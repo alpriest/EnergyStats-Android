@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -16,6 +17,9 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun BatteryView(modifier: Modifier = Modifier) {
+    val foregroundColor = colors.onBackground
+    val backgroundColor = colors.background
+
     Canvas(
         modifier = modifier
     ) {
@@ -28,7 +32,7 @@ fun BatteryView(modifier: Modifier = Modifier) {
         // Battery
         val batterySize = Size(size.width, size.height - boxTop)
         drawRoundRect(
-            color = Color.Black,
+            color = foregroundColor,
             topLeft = Offset(x = 0f, y = boxTop),
             size = batterySize,
             cornerRadius = CornerRadius(x = 10f, y = 10f)
@@ -36,7 +40,7 @@ fun BatteryView(modifier: Modifier = Modifier) {
 
         // Negative terminal
         drawRoundRect(
-            color = Color.Black,
+            color = foregroundColor,
             topLeft = Offset(x = terminalInset, y = 0f),
             size = Size(terminalWidth, boxTop + barHeight),
             cornerRadius = CornerRadius(x = 5f, y = 5f)
@@ -44,7 +48,7 @@ fun BatteryView(modifier: Modifier = Modifier) {
 
         // Positive terminal
         drawRoundRect(
-            color = Color.Black,
+            color = foregroundColor,
             topLeft = Offset(x = size.width - 2 * terminalInset, y = 0f),
             size = Size(terminalWidth, boxTop + barHeight),
             cornerRadius = CornerRadius(x = 5f, y = 5f)
@@ -52,7 +56,7 @@ fun BatteryView(modifier: Modifier = Modifier) {
 
         // Minus
         drawRoundRect(
-            color = Color.White,
+            color = backgroundColor,
             topLeft = Offset(x = terminalInset, y = boxTop + batterySize.height / 2.0f),
             size = Size(terminalWidth, barHeight),
             cornerRadius = CornerRadius(2f, 2f)
@@ -60,7 +64,7 @@ fun BatteryView(modifier: Modifier = Modifier) {
 
         // Plus
         drawRoundRect(
-            color = Color.White,
+            color = backgroundColor,
             topLeft = Offset(
                 x = size.width - 2 * terminalInset,
                 y = boxTop + batterySize.height / 2.0f
@@ -69,7 +73,7 @@ fun BatteryView(modifier: Modifier = Modifier) {
             cornerRadius = CornerRadius(2f, 2f)
         )
         drawRoundRect(
-            color = Color.White,
+            color = backgroundColor,
             topLeft = Offset(
                 x = size.width - 2 * terminalInset + (terminalInset / 2f) - halfBarHeight,
                 y = boxTop + batterySize.height / 2.0f - (terminalInset / 2f) + halfBarHeight

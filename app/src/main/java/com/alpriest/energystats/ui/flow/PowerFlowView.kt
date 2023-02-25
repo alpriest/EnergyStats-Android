@@ -2,8 +2,10 @@ package com.alpriest.energystats.ui.flow
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -71,16 +73,18 @@ fun PowerFlowView(amount: Double, modifier: Modifier = Modifier) {
             }
         }
 
-        Text(
-            text = if (asKw) {
-                amount.kW()
-            } else {
-                amount.w()
-            },
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.clickable { asKw = !asKw }
-        )
+        Box(modifier = Modifier.background(colors.background)) {
+            Text(
+                text = if (asKw) {
+                    amount.kW()
+                } else {
+                    amount.w()
+                },
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable { asKw = !asKw }.padding(1.dp)
+            )
+        }
     }
 }
 

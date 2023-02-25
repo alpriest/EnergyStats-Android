@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,11 +25,11 @@ fun RoundedBox(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colors.background,
+                color = colors.background,
                 shape = RoundedCornerShape(5.dp)
             )
             .clip(shape = RoundedCornerShape(5.dp))
-            .background(Color.White)
+            .background(colors.background)
             .padding(12.dp)
     ) {
         content()

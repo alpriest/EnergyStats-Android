@@ -8,7 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.PowerFlowView
-import com.alpriest.energystats.ui.flow.PylonView
+import com.alpriest.energystats.ui.flow.grid.PylonView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable

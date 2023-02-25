@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.login
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -95,7 +96,10 @@ fun CredentialsView(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                 onClick = onDemoLogin
             ) {
-                Text("Try demo")
+                Text(
+                    "Try demo",
+                    color = colors.onSecondary
+                )
             }
 
             Spacer(modifier = Modifier.width(24.dp))
@@ -103,7 +107,10 @@ fun CredentialsView(
             Button(onClick = {
                 onLogin(username, password)
             }) {
-                Text("Log me in")
+                Text(
+                    "Log me in",
+                    color = colors.onPrimary
+                )
             }
         }
     }

@@ -70,7 +70,7 @@ fun HomeView(
 @Preview(showBackground = true)
 @Composable
 fun HomepagePreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(darkTheme = true) {
         HomeView(
             ConfigManager(
                 config = FakeConfigStore(),

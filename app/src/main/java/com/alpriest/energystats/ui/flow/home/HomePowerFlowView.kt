@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.flow.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.House
 import androidx.compose.runtime.Composable
@@ -29,7 +30,8 @@ fun HomePowerFlowView(amount: Double, modifier: Modifier, iconHeight: Dp) {
             Icon(
                 Icons.Rounded.House,
                 contentDescription = "House",
-                modifier = Modifier.size(iconHeight)
+                modifier = Modifier.size(iconHeight),
+                tint = colors.onBackground
             )
         }
     }

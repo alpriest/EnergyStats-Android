@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -91,7 +92,10 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
                 }
 
                 Button(onClick = onLogout) {
-                    Text("Logout")
+                    Text(
+                        "Logout",
+                        color = colors.onPrimary
+                    )
                 }
             }
         }

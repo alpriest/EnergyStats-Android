@@ -44,7 +44,7 @@ fun BatteryPowerFlow(
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.height(40.dp)
+            modifier = Modifier.defaultMinSize(minHeight = 40.dp)
         ) {
             Box(modifier = Modifier.clickable { percentage = !percentage }) {
                 if (percentage) {
@@ -73,7 +73,7 @@ fun BatteryPowerFlow(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, fontScale = 1.5f)
 @Composable
 fun BatteryPowerFlowViewPreview() {
     EnergyStatsTheme {
