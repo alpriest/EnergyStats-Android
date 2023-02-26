@@ -1,14 +1,13 @@
 package com.alpriest.energystats.ui.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.*
@@ -41,7 +40,7 @@ fun DataSettingsView(rawDataStore: RawDataStoring, modifier: Modifier = Modifier
 
 @Composable
 private fun DeviceListDump(rawDataStore: RawDataStoring) {
-    rawDataStore.deviceList?.let { response ->
+    rawDataStore.deviceListStream.collectAsState().value?.let { response ->
         SettingsTitleView("Device List")
 
         response.devices.map {
@@ -57,7 +56,7 @@ private fun DeviceListDump(rawDataStore: RawDataStoring) {
 
 @Composable
 private fun BatteryDump(rawDataStore: RawDataStoring) {
-    rawDataStore.battery?.let {
+    rawDataStore.batteryStream.collectAsState().value?.let {
         SettingsTitleView("Battery")
 
         Row {
@@ -74,7 +73,7 @@ private fun BatteryDump(rawDataStore: RawDataStoring) {
 
 @Composable
 private fun BatterySettingsDump(rawDataStore: RawDataStoring) {
-    rawDataStore.batterySettings?.let {
+    rawDataStore.batterySettingsStream.collectAsState().value?.let {
         SettingsTitleView("Battery Settings")
 
         Row {
@@ -85,24 +84,14 @@ private fun BatterySettingsDump(rawDataStore: RawDataStoring) {
 
 @Composable
 private fun RawDataDump(rawDataStore: RawDataStoring) {
-    rawDataStore.raw?.let { responses ->
+    rawDataStore.rawStream.collectAsState().value?.let { responses ->
         SettingsTitleView("Raw")
 
         Column {
-            responses.map { response ->
+            responses.map() { response ->
                 response.data.last().let {
                     Row(Modifier.fillMaxWidth()) {
-                        Text(
-                            response.variable,
-                            Modifier.weight(1f)
-                        )
-                        Text(
-                            it.time,
-                            Modifier.weight(1f)
-                        )
-                        Text(
-                            it.value.toString()
-                        )
+                        Text("${it.time} ${response.variable} ${it.value}")
                     }
                 }
             }
@@ -118,19 +107,23 @@ private fun RawDataDump(rawDataStore: RawDataStoring) {
 fun DataSettingsViewPreview() {
     val store = RawDataStore()
     val now = SimpleDateFormat("yyyy-MM-dd hh:mm:ss zZ", Locale.getDefault()).format(Date())
-    store.raw = listOf(
-        RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
-        RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
-        RawResponse("batChargePower", arrayListOf(RawData(now, 2.45))),
-        RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
-        RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
-        RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
+    store.store(
+        raw = listOf(
+            RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("batChargePower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
+        )
     )
-    store.batterySettings = BatterySettingsResponse(30)
-    store.battery = BatteryResponse(power = 2000.0, soc = 20, residual = 1000.0)
-    store.deviceList = PagedDeviceListResponse(
-        currentPage = 1, pageSize = 1, total = 1, devices = listOf(
-            Device(deviceID = "ABC123", deviceSN = "JJJ999", hasBattery = true, hasPV = true)
+    store.store(batterySettings = BatterySettingsResponse(30))
+    store.store(battery = BatteryResponse(power = 2000.0, soc = 20, residual = 1000.0))
+    store.store(
+        deviceList = PagedDeviceListResponse(
+            currentPage = 1, pageSize = 1, total = 1, devices = listOf(
+                Device(deviceID = "ABC123", deviceSN = "JJJ999", hasBattery = true, hasPV = true)
+            )
         )
     )
     EnergyStatsTheme {

@@ -38,11 +38,11 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
 
         Divider()
 
-        DisplaySettingsView(
-            config = config
-        )
-
-        Divider()
+//        DisplaySettingsView(
+//            config = config
+//        )
+//
+//        Divider()
 
         DataSettingsView(rawDataStore = rawDataStore)
 

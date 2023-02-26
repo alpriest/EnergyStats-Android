@@ -86,11 +86,11 @@ class PowerFlowTabViewModel(
                         RawVariable.BatDischargePower
                     )
                 )
-                rawDataStore.raw = raw
+                rawDataStore.store(raw = raw)
                 val rawViewModel = HistoricalViewModel(raw.toTypedArray())
                 val battery: BatteryViewModel = if (configManager.hasBattery) {
                     val battery = network.fetchBattery()
-                    rawDataStore.battery = battery
+                    rawDataStore.store(battery = battery)
                     BatteryViewModel(battery)
                 } else {
                     BatteryViewModel.noBattery()

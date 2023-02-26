@@ -2,6 +2,8 @@ package com.alpriest.energystats.models
 
 import java.text.DecimalFormat
 import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.roundToLong
 
 fun Double.asPercent(): String {
     return String.format("%.0f%%", (this * 100))
@@ -20,15 +22,15 @@ fun Double.kW(): String {
 }
 
 fun Double.w(): String {
-    val divided = Math.round(this * 1000.0)
+    val divided = (this * 1000.0).roundToLong()
 
     val dec = DecimalFormat("#,###,###.##")
-    return dec.format(divided) + " kW"
+    return dec.format(divided) + " W"
 }
 
 fun Double.rounded(decimalPlaces: Int): Double {
-    val power = Math.pow(10.0, decimalPlaces.toDouble())
-    return Math.round(this * power) / power
+    val power = 10.0.pow(decimalPlaces.toDouble())
+    return (this * power).roundToLong() / power
 }
 
 fun Double.sameValueAs(other: Double): Boolean {

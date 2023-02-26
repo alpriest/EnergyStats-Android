@@ -62,13 +62,13 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             config.deviceID = device.deviceID
             config.hasBattery = device.hasBattery
             config.hasPV = device.hasPV
-            rawDataStore.deviceList = deviceList
+            rawDataStore.store(deviceList = deviceList)
 
             if (device.hasBattery) {
                 val battery = networking.fetchBattery()
-                rawDataStore.battery = battery
+                rawDataStore.store(battery = battery)
                 val batterySettings = networking.fetchBatterySettings()
-                rawDataStore.batterySettings = batterySettings
+                rawDataStore.store(batterySettings = batterySettings)
                 config.batteryCapacityW = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
                 config.minSOC = (batterySettings.minSoc.toDouble() / 100.0).toString()
             }
