@@ -43,7 +43,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacityW.toString()) }
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
     ) {
         SettingsTitleView("Battery")
@@ -52,7 +52,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp)
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.Bottom
             ) {
                 Text(
                     "Min SOC",
@@ -72,7 +73,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp)
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.Bottom
             ) {
                 Text(
                     "Capacity",

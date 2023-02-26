@@ -50,6 +50,7 @@ class UserManager(
         configManager.isDemoUser = true
         configManager.hasBattery = true
         store.store("demo", "user")
+        configManager.findDevice()
         _loggedInState.value = LoginStateHolder(LoggedIn)
     }
 

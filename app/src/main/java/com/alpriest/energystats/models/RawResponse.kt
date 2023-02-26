@@ -53,6 +53,6 @@ data class RawResponse(
 )
 
 data class RawData(
-    val time: String,
+    val time: LocalDate,
     val value: Double
 )

@@ -7,14 +7,9 @@ const val DemoRawData = "{\n" +
         "      \"variable\": \"generationPower\",\n" +
         "      \"unit\": \"kW\",\n" +
         "      \"name\": \"Output Power\",\n" +
-        "      \"data\": [\n" +
-        "        {\n" +
-        "          \"time\": \"2022-11-22 18:59:40 GMT+0000\",\n" +
-        "          \"value\": 0.246\n" +
-        "        },\n" +
-        "        {\n" +
+        "      \"data\": [{\n" +
         "          \"time\": \"2022-11-22 19:04:44 GMT+0000\",\n" +
-        "          \"value\": 0.356\n" +
+        "          \"value\": 0.254\n" +
         "        }\n" +
         "      ]\n" +
         "    },\n" +
@@ -22,14 +17,19 @@ const val DemoRawData = "{\n" +
         "      \"variable\": \"feedinPower\",\n" +
         "      \"unit\": \"kW\",\n" +
         "      \"name\": \"Feed-in Power\",\n" +
-        "      \"data\": [\n" +
-        "        {\n" +
-        "          \"time\": \"2022-11-22 18:59:40 GMT+0000\",\n" +
-        "          \"value\": 0\n" +
-        "        },\n" +
-        "        {\n" +
+        "      \"data\": [{\n" +
         "          \"time\": \"2022-11-22 19:04:44 GMT+0000\",\n" +
         "          \"value\": 0\n" +
+        "        }\n" +
+        "      ]\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"variable\": \"loadsPower\",\n" +
+        "      \"unit\": \"kW\",\n" +
+        "      \"name\": \"Load Power\",\n" +
+        "      \"data\": [{\n" +
+        "          \"time\": \"2022-11-22 19:04:44 GMT+0000\",\n" +
+        "          \"value\": 0.272\n" +
         "        }\n" +
         "      ]\n" +
         "    },\n" +
@@ -37,12 +37,7 @@ const val DemoRawData = "{\n" +
         "      \"variable\": \"batChargePower\",\n" +
         "      \"unit\": \"kW\",\n" +
         "      \"name\": \"Charge Power\",\n" +
-        "      \"data\": [\n" +
-        "        {\n" +
-        "          \"time\": \"2022-11-22 18:59:40 GMT+0000\",\n" +
-        "          \"value\": 0\n" +
-        "        },\n" +
-        "        {\n" +
+        "      \"data\": [{\n" +
         "          \"time\": \"2022-11-22 19:04:44 GMT+0000\",\n" +
         "          \"value\": 0\n" +
         "        }\n" +
@@ -52,14 +47,9 @@ const val DemoRawData = "{\n" +
         "      \"variable\": \"batDischargePower\",\n" +
         "      \"unit\": \"kW\",\n" +
         "      \"name\": \"Discharge Power\",\n" +
-        "      \"data\": [\n" +
-        "        {\n" +
-        "          \"time\": \"2022-11-22 18:59:40 GMT+0000\",\n" +
-        "          \"value\": 0.278\n" +
-        "        },\n" +
-        "        {\n" +
+        "      \"data\": [{\n" +
         "          \"time\": \"2022-11-22 19:04:44 GMT+0000\",\n" +
-        "          \"value\": 0.393\n" +
+        "          \"value\": 0.131\n" +
         "        }\n" +
         "      ]\n" +
         "    },\n" +
@@ -67,14 +57,9 @@ const val DemoRawData = "{\n" +
         "      \"variable\": \"gridConsumptionPower\",\n" +
         "      \"unit\": \"kW\",\n" +
         "      \"name\": \"GridConsumption Power\",\n" +
-        "      \"data\": [\n" +
-        "        {\n" +
-        "          \"time\": \"2022-11-22 18:59:40 GMT+0000\",\n" +
-        "          \"value\": 0.01\n" +
-        "        },\n" +
-        "        {\n" +
+        "      \"data\": [{\n" +
         "          \"time\": \"2022-11-22 19:04:44 GMT+0000\",\n" +
-        "          \"value\": 0.006\n" +
+        "          \"value\": 0.027\n" +
         "        }\n" +
         "      ]\n" +
         "    }\n" +

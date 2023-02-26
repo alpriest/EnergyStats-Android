@@ -1,9 +1,14 @@
 package com.alpriest.energystats.services
 
 import android.content.res.AssetManager
+import android.util.JsonReader
+import android.util.JsonWriter
 import com.alpriest.energystats.models.*
-import com.google.gson.Gson
+import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class DemoNetworking : Networking {
     override suspend fun ensureHasToken() {
@@ -15,7 +20,7 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchBattery(): BatteryResponse {
-        return BatteryResponse(power = 0.27, soc = 20, residual = 2420.0)
+        return BatteryResponse(power = 0.131, soc = 20, residual = 2420.0)
     }
 
     override suspend fun fetchBatterySettings(): BatterySettingsResponse {
@@ -39,7 +44,10 @@ class DemoNetworking : Networking {
     override suspend fun fetchRaw(variables: Array<RawVariable>): ArrayList<RawResponse> {
         val itemType = object : TypeToken<NetworkRawResponse>() {}.type
         val rawData = rawData()
-        val result: NetworkRawResponse = Gson().fromJson(rawData, itemType)
+        val gson = GsonBuilder()
+            .registerTypeAdapter(LocalDate::class.java, LocalDateTypeAdapter())
+            .create()
+        val result: NetworkRawResponse = gson.fromJson(rawData, itemType)
         return ArrayList(result.result!!.map { response ->
             RawResponse(
                 variable = response.variable,
@@ -62,6 +70,17 @@ class DemoNetworking : Networking {
         return DemoRawData
     }
 }
+
+class LocalDateTypeAdapter : TypeAdapter<LocalDate>() {
+    override fun write(out: com.google.gson.stream.JsonWriter?, value: LocalDate?) {
+        out?.value(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(value))
+    }
+
+    override fun read(`in`: com.google.gson.stream.JsonReader?): LocalDate {
+        return LocalDate.parse(`in`?.nextString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss zZ"))
+    }
+}
+
 
 fun AssetManager.readFile(fileName: String) = open(fileName)
     .bufferedReader()

@@ -10,14 +10,12 @@ class HistoricalViewModel(raw: Array<RawResponse>) {
     init {
         currentSolarPower = max(
             0.0,
-            raw.currentValue(RawVariable.BatChargePower) - raw.currentValue(RawVariable.BatDischargePower) - raw.currentValue(
-                RawVariable.GridConsumptionPower
-            ) + raw.currentValue(RawVariable.LoadsPower) + raw.currentValue(RawVariable.FeedinPower)
+            raw.currentValue(RawVariable.LoadsPower) + raw.currentValue(RawVariable.BatChargePower) + raw.currentValue(RawVariable.FeedinPower) - raw.currentValue(RawVariable.GridConsumptionPower) - raw.currentValue(
+                RawVariable.BatDischargePower
+            )
         )
-        currentGridExport =
-            raw.currentValue(RawVariable.FeedinPower) - raw.currentValue(RawVariable.GridConsumptionPower)
-        currentHomeConsumption =
-            raw.currentValue(RawVariable.GridConsumptionPower) + raw.currentValue(RawVariable.GenerationPower)
+        currentGridExport = raw.currentValue(RawVariable.FeedinPower) - raw.currentValue(RawVariable.GridConsumptionPower)
+        currentHomeConsumption = raw.currentValue(RawVariable.GridConsumptionPower) + raw.currentValue(RawVariable.GenerationPower)
     }
 }
 

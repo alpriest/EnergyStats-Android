@@ -19,7 +19,6 @@ fun DisplaySettings(config: ConfigManaging, modifier: Modifier = Modifier) {
     val largeDisplayState = rememberSaveable { mutableStateOf(true) }
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = modifier
     ) {
         SettingsTitleView("Display")

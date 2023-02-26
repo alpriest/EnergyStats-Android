@@ -1,6 +1,5 @@
 package com.alpriest.energystats.services
 
-import android.content.Context
 import com.alpriest.energystats.models.*
 
 class NetworkFacade(private val network: Networking, private val config: ConfigInterface) : Networking {
