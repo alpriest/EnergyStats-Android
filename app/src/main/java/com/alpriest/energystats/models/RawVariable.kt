@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 enum class RawVariable {
     GenerationPower,
-    FeedinPower,
+    FeedInPower,
     BatChargePower,
     BatDischargePower,
     GridConsumptionPower,
@@ -13,7 +13,7 @@ enum class RawVariable {
     fun reportVariable(): ReportVariable? {
         return when (this) {
             GenerationPower -> ReportVariable.Generation
-            FeedinPower -> ReportVariable.FeedIn
+            FeedInPower -> ReportVariable.FeedIn
             BatChargePower -> ReportVariable.ChargeEnergyToTal
             BatDischargePower -> ReportVariable.DischargeEnergyToTal
             GridConsumptionPower -> ReportVariable.GridConsumption
@@ -24,7 +24,7 @@ enum class RawVariable {
     fun title(): String {
         return when (this) {
             GenerationPower -> "Output power"
-            FeedinPower -> "Feed-in power"
+            FeedInPower -> "Feed-in power"
             BatChargePower -> "Charge power"
             BatDischargePower -> "Discharge power"
             GridConsumptionPower -> "Grid consumption power"
@@ -35,7 +35,7 @@ enum class RawVariable {
     fun colour(): Color {
         return when (this) {
             GenerationPower -> Color.Yellow
-            FeedinPower -> Color.Green
+            FeedInPower -> Color.Green
             BatChargePower -> Color.Green
             BatDischargePower -> Color.Red
             GridConsumptionPower -> Color.Red
@@ -46,7 +46,7 @@ enum class RawVariable {
     fun description(): String {
         return when (this) {
             GenerationPower -> "PV / Battery power coming through the inverter"
-            FeedinPower -> "Power being sent to the grid"
+            FeedInPower -> "Power being sent to the grid"
             BatChargePower -> "Power charging the battery"
             BatDischargePower -> "Power discharging from the battery"
             GridConsumptionPower -> "Power coming from the grid"
@@ -56,14 +56,13 @@ enum class RawVariable {
 
     fun networkTitle(): String {
         return when (this) {
-            FeedinPower -> "feedInPower"
+            FeedInPower -> "feedinPower"
             GenerationPower -> "generationPower"
             BatChargePower -> "batChargePower"
             BatDischargePower -> "batDischargePower"
             GridConsumptionPower -> "gridConsumptionPower"
             LoadsPower -> "loadsPower"
         }
-
     }
 }
 

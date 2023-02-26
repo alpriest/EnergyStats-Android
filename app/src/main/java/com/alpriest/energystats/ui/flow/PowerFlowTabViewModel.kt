@@ -78,7 +78,7 @@ class PowerFlowTabViewModel(
                 network.ensureHasToken()
                 val raw = network.fetchRaw(
                     arrayOf(
-                        RawVariable.FeedinPower,
+                        RawVariable.FeedInPower,
                         RawVariable.GridConsumptionPower,
                         RawVariable.GenerationPower,
                         RawVariable.LoadsPower,
