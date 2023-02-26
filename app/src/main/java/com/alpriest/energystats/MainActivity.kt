@@ -47,7 +47,8 @@ class MainActivity : ComponentActivity() {
                                 network = appContainer.networking,
                                 userManager = appContainer.userManager,
                                 { appContainer.userManager.logout() },
-                                themeStream = appContainer.configManager.themeStream
+                                themeStream = appContainer.configManager.themeStream,
+                                rawDataStore = appContainer.rawDataStore
                             )
                         is LoggedOut ->
                             CredentialsView(

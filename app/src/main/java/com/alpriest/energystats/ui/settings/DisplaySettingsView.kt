@@ -15,8 +15,8 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun DisplaySettings(config: ConfigManaging, modifier: Modifier = Modifier) {
-    val largeDisplayState = rememberSaveable { mutableStateOf(true) }
+fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
+    val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
 
     Column(
         modifier = modifier
@@ -45,6 +45,6 @@ fun DisplaySettings(config: ConfigManaging, modifier: Modifier = Modifier) {
 @Composable
 fun DisplaySettingsViewPreview() {
     EnergyStatsTheme {
-        DisplaySettings(config = FakeConfigManager(), modifier = Modifier.padding(horizontal = 12.dp))
+        DisplaySettingsView(config = FakeConfigManager(), modifier = Modifier.padding(horizontal = 12.dp))
     }
 }

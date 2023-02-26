@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.HistoricalViewModel
+import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -22,7 +23,8 @@ interface IPowerFlowTabViewModel {
 
 class PowerFlowTabViewModel(
     private val network: Networking,
-    private val configManager: ConfigManaging
+    private val configManager: ConfigManaging,
+    private val rawDataStore: RawDataStoring
 ) : ViewModel(), IPowerFlowTabViewModel {
     private var timer: CountDownTimer? = null
 
@@ -84,9 +86,12 @@ class PowerFlowTabViewModel(
                         RawVariable.BatDischargePower
                     )
                 )
+                rawDataStore.raw = raw
                 val rawViewModel = HistoricalViewModel(raw.toTypedArray())
                 val battery: BatteryViewModel = if (configManager.hasBattery) {
-                    BatteryViewModel(network.fetchBattery())
+                    val battery = network.fetchBattery()
+                    rawDataStore.battery = battery
+                    BatteryViewModel(battery)
                 } else {
                     BatteryViewModel.noBattery()
                 }

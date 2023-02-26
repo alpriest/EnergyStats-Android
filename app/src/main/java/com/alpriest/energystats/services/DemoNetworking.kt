@@ -80,8 +80,3 @@ class LocalDateTypeAdapter : TypeAdapter<LocalDate>() {
         return LocalDate.parse(`in`?.nextString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss zZ"))
     }
 }
-
-
-fun AssetManager.readFile(fileName: String) = open(fileName)
-    .bufferedReader()
-    .use { it.readText() }

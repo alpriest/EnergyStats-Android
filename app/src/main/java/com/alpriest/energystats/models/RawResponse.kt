@@ -1,7 +1,6 @@
 package com.alpriest.energystats.models
 
 import java.time.LocalDate
-import java.util.*
 
 data class RawRequest(
     val deviceID: String,
@@ -53,6 +52,6 @@ data class RawResponse(
 )
 
 data class RawData(
-    val time: LocalDate,
+    val time: String,
     val value: Double
 )

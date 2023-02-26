@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.alpriest.energystats.models.RawDataStore
+import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -29,7 +31,8 @@ fun HomeView(
     network: Networking,
     userManager: UserManaging,
     onLogout: () -> Unit,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppTheme>,
+    rawDataStore: RawDataStoring
 ) {
     val state = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -55,7 +58,7 @@ fun HomeView(
         },
         content = { padding ->
             Box(modifier = Modifier.padding(padding)) {
-                PowerFlowTabView(network, configManager).Content(themeStream = themeStream)
+                PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
             }
         },
         drawerBackgroundColor = MaterialTheme.colors.background,
@@ -63,7 +66,8 @@ fun HomeView(
             SettingsView(
                 config = configManager,
                 userManager = userManager,
-                onLogout = onLogout
+                onLogout = onLogout,
+                rawDataStore = rawDataStore
             )
         },
     )
@@ -76,12 +80,14 @@ fun HomepagePreview() {
         HomeView(
             ConfigManager(
                 config = FakeConfigStore(),
-                networking = DemoNetworking()
+                networking = DemoNetworking(),
+                rawDataStore = RawDataStore()
             ),
             network = DemoNetworking(),
             userManager = FakeUserManager(),
             {},
-            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay)
+            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay),
+            rawDataStore = RawDataStore()
         )
     }
 }

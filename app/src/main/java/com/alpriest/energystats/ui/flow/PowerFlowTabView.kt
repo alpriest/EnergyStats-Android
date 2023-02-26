@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.models.RawDataStore
+import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
@@ -42,17 +44,19 @@ import kotlinx.coroutines.launch
 
 class PowerFlowTabViewModelFactory(
     private val network: Networking,
-    private val configManager: ConfigManaging
+    private val configManager: ConfigManaging,
+    private val rawDataStore: RawDataStoring
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java)
-            .newInstance(network, configManager)
+        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, RawDataStoring::class.java)
+            .newInstance(network, configManager, rawDataStore)
     }
 }
 
 class PowerFlowTabView(
     private val network: Networking,
-    private val configManager: ConfigManaging
+    private val configManager: ConfigManaging,
+    private val rawDataStore: RawDataStoring
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -69,7 +73,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(network, configManager)
+            factory = PowerFlowTabViewModelFactory(network, configManager, rawDataStore)
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -175,7 +179,7 @@ class PowerFlowTabView(
 @Preview(showBackground = true, heightDp = 600)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager())
+    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore())
     val homePowerFlowViewModel = SummaryPowerFlowViewModel(
         FakeConfigManager(),
         2.3,
@@ -193,7 +197,8 @@ fun PowerFlowTabViewPreview() {
 //        ).Content(viewModel)
         PowerFlowTabView(
             DemoNetworking(),
-            FakeConfigManager()
+            FakeConfigManager(),
+            RawDataStore()
         ).Loaded(
             viewModel = viewModel,
             homePowerFlowViewModel = homePowerFlowViewModel,

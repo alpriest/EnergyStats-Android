@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
@@ -35,7 +36,8 @@ fun Tabs(
     network: Networking,
     onLogout: () -> Unit,
     userManager: UserManaging,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppTheme>,
+    rawDataStore: RawDataStoring
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -59,11 +61,12 @@ fun Tabs(
                         contentAlignment = Alignment.TopCenter,
                     ) {
                         when (page) {
-                            0 -> PowerFlowTabView(network, configManager).Content(themeStream = themeStream)
+                            0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
                             1 -> SettingsView(
                                 config = configManager,
                                 userManager = userManager,
-                                onLogout = onLogout
+                                onLogout = onLogout,
+                                rawDataStore = rawDataStore
                             )
                         }
                     }

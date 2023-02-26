@@ -1,12 +1,14 @@
 package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.models.RawDataStore
+import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ConfigManager(var config: ConfigInterface, val networking: Networking) : ConfigManaging {
+class ConfigManager(var config: ConfigInterface, val networking: Networking, val rawDataStore: RawDataStoring) : ConfigManaging {
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(if (config.useLargeDisplay) AppTheme.UseLargeDisplay else AppTheme.UseDefaultDisplay)
 
     override var useLargeDisplay: Boolean
@@ -60,11 +62,14 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking) : C
             config.deviceID = device.deviceID
             config.hasBattery = device.hasBattery
             config.hasPV = device.hasPV
+            rawDataStore.deviceList = deviceList
+
             if (device.hasBattery) {
                 val battery = networking.fetchBattery()
+                rawDataStore.battery = battery
                 val batterySettings = networking.fetchBatterySettings()
-                config.batteryCapacityW =
-                    (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
+                rawDataStore.batterySettings = batterySettings
+                config.batteryCapacityW = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
                 config.minSOC = (batterySettings.minSoc.toDouble() / 100.0).toString()
             }
 
@@ -78,6 +83,4 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking) : C
     }
 }
 
-class NoDeviceFoundException : Exception("No device found") {
-
-}
+class NoDeviceFoundException : Exception("No device found")

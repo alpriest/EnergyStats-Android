@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.models.RawDataStore
+import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -18,7 +20,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: () -> Unit) {
+fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: () -> Unit, rawDataStore: RawDataStoring) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -36,11 +38,13 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
 
         Divider()
 
-        DisplaySettings(
+        DisplaySettingsView(
             config = config
         )
 
         Divider()
+
+        DataSettingsView(rawDataStore = rawDataStore)
 
         Column(
             Modifier.fillMaxWidth(),
@@ -70,7 +74,8 @@ fun SettingsViewPreview() {
         SettingsView(
             config = FakeConfigManager(),
             userManager = FakeUserManager(),
-            onLogout = {}
+            onLogout = {},
+            rawDataStore = RawDataStore()
         )
     }
 }

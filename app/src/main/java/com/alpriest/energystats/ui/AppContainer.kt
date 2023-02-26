@@ -2,6 +2,8 @@ package com.alpriest.energystats.ui
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.alpriest.energystats.models.RawDataStore
+import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.services.NetworkService
@@ -12,6 +14,7 @@ import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
 import com.alpriest.energystats.ui.login.*
 
 class AppContainer(context: Context) {
+    val rawDataStore: RawDataStoring = RawDataStore()
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences(
             "com.alpriest.energystats",
@@ -31,7 +34,8 @@ class AppContainer(context: Context) {
     val configManager: ConfigManaging by lazy {
         ConfigManager(
             config = config,
-            networking = networking
+            networking = networking,
+            rawDataStore = rawDataStore
         )
     }
 
