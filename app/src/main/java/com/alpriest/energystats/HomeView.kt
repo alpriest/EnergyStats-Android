@@ -18,7 +18,9 @@ import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsView
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -26,7 +28,8 @@ fun HomeView(
     configManager: ConfigManaging,
     network: Networking,
     userManager: UserManaging,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    themeStream: MutableStateFlow<AppTheme>
 ) {
     val state = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -52,7 +55,7 @@ fun HomeView(
         },
         content = { padding ->
             Box(modifier = Modifier.padding(padding)) {
-                PowerFlowTabView(network, configManager).Content()
+                PowerFlowTabView(network, configManager).Content(themeStream = themeStream)
             }
         },
         drawerBackgroundColor = MaterialTheme.colors.background,
@@ -66,7 +69,6 @@ fun HomeView(
     )
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun HomepagePreview() {
@@ -77,7 +79,9 @@ fun HomepagePreview() {
                 networking = DemoNetworking()
             ),
             network = DemoNetworking(),
-            userManager = FakeUserManager()
-        ) {}
+            userManager = FakeUserManager(),
+            {},
+            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay)
+        )
     }
 }

@@ -1,9 +1,13 @@
 package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Suppress("UNUSED_PARAMETER")
 class FakeConfigManager : ConfigManaging {
+    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.UseDefaultDisplay)
+    override var useLargeDisplay: Boolean = false
     override val minSOC: Double
         get() = 0.2
     override val batteryCapacityW: Int
@@ -22,6 +26,9 @@ class FakeConfigManager : ConfigManaging {
         set(value) {}
 
     override fun logout() {
+    }
+
+    override fun updateBatteryCapacity(capacity: String) {
     }
 
     override suspend fun findDevice() {

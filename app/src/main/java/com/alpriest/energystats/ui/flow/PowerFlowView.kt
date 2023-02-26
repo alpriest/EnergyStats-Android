@@ -15,15 +15,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.sameValueAs
 import com.alpriest.energystats.models.w
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+
+enum class PowerFlowLinePosition {
+    LEFT,
+    MIDDLE,
+    RIGHT,
+    NONE
+}
 
 @Composable
-fun PowerFlowView(amount: Double, modifier: Modifier = Modifier) {
+fun PowerFlowView(
+    amount: Double,
+    themeStream: MutableStateFlow<AppTheme>,
+    position: PowerFlowLinePosition,
+    modifier: Modifier = Modifier
+) {
     var asKw by remember { mutableStateOf(true) }
     var height by remember { mutableStateOf(0f) }
     val phaseAnimation = rememberInfiniteTransition()
@@ -47,6 +62,21 @@ fun PowerFlowView(amount: Double, modifier: Modifier = Modifier) {
         )
     )
     val isFlowing = !amount.rounded(2).sameValueAs(0.0)
+    val theme by themeStream.collectAsState()
+
+    val strokeWidth: Float
+    val fontSize: TextUnit
+    when (theme) {
+        AppTheme.UseDefaultDisplay -> {
+            strokeWidth = 6f
+            fontSize = 16.sp
+        }
+        AppTheme.UseLargeDisplay ->  {
+            strokeWidth = 12f
+            fontSize = 26.sp
+        }
+    }
+    val lineColor = Color.LightGray
 
     Box(
         modifier = modifier
@@ -56,20 +86,51 @@ fun PowerFlowView(amount: Double, modifier: Modifier = Modifier) {
             },
         contentAlignment = Alignment.Center
     ) {
-        Canvas(modifier.fillMaxHeight()) {
+        Canvas(
+            modifier
+                .fillMaxHeight()
+                .fillMaxWidth()) {
             drawLine(
-                color = Color.LightGray,
+                color = lineColor,
                 start = Offset(size.width / 2, 0f),
                 end = Offset(size.width / 2, size.height),
-                strokeWidth = 6f
+                strokeWidth = strokeWidth
             )
 
             if (isFlowing) {
                 drawCircle(
-                    color = Color.LightGray,
+                    color = lineColor,
                     center = Offset(x = size.width / 2, y = offsetModifier(ballYPosition)),
                     radius = 12f
                 )
+            }
+
+            when (position) {
+                PowerFlowLinePosition.LEFT -> {
+                    drawLine(
+                        color = lineColor,
+                        start = Offset(size.width / 2 - (strokeWidth / 2), strokeWidth / 2),
+                        end = Offset(size.width, strokeWidth / 2),
+                        strokeWidth = strokeWidth
+                    )
+                }
+                PowerFlowLinePosition.MIDDLE -> {
+                    drawLine(
+                        color = lineColor,
+                        start = Offset(0f, strokeWidth / 2),
+                        end = Offset(size.width, strokeWidth / 2),
+                        strokeWidth = strokeWidth
+                    )
+                }
+                PowerFlowLinePosition.RIGHT -> {
+                    drawLine(
+                        color = lineColor,
+                        start = Offset(size.width / 2 + (strokeWidth / 2), strokeWidth / 2),
+                        end = Offset(0f, strokeWidth / 2),
+                        strokeWidth = strokeWidth
+                    )
+                }
+                PowerFlowLinePosition.NONE -> {}
             }
         }
 
@@ -80,9 +141,11 @@ fun PowerFlowView(amount: Double, modifier: Modifier = Modifier) {
                 } else {
                     amount.w()
                 },
-                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { asKw = !asKw }.padding(1.dp)
+                fontSize = fontSize,
+                modifier = Modifier
+                    .clickable { asKw = !asKw }
+                    .padding(1.dp)
             )
         }
     }
@@ -93,12 +156,19 @@ fun PowerFlowView(amount: Double, modifier: Modifier = Modifier) {
 fun PowerFlowViewPreview() {
     Row(Modifier.height(200.dp)) {
         PowerFlowView(
-            3.0, modifier = Modifier
-                .width(100.dp)
+            5.255,
+            themeStream = MutableStateFlow(AppTheme.UseLargeDisplay),
+            position = PowerFlowLinePosition.LEFT
         )
         PowerFlowView(
-            -3.0, modifier = Modifier
-                .width(100.dp)
+            5.255,
+            themeStream = MutableStateFlow(AppTheme.UseLargeDisplay),
+            position = PowerFlowLinePosition.MIDDLE
+        )
+        PowerFlowView(
+            -3.0,
+            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay),
+            position = PowerFlowLinePosition.RIGHT
         )
     }
 }

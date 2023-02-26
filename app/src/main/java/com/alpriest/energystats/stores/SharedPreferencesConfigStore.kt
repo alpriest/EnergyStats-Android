@@ -12,6 +12,15 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     private val HAS_BATTERY = "HAS_BATTERY"
     private val HAS_PV = "HAS_PV"
     private val IS_DEMO_USER = "IS_DEMO_USER"
+    private val USE_LARGE_DISPlAY = "USE_LARGE_DISPlAY"
+
+    override var useLargeDisplay: Boolean
+        get() = sharedPreferences.getBoolean(USE_LARGE_DISPlAY, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(USE_LARGE_DISPlAY, value)
+            editor.apply()
+        }
 
     override var minSOC: String?
         get() = sharedPreferences.getString(MIN_SOC, null)
@@ -21,7 +30,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var batteryCapacity: String?
+    override var batteryCapacityW: String?
         get() = sharedPreferences.getString(BATTERY_CAPACITY, null)
         set(value) {
             val editor = sharedPreferences.edit()

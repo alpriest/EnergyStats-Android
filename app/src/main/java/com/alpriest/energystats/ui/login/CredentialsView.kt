@@ -44,9 +44,8 @@ fun CredentialsView(
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
-
-            )
+            label = { Text("Username") }
+        )
 
         OutlinedTextField(
             value = password,
@@ -58,7 +57,7 @@ fun CredentialsView(
                 val (icon, iconColor) = if (showPassword) {
                     Pair(
                         Icons.Filled.Visibility,
-                        MaterialTheme.colors.primary
+                        colors.primary
                     )
                 } else {
                     Pair(

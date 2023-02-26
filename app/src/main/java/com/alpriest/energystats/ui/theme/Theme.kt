@@ -35,16 +35,22 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun EnergyStatsTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun EnergyStatsTheme(darkTheme: Boolean = isSystemInDarkTheme(), useLargeDisplay: Boolean = false, content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
 
+    val typography = if (useLargeDisplay) {
+        LargeTypography
+    } else {
+        Typography
+    }
+
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = typography,
         shapes = Shapes,
         content = content
     )

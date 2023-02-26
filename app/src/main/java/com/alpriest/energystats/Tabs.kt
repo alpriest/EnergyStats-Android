@@ -19,11 +19,13 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsView
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -32,7 +34,8 @@ fun Tabs(
     configManager: ConfigManaging,
     network: Networking,
     onLogout: () -> Unit,
-    userManager: UserManaging
+    userManager: UserManaging,
+    themeStream: MutableStateFlow<AppTheme>
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -56,7 +59,7 @@ fun Tabs(
                         contentAlignment = Alignment.TopCenter,
                     ) {
                         when (page) {
-                            0 -> PowerFlowTabView(network, configManager).Content()
+                            0 -> PowerFlowTabView(network, configManager).Content(themeStream = themeStream)
                             1 -> SettingsView(
                                 config = configManager,
                                 userManager = userManager,

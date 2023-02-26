@@ -12,17 +12,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.PowerFlowView
+import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun HomePowerFlowView(amount: Double, modifier: Modifier, iconHeight: Dp) {
+fun HomePowerFlowView(amount: Double, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
         Box(modifier = Modifier.weight(1f)) {
             PowerFlowView(
-                amount = amount
+                amount = amount,
+                themeStream = themeStream,
+                position = PowerFlowLinePosition.MIDDLE
             )
         }
 
@@ -45,7 +50,8 @@ fun HomePowerFlowViewPreview() {
             HomePowerFlowView(
                 amount = 1.0,
                 modifier = Modifier,
-                iconHeight = 25.dp
+                iconHeight = 25.dp,
+                themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay)
             )
         }
     }

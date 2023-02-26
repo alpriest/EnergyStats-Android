@@ -9,15 +9,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class SummaryPowerFlowView {
     private val iconHeight = 40.dp
 
     @Composable
-    fun Content(modifier: Modifier = Modifier, viewModel: SummaryPowerFlowViewModel = viewModel()) {
-        val powerFlowWidth = 90.dp
-
+    fun Content(
+        modifier: Modifier = Modifier,
+        viewModel: SummaryPowerFlowViewModel = viewModel(),
+        themeStream: MutableStateFlow<AppTheme>
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.padding(12.dp)
@@ -32,20 +36,8 @@ class SummaryPowerFlowView {
                     modifier = Modifier
                         .width(70.dp)
                         .weight(1f),
-                    iconHeight = iconHeight
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 14.dp + (powerFlowWidth / 2.dp).dp)
-            ) {
-                Inverter(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(0.dp)
-                        .weight(5f)
+                    iconHeight = iconHeight,
+                    themeStream = themeStream
                 )
             }
 
@@ -55,28 +47,36 @@ class SummaryPowerFlowView {
             ) {
                 BatteryPowerFlow(
                     viewModel = viewModel.batteryViewModel,
-                    modifier = Modifier
-                        .width(powerFlowWidth),
-                    iconHeight = iconHeight
+                    iconHeight = iconHeight,
+                    modifier = Modifier.weight(2f),
+                    themeStream = themeStream
                 )
-                Spacer(modifier = Modifier.weight(1f))
+                InverterSpacer(
+                    modifier = Modifier.weight(1f),
+                    themeStream = themeStream
+                )
                 HomePowerFlowView(
                     amount = viewModel.home,
-                    modifier = Modifier.width(powerFlowWidth),
-                    iconHeight = iconHeight
+                    modifier = Modifier.weight(2f),
+                    iconHeight = iconHeight,
+                    themeStream = themeStream
                 )
-                Spacer(modifier = Modifier.weight(1f))
+                InverterSpacer(
+                    modifier = Modifier.weight(1f),
+                    themeStream = themeStream
+                )
                 GridPowerFlowView(
                     amount = viewModel.grid,
-                    modifier = Modifier.width(powerFlowWidth),
-                    iconHeight = iconHeight
+                    modifier = Modifier.weight(2f),
+                    iconHeight = iconHeight,
+                    themeStream = themeStream
                 )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 500, heightDp = 800)
 @Composable
 fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme {
@@ -85,12 +85,13 @@ fun SummaryPowerFlowViewPreview() {
                 viewModel = SummaryPowerFlowViewModel(
                     FakeConfigManager(),
                     2.3,
-                    0.5,
+                    20.5,
                     0.03,
                     0.0,
                     0.4,
                     true
-                )
+                ),
+                themeStream = MutableStateFlow(AppTheme.UseLargeDisplay)
             )
         }
     }

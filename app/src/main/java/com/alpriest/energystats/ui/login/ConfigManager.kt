@@ -3,13 +3,24 @@ package com.alpriest.energystats.ui.login
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class ConfigManager(var config: ConfigInterface, val networking: Networking) : ConfigManaging {
+    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(if (config.useLargeDisplay) AppTheme.UseLargeDisplay else AppTheme.UseDefaultDisplay)
+
+    override var useLargeDisplay: Boolean
+        get() = config.useLargeDisplay
+        set(value) {
+            config.useLargeDisplay = value
+            themeStream.value = if (value) AppTheme.UseLargeDisplay else AppTheme.UseDefaultDisplay
+        }
+
     override val minSOC: Double
         get() = (config.minSOC ?: "0.0").toDouble()
 
     override val batteryCapacityW: Int
-        get() = (config.batteryCapacity ?: "2600").toDouble().toInt()
+        get() = (config.batteryCapacityW ?: "2600").toDouble().toInt()
 
     override val deviceSN: String?
         get() = config.deviceSN
@@ -52,7 +63,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking) : C
             if (device.hasBattery) {
                 val battery = networking.fetchBattery()
                 val batterySettings = networking.fetchBatterySettings()
-                config.batteryCapacity =
+                config.batteryCapacityW =
                     (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
                 config.minSOC = (batterySettings.minSoc.toDouble() / 100.0).toString()
             }
@@ -60,6 +71,10 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking) : C
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         }
+    }
+
+    override fun updateBatteryCapacity(capacity: String) {
+        config.batteryCapacityW = capacity
     }
 }
 

@@ -13,9 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.PowerFlowView
+import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp) {
+fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -30,7 +33,9 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp) {
 
         PowerFlowView(
             amount = amount,
-            modifier = Modifier.height(200.dp)
+            modifier = Modifier.height(200.dp),
+            themeStream = themeStream,
+            position = PowerFlowLinePosition.NONE
         )
     }
 }

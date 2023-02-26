@@ -25,11 +25,11 @@ fun RoundedBox(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = colors.background,
+                color = colors.surface,
                 shape = RoundedCornerShape(5.dp)
             )
             .clip(shape = RoundedCornerShape(5.dp))
-            .background(colors.background)
+            .background(colors.surface)
             .padding(12.dp)
     ) {
         content()

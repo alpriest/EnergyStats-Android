@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,8 +34,10 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowView
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowViewModel
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class PowerFlowTabViewModelFactory(
@@ -69,7 +70,8 @@ class PowerFlowTabView(
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
             factory = PowerFlowTabViewModelFactory(network, configManager)
-        )
+        ),
+        themeStream: MutableStateFlow<AppTheme>
     ) {
         val uiState by viewModel.uiState.collectAsState()
         val coroutineScope = rememberCoroutineScope()
@@ -95,7 +97,7 @@ class PowerFlowTabView(
                     viewModel.timerFired()
                 }
                 is Error -> Error((uiState.loadState as Error).reason) { coroutineScope.launch { viewModel.timerFired() } }
-                is Loaded -> Loaded(viewModel, (uiState.loadState as Loaded).viewModel)
+                is Loaded -> Loaded(viewModel, (uiState.loadState as Loaded).viewModel, themeStream)
             }
 
             if (configManager.isDemoUser) {
@@ -145,18 +147,22 @@ class PowerFlowTabView(
     }
 
     @Composable
-    fun Loaded(viewModel: PowerFlowTabViewModel, homePowerFlowViewModel: SummaryPowerFlowViewModel) {
+    fun Loaded(
+        viewModel: PowerFlowTabViewModel,
+        homePowerFlowViewModel: SummaryPowerFlowViewModel,
+        themeStream: MutableStateFlow<AppTheme>
+    ) {
         val updateMessage by viewModel.updateMessage.collectAsState()
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             SummaryPowerFlowView().Content(
                 modifier = Modifier.weight(1f),
-                viewModel = homePowerFlowViewModel
+                viewModel = homePowerFlowViewModel,
+                themeStream = themeStream
             )
 
             Text(
                 updateMessage ?: "",
-                fontSize = 12.sp,
                 color = Color.Gray,
                 modifier = Modifier
                     .padding(top = 12.dp)
@@ -190,7 +196,8 @@ fun PowerFlowTabViewPreview() {
             FakeConfigManager()
         ).Loaded(
             viewModel = viewModel,
-            homePowerFlowViewModel = homePowerFlowViewModel
+            homePowerFlowViewModel = homePowerFlowViewModel,
+            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay)
         )
     }
 }
