@@ -34,8 +34,8 @@ fun PylonView(modifier: Modifier = Modifier) {
         )
         drawLine(
             color = color,
-            start = leftLegTop,
-            end = rightLegTop,
+            start = leftLegTop.minus(Offset(3f, -1f)),
+            end = rightLegTop.plus(Offset(3f, 1f)),
             strokeWidth = strokeWidth
         )
         drawLine(

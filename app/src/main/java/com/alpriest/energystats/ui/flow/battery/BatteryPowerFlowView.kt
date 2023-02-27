@@ -10,7 +10,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.models.asPercent
@@ -27,6 +29,14 @@ fun BatteryPowerFlow(
     themeStream: MutableStateFlow<AppTheme>
 ) {
     var percentage by remember { mutableStateOf(true) }
+    val fontSize: TextUnit = when (themeStream.collectAsState().value) {
+        AppTheme.UseDefaultDisplay -> {
+            16.sp
+        }
+        AppTheme.UseLargeDisplay -> {
+            26.sp
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,11 +64,13 @@ fun BatteryPowerFlow(
             Box(modifier = Modifier.clickable { percentage = !percentage }) {
                 if (percentage) {
                     Text(
-                        viewModel.batteryStateOfCharge.asPercent()
+                        viewModel.batteryStateOfCharge.asPercent(),
+                        fontSize = fontSize
                     )
                 } else {
                     Text(
-                        viewModel.batteryCapacity
+                        viewModel.batteryCapacity,
+                        fontSize = fontSize
                     )
                 }
             }
@@ -68,7 +80,8 @@ fun BatteryPowerFlow(
                     it,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    fontSize = fontSize
                 )
             }
         }

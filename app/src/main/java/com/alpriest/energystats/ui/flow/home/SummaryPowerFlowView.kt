@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.flow.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,14 +15,14 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SummaryPowerFlowView {
-    private val iconHeight = 40.dp
-
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
         viewModel: SummaryPowerFlowViewModel = viewModel(),
         themeStream: MutableStateFlow<AppTheme>
     ) {
+        val iconHeight = if (themeStream.collectAsState().value == AppTheme.UseDefaultDisplay) 40.dp else 80.dp
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.padding(12.dp)

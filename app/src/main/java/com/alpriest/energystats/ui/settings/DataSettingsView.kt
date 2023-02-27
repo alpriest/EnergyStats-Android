@@ -1,13 +1,14 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.*
@@ -17,7 +18,7 @@ import java.util.*
 
 @Composable
 fun DataSettingsView(rawDataStore: RawDataStoring, modifier: Modifier = Modifier) {
-    var showing by rememberSaveable { mutableStateOf(true) }
+    var showing by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
