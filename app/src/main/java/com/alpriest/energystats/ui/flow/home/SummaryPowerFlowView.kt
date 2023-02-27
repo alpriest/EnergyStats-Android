@@ -8,11 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.models.RawData
+import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SummaryPowerFlowView {
     @Composable
@@ -80,17 +84,24 @@ class SummaryPowerFlowView {
 @Preview(showBackground = true, widthDp = 500, heightDp = 800)
 @Composable
 fun SummaryPowerFlowViewPreview() {
+    val now = SimpleDateFormat("yyyy-MM-dd hh:mm:ss z", Locale.getDefault()).format(Date())
+
     EnergyStatsTheme {
         Box(modifier = Modifier.height(600.dp)) {
             SummaryPowerFlowView().Content(
                 viewModel = SummaryPowerFlowViewModel(
                     FakeConfigManager(),
                     2.3,
-                    20.5,
-                    0.03,
-                    0.0,
-                    0.4,
-                    true
+                    0.5,
+                    true,
+                    raw = listOf(
+                        RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
+                        RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
+                        RawResponse("batChargePower", arrayListOf(RawData(now, 2.45))),
+                        RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
+                        RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
+                        RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
+                    )
                 ),
                 themeStream = MutableStateFlow(AppTheme.UseLargeDisplay)
             )

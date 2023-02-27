@@ -4,7 +4,6 @@ import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.HistoricalViewModel
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
@@ -14,10 +13,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.*
 
 interface IPowerFlowTabViewModel {
     val uiState: StateFlow<UiState>
     val updateMessage: StateFlow<String?>
+    val lastUpdateDate: StateFlow<Date?>
     fun timerFired()
 }
 
@@ -33,6 +34,9 @@ class PowerFlowTabViewModel(
 
     private val _updateMessage: MutableStateFlow<String?> = MutableStateFlow(null)
     override val updateMessage: StateFlow<String?> = _updateMessage.asStateFlow()
+
+    private val _lastUpdateDate: MutableStateFlow<Date?> = MutableStateFlow(null)
+    override val lastUpdateDate: StateFlow<Date?> = _lastUpdateDate.asStateFlow()
 
     private var isLoading = false
 
@@ -87,7 +91,7 @@ class PowerFlowTabViewModel(
                     )
                 )
                 rawDataStore.store(raw = raw)
-                val rawViewModel = HistoricalViewModel(raw.toTypedArray())
+
                 val battery: BatteryViewModel = if (configManager.hasBattery) {
                     val battery = network.fetchBattery()
                     rawDataStore.store(battery = battery)
@@ -95,14 +99,13 @@ class PowerFlowTabViewModel(
                 } else {
                     BatteryViewModel.noBattery()
                 }
+
                 val summary = SummaryPowerFlowViewModel(
                     configManager = configManager,
-                    solar = rawViewModel.currentSolarPower,
                     battery = battery.chargePower,
-                    home = rawViewModel.currentHomeConsumption,
-                    grid = rawViewModel.currentGridExport,
                     batteryStateOfCharge = battery.chargeLevel,
                     hasBattery = battery.hasBattery,
+                    raw = raw
                 )
                 _uiState.value = UiState(Loaded(summary))
                 _updateMessage.value = null

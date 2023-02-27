@@ -107,7 +107,7 @@ private fun RawDataDump(rawDataStore: RawDataStoring) {
 @Composable
 fun DataSettingsViewPreview() {
     val store = RawDataStore()
-    val now = SimpleDateFormat("yyyy-MM-dd hh:mm:ss zZ", Locale.getDefault()).format(Date())
+    val now = SimpleDateFormat("yyyy-MM-dd hh:mm:ss z", Locale.getDefault()).format(Date())
     store.store(
         raw = listOf(
             RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),

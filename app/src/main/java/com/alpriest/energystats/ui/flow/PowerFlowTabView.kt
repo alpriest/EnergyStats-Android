@@ -27,8 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawDataStoring
+import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
@@ -41,6 +43,8 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PowerFlowTabViewModelFactory(
     private val network: Networking,
@@ -180,21 +184,23 @@ class PowerFlowTabView(
 @Composable
 fun PowerFlowTabViewPreview() {
     val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore())
+    val now = SimpleDateFormat("yyyy-MM-dd hh:mm:ss z", Locale.getDefault()).format(Date())
     val homePowerFlowViewModel = SummaryPowerFlowViewModel(
         FakeConfigManager(),
         2.3,
         0.5,
-        0.03,
-        0.0,
-        0.4,
-        true
+        true,
+        raw = listOf(
+            RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("batChargePower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
+            RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
+        )
     )
 
     EnergyStatsTheme {
-//        PowerFlowTabView(
-//            DemoNetworking(),
-//            FakeConfigManager()
-//        ).Content(viewModel)
         PowerFlowTabView(
             DemoNetworking(),
             FakeConfigManager(),
