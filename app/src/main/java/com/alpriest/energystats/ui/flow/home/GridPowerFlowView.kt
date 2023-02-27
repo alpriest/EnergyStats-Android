@@ -34,7 +34,8 @@ fun GridPowerFlowView(amount: Double, modifier: Modifier, iconHeight: Dp, themeS
                 modifier = Modifier
                     .height(iconHeight)
                     .width(iconHeight * 1.125f)
-                    .padding(6.dp)
+                    .padding(6.dp),
+                themeStream = themeStream
             )
         }
     }
@@ -48,8 +49,8 @@ fun GridPowerFlowViewPreview() {
             GridPowerFlowView(
                 amount = 1.0,
                 modifier = Modifier,
-                iconHeight = 25.dp,
-                themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay)
+                iconHeight = 80.dp,
+                themeStream = MutableStateFlow(AppTheme.UseLargeDisplay)
             )
         }
     }

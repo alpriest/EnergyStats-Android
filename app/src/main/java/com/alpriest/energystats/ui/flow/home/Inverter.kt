@@ -11,11 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun InverterSpacer(modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppTheme>) {
-    val strokeWidth: Float = if (themeStream.collectAsState().value == AppTheme.UseDefaultDisplay) {
-        6f
-    } else {
-        12f
-    }
+    val strokeWidth = themeStream.collectAsState().value.strokeWidth()
 
     Canvas(modifier) {
         drawLine(

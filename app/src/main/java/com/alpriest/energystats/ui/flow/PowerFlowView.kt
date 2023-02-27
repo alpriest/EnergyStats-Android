@@ -63,19 +63,9 @@ fun PowerFlowView(
     )
     val isFlowing = !amount.rounded(2).sameValueAs(0.0)
     val theme by themeStream.collectAsState()
+    val strokeWidth: Float = theme.strokeWidth()
+    val fontSize: TextUnit = theme.fontSize()
 
-    val strokeWidth: Float
-    val fontSize: TextUnit
-    when (theme) {
-        AppTheme.UseDefaultDisplay -> {
-            strokeWidth = 6f
-            fontSize = 16.sp
-        }
-        AppTheme.UseLargeDisplay ->  {
-            strokeWidth = 12f
-            fontSize = 26.sp
-        }
-    }
     val lineColor = Color.LightGray
 
     Box(

@@ -4,22 +4,25 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun PylonView(modifier: Modifier = Modifier) {
+fun PylonView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val color = MaterialTheme.colors.onBackground
+    val strokeWidth = themeStream.collectAsState().value.strokeWidth()
 
     Canvas(
         modifier = modifier.padding(top = 2.dp)
     ) {
         val hSize: Float = size.width * 0.1f
         val vSize: Float = size.height * 0.1f
-        val strokeWidth = 8f
 
         val leftLegBottom = Offset(x = hSize * 2.5f, y = size.height)
         val leftLegTop = Offset(x = hSize * 4, y = 0f)
@@ -74,7 +77,7 @@ fun PylonView(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun PylonViewPreview() {
-    val pylonHeight = 40.dp
+    val pylonHeight = 80.dp
 
     EnergyStatsTheme {
         Box(
@@ -83,6 +86,7 @@ fun PylonViewPreview() {
                 .width(pylonHeight * 1.2f)
         ) {
             PylonView(
+                themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay),
                 modifier = Modifier
                     .height(pylonHeight)
                     .width(pylonHeight * 0.9f)

@@ -29,14 +29,7 @@ fun BatteryPowerFlow(
     themeStream: MutableStateFlow<AppTheme>
 ) {
     var percentage by remember { mutableStateOf(true) }
-    val fontSize: TextUnit = when (themeStream.collectAsState().value) {
-        AppTheme.UseDefaultDisplay -> {
-            16.sp
-        }
-        AppTheme.UseLargeDisplay -> {
-            26.sp
-        }
-    }
+    val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

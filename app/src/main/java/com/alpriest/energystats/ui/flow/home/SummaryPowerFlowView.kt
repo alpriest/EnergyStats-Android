@@ -21,7 +21,7 @@ class SummaryPowerFlowView {
         viewModel: SummaryPowerFlowViewModel = viewModel(),
         themeStream: MutableStateFlow<AppTheme>
     ) {
-        val iconHeight = if (themeStream.collectAsState().value == AppTheme.UseDefaultDisplay) 40.dp else 80.dp
+        val iconHeight = themeStream.collectAsState().value.iconHeight()
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
