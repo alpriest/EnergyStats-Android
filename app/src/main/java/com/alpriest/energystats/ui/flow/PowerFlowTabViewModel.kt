@@ -60,6 +60,7 @@ class PowerFlowTabViewModel(
     }
 
     private fun startTimer() {
+        stopTimer()
         timer = object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds: Int = (millisUntilFinished / 1000).toInt()
@@ -110,6 +111,7 @@ class PowerFlowTabViewModel(
                 _uiState.value = UiState(Loaded(summary))
                 _updateMessage.value = null
             } catch (ex: Exception) {
+                stopTimer()
                 _uiState.value = UiState(Error("Failed: " + ex.localizedMessage))
                 _updateMessage.value = null
             }
