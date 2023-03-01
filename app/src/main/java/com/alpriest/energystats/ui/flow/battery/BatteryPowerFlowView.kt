@@ -85,10 +85,9 @@ fun BatteryPowerFlow(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun duration(estimate: BatteryCapacityEstimate): String {
-    val text = pluralStringResource(estimate.stringId, estimate.duration, estimate.duration)
+    val text = stringResource(estimate.stringId)
     val mins = stringResource(R.string.mins)
     val hour = stringResource(R.string.hour)
     val hours = stringResource(R.string.hours)

@@ -6,8 +6,8 @@
     <string name="hour">Stunde</string>
     <string name="hours">Stunden</string>
     <plurals name="nextUpdate">
-        <item quantity="one">Nächstes update in %1$ds</item>
-        <item quantity="other">Nächstes update in %1$ds</item>
+        <item quantity="one">Nächstes Update in %1$ds</item>
+        <item quantity="other">Nächstes Update in %1$ds</item>
     </plurals>
     <string name="fullIn">Voll in</string>
     <string name="emptyIn">Leer in</string>
