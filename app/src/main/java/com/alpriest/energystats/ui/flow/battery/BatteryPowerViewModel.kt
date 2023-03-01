@@ -18,7 +18,7 @@ class BatteryPowerViewModel(
         )
     }
 
-    val batteryExtra: String?
+    val batteryExtra: BatteryCapacityEstimate?
         get() {
             return calculator.batteryPercentageRemaining(
                 batteryChargePowerkWH = batteryChargePowerkWH,

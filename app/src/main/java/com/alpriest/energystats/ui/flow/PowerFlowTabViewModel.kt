@@ -1,8 +1,13 @@
 package com.alpriest.energystats.ui.flow
 
 import android.os.CountDownTimer
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.models.RawVariable
@@ -16,10 +21,38 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 interface IPowerFlowTabViewModel {
-    val uiState: StateFlow<UiState>
-    val updateMessage: StateFlow<String?>
+    val uiState: StateFlow<UiLoadState>
+    val updateMessage: StateFlow<UiUpdateState?>
     val lastUpdateDate: StateFlow<Date?>
     fun timerFired()
+}
+
+data class UiUpdateState(
+    val updateState: UpdateState
+)
+
+sealed class UpdateState {
+    @Composable
+    abstract fun toString2(): String
+}
+
+object LoadingNowUpdateState : UpdateState() {
+    @Composable
+    override fun toString2(): String {
+        return stringResource(R.string.loading)
+    }
+}
+
+class PendingUpdateState(private val nextUpdateSeconds: Int) : UpdateState() {
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Composable
+    override fun toString2(): String {
+        return pluralStringResource(
+            R.plurals.nextUpdate,
+            nextUpdateSeconds,
+            nextUpdateSeconds
+        )
+    }
 }
 
 class PowerFlowTabViewModel(
@@ -29,11 +62,11 @@ class PowerFlowTabViewModel(
 ) : ViewModel(), IPowerFlowTabViewModel {
     private var timer: CountDownTimer? = null
 
-    private val _uiState = MutableStateFlow(UiState(Loading))
-    override val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(UiLoadState(LoadingLoadState))
+    override val uiState: StateFlow<UiLoadState> = _uiState.asStateFlow()
 
-    private val _updateMessage: MutableStateFlow<String?> = MutableStateFlow(null)
-    override val updateMessage: StateFlow<String?> = _updateMessage.asStateFlow()
+    private val _updateMessage: MutableStateFlow<UiUpdateState?> = MutableStateFlow(null)
+    override val updateMessage: StateFlow<UiUpdateState?> = _updateMessage.asStateFlow()
 
     private val _lastUpdateDate: MutableStateFlow<Date?> = MutableStateFlow(null)
     override val lastUpdateDate: StateFlow<Date?> = _lastUpdateDate.asStateFlow()
@@ -64,7 +97,8 @@ class PowerFlowTabViewModel(
         timer = object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds: Int = (millisUntilFinished / 1000).toInt()
-                _updateMessage.value = "Next update in ${seconds}s"
+                _updateMessage.value = UiUpdateState(PendingUpdateState(seconds))
+//                _updateMessage.value = "Next update in ${seconds}s"
             }
 
             override fun onFinish() {
@@ -76,9 +110,10 @@ class PowerFlowTabViewModel(
     private fun loadData() {
         viewModelScope.launch {
             try {
-                _updateMessage.value = "Loading..."
-                if (_uiState.value.loadState is Error) {
-                    _uiState.value = UiState(Loading)
+                _updateMessage.value = UiUpdateState(LoadingNowUpdateState)
+//                _updateMessage.value = "Loading..."
+                if (_uiState.value.state is ErrorLoadState) {
+                    _uiState.value = UiLoadState(LoadingLoadState)
                 }
                 network.ensureHasToken()
                 val raw = network.fetchRaw(
@@ -108,11 +143,11 @@ class PowerFlowTabViewModel(
                     hasBattery = battery.hasBattery,
                     raw = raw
                 )
-                _uiState.value = UiState(Loaded(summary))
+                _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = null
             } catch (ex: Exception) {
                 stopTimer()
-                _uiState.value = UiState(Error("Failed: " + ex.localizedMessage))
+                _uiState.value = UiLoadState(ErrorLoadState(ex.localizedMessage ?: "Error unknown"))
                 _updateMessage.value = null
             }
         }

@@ -20,7 +20,7 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchBattery(): BatteryResponse {
-        return BatteryResponse(power = 0.131, soc = 20, residual = 2420.0)
+        return BatteryResponse(power = 0.131, soc = 25, residual = 2420.0)
     }
 
     override suspend fun fetchBatterySettings(): BatterySettingsResponse {

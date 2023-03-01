@@ -1,13 +1,17 @@
 package com.alpriest.energystats.ui.flow.battery
 
-import android.icu.text.RelativeDateTimeFormatter
+import com.alpriest.energystats.R
 import java.lang.Math.abs
 import kotlin.math.roundToInt
 
+data class BatteryCapacityEstimate(
+    val stringId: Int,
+    val duration: Int
+)
+
 class BatteryCapacityCalculator(
     private val capacityW: Int,
-    private val minimumSOC: Double,
-    private val formatter: RelativeDateTimeFormatter = RelativeDateTimeFormatter.getInstance()
+    private val minimumSOC: Double
 ) {
     private val minimumCharge: Double
         get() {
@@ -17,7 +21,7 @@ class BatteryCapacityCalculator(
     fun batteryPercentageRemaining(
         batteryChargePowerkWH: Double,
         batteryStateOfCharge: Double
-    ): String? {
+    ): BatteryCapacityEstimate? {
         if (kotlin.math.abs(batteryChargePowerkWH) <= 0) {
             return null
         }
@@ -31,30 +35,20 @@ class BatteryCapacityCalculator(
 
             val capacityRemainingW = capacityW - currentEstimatedChargeW
             val minsToFullCharge = (capacityRemainingW / (batteryChargePowerkWH * 1000.0)) * 60
-            val duration = duration(minsToFullCharge.roundToInt())
 
-            return "Full in $duration"
+            return BatteryCapacityEstimate(R.string.fullIn, minsToFullCharge.roundToInt())
         } else { // battery emptying
             if (batteryStateOfCharge <= (minimumSOC * 1.02)) {
                 return null
             }
             val chargeRemaining = currentEstimatedChargeW - minimumCharge
             val minsUntilEmpty = (chargeRemaining / abs(batteryChargePowerkWH * 1000.0)) * 60
-            val duration = duration(minsUntilEmpty.roundToInt())
 
-            return "Empty in $duration"
+            return BatteryCapacityEstimate(R.string.emptyIn, minsUntilEmpty.roundToInt())
         }
     }
 
     fun currentEstimatedChargeAmountkWH(batteryStateOfCharge: Double): Double {
         return (capacityW * batteryStateOfCharge) / 1000.0
-    }
-
-    private fun duration(minutes: Int): String {
-        return when (minutes) {
-            in 0..60 -> "$minutes mins"
-            in 61..119 -> "${minutes / 60} hour"
-            else -> "${Math.round(minutes / 60.0)} hours"
-        }
     }
 }

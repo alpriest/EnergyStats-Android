@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Energy Stats</string>
+    <string name="failed">Misslungen</string>
+    <string name="loading">Laden…</string>
+    <string name="mins">Minuten</string>
+    <string name="hour">Stunde</string>
+    <string name="hours">Stunden</string>
+    <plurals name="nextUpdate">
+        <item quantity="one">Nächstes update in %1$ds</item>
+        <item quantity="other">Nächstes update in %1$ds</item>
+    </plurals>
+    <string name="fullIn">Voll in</string>
+    <string name="emptyIn">Leer in</string>
+</resources>

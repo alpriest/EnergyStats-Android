@@ -83,10 +83,10 @@ class PowerFlowTabView(
     ) {
         val uiState by viewModel.uiState.collectAsState()
         val coroutineScope = rememberCoroutineScope()
-        val background: ShaderBrush = when (uiState.loadState) {
-            is Loading -> largeRadialGradient(listOf(Color.White, Color.Transparent))
-            is Loaded -> largeRadialGradient(listOf(Sunny, Color.Transparent))
-            is Error -> largeRadialGradient(
+        val background: ShaderBrush = when (uiState.state) {
+            is LoadingLoadState -> largeRadialGradient(listOf(Color.White, Color.Transparent))
+            is LoadedLoadState -> largeRadialGradient(listOf(Sunny, Color.Transparent))
+            is ErrorLoadState -> largeRadialGradient(
                 listOf(
                     Color.Red.copy(alpha = 0.7f),
                     Color.Transparent
@@ -100,12 +100,12 @@ class PowerFlowTabView(
                 .background(background),
             contentAlignment = TopEnd
         ) {
-            when (uiState.loadState) {
-                is Loading -> LoadingView("Loading...").run {
+            when (uiState.state) {
+                is LoadingLoadState -> LoadingView("Loading...").run {
                     viewModel.timerFired()
                 }
-                is Error -> Error((uiState.loadState as Error).reason) { coroutineScope.launch { viewModel.timerFired() } }
-                is Loaded -> Loaded(viewModel, (uiState.loadState as Loaded).viewModel, themeStream)
+                is ErrorLoadState -> Error((uiState.state as ErrorLoadState).reason) { coroutineScope.launch { viewModel.timerFired() } }
+                is LoadedLoadState -> Loaded(viewModel, (uiState.state as LoadedLoadState).viewModel, themeStream)
             }
 
             if (configManager.isDemoUser) {
@@ -160,7 +160,7 @@ class PowerFlowTabView(
         homePowerFlowViewModel: SummaryPowerFlowViewModel,
         themeStream: MutableStateFlow<AppTheme>
     ) {
-        val updateMessage by viewModel.updateMessage.collectAsState()
+        val updateState by viewModel.updateMessage.collectAsState()
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             SummaryPowerFlowView().Content(
@@ -169,13 +169,15 @@ class PowerFlowTabView(
                 themeStream = themeStream
             )
 
-            Text(
-                updateMessage ?: "",
-                color = Color.Gray,
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .padding(bottom = 4.dp),
-            )
+            updateState?.let {
+                Text(
+                    it.updateState.toString2(),
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+                        .padding(bottom = 4.dp),
+                )
+            }
         }
     }
 }
@@ -213,11 +215,11 @@ fun PowerFlowTabViewPreview() {
     }
 }
 
-data class UiState(
-    val loadState: LoadState
+data class UiLoadState(
+    val state: LoadState
 )
 
 sealed class LoadState
-class Error(val reason: String) : LoadState()
-object Loading : LoadState()
-class Loaded(val viewModel: SummaryPowerFlowViewModel) : LoadState()
+class ErrorLoadState(val reason: String) : LoadState()
+object LoadingLoadState : LoadState()
+class LoadedLoadState(val viewModel: SummaryPowerFlowViewModel) : LoadState()

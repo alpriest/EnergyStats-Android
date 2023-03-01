@@ -5,14 +5,18 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.models.asPercent
@@ -70,7 +74,7 @@ fun BatteryPowerFlow(
 
             viewModel.batteryExtra?.let {
                 Text(
-                    it,
+                    duration(estimate = it),
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     color = Color.Gray,
@@ -78,6 +82,21 @@ fun BatteryPowerFlow(
                 )
             }
         }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun duration(estimate: BatteryCapacityEstimate): String {
+    val text = pluralStringResource(estimate.stringId, estimate.duration, estimate.duration)
+    val mins = stringResource(R.string.mins)
+    val hour = stringResource(R.string.hour)
+    val hours = stringResource(R.string.hours)
+
+    return when (estimate.duration) {
+        in 0..60 -> "$text $estimate.duration $mins"
+        in 61..119 -> "$text ${estimate.duration / 60} $hour"
+        else -> "$text ${Math.round(estimate.duration / 60.0)} $hours"
     }
 }
 
