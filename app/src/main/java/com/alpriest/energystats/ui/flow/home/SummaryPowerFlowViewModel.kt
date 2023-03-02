@@ -22,37 +22,23 @@ class SummaryPowerFlowViewModel(
     val grid: Double
 
     init {
-        val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
-        val sorted: List<ParsedRawResponse> = raw.map { rawResponse ->
-            ParsedRawResponse(
-                variable = rawResponse.variable,
-                data = rawResponse.data.mapNotNull { rawData ->
-                    val formatted = formatter.parse(rawData.time) ?: return@mapNotNull null
-
-                    ParsedRawData(
-                        time = formatted,
-                        value = rawData.value
-                    )
-                }.sortedBy { it.time }
-            )
-        }
         solar = java.lang.Double.max(
             0.0,
-            sorted.currentValue(RawVariable.LoadsPower) + sorted.currentValue(RawVariable.BatChargePower) + sorted.currentValue(RawVariable.FeedInPower) - sorted.currentValue(
+            raw.currentValue(RawVariable.LoadsPower) + raw.currentValue(RawVariable.BatChargePower) + raw.currentValue(RawVariable.FeedInPower) - raw.currentValue(
                 RawVariable.GridConsumptionPower
-            ) - sorted.currentValue(
+            ) - raw.currentValue(
                 RawVariable.BatDischargePower
             )
         )
-        grid = sorted.currentValue(RawVariable.FeedInPower) - sorted.currentValue(RawVariable.GridConsumptionPower)
-        home = sorted.currentValue(RawVariable.GridConsumptionPower) + sorted.currentValue(RawVariable.GenerationPower)
+        grid = raw.currentValue(RawVariable.FeedInPower) - raw.currentValue(RawVariable.GridConsumptionPower)
+        home = raw.currentValue(RawVariable.GridConsumptionPower) + raw.currentValue(RawVariable.GenerationPower)
     }
 
     val batteryViewModel: BatteryPowerViewModel =
         BatteryPowerViewModel(configManager, batteryStateOfCharge, battery)
 }
 
-private fun List<ParsedRawResponse>.currentValue(forKey: RawVariable): Double {
+private fun List<RawResponse>.currentValue(forKey: RawVariable): Double {
     var result: Double
 
     val item = firstOrNull { it.variable == forKey.networkTitle() }
@@ -67,13 +53,3 @@ private fun List<ParsedRawResponse>.currentValue(forKey: RawVariable): Double {
 
     return result
 }
-
-private data class ParsedRawResponse(
-    val variable: String,
-    val data: List<ParsedRawData>
-)
-
-private data class ParsedRawData(
-    val time: Date,
-    val value: Double
-)
