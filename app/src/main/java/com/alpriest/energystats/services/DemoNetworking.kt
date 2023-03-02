@@ -1,12 +1,10 @@
 package com.alpriest.energystats.services
 
-import android.content.res.AssetManager
-import android.util.JsonReader
-import android.util.JsonWriter
 import com.alpriest.energystats.models.*
-import com.google.gson.*
+import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
 import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -77,6 +75,6 @@ class LocalDateTypeAdapter : TypeAdapter<LocalDate>() {
     }
 
     override fun read(`in`: com.google.gson.stream.JsonReader?): LocalDate {
-        return LocalDate.parse(`in`?.nextString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss zZ"))
+        return LocalDate.parse(`in`?.nextString(), DateTimeFormatter.ofPattern(dateFormat))
     }
 }

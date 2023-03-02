@@ -38,6 +38,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowView
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
@@ -186,7 +187,7 @@ class PowerFlowTabView(
 @Composable
 fun PowerFlowTabViewPreview() {
     val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore())
-    val now = SimpleDateFormat("yyyy-MM-dd hh:mm:ss z", Locale.getDefault()).format(Date())
+    val now = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
     val homePowerFlowViewModel = SummaryPowerFlowViewModel(
         FakeConfigManager(),
         2.3,

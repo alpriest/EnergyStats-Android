@@ -84,7 +84,7 @@ class SummaryPowerFlowView {
 @Preview(showBackground = true, widthDp = 500, heightDp = 800)
 @Composable
 fun SummaryPowerFlowViewPreview() {
-    val now = SimpleDateFormat("yyyy-MM-dd hh:mm:ss z", Locale.getDefault()).format(Date())
+    val now = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
 
     EnergyStatsTheme {
         Box(modifier = Modifier.height(600.dp)) {

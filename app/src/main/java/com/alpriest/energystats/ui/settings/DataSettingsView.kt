@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.*
+import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import java.text.SimpleDateFormat
 import java.util.*
@@ -107,7 +108,7 @@ private fun RawDataDump(rawDataStore: RawDataStoring) {
 @Composable
 fun DataSettingsViewPreview() {
     val store = RawDataStore()
-    val now = SimpleDateFormat("yyyy-MM-dd hh:mm:ss z", Locale.getDefault()).format(Date())
+    val now = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
     store.store(
         raw = listOf(
             RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),

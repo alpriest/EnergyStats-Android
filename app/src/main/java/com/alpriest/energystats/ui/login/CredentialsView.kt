@@ -19,6 +19,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun CredentialsView(

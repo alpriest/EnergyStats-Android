@@ -8,6 +8,8 @@ import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
+const val dateFormat = "yyyy-MM-dd HH:mm:ss"
+
 class SummaryPowerFlowViewModel(
     val configManager: ConfigManaging,
     val battery: Double,
@@ -20,7 +22,7 @@ class SummaryPowerFlowViewModel(
     val grid: Double
 
     init {
-        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z", Locale.getDefault())
+        val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
         val sorted: List<ParsedRawResponse> = raw.map { rawResponse ->
             ParsedRawResponse(
                 variable = rawResponse.variable,
