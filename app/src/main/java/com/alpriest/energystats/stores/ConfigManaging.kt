@@ -13,6 +13,7 @@ interface ConfigManaging {
     val hasPV: Boolean
     var hasBattery: Boolean
     var isDemoUser: Boolean
+    var useColouredFlowLines: Boolean
     fun logout()
     fun updateBatteryCapacity(capacity: String)
     suspend fun findDevice()

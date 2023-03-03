@@ -13,6 +13,15 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     private val HAS_PV = "HAS_PV"
     private val IS_DEMO_USER = "IS_DEMO_USER"
     private val USE_LARGE_DISPlAY = "USE_LARGE_DISPlAY"
+    private val USE_COLOURED_FLOW_LINES = "USE_COLOURED_FLOW_LINES"
+
+    override var useColouredFlowLines: Boolean
+        get() = sharedPreferences.getBoolean(USE_COLOURED_FLOW_LINES, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(USE_COLOURED_FLOW_LINES, value)
+            editor.apply()
+        }
 
     override var useLargeDisplay: Boolean
         get() = sharedPreferences.getBoolean(USE_LARGE_DISPlAY, false)

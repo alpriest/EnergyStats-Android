@@ -101,7 +101,8 @@ fun SummaryPowerFlowViewPreview() {
                         RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
                         RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
                         RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
-                    )
+                    ),
+                    13.6
                 ),
                 themeStream = MutableStateFlow(AppTheme.UseLargeDisplay)
             )

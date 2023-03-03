@@ -5,17 +5,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.PowerFlowView
@@ -43,7 +40,8 @@ fun BatteryPowerFlow(
             PowerFlowView(
                 amount = viewModel.batteryChargePowerkWH,
                 themeStream = themeStream,
-                position = PowerFlowLinePosition.LEFT
+                position = PowerFlowLinePosition.LEFT,
+                useColouredLines = true
             )
         }
 
@@ -59,18 +57,25 @@ fun BatteryPowerFlow(
             modifier = Modifier.defaultMinSize(minHeight = 40.dp)
         ) {
             Box(modifier = Modifier.clickable { percentage = !percentage }) {
-                if (percentage) {
-                    Text(
-                        viewModel.batteryStateOfCharge.asPercent(),
-                        fontSize = fontSize
-                    )
-                } else {
-                    Text(
-                        viewModel.batteryCapacity,
-                        fontSize = fontSize
-                    )
+                Row {
+                    if (percentage) {
+                        Text(
+                            viewModel.batteryStateOfCharge.asPercent(),
+                            fontSize = fontSize
+                        )
+                    } else {
+                        Text(
+                            viewModel.batteryCapacity,
+                            fontSize = fontSize
+                        )
+                    }
                 }
             }
+
+            Text(
+                viewModel.batteryTemperature.asTemperature(),
+                fontSize = fontSize
+            )
 
             viewModel.batteryExtra?.let {
                 Text(
@@ -83,6 +88,10 @@ fun BatteryPowerFlow(
             }
         }
     }
+}
+
+private fun Double.asTemperature(): String {
+    return "${this}°C"
 }
 
 @Composable
@@ -106,8 +115,9 @@ fun BatteryPowerFlowViewPreview() {
         BatteryPowerFlow(
             viewModel = BatteryPowerViewModel(
                 FakeConfigManager(),
+                batteryStateOfCharge = 0.25,
                 batteryChargePowerkWH = -0.5,
-                batteryStateOfCharge = 0.25
+                batteryTemperature = 13.6
             ),
             iconHeight = 40.dp,
             modifier = Modifier,

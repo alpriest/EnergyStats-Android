@@ -141,6 +141,7 @@ class PowerFlowTabViewModel(
                     battery = battery.chargePower,
                     batteryStateOfCharge = battery.chargeLevel,
                     hasBattery = battery.hasBattery,
+                    batteryTemperature = battery.temperature,
                     raw = raw
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))

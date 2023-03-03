@@ -7,7 +7,8 @@ import com.alpriest.energystats.models.kW
 class BatteryPowerViewModel(
     val configManager: ConfigManaging,
     val batteryStateOfCharge: Double,
-    val batteryChargePowerkWH: Double
+    val batteryChargePowerkWH: Double,
+    val batteryTemperature: Double
 ) : ViewModel() {
     private val calculator: BatteryCapacityCalculator
 

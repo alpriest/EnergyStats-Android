@@ -24,6 +24,9 @@ class FakeConfigManager : ConfigManaging {
     override var isDemoUser: Boolean
         get() = true
         set(value) {}
+    override var useColouredFlowLines: Boolean
+        get() = true
+        set(value) {}
 
     override fun logout() {
     }

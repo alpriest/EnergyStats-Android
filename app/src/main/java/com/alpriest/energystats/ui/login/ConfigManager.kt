@@ -45,6 +45,12 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             config.isDemoUser = value
         }
 
+    override var useColouredFlowLines: Boolean
+        get() = config.useColouredFlowLines
+        set(value) {
+            config.useColouredFlowLines = value
+        }
+
     override fun logout() {
         config.deviceID = null
         config.deviceSN = null

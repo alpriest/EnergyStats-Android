@@ -37,6 +37,7 @@ fun PowerFlowView(
     amount: Double,
     themeStream: MutableStateFlow<AppTheme>,
     position: PowerFlowLinePosition,
+    useColouredLines: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     var asKw by remember { mutableStateOf(true) }
@@ -65,8 +66,10 @@ fun PowerFlowView(
     val theme by themeStream.collectAsState()
     val strokeWidth: Float = theme.strokeWidth()
     val fontSize: TextUnit = theme.fontSize()
-
-    val lineColor = Color.LightGray
+    val inverterColor = Color.LightGray
+    val verticalLineColor = if (isFlowing && useColouredLines) flowingColour(amount) else {
+        Color.LightGray
+    }
 
     Box(
         modifier = modifier
@@ -79,26 +82,19 @@ fun PowerFlowView(
         Canvas(
             modifier
                 .fillMaxHeight()
-                .fillMaxWidth()) {
+                .fillMaxWidth()
+        ) {
             drawLine(
-                color = lineColor,
+                color = verticalLineColor,
                 start = Offset(size.width / 2, 0f),
                 end = Offset(size.width / 2, size.height),
                 strokeWidth = strokeWidth
             )
 
-            if (isFlowing) {
-                drawCircle(
-                    color = lineColor,
-                    center = Offset(x = size.width / 2, y = offsetModifier(ballYPosition)),
-                    radius = 12f
-                )
-            }
-
             when (position) {
                 PowerFlowLinePosition.LEFT -> {
                     drawLine(
-                        color = lineColor,
+                        color = inverterColor,
                         start = Offset(size.width / 2 - (strokeWidth / 2), strokeWidth / 2),
                         end = Offset(size.width, strokeWidth / 2),
                         strokeWidth = strokeWidth
@@ -106,7 +102,7 @@ fun PowerFlowView(
                 }
                 PowerFlowLinePosition.MIDDLE -> {
                     drawLine(
-                        color = lineColor,
+                        color = inverterColor,
                         start = Offset(0f, strokeWidth / 2),
                         end = Offset(size.width, strokeWidth / 2),
                         strokeWidth = strokeWidth
@@ -114,13 +110,21 @@ fun PowerFlowView(
                 }
                 PowerFlowLinePosition.RIGHT -> {
                     drawLine(
-                        color = lineColor,
+                        color = inverterColor,
                         start = Offset(size.width / 2 + (strokeWidth / 2), strokeWidth / 2),
                         end = Offset(0f, strokeWidth / 2),
                         strokeWidth = strokeWidth
                     )
                 }
                 PowerFlowLinePosition.NONE -> {}
+            }
+
+            if (isFlowing) {
+                drawCircle(
+                    color = verticalLineColor,
+                    center = Offset(x = size.width / 2, y = offsetModifier(ballYPosition)),
+                    radius = strokeWidth * 2.0f
+                )
             }
         }
 
@@ -138,6 +142,14 @@ fun PowerFlowView(
                     .padding(1.dp)
             )
         }
+    }
+}
+
+fun flowingColour(amount: Double): Color {
+    return if (amount < 0) {
+        Color.Red
+    } else {
+        Color.Green
     }
 }
 

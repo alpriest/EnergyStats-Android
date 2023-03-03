@@ -25,7 +25,8 @@ fun GridPowerFlowView(amount: Double, modifier: Modifier, iconHeight: Dp, themeS
                 modifier = Modifier,
                 amount = amount,
                 themeStream = themeStream,
-                position = PowerFlowLinePosition.RIGHT
+                position = PowerFlowLinePosition.RIGHT,
+                useColouredLines = true
             )
         }
 

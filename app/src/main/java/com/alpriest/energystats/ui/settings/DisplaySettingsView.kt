@@ -17,6 +17,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 @Composable
 fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
+    val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
 
     Column(
         modifier = modifier
@@ -32,6 +33,19 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 onCheckedChange = {
                     largeDisplayState.value = it
                     config.useLargeDisplay = it
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Use coloured flow lines")
+            Checkbox(
+                checked = colouredFlowLinesState.value,
+                onCheckedChange = {
+                    colouredFlowLinesState.value = it
+                    config.useColouredFlowLines = it
                 }
             )
         }
