@@ -86,7 +86,7 @@ fun PylonViewPreview() {
                 .width(pylonHeight * 1.2f)
         ) {
             PylonView(
-                themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay),
+                themeStream = MutableStateFlow(AppTheme(useLargeDisplay = false, useColouredLines = true, showBatteryTemperature = true)),
                 modifier = Modifier
                     .height(pylonHeight)
                     .width(pylonHeight * 0.9f)

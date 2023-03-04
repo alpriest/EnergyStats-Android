@@ -51,7 +51,7 @@ fun HomePowerFlowViewPreview() {
                 amount = 1.0,
                 modifier = Modifier,
                 iconHeight = 25.dp,
-                themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay)
+                themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true))
             )
         }
     }

@@ -121,7 +121,7 @@ fun BatteryPowerFlowViewPreview() {
             ),
             iconHeight = 40.dp,
             modifier = Modifier,
-            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay)
+            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true))
         )
     }
 }

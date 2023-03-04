@@ -14,6 +14,15 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     private val IS_DEMO_USER = "IS_DEMO_USER"
     private val USE_LARGE_DISPlAY = "USE_LARGE_DISPlAY"
     private val USE_COLOURED_FLOW_LINES = "USE_COLOURED_FLOW_LINES"
+    private val SHOW_BATTERY_TEMPERATURE = "SHOW_BATTERY_TEMPERATURE"
+
+    override var showBatteryTemperature: Boolean
+        get() = sharedPreferences.getBoolean(SHOW_BATTERY_TEMPERATURE, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SHOW_BATTERY_TEMPERATURE, value)
+            editor.apply()
+        }
 
     override var useColouredFlowLines: Boolean
         get() = sharedPreferences.getBoolean(USE_COLOURED_FLOW_LINES, false)

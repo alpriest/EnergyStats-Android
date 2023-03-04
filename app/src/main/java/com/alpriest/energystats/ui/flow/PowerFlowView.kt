@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.sameValueAs
@@ -67,7 +66,7 @@ fun PowerFlowView(
     val strokeWidth: Float = theme.strokeWidth()
     val fontSize: TextUnit = theme.fontSize()
     val inverterColor = Color.LightGray
-    val verticalLineColor = if (isFlowing && useColouredLines) flowingColour(amount) else {
+    val verticalLineColor = if (isFlowing && useColouredLines && theme.useColouredLines) flowingColour(amount) else {
         Color.LightGray
     }
 
@@ -159,17 +158,17 @@ fun PowerFlowViewPreview() {
     Row(Modifier.height(200.dp)) {
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppTheme.UseLargeDisplay),
+            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true)),
             position = PowerFlowLinePosition.LEFT
         )
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppTheme.UseLargeDisplay),
+            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true)),
             position = PowerFlowLinePosition.MIDDLE
         )
         PowerFlowView(
             -3.0,
-            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay),
+            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = false, useColouredLines = true, showBatteryTemperature = false)),
             position = PowerFlowLinePosition.RIGHT
         )
     }

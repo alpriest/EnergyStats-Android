@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
             }
             val theme = appContainer.configManager.themeStream.collectAsState()
 
-            EnergyStatsTheme(useLargeDisplay = theme.value == AppTheme.UseLargeDisplay) {
+            EnergyStatsTheme(useLargeDisplay = theme.value.useLargeDisplay) {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {

@@ -10,21 +10,21 @@ fun Double.asPercent(): String {
 }
 
 fun Int.kW(): String {
-    val divided = this.toDouble().rounded(2)
+    val divided = this.toDouble().rounded(3)
     val dec = DecimalFormat("#,###,###")
     return dec.format(divided) + " kW"
 }
 
 fun Double.kW(): String {
-    val divided = this.rounded(2)
-    val dec = DecimalFormat("#,###,###.##")
+    val divided = this.rounded(3)
+    val dec = DecimalFormat("#,###,##0.000")
     return dec.format(divided) + " kW"
 }
 
 fun Double.w(): String {
     val divided = (this * 1000.0).roundToLong()
 
-    val dec = DecimalFormat("#,###,###.##")
+    val dec = DecimalFormat("#,###,###.###")
     return dec.format(divided) + " W"
 }
 

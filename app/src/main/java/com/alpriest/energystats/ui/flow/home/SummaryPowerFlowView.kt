@@ -104,7 +104,7 @@ fun SummaryPowerFlowViewPreview() {
                     ),
                     13.6
                 ),
-                themeStream = MutableStateFlow(AppTheme.UseLargeDisplay)
+                themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true))
             )
         }
     }

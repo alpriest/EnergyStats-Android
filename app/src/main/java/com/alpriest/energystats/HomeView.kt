@@ -86,7 +86,7 @@ fun HomepagePreview() {
             network = DemoNetworking(),
             userManager = FakeUserManager(),
             {},
-            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay),
+            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true)),
             rawDataStore = RawDataStore()
         )
     }

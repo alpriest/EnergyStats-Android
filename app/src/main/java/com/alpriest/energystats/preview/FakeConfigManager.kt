@@ -6,7 +6,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Suppress("UNUSED_PARAMETER")
 class FakeConfigManager : ConfigManaging {
-    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.UseDefaultDisplay)
+    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
+        AppTheme(
+            useLargeDisplay = true,
+            useColouredLines = true,
+            showBatteryTemperature = showBatteryTemperature
+        )
+    )
+    override var showBatteryTemperature: Boolean
+        get() = true
+        set(value) {}
     override var useLargeDisplay: Boolean = false
     override val minSOC: Double
         get() = 0.2

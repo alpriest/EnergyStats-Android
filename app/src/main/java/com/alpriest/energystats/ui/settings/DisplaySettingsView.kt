@@ -18,6 +18,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
     val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
+    val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
 
     Column(
         modifier = modifier
@@ -46,6 +47,19 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 onCheckedChange = {
                     colouredFlowLinesState.value = it
                     config.useColouredFlowLines = it
+                }
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Show battery temperature")
+            Checkbox(
+                checked = showBatteryTemperatureState.value,
+                onCheckedChange = {
+                    showBatteryTemperatureState.value = it
+                    config.showBatteryTemperature = it
                 }
             )
         }

@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.models.ConfigInterface
-import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -9,14 +8,13 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ConfigManager(var config: ConfigInterface, val networking: Networking, val rawDataStore: RawDataStoring) : ConfigManaging {
-    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(if (config.useLargeDisplay) AppTheme.UseLargeDisplay else AppTheme.UseDefaultDisplay)
-
-    override var useLargeDisplay: Boolean
-        get() = config.useLargeDisplay
-        set(value) {
-            config.useLargeDisplay = value
-            themeStream.value = if (value) AppTheme.UseLargeDisplay else AppTheme.UseDefaultDisplay
-        }
+    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
+        AppTheme(
+            useLargeDisplay = config.useLargeDisplay,
+            useColouredLines = config.useColouredFlowLines,
+            showBatteryTemperature = showBatteryTemperature
+        )
+    )
 
     override val minSOC: Double
         get() = (config.minSOC ?: "0.0").toDouble()
@@ -49,6 +47,21 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         get() = config.useColouredFlowLines
         set(value) {
             config.useColouredFlowLines = value
+            themeStream.value = themeStream.value.update(useColouredLines = useColouredFlowLines)
+        }
+
+    override var showBatteryTemperature: Boolean
+        get() = config.showBatteryTemperature
+        set(value) {
+            config.showBatteryTemperature = value
+            themeStream.value = themeStream.value.update(showBatteryTemperature = showBatteryTemperature)
+        }
+
+    override var useLargeDisplay: Boolean
+        get() = config.useLargeDisplay
+        set(value) {
+            config.useLargeDisplay = value
+            themeStream.value = themeStream.value.update(useLargeDisplay = useLargeDisplay)
         }
 
     override fun logout() {

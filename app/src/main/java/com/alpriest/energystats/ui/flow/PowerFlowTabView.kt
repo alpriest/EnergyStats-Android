@@ -212,7 +212,7 @@ fun PowerFlowTabViewPreview() {
         ).Loaded(
             viewModel = viewModel,
             homePowerFlowViewModel = homePowerFlowViewModel,
-            themeStream = MutableStateFlow(AppTheme.UseDefaultDisplay)
+            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true))
         )
     }
 }
