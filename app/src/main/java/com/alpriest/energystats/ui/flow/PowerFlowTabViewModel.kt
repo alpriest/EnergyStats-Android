@@ -2,8 +2,6 @@ package com.alpriest.energystats.ui.flow
 
 import android.os.CountDownTimer
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,36 +20,38 @@ import java.util.*
 
 interface IPowerFlowTabViewModel {
     val uiState: StateFlow<UiLoadState>
-    val updateMessage: StateFlow<UiUpdateState?>
+    val updateMessage: StateFlow<UiUpdateMessageState?>
     val lastUpdateDate: StateFlow<Date?>
     fun timerFired()
 }
 
-data class UiUpdateState(
-    val updateState: UpdateState
+data class UiUpdateMessageState(
+    val updateState: UpdateMessageState
 )
 
-sealed class UpdateState {
+sealed class UpdateMessageState {
     @Composable
     abstract fun toString2(): String
 }
 
-object LoadingNowUpdateState : UpdateState() {
+object LoadingNowUpdateMessageState : UpdateMessageState() {
     @Composable
     override fun toString2(): String {
         return stringResource(R.string.loading)
     }
 }
 
-class PendingUpdateState(private val nextUpdateSeconds: Int) : UpdateState() {
-    @OptIn(ExperimentalComposeUiApi::class)
+class PendingUpdateMessageState(private val nextUpdateSeconds: Int) : UpdateMessageState() {
     @Composable
     override fun toString2(): String {
-        return pluralStringResource(
-            R.plurals.nextUpdate,
-            nextUpdateSeconds,
-            nextUpdateSeconds
-        )
+        return String.format(stringResource(R.string.nextUpdate, nextUpdateSeconds))
+    }
+}
+
+object EmptyUpdateMessageState: UpdateMessageState() {
+    @Composable
+    override fun toString2(): String {
+        return " "
     }
 }
 
@@ -65,8 +65,8 @@ class PowerFlowTabViewModel(
     private val _uiState = MutableStateFlow(UiLoadState(LoadingLoadState))
     override val uiState: StateFlow<UiLoadState> = _uiState.asStateFlow()
 
-    private val _updateMessage: MutableStateFlow<UiUpdateState?> = MutableStateFlow(null)
-    override val updateMessage: StateFlow<UiUpdateState?> = _updateMessage.asStateFlow()
+    private val _updateMessage: MutableStateFlow<UiUpdateMessageState> = MutableStateFlow(UiUpdateMessageState(EmptyUpdateMessageState))
+    override val updateMessage: StateFlow<UiUpdateMessageState> = _updateMessage.asStateFlow()
 
     private val _lastUpdateDate: MutableStateFlow<Date?> = MutableStateFlow(null)
     override val lastUpdateDate: StateFlow<Date?> = _lastUpdateDate.asStateFlow()
@@ -97,8 +97,7 @@ class PowerFlowTabViewModel(
         timer = object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds: Int = (millisUntilFinished / 1000).toInt()
-                _updateMessage.value = UiUpdateState(PendingUpdateState(seconds))
-//                _updateMessage.value = "Next update in ${seconds}s"
+                _updateMessage.value = UiUpdateMessageState(PendingUpdateMessageState(seconds))
             }
 
             override fun onFinish() {
@@ -110,8 +109,7 @@ class PowerFlowTabViewModel(
     private fun loadData() {
         viewModelScope.launch {
             try {
-                _updateMessage.value = UiUpdateState(LoadingNowUpdateState)
-//                _updateMessage.value = "Loading..."
+                _updateMessage.value = UiUpdateMessageState(LoadingNowUpdateMessageState)
                 if (_uiState.value.state is ErrorLoadState) {
                     _uiState.value = UiLoadState(LoadingLoadState)
                 }
@@ -145,11 +143,11 @@ class PowerFlowTabViewModel(
                     raw = raw
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
-                _updateMessage.value = null
+                _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
             } catch (ex: Exception) {
                 stopTimer()
                 _uiState.value = UiLoadState(ErrorLoadState(ex.localizedMessage ?: "Error unknown"))
-                _updateMessage.value = null
+                _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
             }
         }
     }

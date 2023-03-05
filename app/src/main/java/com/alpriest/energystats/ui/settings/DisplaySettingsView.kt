@@ -1,8 +1,7 @@
 package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -28,40 +27,43 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Increase sizes for large display")
             Checkbox(
                 checked = largeDisplayState.value,
                 onCheckedChange = {
                     largeDisplayState.value = it
                     config.useLargeDisplay = it
-                }
+                },
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
+            Text("Increase sizes for large display")
         }
 
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Use coloured flow lines")
             Checkbox(
                 checked = colouredFlowLinesState.value,
                 onCheckedChange = {
                     colouredFlowLinesState.value = it
                     config.useColouredFlowLines = it
-                }
+                },
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
+            Text("Use coloured flow lines")
         }
 
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Show battery temperature")
             Checkbox(
                 checked = showBatteryTemperatureState.value,
                 onCheckedChange = {
                     showBatteryTemperatureState.value = it
                     config.showBatteryTemperature = it
-                }
+                },
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
+            Text("Show battery temperature")
         }
     }
 }

@@ -31,6 +31,7 @@ fun BatteryPowerFlow(
 ) {
     var percentage by remember { mutableStateOf(true) }
     val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
+    val showBatteryTemperature = themeStream.collectAsState().value.showBatteryTemperature
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,10 +73,12 @@ fun BatteryPowerFlow(
                 }
             }
 
-            Text(
-                viewModel.batteryTemperature.asTemperature(),
-                fontSize = fontSize
-            )
+            if (showBatteryTemperature) {
+                Text(
+                    viewModel.batteryTemperature.asTemperature(),
+                    fontSize = fontSize
+                )
+            }
 
             viewModel.batteryExtra?.let {
                 Text(
@@ -121,7 +124,7 @@ fun BatteryPowerFlowViewPreview() {
             ),
             iconHeight = 40.dp,
             modifier = Modifier,
-            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true))
+            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = false))
         )
     }
 }

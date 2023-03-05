@@ -22,6 +22,8 @@ import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.sameValueAs
 import com.alpriest.energystats.models.w
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.PowerFlowNegative
+import com.alpriest.energystats.ui.theme.PowerFlowPositive
 import kotlinx.coroutines.flow.MutableStateFlow
 
 enum class PowerFlowLinePosition {
@@ -146,9 +148,9 @@ fun PowerFlowView(
 
 fun flowingColour(amount: Double): Color {
     return if (amount < 0) {
-        Color.Red
+        PowerFlowNegative
     } else {
-        Color.Green
+        PowerFlowPositive
     }
 }
 
