@@ -12,6 +12,7 @@ class FakeConfigStore(
     override var isDemoUser: Boolean = true,
     override var useLargeDisplay: Boolean = false,
     override var useColouredFlowLines: Boolean = true,
-    override var showBatteryTemperature: Boolean = true
+    override var showBatteryTemperature: Boolean = true,
+    override var refreshFrequency: Int = 0
 ) : ConfigInterface {
 }

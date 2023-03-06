@@ -5,94 +5,106 @@ import com.alpriest.energystats.models.ConfigInterface
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
     ConfigInterface {
-    private val BATTERY_CAPACITY = "BATTERY_CAPACITY"
-    private val MIN_SOC = "MIN_SOC"
-    private val DEVICE_ID = "DEVICE_ID"
-    private val DEVICE_SN = "DEVICE_SN"
-    private val HAS_BATTERY = "HAS_BATTERY"
-    private val HAS_PV = "HAS_PV"
-    private val IS_DEMO_USER = "IS_DEMO_USER"
-    private val USE_LARGE_DISPlAY = "USE_LARGE_DISPlAY"
-    private val USE_COLOURED_FLOW_LINES = "USE_COLOURED_FLOW_LINES"
-    private val SHOW_BATTERY_TEMPERATURE = "SHOW_BATTERY_TEMPERATURE"
 
-    override var showBatteryTemperature: Boolean
-        get() = sharedPreferences.getBoolean(SHOW_BATTERY_TEMPERATURE, false)
+    private enum class SharedPreferenceKey {
+        BATTERY_CAPACITY,
+        MIN_SOC,
+        DEVICE_ID,
+        DEVICE_SN,
+        HAS_BATTERY,
+        HAS_PV,
+        IS_DEMO_USER,
+        USE_LARGE_DISPLAY,
+        USE_COLOURED_FLOW_LINES,
+        SHOW_BATTERY_TEMPERATURE,
+        REFRESH_FREQUENCY
+    }
+
+    override var refreshFrequency: Int
+        get() = sharedPreferences.getInt(SharedPreferenceKey.REFRESH_FREQUENCY.name, 0)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(SHOW_BATTERY_TEMPERATURE, value)
+            editor.putInt(SharedPreferenceKey.REFRESH_FREQUENCY.name, value)
+            editor.apply()
+        }
+
+    override var showBatteryTemperature: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_BATTERY_TEMPERATURE.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_BATTERY_TEMPERATURE.name, value)
             editor.apply()
         }
 
     override var useColouredFlowLines: Boolean
-        get() = sharedPreferences.getBoolean(USE_COLOURED_FLOW_LINES, false)
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.USE_COLOURED_FLOW_LINES.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(USE_COLOURED_FLOW_LINES, value)
+            editor.putBoolean(SharedPreferenceKey.USE_COLOURED_FLOW_LINES.name, value)
             editor.apply()
         }
 
     override var useLargeDisplay: Boolean
-        get() = sharedPreferences.getBoolean(USE_LARGE_DISPlAY, false)
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.USE_LARGE_DISPLAY.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(USE_LARGE_DISPlAY, value)
+            editor.putBoolean(SharedPreferenceKey.USE_LARGE_DISPLAY.name, value)
             editor.apply()
         }
 
     override var minSOC: String?
-        get() = sharedPreferences.getString(MIN_SOC, null)
+        get() = sharedPreferences.getString(SharedPreferenceKey.MIN_SOC.name, null)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putString(MIN_SOC, value)
+            editor.putString(SharedPreferenceKey.MIN_SOC.name, value)
             editor.apply()
         }
 
     override var batteryCapacityW: String?
-        get() = sharedPreferences.getString(BATTERY_CAPACITY, null)
+        get() = sharedPreferences.getString(SharedPreferenceKey.BATTERY_CAPACITY.name, null)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putString(BATTERY_CAPACITY, value)
+            editor.putString(SharedPreferenceKey.BATTERY_CAPACITY.name, value)
             editor.apply()
         }
 
     override var deviceID: String?
-        get() = sharedPreferences.getString(DEVICE_ID, null)
+        get() = sharedPreferences.getString(SharedPreferenceKey.DEVICE_ID.name, null)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putString(DEVICE_ID, value)
+            editor.putString(SharedPreferenceKey.DEVICE_ID.name, value)
             editor.apply()
         }
 
     override var deviceSN: String?
-        get() = sharedPreferences.getString(DEVICE_SN, null)
+        get() = sharedPreferences.getString(SharedPreferenceKey.DEVICE_SN.name, null)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putString(DEVICE_SN, value)
+            editor.putString(SharedPreferenceKey.DEVICE_SN.name, value)
             editor.apply()
         }
 
     override var hasBattery: Boolean
-        get() = sharedPreferences.getBoolean(HAS_BATTERY, false)
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.HAS_BATTERY.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(HAS_BATTERY, value)
+            editor.putBoolean(SharedPreferenceKey.HAS_BATTERY.name, value)
             editor.apply()
         }
 
     override var hasPV: Boolean
-        get() = sharedPreferences.getBoolean(HAS_PV, false)
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.HAS_PV.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(HAS_PV, value)
+            editor.putBoolean(SharedPreferenceKey.HAS_PV.name, value)
             editor.apply()
         }
 
     override var isDemoUser: Boolean
-        get() = sharedPreferences.getBoolean(IS_DEMO_USER, false)
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.IS_DEMO_USER.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(IS_DEMO_USER, value)
+            editor.putBoolean(SharedPreferenceKey.IS_DEMO_USER.name, value)
             editor.apply()
         }
 }

@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -48,6 +49,12 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         set(value) {
             config.useColouredFlowLines = value
             themeStream.value = themeStream.value.update(useColouredLines = useColouredFlowLines)
+        }
+
+    override var refreshFrequency: RefreshFrequency
+        get() = RefreshFrequency.fromInt(config.refreshFrequency)
+        set(value) {
+            config.refreshFrequency = value.value
         }
 
     override var showBatteryTemperature: Boolean

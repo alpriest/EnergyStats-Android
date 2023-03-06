@@ -12,6 +12,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowViewModel
+import com.alpriest.energystats.ui.settings.RefreshFrequency
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -145,6 +146,10 @@ class PowerFlowTabViewModel(
     }
 
     private fun calculateTicks(summary: SummaryPowerFlowViewModel) {
-        totalSeconds = 60
+        totalSeconds = when (configManager.refreshFrequency) {
+            RefreshFrequency.OneMinute -> 60
+            RefreshFrequency.FiveMinutes -> 300
+            RefreshFrequency.Auto -> 60
+        }
     }
 }

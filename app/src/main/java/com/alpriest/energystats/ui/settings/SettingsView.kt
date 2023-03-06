@@ -44,7 +44,7 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
 
         Divider()
 
-        RefreshFrequencySettingsView()
+        RefreshFrequencySettingsView(config)
 
         Divider()
 

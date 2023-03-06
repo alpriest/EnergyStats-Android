@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
@@ -14,13 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
-enum class RefreshFrequency {
-    OneMinute,
-    FiveMinutes,
-    Auto;
+enum class RefreshFrequency(val value: Int) {
+    OneMinute(1),
+    FiveMinutes(5),
+    Auto(0);
 
     fun title(): String {
         return when (this) {
@@ -29,10 +29,14 @@ enum class RefreshFrequency {
             Auto -> "Auto"
         }
     }
+
+    companion object {
+        fun fromInt(value: Int) = values().first { it.value == value }
+    }
 }
 
 @Composable
-fun RefreshFrequencySettingsView() {
+fun RefreshFrequencySettingsView(config: ConfigManaging) {
     val refreshFrequency = rememberSaveable { mutableStateOf(RefreshFrequency.Auto) }
 
     Column {
@@ -44,6 +48,7 @@ fun RefreshFrequencySettingsView() {
                     selected = refreshFrequency.value == it,
                     onClick = {
                         refreshFrequency.value = it
+                        config.refreshFrequency = it
                     },
                     colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colors.primary)
                 )
@@ -68,6 +73,6 @@ fun RefreshFrequencySettingsView() {
 @Composable
 fun RefreshFrequencySettingsViewPreview() {
     EnergyStatsTheme {
-        RefreshFrequencySettingsView()
+        RefreshFrequencySettingsView(FakeConfigManager())
     }
 }

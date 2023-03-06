@@ -1,6 +1,7 @@
 package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -35,6 +36,9 @@ class FakeConfigManager : ConfigManaging {
         set(value) {}
     override var useColouredFlowLines: Boolean
         get() = true
+        set(value) {}
+    override var refreshFrequency: RefreshFrequency
+        get() = RefreshFrequency.Auto
         set(value) {}
 
     override fun logout() {

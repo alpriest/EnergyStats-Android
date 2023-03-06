@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 interface ConfigInterface {
+    var refreshFrequency: Int
     var showBatteryTemperature: Boolean
     var useColouredFlowLines: Boolean
     var useLargeDisplay: Boolean
