@@ -44,6 +44,10 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
 
         Divider()
 
+        RefreshFrequencySettingsView()
+
+        Divider()
+
         DataSettingsView(rawDataStore = rawDataStore)
 
         Column(

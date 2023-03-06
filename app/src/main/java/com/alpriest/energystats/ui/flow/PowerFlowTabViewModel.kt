@@ -18,13 +18,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.*
 
-interface IPowerFlowTabViewModel {
-    val uiState: StateFlow<UiLoadState>
-    val updateMessage: StateFlow<UiUpdateMessageState?>
-    val lastUpdateDate: StateFlow<Date?>
-    fun timerFired()
-}
-
 data class UiUpdateMessageState(
     val updateState: UpdateMessageState
 )
@@ -59,21 +52,19 @@ class PowerFlowTabViewModel(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val rawDataStore: RawDataStoring
-) : ViewModel(), IPowerFlowTabViewModel {
+) : ViewModel() {
     private var timer: CountDownTimer? = null
 
     private val _uiState = MutableStateFlow(UiLoadState(LoadingLoadState))
-    override val uiState: StateFlow<UiLoadState> = _uiState.asStateFlow()
+    val uiState: StateFlow<UiLoadState> = _uiState.asStateFlow()
 
     private val _updateMessage: MutableStateFlow<UiUpdateMessageState> = MutableStateFlow(UiUpdateMessageState(EmptyUpdateMessageState))
-    override val updateMessage: StateFlow<UiUpdateMessageState> = _updateMessage.asStateFlow()
-
-    private val _lastUpdateDate: MutableStateFlow<Date?> = MutableStateFlow(null)
-    override val lastUpdateDate: StateFlow<Date?> = _lastUpdateDate.asStateFlow()
+    val updateMessage: StateFlow<UiUpdateMessageState> = _updateMessage.asStateFlow()
 
     private var isLoading = false
+    private var totalSeconds = 60
 
-    override fun timerFired() {
+    fun timerFired() {
         if (isLoading) {
             return
         }
@@ -94,7 +85,7 @@ class PowerFlowTabViewModel(
 
     private fun startTimer() {
         stopTimer()
-        timer = object : CountDownTimer(60000, 1000) {
+        timer = object : CountDownTimer(totalSeconds * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds: Int = (millisUntilFinished / 1000).toInt()
                 _updateMessage.value = UiUpdateMessageState(PendingUpdateMessageState(seconds))
@@ -144,11 +135,16 @@ class PowerFlowTabViewModel(
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
+                calculateTicks(summary)
             } catch (ex: Exception) {
                 stopTimer()
                 _uiState.value = UiLoadState(ErrorLoadState(ex.localizedMessage ?: "Error unknown"))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
             }
         }
+    }
+
+    private fun calculateTicks(summary: SummaryPowerFlowViewModel) {
+        totalSeconds = 60
     }
 }

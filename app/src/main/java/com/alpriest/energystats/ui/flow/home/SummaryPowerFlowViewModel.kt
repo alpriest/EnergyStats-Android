@@ -1,10 +1,13 @@
 package com.alpriest.energystats.ui.flow.home
 
 import androidx.lifecycle.ViewModel
+import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
 
@@ -26,22 +29,15 @@ class SummaryPowerFlowViewModel(
     )
     val home: Double = raw.currentValue(RawVariable.GridConsumptionPower) + raw.currentValue(RawVariable.GenerationPower)
     val grid: Double = raw.currentValue(RawVariable.FeedInPower) - raw.currentValue(RawVariable.GridConsumptionPower)
-    val batteryViewModel: BatteryPowerViewModel =
-        BatteryPowerViewModel(configManager, batteryStateOfCharge, battery, batteryTemperature)
+    val batteryViewModel: BatteryPowerViewModel = BatteryPowerViewModel(configManager, batteryStateOfCharge, battery, batteryTemperature)
+    val latestUpdate = raw.currentData(RawVariable.GridConsumptionPower)?.time?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it) } ?: Date()
 }
 
 private fun List<RawResponse>.currentValue(forKey: RawVariable): Double {
-    var result: Double
+    val item = currentData(forKey)
+    return item?.value ?: 0.0
+}
 
-    val item = firstOrNull { it.variable == forKey.networkTitle() }
-    if (item != null) {
-        item.let {
-            result = it.data
-                .lastOrNull()?.value ?: 0.0
-        }
-    } else {
-        result = 0.0
-    }
-
-    return result
+private fun List<RawResponse>.currentData(forKey: RawVariable): RawData? {
+    return firstOrNull { it.variable == forKey.networkTitle() }?.data?.lastOrNull()
 }
