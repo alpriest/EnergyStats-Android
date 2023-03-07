@@ -105,7 +105,7 @@ private fun duration(estimate: BatteryCapacityEstimate): String {
     val hours = stringResource(R.string.hours)
 
     return when (estimate.duration) {
-        in 0..60 -> "$text $estimate.duration $mins"
+        in 0..60 -> "$text ${estimate.duration} $mins"
         in 61..119 -> "$text ${estimate.duration / 60} $hour"
         else -> "$text ${Math.round(estimate.duration / 60.0)} $hours"
     }

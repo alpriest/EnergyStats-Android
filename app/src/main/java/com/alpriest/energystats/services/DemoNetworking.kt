@@ -1,12 +1,17 @@
 package com.alpriest.energystats.services
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
 import com.google.gson.reflect.TypeToken
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DemoNetworking : Networking {
     override suspend fun ensureHasToken() {
@@ -39,6 +44,7 @@ class DemoNetworking : Networking {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun fetchRaw(variables: Array<RawVariable>): ArrayList<RawResponse> {
         val itemType = object : TypeToken<NetworkRawResponse>() {}.type
         val rawData = rawData()
@@ -50,7 +56,7 @@ class DemoNetworking : Networking {
             RawResponse(
                 variable = response.variable,
                 data = ArrayList(response.data.map {
-                    RawData(time = it.time, value = it.value)
+                    RawData(time = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date()), value = it.value)
                 }.toList())
             )
         }.toList())
@@ -70,10 +76,12 @@ class DemoNetworking : Networking {
 }
 
 class LocalDateTypeAdapter : TypeAdapter<LocalDate>() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun write(out: com.google.gson.stream.JsonWriter?, value: LocalDate?) {
         out?.value(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(value))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun read(`in`: com.google.gson.stream.JsonReader?): LocalDate {
         return LocalDate.parse(`in`?.nextString(), DateTimeFormatter.ofPattern(dateFormat))
     }

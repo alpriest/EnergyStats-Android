@@ -27,7 +27,7 @@ class SummaryPowerFlowViewModel(
             RawVariable.BatDischargePower
         )
     )
-    val home: Double = raw.currentValue(RawVariable.GridConsumptionPower) + raw.currentValue(RawVariable.GenerationPower)
+    val home: Double = raw.currentValue(RawVariable.GridConsumptionPower) + raw.currentValue(RawVariable.GenerationPower) - raw.currentValue(RawVariable.FeedInPower)
     val grid: Double = raw.currentValue(RawVariable.FeedInPower) - raw.currentValue(RawVariable.GridConsumptionPower)
     val batteryViewModel: BatteryPowerViewModel = BatteryPowerViewModel(configManager, batteryStateOfCharge, battery, batteryTemperature)
     val latestUpdate = raw.currentData(RawVariable.GridConsumptionPower)?.time?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it) } ?: Date()
