@@ -1,5 +1,6 @@
 package com.alpriest.energystats.stores
 
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,15 +10,14 @@ interface ConfigManaging {
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean
     val minSOC: Double
-    val batteryCapacityW: Int
-    val deviceSN: String?
-    val deviceID: String?
-    val hasPV: Boolean
-    var hasBattery: Boolean
+    val batteryCapacity: String
     var isDemoUser: Boolean
     var useColouredFlowLines: Boolean
     var refreshFrequency: RefreshFrequency
+    var devices: List<Device>?
+    var currentDevice: Device?
+    var selectedDeviceID: String?
     fun logout()
     fun updateBatteryCapacity(capacity: String)
-    suspend fun findDevice()
+    suspend fun findDevices()
 }

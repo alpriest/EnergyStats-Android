@@ -1,12 +1,15 @@
 package com.alpriest.energystats.ui.login
 
+import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.google.gson.Gson
+import kotlinx.coroutines.flow.*
 
 class ConfigManager(var config: ConfigInterface, val networking: Networking, val rawDataStore: RawDataStoring) : ConfigManaging {
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
@@ -18,25 +21,10 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
     )
 
     override val minSOC: Double
-        get() = (config.minSOC ?: "0.0").toDouble()
+        get() = (currentDevice?.battery?.minSOC ?: "0.2").toDouble()
 
-    override val batteryCapacityW: Int
-        get() = (config.batteryCapacityW ?: "2600").toDouble().toInt()
-
-    override val deviceSN: String?
-        get() = config.deviceSN
-
-    override val deviceID: String?
-        get() = config.deviceID
-
-    override val hasPV: Boolean
-        get() = config.hasPV
-
-    override var hasBattery: Boolean
-        get() = config.hasBattery
-        set(value) {
-            config.hasBattery = value
-        }
+    override val batteryCapacity: String
+        get() = currentDevice?.battery?.capacity ?: "2600"
 
     override var isDemoUser: Boolean
         get() = config.isDemoUser
@@ -72,40 +60,84 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         }
 
     override fun logout() {
-        config.deviceID = null
-        config.deviceSN = null
-        config.hasPV = false
-        config.hasBattery = false
+        config.devices = null
         config.isDemoUser = false
     }
 
-    override suspend fun findDevice() {
+    override var devices: List<Device>?
+        get() {
+            config.devices?.let {
+                return Gson().fromJson(it, Array<Device>::class.java).toList()
+            }
+
+            return null
+        }
+        set(value) {
+            if (value != null) {
+                config.devices = Gson().toJson(value)
+            } else {
+                config.devices = null
+            }
+        }
+
+    override var currentDevice: Device?
+        get() {
+            return devices?.first { it.deviceID == selectedDeviceID }
+        }
+        set(value) {}
+
+    override var selectedDeviceID: String?
+        get() = config.selectedDeviceID
+        set(value) {
+            config.selectedDeviceID = value
+        }
+
+    override suspend fun findDevices() {
         val deviceList = networking.fetchDeviceList()
 
         try {
-            val device = deviceList.devices.first()
-            config.deviceSN = device.deviceSN
-            config.deviceID = device.deviceID
-            config.hasBattery = device.hasBattery
-            config.hasPV = device.hasPV
+            val mappedDevices = ArrayList<Device>()
+            deviceList.devices.asFlow().map {
+                val batteryCapacity: String?
+                val minSOC: String?
+
+                if (it.hasBattery) {
+                    val battery = networking.fetchBattery(it.deviceID)
+                    rawDataStore.store(battery = battery)
+                    val batterySettings = networking.fetchBatterySettings(it.deviceSN)
+                    batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
+                    minSOC = (batterySettings.minSoc.toDouble() / 100.0).toString()
+                } else {
+                    batteryCapacity = null
+                    minSOC = null
+                }
+
+                mappedDevices.add(
+                    Device(
+                        plantName = it.plantName,
+                        deviceID = it.deviceID,
+                        deviceSN = it.deviceSN,
+                        hasPV = it.hasPV,
+                        battery = if (it.hasBattery) Battery(batteryCapacity, minSOC) else null
+                    )
+                )
+            }.collect()
+
+            devices = mappedDevices
             rawDataStore.store(deviceList = deviceList)
-
-            if (device.hasBattery) {
-                val battery = networking.fetchBattery()
-                rawDataStore.store(battery = battery)
-                val batterySettings = networking.fetchBatterySettings()
-                rawDataStore.store(batterySettings = batterySettings)
-                config.batteryCapacityW = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
-                config.minSOC = (batterySettings.minSoc.toDouble() / 100.0).toString()
-            }
-
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         }
     }
 
     override fun updateBatteryCapacity(capacity: String) {
-        config.batteryCapacityW = capacity
+        devices = devices?.map {
+            if (it.deviceID == selectedDeviceID && it.battery != null) {
+                Device(it.plantName, it.deviceID, it.deviceSN, it.hasPV, Battery(capacity, it.battery.minSOC))
+            } else {
+                it
+            }
+        }
     }
 }
 

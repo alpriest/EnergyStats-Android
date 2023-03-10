@@ -40,7 +40,7 @@ fun SettingsTitleView(title: String) {
 @Composable
 fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val isEditingCapacity = rememberSaveable { mutableStateOf(false) }
-    var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacityW.toString()) }
+    var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacity) }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -93,7 +93,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     )
                 } else {
                     Text(
-                        text = config.batteryCapacityW.kW(),
+                        text = config.batteryCapacity.toInt().kW(),
                         modifier = Modifier.clickable { isEditingCapacity.value = true }
                     )
                 }

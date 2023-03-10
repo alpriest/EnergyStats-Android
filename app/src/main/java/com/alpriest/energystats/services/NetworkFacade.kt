@@ -29,35 +29,35 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
         }
     }
 
-    override suspend fun fetchBattery(): BatteryResponse {
+    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         return if (config.isDemoUser) {
-            demoNetworking.fetchBattery()
+            demoNetworking.fetchBattery(deviceID)
         } else {
-            network.fetchBattery()
+            network.fetchBattery(deviceID)
         }
     }
 
-    override suspend fun fetchBatterySettings(): BatterySettingsResponse {
+    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
         return if (config.isDemoUser) {
-            demoNetworking.fetchBatterySettings()
+            demoNetworking.fetchBatterySettings(deviceSN)
         } else {
-            network.fetchBatterySettings()
+            network.fetchBatterySettings(deviceSN)
         }
     }
 
-    override suspend fun fetchReport(variables: Array<ReportVariable>, queryDate: QueryDate): ArrayList<ReportResponse> {
+    override suspend fun fetchReport(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate): ArrayList<ReportResponse> {
         return if (config.isDemoUser) {
-            demoNetworking.fetchReport(variables, queryDate)
+            demoNetworking.fetchReport(deviceID, variables, queryDate)
         } else {
-            network.fetchReport(variables, queryDate)
+            network.fetchReport(deviceID, variables, queryDate)
         }
     }
 
-    override suspend fun fetchRaw(variables: Array<RawVariable>): List<RawResponse> {
+    override suspend fun fetchRaw(deviceID: String, variables: Array<RawVariable>): ArrayList<RawResponse> {
         return if (config.isDemoUser) {
-            demoNetworking.fetchRaw(variables)
+            demoNetworking.fetchRaw(deviceID, variables)
         } else {
-            network.fetchRaw(variables)
+            network.fetchRaw(deviceID, variables)
         }
     }
 }

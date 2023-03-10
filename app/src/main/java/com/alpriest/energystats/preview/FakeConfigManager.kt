@@ -1,5 +1,6 @@
 package com.alpriest.energystats.preview
 
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -20,17 +21,8 @@ class FakeConfigManager : ConfigManaging {
     override var useLargeDisplay: Boolean = false
     override val minSOC: Double
         get() = 0.2
-    override val batteryCapacityW: Int
-        get() = 10000
-    override val deviceSN: String
-        get() = "1234"
-    override val deviceID: String
-        get() = "4567"
-    override val hasPV: Boolean
-        get() = true
-    override var hasBattery: Boolean
-        get() = true
-        set(value) {}
+    override val batteryCapacity: String
+        get() = "10000"
     override var isDemoUser: Boolean
         get() = true
         set(value) {}
@@ -40,6 +32,15 @@ class FakeConfigManager : ConfigManaging {
     override var refreshFrequency: RefreshFrequency
         get() = RefreshFrequency.Auto
         set(value) {}
+    override var devices: List<Device>?
+        get() = TODO("Not yet implemented")
+        set(value) {}
+    override var currentDevice: Device?
+        get() = TODO("Not yet implemented")
+        set(value) {}
+    override var selectedDeviceID: String?
+        get() = TODO("Not yet implemented")
+        set(value) {}
 
     override fun logout() {
     }
@@ -47,6 +48,6 @@ class FakeConfigManager : ConfigManaging {
     override fun updateBatteryCapacity(capacity: String) {
     }
 
-    override suspend fun findDevice() {
+    override suspend fun findDevices() {
     }
 }

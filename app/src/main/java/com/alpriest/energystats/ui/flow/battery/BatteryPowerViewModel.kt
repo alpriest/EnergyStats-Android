@@ -14,7 +14,7 @@ class BatteryPowerViewModel(
 
     init {
         calculator = BatteryCapacityCalculator(
-            capacityW = configManager.batteryCapacityW,
+            capacityW = configManager.batteryCapacity.toInt(),
             configManager.minSOC
         )
     }

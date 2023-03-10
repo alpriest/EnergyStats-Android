@@ -22,15 +22,16 @@ class DemoNetworking : Networking {
         // Assume valid
     }
 
-    override suspend fun fetchBattery(): BatteryResponse {
+    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         return BatteryResponse(power = 0.131, soc = 25, residual = 2420.0, temperature = 13.6)
     }
 
-    override suspend fun fetchBatterySettings(): BatterySettingsResponse {
+    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
         return BatterySettingsResponse(20)
     }
 
     override suspend fun fetchReport(
+        deviceID: String,
         variables: Array<ReportVariable>,
         queryDate: QueryDate
     ): ArrayList<ReportResponse> {
@@ -45,7 +46,7 @@ class DemoNetworking : Networking {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun fetchRaw(variables: Array<RawVariable>): ArrayList<RawResponse> {
+    override suspend fun fetchRaw(deviceID: String, variables: Array<RawVariable>): ArrayList<RawResponse> {
         val itemType = object : TypeToken<NetworkRawResponse>() {}.type
         val rawData = rawData()
         val gson = GsonBuilder()
@@ -65,7 +66,8 @@ class DemoNetworking : Networking {
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return PagedDeviceListResponse(
             currentPage = 1, pageSize = 1, total = 1, devices = arrayListOf(
-                Device(deviceID = "abcdef", deviceSN = "123123", hasBattery = true, hasPV = true)
+                NetworkDevice(plantName = "plant1,", deviceID = "abcdef", deviceSN = "123123", hasBattery = true, hasPV = true),
+                NetworkDevice(plantName = "plant2,", deviceID = "ppplll", deviceSN = "998877", hasBattery = true, hasPV = true)
             )
         )
     }

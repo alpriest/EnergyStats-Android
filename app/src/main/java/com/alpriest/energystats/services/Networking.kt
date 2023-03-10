@@ -13,10 +13,10 @@ interface Networking {
     suspend fun fetchDeviceList(): PagedDeviceListResponse
     suspend fun ensureHasToken()
     suspend fun verifyCredentials(username: String, password: String)
-    suspend fun fetchBattery(): BatteryResponse
-    suspend fun fetchBatterySettings(): BatterySettingsResponse
-    suspend fun fetchReport(variables: Array<ReportVariable>, queryDate: QueryDate): ArrayList<ReportResponse>
-    suspend fun fetchRaw(variables: Array<RawVariable>): List<RawResponse>
+    suspend fun fetchBattery(deviceID: String): BatteryResponse
+    suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse
+    suspend fun fetchRaw(deviceID: String, variables: Array<RawVariable>): ArrayList<RawResponse>
+    suspend fun fetchReport(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate): ArrayList<ReportResponse>
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

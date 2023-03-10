@@ -87,11 +87,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         }
     }
 
-    override suspend fun fetchBatterySettings(): BatterySettingsResponse {
-        val deviceSN = config.deviceSN
-            ?: throw InvalidConfiguration("deviceSN missing, please try logging out and back in.")
-        if (!config.hasBattery) throw InvalidConfiguration("No battery")
-
+    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("www.foxesscloud.com")
@@ -109,12 +105,10 @@ class NetworkService(private val credentials: CredentialStore, private val confi
     }
 
     override suspend fun fetchReport(
+        deviceID: String,
         variables: Array<ReportVariable>,
         queryDate: QueryDate
     ): ArrayList<ReportResponse> {
-        val deviceID = config.deviceID
-            ?: throw InvalidConfiguration("deviceID missing, please try logging out and back in.")
-
         val body = RequestBody.create(
             MediaType.parse("application/json"),
             Gson().toJson(ReportRequest(deviceID, variables, queryDate))
@@ -130,10 +124,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         return response.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchRaw(variables: Array<RawVariable>): ArrayList<RawResponse> {
-        val deviceID = config.deviceID
-            ?: throw InvalidConfiguration("deviceID missing, please try logging out and back in.")
-
+    override suspend fun fetchRaw(deviceID: String, variables: Array<RawVariable>): ArrayList<RawResponse> {
         val body = RequestBody.create(
             MediaType.parse("application/json"),
             Gson().toJson(RawRequest(deviceID, variables))
@@ -149,11 +140,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         return response.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchBattery(): BatteryResponse {
-        val deviceID = config.deviceID
-            ?: throw InvalidConfiguration("deviceID missing, please try logging out and back in.")
-        if (!config.hasBattery) throw InvalidConfiguration("No battery")
-
+    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("www.foxesscloud.com")

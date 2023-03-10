@@ -7,18 +7,31 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     ConfigInterface {
 
     private enum class SharedPreferenceKey {
-        BATTERY_CAPACITY,
-        MIN_SOC,
-        DEVICE_ID,
-        DEVICE_SN,
-        HAS_BATTERY,
         HAS_PV,
         IS_DEMO_USER,
         USE_LARGE_DISPLAY,
         USE_COLOURED_FLOW_LINES,
         SHOW_BATTERY_TEMPERATURE,
-        REFRESH_FREQUENCY
+        REFRESH_FREQUENCY,
+        SELECTED_DEVICE_ID,
+        DEVICES
     }
+
+    override var selectedDeviceID: String?
+        get() = sharedPreferences.getString(SharedPreferenceKey.SELECTED_DEVICE_ID.name, null)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putString(SharedPreferenceKey.SELECTED_DEVICE_ID.name, value)
+            editor.apply()
+        }
+
+    override var devices: String?
+        get() = sharedPreferences.getString(SharedPreferenceKey.DEVICES.name, null)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putString(SharedPreferenceKey.DEVICES.name, value)
+            editor.apply()
+        }
 
     override var refreshFrequency: Int
         get() = sharedPreferences.getInt(SharedPreferenceKey.REFRESH_FREQUENCY.name, 0)
@@ -49,54 +62,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.USE_LARGE_DISPLAY.name, value)
-            editor.apply()
-        }
-
-    override var minSOC: String?
-        get() = sharedPreferences.getString(SharedPreferenceKey.MIN_SOC.name, null)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putString(SharedPreferenceKey.MIN_SOC.name, value)
-            editor.apply()
-        }
-
-    override var batteryCapacityW: String?
-        get() = sharedPreferences.getString(SharedPreferenceKey.BATTERY_CAPACITY.name, null)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putString(SharedPreferenceKey.BATTERY_CAPACITY.name, value)
-            editor.apply()
-        }
-
-    override var deviceID: String?
-        get() = sharedPreferences.getString(SharedPreferenceKey.DEVICE_ID.name, null)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putString(SharedPreferenceKey.DEVICE_ID.name, value)
-            editor.apply()
-        }
-
-    override var deviceSN: String?
-        get() = sharedPreferences.getString(SharedPreferenceKey.DEVICE_SN.name, null)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putString(SharedPreferenceKey.DEVICE_SN.name, value)
-            editor.apply()
-        }
-
-    override var hasBattery: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceKey.HAS_BATTERY.name, false)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceKey.HAS_BATTERY.name, value)
-            editor.apply()
-        }
-
-    override var hasPV: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceKey.HAS_PV.name, false)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceKey.HAS_PV.name, value)
             editor.apply()
         }
 
