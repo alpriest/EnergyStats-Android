@@ -84,7 +84,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         get() {
             return devices?.first { it.deviceID == selectedDeviceID }
         }
-        set(value) {}
+        set(@Suppress("UNUSED_PARAMETER") value) {}
 
     override var selectedDeviceID: String?
         get() = config.selectedDeviceID
@@ -124,6 +124,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             }.collect()
 
             devices = mappedDevices
+            selectedDeviceID = devices?.first()?.deviceID
             rawDataStore.store(deviceList = deviceList)
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()

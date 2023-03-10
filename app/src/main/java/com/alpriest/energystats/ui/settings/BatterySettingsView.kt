@@ -93,7 +93,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     )
                 } else {
                     Text(
-                        text = config.batteryCapacity.toInt().kW(),
+                        text = config.batteryCapacity.toDouble().kW(),
                         modifier = Modifier.clickable { isEditingCapacity.value = true }
                     )
                 }
