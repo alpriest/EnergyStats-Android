@@ -15,8 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,7 +38,7 @@ fun SettingsTitleView(title: String) {
 @Composable
 fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val isEditingCapacity = rememberSaveable { mutableStateOf(false) }
-    var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacity) }
+    var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacity.toString()) }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -93,7 +91,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     )
                 } else {
                     Text(
-                        text = config.batteryCapacity.toDouble().kW(),
+                        text = config.batteryCapacity.toInt().kW(),
                         modifier = Modifier.clickable { isEditingCapacity.value = true }
                     )
                 }

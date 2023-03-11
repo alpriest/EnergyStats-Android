@@ -10,7 +10,7 @@ interface ConfigManaging {
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean
     val minSOC: Double
-    val batteryCapacity: String
+    val batteryCapacity: Int
     var isDemoUser: Boolean
     var useColouredFlowLines: Boolean
     var refreshFrequency: RefreshFrequency

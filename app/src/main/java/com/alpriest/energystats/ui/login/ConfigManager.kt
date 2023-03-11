@@ -23,8 +23,8 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
     override val minSOC: Double
         get() = (currentDevice?.battery?.minSOC ?: "0.2").toDouble()
 
-    override val batteryCapacity: String
-        get() = currentDevice?.battery?.capacity ?: "2600"
+    override val batteryCapacity: Int
+        get() = (currentDevice?.battery?.capacity ?: "2600").toDouble().toInt()
 
     override var isDemoUser: Boolean
         get() = config.isDemoUser

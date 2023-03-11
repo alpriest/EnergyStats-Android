@@ -32,6 +32,8 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        DeviceSettingsView(config = config)
+
         BatterySettingsView(
             config = config
         )
