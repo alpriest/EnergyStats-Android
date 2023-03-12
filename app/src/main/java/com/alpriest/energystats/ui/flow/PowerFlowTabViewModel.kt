@@ -113,12 +113,12 @@ class PowerFlowTabViewModel(
     }
 
     private suspend fun loadData() {
-        if (configManager.currentDevice == null) {
-            configManager.findDevices()
-        }
+        try {
+            if (configManager.currentDevice == null) {
+                configManager.findDevices()
+            }
 
-        configManager.currentDevice?.let { currentDevice ->
-            try {
+            configManager.currentDevice?.let { currentDevice ->
                 _updateMessage.value = UiUpdateMessageState(LoadingNowUpdateMessageState)
                 if (_uiState.value.state is ErrorLoadState) {
                     _uiState.value = UiLoadState(LoadingLoadState)
@@ -156,11 +156,11 @@ class PowerFlowTabViewModel(
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
                 calculateTicks(summary)
-            } catch (ex: Exception) {
-                stopTimer()
-                _uiState.value = UiLoadState(ErrorLoadState(ex.localizedMessage ?: "Error unknown"))
-                _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
             }
+        } catch (ex: Exception) {
+            stopTimer()
+            _uiState.value = UiLoadState(ErrorLoadState(ex.localizedMessage ?: "Error unknown"))
+            _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
         }
     }
 

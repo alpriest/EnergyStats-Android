@@ -90,7 +90,7 @@ private fun RawDataDump(rawDataStore: RawDataStoring) {
         SettingsTitleView("Raw")
 
         Column {
-            responses.map() { response ->
+            responses.map { response ->
                 response.data.last().let {
                     Row(Modifier.fillMaxWidth()) {
                         Text("${it.time} ${response.variable} ${it.value}")

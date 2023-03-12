@@ -1,6 +1,6 @@
 package com.alpriest.energystats.models
 
-import java.time.LocalDate
+import java.util.*
 
 data class RawRequest(
     val deviceID: String,
@@ -40,8 +40,11 @@ data class RawRequest(
 data class QueryDate(val year: Int, val month: Int, val day: Int) {
     companion object {
         operator fun invoke(): QueryDate {
-            val date = LocalDate.now()
-            return QueryDate(year = date.year, month = date.monthValue, day = date.dayOfMonth)
+            return QueryDate(
+                year = Calendar.getInstance().get(Calendar.YEAR),
+                month = Calendar.getInstance().get(Calendar.MONTH),
+                day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            )
         }
     }
 }

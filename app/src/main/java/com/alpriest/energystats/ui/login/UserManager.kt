@@ -70,8 +70,7 @@ class UserManager(
             _loggedInState.value = LoginStateHolder(LoggedOut("Wrong credentials, try again"))
         } catch (e: Exception) {
             logout()
-            _loggedInState.value =
-                LoginStateHolder(LoggedOut("Could not login. Check your internet connection"))
+            _loggedInState.value = LoginStateHolder(LoggedOut("Could not login. Check your internet connection. ${e.localizedMessage}"))
         }
     }
 
