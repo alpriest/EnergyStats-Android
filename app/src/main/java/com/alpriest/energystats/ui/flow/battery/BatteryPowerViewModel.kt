@@ -27,8 +27,7 @@ class BatteryPowerViewModel(
             )
         }
 
-    val batteryCapacity: String
-        get() {
-            return calculator.currentEstimatedChargeAmountkWH(batteryStateOfCharge = batteryStateOfCharge).kW()
-        }
+    fun batteryCapacity(decimalPlaces: Int): String {
+        return calculator.currentEstimatedChargeAmountkWH(batteryStateOfCharge = batteryStateOfCharge).kW(decimalPlaces = decimalPlaces)
+    }
 }

@@ -33,6 +33,7 @@ fun BatteryPowerFlow(
     var percentage by remember { mutableStateOf(true) }
     val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
     val showBatteryTemperature = themeStream.collectAsState().value.showBatteryTemperature
+    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -67,7 +68,7 @@ fun BatteryPowerFlow(
                         )
                     } else {
                         Text(
-                            viewModel.batteryCapacity,
+                            viewModel.batteryCapacity(decimalPlaces),
                             fontSize = fontSize
                         )
                     }

@@ -133,7 +133,7 @@ fun PowerFlowView(
         Box(modifier = Modifier.background(colors.background)) {
             Text(
                 text = if (asKw) {
-                    amount.kW()
+                    amount.kW(theme.decimalPlaces)
                 } else {
                     amount.w()
                 },
