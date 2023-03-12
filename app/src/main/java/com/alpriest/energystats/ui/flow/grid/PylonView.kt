@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -86,7 +87,7 @@ fun PylonViewPreview() {
                 .width(pylonHeight * 1.2f)
         ) {
             PylonView(
-                themeStream = MutableStateFlow(AppTheme(useLargeDisplay = false, useColouredLines = true, showBatteryTemperature = true)),
+                themeStream = MutableStateFlow(AppTheme.preview()),
                 modifier = Modifier
                     .height(pylonHeight)
                     .width(pylonHeight * 0.9f)

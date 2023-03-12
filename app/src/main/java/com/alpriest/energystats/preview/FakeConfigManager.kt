@@ -13,9 +13,17 @@ class FakeConfigManager : ConfigManaging {
         AppTheme(
             useLargeDisplay = true,
             useColouredLines = true,
-            showBatteryTemperature = showBatteryTemperature
+            showBatteryTemperature = showBatteryTemperature,
+            decimalPlaces = 2,
+            showSunnyBackground = true
         )
     )
+    override var decimalPlaces: Int
+        get() = 2
+        set(value) {}
+    override var showSunnyBackground: Boolean
+        get() = true
+        set(value) {}
     override var showBatteryTemperature: Boolean
         get() = true
         set(value) {}

@@ -8,7 +8,9 @@ import androidx.compose.ui.unit.sp
 data class AppTheme(
     val useLargeDisplay: Boolean,
     val useColouredLines: Boolean,
-    val showBatteryTemperature: Boolean
+    val showBatteryTemperature: Boolean,
+    val decimalPlaces: Int,
+    val showSunnyBackground: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -34,12 +36,18 @@ data class AppTheme(
     fun update(
         useLargeDisplay: Boolean = this.useLargeDisplay,
         useColouredLines: Boolean = this.useColouredLines,
-        showBatteryTemperature: Boolean = this.showBatteryTemperature
+        showBatteryTemperature: Boolean = this.showBatteryTemperature,
+        decimalPlaces: Int = this.decimalPlaces,
+        showSunnyBackground: Boolean = this.showSunnyBackground
     ): AppTheme {
         return AppTheme(
             useLargeDisplay = useLargeDisplay,
             useColouredLines = useColouredLines,
-            showBatteryTemperature = showBatteryTemperature
+            showBatteryTemperature = showBatteryTemperature,
+            decimalPlaces = decimalPlaces,
+            showSunnyBackground = showSunnyBackground
         )
     }
+
+    companion object {}
 }

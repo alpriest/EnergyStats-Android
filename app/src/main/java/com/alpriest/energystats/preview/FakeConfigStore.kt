@@ -9,6 +9,8 @@ class FakeConfigStore(
     override var showBatteryTemperature: Boolean = true,
     override var refreshFrequency: Int = 0,
     override var selectedDeviceID: String? = null,
-    override var devices: String? = null
+    override var devices: String? = null,
+    override var showSunnyBackground: Boolean = true,
+    override var decimalPlaces: Int = 2
 ) : ConfigInterface {
 }

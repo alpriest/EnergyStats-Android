@@ -16,9 +16,25 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         AppTheme(
             useLargeDisplay = config.useLargeDisplay,
             useColouredLines = config.useColouredFlowLines,
-            showBatteryTemperature = showBatteryTemperature
+            showBatteryTemperature = config.showBatteryTemperature,
+            decimalPlaces = config.decimalPlaces,
+            showSunnyBackground = config.showSunnyBackground
         )
     )
+
+    override var decimalPlaces: Int
+        get() = config.decimalPlaces
+        set(value) {
+            config.decimalPlaces = value
+            themeStream.value = themeStream.value.update(decimalPlaces = decimalPlaces)
+        }
+
+    override var showSunnyBackground: Boolean
+        get() = config.showSunnyBackground
+        set(value) {
+            config.showSunnyBackground = value
+            themeStream.value = themeStream.value.update(showSunnyBackground = showSunnyBackground)
+        }
 
     override val minSOC: Double
         get() = (currentDevice?.battery?.minSOC ?: "0.2").toDouble()

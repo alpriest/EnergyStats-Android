@@ -51,8 +51,24 @@ fun HomePowerFlowViewPreview() {
                 amount = 1.0,
                 modifier = Modifier,
                 iconHeight = 25.dp,
-                themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true))
+                themeStream = MutableStateFlow(AppTheme.preview())
             )
         }
     }
+}
+
+fun AppTheme.Companion.preview(
+    useLargeDisplay: Boolean = false,
+    useColouredLines: Boolean = true,
+    showBatteryTemperature: Boolean = true,
+    showSunnyBackground: Boolean = true,
+    decimalPlaces: Int = 2
+): AppTheme {
+    return AppTheme(
+        useLargeDisplay = useLargeDisplay,
+        useColouredLines = useColouredLines,
+        showBatteryTemperature = showBatteryTemperature,
+        showSunnyBackground = showSunnyBackground,
+        decimalPlaces = decimalPlaces
+    )
 }

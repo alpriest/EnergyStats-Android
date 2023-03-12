@@ -17,6 +17,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsView
@@ -86,7 +87,7 @@ fun HomepagePreview() {
             network = DemoNetworking(),
             userManager = FakeUserManager(),
             {},
-            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true)),
+            themeStream = MutableStateFlow(AppTheme.preview()),
             rawDataStore = RawDataStore()
         )
     }

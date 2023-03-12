@@ -51,7 +51,7 @@ fun GridPowerFlowViewPreview() {
                 amount = 1.0,
                 modifier = Modifier,
                 iconHeight = 80.dp,
-                themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true))
+                themeStream = MutableStateFlow(AppTheme.preview())
             )
         }
     }

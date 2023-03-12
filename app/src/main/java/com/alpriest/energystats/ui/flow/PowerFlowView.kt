@@ -21,6 +21,7 @@ import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.sameValueAs
 import com.alpriest.energystats.models.w
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.alpriest.energystats.ui.theme.PowerFlowPositive
@@ -38,8 +39,8 @@ fun PowerFlowView(
     amount: Double,
     themeStream: MutableStateFlow<AppTheme>,
     position: PowerFlowLinePosition,
+    modifier: Modifier = Modifier,
     useColouredLines: Boolean = false,
-    modifier: Modifier = Modifier
 ) {
     var asKw by remember { mutableStateOf(true) }
     var height by remember { mutableStateOf(0f) }
@@ -160,17 +161,17 @@ fun PowerFlowViewPreview() {
     Row(Modifier.height(200.dp)) {
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true)),
+            themeStream = MutableStateFlow(AppTheme.preview()),
             position = PowerFlowLinePosition.LEFT
         )
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = true)),
+            themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = true, showBatteryTemperature = true)),
             position = PowerFlowLinePosition.MIDDLE
         )
         PowerFlowView(
             -3.0,
-            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = false, useColouredLines = true, showBatteryTemperature = false)),
+            themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false, showBatteryTemperature = false)),
             position = PowerFlowLinePosition.RIGHT
         )
     }

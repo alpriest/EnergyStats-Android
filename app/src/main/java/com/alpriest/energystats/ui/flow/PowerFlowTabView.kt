@@ -39,6 +39,7 @@ import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowView
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
@@ -55,6 +56,14 @@ class PowerFlowTabViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, RawDataStoring::class.java)
             .newInstance(network, configManager, rawDataStore)
+    }
+}
+
+fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier): Modifier {
+    return if (condition) {
+        then(modifier(Modifier))
+    } else {
+        this
     }
 }
 
@@ -84,7 +93,8 @@ class PowerFlowTabView(
     ) {
         val uiState by viewModel.uiState.collectAsState()
         val coroutineScope = rememberCoroutineScope()
-        val background: ShaderBrush = when (uiState.state) {
+        val showSunnyBackground = themeStream.collectAsState().value.showSunnyBackground
+        val background = when (uiState.state) {
             is LoadingLoadState -> largeRadialGradient(listOf(Color.White, Color.Transparent))
             is LoadedLoadState -> largeRadialGradient(listOf(Sunny, Color.Transparent))
             is ErrorLoadState -> largeRadialGradient(
@@ -94,11 +104,13 @@ class PowerFlowTabView(
                 )
             )
         }
-
+        
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(background),
+                .conditional(showSunnyBackground) {
+                    background(background)
+                },
             contentAlignment = TopEnd
         ) {
             when (uiState.state) {
@@ -170,15 +182,13 @@ class PowerFlowTabView(
                 themeStream = themeStream
             )
 
-            updateState?.let {
-                Text(
-                    it.updateState.toString2(),
-                    color = Color.Gray,
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .padding(bottom = 4.dp),
-                )
-            }
+            Text(
+                updateState.updateState.toString2(),
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .padding(bottom = 4.dp),
+            )
         }
     }
 }
@@ -212,7 +222,7 @@ fun PowerFlowTabViewPreview() {
         ).Loaded(
             viewModel = viewModel,
             homePowerFlowViewModel = homePowerFlowViewModel,
-            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = false, useColouredLines = true, showBatteryTemperature = true))
+            themeStream = MutableStateFlow(AppTheme.preview())
         )
     }
 }

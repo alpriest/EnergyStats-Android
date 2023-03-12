@@ -10,6 +10,7 @@ import java.lang.reflect.Type
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlin.collections.ArrayList
+import kotlin.coroutines.resume
 
 interface NetworkResponseInterface {
     val errno: Int
@@ -191,14 +192,18 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             return suspendCoroutine { continuation ->
                 okHttpClient.newCall(request).enqueue(object : Callback {
                     override fun onResponse(call: Call, response: Response) {
-                        val text = response.body()!!.string()
-                        val body: T = Gson().fromJson(text, type)
-                        val result: Result<T> = check(body)
-                        result.fold(onSuccess = {
-                            continuation.resumeWith(Result.success(it))
-                        }, onFailure = {
-                            continuation.resumeWithException(it)
-                        })
+                        try {
+                            val text = response.body()!!.string()
+                            val body: T = Gson().fromJson(text, type)
+                            val result: Result<T> = check(body)
+                            result.fold(onSuccess = {
+                                continuation.resumeWith(Result.success(it))
+                            }, onFailure = {
+                                continuation.resumeWithException(it)
+                            })
+                        } catch (ex: Exception) {
+                            continuation.resumeWithException(ex)
+                        }
                     }
 
                     override fun onFailure(call: Call, e: IOException) {

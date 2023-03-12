@@ -18,6 +18,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -124,7 +125,7 @@ fun BatteryPowerFlowViewPreview() {
             ),
             iconHeight = 40.dp,
             modifier = Modifier,
-            themeStream = MutableStateFlow(AppTheme(useLargeDisplay = true, useColouredLines = true, showBatteryTemperature = false))
+            themeStream = MutableStateFlow(AppTheme.preview())
         )
     }
 }

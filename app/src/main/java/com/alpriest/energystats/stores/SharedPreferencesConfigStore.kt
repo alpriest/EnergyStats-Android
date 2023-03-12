@@ -7,15 +7,32 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     ConfigInterface {
 
     private enum class SharedPreferenceKey {
-        HAS_PV,
         IS_DEMO_USER,
         USE_LARGE_DISPLAY,
         USE_COLOURED_FLOW_LINES,
         SHOW_BATTERY_TEMPERATURE,
         REFRESH_FREQUENCY,
         SELECTED_DEVICE_ID,
-        DEVICES
+        DEVICES,
+        SHOW_SUNNY_BACKGROUND,
+        DECIMAL_PLACES
     }
+
+    override var showSunnyBackground: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_SUNNY_BACKGROUND.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_SUNNY_BACKGROUND.name, value)
+            editor.apply()
+        }
+
+    override var decimalPlaces: Int
+        get() = sharedPreferences.getInt(SharedPreferenceKey.DECIMAL_PLACES.name, 2)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(SharedPreferenceKey.DECIMAL_PLACES.name, value)
+            editor.apply()
+        }
 
     override var selectedDeviceID: String?
         get() = sharedPreferences.getString(SharedPreferenceKey.SELECTED_DEVICE_ID.name, null)
