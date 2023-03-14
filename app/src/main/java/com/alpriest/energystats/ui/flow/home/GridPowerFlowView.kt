@@ -15,12 +15,12 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun GridPowerFlowView(amount: Double, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
+fun GridPowerFlowView(amount: Double, modifier: Modifier, themeStream: MutableStateFlow<AppTheme>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth()
     ) {
-        Box(modifier = Modifier.weight(1f)) {
+        Box {
             PowerFlowView(
                 modifier = Modifier,
                 amount = amount,
@@ -29,8 +29,15 @@ fun GridPowerFlowView(amount: Double, modifier: Modifier, iconHeight: Dp, themeS
                 useColouredLines = true
             )
         }
+    }
+}
 
-        Box(modifier = Modifier.padding(bottom = 40.dp)) {
+@Composable
+fun GridIconView(iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
             PylonView(
                 modifier = Modifier
                     .height(iconHeight)
@@ -38,7 +45,6 @@ fun GridPowerFlowView(amount: Double, modifier: Modifier, iconHeight: Dp, themeS
                     .padding(6.dp),
                 themeStream = themeStream
             )
-        }
     }
 }
 
@@ -50,7 +56,6 @@ fun GridPowerFlowViewPreview() {
             GridPowerFlowView(
                 amount = 1.0,
                 modifier = Modifier,
-                iconHeight = 80.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
             )
         }

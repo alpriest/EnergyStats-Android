@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.PowerFlowView
-import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -26,9 +26,30 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun BatteryPowerFlow(
     viewModel: BatteryPowerViewModel,
-    iconHeight: Dp,
     modifier: Modifier = Modifier,
     themeStream: MutableStateFlow<AppTheme>
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Box(modifier = Modifier.fillMaxHeight()) {
+            PowerFlowView(
+                amount = viewModel.batteryChargePowerkWH,
+                themeStream = themeStream,
+                position = PowerFlowLinePosition.LEFT,
+                useColouredLines = true
+            )
+        }
+    }
+}
+
+@Composable
+fun BatteryIconView(
+    viewModel: BatteryPowerViewModel,
+    themeStream: MutableStateFlow<AppTheme>,
+    iconHeight: Dp,
+    modifier: Modifier = Modifier
 ) {
     var percentage by remember { mutableStateOf(true) }
     val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
@@ -39,15 +60,6 @@ fun BatteryPowerFlow(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        Box(modifier = Modifier.weight(1f)) {
-            PowerFlowView(
-                amount = viewModel.batteryChargePowerkWH,
-                themeStream = themeStream,
-                position = PowerFlowLinePosition.LEFT,
-                useColouredLines = true
-            )
-        }
-
         BatteryView(
             modifier = Modifier
                 .height(iconHeight)
@@ -55,52 +67,47 @@ fun BatteryPowerFlow(
                 .padding(5.dp)
         )
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.defaultMinSize(minHeight = 40.dp)
-        ) {
-            Box(modifier = Modifier.clickable { percentage = !percentage }) {
-                Row {
-                    if (percentage) {
-                        Text(
-                            viewModel.batteryStateOfCharge.asPercent(),
-                            fontSize = fontSize
-                        )
-                    } else {
-                        Text(
-                            viewModel.batteryCapacity(decimalPlaces),
-                            fontSize = fontSize
-                        )
-                    }
+        Box(modifier = Modifier.clickable { percentage = !percentage }) {
+            Row {
+                if (percentage) {
+                    Text(
+                        viewModel.batteryStateOfCharge.asPercent(),
+                        fontSize = fontSize
+                    )
+                } else {
+                    Text(
+                        viewModel.batteryCapacity(decimalPlaces),
+                        fontSize = fontSize
+                    )
                 }
             }
+        }
 
-            if (showBatteryTemperature) {
-                Text(
-                    viewModel.batteryTemperature.asTemperature(),
-                    fontSize = fontSize
-                )
-            }
+        if (showBatteryTemperature) {
+            Text(
+                viewModel.batteryTemperature.asTemperature(),
+                fontSize = fontSize
+            )
+        }
 
-            viewModel.batteryExtra?.let {
-                Text(
-                    duration(estimate = it),
-                    textAlign = TextAlign.Center,
-                    maxLines = 2,
-                    color = Color.Gray,
-                    fontSize = fontSize
-                )
-            }
+        viewModel.batteryExtra?.let {
+            Text(
+                duration(estimate = it),
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                color = Color.Gray,
+                fontSize = fontSize
+            )
         }
     }
 }
 
-private fun Double.asTemperature(): String {
+fun Double.asTemperature(): String {
     return "${this}°C"
 }
 
 @Composable
-private fun duration(estimate: BatteryCapacityEstimate): String {
+fun duration(estimate: BatteryCapacityEstimate): String {
     val text = stringResource(estimate.stringId)
     val mins = stringResource(R.string.mins)
     val hour = stringResource(R.string.hour)
@@ -124,7 +131,6 @@ fun BatteryPowerFlowViewPreview() {
                 batteryChargePowerkWH = -0.5,
                 batteryTemperature = 13.6
             ),
-            iconHeight = 40.dp,
             modifier = Modifier,
             themeStream = MutableStateFlow(AppTheme.preview())
         )

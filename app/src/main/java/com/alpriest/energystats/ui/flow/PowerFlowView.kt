@@ -5,8 +5,12 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults.cardColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,9 +26,7 @@ import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.sameValueAs
 import com.alpriest.energystats.models.w
 import com.alpriest.energystats.ui.flow.home.preview
-import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.PowerFlowNegative
-import com.alpriest.energystats.ui.theme.PowerFlowPositive
+import com.alpriest.energystats.ui.theme.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
 enum class PowerFlowLinePosition {
@@ -71,6 +73,10 @@ fun PowerFlowView(
     val inverterColor = Color.LightGray
     val verticalLineColor = if (isFlowing && useColouredLines && theme.useColouredLines) flowingColour(amount) else {
         Color.LightGray
+    }
+
+    val powerTextColor = if (isFlowing && useColouredLines && theme.useColouredLines) textForeground(amount) else {
+        PowerFlowNeutralText
     }
 
     Box(
@@ -130,18 +136,22 @@ fun PowerFlowView(
             }
         }
 
-        Box(modifier = Modifier.background(colors.background)) {
+        Card(
+            shape = RoundedCornerShape(4.dp),
+            colors = cardColors(containerColor = verticalLineColor)
+        ) {
             Text(
                 text = if (asKw) {
                     amount.kW(theme.decimalPlaces)
                 } else {
                     amount.w()
                 },
+                color = powerTextColor,
                 fontWeight = FontWeight.Bold,
                 fontSize = fontSize,
                 modifier = Modifier
                     .clickable { asKw = !asKw }
-                    .padding(1.dp)
+                    .padding(3.dp)
             )
         }
     }
@@ -152,6 +162,14 @@ fun flowingColour(amount: Double): Color {
         PowerFlowNegative
     } else {
         PowerFlowPositive
+    }
+}
+
+fun textForeground(amount: Double): Color {
+    return if (amount < 0) {
+        PowerFlowNegativeText
+    } else {
+        PowerFlowPositiveText
     }
 }
 

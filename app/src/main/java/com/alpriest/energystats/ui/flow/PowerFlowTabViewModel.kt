@@ -41,7 +41,16 @@ object LoadingNowUpdateMessageState : UpdateMessageState() {
 class PendingUpdateMessageState(private val nextUpdateSeconds: Int) : UpdateMessageState() {
     @Composable
     override fun toString2(): String {
-        return String.format(stringResource(R.string.nextUpdate, nextUpdateSeconds))
+        val next = when (nextUpdateSeconds) {
+            in 0 until 60 -> "${nextUpdateSeconds}s"
+            else -> {
+                val minutes = nextUpdateSeconds / 60
+                val remainder = nextUpdateSeconds % 60
+                return "${minutes}m ${remainder}s"
+            }
+        }
+
+        return String.format(stringResource(R.string.nextUpdate, next))
     }
 }
 

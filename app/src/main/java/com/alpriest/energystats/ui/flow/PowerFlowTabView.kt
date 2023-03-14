@@ -170,30 +170,23 @@ class PowerFlowTabView(
     @Composable
     fun Loaded(
         viewModel: PowerFlowTabViewModel,
-        homePowerFlowViewModel: SummaryPowerFlowViewModel,
+        summaryPowerFlowViewModel: SummaryPowerFlowViewModel,
         themeStream: MutableStateFlow<AppTheme>
     ) {
-        val updateState by viewModel.updateMessage.collectAsState()
-
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            SummaryPowerFlowView().Content(
-                modifier = Modifier.weight(1f),
-                viewModel = homePowerFlowViewModel,
-                themeStream = themeStream
-            )
-
-            Text(
-                updateState.updateState.toString2(),
-                color = Color.Gray,
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .padding(bottom = 4.dp),
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            SummaryPowerFlowView(
+                powerFlowViewModel = viewModel,
+                summaryPowerFlowViewModel = summaryPowerFlowViewModel,
+                themeStream = themeStream,
             )
         }
     }
 }
 
-@Preview(showBackground = true, heightDp = 600)
+@Preview(showBackground = true, heightDp = 900)
 @Composable
 fun PowerFlowTabViewPreview() {
     val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore())
@@ -221,7 +214,7 @@ fun PowerFlowTabViewPreview() {
             RawDataStore()
         ).Loaded(
             viewModel = viewModel,
-            homePowerFlowViewModel = homePowerFlowViewModel,
+            summaryPowerFlowViewModel = homePowerFlowViewModel,
             themeStream = MutableStateFlow(AppTheme.preview())
         )
     }

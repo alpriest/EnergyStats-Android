@@ -5,7 +5,7 @@
     <string name="mins">Minuten</string>
     <string name="hour">Stunde</string>
     <string name="hours">Stunden</string>
-    <string name="nextUpdate">Nächstes Update in %1$ds</string>
+    <string name="nextUpdate">Nächstes Update in %1s</string>
     <string name="fullIn">Voll in</string>
     <string name="emptyIn">Leer in</string>
 </resources>

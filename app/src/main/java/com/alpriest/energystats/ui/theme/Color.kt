@@ -9,3 +9,6 @@ val Teal200 = Color(0xFF03DAC5)
 val Sunny = Color(0xFFFEDB58)
 val PowerFlowPositive = Color(0xFF30A530)
 val PowerFlowNegative = Color(0xFFA72A2A)
+val PowerFlowPositiveText = Color.White
+val PowerFlowNegativeText = Color.White
+val PowerFlowNeutralText = Color.Black

@@ -33,7 +33,6 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
 
         PowerFlowView(
             amount = amount,
-            modifier = Modifier.height(200.dp),
             themeStream = themeStream,
             position = PowerFlowLinePosition.NONE
         )
