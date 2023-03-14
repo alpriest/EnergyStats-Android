@@ -168,6 +168,7 @@ class PowerFlowTabView(
     }
 
     @Composable
+
     fun Loaded(
         viewModel: PowerFlowTabViewModel,
         summaryPowerFlowViewModel: SummaryPowerFlowViewModel,

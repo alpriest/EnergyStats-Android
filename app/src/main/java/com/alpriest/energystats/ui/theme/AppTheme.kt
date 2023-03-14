@@ -9,6 +9,7 @@ data class AppTheme(
     val useLargeDisplay: Boolean,
     val useColouredLines: Boolean,
     val showBatteryTemperature: Boolean,
+    val showBatteryEstimate: Boolean,
     val decimalPlaces: Int,
     val showSunnyBackground: Boolean
 ) {
@@ -37,6 +38,7 @@ data class AppTheme(
         useLargeDisplay: Boolean = this.useLargeDisplay,
         useColouredLines: Boolean = this.useColouredLines,
         showBatteryTemperature: Boolean = this.showBatteryTemperature,
+        showBatteryEstimate: Boolean = this.showBatteryEstimate,
         decimalPlaces: Int = this.decimalPlaces,
         showSunnyBackground: Boolean = this.showSunnyBackground
     ): AppTheme {
@@ -44,6 +46,7 @@ data class AppTheme(
             useLargeDisplay = useLargeDisplay,
             useColouredLines = useColouredLines,
             showBatteryTemperature = showBatteryTemperature,
+            showBatteryEstimate = showBatteryEstimate,
             decimalPlaces = decimalPlaces,
             showSunnyBackground = showSunnyBackground
         )

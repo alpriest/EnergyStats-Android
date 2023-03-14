@@ -9,6 +9,7 @@ interface ConfigManaging {
     val themeStream: MutableStateFlow<AppTheme>
     var decimalPlaces: Int
     var showSunnyBackground: Boolean
+    var showBatteryEstimate: Boolean
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean
     val minSOC: Double

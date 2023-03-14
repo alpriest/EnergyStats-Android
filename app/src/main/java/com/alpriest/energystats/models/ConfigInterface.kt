@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 interface ConfigInterface {
+    var showBatteryEstimate: Boolean
     var showSunnyBackground: Boolean
     var selectedDeviceID: String?
     var devices: String?

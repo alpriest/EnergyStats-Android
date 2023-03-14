@@ -11,6 +11,7 @@ class FakeConfigStore(
     override var selectedDeviceID: String? = null,
     override var devices: String? = null,
     override var showSunnyBackground: Boolean = true,
-    override var decimalPlaces: Int = 2
+    override var decimalPlaces: Int = 2,
+    override var showBatteryEstimate: Boolean = true
 ) : ConfigInterface {
 }

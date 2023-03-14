@@ -18,7 +18,8 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             useColouredLines = config.useColouredFlowLines,
             showBatteryTemperature = config.showBatteryTemperature,
             decimalPlaces = config.decimalPlaces,
-            showSunnyBackground = config.showSunnyBackground
+            showSunnyBackground = config.showSunnyBackground,
+            showBatteryEstimate = config.showBatteryEstimate
         )
     )
 
@@ -34,6 +35,13 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         set(value) {
             config.showSunnyBackground = value
             themeStream.value = themeStream.value.update(showSunnyBackground = showSunnyBackground)
+        }
+
+    override var showBatteryEstimate: Boolean
+        get() = config.showBatteryEstimate
+        set(value) {
+            config.showBatteryEstimate = value
+            themeStream.value = themeStream.value.update(showBatteryEstimate = showBatteryEstimate)
         }
 
     override val minSOC: Double

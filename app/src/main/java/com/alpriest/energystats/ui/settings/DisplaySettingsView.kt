@@ -21,6 +21,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
     val decimalPlacesState = rememberSaveable { mutableStateOf(config.decimalPlaces) }
+    var showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
 
     Column(
         modifier = modifier
@@ -67,6 +68,20 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
             Text("Show battery temperature")
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = showBatteryEstimateState.value,
+                onCheckedChange = {
+                    showBatteryEstimateState.value = it
+                    config.showBatteryEstimate = it
+                },
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+            )
+            Text("Show battery full/empty estimate")
         }
 
         Row(

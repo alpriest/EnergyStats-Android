@@ -55,6 +55,7 @@ fun BatteryIconView(
     val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
     val showBatteryTemperature = themeStream.collectAsState().value.showBatteryTemperature
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
+    val showBatteryEstimate = themeStream.collectAsState().value.showBatteryEstimate
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -90,14 +91,16 @@ fun BatteryIconView(
             )
         }
 
-        viewModel.batteryExtra?.let {
-            Text(
-                duration(estimate = it),
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                color = Color.Gray,
-                fontSize = fontSize
-            )
+        if (showBatteryEstimate) {
+            viewModel.batteryExtra?.let {
+                Text(
+                    duration(estimate = it),
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    color = Color.Gray,
+                    fontSize = fontSize
+                )
+            }
         }
     }
 }

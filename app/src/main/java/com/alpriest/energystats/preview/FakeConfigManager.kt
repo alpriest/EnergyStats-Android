@@ -15,13 +15,17 @@ class FakeConfigManager : ConfigManaging {
             useColouredLines = true,
             showBatteryTemperature = showBatteryTemperature,
             decimalPlaces = 2,
-            showSunnyBackground = true
+            showSunnyBackground = true,
+            showBatteryEstimate = true
         )
     )
     override var decimalPlaces: Int
         get() = 2
         set(value) {}
     override var showSunnyBackground: Boolean
+        get() = true
+        set(value) {}
+    override var showBatteryEstimate: Boolean
         get() = true
         set(value) {}
     override var showBatteryTemperature: Boolean
