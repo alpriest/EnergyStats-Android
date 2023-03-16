@@ -6,15 +6,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.House
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.models.RawData
@@ -38,42 +36,26 @@ fun SummaryPowerFlowView(
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
-    val density = LocalDensity.current
-    val minimumHeightState = remember { MinimumHeightState() }
-    val minimumHeightStateModifier = Modifier.minimumHeightModifier(
-        minimumHeightState,
-        density
-    )
     val updateState by powerFlowViewModel.updateMessage.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(2f)
-        ) {
-            SolarPowerFlow(
-                summaryPowerFlowViewModel.solar,
-                modifier = Modifier
-                    .width(70.dp)
-                    .weight(1f),
-                iconHeight = iconHeight,
-                themeStream = themeStream
-            )
-        }
+        SolarPowerFlow(
+            summaryPowerFlowViewModel.solar,
+            modifier = Modifier.fillMaxHeight(0.4f),
+            iconHeight = iconHeight * 1.1f,
+            themeStream = themeStream
+        )
 
         Row(
             modifier = Modifier
-                .fillMaxHeight()
-                .weight(3f)
+                .weight(1f)
         ) {
             BatteryPowerFlow(
                 viewModel = summaryPowerFlowViewModel.batteryViewModel,
                 modifier = Modifier
-                    .fillMaxHeight()
                     .weight(2f),
                 themeStream = themeStream
             )
@@ -97,23 +79,21 @@ fun SummaryPowerFlowView(
             )
         }
 
-        Row(
-            modifier = Modifier
-                .weight(1f)
-        ) {
+        Row {
             BatteryIconView(
                 viewModel = summaryPowerFlowViewModel.batteryViewModel,
                 themeStream = themeStream,
-                modifier = minimumHeightStateModifier.weight(2f),
+                modifier = Modifier.weight(2f),
                 iconHeight = iconHeight
             )
 
             Spacer(
                 modifier = Modifier.weight(1f)
             )
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = minimumHeightStateModifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f)
             ) {
@@ -124,6 +104,7 @@ fun SummaryPowerFlowView(
                     tint = MaterialTheme.colors.onBackground
                 )
             }
+
             Spacer(
                 modifier = Modifier.weight(1f)
             )
@@ -131,61 +112,44 @@ fun SummaryPowerFlowView(
             GridIconView(
                 iconHeight = iconHeight,
                 themeStream = themeStream,
-                modifier = minimumHeightStateModifier.weight(2f)
+                modifier = Modifier.weight(2f)
             )
         }
 
         Text(
-            updateState.updateState.toString2(),
+            updateState.updateState.updateMessage(),
             color = Color.Gray,
             modifier = Modifier
                 .padding(top = 12.dp)
-                .padding(bottom = 4.dp),
+                .padding(bottom = 4.dp)
         )
     }
 }
 
-fun Modifier.minimumHeightModifier(state: MinimumHeightState, density: Density) = onSizeChanged { size ->
-    val itemHeight = with(density) {
-        val height = size.height
-        height.toDp()
-    }
-
-    if (itemHeight > (state.minHeight ?: 0.dp)) {
-        state.minHeight = itemHeight
-    }
-}.defaultMinSize(minHeight = state.minHeight ?: Dp.Unspecified)
-
-class MinimumHeightState(minHeight: Dp? = null) {
-    var minHeight by mutableStateOf(minHeight)
-}
-
-@Preview(showBackground = true, widthDp = 500, heightDp = 600)
+@Preview(showBackground = true, widthDp = 700, heightDp = 600)
 @Composable
 fun SummaryPowerFlowViewPreview() {
     val now = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
 
     EnergyStatsTheme {
-        Box(modifier = Modifier.height(600.dp)) {
-            SummaryPowerFlowView(
-                PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore()),
-                summaryPowerFlowViewModel = SummaryPowerFlowViewModel(
-                    FakeConfigManager(),
-                    2.3,
-                    0.5,
-                    true,
-                    raw = listOf(
-                        RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
-                        RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
-                        RawResponse("batChargePower", arrayListOf(RawData(now, 2.45))),
-                        RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
-                        RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
-                        RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
-                    ),
-                    13.6
+        SummaryPowerFlowView(
+            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore()),
+            summaryPowerFlowViewModel = SummaryPowerFlowViewModel(
+                FakeConfigManager(),
+                2.3,
+                0.5,
+                true,
+                raw = listOf(
+                    RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
+                    RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
+                    RawResponse("batChargePower", arrayListOf(RawData(now, 2.45))),
+                    RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
+                    RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
+                    RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
                 ),
-                themeStream = MutableStateFlow(AppTheme.preview()),
-            )
-        }
+                13.6
+            ),
+            themeStream = MutableStateFlow(AppTheme.preview()),
+        )
     }
 }

@@ -168,7 +168,6 @@ class PowerFlowTabView(
     }
 
     @Composable
-
     fun Loaded(
         viewModel: PowerFlowTabViewModel,
         summaryPowerFlowViewModel: SummaryPowerFlowViewModel,
@@ -176,18 +175,18 @@ class PowerFlowTabView(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(12.dp)
         ) {
             SummaryPowerFlowView(
                 powerFlowViewModel = viewModel,
                 summaryPowerFlowViewModel = summaryPowerFlowViewModel,
-                themeStream = themeStream,
+                themeStream = themeStream
             )
         }
     }
 }
 
-@Preview(showBackground = true, heightDp = 900)
+@Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
     val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore())

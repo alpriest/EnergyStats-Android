@@ -33,14 +33,13 @@ fun BatteryPowerFlow(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        Box(modifier = Modifier.fillMaxHeight()) {
-            PowerFlowView(
-                amount = viewModel.batteryChargePowerkWH,
-                themeStream = themeStream,
-                position = PowerFlowLinePosition.LEFT,
-                useColouredLines = true
-            )
-        }
+        PowerFlowView(
+            amount = viewModel.batteryChargePowerkWH,
+            themeStream = themeStream,
+            position = PowerFlowLinePosition.LEFT,
+            useColouredLines = true,
+            modifier = Modifier.fillMaxHeight()
+        )
     }
 }
 

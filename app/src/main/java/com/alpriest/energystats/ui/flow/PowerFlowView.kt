@@ -78,7 +78,6 @@ fun PowerFlowView(
 
     Box(
         modifier = modifier
-            .fillMaxHeight()
             .onGloballyPositioned { coordinates ->
                 height = coordinates.size.height.toFloat()
             },
@@ -133,24 +132,26 @@ fun PowerFlowView(
             }
         }
 
-        Card(
-            shape = RoundedCornerShape(4.dp),
-            colors = cardColors(containerColor = verticalLineColor)
-        ) {
-            Text(
-                text = if (asKw) {
-                    amount.kW(theme.decimalPlaces)
-                } else {
-                    amount.w()
-                },
-                color = powerTextColor,
-                fontWeight = FontWeight.Bold,
-                fontSize = fontSize,
-                modifier = Modifier
-                    .clickable { asKw = !asKw }
-                    .padding(3.dp)
-                    .padding(horizontal = 5.dp)
-            )
+        if (isFlowing) {
+            Card(
+                shape = RoundedCornerShape(4.dp),
+                colors = cardColors(containerColor = verticalLineColor)
+            ) {
+                Text(
+                    text = if (asKw) {
+                        amount.kW(theme.decimalPlaces)
+                    } else {
+                        amount.w()
+                    },
+                    color = powerTextColor,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = fontSize,
+                    modifier = Modifier
+                        .clickable { asKw = !asKw }
+                        .padding(3.dp)
+                        .padding(horizontal = 5.dp)
+                )
+            }
         }
     }
 }
