@@ -1,9 +1,6 @@
 package com.alpriest.energystats.ui.login
 
-import com.alpriest.energystats.models.Battery
-import com.alpriest.energystats.models.ConfigInterface
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.RawDataStoring
+import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.RefreshFrequency
@@ -153,6 +150,24 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         }
+    }
+
+    override suspend fun fetchFirmwareVersions(): DeviceFirmwareVersion? {
+        currentDevice?.let {
+            try {
+                val deviceID = it.deviceID
+                val firmware = networking.fetchAddressBook(deviceID)
+                return DeviceFirmwareVersion(
+                    master = firmware.softVersion.master,
+                    slave = firmware.softVersion.slave,
+                    manager = firmware.softVersion.manager
+                )
+            } catch (ex: Exception) {
+                // Suppress
+            }
+        }
+
+        return null
     }
 
     override fun updateBatteryCapacity(capacity: String) {

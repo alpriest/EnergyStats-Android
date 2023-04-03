@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.models.W
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -84,12 +85,12 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                         onValueChange = {
                             editingCapacity = it
                         },
-                        label = { Text("Total kW of your battery") },
+                        label = { Text("Total W of your battery") },
                         modifier = Modifier.weight(1f)
                     )
                 } else {
                     Text(
-                        text = config.batteryCapacity.kW(decimalPlaces),
+                        text = config.batteryCapacity.W(decimalPlaces),
                         modifier = Modifier.clickable { isEditingCapacity.value = true }
                     )
                 }

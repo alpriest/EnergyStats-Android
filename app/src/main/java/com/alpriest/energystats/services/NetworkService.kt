@@ -125,6 +125,23 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         return response.result ?: throw MissingDataException()
     }
 
+    override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("/c/v0/device/addressbook")
+            .addQueryParameter("id", deviceID)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<AddressBookResponse>>() {}.type
+        val response: NetworkResponse<AddressBookResponse> = fetch(request, type)
+        return response.result ?: throw MissingDataException()
+    }
+
     override suspend fun fetchRaw(deviceID: String, variables: Array<RawVariable>): ArrayList<RawResponse> {
         val body = RequestBody.create(
             MediaType.parse("application/json"),

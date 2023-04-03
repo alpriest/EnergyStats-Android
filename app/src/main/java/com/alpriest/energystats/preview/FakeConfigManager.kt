@@ -2,6 +2,7 @@ package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -65,5 +66,9 @@ class FakeConfigManager : ConfigManaging {
     }
 
     override suspend fun findDevices() {
+    }
+
+    override suspend fun fetchFirmwareVersions(): DeviceFirmwareVersion? {
+        return DeviceFirmwareVersion("1.50", "1.09", "1.49")
     }
 }

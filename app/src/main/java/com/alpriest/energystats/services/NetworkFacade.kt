@@ -53,6 +53,14 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
         }
     }
 
+    override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
+        return if (config.isDemoUser) {
+            demoNetworking.fetchAddressBook(deviceID)
+        } else {
+            network.fetchAddressBook(deviceID)
+        }
+    }
+
     override suspend fun fetchRaw(deviceID: String, variables: Array<RawVariable>): ArrayList<RawResponse> {
         return if (config.isDemoUser) {
             demoNetworking.fetchRaw(deviceID, variables)

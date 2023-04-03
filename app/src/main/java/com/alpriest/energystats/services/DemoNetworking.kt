@@ -39,6 +39,10 @@ class DemoNetworking : Networking {
         )
     }
 
+    override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
+        return AddressBookResponse(softVersion = SoftwareVersion(master = "1.54", slave = "1.09", manager = "1.49"))
+    }
+
     override suspend fun fetchRaw(deviceID: String, variables: Array<RawVariable>): ArrayList<RawResponse> {
         val itemType = object : TypeToken<NetworkRawResponse>() {}.type
         val rawData = rawData()
