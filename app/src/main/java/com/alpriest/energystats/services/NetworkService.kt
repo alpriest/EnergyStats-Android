@@ -130,7 +130,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .scheme("https")
             .host("www.foxesscloud.com")
             .addPathSegments("/c/v0/device/addressbook")
-            .addQueryParameter("id", deviceID)
+            .addQueryParameter("deviceID", deviceID)
             .build()
 
         val request = Request.Builder()

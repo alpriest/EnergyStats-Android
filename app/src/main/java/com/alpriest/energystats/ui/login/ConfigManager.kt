@@ -153,18 +153,18 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
     }
 
     override suspend fun fetchFirmwareVersions(): DeviceFirmwareVersion? {
+        if (currentDevice == null) {
+            throw NoDeviceFoundException()
+        }
+
         currentDevice?.let {
-            try {
-                val deviceID = it.deviceID
-                val firmware = networking.fetchAddressBook(deviceID)
-                return DeviceFirmwareVersion(
-                    master = firmware.softVersion.master,
-                    slave = firmware.softVersion.slave,
-                    manager = firmware.softVersion.manager
-                )
-            } catch (ex: Exception) {
-                // Suppress
-            }
+            val deviceID = it.deviceID
+            val firmware = networking.fetchAddressBook(deviceID)
+            return DeviceFirmwareVersion(
+                master = firmware.softVersion.master,
+                slave = firmware.softVersion.slave,
+                manager = firmware.softVersion.manager
+            )
         }
 
         return null

@@ -78,10 +78,6 @@ class PowerFlowTabViewModel(
     private var totalSeconds = 60
     private val lock = ReentrantLock()
 
-    init {
-        println("AWP created")
-    }
-
     fun timerFired() {
         lock.run {
             if (isLoading) {
