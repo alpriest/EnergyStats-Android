@@ -3,7 +3,12 @@ package com.alpriest.energystats
 import android.app.Application
 import android.content.Context
 import com.alpriest.energystats.ui.AppContainer
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 class EnergyStatsApplication : Application() {
     var context: Context? = null
 
@@ -12,6 +17,9 @@ class EnergyStatsApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        GlobalScope.launch { appContainer.configManager.fetchFirmwareVersions() }
+
         context = applicationContext
     }
 }

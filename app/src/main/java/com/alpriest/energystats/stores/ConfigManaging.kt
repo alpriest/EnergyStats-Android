@@ -7,6 +7,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface ConfigManaging {
+    var firmwareVersion: DeviceFirmwareVersion?
     val themeStream: MutableStateFlow<AppTheme>
     var decimalPlaces: Int
     var showSunnyBackground: Boolean
@@ -24,5 +25,5 @@ interface ConfigManaging {
     fun logout()
     fun updateBatteryCapacity(capacity: String)
     suspend fun findDevices()
-    suspend fun fetchFirmwareVersions(): DeviceFirmwareVersion?
+    suspend fun fetchFirmwareVersions()
 }

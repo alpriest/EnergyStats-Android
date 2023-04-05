@@ -85,6 +85,8 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         config.isDemoUser = false
     }
 
+    override var firmwareVersion: DeviceFirmwareVersion? = null
+
     override var devices: List<Device>?
         get() {
             config.devices?.let {
@@ -152,22 +154,25 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         }
     }
 
-    override suspend fun fetchFirmwareVersions(): DeviceFirmwareVersion? {
+    override suspend fun fetchFirmwareVersions() {
         if (currentDevice == null) {
             throw NoDeviceFoundException()
+        }
+
+        if (firmwareVersion != null) {
+            return
         }
 
         currentDevice?.let {
             val deviceID = it.deviceID
             val firmware = networking.fetchAddressBook(deviceID)
-            return DeviceFirmwareVersion(
+
+            this.firmwareVersion = DeviceFirmwareVersion(
                 master = firmware.softVersion.master,
                 slave = firmware.softVersion.slave,
                 manager = firmware.softVersion.manager
             )
         }
-
-        return null
     }
 
     override fun updateBatteryCapacity(capacity: String) {

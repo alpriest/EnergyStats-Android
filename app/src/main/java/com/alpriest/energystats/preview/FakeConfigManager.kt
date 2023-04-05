@@ -68,7 +68,9 @@ class FakeConfigManager : ConfigManaging {
     override suspend fun findDevices() {
     }
 
-    override suspend fun fetchFirmwareVersions(): DeviceFirmwareVersion? {
-        return DeviceFirmwareVersion("1.50", "1.09", "1.49")
+    override suspend fun fetchFirmwareVersions() {
+        firmwareVersion = DeviceFirmwareVersion("1.50", "1.09", "1.49")
     }
+
+    override var firmwareVersion: DeviceFirmwareVersion? = null
 }

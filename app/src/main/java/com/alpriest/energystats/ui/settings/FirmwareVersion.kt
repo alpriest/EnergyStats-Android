@@ -14,14 +14,11 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.stores.ConfigManaging
-import kotlinx.coroutines.launch
 
 @Composable
 fun FirmwareVersionView(config: ConfigManaging) {
-    var firmwareVersion by remember { mutableStateOf<DeviceFirmwareVersion?>(null) }
-    var error by remember { mutableStateOf<String?>(null) }
     val uriHandler = LocalUriHandler.current
-    val coroutineScope = rememberCoroutineScope()
+    val firmwareVersion by remember { mutableStateOf(config.firmwareVersion)}
 
     Column {
         firmwareVersion?.let {
@@ -44,18 +41,6 @@ fun FirmwareVersionView(config: ConfigManaging) {
             )
         }
 
-        error?.let {
-            Text(it)
-        }
-
         Divider(modifier = Modifier.padding(top = 24.dp))
-    }.run {
-        coroutineScope.launch {
-            try {
-                firmwareVersion = config.fetchFirmwareVersions()
-            } catch (ex: Exception) {
-                error = ex.localizedMessage
-            }
-        }
     }
 }
