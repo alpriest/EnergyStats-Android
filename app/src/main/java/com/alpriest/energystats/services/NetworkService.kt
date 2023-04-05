@@ -1,18 +1,15 @@
 package com.alpriest.energystats.services
 
-import android.accounts.NetworkErrorException
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.stores.CredentialStore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
-import ru.gildor.coroutines.okhttp.await
 import java.io.IOException
 import java.lang.reflect.Type
+import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import kotlin.collections.ArrayList
-import kotlin.coroutines.resume
 
 interface NetworkResponseInterface {
     val errno: Int
@@ -215,14 +212,18 @@ class NetworkService(private val credentials: CredentialStore, private val confi
                     }
 
                     override fun onResponse(call: Call, response: Response) {
-                        val text = response.body()?.string()
-                        val body: T = Gson().fromJson(text, type)
-                        val result: Result<T> = check(body)
+                        try {
+                            val text = response.body()?.string()
+                            val body: T = Gson().fromJson(text, type)
+                            val result: Result<T> = check(body)
 
-                        result.fold(
-                            onSuccess = { continuation.resume(it) },
-                            onFailure = { continuation.resumeWithException(it) }
-                        )
+                            result.fold(
+                                onSuccess = { continuation.resume(it) },
+                                onFailure = { continuation.resumeWithException(it) }
+                            )
+                        } catch (ex: Exception) {
+                            continuation.resumeWithException(ex)
+                        }
                     }
                 })
             }

@@ -1,11 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.accompanist:accompanist-pager:0.20.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/66e51c97a181b06c11cd43593309f776/transformed/accompanist-pager-0.20.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9004f09c85845665850e63e4592ff9bb/transformed/accompanist-pager-0.20.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2338b4cea438c05d38906a30fab44984/transformed/accompanist-pager-0.20.0/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2338b4cea438c05d38906a30fab44984/transformed/accompanist-pager-0.20.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/2338b4cea438c05d38906a30fab44984/transformed/accompanist-pager-0.20.0/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/7141b24768dc2e8b6191dfd2e739942f/transformed/accompanist-pager-0.20.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7141b24768dc2e8b6191dfd2e739942f/transformed/accompanist-pager-0.20.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.accompanist/accompanist-pager/0.20.0/bb4f9c1ef831cb8dfc0da2064db2d3f212af1eb0/accompanist-pager-0.20.0-javadoc.jar!/" />
