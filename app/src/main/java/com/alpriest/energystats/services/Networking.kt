@@ -6,8 +6,6 @@ class InvalidTokenException : Exception("Invalid Token")
 class BadCredentialsException : Exception("Bad Credentials")
 class TryLaterException : Exception("Try Later")
 
-open class InvalidConfiguration(message: String) : Exception(message)
-
 class MissingDataException : Exception("Missing data")
 interface Networking {
     suspend fun fetchDeviceList(): PagedDeviceListResponse

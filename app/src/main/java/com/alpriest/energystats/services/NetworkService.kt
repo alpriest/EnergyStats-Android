@@ -1,10 +1,12 @@
 package com.alpriest.energystats.services
 
+import android.accounts.NetworkErrorException
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.stores.CredentialStore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
+import ru.gildor.coroutines.okhttp.await
 import java.io.IOException
 import java.lang.reflect.Type
 import kotlin.coroutines.resumeWithException
@@ -92,7 +94,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("www.foxesscloud.com")
-            .addPathSegments("/c/v0/device/battery/soc/get")
+            .addPathSegments("c/v0/device/battery/soc/get")
             .addQueryParameter("sn", deviceSN)
             .build()
 
@@ -129,7 +131,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("www.foxesscloud.com")
-            .addPathSegments("/c/v0/device/addressbook")
+            .addPathSegments("c/v0/device/addressbook")
             .addQueryParameter("deviceID", deviceID)
             .build()
 
@@ -162,7 +164,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("www.foxesscloud.com")
-            .addPathSegments("/c/v0/device/battery/info")
+            .addPathSegments("c/v0/device/battery/info")
             .addQueryParameter("id", deviceID)
             .build()
 
@@ -207,24 +209,20 @@ class NetworkService(private val credentials: CredentialStore, private val confi
     ): T {
         try {
             return suspendCoroutine { continuation ->
-                okHttpClient.newCall(request).enqueue(object : Callback {
-                    override fun onResponse(call: Call, response: Response) {
-                        try {
-                            val text = response.body()!!.string()
-                            val body: T = Gson().fromJson(text, type)
-                            val result: Result<T> = check(body)
-                            result.fold(onSuccess = {
-                                continuation.resumeWith(Result.success(it))
-                            }, onFailure = {
-                                continuation.resumeWithException(it)
-                            })
-                        } catch (ex: Exception) {
-                            continuation.resumeWithException(ex)
-                        }
-                    }
-
+                okHttpClient.newCall(request).enqueue(object: Callback {
                     override fun onFailure(call: Call, e: IOException) {
                         continuation.resumeWithException(e)
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val text = response.body()?.string()
+                        val body: T = Gson().fromJson(text, type)
+                        val result: Result<T> = check(body)
+
+                        result.fold(
+                            onSuccess = { continuation.resume(it) },
+                            onFailure = { continuation.resumeWithException(it) }
+                        )
                     }
                 })
             }
