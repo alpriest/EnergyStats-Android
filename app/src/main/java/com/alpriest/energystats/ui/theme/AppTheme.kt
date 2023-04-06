@@ -11,7 +11,8 @@ data class AppTheme(
     val showBatteryTemperature: Boolean,
     val showBatteryEstimate: Boolean,
     val decimalPlaces: Int,
-    val showSunnyBackground: Boolean
+    val showSunnyBackground: Boolean,
+    val showUsableBatteryOnly: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -40,7 +41,8 @@ data class AppTheme(
         showBatteryTemperature: Boolean = this.showBatteryTemperature,
         showBatteryEstimate: Boolean = this.showBatteryEstimate,
         decimalPlaces: Int = this.decimalPlaces,
-        showSunnyBackground: Boolean = this.showSunnyBackground
+        showSunnyBackground: Boolean = this.showSunnyBackground,
+        showUsableBatteryOnly: Boolean = this.showUsableBatteryOnly
     ): AppTheme {
         return AppTheme(
             useLargeDisplay = useLargeDisplay,
@@ -48,7 +50,8 @@ data class AppTheme(
             showBatteryTemperature = showBatteryTemperature,
             showBatteryEstimate = showBatteryEstimate,
             decimalPlaces = decimalPlaces,
-            showSunnyBackground = showSunnyBackground
+            showSunnyBackground = showSunnyBackground,
+            showUsableBatteryOnly = showUsableBatteryOnly
         )
     }
 

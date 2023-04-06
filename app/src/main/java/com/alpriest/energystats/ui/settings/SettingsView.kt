@@ -61,7 +61,7 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
             userManager.getUsername()?.let {
                 Text(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    text = "You are logged in as $it"
+                    text = "You are logged in  as $it"
                 )
             }
 

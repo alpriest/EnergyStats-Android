@@ -16,7 +16,8 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             showBatteryTemperature = config.showBatteryTemperature,
             decimalPlaces = config.decimalPlaces,
             showSunnyBackground = config.showSunnyBackground,
-            showBatteryEstimate = config.showBatteryEstimate
+            showBatteryEstimate = config.showBatteryEstimate,
+            showUsableBatteryOnly = config.showUsableBatteryOnly
         )
     )
 
@@ -84,6 +85,13 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         config.devices = null
         config.isDemoUser = false
     }
+
+    override var showUsableBatteryOnly: Boolean
+        get() = config.showUsableBatteryOnly
+        set(value) {
+            config.showUsableBatteryOnly = value
+            themeStream.value = themeStream.value.update(showUsableBatteryOnly = showUsableBatteryOnly)
+        }
 
     override var firmwareVersion: DeviceFirmwareVersion? = null
 
@@ -156,7 +164,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
 
     override suspend fun fetchFirmwareVersions() {
         if (currentDevice == null) {
-            throw NoDeviceFoundException()
+            return
         }
 
         if (firmwareVersion != null) {

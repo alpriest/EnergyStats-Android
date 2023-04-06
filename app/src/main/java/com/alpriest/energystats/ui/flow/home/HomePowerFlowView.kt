@@ -48,7 +48,8 @@ fun AppTheme.Companion.preview(
     showBatteryTemperature: Boolean = true,
     showBatteryEstimate: Boolean = true,
     showSunnyBackground: Boolean = true,
-    decimalPlaces: Int = 2
+    decimalPlaces: Int = 2,
+    showUsableBatteryOnly: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -56,6 +57,7 @@ fun AppTheme.Companion.preview(
         showBatteryTemperature = showBatteryTemperature,
         showBatteryEstimate = showBatteryEstimate,
         showSunnyBackground = showSunnyBackground,
-        decimalPlaces = decimalPlaces
+        decimalPlaces = decimalPlaces,
+        showUsableBatteryOnly = showUsableBatteryOnly
     )
 }

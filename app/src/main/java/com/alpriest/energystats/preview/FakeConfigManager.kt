@@ -14,38 +14,23 @@ class FakeConfigManager : ConfigManaging {
         AppTheme(
             useLargeDisplay = true,
             useColouredLines = true,
-            showBatteryTemperature = showBatteryTemperature,
+            showBatteryTemperature = true,
             decimalPlaces = 2,
             showSunnyBackground = true,
-            showBatteryEstimate = true
+            showBatteryEstimate = true,
+            showUsableBatteryOnly = false
         )
     )
-    override var decimalPlaces: Int
-        get() = 2
-        set(value) {}
-    override var showSunnyBackground: Boolean
-        get() = true
-        set(value) {}
-    override var showBatteryEstimate: Boolean
-        get() = true
-        set(value) {}
-    override var showBatteryTemperature: Boolean
-        get() = true
-        set(value) {}
+    override var decimalPlaces: Int = 2
+    override var showSunnyBackground: Boolean = true
+    override var showBatteryEstimate: Boolean = true
+    override var showBatteryTemperature: Boolean = true
     override var useLargeDisplay: Boolean = false
-    override val minSOC: Double
-        get() = 0.2
-    override val batteryCapacity: Int
-        get() = 10000
-    override var isDemoUser: Boolean
-        get() = true
-        set(value) {}
-    override var useColouredFlowLines: Boolean
-        get() = true
-        set(value) {}
-    override var refreshFrequency: RefreshFrequency
-        get() = RefreshFrequency.Auto
-        set(value) {}
+    override val minSOC: Double = 0.2
+    override val batteryCapacity: Int = 10000
+    override var isDemoUser: Boolean = true
+    override var useColouredFlowLines: Boolean = true
+    override var refreshFrequency: RefreshFrequency = RefreshFrequency.Auto
     override var devices: List<Device>?
         get() = listOf(
             Device(plantName = "plant1", deviceID = "abcdef", deviceSN = "123123", battery = Battery("5200", "20"), hasPV = true),
@@ -55,9 +40,7 @@ class FakeConfigManager : ConfigManaging {
     override var currentDevice: Device?
         get() = devices?.first()
         set(value) {}
-    override var selectedDeviceID: String?
-        get() = "abcdef"
-        set(value) {}
+    override var selectedDeviceID: String? = "abcdef"
 
     override fun logout() {
     }
@@ -72,5 +55,6 @@ class FakeConfigManager : ConfigManaging {
         firmwareVersion = DeviceFirmwareVersion("1.50", "1.09", "1.49")
     }
 
+    override var showUsableBatteryOnly: Boolean = false
     override var firmwareVersion: DeviceFirmwareVersion? = null
 }

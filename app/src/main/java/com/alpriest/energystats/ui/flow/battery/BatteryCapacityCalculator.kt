@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.rounded
 import java.lang.Math.abs
 import kotlin.math.roundToInt
 
@@ -18,6 +19,8 @@ class BatteryCapacityCalculator(
             return capacityW.toDouble() * minimumSOC
         }
 
+    private val percentageConsideredFull = 98.75
+
     fun batteryPercentageRemaining(
         batteryChargePowerkWH: Double,
         batteryStateOfCharge: Double
@@ -29,7 +32,7 @@ class BatteryCapacityCalculator(
         val currentEstimatedChargeW = capacityW * batteryStateOfCharge
 
         if (batteryChargePowerkWH > 0) { // battery charging
-            if (batteryStateOfCharge >= 98.99) {
+            if (batteryStateOfCharge >= percentageConsideredFull) {
                 return null
             }
 
@@ -48,7 +51,14 @@ class BatteryCapacityCalculator(
         }
     }
 
-    fun currentEstimatedChargeAmountkWH(batteryStateOfCharge: Double): Double {
-        return (capacityW * batteryStateOfCharge) / 1000.0
+    fun currentEstimatedChargeAmountW(batteryStateOfCharge: Double, includeUnusableCapacity: Boolean = true): Double {
+        return (capacityW * batteryStateOfCharge) - (if (includeUnusableCapacity) 0.0 else minimumCharge)
+    }
+
+    fun effectiveBatteryStateOfCharge(batteryStateOfCharge: Double, includeUnusableCapacity: Boolean = true): Double {
+        if (batteryStateOfCharge > percentageConsideredFull) return 0.99
+
+        val deduction = if (includeUnusableCapacity) 0.0 else minimumSOC
+        return ((batteryStateOfCharge - deduction) / (1 - deduction)).rounded(decimalPlaces = 2)
     }
 }

@@ -21,7 +21,8 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
     val decimalPlacesState = rememberSaveable { mutableStateOf(config.decimalPlaces) }
-    var showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
+    val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
+    val showUsableBatteryOnly = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
 
     Column(
         modifier = modifier
@@ -82,6 +83,33 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
             Text("Show battery full/empty estimate")
+        }
+
+        Row(
+            verticalAlignment = Alignment.Top
+        ) {
+            Checkbox(
+                checked = showUsableBatteryOnly.value,
+                onCheckedChange = {
+                    showUsableBatteryOnly.value = it
+                    config.showUsableBatteryOnly = it
+                },
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+            )
+
+            Column {
+                Text(
+                    modifier = Modifier.padding(top = 14.dp),
+                    text = "Show usable battery only"
+                )
+
+                Text(
+                    modifier = Modifier,
+                    text = "Deducts the Min SOC amount from the battery charge level and percentage. Due to inaccuracies in the way battery levels are measured this may result in occasionally showing a negative amount remaining.",
+                    color = Color.DarkGray,
+                    style = MaterialTheme.typography.caption
+                )
+            }
         }
 
         Row(

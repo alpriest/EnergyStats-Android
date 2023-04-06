@@ -7,6 +7,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface ConfigManaging {
+    var showUsableBatteryOnly: Boolean
     var firmwareVersion: DeviceFirmwareVersion?
     val themeStream: MutableStateFlow<AppTheme>
     var decimalPlaces: Int

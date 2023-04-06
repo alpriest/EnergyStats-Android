@@ -5,8 +5,8 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.models.kW
 
 class BatteryPowerViewModel(
-    val configManager: ConfigManaging,
-    val batteryStateOfCharge: Double,
+    private val configManager: ConfigManaging,
+    private val actualBatteryStateOfCharge: Double,
     val batteryChargePowerkWH: Double,
     val batteryTemperature: Double
 ) : ViewModel() {
@@ -23,11 +23,15 @@ class BatteryPowerViewModel(
         get() {
             return calculator.batteryPercentageRemaining(
                 batteryChargePowerkWH = batteryChargePowerkWH,
-                batteryStateOfCharge = batteryStateOfCharge
+                batteryStateOfCharge = actualBatteryStateOfCharge
             )
         }
 
-    fun batteryCapacity(decimalPlaces: Int): String {
-        return calculator.currentEstimatedChargeAmountkWH(batteryStateOfCharge = batteryStateOfCharge).kW(decimalPlaces = decimalPlaces)
+    fun batteryStoredChargekW(decimalPlaces: Int): String {
+        return (calculator.currentEstimatedChargeAmountW(batteryStateOfCharge = actualBatteryStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly) / 1000.0).kW(decimalPlaces = decimalPlaces)
+    }
+
+    fun batteryStateOfCharge(): Double {
+        return calculator.effectiveBatteryStateOfCharge(batteryStateOfCharge = actualBatteryStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly)
     }
 }

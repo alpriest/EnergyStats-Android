@@ -71,12 +71,12 @@ fun BatteryIconView(
             Row {
                 if (percentage) {
                     Text(
-                        viewModel.batteryStateOfCharge.asPercent(),
+                        viewModel.batteryStateOfCharge().asPercent(),
                         fontSize = fontSize
                     )
                 } else {
                     Text(
-                        viewModel.batteryCapacity(decimalPlaces),
+                        viewModel.batteryStoredChargekW(decimalPlaces),
                         fontSize = fontSize
                     )
                 }
@@ -118,7 +118,8 @@ fun duration(estimate: BatteryCapacityEstimate): String {
     return when (estimate.duration) {
         in 0..60 -> "$text ${estimate.duration} $mins"
         in 61..119 -> "$text ${estimate.duration / 60} $hour"
-        else -> "$text ${Math.round(estimate.duration / 60.0)} $hours"
+        in 120..1440 -> "$text ${Math.round(estimate.duration / 60.0)} $hours"
+        else -> "$text ${Math.round(estimate.duration / 1444.0)} days"
     }
 }
 
@@ -129,7 +130,7 @@ fun BatteryPowerFlowViewPreview() {
         BatteryPowerFlow(
             viewModel = BatteryPowerViewModel(
                 FakeConfigManager(),
-                batteryStateOfCharge = 0.25,
+                actualBatteryStateOfCharge = 0.25,
                 batteryChargePowerkWH = -0.5,
                 batteryTemperature = 13.6
             ),
