@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.ui.login.CredentialsView
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.login.*
-import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
@@ -48,7 +47,9 @@ class MainActivity : ComponentActivity() {
                                 userManager = appContainer.userManager,
                                 { appContainer.userManager.logout() },
                                 themeStream = appContainer.configManager.themeStream,
-                                rawDataStore = appContainer.rawDataStore
+                                rawDataStore = appContainer.rawDataStore,
+                                { appContainer.openAppInPlayStore() },
+                                { appContainer.sendUsEmail() }
                             )
                         is LoggedOut ->
                             CredentialsView(

@@ -33,7 +33,7 @@ enum class ReportVariable {
         return when (this) {
             FeedIn -> "Power being sent to the grid"
             GridConsumption -> "Power coming from the grid"
-            Generation -> "PV / Battery power coming through the inverter"
+            Generation -> "Solar / Battery power coming through the inverter"
             ChargeEnergyToTal -> "Power charging the battery"
             DischargeEnergyToTal -> "Power discharging from the battery"
         }

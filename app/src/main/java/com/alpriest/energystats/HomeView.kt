@@ -33,7 +33,9 @@ fun HomeView(
     userManager: UserManaging,
     onLogout: () -> Unit,
     themeStream: MutableStateFlow<AppTheme>,
-    rawDataStore: RawDataStoring
+    rawDataStore: RawDataStoring,
+    onRateApp: () -> Unit,
+    onSendUsEmail: () -> Unit
 ) {
     val state = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -68,7 +70,9 @@ fun HomeView(
                 config = configManager,
                 userManager = userManager,
                 onLogout = onLogout,
-                rawDataStore = rawDataStore
+                rawDataStore = rawDataStore,
+                onRateApp = onRateApp,
+                onSendUsEmail = onSendUsEmail
             )
         },
     )
@@ -88,7 +92,9 @@ fun HomepagePreview() {
             userManager = FakeUserManager(),
             {},
             themeStream = MutableStateFlow(AppTheme.preview()),
-            rawDataStore = RawDataStore()
+            rawDataStore = RawDataStore(),
+            {},
+            {}
         )
     }
 }

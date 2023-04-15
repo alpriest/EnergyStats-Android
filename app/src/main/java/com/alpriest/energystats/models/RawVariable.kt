@@ -45,7 +45,7 @@ enum class RawVariable {
 
     fun description(): String {
         return when (this) {
-            GenerationPower -> "PV / Battery power coming through the inverter"
+            GenerationPower -> "Solar / Battery power coming through the inverter"
             FeedInPower -> "Power being sent to the grid"
             BatChargePower -> "Power charging the battery"
             BatDischargePower -> "Power discharging from the battery"
