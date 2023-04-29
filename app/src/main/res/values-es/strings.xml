@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">Energy Stats</string>
-    <string name="failed">Fracasado</string>
     <string name="loading">Carga…</string>
     <string name="mins">Minutos</string>
     <string name="hour">hora</string>
     <string name="hours">horas</string>
     <string name="nextUpdate">Próxima actualización en %1s</string>
     <string name="fullIn">Lleno en</string>
-    <string name="emptyIn">Vaciar en</string>
+    <string name="emptyIn">Vacia en</string>
 </resources>

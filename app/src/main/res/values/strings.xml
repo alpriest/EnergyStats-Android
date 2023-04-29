@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Energy Stats</string>
-    <string name="failed">Failed</string>
     <string name="loading">Loading…</string>
     <string name="mins">mins</string>
     <string name="hour">hour</string>
