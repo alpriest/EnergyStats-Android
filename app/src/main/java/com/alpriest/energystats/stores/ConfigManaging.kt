@@ -2,6 +2,7 @@ package com.alpriest.energystats.stores
 
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
+import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +24,10 @@ interface ConfigManaging {
     var devices: List<Device>?
     var currentDevice: Device?
     var selectedDeviceID: String?
+    var variables: List<RawVariable>
     fun logout()
     fun updateBatteryCapacity(capacity: String)
     suspend fun findDevices()
     suspend fun fetchFirmwareVersions()
+    suspend fun fetchVariables()
 }

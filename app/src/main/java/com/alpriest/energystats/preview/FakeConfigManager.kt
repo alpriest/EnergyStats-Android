@@ -3,6 +3,7 @@ package com.alpriest.energystats.preview
 import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
+import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -41,6 +42,7 @@ class FakeConfigManager : ConfigManaging {
         get() = devices?.first()
         set(value) {}
     override var selectedDeviceID: String? = "abcdef"
+    override var variables: List<RawVariable> = listOf() // TODO: Does this need content
 
     override fun logout() {
     }
@@ -53,6 +55,9 @@ class FakeConfigManager : ConfigManaging {
 
     override suspend fun fetchFirmwareVersions() {
         firmwareVersion = DeviceFirmwareVersion("1.50", "1.09", "1.49")
+    }
+
+    override suspend fun fetchVariables() {
     }
 
     override var showUsableBatteryOnly: Boolean = false

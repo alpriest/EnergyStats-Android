@@ -61,11 +61,19 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
         }
     }
 
-    override suspend fun fetchRaw(deviceID: String, variables: Array<RawVariable>): ArrayList<RawResponse> {
+    override suspend fun fetchRaw(deviceID: String, variables: Array<String>): ArrayList<RawResponse> {
         return if (config.isDemoUser) {
             demoNetworking.fetchRaw(deviceID, variables)
         } else {
             network.fetchRaw(deviceID, variables)
+        }
+    }
+
+    override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
+        return if (config.isDemoUser) {
+            demoNetworking.fetchVariables(deviceID)
+        } else {
+            network.fetchVariables(deviceID)
         }
     }
 }

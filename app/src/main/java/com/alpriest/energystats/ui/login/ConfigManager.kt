@@ -21,6 +21,8 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         )
     )
 
+    override var variables: List<RawVariable> = listOf()
+
     override var decimalPlaces: Int
         get() = config.decimalPlaces
         set(value) {
@@ -190,6 +192,17 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             } else {
                 it
             }
+        }
+    }
+
+    override suspend fun fetchVariables() {
+        if (currentDevice == null) {
+            return
+        }
+
+        currentDevice?.let {
+            val deviceID = it.deviceID
+            this.variables = networking.fetchVariables(deviceID)
         }
     }
 }

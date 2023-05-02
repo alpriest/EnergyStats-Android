@@ -21,23 +21,23 @@ class SummaryPowerFlowViewModel(
 ) : ViewModel() {
     val solar: Double = java.lang.Double.max(
         0.0,
-        raw.currentValue(RawVariable.LoadsPower) + raw.currentValue(RawVariable.BatChargePower) + raw.currentValue(RawVariable.FeedInPower) - raw.currentValue(
-            RawVariable.GridConsumptionPower
+        raw.currentValue("loadsPower") + raw.currentValue("batChargePower") + raw.currentValue("feedInPower") - raw.currentValue(
+            "gridConsumptionPower"
         ) - raw.currentValue(
-            RawVariable.BatDischargePower
+            "batDischargePower"
         )
     )
-    val home: Double = raw.currentValue(RawVariable.GridConsumptionPower) + raw.currentValue(RawVariable.GenerationPower) - raw.currentValue(RawVariable.FeedInPower)
-    val grid: Double = raw.currentValue(RawVariable.FeedInPower) - raw.currentValue(RawVariable.GridConsumptionPower)
+    val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
+    val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
     val batteryViewModel: BatteryPowerViewModel = BatteryPowerViewModel(configManager, batteryStateOfCharge, battery, batteryTemperature)
-    val latestUpdate = raw.currentData(RawVariable.GridConsumptionPower)?.time?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it) } ?: Date()
+    val latestUpdate = raw.currentData("gridConsumptionPower")?.time?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it) } ?: Date()
 }
 
-private fun List<RawResponse>.currentValue(forKey: RawVariable): Double {
+private fun List<RawResponse>.currentValue(forKey: String): Double {
     val item = currentData(forKey)
     return item?.value ?: 0.0
 }
 
-private fun List<RawResponse>.currentData(forKey: RawVariable): RawData? {
-    return firstOrNull { it.variable == forKey.networkTitle() }?.data?.lastOrNull()
+private fun List<RawResponse>.currentData(forKey: String): RawData? {
+    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }?.data?.lastOrNull()
 }

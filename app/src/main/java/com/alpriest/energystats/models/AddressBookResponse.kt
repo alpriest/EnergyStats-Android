@@ -9,3 +9,5 @@ data class SoftwareVersion(
     val slave: String,
     val manager: String
 )
+
+

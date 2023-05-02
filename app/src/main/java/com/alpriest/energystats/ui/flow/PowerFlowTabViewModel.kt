@@ -132,12 +132,12 @@ class PowerFlowTabViewModel(
                 val raw = network.fetchRaw(
                     deviceID = currentDevice.deviceID,
                     arrayOf(
-                        RawVariable.FeedInPower,
-                        RawVariable.GridConsumptionPower,
-                        RawVariable.GenerationPower,
-                        RawVariable.LoadsPower,
-                        RawVariable.BatChargePower,
-                        RawVariable.BatDischargePower
+                        "feedInPower",
+                        "gridConsumptionPower",
+                        "generationPower",
+                        "loadsPower",
+                        "batChargePower",
+                        "batDischargePower"
                     )
                 )
                 rawDataStore.store(raw = raw)
