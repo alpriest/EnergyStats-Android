@@ -249,6 +249,9 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             40401 -> {
                 return Result.failure(TryLaterException())
             }
+            30000 -> {
+                return Result.failure(MaintenanceModeException())
+            }
         }
 
         return Result.success(item)

@@ -5,6 +5,7 @@ import com.alpriest.energystats.models.*
 class InvalidTokenException : Exception("Invalid Token")
 class BadCredentialsException : Exception("Bad Credentials")
 class TryLaterException : Exception("Try Later")
+class MaintenanceModeException: Exception("Fox servers are offline. Please try later.")
 
 class MissingDataException : Exception("Missing data")
 interface Networking {
