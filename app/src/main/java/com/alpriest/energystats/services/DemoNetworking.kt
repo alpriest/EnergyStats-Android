@@ -43,7 +43,7 @@ class DemoNetworking : Networking {
         return AddressBookResponse(softVersion = SoftwareVersion(master = "1.54", slave = "1.09", manager = "1.49"))
     }
 
-    override suspend fun fetchRaw(deviceID: String, variables: Array<String>): ArrayList<RawResponse> {
+    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>): ArrayList<RawResponse> {
         val itemType = object : TypeToken<NetworkRawResponse>() {}.type
         val rawData = rawData()
         val gson = GsonBuilder().create()

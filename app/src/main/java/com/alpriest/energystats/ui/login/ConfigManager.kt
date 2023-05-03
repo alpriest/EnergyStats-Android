@@ -200,6 +200,10 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             return
         }
 
+        if (!variables.isEmpty()) {
+            return
+        }
+
         currentDevice?.let {
             val deviceID = it.deviceID
             this.variables = networking.fetchVariables(deviceID)

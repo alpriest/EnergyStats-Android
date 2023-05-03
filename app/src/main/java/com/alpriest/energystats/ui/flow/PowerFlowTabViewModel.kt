@@ -2,8 +2,6 @@ package com.alpriest.energystats.ui.flow
 
 import android.os.CountDownTimer
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -129,16 +127,18 @@ class PowerFlowTabViewModel(
                     _uiState.value = UiLoadState(LoadingLoadState)
                 }
                 network.ensureHasToken()
+                val variables: List<RawVariable> = listOfNotNull(
+                    variable("feedInPower"),
+                    variable("gridConsumptionPower"),
+                    variable("generationPower"),
+                    variable("loadsPower"),
+                    variable("batChargePower"),
+                    variable("batDischargePower")
+                )
+
                 val raw = network.fetchRaw(
                     deviceID = currentDevice.deviceID,
-                    arrayOf(
-                        "feedInPower",
-                        "gridConsumptionPower",
-                        "generationPower",
-                        "loadsPower",
-                        "batChargePower",
-                        "batDischargePower"
-                    )
+                    variables
                 )
                 rawDataStore.store(raw = raw)
 
@@ -167,6 +167,10 @@ class PowerFlowTabViewModel(
             _uiState.value = UiLoadState(ErrorLoadState(ex.localizedMessage ?: "Error unknown"))
             _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
         }
+    }
+
+    private fun variable(variableName: String): RawVariable? {
+        return configManager.variables.firstOrNull { it.variable.lowercase() == variableName.lowercase() }
     }
 
     private fun calculateTicks(summary: SummaryPowerFlowViewModel) {

@@ -42,7 +42,7 @@ class FakeConfigManager : ConfigManaging {
         get() = devices?.first()
         set(value) {}
     override var selectedDeviceID: String? = "abcdef"
-    override var variables: List<RawVariable> = listOf() // TODO: Does this need content
+    override var variables: List<RawVariable> = listOf()
 
     override fun logout() {
     }

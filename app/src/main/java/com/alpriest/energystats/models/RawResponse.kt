@@ -8,9 +8,9 @@ data class RawRequest(
     val timespan: String = "day",
     val beginDate: QueryDate
 ) {
-    constructor(deviceID: String, variables: Array<String>) : this(
+    constructor(deviceID: String, variables: List<RawVariable>) : this(
         deviceID = deviceID,
-        variables = variables,
+        variables = variables.map { it.variable }.toTypedArray(),
         beginDate = QueryDate()
     )
 

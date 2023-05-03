@@ -18,14 +18,6 @@ class EnergyStatsApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        GlobalScope.launch {
-            try {
-                appContainer.configManager.fetchFirmwareVersions()
-            } catch (ex: Exception) {
-                // TODO
-            }
-        }
-
         context = applicationContext
     }
 }

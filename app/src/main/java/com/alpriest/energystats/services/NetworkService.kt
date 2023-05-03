@@ -141,7 +141,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         return response.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchRaw(deviceID: String, variables: Array<String>): ArrayList<RawResponse> {
+    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>): ArrayList<RawResponse> {
         val body = RequestBody.create(
             MediaType.parse("application/json"),
             Gson().toJson(RawRequest(deviceID, variables))
@@ -178,7 +178,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/variables")
+            .addPathSegments("c/v1/device/variables")
             .addQueryParameter("deviceID", deviceID)
             .build()
 
