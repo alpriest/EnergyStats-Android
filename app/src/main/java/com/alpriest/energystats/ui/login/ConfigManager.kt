@@ -125,7 +125,12 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             config.selectedDeviceID = value
         }
 
-    override suspend fun findDevices() {
+    override val hasBattery: Boolean
+        get() {
+            return currentDevice?.let { it.battery == null } ?: false
+        }
+
+    override suspend fun fetchDevices() {
         val deviceList = networking.fetchDeviceList()
 
         try {
@@ -151,7 +156,8 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
                         deviceID = it.deviceID,
                         deviceSN = it.deviceSN,
                         hasPV = it.hasPV,
-                        battery = if (it.hasBattery) Battery(batteryCapacity, minSOC) else null
+                        battery = if (it.hasBattery) Battery(batteryCapacity, minSOC) else null,
+                        deviceType = it.deviceType
                     )
                 )
             }.collect()
@@ -188,7 +194,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
     override fun updateBatteryCapacity(capacity: String) {
         devices = devices?.map {
             if (it.deviceID == selectedDeviceID && it.battery != null) {
-                Device(it.plantName, it.deviceID, it.deviceSN, it.hasPV, Battery(capacity, it.battery.minSOC))
+                Device(it.plantName, it.deviceID, it.deviceSN, it.hasPV, Battery(capacity, it.battery.minSOC), it.deviceType)
             } else {
                 it
             }

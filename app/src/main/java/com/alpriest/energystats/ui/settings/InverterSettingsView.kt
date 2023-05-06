@@ -12,9 +12,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+
+private val Device.deviceDisplayName: String
+    get() {
+        return deviceType ?: "$deviceID Re-login to update"
+    }
 
 @Composable
 fun DeviceSettingsView(config: ConfigManaging) {
@@ -29,7 +35,7 @@ fun DeviceSettingsView(config: ConfigManaging) {
                     Row {
                         Button(onClick = { expanded = !expanded }) {
                             Text(
-                                it.plantName,
+                                it.deviceDisplayName,
                                 fontSize = 10.sp
                             )
                             Icon(
@@ -38,6 +44,7 @@ fun DeviceSettingsView(config: ConfigManaging) {
                                 tint = Color.White
                             )
                         }
+
                         DropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false },
@@ -47,7 +54,7 @@ fun DeviceSettingsView(config: ConfigManaging) {
                                     expanded = false
                                     config.selectedDeviceID = device.deviceID
                                 }) {
-                                    Text(text = device.plantName)
+                                    Text(text = device.deviceDisplayName)
                                 }
                             }
                         }

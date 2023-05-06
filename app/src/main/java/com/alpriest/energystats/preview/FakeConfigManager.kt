@@ -34,8 +34,8 @@ class FakeConfigManager : ConfigManaging {
     override var refreshFrequency: RefreshFrequency = RefreshFrequency.Auto
     override var devices: List<Device>?
         get() = listOf(
-            Device(plantName = "plant1", deviceID = "abcdef", deviceSN = "123123", battery = Battery("5200", "20"), hasPV = true),
-            Device(plantName = "plant2", deviceID = "ppplll", deviceSN = "998877", battery = Battery("5200", "20"), hasPV = true)
+            Device(plantName = "plant1", deviceID = "abcdef", deviceSN = "123123", battery = Battery("5200", "20"), hasPV = true, deviceType = "F3000"),
+            Device(plantName = "plant2", deviceID = "ppplll", deviceSN = "998877", battery = Battery("5200", "20"), hasPV = true, deviceType = "H1-3.7-E")
         )
         set(value) {}
     override var currentDevice: Device?
@@ -43,6 +43,7 @@ class FakeConfigManager : ConfigManaging {
         set(value) {}
     override var selectedDeviceID: String? = "abcdef"
     override var variables: List<RawVariable> = listOf()
+    override val hasBattery: Boolean = true
 
     override fun logout() {
     }
@@ -50,7 +51,7 @@ class FakeConfigManager : ConfigManaging {
     override fun updateBatteryCapacity(capacity: String) {
     }
 
-    override suspend fun findDevices() {
+    override suspend fun fetchDevices() {
     }
 
     override suspend fun fetchFirmwareVersions() {

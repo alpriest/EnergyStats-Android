@@ -40,9 +40,11 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
 
         FirmwareVersionView(config)
 
-        BatterySettingsView(
-            config = config
-        )
+        if (config.hasBattery) {
+            BatterySettingsView(
+                config = config
+            )
+        }
 
         Divider()
 

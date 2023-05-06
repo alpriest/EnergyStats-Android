@@ -18,15 +18,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainAppView(appContainer: AppContainer) {
     val theme = appContainer.configManager.themeStream.collectAsState()
+    val loginState = appContainer.userManager.loggedInState.collectAsState()
 
     EnergyStatsTheme(useLargeDisplay = theme.value.useLargeDisplay) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            val loginState = appContainer.userManager.loggedInState.collectAsState().value
             val coroutineScope = rememberCoroutineScope()
+            val loginStateValue = loginState.value
 
-            when (loginState.loadState) {
+            when (loginStateValue.loadState) {
                 is LoggedIn ->
                     HomeView(
                         configManager = appContainer.configManager,
@@ -40,7 +41,7 @@ fun MainAppView(appContainer: AppContainer) {
                     )
                 is LoggedOut ->
                     CredentialsView(
-                        errorMessage = loginState.loadState.reason,
+                        errorMessage = loginStateValue.loadState.reason,
                         onLogin = { username, password ->
                             coroutineScope.launch {
                                 appContainer.userManager.login(

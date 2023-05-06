@@ -124,7 +124,7 @@ fun DataSettingsViewPreview() {
     store.store(
         deviceList = PagedDeviceListResponse(
             currentPage = 1, pageSize = 1, total = 1, devices = listOf(
-                NetworkDevice(plantName = "plant1", deviceID = "ABC123", deviceSN = "JJJ999", hasBattery = true, hasPV = true)
+                NetworkDevice(plantName = "plant1", deviceID = "ABC123", deviceSN = "JJJ999", hasBattery = true, hasPV = true, deviceType = "F3000")
             )
         )
     )

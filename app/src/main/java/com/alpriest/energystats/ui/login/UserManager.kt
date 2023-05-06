@@ -49,7 +49,7 @@ class UserManager(
     override suspend fun loginDemo() {
         configManager.isDemoUser = true
         store.store("demo", "user")
-        configManager.findDevices()
+        configManager.fetchDevices()
         _loggedInState.value = LoginStateHolder(LoggedIn)
     }
 
@@ -57,13 +57,19 @@ class UserManager(
         username: String,
         password: String
     ) {
+        if (username.isBlank() || password.isBlank()) {
+            return
+        }
+
         _loggedInState.value = LoginStateHolder(LoggingIn)
 
         try {
             val hashedPassword = Encryption.md5(password)
             networking.verifyCredentials(username, hashedPassword)
             store.store(username, hashedPassword)
-            configManager.findDevices()
+            configManager.fetchDevices()
+            configManager.fetchFirmwareVersions()
+            configManager.fetchVariables()
             _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: BadCredentialsException) {
             logout()

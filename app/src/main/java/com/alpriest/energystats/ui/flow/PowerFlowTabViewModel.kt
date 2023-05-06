@@ -118,7 +118,7 @@ class PowerFlowTabViewModel(
     private suspend fun loadData() {
         try {
             if (configManager.currentDevice == null) {
-                configManager.findDevices()
+                configManager.fetchDevices()
             }
 
             configManager.currentDevice?.let { currentDevice ->

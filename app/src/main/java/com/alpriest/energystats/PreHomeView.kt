@@ -36,15 +36,6 @@ fun PreHomeView(appContainer: AppContainer, viewModel: PreHomeViewModel) {
 
     when (uiState) {
         false -> LoadingView(title = "Loading...")
-        true -> HomeView(
-            configManager = appContainer.configManager,
-            network = appContainer.networking,
-            userManager = appContainer.userManager,
-            { appContainer.userManager.logout() },
-            themeStream = appContainer.configManager.themeStream,
-            rawDataStore = appContainer.rawDataStore,
-            { appContainer.openAppInPlayStore() },
-            { appContainer.sendUsEmail() }
-        )
+        true -> MainAppView(appContainer)
     }
 }
