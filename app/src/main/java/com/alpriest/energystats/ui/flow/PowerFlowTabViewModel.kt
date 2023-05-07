@@ -117,11 +117,11 @@ class PowerFlowTabViewModel(
 
     private suspend fun loadData() {
         try {
-            if (configManager.currentDevice == null) {
+            if (configManager.currentDevice.value == null) {
                 configManager.fetchDevices()
             }
 
-            configManager.currentDevice?.let { currentDevice ->
+            configManager.currentDevice.value?.let { currentDevice ->
                 _updateMessage.value = UiUpdateMessageState(LoadingNowUpdateMessageState)
                 if (_uiState.value.state is ErrorLoadState) {
                     _uiState.value = UiLoadState(LoadingLoadState)
@@ -135,7 +135,7 @@ class PowerFlowTabViewModel(
                     variable("batChargePower"),
                     variable("batDischargePower")
                 )
-
+                
                 val raw = network.fetchRaw(
                     deviceID = currentDevice.deviceID,
                     variables

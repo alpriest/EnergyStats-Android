@@ -23,7 +23,7 @@ private val Device.deviceDisplayName: String
     }
 
 @Composable
-fun DeviceSettingsView(config: ConfigManaging) {
+fun DeviceSelectionView(config: ConfigManaging) {
     var expanded by remember { mutableStateOf(false) }
 
     Column {
@@ -31,7 +31,7 @@ fun DeviceSettingsView(config: ConfigManaging) {
             Column {
                 SettingsTitleView("Device selection")
 
-                config.currentDevice?.let {
+                config.currentDevice.collectAsState().value?.let {
                     Row {
                         Button(onClick = { expanded = !expanded }) {
                             Text(
@@ -71,6 +71,6 @@ fun DeviceSettingsView(config: ConfigManaging) {
 @Composable
 fun InverterSettingsViewPreview() {
     EnergyStatsTheme {
-        DeviceSettingsView(FakeConfigManager())
+        DeviceSelectionView(FakeConfigManager())
     }
 }

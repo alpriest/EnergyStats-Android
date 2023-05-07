@@ -21,7 +21,7 @@ class PreHomeViewModel(
         loadData()
     }
 
-    fun loadData() {
+    private fun loadData() {
         viewModelScope.launch {
             configManager.fetchFirmwareVersions()
             configManager.fetchVariables()

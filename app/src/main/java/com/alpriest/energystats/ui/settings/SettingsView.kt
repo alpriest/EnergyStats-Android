@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +27,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 @Composable
 fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: () -> Unit, rawDataStore: RawDataStoring, onRateApp: () -> Unit, onSendUsEmail: () -> Unit) {
     val scrollState = rememberScrollState()
+    val currentDevice = config.currentDevice.collectAsState()
 
     Column(
         modifier = Modifier
@@ -36,17 +38,19 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        DeviceSettingsView(config = config)
+        DeviceSelectionView(config = config)
 
         FirmwareVersionView(config)
 
-        if (config.hasBattery) {
-            BatterySettingsView(
-                config = config
-            )
-        }
+        currentDevice.value?.let {
+            if (it.battery != null) {
+                BatterySettingsView(
+                    config = config
+                )
 
-        Divider()
+                Divider()
+            }
+        }
 
         DisplaySettingsView(
             config = config

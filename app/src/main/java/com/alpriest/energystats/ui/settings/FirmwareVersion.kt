@@ -18,10 +18,10 @@ import com.alpriest.energystats.stores.ConfigManaging
 @Composable
 fun FirmwareVersionView(config: ConfigManaging) {
     val uriHandler = LocalUriHandler.current
-    val firmwareVersion by remember { mutableStateOf(config.firmwareVersion)}
+    val firmwareVersion by remember { mutableStateOf(config.firmwareVersion) }
 
-    Column {
-        firmwareVersion?.let {
+    firmwareVersion?.let {
+        Column {
             SettingsTitleView("Firmware versions")
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -39,8 +39,8 @@ fun FirmwareVersionView(config: ConfigManaging) {
                     uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
                 }
             )
-        }
 
-        Divider(modifier = Modifier.padding(top = 24.dp))
+            Divider(modifier = Modifier.padding(top = 24.dp))
+        }
     }
 }

@@ -38,9 +38,7 @@ class FakeConfigManager : ConfigManaging {
             Device(plantName = "plant2", deviceID = "ppplll", deviceSN = "998877", battery = Battery("5200", "20"), hasPV = true, deviceType = "H1-3.7-E")
         )
         set(value) {}
-    override var currentDevice: Device?
-        get() = devices?.first()
-        set(value) {}
+    override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(null)
     override var selectedDeviceID: String? = "abcdef"
     override var variables: List<RawVariable> = listOf()
     override val hasBattery: Boolean = true

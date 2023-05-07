@@ -23,7 +23,7 @@ interface ConfigManaging {
     var useColouredFlowLines: Boolean
     var refreshFrequency: RefreshFrequency
     var devices: List<Device>?
-    var currentDevice: Device?
+    var currentDevice: MutableStateFlow<Device?>
     var selectedDeviceID: String?
     var variables: List<RawVariable>
     fun logout()

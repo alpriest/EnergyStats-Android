@@ -45,10 +45,10 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         }
 
     override val minSOC: Double
-        get() = (currentDevice?.battery?.minSOC ?: "0.2").toDouble()
+        get() = (currentDevice.value?.battery?.minSOC ?: "0.2").toDouble()
 
     override val batteryCapacity: Int
-        get() = (currentDevice?.battery?.capacity ?: "2600").toDouble().toInt()
+        get() = (currentDevice.value?.battery?.capacity ?: "2600").toDouble().toInt()
 
     override var isDemoUser: Boolean
         get() = config.isDemoUser
@@ -111,23 +111,24 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             } else {
                 config.devices = null
             }
+
+            currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
         }
 
-    override var currentDevice: Device?
-        get() {
-            return devices?.first { it.deviceID == selectedDeviceID }
-        }
-        set(@Suppress("UNUSED_PARAMETER") value) {}
+    override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(
+        devices?.firstOrNull { it.deviceID == selectedDeviceID }
+    )
 
     override var selectedDeviceID: String?
         get() = config.selectedDeviceID
         set(value) {
             config.selectedDeviceID = value
+            currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
         }
 
     override val hasBattery: Boolean
         get() {
-            return currentDevice?.let { it.battery == null } ?: false
+            return currentDevice.value?.let { it.battery == null } ?: false
         }
 
     override suspend fun fetchDevices() {
@@ -163,7 +164,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             }.collect()
 
             devices = mappedDevices
-            selectedDeviceID = devices?.first()?.deviceID
+            selectedDeviceID = devices?.firstOrNull()?.deviceID
             rawDataStore.store(deviceList = deviceList)
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
@@ -171,7 +172,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
     }
 
     override suspend fun fetchFirmwareVersions() {
-        if (currentDevice == null) {
+        if (currentDevice.value == null) {
             return
         }
 
@@ -179,7 +180,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             return
         }
 
-        currentDevice?.let {
+        currentDevice.value?.let {
             val deviceID = it.deviceID
             val firmware = networking.fetchAddressBook(deviceID)
 
@@ -202,7 +203,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
     }
 
     override suspend fun fetchVariables() {
-        if (currentDevice == null) {
+        if (currentDevice.value == null) {
             return
         }
 
@@ -210,7 +211,7 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             return
         }
 
-        currentDevice?.let {
+        currentDevice.value?.let {
             val deviceID = it.deviceID
             this.variables = networking.fetchVariables(deviceID)
         }
