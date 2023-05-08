@@ -18,9 +18,9 @@ import com.alpriest.energystats.stores.ConfigManaging
 @Composable
 fun FirmwareVersionView(config: ConfigManaging) {
     val uriHandler = LocalUriHandler.current
-    val firmwareVersion by remember { mutableStateOf(config.firmwareVersion) }
+    val currentDevice = config.currentDevice.collectAsState()
 
-    firmwareVersion?.let {
+    currentDevice.value?.firmware?.let {
         Column {
             SettingsTitleView("Firmware versions")
             Row(

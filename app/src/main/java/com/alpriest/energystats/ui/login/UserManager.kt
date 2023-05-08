@@ -68,8 +68,6 @@ class UserManager(
             networking.verifyCredentials(username, hashedPassword)
             store.store(username, hashedPassword)
             configManager.fetchDevices()
-            configManager.fetchFirmwareVersions()
-            configManager.fetchVariables()
             _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: BadCredentialsException) {
             logout()

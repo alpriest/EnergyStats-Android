@@ -8,7 +8,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 
-class ConfigManager(var config: ConfigInterface, val networking: Networking, val rawDataStore: RawDataStoring) : ConfigManaging {
+open class ConfigManager(var config: ConfigInterface, val networking: Networking, val rawDataStore: RawDataStoring) : ConfigManaging {
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
         AppTheme(
             useLargeDisplay = config.useLargeDisplay,
@@ -20,8 +20,6 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             showUsableBatteryOnly = config.showUsableBatteryOnly
         )
     )
-
-    override var variables: List<RawVariable> = listOf()
 
     override var decimalPlaces: Int
         get() = config.decimalPlaces
@@ -95,8 +93,6 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             themeStream.value = themeStream.value.update(showUsableBatteryOnly = showUsableBatteryOnly)
         }
 
-    override var firmwareVersion: DeviceFirmwareVersion? = null
-
     override var devices: List<Device>?
         get() {
             config.devices?.let {
@@ -126,6 +122,11 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
         }
 
+    override val variables: List<RawVariable>
+        get() {
+            return currentDevice.value?.variables ?: listOf()
+        }
+
     override val hasBattery: Boolean
         get() {
             return currentDevice.value?.let { it.battery == null } ?: false
@@ -139,6 +140,9 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
             deviceList.devices.asFlow().map {
                 val batteryCapacity: String?
                 val minSOC: String?
+
+                val variables = networking.fetchVariables(it.deviceID)
+                val firmware = fetchFirmwareVersions(it.deviceID)
 
                 if (it.hasBattery) {
                     val battery = networking.fetchBattery(it.deviceID)
@@ -158,7 +162,9 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
                         deviceSN = it.deviceSN,
                         hasPV = it.hasPV,
                         battery = if (it.hasBattery) Battery(batteryCapacity, minSOC) else null,
-                        deviceType = it.deviceType
+                        deviceType = it.deviceType,
+                        firmware = firmware,
+                        variables = variables
                     )
                 )
             }.collect()
@@ -171,49 +177,32 @@ class ConfigManager(var config: ConfigInterface, val networking: Networking, val
         }
     }
 
-    override suspend fun fetchFirmwareVersions() {
-        if (currentDevice.value == null) {
-            return
-        }
+    suspend fun fetchFirmwareVersions(deviceID: String): DeviceFirmwareVersion {
+        val firmware = networking.fetchAddressBook(deviceID)
 
-        if (firmwareVersion != null) {
-            return
-        }
-
-        currentDevice.value?.let {
-            val deviceID = it.deviceID
-            val firmware = networking.fetchAddressBook(deviceID)
-
-            this.firmwareVersion = DeviceFirmwareVersion(
-                master = firmware.softVersion.master,
-                slave = firmware.softVersion.slave,
-                manager = firmware.softVersion.manager
-            )
-        }
+        return DeviceFirmwareVersion(
+            master = firmware.softVersion.master,
+            slave = firmware.softVersion.slave,
+            manager = firmware.softVersion.manager
+        )
     }
 
     override fun updateBatteryCapacity(capacity: String) {
         devices = devices?.map {
             if (it.deviceID == selectedDeviceID && it.battery != null) {
-                Device(it.plantName, it.deviceID, it.deviceSN, it.hasPV, Battery(capacity, it.battery.minSOC), it.deviceType)
+                Device(
+                    it.plantName,
+                    it.deviceID,
+                    it.deviceSN,
+                    it.hasPV,
+                    Battery(capacity, it.battery.minSOC),
+                    it.deviceType,
+                    it.firmware,
+                    it.variables
+                )
             } else {
                 it
             }
-        }
-    }
-
-    override suspend fun fetchVariables() {
-        if (currentDevice.value == null) {
-            return
-        }
-
-        if (!variables.isEmpty()) {
-            return
-        }
-
-        currentDevice.value?.let {
-            val deviceID = it.deviceID
-            this.variables = networking.fetchVariables(deviceID)
         }
     }
 }

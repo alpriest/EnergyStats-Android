@@ -23,8 +23,10 @@ class PreHomeViewModel(
 
     private fun loadData() {
         viewModelScope.launch {
-            configManager.fetchFirmwareVersions()
-            configManager.fetchVariables()
+            if (configManager.devices?.any { it.firmware == null } == true) {
+                configManager.fetchDevices()
+            }
+
             _uiState.value = true
         }
     }

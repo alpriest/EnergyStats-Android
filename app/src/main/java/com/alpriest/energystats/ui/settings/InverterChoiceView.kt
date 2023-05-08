@@ -17,21 +17,17 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
-private val Device.deviceDisplayName: String
-    get() {
-        return deviceType ?: "$deviceID Re-login to update"
-    }
-
 @Composable
-fun DeviceSelectionView(config: ConfigManaging) {
+fun InverterChoiceView(config: ConfigManaging) {
     var expanded by remember { mutableStateOf(false) }
+    val currentDevice = config.currentDevice.collectAsState()
 
     Column {
         if ((config.devices?.count() ?: 0) > 1) {
             Column {
                 SettingsTitleView("Device selection")
 
-                config.currentDevice.collectAsState().value?.let {
+                currentDevice.value?.let {
                     Row {
                         Button(onClick = { expanded = !expanded }) {
                             Text(
@@ -67,10 +63,15 @@ fun DeviceSelectionView(config: ConfigManaging) {
     }
 }
 
+private val Device.deviceDisplayName: String
+    get() {
+        return deviceType ?: "$deviceID Re-login to update"
+    }
+
 @Preview(showBackground = true, heightDp = 600)
 @Composable
 fun InverterSettingsViewPreview() {
     EnergyStatsTheme {
-        DeviceSelectionView(FakeConfigManager())
+        InverterChoiceView(FakeConfigManager())
     }
 }

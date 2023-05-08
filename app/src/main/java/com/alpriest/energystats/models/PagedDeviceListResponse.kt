@@ -38,7 +38,9 @@ data class Device(
     val deviceSN: String,
     val hasPV: Boolean,
     val battery: Battery?,
-    val deviceType: String?
+    val deviceType: String?,
+    val firmware: DeviceFirmwareVersion?,
+    val variables: List<RawVariable>
 )
 
 data class Battery(

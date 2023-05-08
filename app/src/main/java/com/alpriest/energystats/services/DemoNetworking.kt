@@ -40,7 +40,11 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        return AddressBookResponse(softVersion = SoftwareVersion(master = "1.54", slave = "1.09", manager = "1.49"))
+        if (deviceID == "abcdef") {
+            return AddressBookResponse(softVersion = SoftwareVersion(master = "1.54", slave = "1.09", manager = "1.49"))
+        } else {
+            return AddressBookResponse(softVersion = SoftwareVersion(master = "2.54", slave = "1.09", manager = "1.56"))
+        }
     }
 
     override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>): ArrayList<RawResponse> {
