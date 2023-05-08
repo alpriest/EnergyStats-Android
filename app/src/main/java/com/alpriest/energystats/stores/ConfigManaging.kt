@@ -24,8 +24,9 @@ interface ConfigManaging {
     var refreshFrequency: RefreshFrequency
     var devices: List<Device>?
     var currentDevice: MutableStateFlow<Device?>
-    var selectedDeviceID: String?
+    val selectedDeviceID: String?
     fun logout()
     fun updateBatteryCapacity(capacity: String)
     suspend fun fetchDevices()
+    fun select(device: Device)
 }

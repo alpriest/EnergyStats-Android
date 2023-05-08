@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.login
 
+import android.util.Log
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -25,21 +26,21 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.decimalPlaces
         set(value) {
             config.decimalPlaces = value
-            themeStream.value = themeStream.value.update(decimalPlaces = decimalPlaces)
+            themeStream.value = themeStream.value.copy(decimalPlaces = decimalPlaces)
         }
 
     override var showSunnyBackground: Boolean
         get() = config.showSunnyBackground
         set(value) {
             config.showSunnyBackground = value
-            themeStream.value = themeStream.value.update(showSunnyBackground = showSunnyBackground)
+            themeStream.value = themeStream.value.copy(showSunnyBackground = showSunnyBackground)
         }
 
     override var showBatteryEstimate: Boolean
         get() = config.showBatteryEstimate
         set(value) {
             config.showBatteryEstimate = value
-            themeStream.value = themeStream.value.update(showBatteryEstimate = showBatteryEstimate)
+            themeStream.value = themeStream.value.copy(showBatteryEstimate = showBatteryEstimate)
         }
 
     override val minSOC: Double
@@ -58,7 +59,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.useColouredFlowLines
         set(value) {
             config.useColouredFlowLines = value
-            themeStream.value = themeStream.value.update(useColouredLines = useColouredFlowLines)
+            themeStream.value = themeStream.value.copy(useColouredLines = useColouredFlowLines)
         }
 
     override var refreshFrequency: RefreshFrequency
@@ -71,14 +72,14 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.showBatteryTemperature
         set(value) {
             config.showBatteryTemperature = value
-            themeStream.value = themeStream.value.update(showBatteryTemperature = showBatteryTemperature)
+            themeStream.value = themeStream.value.copy(showBatteryTemperature = showBatteryTemperature)
         }
 
     override var useLargeDisplay: Boolean
         get() = config.useLargeDisplay
         set(value) {
             config.useLargeDisplay = value
-            themeStream.value = themeStream.value.update(useLargeDisplay = useLargeDisplay)
+            themeStream.value = themeStream.value.copy(useLargeDisplay = useLargeDisplay)
         }
 
     override fun logout() {
@@ -90,10 +91,10 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.showUsableBatteryOnly
         set(value) {
             config.showUsableBatteryOnly = value
-            themeStream.value = themeStream.value.update(showUsableBatteryOnly = showUsableBatteryOnly)
+            themeStream.value = themeStream.value.copy(showUsableBatteryOnly = showUsableBatteryOnly)
         }
 
-    override var devices: List<Device>?
+    final override var devices: List<Device>?
         get() {
             config.devices?.let {
                 return Gson().fromJson(it, Array<Device>::class.java).toList()
@@ -117,10 +118,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
     override var selectedDeviceID: String?
         get() = config.selectedDeviceID
-        set(value) {
-            config.selectedDeviceID = value
-            currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
-        }
+        set(value) { config.selectedDeviceID = value }
+
+    override fun select(device: Device) {
+        selectedDeviceID = device.deviceID
+        Log.d("AWP", "Selected ${device.deviceID}")
+        currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
+    }
 
     override val variables: List<RawVariable>
         get() {
@@ -190,16 +194,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
     override fun updateBatteryCapacity(capacity: String) {
         devices = devices?.map {
             if (it.deviceID == selectedDeviceID && it.battery != null) {
-                Device(
-                    it.plantName,
-                    it.deviceID,
-                    it.deviceSN,
-                    it.hasPV,
-                    Battery(capacity, it.battery.minSOC),
-                    it.deviceType,
-                    it.firmware,
-                    it.variables
-                )
+                it.copy(battery = Battery(capacity, it.battery.minSOC))
             } else {
                 it
             }

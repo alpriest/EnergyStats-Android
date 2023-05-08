@@ -32,7 +32,7 @@ fun InverterChoiceView(config: ConfigManaging) {
                         Button(onClick = { expanded = !expanded }) {
                             Text(
                                 it.deviceDisplayName,
-                                fontSize = 10.sp
+                                fontSize = 12.sp
                             )
                             Icon(
                                 imageVector = Icons.Filled.ArrowDropDown,
@@ -48,7 +48,7 @@ fun InverterChoiceView(config: ConfigManaging) {
                             config.devices?.forEach { device ->
                                 DropdownMenuItem(onClick = {
                                     expanded = false
-                                    config.selectedDeviceID = device.deviceID
+                                    config.select(device)
                                 }) {
                                     Text(text = device.deviceDisplayName)
                                 }

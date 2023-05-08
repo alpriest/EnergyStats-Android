@@ -2,6 +2,7 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
@@ -40,7 +41,7 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        if (deviceID == "abcdef") {
+        if (deviceID == "f3000_deviceid") {
             return AddressBookResponse(softVersion = SoftwareVersion(master = "1.54", slave = "1.09", manager = "1.49"))
         } else {
             return AddressBookResponse(softVersion = SoftwareVersion(master = "2.54", slave = "1.09", manager = "1.56"))
@@ -48,11 +49,8 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>): ArrayList<RawResponse> {
-        val itemType = object : TypeToken<NetworkRawResponse>() {}.type
-        val rawData = rawData()
-        val gson = GsonBuilder().create()
-        val result: NetworkRawResponse = gson.fromJson(rawData, itemType)
-        return ArrayList(result.result!!.map { response ->
+        val result = rawData(deviceID)
+        return ArrayList(result.map { response ->
             RawResponse(
                 variable = response.variable,
                 data = ArrayList(response.data.map {
@@ -65,8 +63,8 @@ class DemoNetworking : Networking {
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return PagedDeviceListResponse(
             currentPage = 1, pageSize = 1, total = 1, devices = arrayListOf(
-                NetworkDevice(plantName = "plant 1", deviceID = "abcdef", deviceSN = "123123", hasBattery = true, hasPV = true, deviceType = "F3000"),
-                NetworkDevice(plantName = "plant 2", deviceID = "ppplll", deviceSN = "998877", hasBattery = true, hasPV = true, deviceType = "H1-3.7-E")
+                NetworkDevice(plantName = "plant 1", deviceID = "f3000_deviceid", deviceSN = "123123", hasBattery = true, hasPV = true, deviceType = "F3000"),
+                NetworkDevice(plantName = "plant 2", deviceID = "h1_deviceid", deviceSN = "998877", hasBattery = true, hasPV = true, deviceType = "H1-3.7-E")
             )
         )
     }
@@ -98,7 +96,11 @@ class DemoNetworking : Networking {
         )
     }
 
-    private fun rawData(): String {
-        return DemoRawData
+    private fun rawData(deviceID: String): List<RawResponse> {
+        val fileContent = this::class.java.classLoader?.getResource("res/raw/raw_$deviceID.json")?.readText()
+
+        val data: NetworkRawResponse = Gson().fromJson(fileContent, object : TypeToken<NetworkRawResponse>() {}.type)
+
+        return data.result?.toList() ?: listOf()
     }
 }

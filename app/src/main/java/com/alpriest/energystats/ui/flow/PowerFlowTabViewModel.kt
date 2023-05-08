@@ -1,69 +1,34 @@
 package com.alpriest.energystats.ui.flow
 
 import android.os.CountDownTimer
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowViewModel
+import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
+import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
+import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
+import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.ui.settings.RefreshFrequency
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.locks.ReentrantLock
-
-data class UiUpdateMessageState(
-    val updateState: UpdateMessageState
-)
-
-sealed class UpdateMessageState {
-    @Composable
-    abstract fun updateMessage(): String
-}
-
-object LoadingNowUpdateMessageState : UpdateMessageState() {
-    @Composable
-    override fun updateMessage(): String {
-        return stringResource(R.string.loading)
-    }
-}
-
-class PendingUpdateMessageState(private val nextUpdateSeconds: Int) : UpdateMessageState() {
-    @Composable
-    override fun updateMessage(): String {
-        val next = when (nextUpdateSeconds) {
-            in 0 until 60 -> "${nextUpdateSeconds}s"
-            else -> {
-                val minutes = nextUpdateSeconds / 60
-                val remainder = nextUpdateSeconds % 60
-                "${minutes}m ${remainder}s"
-            }
-        }
-
-        return String.format(stringResource(R.string.nextUpdate, next))
-    }
-}
-
-object EmptyUpdateMessageState : UpdateMessageState() {
-    @Composable
-    override fun updateMessage(): String {
-        return " "
-    }
-}
 
 class PowerFlowTabViewModel(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val rawDataStore: RawDataStoring
 ) : ViewModel() {
+
+    var launchIn: Job? = null
+
     private var timer: CountDownTimer? = null
 
     private val _uiState = MutableStateFlow(UiLoadState(LoadingLoadState))
@@ -91,6 +56,17 @@ class PowerFlowTabViewModel(
                 } finally {
                     isLoading = false
                 }
+            }
+
+            if (launchIn == null) {
+                launchIn = configManager.currentDevice
+                    .onEach {
+                        if (it != null) {
+                            viewModelScope.launch {
+                                timerFired()
+                            }
+                        }
+                    }.launchIn(viewModelScope)
             }
         }
     }
@@ -135,7 +111,7 @@ class PowerFlowTabViewModel(
                     variable("batChargePower"),
                     variable("batDischargePower")
                 )
-                
+
                 val raw = network.fetchRaw(
                     deviceID = currentDevice.deviceID,
                     variables

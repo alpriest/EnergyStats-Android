@@ -35,25 +35,5 @@ data class AppTheme(
         }
     }
 
-    fun update(
-        useLargeDisplay: Boolean = this.useLargeDisplay,
-        useColouredLines: Boolean = this.useColouredLines,
-        showBatteryTemperature: Boolean = this.showBatteryTemperature,
-        showBatteryEstimate: Boolean = this.showBatteryEstimate,
-        decimalPlaces: Int = this.decimalPlaces,
-        showSunnyBackground: Boolean = this.showSunnyBackground,
-        showUsableBatteryOnly: Boolean = this.showUsableBatteryOnly
-    ): AppTheme {
-        return AppTheme(
-            useLargeDisplay = useLargeDisplay,
-            useColouredLines = useColouredLines,
-            showBatteryTemperature = showBatteryTemperature,
-            showBatteryEstimate = showBatteryEstimate,
-            decimalPlaces = decimalPlaces,
-            showSunnyBackground = showSunnyBackground,
-            showUsableBatteryOnly = showUsableBatteryOnly
-        )
-    }
-
     companion object {}
 }
