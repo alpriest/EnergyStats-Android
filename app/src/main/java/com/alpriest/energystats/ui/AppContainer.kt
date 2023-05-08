@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
+import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.NetworkFacade
@@ -40,7 +43,8 @@ class AppContainer(private val context: Context) {
         ConfigManager(
             config = config,
             networking = networking,
-            rawDataStore = rawDataStore
+            rawDataStore = rawDataStore,
+            appVersion = BuildConfig.VERSION_NAME
         )
     }
 

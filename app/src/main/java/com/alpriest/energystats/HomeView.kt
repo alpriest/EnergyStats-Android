@@ -86,7 +86,8 @@ fun HomepagePreview() {
             ConfigManager(
                 config = FakeConfigStore(),
                 networking = DemoNetworking(),
-                rawDataStore = RawDataStore()
+                rawDataStore = RawDataStore(),
+                appVersion = "1.19"
             ),
             network = DemoNetworking(),
             userManager = FakeUserManager(),

@@ -9,7 +9,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 
-open class ConfigManager(var config: ConfigInterface, val networking: Networking, val rawDataStore: RawDataStoring) : ConfigManaging {
+open class ConfigManager(var config: ConfigInterface, val networking: Networking, val rawDataStore: RawDataStoring, override var appVersion: String) : ConfigManaging {
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
         AppTheme(
             useLargeDisplay = config.useLargeDisplay,
