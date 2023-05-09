@@ -28,6 +28,7 @@ interface ConfigManaging {
     fun logout()
     fun updateBatteryCapacity(capacity: String)
     suspend fun fetchDevices()
+    suspend fun refreshFirmwareVersion()
     fun select(device: Device)
     var appVersion: String
 }

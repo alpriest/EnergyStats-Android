@@ -118,7 +118,9 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
     override var selectedDeviceID: String?
         get() = config.selectedDeviceID
-        set(value) { config.selectedDeviceID = value }
+        set(value) {
+            config.selectedDeviceID = value
+        }
 
     override fun select(device: Device) {
         selectedDeviceID = device.deviceID
@@ -181,7 +183,22 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         }
     }
 
-    suspend fun fetchFirmwareVersions(deviceID: String): DeviceFirmwareVersion {
+    override suspend fun refreshFirmwareVersion() {
+        try {
+            devices = devices?.map {
+                val firmware = fetchFirmwareVersions(it.deviceID)
+                if (it.firmware != firmware) {
+                    return@map it.copy(firmware = firmware)
+                } else {
+                    return@map it
+                }
+            }
+        } catch (ex: Exception) {
+            // Ignore
+        }
+    }
+
+    private suspend fun fetchFirmwareVersions(deviceID: String): DeviceFirmwareVersion {
         val firmware = networking.fetchAddressBook(deviceID)
 
         return DeviceFirmwareVersion(

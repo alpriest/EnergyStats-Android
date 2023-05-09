@@ -25,6 +25,10 @@ class PreHomeViewModel(
         viewModelScope.launch {
             if (configManager.devices?.any { it.firmware == null } == true) {
                 configManager.fetchDevices()
+            } else {
+                launch {
+                    configManager.refreshFirmwareVersion()
+                }
             }
 
             _uiState.value = true
