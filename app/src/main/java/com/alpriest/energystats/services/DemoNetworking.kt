@@ -103,4 +103,8 @@ class DemoNetworking : Networking {
 
         return data.result?.toList() ?: listOf()
     }
+
+    override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
+        return EarningsResponse(Earning(generation = 11.5, earnings = 54.2))
+    }
 }

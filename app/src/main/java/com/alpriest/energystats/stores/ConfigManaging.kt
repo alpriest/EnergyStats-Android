@@ -13,6 +13,7 @@ interface ConfigManaging {
     var showUsableBatteryOnly: Boolean
     val themeStream: MutableStateFlow<AppTheme>
     var decimalPlaces: Int
+    var showTotalYield: Boolean
     var showSunnyBackground: Boolean
     var showBatteryEstimate: Boolean
     var showBatteryTemperature: Boolean

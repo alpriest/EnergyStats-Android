@@ -10,3 +10,12 @@ data class BatteryResponse(
 data class BatterySettingsResponse(
     val minSoc: Int
 )
+
+data class EarningsResponse(
+    val today: Earning
+)
+
+data class Earning(
+    val generation: Double,
+    val earnings: Double
+)

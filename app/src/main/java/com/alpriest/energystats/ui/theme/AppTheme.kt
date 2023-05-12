@@ -12,7 +12,8 @@ data class AppTheme(
     val showBatteryEstimate: Boolean,
     val decimalPlaces: Int,
     val showSunnyBackground: Boolean,
-    val showUsableBatteryOnly: Boolean
+    val showUsableBatteryOnly: Boolean,
+    val showTotalYield: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

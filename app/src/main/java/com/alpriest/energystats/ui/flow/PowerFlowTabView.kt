@@ -195,7 +195,6 @@ fun PowerFlowTabViewPreview() {
         FakeConfigManager(),
         2.3,
         0.5,
-        true,
         raw = listOf(
             RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
             RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
@@ -204,7 +203,8 @@ fun PowerFlowTabViewPreview() {
             RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
             RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
         ),
-        13.6
+        13.6,
+        todaysGeneration = 5.4,
     )
 
     EnergyStatsTheme {

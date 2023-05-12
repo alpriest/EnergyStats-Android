@@ -13,6 +13,7 @@ class FakeConfigStore(
     override var showSunnyBackground: Boolean = true,
     override var decimalPlaces: Int = 2,
     override var showBatteryEstimate: Boolean = true,
-    override var showUsableBatteryOnly: Boolean = false
+    override var showUsableBatteryOnly: Boolean = false,
+    override var showTotalYield: Boolean = true
 ) : ConfigInterface {
 }

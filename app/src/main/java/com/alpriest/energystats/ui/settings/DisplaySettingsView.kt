@@ -22,7 +22,8 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
     val decimalPlacesState = rememberSaveable { mutableStateOf(config.decimalPlaces) }
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
-    val showUsableBatteryOnly = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
+    val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
+    val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
 
     Column(
         modifier = modifier
@@ -61,6 +62,20 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
+                checked = showTotalYieldState.value,
+                onCheckedChange = {
+                    showTotalYieldState.value = it
+                    config.showTotalYield = it
+                },
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+            )
+            Text("Show total yield")
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
                 checked = showBatteryTemperatureState.value,
                 onCheckedChange = {
                     showBatteryTemperatureState.value = it
@@ -89,9 +104,9 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.Top
         ) {
             Checkbox(
-                checked = showUsableBatteryOnly.value,
+                checked = showUsableBatteryOnlyState.value,
                 onCheckedChange = {
-                    showUsableBatteryOnly.value = it
+                    showUsableBatteryOnlyState.value = it
                     config.showUsableBatteryOnly = it
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)

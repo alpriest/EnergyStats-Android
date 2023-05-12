@@ -12,4 +12,5 @@ interface ConfigInterface {
     var useLargeDisplay: Boolean
     var isDemoUser: Boolean
     var decimalPlaces: Int
+    var showTotalYield: Boolean
 }

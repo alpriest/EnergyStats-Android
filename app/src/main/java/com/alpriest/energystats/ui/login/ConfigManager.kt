@@ -18,7 +18,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             decimalPlaces = config.decimalPlaces,
             showSunnyBackground = config.showSunnyBackground,
             showBatteryEstimate = config.showBatteryEstimate,
-            showUsableBatteryOnly = config.showUsableBatteryOnly
+            showUsableBatteryOnly = config.showUsableBatteryOnly,
+            showTotalYield = config.showTotalYield
         )
     )
 
@@ -34,6 +35,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showSunnyBackground = value
             themeStream.value = themeStream.value.copy(showSunnyBackground = showSunnyBackground)
+        }
+
+    override var showTotalYield: Boolean
+        get() = config.showTotalYield
+        set(value) {
+            config.showTotalYield = value
+            themeStream.value = themeStream.value.copy(showTotalYield = showTotalYield)
         }
 
     override var showBatteryEstimate: Boolean

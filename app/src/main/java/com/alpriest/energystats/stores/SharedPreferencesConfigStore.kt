@@ -17,8 +17,17 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_SUNNY_BACKGROUND,
         DECIMAL_PLACES,
         SHOW_BATTERY_ESTIMATE,
-        SHOW_USABLE_BATTERY_ONLY
+        SHOW_USABLE_BATTERY_ONLY,
+        SHOW_TOTAL_YIELD
     }
+
+    override var showTotalYield: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_TOTAL_YIELD.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_TOTAL_YIELD.name, value)
+            editor.apply()
+        }
 
     override var showUsableBatteryOnly: Boolean
         get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_USABLE_BATTERY_ONLY.name, false)

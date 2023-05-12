@@ -76,4 +76,12 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
             network.fetchVariables(deviceID)
         }
     }
+
+    override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
+        return if (config.isDemoUser) {
+            demoNetworking.fetchEarnings(deviceID)
+        } else {
+            network.fetchEarnings(deviceID)
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.flow
 
 import android.os.CountDownTimer
-import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
@@ -103,6 +102,9 @@ class PowerFlowTabViewModel(
                     _uiState.value = UiLoadState(LoadingLoadState)
                 }
                 network.ensureHasToken()
+
+                val earnings = network.fetchEarnings(deviceID = currentDevice.deviceID)
+
                 val variables: List<RawVariable> = listOfNotNull(
                     variable("feedInPower"),
                     variable("gridConsumptionPower"),
@@ -111,7 +113,6 @@ class PowerFlowTabViewModel(
                     variable("batChargePower"),
                     variable("batDischargePower")
                 )
-
                 val raw = network.fetchRaw(
                     deviceID = currentDevice.deviceID,
                     variables
@@ -130,9 +131,9 @@ class PowerFlowTabViewModel(
                     configManager = configManager,
                     battery = battery.chargePower,
                     batteryStateOfCharge = battery.chargeLevel,
-                    hasBattery = battery.hasBattery,
+                    raw = raw,
                     batteryTemperature = battery.temperature,
-                    raw = raw
+                    todaysGeneration = earnings.today.generation
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

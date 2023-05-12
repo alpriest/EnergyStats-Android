@@ -18,6 +18,7 @@ interface Networking {
     suspend fun fetchReport(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate): ArrayList<ReportResponse>
     suspend fun fetchAddressBook(deviceID: String): AddressBookResponse
     suspend fun fetchVariables(deviceID: String): List<RawVariable>
+    suspend fun fetchEarnings(deviceID: String): EarningsResponse
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

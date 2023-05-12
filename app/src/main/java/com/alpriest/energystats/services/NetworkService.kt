@@ -174,6 +174,23 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         return response.result ?: throw MissingDataException()
     }
 
+    override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("c/v0/device/earnings")
+            .addQueryParameter("deviceID", deviceID)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<EarningsResponse>>() {}.type
+        val response: NetworkResponse<EarningsResponse> = fetch(request, type)
+        return response.result ?: throw MissingDataException()
+    }
+
     override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
         val url = HttpUrl.Builder()
             .scheme("https")

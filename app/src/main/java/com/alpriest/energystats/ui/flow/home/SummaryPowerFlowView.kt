@@ -42,6 +42,7 @@ fun SummaryPowerFlowView(
     ) {
         SolarPowerFlow(
             summaryPowerFlowViewModel.solar,
+            summaryPowerFlowViewModel.todaysGeneration,
             modifier = Modifier.fillMaxHeight(0.4f),
             iconHeight = iconHeight * 1.1f,
             themeStream = themeStream
@@ -136,7 +137,6 @@ fun SummaryPowerFlowViewPreview() {
                 FakeConfigManager(),
                 2.3,
                 0.5,
-                true,
                 raw = listOf(
                     RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
                     RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
@@ -145,7 +145,8 @@ fun SummaryPowerFlowViewPreview() {
                     RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
                     RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
                 ),
-                13.6
+                13.6,
+                todaysGeneration = 1.0
             ),
             themeStream = MutableStateFlow(AppTheme.preview()),
         )
