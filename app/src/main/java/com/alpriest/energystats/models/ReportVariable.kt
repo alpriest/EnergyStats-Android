@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColorInt
 
 enum class ReportVariable {
     FeedIn,
@@ -21,11 +22,11 @@ enum class ReportVariable {
 
     fun title(): String {
         return when (this) {
-            FeedIn -> "Feed-in power"
-            Generation -> "Output power"
-            GridConsumption -> "Grid consumption power"
-            ChargeEnergyToTal -> "Charge power"
-            DischargeEnergyToTal -> "Discharge power"
+            FeedIn -> "Feed-in energy"
+            Generation -> "Output energy"
+            GridConsumption -> "Grid consumption energy"
+            ChargeEnergyToTal -> "Charge energy"
+            DischargeEnergyToTal -> "Discharge energy"
         }
     }
 
@@ -41,11 +42,13 @@ enum class ReportVariable {
 
     fun colour(): Color {
         return when (this) {
-            Generation -> Color.Yellow
-            FeedIn -> Color.Green
-            ChargeEnergyToTal -> Color.Green
-            DischargeEnergyToTal -> Color.Red
-            GridConsumption -> Color.Red
+            Generation -> Color(248,216,87)
+            FeedIn -> Color(105,207,202)
+            ChargeEnergyToTal -> Color(125, 208, 130)
+            DischargeEnergyToTal -> Color(241, 162, 154)
+            GridConsumption -> Color(237, 108, 96)
         }
     }
+
+    companion object
 }

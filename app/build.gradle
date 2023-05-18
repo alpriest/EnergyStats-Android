@@ -68,5 +68,5 @@ dependencies {
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     implementation 'androidx.compose.material:material-icons-extended:1.4.2'
-    implementation("com.himanshoe:charty:1.0.1")
+    implementation "com.patrykandpatrick.vico:compose-m3:1.6.5"
 }

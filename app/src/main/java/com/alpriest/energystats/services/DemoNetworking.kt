@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DemoNetworking : Networking {
     override suspend fun ensureHasToken() {
@@ -30,14 +31,11 @@ class DemoNetworking : Networking {
         variables: Array<ReportVariable>,
         queryDate: QueryDate
     ): ArrayList<ReportResponse> {
-        return ArrayList(
-            arrayOf(
-                ReportResponse(
-                    variable = "feedin",
-                    data = arrayOf(ReportData(14, 1.5))
-                )
-            ).asList()
-        )
+        val fileContent = this::class.java.classLoader?.getResource("res/raw/report_day.json")?.readText()
+
+        val data: NetworkReportResponse = Gson().fromJson(fileContent, object : TypeToken<NetworkReportResponse>() {}.type)
+
+        return data.result ?: ArrayList()
     }
 
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
