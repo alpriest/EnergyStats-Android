@@ -120,20 +120,6 @@ class PowerFlowTabView(
                 is ErrorLoadState -> Error((uiState.state as ErrorLoadState).reason) { coroutineScope.launch { viewModel.timerFired() } }
                 is LoadedLoadState -> Loaded(viewModel, (uiState.state as LoadedLoadState).viewModel, themeStream)
             }
-
-            if (configManager.isDemoUser) {
-                OutlinedCard(
-                    colors = outlinedCardColors(containerColor = Color.Red),
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(
-                        "Demo",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(4.dp)
-                    )
-                }
-            }
         }
     }
 

@@ -1,21 +1,28 @@
 package com.alpriest.energystats
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.preview.FakeConfigStore
@@ -40,6 +47,12 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
+data class TitleItem(
+    val title: String,
+    val icon: ImageVector,
+    val isSettings: Boolean
+)
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeView(
@@ -57,58 +70,39 @@ fun HomeView(
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
     val titles = listOf(
-        "Power flow" to Icons.Default.SwapVert,
-        "Stats" to Icons.Default.BarChart
+        TitleItem("Power flow", Icons.Default.SwapVert, false),
+        TitleItem("Stats", Icons.Default.BarChart, false),
+        TitleItem("Settings", Icons.Default.Settings, true)
     )
 
     Scaffold(
         scaffoldState = state,
-        topBar = {
-            TopAppBar(
-                title = { Text("Energy Stats") },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            scope.launch { if (state.drawerState.isClosed) state.drawerState.open() else state.drawerState.close() }
-                        }
-                    ) {
-                        Icon(
-                            Icons.Filled.Menu, "Menu"
-                        )
-                    }
-                },
-                backgroundColor = MaterialTheme.colors.surface
-            )
-        },
         content = { padding ->
             HorizontalPager(
-                modifier = Modifier.padding(bottom = 36.dp),
+                modifier = Modifier.padding(bottom = 54.dp),
                 count = titles.size,
                 state = pagerState
             ) { page ->
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
                     1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network))
+                    2 -> SettingsView(
+                        config = configManager,
+                        userManager = userManager,
+                        onLogout = onLogout,
+                        rawDataStore = rawDataStore,
+                        onRateApp = onRateApp,
+                        onSendUsEmail = onSendUsEmail,
+                        onBuyMeCoffee = onBuyMeCoffee
+                    )
                 }
             }
-        },
-        drawerBackgroundColor = MaterialTheme.colors.background,
-        drawerContent = {
-            SettingsView(
-                config = configManager,
-                userManager = userManager,
-                onLogout = onLogout,
-                rawDataStore = rawDataStore,
-                onRateApp = onRateApp,
-                onSendUsEmail = onSendUsEmail,
-                onBuyMeCoffee = onBuyMeCoffee
-            )
         },
         bottomBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    backgroundColor = Color.White,
+                    backgroundColor = darkenColor(colors.background, 0.02f),
                     indicator = { tabPositions ->
                         TabRowDefaults.Indicator(
                             Modifier
@@ -117,7 +111,7 @@ fun HomeView(
                         )
                     }
                 ) {
-                    titles.forEachIndexed { index, title ->
+                    titles.forEachIndexed { index, item ->
                         Tab(
                             selected = pagerState.currentPage == index,
                             onClick = {
@@ -128,14 +122,36 @@ fun HomeView(
                                 }
                             },
                             content = {
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier.padding(bottom = 4.dp)
-                                ) {
-                                    Icon(imageVector = title.second, contentDescription = null)
-                                    Text(
-                                        text = title.first
-                                    )
+                                Box(contentAlignment = Alignment.TopEnd) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier.padding(vertical = 8.dp)
+                                    ) {
+                                        Icon(imageVector = item.icon, contentDescription = null)
+                                        Text(
+                                            text = item.title,
+                                            fontSize = 10.sp
+                                        )
+
+                                    }
+
+                                    if (configManager.isDemoUser && item.isSettings) {
+                                        Card(
+                                            backgroundColor = Color.Red,
+                                            shape = RoundedCornerShape(6.dp),
+                                            modifier = Modifier
+                                                .padding(2.dp)
+                                                .offset(x = 16.dp, y = 2.dp)
+                                        ) {
+                                            Text(
+                                                "Demo",
+                                                color = Color.White,
+                                                fontWeight = FontWeight.Bold,
+                                                modifier = Modifier.padding(horizontal = 2.dp).padding(bottom = 2.dp),
+                                                fontSize = 10.sp
+                                            )
+                                        }
+                                    }
                                 }
                             },
                             selectedContentColor = colors.primary,
@@ -169,4 +185,18 @@ fun HomepagePreview() {
             {}
         )
     }
+}
+
+fun darkenColor(color: Color, percentage: Float): Color {
+    val argb = color.toArgb()
+    val alpha = argb ushr 24
+    val red = argb shr 16 and 0xFF
+    val green = argb shr 8 and 0xFF
+    val blue = argb and 0xFF
+
+    val darkenedRed = (red * (1 - percentage)).toInt()
+    val darkenedGreen = (green * (1 - percentage)).toInt()
+    val darkenedBlue = (blue * (1 - percentage)).toInt()
+
+    return Color(alpha = alpha, red = darkenedRed, green = darkenedGreen, blue = darkenedBlue)
 }
