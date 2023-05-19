@@ -38,24 +38,25 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 12.dp)
-        .verticalScroll(scrollState)) {
+        .verticalScroll(scrollState)
+    ) {
         StatsDatePickerView()
 
         StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 12.dp))
 
-        StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp))
+        StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp))
 
         Text(
             text = "Stats are aggregated by FoxESS into 1 hr, 1 day or 1 month totals",
             fontSize = 12.sp,
             color = DimmedTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 44.dp)
+            modifier = Modifier.padding(top = 84.dp)
         )
     }
 }
 
-@Preview(widthDp = 200)
+@Preview(widthDp = 400)
 @Composable
 fun StatsGraphTabViewPreview() {
     StatsGraphTabView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()))

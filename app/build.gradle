@@ -59,14 +59,14 @@ dependencies {
     implementation 'androidx.compose.material3:material3'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
     implementation 'androidx.activity:activity-compose:1.7.1'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material:material-icons-extended:1.4.3'
     testImplementation 'junit:junit:4.13.2'
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     implementation "com.google.accompanist:accompanist-pager:0.20.0"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.20.0"
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.0"
-    implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
-    implementation 'androidx.compose.material:material-icons-extended:1.4.2'
     implementation "com.patrykandpatrick.vico:compose-m3:1.6.5"
 }
