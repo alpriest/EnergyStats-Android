@@ -37,7 +37,8 @@ fun MainAppView(appContainer: AppContainer) {
                         themeStream = appContainer.configManager.themeStream,
                         rawDataStore = appContainer.rawDataStore,
                         { appContainer.openAppInPlayStore() },
-                        { appContainer.sendUsEmail() }
+                        { appContainer.sendUsEmail() },
+                        { appContainer.buyMeACoffee() }
                     )
                 is LoggedOut ->
                     CredentialsView(

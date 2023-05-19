@@ -25,7 +25,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
 
-    Column(
+    RoundedColumnWithChild(
         modifier = modifier
     ) {
         SettingsTitleView("Display")

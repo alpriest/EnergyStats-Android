@@ -3,13 +3,14 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.RawDataStore
@@ -21,7 +22,29 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: () -> Unit, rawDataStore: RawDataStoring, onRateApp: () -> Unit, onSendUsEmail: () -> Unit) {
+fun RoundedColumnWithChild(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .background(Color.White, shape = RoundedCornerShape(24.dp))
+            .padding(12.dp)
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun SettingsView(
+    config: ConfigManaging,
+    userManager: UserManaging,
+    onLogout: () -> Unit,
+    rawDataStore: RawDataStoring,
+    onRateApp: () -> Unit,
+    onSendUsEmail: () -> Unit,
+    onBuyMeCoffee: () -> Unit
+) {
     val scrollState = rememberScrollState()
     val currentDevice = config.currentDevice.collectAsState()
 
@@ -29,11 +52,12 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
         modifier = Modifier
             .fillMaxWidth()
             .background(colors.background)
-            .padding(12.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        Spacer(modifier = Modifier.padding(top = 6.dp))
+
         InverterChoiceView(config = config)
 
         FirmwareVersionView(config)
@@ -43,8 +67,6 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
                 BatterySettingsView(
                     config = config
                 )
-
-                Divider()
             }
         }
 
@@ -52,17 +74,12 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
             config = config
         )
 
-        Divider()
 
         RefreshFrequencySettingsView(config)
 
-        Divider()
-
         DataSettingsView(rawDataStore = rawDataStore)
 
-        Divider()
-
-        SettingsFooterView(config, userManager, onLogout, onRateApp, onSendUsEmail)
+        SettingsFooterView(config, userManager, onLogout, onRateApp, onSendUsEmail, onBuyMeCoffee)
     }
 }
 
@@ -70,6 +87,6 @@ fun SettingsView(config: ConfigManaging, userManager: UserManaging, onLogout: ()
 @Composable
 fun SettingsViewPreview() {
     EnergyStatsTheme {
-        SettingsView(config = FakeConfigManager(), userManager = FakeUserManager(), onLogout = {}, rawDataStore = RawDataStore(), onRateApp = {}, onSendUsEmail = {})
+        SettingsView(config = FakeConfigManager(), userManager = FakeUserManager(), onLogout = {}, rawDataStore = RawDataStore(), onRateApp = {}, onSendUsEmail = {}, onBuyMeCoffee = {})
     }
 }

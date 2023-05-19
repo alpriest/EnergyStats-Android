@@ -21,9 +21,7 @@ import java.util.*
 fun DataSettingsView(rawDataStore: RawDataStoring, modifier: Modifier = Modifier) {
     var showing by rememberSaveable { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier
-    ) {
+    RoundedColumnWithChild {
         SettingsTitleView("Data")
 
         Text(

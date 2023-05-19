@@ -21,7 +21,7 @@ fun FirmwareVersionView(config: ConfigManaging) {
     val currentDevice = config.currentDevice.collectAsState()
 
     currentDevice.value?.firmware?.let {
-        Column {
+        RoundedColumnWithChild {
             SettingsTitleView("Firmware versions")
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -39,8 +39,6 @@ fun FirmwareVersionView(config: ConfigManaging) {
                     uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
                 }
             )
-
-            Divider(modifier = Modifier.padding(top = 24.dp))
         }
     }
 }

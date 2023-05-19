@@ -22,43 +22,39 @@ fun InverterChoiceView(config: ConfigManaging) {
     var expanded by remember { mutableStateOf(false) }
     val currentDevice = config.currentDevice.collectAsState()
 
-    Column {
-        if ((config.devices?.count() ?: 0) > 1) {
-            Column {
-                SettingsTitleView("Device selection")
+    if ((config.devices?.count() ?: 0) > 1) {
+        RoundedColumnWithChild {
+            SettingsTitleView("Device selection")
 
-                currentDevice.value?.let {
-                    Row {
-                        Button(onClick = { expanded = !expanded }) {
-                            Text(
-                                it.deviceDisplayName,
-                                fontSize = 12.sp
-                            )
-                            Icon(
-                                imageVector = Icons.Filled.ArrowDropDown,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
+            currentDevice.value?.let {
+                Row {
+                    Button(onClick = { expanded = !expanded }) {
+                        Text(
+                            it.deviceDisplayName,
+                            fontSize = 12.sp
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.ArrowDropDown,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
 
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                        ) {
-                            config.devices?.forEach { device ->
-                                DropdownMenuItem(onClick = {
-                                    expanded = false
-                                    config.select(device)
-                                }) {
-                                    Text(text = device.deviceDisplayName)
-                                }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                    ) {
+                        config.devices?.forEach { device ->
+                            DropdownMenuItem(onClick = {
+                                expanded = false
+                                config.select(device)
+                            }) {
+                                Text(text = device.deviceDisplayName)
                             }
                         }
                     }
                 }
             }
-
-            Divider(modifier = Modifier.padding(top = 24.dp))
         }
     }
 }

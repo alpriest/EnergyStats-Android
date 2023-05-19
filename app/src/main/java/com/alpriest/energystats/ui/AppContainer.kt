@@ -79,4 +79,13 @@ class AppContainer(private val context: Context) {
         intent.data = data
         startActivity(context, intent, null)
     }
+
+    fun buyMeACoffee() {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.flags = FLAG_ACTIVITY_NEW_TASK
+        val subject = "Android App"
+        val data = Uri.parse("https://buymeacoffee.com/alpriest")
+        intent.data = data
+        startActivity(context, intent, null)
+    }
 }

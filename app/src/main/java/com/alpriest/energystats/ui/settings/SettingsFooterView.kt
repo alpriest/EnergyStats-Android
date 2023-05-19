@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -20,29 +20,78 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SettingsFooterView(config: ConfigManaging, userManager: UserManaging, onLogout: () -> Unit, onRateApp: () -> Unit, onSendUsEmail: () -> Unit) {
+fun SettingsFooterView(
+    config: ConfigManaging, userManager: UserManaging, onLogout: () -> Unit, onRateApp: () -> Unit,
+    onSendUsEmail: () -> Unit, onBuyMeCoffee: () -> Unit
+) {
     Column(
-        Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+        Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        userManager.getUsername()?.let {
-            Text(
-                modifier = Modifier.padding(bottom = 24.dp), text = "You are logged in as $it"
-            )
+        RoundedColumnWithChild(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                userManager.getUsername()?.let {
+                    Text(
+                        modifier = Modifier.padding(bottom = 24.dp), text = "You are logged in as $it"
+                    )
+                }
+
+                Button(
+                    onClick = onLogout,
+                    elevation = ButtonDefaults.elevation(
+                        defaultElevation = 10.dp,
+                        pressedElevation = 15.dp,
+                        disabledElevation = 0.dp
+                    )
+                ) {
+                    Text(
+                        "Logout", color = MaterialTheme.colors.onPrimary
+                    )
+                }
+            }
         }
 
-        Button(onClick = onLogout) {
-            Text(
-                "Logout", color = MaterialTheme.colors.onPrimary
-            )
+        Row {
+            Button(
+                onClick = onSendUsEmail,
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colors.primary,
+                    backgroundColor = Color.Transparent
+                ),
+                elevation = null
+            ) {
+                Icon(
+                    Icons.Default.Email, contentDescription = "Email", modifier = Modifier.padding(end = 5.dp)
+                )
+                Text(
+                    "Get in touch",
+                    fontSize = 12.sp,
+                )
+            }
         }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 44.dp), horizontalArrangement = Arrangement.SpaceBetween
+                .padding(top = 24.dp), horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            OutlinedButton(
-                onClick = onRateApp, modifier = Modifier.weight(1f)
+            Button(
+                onClick = onRateApp,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colors.primary,
+                    backgroundColor = Color.Transparent
+                ),
+                elevation = null
             ) {
                 Icon(
                     Icons.Default.ThumbUp, contentDescription = "Thumbs Up", modifier = Modifier.padding(end = 5.dp)
@@ -55,14 +104,20 @@ fun SettingsFooterView(config: ConfigManaging, userManager: UserManaging, onLogo
 
             Spacer(modifier = Modifier.widthIn(min = 20.dp))
 
-            OutlinedButton(
-                onClick = onSendUsEmail, modifier = Modifier.weight(1f)
+            Button(
+                onClick = onBuyMeCoffee,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colors.primary,
+                    backgroundColor = Color.Transparent
+                ),
+                elevation = null
             ) {
                 Icon(
-                    Icons.Default.Email, contentDescription = "Email", modifier = Modifier.padding(end = 5.dp)
+                    Icons.Default.LocalCafe, contentDescription = "Coffee Cup", modifier = Modifier.padding(end = 5.dp)
                 )
                 Text(
-                    "Get in touch",
+                    text = "Buy me a coffee",
                     fontSize = 12.sp,
                 )
             }
@@ -81,6 +136,8 @@ fun SettingsFooterView(config: ConfigManaging, userManager: UserManaging, onLogo
 @Composable
 fun SettingsFooterViewPreview() {
     EnergyStatsTheme {
-        SettingsFooterView(config = FakeConfigManager(), userManager = FakeUserManager(), onLogout = {}, onRateApp = {}, onSendUsEmail = {})
+        SettingsFooterView(config = FakeConfigManager(),
+            userManager = FakeUserManager(), onLogout = {}, onRateApp = {},
+            onSendUsEmail = {}, onBuyMeCoffee = {})
     }
 }
