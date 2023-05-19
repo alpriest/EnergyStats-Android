@@ -20,7 +20,7 @@ class StatsGraphTabViewModel(
 ) : ViewModel() {
     var chartColors = listOf<Color>()
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
-    val displayMode = MutableStateFlow(StatsDisplayMode.Day(Date()))
+    val displayMode = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(Calendar.getInstance().timeInMillis))
     val variables = listOf(
         ReportVariable.Generation,
         ReportVariable.FeedIn,

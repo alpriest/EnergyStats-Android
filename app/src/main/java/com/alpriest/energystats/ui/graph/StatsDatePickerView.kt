@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 
@@ -23,14 +22,9 @@ enum class DatePickerRange {
     YEAR
 }
 
-class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
-    var rangeStream = MutableStateFlow<DatePickerRange>(DatePickerRange.DAY)
-}
-
 @Composable
-fun StatsDatePickerView(viewModel: StatsDatePickerViewModel = StatsDatePickerViewModel()) {
+fun StatsDatePickerView(viewModel: StatsDatePickerViewModel) {
     var showingDisplayMode by remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf(Calendar.getInstance().timeInMillis) }
     var showingDatePicker by remember { mutableStateOf(false) }
     val range = viewModel.rangeStream.collectAsState().value
 
@@ -47,7 +41,7 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel = StatsDatePickerVie
                 onDismissRequest = { showingDisplayMode = false }
             )
             {
-                DropdownMenuItem(onClick = { viewModel.rangeStream.value = DatePickerRange.YEAR }) {
+                DropdownMenuItem(onClick = { viewModel.rangeStream.value = DatePickerRange.DAY }) {
                     Row {
                         Text("Day")
                         if (range == DatePickerRange.DAY) {
@@ -86,8 +80,8 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel = StatsDatePickerVie
                     { CalendarView(it) },
                     modifier = Modifier.wrapContentWidth(),
                     update = { views ->
-                        views.setOnDateChangeListener { calendarView, i, i2, i3 ->
-                            selectedDate = calendarView.date
+                        views.setOnDateChangeListener { calendarView, _, _, _ ->
+                            viewModel.dateStream.value = calendarView.date
                         }
                     }
                 )
@@ -96,11 +90,11 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel = StatsDatePickerVie
 
         Spacer(modifier = Modifier.weight(1.0f))
 
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = { viewModel.decrease() }) {
             Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
         }
 
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = { viewModel.increase() }) {
             Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
         }
     }
@@ -109,5 +103,5 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel = StatsDatePickerVie
 @Preview(widthDp = 300, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerView()
+    StatsDatePickerView(viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(Calendar.getInstance().timeInMillis))))
 }

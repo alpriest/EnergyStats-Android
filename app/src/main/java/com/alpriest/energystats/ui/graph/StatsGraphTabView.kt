@@ -18,7 +18,7 @@ import com.alpriest.energystats.ui.theme.DimmedTextColor
 import java.util.*
 
 sealed class StatsDisplayMode {
-    data class Day(val date: Date) : StatsDisplayMode()
+    data class Day(val date: Long) : StatsDisplayMode()
     data class Month(val month: Int, val year: Int) : StatsDisplayMode()
     data class Year(val year: Int) : StatsDisplayMode()
 
@@ -40,7 +40,7 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel) {
         .padding(horizontal = 12.dp)
         .verticalScroll(scrollState)
     ) {
-        StatsDatePickerView()
+        StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayMode))
 
         StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 12.dp))
 
@@ -51,7 +51,7 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel) {
             fontSize = 12.sp,
             color = DimmedTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 84.dp)
+            modifier = Modifier.padding(top = 44.dp)
         )
     }
 }
