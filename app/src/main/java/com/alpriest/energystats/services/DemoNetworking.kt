@@ -2,8 +2,8 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.graph.ReportType
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,7 +29,8 @@ class DemoNetworking : Networking {
     override suspend fun fetchReport(
         deviceID: String,
         variables: Array<ReportVariable>,
-        queryDate: QueryDate
+        queryDate: QueryDate,
+        reportType: ReportType
     ): ArrayList<ReportResponse> {
         val fileContent = this::class.java.classLoader?.getResource("res/raw/report_day.json")?.readText()
 

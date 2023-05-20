@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
+import com.alpriest.energystats.ui.graph.ReportType
 
 class NetworkFacade(private val network: Networking, private val config: ConfigInterface) : Networking {
     private val demoNetworking = DemoNetworking()
@@ -45,11 +46,11 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
         }
     }
 
-    override suspend fun fetchReport(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate): ArrayList<ReportResponse> {
+    override suspend fun fetchReport(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse> {
         return if (config.isDemoUser) {
-            demoNetworking.fetchReport(deviceID, variables, queryDate)
+            demoNetworking.fetchReport(deviceID, variables, queryDate, reportType)
         } else {
-            network.fetchReport(deviceID, variables, queryDate)
+            network.fetchReport(deviceID, variables, queryDate, reportType)
         }
     }
 

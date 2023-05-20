@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.graph
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,12 +16,12 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class StatsGraphTabViewModel(
-    configManager: ConfigManaging,
-    networking: Networking
+    val configManager: ConfigManaging,
+    val networking: Networking
 ) : ViewModel() {
     var chartColors = listOf<Color>()
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
-    val displayMode = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(Calendar.getInstance().timeInMillis))
+    val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(Calendar.getInstance().timeInMillis))
     val variables = listOf(
         ReportVariable.Generation,
         ReportVariable.FeedIn,
@@ -31,31 +32,78 @@ class StatsGraphTabViewModel(
 
     init {
         viewModelScope.launch {
-            configManager.currentDevice.value?.let {
-                chartColors = variables.map { it.colour() }
-
-                val reportData = networking.fetchReport(
-                    it.deviceID,
-                    variables = variables.toTypedArray(),
-                    queryDate = QueryDate(2023, 5, 14) // TODO Correct
-                )
-
-                val entries = reportData
-                    .groupBy { it.variable }
-                    .map { group ->
-                        group.value.flatMap {
-                            it.data.map {
-                                FloatEntry(x = it.index.toFloat(), y = it.value.toFloat())
-                            }
-                        }.toList()
-                    }.toList()
-
-                chartColors = reportData
-                    .groupBy { it.variable }
-                    .map { ReportVariable.parse(it.value.first().variable).colour() }
-
-                producer.setEntries(entries)
+            displayModeStream.collect { newValue ->
+                fetchData()
             }
         }
     }
+
+    private suspend fun fetchData() {
+        val device = configManager.currentDevice.value ?: return
+
+        chartColors = variables.map { it.colour() }
+
+        Log.i("AWP", "fetchData: Called")
+        Log.i("AWP", "fetchData: ${displayModeStream.value}")
+
+        val queryDate = makeQueryDate(displayModeStream.value)
+        val reportType = makeReportType(displayModeStream.value)
+
+        val reportData = networking.fetchReport(
+            device.deviceID,
+            variables = variables.toTypedArray(),
+            queryDate = queryDate,
+            reportType = reportType
+        )
+
+        val entries = reportData
+            .groupBy { it.variable }
+            .map { group ->
+                group.value.flatMap {
+                    it.data.map {
+                        FloatEntry(x = it.index.toFloat(), y = it.value.toFloat())
+                    }
+                }.toList()
+            }.toList()
+
+        chartColors = reportData
+            .groupBy { it.variable }
+            .map { ReportVariable.parse(it.value.first().variable).colour() }
+
+        producer.setEntries(entries)
+    }
+
+    fun makeQueryDate(displayMode: StatsDisplayMode): QueryDate {
+        return when (displayMode) {
+            is StatsDisplayMode.Day -> {
+                val date = Date(displayMode.date)
+                QueryDate(
+                    year = Calendar.getInstance().apply { time = date }.get(Calendar.YEAR),
+                    month = Calendar.getInstance().apply { time = date }.get(Calendar.MONTH) + 1,
+                    day = Calendar.getInstance().apply { time = date }.get(Calendar.DAY_OF_MONTH)
+                )
+            }
+            is StatsDisplayMode.Month -> {
+                QueryDate(year = displayMode.year, month = displayMode.month + 1, day = null)
+            }
+            is StatsDisplayMode.Year -> {
+                QueryDate(year = displayMode.year, month = null, day = null)
+            }
+        }
+    }
+
+    fun makeReportType(displayMode: StatsDisplayMode): ReportType {
+        return when (displayMode) {
+            is StatsDisplayMode.Day -> ReportType.day
+            is StatsDisplayMode.Month -> ReportType.month
+            is StatsDisplayMode.Year -> ReportType.year
+        }
+    }
+
+}
+
+enum class ReportType {
+    day,
+    month,
+    year,
 }

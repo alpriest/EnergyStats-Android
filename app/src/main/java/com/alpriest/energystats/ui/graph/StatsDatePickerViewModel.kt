@@ -11,9 +11,29 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
     var monthStream = MutableStateFlow(0)
     var yearStream = MutableStateFlow(0)
     var dateStream = MutableStateFlow<Long>(Calendar.getInstance().timeInMillis)
+    var isInitialised = false
 
     init {
         viewModelScope.launch {
+            val displayMode = displayModeStream.value
+            when (displayMode) {
+                is StatsDisplayMode.Day -> {
+                    dateStream.value = displayMode.date
+                    rangeStream.value = DatePickerRange.DAY
+                }
+                is StatsDisplayMode.Month -> {
+                    monthStream.value = displayMode.month
+                    yearStream.value = displayMode.year
+                    rangeStream.value = DatePickerRange.MONTH
+                }
+                is StatsDisplayMode.Year -> {
+                    yearStream.value = displayMode.year
+                    rangeStream.value = DatePickerRange.YEAR
+                }
+            }
+
+            isInitialised = true
+
             rangeStream.collect { newValue ->
                 updateDisplayMode()
             }
@@ -29,6 +49,8 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
     }
 
     private fun updateDisplayMode() {
+        if (!isInitialised) { return }
+
         displayModeStream.value = makeUpdatedDisplayMode(rangeStream.value)
     }
 

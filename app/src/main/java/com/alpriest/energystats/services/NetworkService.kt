@@ -2,6 +2,7 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.stores.CredentialStore
+import com.alpriest.energystats.ui.graph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
@@ -107,11 +108,12 @@ class NetworkService(private val credentials: CredentialStore, private val confi
     override suspend fun fetchReport(
         deviceID: String,
         variables: Array<ReportVariable>,
-        queryDate: QueryDate
+        queryDate: QueryDate,
+        reportType: ReportType
     ): ArrayList<ReportResponse> {
         val body = RequestBody.create(
             MediaType.parse("application/json"),
-            Gson().toJson(ReportRequest(deviceID, variables, queryDate))
+            Gson().toJson(ReportRequest(deviceID, variables, queryDate, reportType))
         )
 
         val request = Request.Builder()

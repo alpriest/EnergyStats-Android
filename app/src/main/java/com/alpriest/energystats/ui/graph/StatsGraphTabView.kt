@@ -40,7 +40,7 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel) {
         .padding(horizontal = 12.dp)
         .verticalScroll(scrollState)
     ) {
-        StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayMode))
+        StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream))
 
         StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 12.dp))
 

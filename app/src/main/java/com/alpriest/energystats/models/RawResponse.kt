@@ -37,7 +37,7 @@ data class RawRequest(
     }
 }
 
-data class QueryDate(val year: Int, val month: Int, val day: Int) {
+data class QueryDate(val year: Int, val month: Int?, val day: Int?) {
     companion object {
         operator fun invoke(): QueryDate {
             return QueryDate(

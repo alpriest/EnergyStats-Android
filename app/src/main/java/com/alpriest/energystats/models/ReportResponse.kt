@@ -1,5 +1,7 @@
 package com.alpriest.energystats.models
 
+import com.alpriest.energystats.ui.graph.ReportType
+
 data class ReportResponse(
     val variable: String,
     val data: Array<ReportData>
@@ -25,14 +27,15 @@ data class ReportResponse(
 
 data class ReportRequest(
     val deviceID: String,
-    val reportType: String = "day",
     val variables: Array<String>,
-    val queryDate: QueryDate
+    val queryDate: QueryDate,
+    val reportType: ReportType,
 ) {
-    constructor(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate) : this(
+    constructor(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate, reportType: ReportType) : this(
         deviceID = deviceID,
         variables = variables.map { it.networkTitle() }.toTypedArray(),
-        queryDate = queryDate
+        queryDate = queryDate,
+        reportType = reportType
     )
 
     override fun equals(other: Any?): Boolean {
