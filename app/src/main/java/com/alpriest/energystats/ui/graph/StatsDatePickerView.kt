@@ -17,7 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.compose.material.DropdownMenuItem
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.text.SimpleDateFormat
 import java.time.*
 import java.util.*
 
@@ -28,61 +30,17 @@ enum class DatePickerRange {
 }
 
 @Composable
-fun StatsDatePickerView(viewModel: StatsDatePickerViewModel) {
-    var showingDisplayMode by remember { mutableStateOf(false) }
+fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, modifier: Modifier = Modifier) {
     val range = viewModel.rangeStream.collectAsState().value
-    val currentMonth = remember { YearMonth.now() }
 
-    Row {
-        Box(
-            modifier = Modifier
-                .wrapContentSize(Alignment.TopStart)
-                .padding(end = 14.dp)
-        ) {
-            Button(
-                onClick = { showingDisplayMode = true }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.CalendarMonth,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
+    Row(modifier = modifier) {
+        dateRangePicker(viewModel, range)
 
-            DropdownMenu(
-                expanded = showingDisplayMode,
-                onDismissRequest = { showingDisplayMode = false }
-            )
-            {
-                DropdownMenuItem(onClick = { viewModel.rangeStream.value = DatePickerRange.DAY }) {
-                    Row {
-                        Text("Day")
-                        if (range == DatePickerRange.DAY) {
-                            Spacer(modifier = Modifier.weight(1f))
-                            Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                        }
-                    }
-                }
-                Divider()
-                DropdownMenuItem(onClick = { viewModel.rangeStream.value = DatePickerRange.MONTH }) {
-                    Text("Month")
-                    if (range == DatePickerRange.MONTH) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                    }
-                }
-                Divider()
-                DropdownMenuItem(onClick = { viewModel.rangeStream.value = DatePickerRange.YEAR }) {
-                    Text("Year")
-                    if (range == DatePickerRange.YEAR) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                    }
-                }
-            }
+        when (range) {
+            DatePickerRange.DAY -> calendarView(viewModel = viewModel)
+            DatePickerRange.MONTH -> monthPicker(viewModel = viewModel)
+            DatePickerRange.YEAR -> yearPicker(viewModel = viewModel)
         }
-
-        calendarView(viewModel = viewModel)
 
         Spacer(modifier = Modifier.weight(1.0f))
 
@@ -98,6 +56,139 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel) {
             onClick = { viewModel.increase() }
         ) {
             Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right", modifier = Modifier.size(20.dp))
+        }
+    }
+}
+
+@Composable
+private fun monthPicker(viewModel: StatsDatePickerViewModel) {
+    var showing by remember { mutableStateOf(false) }
+    val month = viewModel.monthStream.collectAsState().value
+    val calendar = Calendar.getInstance()
+    val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
+
+    Box(
+        modifier = Modifier
+            .wrapContentSize(Alignment.TopStart)
+            .padding(end = 14.dp)
+    ) {
+        Button(
+            onClick = { showing = true }
+        ) {
+            calendar.set(Calendar.MONTH, month)
+            Text(monthFormat.format(calendar.time))
+        }
+
+        DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
+            for (monthIndex in 0 until 12) {
+                calendar.set(Calendar.MONTH, monthIndex)
+                val monthName = monthFormat.format(calendar.time)
+                DropdownMenuItem(onClick = { viewModel.monthStream.value = monthIndex }) {
+                    Text(monthName)
+                    if (monthIndex == month) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                    }
+                }
+                Divider()
+            }
+        }
+    }
+}
+
+@Composable
+private fun yearPicker(viewModel: StatsDatePickerViewModel) {
+    var showing by remember { mutableStateOf(false) }
+    val year = viewModel.yearStream.collectAsState().value
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
+    Box(
+        modifier = Modifier
+            .wrapContentSize(Alignment.TopStart)
+            .padding(end = 14.dp)
+    ) {
+        Button(
+            onClick = { showing = true }
+        ) {
+            Text(year.toString())
+        }
+
+        DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
+            for (yearIndex in 2000..currentYear) {
+                DropdownMenuItem(onClick = { viewModel.yearStream.value = yearIndex }) {
+                    Text(yearIndex.toString())
+                    if (yearIndex == year) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                    }
+                }
+                Divider()
+            }
+        }
+    }
+}
+
+@Composable
+private fun dateRangePicker(
+    viewModel: StatsDatePickerViewModel,
+    range: DatePickerRange
+) {
+    var showing by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .wrapContentSize(Alignment.TopStart)
+            .padding(end = 14.dp)
+    ) {
+        Button(
+            onClick = { showing = true }
+        ) {
+            Icon(
+                imageVector = Icons.Default.CalendarMonth,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+
+        DropdownMenu(
+            expanded = showing,
+            onDismissRequest = { showing = false }
+        )
+        {
+            DropdownMenuItem(onClick = {
+                viewModel.rangeStream.value = DatePickerRange.DAY
+                showing = false
+            }) {
+                Row {
+                    Text("Day")
+                    if (range == DatePickerRange.DAY) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                    }
+                }
+            }
+            Divider()
+            DropdownMenuItem(onClick = {
+                viewModel.rangeStream.value = DatePickerRange.MONTH
+                showing = false
+            }) {
+                Text("Month")
+                if (range == DatePickerRange.MONTH) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                }
+            }
+            Divider()
+            DropdownMenuItem(onClick = {
+                viewModel.rangeStream.value = DatePickerRange.YEAR
+                showing = false
+            }) {
+                Text("Year")
+                if (range == DatePickerRange.YEAR) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                }
+            }
         }
     }
 }
@@ -158,5 +249,5 @@ fun millisToLocalDate(millis: Long): LocalDate {
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerView(viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))))
+    StatsDatePickerView(viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))),)
 }

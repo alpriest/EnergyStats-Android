@@ -32,7 +32,12 @@ class DemoNetworking : Networking {
         queryDate: QueryDate,
         reportType: ReportType
     ): ArrayList<ReportResponse> {
-        val fileContent = this::class.java.classLoader?.getResource("res/raw/report_day.json")?.readText()
+        val filename = when (reportType) {
+            ReportType.day -> "res/raw/report_day.json"
+            ReportType.month -> "res/raw/report_month.json"
+            ReportType.year -> "res/raw/report_year.json"
+        }
+        val fileContent = this::class.java.classLoader?.getResource(filename)?.readText()
 
         val data: NetworkReportResponse = Gson().fromJson(fileContent, object : TypeToken<NetworkReportResponse>() {}.type)
 

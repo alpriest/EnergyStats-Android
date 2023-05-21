@@ -1,7 +1,6 @@
 package com.alpriest.energystats.models
 
 import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.toColorInt
 
 enum class ReportVariable {
     FeedIn,

@@ -13,8 +13,10 @@ import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.lang.Math.abs
 import java.time.LocalDate
-import java.util.*
+
+data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
 class StatsGraphTabViewModel(
     val configManager: ConfigManaging,
@@ -30,6 +32,8 @@ class StatsGraphTabViewModel(
         ReportVariable.ChargeEnergyToTal,
         ReportVariable.DischargeEnergyToTal
     )
+    var rawData: List<StatsGraphValue> = listOf()
+    private var totals: MutableMap<ReportVariable, Double> = mutableMapOf()
 
     init {
         viewModelScope.launch {
@@ -43,12 +47,13 @@ class StatsGraphTabViewModel(
         val device = configManager.currentDevice.value ?: return
 
         chartColors = variables.map { it.colour() }
+        val displayMode = displayModeStream.value
 
         Log.i("AWP", "fetchData: Called")
-        Log.i("AWP", "fetchData: ${displayModeStream.value}")
+        Log.i("AWP", "fetchData: ${displayMode}")
 
-        val queryDate = makeQueryDate(displayModeStream.value)
-        val reportType = makeReportType(displayModeStream.value)
+        val queryDate = makeQueryDate(displayMode)
+        val reportType = makeReportType(displayMode)
 
         val reportData = networking.fetchReport(
             device.deviceID,
@@ -57,13 +62,39 @@ class StatsGraphTabViewModel(
             reportType = reportType
         )
 
-        val entries = reportData
-            .groupBy { it.variable }
-            .map { group ->
-                group.value.flatMap {
-                    it.data.map {
-                        FloatEntry(x = it.index.toFloat(), y = it.value.toFloat())
+        rawData = reportData.flatMap { reportResponse ->
+            val reportVariable = ReportVariable.parse(reportResponse.variable)
+
+            totals[reportVariable] = reportResponse.data.map { abs(it.value) }.sum()
+
+            return@flatMap reportResponse.data.map { dataPoint ->
+                val graphPoint: Int
+
+                when (displayMode) {
+                    is StatsDisplayMode.Day -> {
+                        graphPoint = dataPoint.index - 1
                     }
+                    is StatsDisplayMode.Month -> {
+                        graphPoint = dataPoint.index
+                    }
+                    is StatsDisplayMode.Year -> {
+                        graphPoint = dataPoint.index
+                    }
+                }
+
+                return@map StatsGraphValue(
+                    graphPoint = graphPoint,
+                    value = dataPoint.value,
+                    type = reportVariable
+                )
+            }
+        }
+
+        val entries = rawData
+            .groupBy { it.type }
+            .map { group ->
+                group.value.map {
+                    FloatEntry(x = it.graphPoint.toFloat(), y = it.value.toFloat())
                 }.toList()
             }.toList()
 
@@ -74,7 +105,7 @@ class StatsGraphTabViewModel(
         producer.setEntries(entries)
     }
 
-    fun makeQueryDate(displayMode: StatsDisplayMode): QueryDate {
+    private fun makeQueryDate(displayMode: StatsDisplayMode): QueryDate {
         return when (displayMode) {
             is StatsDisplayMode.Day -> {
                 val date = displayMode.date
@@ -93,12 +124,16 @@ class StatsGraphTabViewModel(
         }
     }
 
-    fun makeReportType(displayMode: StatsDisplayMode): ReportType {
+    private fun makeReportType(displayMode: StatsDisplayMode): ReportType {
         return when (displayMode) {
             is StatsDisplayMode.Day -> ReportType.day
             is StatsDisplayMode.Month -> ReportType.month
             is StatsDisplayMode.Year -> ReportType.year
         }
+    }
+
+    fun totalOf(it: ReportVariable): Double {
+        return totals[it] ?: 0.0
     }
 
 }

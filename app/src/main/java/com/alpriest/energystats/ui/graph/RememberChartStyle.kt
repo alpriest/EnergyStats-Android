@@ -1,12 +1,14 @@
 package com.alpriest.energystats.ui.graph
 
 import android.graphics.Paint
+import android.graphics.Typeface
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.sp
 import com.patrykandpatrick.vico.compose.component.shape.shader.fromBrush
 import com.patrykandpatrick.vico.compose.style.ChartStyle
 import com.patrykandpatrick.vico.core.DefaultAlpha
@@ -27,7 +29,9 @@ internal fun rememberChartStyle(columnChartColors: List<Color>, lineChartColors:
                 axisLabelColor = Color(defaultColors.axisLabelColor),
                 axisGuidelineColor = Color(230,230,230),
                 axisLineColor = Color(defaultColors.axisLineColor),
-                axisLabelTextAlign = Paint.Align.RIGHT
+                axisLabelTextAlign = Paint.Align.RIGHT,
+                axisLabelTypeface = Typeface.DEFAULT,
+                axisLabelTextSize = 8.sp
             ),
             ChartStyle.ColumnChart(
                 columnChartColors.map { columnChartColor ->
@@ -42,14 +46,6 @@ internal fun rememberChartStyle(columnChartColors: List<Color>, lineChartColors:
                 lineChartColors.map { lineChartColor ->
                     LineChart.LineSpec(
                         lineColor = lineChartColor.toArgb(),
-                        lineBackgroundShader = DynamicShaders.fromBrush(
-                            Brush.verticalGradient(
-                                listOf(
-                                    lineChartColor.copy(DefaultAlpha.LINE_BACKGROUND_SHADER_START),
-                                    lineChartColor.copy(DefaultAlpha.LINE_BACKGROUND_SHADER_END),
-                                ),
-                            ),
-                        ),
                     )
                 },
             ),

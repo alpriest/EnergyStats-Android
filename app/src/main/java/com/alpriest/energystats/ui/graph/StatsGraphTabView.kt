@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.graph
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -42,9 +41,9 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel) {
         .padding(12.dp)
         .verticalScroll(scrollState)
     ) {
-        StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream))
+        StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), modifier = Modifier.padding(bottom = 24.dp))
 
-        StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 12.dp))
+        StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
         StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp))
 
