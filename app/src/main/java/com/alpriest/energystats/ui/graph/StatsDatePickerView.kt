@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.material.DropdownMenuItem
+import com.patrykandpatrick.vico.core.component.dimension.Padding
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.*
@@ -34,37 +35,39 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, modifier: Modifier 
     val range = viewModel.rangeStream.collectAsState().value
 
     Row(modifier = modifier) {
-        dateRangePicker(viewModel, range)
+        DateRangePicker(viewModel, range)
 
         when (range) {
             DatePickerRange.DAY -> calendarView(viewModel = viewModel)
             DatePickerRange.MONTH -> {
-                monthPicker(viewModel = viewModel)
-                yearPicker(viewModel = viewModel)
+                MonthPicker(viewModel = viewModel)
+                YearPicker(viewModel = viewModel)
             }
-            DatePickerRange.YEAR -> yearPicker(viewModel = viewModel)
+            DatePickerRange.YEAR -> YearPicker(viewModel = viewModel)
         }
 
         Spacer(modifier = Modifier.weight(1.0f))
 
         Button(
-            modifier = Modifier.padding(end = 14.dp),
-            onClick = { viewModel.decrease() }
+            modifier = Modifier.padding(end = 14.dp).padding(vertical = 6.dp).size(36.dp),
+            onClick = { viewModel.decrease() },
+            contentPadding = PaddingValues(0.dp)
         ) {
-            Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left", modifier = Modifier.size(20.dp))
+            Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
         }
 
         Button(
-            modifier = Modifier.padding(end = 14.dp),
-            onClick = { viewModel.increase() }
+            modifier = Modifier.padding(vertical = 6.dp).size(36.dp),
+            onClick = { viewModel.increase() },
+            contentPadding = PaddingValues(0.dp)
         ) {
-            Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right", modifier = Modifier.size(20.dp))
+            Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
         }
     }
 }
 
 @Composable
-private fun monthPicker(viewModel: StatsDatePickerViewModel) {
+private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
     var showing by remember { mutableStateOf(false) }
     val month = viewModel.monthStream.collectAsState().value
     val calendar = Calendar.getInstance()
@@ -100,7 +103,7 @@ private fun monthPicker(viewModel: StatsDatePickerViewModel) {
 }
 
 @Composable
-private fun yearPicker(viewModel: StatsDatePickerViewModel) {
+private fun YearPicker(viewModel: StatsDatePickerViewModel) {
     var showing by remember { mutableStateOf(false) }
     val year = viewModel.yearStream.collectAsState().value
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -132,7 +135,7 @@ private fun yearPicker(viewModel: StatsDatePickerViewModel) {
 }
 
 @Composable
-private fun dateRangePicker(
+private fun DateRangePicker(
     viewModel: StatsDatePickerViewModel,
     range: DatePickerRange
 ) {
@@ -144,12 +147,13 @@ private fun dateRangePicker(
             .padding(end = 14.dp)
     ) {
         Button(
-            onClick = { showing = true }
+            onClick = { showing = true },
+            modifier = Modifier.padding(vertical = 6.dp).size(36.dp),
+            contentPadding = PaddingValues(0.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.CalendarMonth,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp)
+                contentDescription = null
             )
         }
 
