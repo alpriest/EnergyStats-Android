@@ -41,11 +41,11 @@ class StatsGraphTabViewModel(
         chartColors = variables.map { it.colour() }
         val displayMode = displayModeStream.value
 
-        Log.i("AWP", "fetchData: Called")
-        Log.i("AWP", "fetchData: ${displayMode}")
-
         val queryDate = makeQueryDate(displayMode)
         val reportType = makeReportType(displayMode)
+
+        Log.i("AWP", "fetchData: Called")
+        Log.i("AWP", "fetchData: $queryDate $reportType")
 
         val reportData = networking.fetchReport(
             device.deviceID,
