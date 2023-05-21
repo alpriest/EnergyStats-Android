@@ -96,7 +96,9 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                     }
                 }
-                Divider()
+                if (monthIndex < 11) {
+                    Divider()
+                }
             }
         }
     }
@@ -120,7 +122,7 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
         }
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
-            for (yearIndex in 2000..currentYear) {
+            for (yearIndex in 2015..currentYear) {
                 DropdownMenuItem(onClick = { viewModel.yearStream.value = yearIndex }) {
                     Text(yearIndex.toString())
                     if (yearIndex == year) {
@@ -128,7 +130,9 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                     }
                 }
-                Divider()
+                if (yearIndex < currentYear) {
+                    Divider()
+                }
             }
         }
     }
