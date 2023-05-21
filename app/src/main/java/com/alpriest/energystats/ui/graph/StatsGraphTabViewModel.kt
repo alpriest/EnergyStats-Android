@@ -13,6 +13,7 @@ import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.*
 
 class StatsGraphTabViewModel(
@@ -21,7 +22,7 @@ class StatsGraphTabViewModel(
 ) : ViewModel() {
     var chartColors = listOf<Color>()
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
-    val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(Calendar.getInstance().timeInMillis))
+    val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
     val variables = listOf(
         ReportVariable.Generation,
         ReportVariable.FeedIn,
@@ -76,11 +77,11 @@ class StatsGraphTabViewModel(
     fun makeQueryDate(displayMode: StatsDisplayMode): QueryDate {
         return when (displayMode) {
             is StatsDisplayMode.Day -> {
-                val date = Date(displayMode.date)
+                val date = displayMode.date
                 QueryDate(
-                    year = Calendar.getInstance().apply { time = date }.get(Calendar.YEAR),
-                    month = Calendar.getInstance().apply { time = date }.get(Calendar.MONTH) + 1,
-                    day = Calendar.getInstance().apply { time = date }.get(Calendar.DAY_OF_MONTH)
+                    year = date.year,
+                    month = date.monthValue + 1,
+                    day = date.dayOfMonth
                 )
             }
             is StatsDisplayMode.Month -> {

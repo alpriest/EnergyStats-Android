@@ -4,19 +4,35 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
     var rangeStream = MutableStateFlow(DatePickerRange.DAY)
     var monthStream = MutableStateFlow(0)
     var yearStream = MutableStateFlow(0)
-    var dateStream = MutableStateFlow<Long>(Calendar.getInstance().timeInMillis)
+    var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
     var isInitialised = false
 
     init {
         viewModelScope.launch {
-            val displayMode = displayModeStream.value
-            when (displayMode) {
+            rangeStream.collect { newValue ->
+                updateDisplayMode()
+            }
+        }
+
+        viewModelScope.launch {
+            dateStream.collect { newValue ->
+                updateDisplayMode()
+            }
+        }
+
+        viewModelScope.launch {
+            when (val displayMode = displayModeStream.value) {
                 is StatsDisplayMode.Day -> {
                     dateStream.value = displayMode.date
                     rangeStream.value = DatePickerRange.DAY
@@ -33,10 +49,6 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
             }
 
             isInitialised = true
-
-            rangeStream.collect { newValue ->
-                updateDisplayMode()
-            }
         }
     }
 
@@ -49,14 +61,18 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
     }
 
     private fun updateDisplayMode() {
-        if (!isInitialised) { return }
+        if (!isInitialised) {
+            return
+        }
 
         displayModeStream.value = makeUpdatedDisplayMode(rangeStream.value)
     }
 
     fun decrease() {
         when (rangeStream.value) {
-            DatePickerRange.DAY -> dateStream.value = dateStream.value - 86400
+            DatePickerRange.DAY -> {
+                dateStream.value = dateStream.value.minusDays(1)
+            }
             DatePickerRange.MONTH -> {
                 if (monthStream.value - 1 < 0) {
                     monthStream.value = 11
@@ -73,7 +89,9 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
 
     fun increase() {
         when (rangeStream.value) {
-            DatePickerRange.DAY -> dateStream.value = dateStream.value + 86400
+            DatePickerRange.DAY -> {
+                dateStream.value = dateStream.value.plusDays(1)
+            }
             DatePickerRange.MONTH -> {
                 if (monthStream.value + 1 > 11) {
                     monthStream.value = 0

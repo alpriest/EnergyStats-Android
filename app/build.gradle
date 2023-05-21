@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.alpriest.energystats"
-        minSdk 21
+        minSdk 26
         targetSdk 33
         versionCode 29
         versionName "1.11"

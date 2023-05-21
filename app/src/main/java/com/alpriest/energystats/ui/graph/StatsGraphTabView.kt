@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.graph
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -15,10 +16,11 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.theme.DimmedTextColor
+import java.time.LocalDate
 import java.util.*
 
 sealed class StatsDisplayMode {
-    data class Day(val date: Long) : StatsDisplayMode()
+    data class Day(val date: LocalDate) : StatsDisplayMode()
     data class Month(val month: Int, val year: Int) : StatsDisplayMode()
     data class Year(val year: Int) : StatsDisplayMode()
 
@@ -36,8 +38,8 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel) {
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 12.dp)
+        .fillMaxSize()
+        .padding(12.dp)
         .verticalScroll(scrollState)
     ) {
         StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream))
@@ -56,7 +58,7 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel) {
     }
 }
 
-@Preview(widthDp = 400)
+@Preview(widthDp = 400, heightDp = 800)
 @Composable
 fun StatsGraphTabViewPreview() {
     StatsGraphTabView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()))
