@@ -20,13 +20,18 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
 
     init {
         viewModelScope.launch {
-            rangeStream.collect { newValue ->
+            monthStream.value = dateStream.value.monthValue - 1
+            yearStream.value = dateStream.value.year
+        }
+
+        viewModelScope.launch {
+            rangeStream.collect { _ ->
                 updateDisplayMode()
             }
         }
 
         viewModelScope.launch {
-            dateStream.collect { newValue ->
+            dateStream.collect { _ ->
                 updateDisplayMode()
             }
         }

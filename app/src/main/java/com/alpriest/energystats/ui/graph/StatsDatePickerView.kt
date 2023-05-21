@@ -38,7 +38,10 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, modifier: Modifier 
 
         when (range) {
             DatePickerRange.DAY -> calendarView(viewModel = viewModel)
-            DatePickerRange.MONTH -> monthPicker(viewModel = viewModel)
+            DatePickerRange.MONTH -> {
+                monthPicker(viewModel = viewModel)
+                yearPicker(viewModel = viewModel)
+            }
             DatePickerRange.YEAR -> yearPicker(viewModel = viewModel)
         }
 
@@ -219,7 +222,7 @@ private fun calendarView(viewModel: StatsDatePickerViewModel) {
                         modifier = Modifier.wrapContentWidth(),
                         update = { views ->
                             views.date = millis
-                            views.setOnDateChangeListener { calendarView, year, month, dayOfMonth ->
+                            views.setOnDateChangeListener { _, year, month, dayOfMonth ->
                                 val cal = Calendar.getInstance()
                                 cal.set(year, month, dayOfMonth)
                                 viewModel.dateStream.value = millisToLocalDate(cal.timeInMillis)

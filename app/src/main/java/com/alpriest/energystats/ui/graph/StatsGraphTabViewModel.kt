@@ -35,15 +35,7 @@ class StatsGraphTabViewModel(
     var rawData: List<StatsGraphValue> = listOf()
     private var totals: MutableMap<ReportVariable, Double> = mutableMapOf()
 
-    init {
-        viewModelScope.launch {
-            displayModeStream.collect { newValue ->
-                fetchData()
-            }
-        }
-    }
-
-    private suspend fun fetchData() {
+    suspend fun loadData() {
         val device = configManager.currentDevice.value ?: return
 
         chartColors = variables.map { it.colour() }
@@ -68,17 +60,15 @@ class StatsGraphTabViewModel(
             totals[reportVariable] = reportResponse.data.map { abs(it.value) }.sum()
 
             return@flatMap reportResponse.data.map { dataPoint ->
-                val graphPoint: Int
-
-                when (displayMode) {
+                val graphPoint: Int = when (displayMode) {
                     is StatsDisplayMode.Day -> {
-                        graphPoint = dataPoint.index - 1
+                        dataPoint.index - 1
                     }
                     is StatsDisplayMode.Month -> {
-                        graphPoint = dataPoint.index
+                        dataPoint.index
                     }
                     is StatsDisplayMode.Year -> {
-                        graphPoint = dataPoint.index
+                        dataPoint.index
                     }
                 }
 

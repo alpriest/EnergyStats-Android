@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -17,15 +18,22 @@ import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 
 @Composable
-fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modifier) {
+fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+    val appTheme = themeStream.collectAsState().value
+
     Column(modifier) {
         viewModel.variables.map {
             Row(
                 verticalAlignment = Alignment.Top,
-                modifier = Modifier.padding(bottom = 6.dp)
+                modifier = Modifier
+                    .padding(bottom = 6.dp)
                     .clickable {
                         // TODO toggle the data visibility
                     }
@@ -50,7 +58,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, modifier: M
 
                         Spacer(modifier = Modifier.weight(1f))
 
-                        Text(viewModel.totalOf(it).kWh(2))
+                        Text(viewModel.totalOf(it).kWh(appTheme.decimalPlaces))
                     }
 
                     Text(
@@ -67,5 +75,5 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, modifier: M
 @Composable
 @Preview
 fun StatsGraphVariableTogglesViewPreview() {
-    StatsGraphVariableTogglesView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()))
+    StatsGraphVariableTogglesView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()), themeStream = MutableStateFlow(AppTheme.preview()))
 }

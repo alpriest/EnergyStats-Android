@@ -1,17 +1,13 @@
 package com.alpriest.energystats
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -85,7 +81,7 @@ fun HomeView(
             ) { page ->
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
-                    1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network))
+                    1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network), themeStream)
                     2 -> SettingsView(
                         config = configManager,
                         userManager = userManager,

@@ -18,10 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.models.kW
-import com.alpriest.energystats.models.rounded
-import com.alpriest.energystats.models.sameValueAs
-import com.alpriest.energystats.models.w
+import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +38,7 @@ fun PowerFlowView(
     modifier: Modifier = Modifier,
     useColouredLines: Boolean = false,
 ) {
-    var asKw by remember { mutableStateOf(true) }
+    var asKwh by remember { mutableStateOf(true) }
     var height by remember { mutableStateOf(0f) }
     val phaseAnimation = rememberInfiniteTransition()
     val offsetModifier: (Float) -> Float = {
@@ -138,16 +135,16 @@ fun PowerFlowView(
                 colors = cardColors(containerColor = verticalLineColor)
             ) {
                 Text(
-                    text = if (asKw) {
-                        amount.kW(theme.decimalPlaces)
+                    text = if (asKwh) {
+                        amount.kWh(theme.decimalPlaces)
                     } else {
-                        amount.w()
+                        amount.wh()
                     },
                     color = powerTextColor,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
                     modifier = Modifier
-                        .clickable { asKw = !asKw }
+                        .clickable { asKwh = !asKwh }
                         .padding(3.dp)
                         .padding(horizontal = 5.dp)
                 )

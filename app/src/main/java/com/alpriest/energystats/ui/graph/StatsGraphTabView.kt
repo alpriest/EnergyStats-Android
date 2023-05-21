@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,7 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 import java.util.*
 
@@ -33,32 +37,45 @@ sealed class StatsDisplayMode {
 }
 
 @Composable
-fun StatsGraphTabView(viewModel: StatsGraphTabViewModel) {
+fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
     val scrollState = rememberScrollState()
+    var isLoading by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(12.dp)
-        .verticalScroll(scrollState)
-    ) {
-        StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), modifier = Modifier.padding(bottom = 24.dp))
+    LaunchedEffect(viewModel.displayModeStream) {
+        isLoading = true
+        viewModel.displayModeStream
+            .onEach { viewModel.loadData() }
+            .collect { isLoading = false }
+    }
 
-        StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+    if (isLoading) {
+        Text("Loading...")
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp)
+                .verticalScroll(scrollState)
+        ) {
+            StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), modifier = Modifier.padding(bottom = 24.dp))
 
-        StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp))
+            StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
-        Text(
-            text = "Stats are aggregated by FoxESS into 1 hr, 1 day or 1 month totals",
-            fontSize = 12.sp,
-            color = DimmedTextColor,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 44.dp)
-        )
+            StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+
+            Text(
+                text = "Stats are aggregated by FoxESS into 1 hr, 1 day or 1 month totals",
+                fontSize = 12.sp,
+                color = DimmedTextColor,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 44.dp)
+            )
+        }
     }
 }
 
 @Preview(widthDp = 400, heightDp = 800)
 @Composable
 fun StatsGraphTabViewPreview() {
-    StatsGraphTabView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()))
+    StatsGraphTabView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()), themeStream = MutableStateFlow(AppTheme.preview()))
 }
