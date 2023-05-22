@@ -42,7 +42,7 @@ private fun ToggleRowView(
     it: StatsGraphVariable,
     themeStream: MutableStateFlow<AppTheme>
 ) {
-    val textColor = if (it.enabled) Color.Black else DimmedTextColor
+    val textColor = if (it.enabled) MaterialTheme.colors.onBackground else DimmedTextColor
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
     val decimalPlaces = appTheme.decimalPlaces

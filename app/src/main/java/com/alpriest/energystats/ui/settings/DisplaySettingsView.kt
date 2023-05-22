@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -121,7 +122,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 Text(
                     modifier = Modifier,
                     text = "Deducts the Min SOC amount from the battery charge level and percentage. Due to inaccuracies in the way battery levels are measured this may result in occasionally showing a negative amount remaining.",
-                    color = Color.DarkGray,
+                    color = colors.onSecondary,
                     style = MaterialTheme.typography.caption
                 )
             }

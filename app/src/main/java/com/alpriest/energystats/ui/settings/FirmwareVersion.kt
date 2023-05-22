@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -34,7 +35,7 @@ fun FirmwareVersionView(config: ConfigManaging) {
 
             Text(
                 text = "Find out more about firmware versions from the foxesscommunity.com website",
-                color = Color.DarkGray,
+                color = colors.onSecondary,
                 modifier = Modifier.clickable {
                     uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
                 }

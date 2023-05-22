@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -26,7 +27,8 @@ fun DataSettingsView(rawDataStore: RawDataStoring, modifier: Modifier = Modifier
 
         Text(
             "Tap to reveal your latest data. If you're seeing something wrong in the app please send the details below with a description of the problem.",
-            modifier = Modifier.clickable { showing = !showing }
+            modifier = Modifier.clickable { showing = !showing },
+            color = MaterialTheme.colors.onSecondary
         )
 
         if (showing) {

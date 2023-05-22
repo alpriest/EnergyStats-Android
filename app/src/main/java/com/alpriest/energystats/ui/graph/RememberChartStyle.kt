@@ -22,7 +22,7 @@ internal fun chartStyle(columnChartColors: List<Color>, lineChartColors: List<Co
     return ChartStyle(
         ChartStyle.Axis(
             axisLabelColor = Color(defaultColors.axisLabelColor),
-            axisGuidelineColor = Color(230, 230, 230),
+            axisGuidelineColor = Color(defaultColors.axisGuidelineColor),
             axisLineColor = Color(defaultColors.axisLineColor),
             axisLabelTextAlign = Paint.Align.RIGHT,
             axisLabelTypeface = Typeface.DEFAULT,

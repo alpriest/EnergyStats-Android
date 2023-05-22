@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -60,7 +61,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
 
                 Text(
                     text = "Read from your inverter when you login.",
-                    color = Color.DarkGray
+                    color = colors.onSecondary
                 )
             }
 
@@ -117,20 +118,20 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     buildAnnotatedString {
                         append("Calculated as ")
                         withStyle(
-                            style = SpanStyle(fontStyle = FontStyle.Italic, color = Color.DarkGray)
+                            style = SpanStyle(fontStyle = FontStyle.Italic, color = colors.onSecondary)
                         ) {
                             append("residual / (Min SOC / 100)")
                         }
                         append(" where residual is estimated by your installation and may not be accurate. Tap the capacity above to enter a manual value.")
                     },
-                    color = Color.DarkGray
+                    color = colors.onSecondary
                 )
 
                 Text(
                     modifier = Modifier
                         .padding(top = 12.dp),
                     text = "Empty/full battery durations are estimates based on calculated capacity, assume that solar conditions and battery charge rates remain constant.",
-                    color = Color.DarkGray
+                    color = colors.onSecondary
                 )
             }
         }

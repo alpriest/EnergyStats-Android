@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
@@ -53,8 +54,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
                     colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colors.primary)
                 )
                 Text(
-                    it.title(),
-                    color = Color.DarkGray
+                    it.title()
                 )
             }
         }
@@ -62,7 +62,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
         Text(
             modifier = Modifier,
             text = "FoxESS Cloud data is updated every 5 minutes. Auto attempts to synchronise fetches just after the data feed uploads to minimise server load.",
-            color = Color.DarkGray
+            color = colors.onSecondary
         )
     }
 }

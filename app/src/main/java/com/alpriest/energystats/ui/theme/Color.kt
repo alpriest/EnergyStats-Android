@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val PaleWhite = Color(0xFFEAECEC)
 val PaleHeader = Color(0xFFDFDFDF)
-val DarkBackground = Color(0xFF2A2B2B)
+val DarkBackground = Color(0xFF161616)
 val DarkHeader = Color(0xFF252525)
 val DimmedTextColor = Color(190, 190, 190)
 val TintColor = Color(52, 120, 247)

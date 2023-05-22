@@ -28,7 +28,7 @@ fun RoundedColumnWithChild(
 ) {
     Column(
         modifier = modifier
-            .background(Color.White, shape = RoundedCornerShape(24.dp))
+            .background(colors.surface, shape = RoundedCornerShape(24.dp))
             .padding(12.dp)
     ) {
         content()
