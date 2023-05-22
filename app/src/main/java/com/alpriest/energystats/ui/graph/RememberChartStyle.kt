@@ -18,11 +18,12 @@ import com.patrykandpatrick.vico.core.component.shape.Shapes
 internal fun chartStyle(columnChartColors: List<Color>, lineChartColors: List<Color> = listOf()): ChartStyle {
     val isSystemInDarkTheme = isSystemInDarkTheme()
     val defaultColors = if (isSystemInDarkTheme) DefaultColors.Dark else DefaultColors.Light
+    val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray
 
     return ChartStyle(
         ChartStyle.Axis(
             axisLabelColor = Color(defaultColors.axisLabelColor),
-            axisGuidelineColor = Color(defaultColors.axisGuidelineColor),
+            axisGuidelineColor = axisGuidelineColor,
             axisLineColor = Color(defaultColors.axisLineColor),
             axisLabelTextAlign = Paint.Align.RIGHT,
             axisLabelTypeface = Typeface.DEFAULT,
