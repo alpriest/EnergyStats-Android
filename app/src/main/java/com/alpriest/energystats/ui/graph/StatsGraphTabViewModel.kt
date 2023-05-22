@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.Math.abs
+import java.lang.Math.max
 import java.time.LocalDate
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
@@ -24,6 +25,7 @@ class StatsGraphTabViewModel(
     val configManager: ConfigManaging,
     val networking: Networking
 ) : ViewModel() {
+    var maxY: Float = 0f
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
@@ -93,7 +95,8 @@ class StatsGraphTabViewModel(
         val entries = grouped
             .map { group ->
                 group.value.map {
-                    FloatEntry(x = it.graphPoint.toFloat(), y = it.value.toFloat())
+                    maxY = max(maxY, it.value.toFloat() + 0.5f)
+                    return@map FloatEntry(x = it.graphPoint.toFloat(), y = it.value.toFloat())
                 }.toList()
             }.toList()
 

@@ -27,12 +27,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-    val appTheme = themeStream.collectAsState().value
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
 
     Column(modifier) {
         graphVariables.value.map {
-            ToggleRowView(viewModel, it, appTheme)
+            ToggleRowView(viewModel, it, themeStream)
         }
     }
 }
@@ -41,9 +40,12 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
 private fun ToggleRowView(
     viewModel: StatsGraphTabViewModel,
     it: StatsGraphVariable,
-    appTheme: AppTheme
+    themeStream: MutableStateFlow<AppTheme>
 ) {
     val textColor = if (it.enabled) Color.Black else DimmedTextColor
+    val appTheme = themeStream.collectAsState().value
+    val fontSize = appTheme.fontSize()
+    val decimalPlaces = appTheme.decimalPlaces
 
     Row(
         verticalAlignment = Alignment.Top,
@@ -53,7 +55,7 @@ private fun ToggleRowView(
                 viewModel.toggleVisibility(it)
             }
     ) {
-        Box(modifier = Modifier.padding(top = 4.dp)) {
+        Box(modifier = Modifier.padding(top = if (appTheme.useLargeDisplay) 10.dp else 4.dp)) {
             Canvas(modifier = Modifier.size(16.dp)) {
                 drawCircle(
                     color = it.type.colour().copy(alpha = if (it.enabled) 1.0f else 0.5f),
@@ -66,31 +68,33 @@ private fun ToggleRowView(
         Column(
             modifier = Modifier.padding(start = 8.dp)
         ) {
-            Row {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     it.type.title(),
-                    color = textColor
+                    color = textColor,
+                    fontSize = fontSize,
+                    modifier = Modifier.weight(1f).wrapContentWidth(Alignment.Start)
                 )
 
-                Spacer(modifier = Modifier.weight(1f))
-
                 Text(
-                    viewModel.totalOf(it.type).kWh(appTheme.decimalPlaces),
-                    color = textColor
+                    viewModel.totalOf(it.type).kWh(decimalPlaces),
+                    color = textColor,
+                    fontSize = fontSize,
+                    modifier = Modifier.weight(1.1f).fillMaxWidth().wrapContentWidth(Alignment.End)
                 )
             }
 
             Text(
                 it.type.description(),
                 color = DimmedTextColor,
-                fontSize = 10.sp
+                fontSize = appTheme.smallFontSize()
             )
         }
     }
 }
 
 @Composable
-@Preview
+@Preview(widthDp = 500)
 fun StatsGraphVariableTogglesViewPreview() {
-    StatsGraphVariableTogglesView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()), themeStream = MutableStateFlow(AppTheme.preview()))
+    StatsGraphVariableTogglesView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()), themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false)))
 }

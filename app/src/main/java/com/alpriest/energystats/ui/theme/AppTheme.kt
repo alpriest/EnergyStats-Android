@@ -22,6 +22,13 @@ data class AppTheme(
         }
     }
 
+    fun smallFontSize(): TextUnit {
+        return when (useLargeDisplay) {
+            false -> 12.sp
+            true -> 22.sp
+        }
+    }
+
     fun strokeWidth(): Float {
         return when (useLargeDisplay) {
             false -> 6f
