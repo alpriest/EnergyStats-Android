@@ -9,10 +9,10 @@ fun Double.asPercent(): String {
     return String.format("%.0f%%", (this * 100))
 }
 
-fun Int.W(decimalPlaces: Int): String {
+fun Int.Wh(decimalPlaces: Int): String {
     val divided = this.toDouble().rounded(decimalPlaces)
     val dec = DecimalFormat("#,###,###")
-    return dec.format(divided) + " W"
+    return dec.format(divided) + " Wh"
 }
 
 fun Double.kW(decimalPlaces: Int): String {

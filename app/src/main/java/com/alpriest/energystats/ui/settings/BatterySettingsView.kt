@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -15,9 +14,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.models.W
+import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.asPercent
-import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -85,12 +83,12 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                             onValueChange = {
                                 editingCapacity = it
                             },
-                            label = { Text("Total W of your battery") },
+                            label = { Text("Total Wh of your battery") },
                             modifier = Modifier.weight(1f)
                         )
                     } else {
                         Text(
-                            text = config.batteryCapacity.W(decimalPlaces),
+                            text = config.batteryCapacity.Wh(decimalPlaces),
                             modifier = Modifier.clickable { isEditingCapacity.value = true }
                         )
                     }
@@ -138,7 +136,6 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

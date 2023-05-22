@@ -12,6 +12,8 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.Math.abs
 import java.time.LocalDate
@@ -22,23 +24,25 @@ class StatsGraphTabViewModel(
     val configManager: ConfigManaging,
     val networking: Networking
 ) : ViewModel() {
-    var chartColors = listOf<Color>()
+    var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
-    val variables = listOf(
+    val graphVariablesStream = MutableStateFlow(listOf(
         ReportVariable.Generation,
         ReportVariable.FeedIn,
         ReportVariable.GridConsumption,
         ReportVariable.ChargeEnergyToTal,
         ReportVariable.DischargeEnergyToTal
-    )
+    ).map {
+        StatsGraphVariable(it, true)
+    })
     var rawData: List<StatsGraphValue> = listOf()
     private var totals: MutableMap<ReportVariable, Double> = mutableMapOf()
 
     suspend fun loadData() {
         val device = configManager.currentDevice.value ?: return
+        val graphVariables = graphVariablesStream.value
 
-        chartColors = variables.map { it.colour() }
         val displayMode = displayModeStream.value
 
         val queryDate = makeQueryDate(displayMode)
@@ -49,7 +53,7 @@ class StatsGraphTabViewModel(
 
         val reportData = networking.fetchReport(
             device.deviceID,
-            variables = variables.toTypedArray(),
+            variables = graphVariables.map { it.type }.toTypedArray(),
             queryDate = queryDate,
             reportType = reportType
         )
@@ -80,17 +84,21 @@ class StatsGraphTabViewModel(
             }
         }
 
-        val entries = rawData
-            .groupBy { it.type }
+        refresh()
+    }
+
+    private fun refresh() {
+        val hiddenVariables = graphVariablesStream.value.filter { !it.enabled }.map { it.type }
+        val grouped = rawData.filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
+        val entries = grouped
             .map { group ->
                 group.value.map {
                     FloatEntry(x = it.graphPoint.toFloat(), y = it.value.toFloat())
                 }.toList()
             }.toList()
 
-        chartColors = reportData
-            .groupBy { it.variable }
-            .map { ReportVariable.parse(it.value.first().variable).colour() }
+        chartColorsStream.value = grouped
+            .map { it.key.colour() }
 
         producer.setEntries(entries)
     }
@@ -126,6 +134,22 @@ class StatsGraphTabViewModel(
         return totals[it] ?: 0.0
     }
 
+    fun toggleVisibility(statsGraphVariable: StatsGraphVariable) {
+        val updated = graphVariablesStream.value.map {
+            if (it.type == statsGraphVariable.type) {
+                return@map StatsGraphVariable(it.type, !it.enabled)
+            } else {
+                return@map it
+            }
+        }
+
+        if (updated.count { it.enabled } == 0) {
+            return
+        }
+
+        graphVariablesStream.value = updated
+        refresh()
+    }
 }
 
 enum class ReportType {
