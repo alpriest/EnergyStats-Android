@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.flow.battery
 
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.models.kW
 
 class BatteryPowerViewModel(
     private val configManager: ConfigManaging,
@@ -27,8 +26,8 @@ class BatteryPowerViewModel(
             )
         }
 
-    fun batteryStoredChargekW(decimalPlaces: Int): String {
-        return (calculator.currentEstimatedChargeAmountW(batteryStateOfCharge = actualBatteryStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly) / 1000.0).kW(decimalPlaces = decimalPlaces)
+    fun batteryStoredCharge(): Double {
+        return (calculator.currentEstimatedChargeAmountW(batteryStateOfCharge = actualBatteryStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly) / 1000.0)
     }
 
     fun batteryStateOfCharge(): Double {

@@ -26,8 +26,7 @@ fun SettingsFooterView(
 ) {
     Column(
         Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         RoundedColumnWithChild(

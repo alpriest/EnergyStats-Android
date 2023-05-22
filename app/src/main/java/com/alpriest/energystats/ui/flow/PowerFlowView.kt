@@ -38,7 +38,7 @@ fun PowerFlowView(
     modifier: Modifier = Modifier,
     useColouredLines: Boolean = false,
 ) {
-    var asKwh by remember { mutableStateOf(true) }
+    var asKw by remember { mutableStateOf(true) }
     var height by remember { mutableStateOf(0f) }
     val phaseAnimation = rememberInfiniteTransition()
     val offsetModifier: (Float) -> Float = {
@@ -101,6 +101,7 @@ fun PowerFlowView(
                         strokeWidth = strokeWidth
                     )
                 }
+
                 PowerFlowLinePosition.MIDDLE -> {
                     drawLine(
                         color = inverterColor,
@@ -109,6 +110,7 @@ fun PowerFlowView(
                         strokeWidth = strokeWidth
                     )
                 }
+
                 PowerFlowLinePosition.RIGHT -> {
                     drawLine(
                         color = inverterColor,
@@ -117,34 +119,39 @@ fun PowerFlowView(
                         strokeWidth = strokeWidth
                     )
                 }
+
                 PowerFlowLinePosition.NONE -> {}
             }
+        }
 
-            if (isFlowing) {
+        if (isFlowing) {
+            Canvas(
+                modifier = modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+            ) {
                 drawCircle(
                     color = verticalLineColor,
                     center = Offset(x = size.width / 2, y = offsetModifier(ballYPosition)),
                     radius = strokeWidth * 2.0f
                 )
             }
-        }
 
-        if (isFlowing) {
             Card(
                 shape = RoundedCornerShape(4.dp),
                 colors = cardColors(containerColor = verticalLineColor)
             ) {
                 Text(
-                    text = if (asKwh) {
-                        amount.kWh(theme.decimalPlaces)
+                    text = if (asKw) {
+                        amount.kW(theme.decimalPlaces)
                     } else {
-                        amount.wh()
+                        amount.w(theme.decimalPlaces)
                     },
                     color = powerTextColor,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
                     modifier = Modifier
-                        .clickable { asKwh = !asKwh }
+                        .clickable { asKw = !asKw }
                         .padding(3.dp)
                         .padding(horizontal = 5.dp)
                 )

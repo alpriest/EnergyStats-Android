@@ -10,6 +10,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopEnd
@@ -91,18 +92,17 @@ class PowerFlowTabView(
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
+        val loadingBackground = remember { largeRadialGradient(listOf(Color.White, Color.Transparent)) }
+        val loadedBackground = remember { largeRadialGradient(listOf(Sunny, Color.Transparent)) }
+        val errorBackground = remember { largeRadialGradient(listOf(Color.Red.copy(alpha = 0.7f), Color.Transparent)) }
+
         val uiState by viewModel.uiState.collectAsState()
         val coroutineScope = rememberCoroutineScope()
         val showSunnyBackground = themeStream.collectAsState().value.showSunnyBackground
         val background = when (uiState.state) {
-            is LoadingLoadState -> largeRadialGradient(listOf(Color.White, Color.Transparent))
-            is LoadedLoadState -> largeRadialGradient(listOf(Sunny, Color.Transparent))
-            is ErrorLoadState -> largeRadialGradient(
-                listOf(
-                    Color.Red.copy(alpha = 0.7f),
-                    Color.Transparent
-                )
-            )
+            is LoadingLoadState -> loadingBackground
+            is LoadedLoadState -> loadedBackground
+            is ErrorLoadState -> errorBackground
         }
         
         Box(

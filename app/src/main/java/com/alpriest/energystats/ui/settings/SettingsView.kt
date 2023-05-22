@@ -52,6 +52,7 @@ fun SettingsView(
         modifier = Modifier
             .fillMaxWidth()
             .background(colors.background)
+            .padding(horizontal = 12.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)

@@ -5,11 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
-import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.NetworkFacade
@@ -44,7 +42,7 @@ class AppContainer(private val context: Context) {
             config = config,
             networking = networking,
             rawDataStore = rawDataStore,
-            appVersion = BuildConfig.VERSION_NAME
+            appVersion = getAppVersionName(context)
         )
     }
 
@@ -88,4 +86,15 @@ class AppContainer(private val context: Context) {
         intent.data = data
         startActivity(context, intent, null)
     }
+}
+
+fun getAppVersionName(context: Context): String {
+    var appVersionName = ""
+    try {
+        appVersionName =
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+    }
+    return appVersionName
 }
