@@ -94,7 +94,7 @@ fun CredentialsView(
                 .padding(top = 24.dp)
         ) {
             Button(
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+                colors = ButtonDefaults.buttonColors(backgroundColor = colors.background),
                 onClick = onDemoLogin
             ) {
                 Text(

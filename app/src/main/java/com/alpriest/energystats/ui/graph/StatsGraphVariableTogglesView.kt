@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,19 +69,20 @@ private fun ToggleRowView(
         Column(
             modifier = Modifier.padding(start = 8.dp)
         ) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
                     it.type.title(),
                     color = textColor,
-                    fontSize = fontSize,
-                    modifier = Modifier.weight(1f).wrapContentWidth(Alignment.Start)
+                    fontSize = fontSize
                 )
 
                 Text(
                     viewModel.totalOf(it.type).kWh(decimalPlaces),
                     color = textColor,
                     fontSize = fontSize,
-                    modifier = Modifier.weight(1.1f).fillMaxWidth().wrapContentWidth(Alignment.End)
                 )
             }
 
@@ -94,7 +96,7 @@ private fun ToggleRowView(
 }
 
 @Composable
-@Preview(widthDp = 500)
+@Preview(widthDp = 340)
 fun StatsGraphVariableTogglesViewPreview() {
     StatsGraphVariableTogglesView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()), themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false)))
 }

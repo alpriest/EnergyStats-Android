@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.graph
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -22,18 +23,10 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
         viewModelScope.launch {
             monthStream.value = dateStream.value.monthValue - 1
             yearStream.value = dateStream.value.year
-        }
 
-        viewModelScope.launch {
-            rangeStream.collect { _ ->
+            combine(rangeStream, dateStream, monthStream, yearStream) { _, _, _, _ ->
                 updateDisplayMode()
-            }
-        }
-
-        viewModelScope.launch {
-            dateStream.collect { _ ->
-                updateDisplayMode()
-            }
+            }.collect { }
         }
 
         viewModelScope.launch {

@@ -25,7 +25,7 @@ class StatsGraphTabViewModel(
     val configManager: ConfigManaging,
     val networking: Networking
 ) : ViewModel() {
-    var maxY: Float = 0f
+    var maxYStream = MutableStateFlow(0f)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
@@ -60,6 +60,8 @@ class StatsGraphTabViewModel(
             reportType = reportType
         )
 
+        var maxY = 0f
+
         rawData = reportData.flatMap { reportResponse ->
             val reportVariable = ReportVariable.parse(reportResponse.variable)
 
@@ -78,6 +80,8 @@ class StatsGraphTabViewModel(
                     }
                 }
 
+                maxY = max(maxY, dataPoint.value.toFloat() + 0.5f)
+
                 return@map StatsGraphValue(
                     graphPoint = graphPoint,
                     value = dataPoint.value,
@@ -85,6 +89,8 @@ class StatsGraphTabViewModel(
                 )
             }
         }
+
+        maxYStream.value = maxY
 
         refresh()
     }
@@ -95,7 +101,6 @@ class StatsGraphTabViewModel(
         val entries = grouped
             .map { group ->
                 group.value.map {
-                    maxY = max(maxY, it.value.toFloat() + 0.5f)
                     return@map FloatEntry(x = it.graphPoint.toFloat(), y = it.value.toFloat())
                 }.toList()
             }.toList()
@@ -112,7 +117,7 @@ class StatsGraphTabViewModel(
                 val date = displayMode.date
                 QueryDate(
                     year = date.year,
-                    month = date.monthValue + 1,
+                    month = date.monthValue,
                     day = date.dayOfMonth
                 )
             }

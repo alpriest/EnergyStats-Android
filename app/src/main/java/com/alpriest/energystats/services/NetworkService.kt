@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import java.io.IOException
 import java.lang.reflect.Type
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -31,6 +32,9 @@ class NetworkService(private val credentials: CredentialStore, private val confi
 
         OkHttpClient()
             .newBuilder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val original = chain.request()
 
@@ -242,7 +246,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
     ): T {
         try {
             return suspendCoroutine { continuation ->
-                okHttpClient.newCall(request).enqueue(object: Callback {
+                okHttpClient.newCall(request).enqueue(object : Callback {
                     override fun onFailure(call: Call, e: IOException) {
                         continuation.resumeWithException(e)
                     }
@@ -279,12 +283,15 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             41808, 41809, 41810 -> {
                 return Result.failure(InvalidTokenException())
             }
+
             41807 -> {
                 return Result.failure(BadCredentialsException())
             }
+
             40401 -> {
                 return Result.failure(TryLaterException())
             }
+
             30000 -> {
                 return Result.failure(MaintenanceModeException())
             }

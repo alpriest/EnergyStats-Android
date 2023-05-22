@@ -11,7 +11,7 @@ enum class ReportVariable {
 
     fun networkTitle(): String {
         return when (this) {
-            FeedIn -> "feedIn"
+            FeedIn -> "feedin"
             Generation -> "generation"
             GridConsumption -> "gridConsumption"
             ChargeEnergyToTal -> "chargeEnergyToTal"

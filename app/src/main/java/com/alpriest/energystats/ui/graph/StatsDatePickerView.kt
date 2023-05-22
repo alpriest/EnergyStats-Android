@@ -43,13 +43,17 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, modifier: Modifier 
                 MonthPicker(viewModel = viewModel)
                 YearPicker(viewModel = viewModel)
             }
+
             DatePickerRange.YEAR -> YearPicker(viewModel = viewModel)
         }
 
         Spacer(modifier = Modifier.weight(1.0f))
 
         Button(
-            modifier = Modifier.padding(end = 14.dp).padding(vertical = 6.dp).size(36.dp),
+            modifier = Modifier
+                .padding(end = 14.dp)
+                .padding(vertical = 6.dp)
+                .size(36.dp),
             onClick = { viewModel.decrease() },
             contentPadding = PaddingValues(0.dp)
         ) {
@@ -57,7 +61,9 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, modifier: Modifier 
         }
 
         Button(
-            modifier = Modifier.padding(vertical = 6.dp).size(36.dp),
+            modifier = Modifier
+                .padding(vertical = 6.dp)
+                .size(36.dp),
             onClick = { viewModel.increase() },
             contentPadding = PaddingValues(0.dp)
         ) {
@@ -89,7 +95,10 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
             for (monthIndex in 0 until 12) {
                 calendar.set(Calendar.MONTH, monthIndex)
                 val monthName = monthFormat.format(calendar.time)
-                DropdownMenuItem(onClick = { viewModel.monthStream.value = monthIndex }) {
+                DropdownMenuItem(onClick = {
+                    viewModel.monthStream.value = monthIndex
+                    showing = false
+                }) {
                     Text(monthName)
                     if (monthIndex == month) {
                         Spacer(modifier = Modifier.weight(1f))
@@ -123,7 +132,10 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
             for (yearIndex in 2015..currentYear) {
-                DropdownMenuItem(onClick = { viewModel.yearStream.value = yearIndex }) {
+                DropdownMenuItem(onClick = {
+                    viewModel.yearStream.value = yearIndex
+                    showing = false
+                }) {
                     Text(yearIndex.toString())
                     if (yearIndex == year) {
                         Spacer(modifier = Modifier.weight(1f))
@@ -152,7 +164,9 @@ private fun DateRangePicker(
     ) {
         Button(
             onClick = { showing = true },
-            modifier = Modifier.padding(vertical = 6.dp).size(36.dp),
+            modifier = Modifier
+                .padding(vertical = 6.dp)
+                .size(36.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
             Icon(
@@ -260,5 +274,5 @@ fun millisToLocalDate(millis: Long): LocalDate {
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerView(viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))),)
+    StatsDatePickerView(viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))))
 }

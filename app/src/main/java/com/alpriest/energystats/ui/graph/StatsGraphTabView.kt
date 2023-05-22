@@ -27,11 +27,11 @@ sealed class StatsDisplayMode {
     data class Month(val month: Int, val year: Int) : StatsDisplayMode()
     data class Year(val year: Int) : StatsDisplayMode()
 
-    fun unit(): Int {
+    fun unit(): String {
         return when (this) {
-            is Day -> Calendar.HOUR
-            is Month -> Calendar.DAY_OF_MONTH
-            is Year -> Calendar.MONTH
+            is Day -> "Hour"
+            is Month -> "Day"
+            is Year -> "Month"
         }
     }
 }

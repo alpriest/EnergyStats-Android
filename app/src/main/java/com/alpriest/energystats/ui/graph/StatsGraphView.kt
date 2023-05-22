@@ -2,13 +2,19 @@ package com.alpriest.energystats.ui.graph
 
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.graph.StatsDisplayMode.Day
+import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
@@ -28,12 +34,13 @@ import java.util.*
 fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val chartColors = viewModel.chartColorsStream.collectAsState().value
+    val maxY = viewModel.maxYStream.collectAsState().value
 
     Column(modifier = modifier.fillMaxWidth()) {
         ProvideChartStyle(chartStyle(chartColors)) {
             Chart(
                 chart = columnChart(
-                    axisValuesOverrider = AxisValuesOverrider.fixed(minY = 0f, maxY = viewModel.maxY)
+                    axisValuesOverrider = AxisValuesOverrider.fixed(minY = 0f, maxY = maxY)
                 ),
                 chartModelProducer = viewModel.producer,
                 chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
@@ -42,11 +49,15 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
                     valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                 ),
                 bottomAxis = bottomAxis(
-                    tickPosition = HorizontalAxis.TickPosition.Center(offset = 1, spacing = 2),
+                    label = axisLabelComponent(horizontalPadding = 2.dp),
+                    tickPosition = HorizontalAxis.TickPosition.Center(offset = 0, spacing = 2),
                     valueFormatter = CustomFormatAxisValueFormatter(displayMode)
                 ),
                 diffAnimationSpec = SnapSpec()
             )
+        }
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Text(displayMode.unit())
         }
     }
 }
@@ -62,7 +73,7 @@ class CustomFormatAxisValueFormatter<Position : AxisPosition>(private val displa
 
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
         return when (displayMode) {
-            is StatsDisplayMode.Day -> value.toInt().toString()
+            is Day -> value.toInt().toString()
             is StatsDisplayMode.Month -> value.toInt().toString()
             is StatsDisplayMode.Year -> {
                 val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
