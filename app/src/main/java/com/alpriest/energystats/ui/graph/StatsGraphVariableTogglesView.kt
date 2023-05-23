@@ -47,6 +47,7 @@ private fun ToggleRowView(
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
     val decimalPlaces = appTheme.decimalPlaces
+    val totals = viewModel.totalsStream.collectAsState().value
 
     Row(
         verticalAlignment = Alignment.Top,
@@ -80,7 +81,7 @@ private fun ToggleRowView(
                 )
 
                 Text(
-                    viewModel.totalOf(it.type).kWh(decimalPlaces),
+                    totals[it.type]?.kWh(decimalPlaces) ?: "",
                     color = textColor,
                     fontSize = fontSize,
                 )
