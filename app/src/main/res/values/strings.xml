@@ -32,4 +32,27 @@
     <string name="_5_mins">5 mins</string>
     <string name="auto">Auto</string>
     <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">FoxESS Cloud data is updated every 5 minutes. Auto attempts to synchronise fetches just after the data feed uploads to minimise server load.</string>
+    <string name="decimal_places">Decimal places</string>
+    <string name="read_from_your_inverter_when_you_login">Read from your inverter when you login.</string>
+    <string name="you_are_logged_in_as">You are logged in as %1s</string>
+    <string name="logout">Logout</string>
+    <string name="get_in_touch">Get in touch</string>
+    <string name="rate_this_app">Rate this app</string>
+    <string name="buy_me_a_coffee">Buy me a coffee</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Stats are aggregated by FoxESS into 1 hr, 1 day or 1 month totals</string>
+    <string name="feed_in">"Feed-in %1s"</string>
+    <string name="output_">"Output %1s"</string>
+    <string name="power">power</string>
+    <string name="energy">energy</string>
+    <string name="grid_consumption">"Grid consumption "</string>
+    <string name="charge">"Charge "</string>
+    <string name="discharge">"Discharge "</string>
+    <string name="power_being_sent_to_the_grid">Power being sent to the grid</string>
+    <string name="power_coming_from_the_grid">Power coming from the grid</string>
+    <string name="solar_battery_power_coming_through_the_inverter">Solar / Battery power coming through the inverter</string>
+    <string name="power_charging_the_battery">Power charging the battery</string>
+    <string name="power_discharging_from_the_battery">Power discharging from the battery</string>
 </resources>

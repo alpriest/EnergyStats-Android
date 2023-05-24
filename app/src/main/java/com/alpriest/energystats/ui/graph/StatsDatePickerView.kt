@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.ui.res.stringResource
+import com.alpriest.energystats.R
 import com.patrykandpatrick.vico.core.component.dimension.Padding
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
@@ -185,7 +187,7 @@ private fun DateRangePicker(
                 showing = false
             }) {
                 Row {
-                    Text("Day")
+                    Text(stringResource(R.string.day))
                     if (range == DatePickerRange.DAY) {
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
@@ -197,7 +199,7 @@ private fun DateRangePicker(
                 viewModel.rangeStream.value = DatePickerRange.MONTH
                 showing = false
             }) {
-                Text("Month")
+                Text(stringResource(R.string.month))
                 if (range == DatePickerRange.MONTH) {
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
@@ -208,7 +210,7 @@ private fun DateRangePicker(
                 viewModel.rangeStream.value = DatePickerRange.YEAR
                 showing = false
             }) {
-                Text("Year")
+                Text(stringResource(R.string.year))
                 if (range == DatePickerRange.YEAR) {
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")

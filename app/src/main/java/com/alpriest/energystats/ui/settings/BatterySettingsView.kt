@@ -62,7 +62,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 }
 
                 Text(
-                    text = "Read from your inverter when you login.",
+                    text = stringResource(R.string.read_from_your_inverter_when_you_login),
                     color = colors.onSecondary
                 )
             }

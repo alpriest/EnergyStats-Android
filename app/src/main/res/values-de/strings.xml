@@ -17,6 +17,7 @@
     <string name="calculated_as">Calculated as </string>
     <string name="where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value"> wobei die Restladung durch Ihre Installation geschätzt wird und nicht akkurat sein könnte. Klicken Sie oben auf \'Kapazität\', um einen manuellen Wert einzugeben.</string>
     <string name="empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant">Die Zeitdauer für eine leere/volle Batterie ist eine Schätzung basierend auf der berechneten Kapazität unter der Annahme, dass die solaren Bedingungen und die (Ent-)Laderate der Batterie konstant bleiben.</string>
+    <string name="read_from_your_inverter_when_you_login">Beim Einloggen vom Wechselrichter lesen.</string>
     <string name="capacity">Kapazität</string>
     <string name="display">Anzeige</string>
     <string name="increase_sizes_for_large_display">Größere Größen für große Bildschirme</string>
@@ -32,4 +33,26 @@
     <string name="_5_mins">5 mins</string>
     <string name="auto">Auto</string>
     <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">FoxESS Cloud-Daten werden alle 5 Minuten aktualisiert. \'Auto\' versucht, die Datenabfragen direkt nach dem Upload von Ihrem Wechselrichter zu synchronisieren, um die Server-Last zu minimieren.</string>
+    <string name="decimal_places">Dezimalstellen</string>
+    <string name="you_are_logged_in_as">Sie sind angemeldet als %1s</string>
+    <string name="logout">Logout</string>
+    <string name="get_in_touch">Kontaktieren Sie mich</string>
+    <string name="rate_this_app">Bewerten Sie diese App</string>
+    <string name="buy_me_a_coffee">Kaufen Sie mir einen Kaffee</string>
+    <string name="day">Tag</string>
+    <string name="month">Monat</string>
+    <string name="year">Jahr</string>
+    <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Stats (Statistiken) werden von FoxESS für jeweils 1 Stunde, 1 Tag oder 1 Monat aufsummiert</string>
+    <string name="feed_in">"Einspeise-%1s"</string>
+    <string name="output_">"Ertrags-%1s"</string>
+    <string name="power">Leistung</string>
+    <string name="energy">Energie</string>
+    <string name="grid_consumption">"Grid consumption "</string>
+    <string name="charge">"Lade-"</string>
+    <string name="discharge">"Entlade-"</string>
+    <string name="power_being_sent_to_the_grid">Leistung zum Einspeisen ins Netz</string>
+    <string name="power_coming_from_the_grid">Leistung, die vom Netz bezogen wird</string>
+    <string name="solar_battery_power_coming_through_the_inverter">Solar-/Batterieleistung, die vom Wechselrichter geliefert wird</string>
+    <string name="power_charging_the_battery">Leistung zum Laden der Batterie</string>
+    <string name="power_discharging_from_the_battery">Leistung vom Entladen der Batterie</string>
 </resources>

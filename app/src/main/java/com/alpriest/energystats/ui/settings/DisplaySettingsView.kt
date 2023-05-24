@@ -147,7 +147,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Decimal places")
+            Text(stringResource(R.string.decimal_places))
             listOf(2, 3).map {
                 RadioButton(
                     selected = decimalPlacesState.value == it,

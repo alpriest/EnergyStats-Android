@@ -10,9 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -40,7 +42,8 @@ fun SettingsFooterView(
             ) {
                 userManager.getUsername()?.let {
                     Text(
-                        modifier = Modifier.padding(bottom = 24.dp), text = "You are logged in as $it"
+                        modifier = Modifier.padding(bottom = 24.dp),
+                        text = stringResource(R.string.you_are_logged_in_as, it)
                     )
                 }
 
@@ -53,7 +56,8 @@ fun SettingsFooterView(
                     )
                 ) {
                     Text(
-                        "Logout", color = MaterialTheme.colors.onPrimary
+                        stringResource(R.string.logout),
+                        color = MaterialTheme.colors.onPrimary
                     )
                 }
             }
@@ -72,7 +76,7 @@ fun SettingsFooterView(
                     Icons.Default.Email, contentDescription = "Email", modifier = Modifier.padding(end = 5.dp)
                 )
                 Text(
-                    "Get in touch",
+                    stringResource(R.string.get_in_touch),
                     fontSize = 12.sp,
                 )
             }
@@ -96,7 +100,7 @@ fun SettingsFooterView(
                     Icons.Default.ThumbUp, contentDescription = "Thumbs Up", modifier = Modifier.padding(end = 5.dp)
                 )
                 Text(
-                    text = "Rate this app",
+                    text = stringResource(R.string.rate_this_app),
                     fontSize = 12.sp,
                 )
             }
@@ -116,7 +120,7 @@ fun SettingsFooterView(
                     Icons.Default.LocalCafe, contentDescription = "Coffee Cup", modifier = Modifier.padding(end = 5.dp)
                 )
                 Text(
-                    text = "Buy me a coffee",
+                    text = stringResource(R.string.buy_me_a_coffee),
                     fontSize = 12.sp,
                 )
             }

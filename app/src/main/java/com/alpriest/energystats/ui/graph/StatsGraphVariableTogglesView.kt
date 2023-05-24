@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.graph
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,14 +8,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.R
+import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -24,7 +24,6 @@ import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 @Composable
 fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
@@ -74,8 +73,8 @@ private fun ToggleRowView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    it.type.title(),
+                ReportVariableTitle(
+                    it.type,
                     color = textColor,
                     fontSize = fontSize
                 )
@@ -87,13 +86,53 @@ private fun ToggleRowView(
                 )
             }
 
-            Text(
-                it.type.description(),
+            ReportVariableDescription(
+                it.type,
                 color = DimmedTextColor,
                 fontSize = appTheme.smallFontSize()
             )
         }
     }
+}
+
+@Composable
+fun title(usage: ValueUsage): String {
+    return when (usage) {
+        ValueUsage.SNAPSHOT -> stringResource(R.string.power)
+        ValueUsage.TOTAL -> stringResource(R.string.energy)
+    }
+}
+
+@Composable
+fun ReportVariableTitle(variable: ReportVariable, color: Color, fontSize: TextUnit) {
+    val usage = ValueUsage.TOTAL
+
+    Text(
+        when (variable) {
+            ReportVariable.FeedIn -> stringResource(R.string.feed_in, title(usage))
+            ReportVariable.Generation -> stringResource(R.string.output_, title(usage))
+            ReportVariable.GridConsumption -> stringResource(R.string.grid_consumption) + "energy"
+            ReportVariable.ChargeEnergyToTal -> stringResource(R.string.charge) + "energy"
+            ReportVariable.DischargeEnergyToTal -> stringResource(R.string.discharge) + "energy"
+        },
+        color = color,
+        fontSize = fontSize
+    )
+}
+
+@Composable
+fun ReportVariableDescription(variable: ReportVariable, color: Color, fontSize: TextUnit) {
+    Text(
+        when (variable) {
+            ReportVariable.FeedIn -> stringResource(R.string.power_being_sent_to_the_grid)
+            ReportVariable.GridConsumption -> stringResource(R.string.power_coming_from_the_grid)
+            ReportVariable.Generation -> stringResource(R.string.solar_battery_power_coming_through_the_inverter)
+            ReportVariable.ChargeEnergyToTal -> stringResource(R.string.power_charging_the_battery)
+            ReportVariable.DischargeEnergyToTal -> stringResource(R.string.power_discharging_from_the_battery)
+        },
+        color = color,
+        fontSize = fontSize
+    )
 }
 
 @Composable

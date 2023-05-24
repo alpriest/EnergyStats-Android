@@ -9,8 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.graph.StatsDisplayMode.Day
@@ -57,7 +59,11 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
             )
         }
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(displayMode.unit())
+            Text(when (displayMode) {
+                is Day -> stringResource(R.string.day)
+                is StatsDisplayMode.Month -> stringResource(R.string.month)
+                is StatsDisplayMode.Year -> stringResource(R.string.year)
+            })
         }
     }
 }

@@ -14,6 +14,7 @@
     <string name="firmware_versions">Versiones de firmware</string>
     <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Obtén más información sobre las versiones de firmware en </string>
     <string name="battery">Batería</string>
+    <string name="read_from_your_inverter_when_you_login">Leer desde tu inversor cuando inicies sesión.</string>
     <string name="capacity">Capacidad</string>
     <string name="calculated_as">Calculated as </string>
     <string name="where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value"> donde el residual es una estimación realizada por tu instalación y puede no ser precisa. Toca la capacidad anterior para ingresar un valor manual.</string>
@@ -32,4 +33,26 @@
     <string name="_5_mins">5 min</string>
     <string name="auto">Auto</string>
     <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">Los datos de FoxESS Cloud se actualizan cada 5 minutos. \'Auto\' intenta sincronizar las recuperaciones de datos justo después de que los datos se carguen desde tu inversor para minimizar la carga del servidor.</string>
+    <string name="decimal_places">Decimales</string>
+    <string name="you_are_logged_in_as">Has iniciado sesión como %1s</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="get_in_touch">Ponte en contacto</string>
+    <string name="rate_this_app">Califica esta aplicación</string>
+    <string name="buy_me_a_coffee">Invítame un café</string>
+    <string name="day">Día</string>
+    <string name="month">Mes</string>
+    <string name="year">Año</string>
+    <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Las estadísticas se agregan por FoxESS en totales de 1 hora, 1 día o 1 mes</string>
+    <string name="feed_in">"Inyección en red %1s"</string>
+    <string name="output_">"Salida %1s"</string>
+    <string name="power">potencia</string>
+    <string name="energy">energía</string>
+    <string name="grid_consumption">"Netzverbrauchs-"</string>
+    <string name="charge">"Carga "</string>
+    <string name="discharge">"Descarga "</string>
+    <string name="power_being_sent_to_the_grid">Potencia enviada a la red</string>
+    <string name="power_coming_from_the_grid">Potencia proveniente de la red</string>
+    <string name="solar_battery_power_coming_through_the_inverter">Potencia solar / de batería que pasa a través del inversor</string>
+    <string name="power_charging_the_battery">Potencia de carga de la batería</string>
+    <string name="power_discharging_from_the_battery">Potencia de descarga de la batería</string>
 </resources>

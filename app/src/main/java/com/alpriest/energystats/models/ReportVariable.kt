@@ -2,6 +2,11 @@ package com.alpriest.energystats.models
 
 import androidx.compose.ui.graphics.Color
 
+enum class ValueUsage(private val stringValue: String) {
+    SNAPSHOT("snapshot"),
+    TOTAL("total");
+}
+
 enum class ReportVariable {
     FeedIn,
     Generation,
@@ -16,26 +21,6 @@ enum class ReportVariable {
             GridConsumption -> "gridConsumption"
             ChargeEnergyToTal -> "chargeEnergyToTal"
             DischargeEnergyToTal -> "dischargeEnergyToTal"
-        }
-    }
-
-    fun title(): String {
-        return when (this) {
-            FeedIn -> "Feed-in energy"
-            Generation -> "Output energy"
-            GridConsumption -> "Grid consumption energy"
-            ChargeEnergyToTal -> "Charge energy"
-            DischargeEnergyToTal -> "Discharge energy"
-        }
-    }
-
-    fun description(): String {
-        return when (this) {
-            FeedIn -> "Power being sent to the grid"
-            GridConsumption -> "Power coming from the grid"
-            Generation -> "Solar / Battery power coming through the inverter"
-            ChargeEnergyToTal -> "Power charging the battery"
-            DischargeEnergyToTal -> "Power discharging from the battery"
         }
     }
 
