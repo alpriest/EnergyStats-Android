@@ -21,4 +21,15 @@
     <string name="display">Display</string>
     <string name="increase_sizes_for_large_display">Increase sizes for large display</string>
     <string name="show_coloured_flow_lines">Show coloured flow lines</string>
+    <string name="show_total_yield">Show total yield</string>
+    <string name="show_battery_temperature">Show battery temperature</string>
+    <string name="show_battery_full_empty_estimate">Show battery full/empty estimate</string>
+    <string name="show_usable_battery_only">Show usable battery only</string>
+    <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Deducts the Min SOC amount from the battery charge level and percentage. Due to inaccuracies in the way battery levels are measured this may result in occasionally showing a negative amount remaining.</string>
+    <string name="show_sunny_background">Show sunny background</string>
+    <string name="refresh_frequency">Refresh frequency</string>
+    <string name="_1_min">1 min</string>
+    <string name="_5_mins">5 mins</string>
+    <string name="auto">Auto</string>
+    <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">FoxESS Cloud data is updated every 5 minutes. Auto attempts to synchronise fetches just after the data feed uploads to minimise server load.</string>
 </resources>

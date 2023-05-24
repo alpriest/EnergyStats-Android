@@ -13,7 +13,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -22,14 +24,6 @@ enum class RefreshFrequency(val value: Int) {
     OneMinute(1),
     FiveMinutes(5),
     Auto(0);
-
-    fun title(): String {
-        return when (this) {
-            OneMinute -> "1 min"
-            FiveMinutes -> "5 mins"
-            Auto -> "Auto"
-        }
-    }
 
     companion object {
         fun fromInt(value: Int) = values().first { it.value == value }
@@ -41,7 +35,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
     val refreshFrequency = rememberSaveable { mutableStateOf(RefreshFrequency.Auto) }
 
     RoundedColumnWithChild {
-        SettingsTitleView("Refresh frequency")
+        SettingsTitleView(stringResource(R.string.refresh_frequency))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             RefreshFrequency.values().map {
@@ -54,14 +48,18 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
                     colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colors.primary)
                 )
                 Text(
-                    it.title()
+                    when (it) {
+                        RefreshFrequency.OneMinute -> stringResource(R.string._1_min)
+                        RefreshFrequency.FiveMinutes -> stringResource(R.string._5_mins)
+                        RefreshFrequency.Auto -> stringResource(R.string.auto)
+                    }
                 )
             }
         }
 
         Text(
             modifier = Modifier,
-            text = "FoxESS Cloud data is updated every 5 minutes. Auto attempts to synchronise fetches just after the data feed uploads to minimise server load.",
+            text = stringResource(R.string.foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load),
             color = colors.onSecondary
         )
     }

@@ -18,7 +18,18 @@
     <string name="where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value"> wobei die Restladung durch Ihre Installation geschätzt wird und nicht akkurat sein könnte. Klicken Sie oben auf \'Kapazität\', um einen manuellen Wert einzugeben.</string>
     <string name="empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant">Die Zeitdauer für eine leere/volle Batterie ist eine Schätzung basierend auf der berechneten Kapazität unter der Annahme, dass die solaren Bedingungen und die (Ent-)Laderate der Batterie konstant bleiben.</string>
     <string name="capacity">Kapazität</string>
-    <string name="display">Display</string>
+    <string name="display">Anzeige</string>
     <string name="increase_sizes_for_large_display">Größere Größen für große Bildschirme</string>
     <string name="show_coloured_flow_lines">Zeige farbige Leistungsfluss-Linien</string>
+    <string name="show_total_yield">Zeige den Gesamtertrag</string>
+    <string name="show_battery_temperature">Zeige die Batterie-Temperatur</string>
+    <string name="show_battery_full_empty_estimate">Zeige die Schätzung für Batterie voll/leer</string>
+    <string name="show_usable_battery_only">Zeige nur die verwendbare Batteriekapazität</string>
+    <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Leitet den minimalen SOC vom Batterieladezustand und -prozentsatz ab. Aufgrund von Ungenauigkeiten in der Art und Weise, wie der Batterieladezustand gemessen wird, kann dies manchmal zur Anzeige von einer negativen verbleibenden Restladung führen.</string>
+    <string name="show_sunny_background">Zeige den Sonnenschein-Hintergrund</string>
+    <string name="refresh_frequency">Aktualisierungshäufigkeit</string>
+    <string name="_1_min">1 min</string>
+    <string name="_5_mins">5 mins</string>
+    <string name="auto">Auto</string>
+    <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">FoxESS Cloud-Daten werden alle 5 Minuten aktualisiert. \'Auto\' versucht, die Datenabfragen direkt nach dem Upload von Ihrem Wechselrichter zu synchronisieren, um die Server-Last zu minimieren.</string>
 </resources>

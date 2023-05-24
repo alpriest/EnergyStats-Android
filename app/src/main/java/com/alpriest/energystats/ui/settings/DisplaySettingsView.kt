@@ -72,7 +72,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
-            Text("Show total yield")
+            Text(stringResource(R.string.show_total_yield))
         }
 
         Row(
@@ -86,7 +86,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
-            Text("Show battery temperature")
+            Text(stringResource(R.string.show_battery_temperature))
         }
 
         Row(
@@ -100,7 +100,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
-            Text("Show battery full/empty estimate")
+            Text(stringResource(R.string.show_battery_full_empty_estimate))
         }
 
         Row(
@@ -118,12 +118,12 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             Column {
                 Text(
                     modifier = Modifier.padding(top = 14.dp),
-                    text = "Show usable battery only"
+                    text = stringResource(R.string.show_usable_battery_only)
                 )
 
                 Text(
                     modifier = Modifier,
-                    text = "Deducts the Min SOC amount from the battery charge level and percentage. Due to inaccuracies in the way battery levels are measured this may result in occasionally showing a negative amount remaining.",
+                    text = stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining),
                     color = colors.onSecondary,
                     style = MaterialTheme.typography.caption
                 )
@@ -141,7 +141,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
-            Text("Show sunny background")
+            Text(stringResource(R.string.show_sunny_background))
         }
 
         Row(
