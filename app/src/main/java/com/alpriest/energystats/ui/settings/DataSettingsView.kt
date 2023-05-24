@@ -10,8 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -59,7 +61,7 @@ private fun DeviceListDump(rawDataStore: RawDataStoring) {
 @Composable
 private fun BatteryDump(rawDataStore: RawDataStoring) {
     rawDataStore.batteryStream.collectAsState().value?.let {
-        SettingsTitleView("Battery")
+        SettingsTitleView(stringResource(R.string.battery))
 
         Row {
             Text("SOC ${it.soc}")

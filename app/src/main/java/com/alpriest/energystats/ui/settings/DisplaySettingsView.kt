@@ -9,8 +9,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -29,7 +31,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     RoundedColumnWithChild(
         modifier = modifier
     ) {
-        SettingsTitleView("Display")
+        SettingsTitleView(stringResource(R.string.display))
 
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -42,7 +44,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
-            Text("Increase sizes for large display")
+            Text(stringResource(R.string.increase_sizes_for_large_display))
         }
 
         Row(
@@ -56,7 +58,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )
-            Text("Show coloured flow lines")
+            Text(stringResource(R.string.show_coloured_flow_lines))
         }
 
         Row(
