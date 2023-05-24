@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">Energy Stats</string>
-    <string name="loading">Laden…</string>
+    <string name="loading">Lade…</string>
     <string name="mins">Minuten</string>
     <string name="hour">Stunde</string>
     <string name="hours">Stunden</string>
     <string name="nextUpdate">Nächstes Update in %1s</string>
     <string name="fullIn">Voll in</string>
     <string name="emptyIn">Leer in</string>
+    <string name="yieldToday">Ertrag heute %1s</string>
+    <string name="power_flow_tab">Leistungsfluss</string>
+    <string name="stats_tab">Stats</string>
+    <string name="settings_tab">Einstellungen</string>
+    <string name="firmware_versions">Firmware-Versionen</string>
+    <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Mehr Informationen über Firmware-Versionen gibt es auf der foxesscommunity.com Webseite</string>
 </resources>

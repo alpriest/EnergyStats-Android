@@ -7,4 +7,10 @@
     <string name="nextUpdate">Next update in %1s</string>
     <string name="fullIn">Full in</string>
     <string name="emptyIn">Empty in</string>
+    <string name="yieldToday">Yield today %1s</string>
+    <string name="power_flow_tab">Power flow</string>
+    <string name="stats_tab">Stats</string>
+    <string name="settings_tab">Settings</string>
+    <string name="firmware_versions">Firmware versions</string>
+    <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Find out more about firmware versions from the foxesscommunity.com website</string>
 </resources>

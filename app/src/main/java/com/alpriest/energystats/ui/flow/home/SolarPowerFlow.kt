@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
+import com.alpriest.energystats.R
 
 @Composable
 fun SolarPowerFlow(amount: Double, todaysGeneration: Double, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
@@ -67,7 +69,7 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, modifier: Modifier,
 
         if (theme.showTotalYield) {
             val yieldString = todaysGeneration.kWh(theme.decimalPlaces)
-            Text("Yield today $yieldString")
+            Text(text = stringResource(id = R.string.yieldToday, yieldString))
         }
 
         Box(

@@ -12,7 +12,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.stores.ConfigManaging
 
@@ -23,7 +25,7 @@ fun FirmwareVersionView(config: ConfigManaging) {
 
     currentDevice.value?.firmware?.let {
         RoundedColumnWithChild {
-            SettingsTitleView("Firmware versions")
+            SettingsTitleView(stringResource(R.string.firmware_versions))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.padding(vertical = 4.dp)
@@ -34,7 +36,7 @@ fun FirmwareVersionView(config: ConfigManaging) {
             }
 
             Text(
-                text = "Find out more about firmware versions from the foxesscommunity.com website",
+                text = stringResource(R.string.find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website),
                 color = colors.onSecondary,
                 modifier = Modifier.clickable {
                     uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")

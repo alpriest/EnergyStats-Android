@@ -16,6 +16,6 @@ class PendingUpdateMessageState(private val nextUpdateSeconds: Int) : UpdateMess
             }
         }
 
-        return String.format(stringResource(R.string.nextUpdate, next))
+            return String.format(stringResource(R.string.nextUpdate, next))
     }
 }
