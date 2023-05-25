@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.House
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,7 +35,6 @@ fun SummaryPowerFlowView(
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
-    val updateState by powerFlowViewModel.updateMessage.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -115,14 +115,21 @@ fun SummaryPowerFlowView(
             )
         }
 
-        Text(
-            updateState.updateState.updateMessage(),
-            color = Color.Gray,
-            modifier = Modifier
-                .padding(top = 12.dp)
-                .padding(bottom = 4.dp)
-        )
+        UpdateMessage(viewModel = powerFlowViewModel)
     }
+}
+
+@Composable
+fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
+    val updateState by viewModel.updateMessage.collectAsState()
+
+    Text(
+        updateState.updateState.updateMessage(),
+        color = Color.Gray,
+        modifier = Modifier
+            .padding(top = 12.dp)
+            .padding(bottom = 4.dp)
+    )
 }
 
 @Preview(showBackground = true, widthDp = 700, heightDp = 600)

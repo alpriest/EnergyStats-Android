@@ -15,9 +15,13 @@ import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Date
 import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
@@ -36,9 +40,22 @@ class PowerFlowTabViewModel(
     private val _updateMessage: MutableStateFlow<UiUpdateMessageState> = MutableStateFlow(UiUpdateMessageState(EmptyUpdateMessageState))
     val updateMessage: StateFlow<UiUpdateMessageState> = _updateMessage.asStateFlow()
 
+    private val appLifecycleObserver = AppLifecycleObserver(
+        onAppGoesToBackground = { timer?.cancel() },
+        onAppEntersForeground = { timerFired() }
+    )
+
     private var isLoading = false
     private var totalSeconds = 60
     private val lock = ReentrantLock()
+
+    init {
+        appLifecycleObserver.attach()
+    }
+
+    fun finalize() {
+        appLifecycleObserver.detach()
+    }
 
     fun timerFired() {
         lock.run {
