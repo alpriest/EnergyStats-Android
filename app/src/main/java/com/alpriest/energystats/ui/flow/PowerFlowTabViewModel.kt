@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
@@ -132,7 +133,8 @@ class PowerFlowTabViewModel(
                 )
                 val raw = network.fetchRaw(
                     deviceID = currentDevice.deviceID,
-                    variables
+                    variables,
+                    QueryDate()
                 )
                 rawDataStore.store(raw = raw)
 

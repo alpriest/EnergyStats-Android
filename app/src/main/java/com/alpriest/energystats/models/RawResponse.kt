@@ -8,10 +8,10 @@ data class RawRequest(
     val timespan: String = "day",
     val beginDate: QueryDate
 ) {
-    constructor(deviceID: String, variables: List<RawVariable>) : this(
+    constructor(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate) : this(
         deviceID = deviceID,
         variables = variables.map { it.variable }.toTypedArray(),
-        beginDate = QueryDate()
+        beginDate = queryDate
     )
 
     override fun equals(other: Any?): Boolean {

@@ -147,10 +147,10 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         return response.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>): ArrayList<RawResponse> {
+    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
         val body = RequestBody.create(
             MediaType.parse("application/json"),
-            Gson().toJson(RawRequest(deviceID, variables))
+            Gson().toJson(RawRequest(deviceID, variables, queryDate))
         )
 
         val request = Request.Builder()

@@ -52,7 +52,7 @@ class DemoNetworking : Networking {
         }
     }
 
-    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>): ArrayList<RawResponse> {
+    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
         val result = rawData(deviceID)
         return ArrayList(result.map { response ->
             RawResponse(

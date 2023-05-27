@@ -28,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -158,7 +160,7 @@ data class ParametersGraphVariable(
     val id: String
         get() = type.title()
 
-    fun setSelected(selected: Boolean) {
+    fun setIsSelected(selected: Boolean) {
         isSelected = selected
         enabled = true
     }
@@ -167,5 +169,5 @@ data class ParametersGraphVariable(
 @Preview
 @Composable
 fun PreviewParameterGraphHeaderView() {
-    ParameterGraphHeaderView(viewModel = ParametersGraphTabViewModel())
+    ParameterGraphHeaderView(viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking()))
 }
