@@ -163,7 +163,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                     rawDataStore.store(battery = battery)
                     val batterySettings = networking.fetchBatterySettings(it.deviceSN)
                     batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
-                    minSOC = (batterySettings.minSoc.toDouble() / 100.0).toString()
+                    minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
                 } else {
                     batteryCapacity = null
                     minSOC = null

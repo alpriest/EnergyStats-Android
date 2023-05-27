@@ -8,7 +8,7 @@ data class BatteryResponse(
 )
 
 data class BatterySettingsResponse(
-    val minSoc: Int
+    val minGridSoc: Int
 )
 
 data class EarningsResponse(

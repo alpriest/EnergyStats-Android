@@ -81,7 +81,7 @@ private fun BatterySettingsDump(rawDataStore: RawDataStoring) {
         SettingsTitleView("Battery Settings")
 
         Row {
-            Text("Min SOC ${it.minSoc}")
+            Text("Min SOC ${it.minGridSoc}")
         }
     }
 }
