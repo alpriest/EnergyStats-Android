@@ -2,7 +2,7 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.ui.graph.ReportType
+import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*

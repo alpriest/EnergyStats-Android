@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.graph
+package com.alpriest.energystats.ui.statsgraph
 
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -14,7 +14,6 @@ import com.patrykandpatrick.vico.core.DefaultDimens
 import com.patrykandpatrick.vico.core.chart.line.LineChart
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
-import com.patrykandpatrick.vico.core.dimensions.Dimensions
 
 @Composable
 internal fun chartStyle(columnChartColors: List<Color>, lineChartColors: List<Color> = listOf()): ChartStyle {

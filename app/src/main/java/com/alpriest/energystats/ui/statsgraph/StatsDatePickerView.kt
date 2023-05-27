@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.graph
+package com.alpriest.energystats.ui.statsgraph
 
 import android.widget.CalendarView
 import androidx.compose.foundation.background
@@ -20,7 +20,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.R
-import com.patrykandpatrick.vico.core.component.dimension.Padding
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.*

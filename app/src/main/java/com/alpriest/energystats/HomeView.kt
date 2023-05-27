@@ -29,8 +29,8 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.flow.home.preview
-import com.alpriest.energystats.ui.graph.StatsGraphTabView
-import com.alpriest.energystats.ui.graph.StatsGraphTabViewModel
+import com.alpriest.energystats.ui.statsgraph.StatsGraphTabView
+import com.alpriest.energystats.ui.statsgraph.StatsGraphTabViewModel
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsView

@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.graph
+package com.alpriest.energystats.ui.statsgraph
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable

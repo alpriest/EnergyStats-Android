@@ -2,7 +2,7 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.alpriest.energystats.ui.graph.ReportType
+import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat

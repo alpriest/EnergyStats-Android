@@ -1,6 +1,5 @@
-package com.alpriest.energystats.ui.graph
+package com.alpriest.energystats.ui.statsgraph
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.models.QueryDate

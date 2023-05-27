@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.graph
+package com.alpriest.energystats.ui.statsgraph
 
 import com.alpriest.energystats.models.ReportVariable
 
