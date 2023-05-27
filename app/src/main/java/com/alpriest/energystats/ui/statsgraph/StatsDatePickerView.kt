@@ -39,7 +39,7 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, modifier: Modifier 
         DateRangePicker(viewModel, range)
 
         when (range) {
-            DatePickerRange.DAY -> calendarView(viewModel = viewModel)
+            DatePickerRange.DAY -> CalendarView(viewModel = viewModel)
             DatePickerRange.MONTH -> {
                 MonthPicker(viewModel = viewModel)
                 YearPicker(viewModel = viewModel)
@@ -219,8 +219,12 @@ private fun DateRangePicker(
     }
 }
 
+interface DateStreamViewModel {
+    var dateStream: MutableStateFlow<LocalDate>
+}
+
 @Composable
-private fun calendarView(viewModel: StatsDatePickerViewModel) {
+fun CalendarView(viewModel: DateStreamViewModel) {
     var showingDatePicker by remember { mutableStateOf(false) }
 
     val dateState = viewModel.dateStream.collectAsState().value
