@@ -60,7 +60,7 @@ private val Device.deviceDisplayName: String
         return deviceType ?: "$deviceID Re-login to update"
     }
 
-@Preview(showBackground = true, heightDp = 600)
+@Preview(showBackground = true, heightDp = 600, widthDp = 400)
 @Composable
 fun InverterSettingsViewPreview() {
     EnergyStatsTheme {

@@ -75,7 +75,6 @@ fun SettingsView(
             config = config
         )
 
-
         RefreshFrequencySettingsView(config)
 
         DataSettingsView(rawDataStore = rawDataStore)

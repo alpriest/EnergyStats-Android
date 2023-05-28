@@ -35,7 +35,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel) {
     var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
 
     Row {
-        ParameterGraphVariableChooserView(ParameterGraphVariableChooserViewModel())
+        ParameterGraphVariableChooserView(ParameterGraphVariableChooserViewModel(variables = listOf()))
 
         Spacer(Modifier.defaultMinSize(minWidth = 8.dp))
 

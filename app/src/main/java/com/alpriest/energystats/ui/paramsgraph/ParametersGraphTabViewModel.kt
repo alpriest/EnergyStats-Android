@@ -4,13 +4,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
-import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode
-import com.alpriest.energystats.ui.statsgraph.StatsGraphValue
-import com.alpriest.energystats.ui.statsgraph.StatsGraphVariable
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +24,7 @@ class ParametersGraphTabViewModel(
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     var rawData: List<ParametersGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<RawVariable, Double>> = MutableStateFlow(mutableMapOf())
-    val graphVariablesStream: MutableStateFlow<List<ParametersGraphVariable>> = MutableStateFlow(listOf())
+    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(listOf())
     var queryDate = QueryDate()
     var hours: Int = 24
 
@@ -49,7 +44,7 @@ class ParametersGraphTabViewModel(
                         val variable = configManager.variables.firstOrNull { it.variable == rawVariable.variable }
 
                         if (variable != null) {
-                            return@mapNotNull ParametersGraphVariable(
+                            return@mapNotNull ParameterGraphVariable(
                                 variable,
                                 isSelected = DefaultGraphVariables.contains(variable.variable),
                                 enabled = DefaultGraphVariables.contains(variable.variable),
@@ -143,10 +138,10 @@ class ParametersGraphTabViewModel(
         producer.setEntries(entries)
     }
 
-    fun toggleVisibility(parametersGraphVariable: ParametersGraphVariable) {
+    fun toggleVisibility(parameterGraphVariable: ParameterGraphVariable) {
         val updated = graphVariablesStream.value.map {
-            if (it.type == parametersGraphVariable.type) {
-                return@map ParametersGraphVariable(it.type, !it.enabled, it.isSelected)
+            if (it.type == parameterGraphVariable.type) {
+                return@map ParameterGraphVariable(it.type, !it.enabled, it.isSelected)
             } else {
                 return@map it
             }

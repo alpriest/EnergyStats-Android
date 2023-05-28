@@ -10,7 +10,7 @@ data class ParametersDisplayMode(
 
 data class ParametersGraphValue(val graphPoint: Int, val value: Double, val type: RawVariable)
 
-data class ParametersGraphVariable(
+data class ParameterGraphVariable(
     val type: RawVariable,
     var enabled: Boolean,
     var isSelected: Boolean
