@@ -39,7 +39,7 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, modifier: Modifier 
         DateRangePicker(viewModel, range)
 
         when (range) {
-            DatePickerRange.DAY -> CalendarView(viewModel = viewModel)
+            DatePickerRange.DAY -> CalendarView(viewModel.dateStream)
             DatePickerRange.MONTH -> {
                 MonthPicker(viewModel = viewModel)
                 YearPicker(viewModel = viewModel)
@@ -219,15 +219,11 @@ private fun DateRangePicker(
     }
 }
 
-interface DateStreamViewModel {
-    var dateStream: MutableStateFlow<LocalDate>
-}
-
 @Composable
-fun CalendarView(viewModel: DateStreamViewModel) {
+fun CalendarView(dateStream: MutableStateFlow<LocalDate>) {
     var showingDatePicker by remember { mutableStateOf(false) }
 
-    val dateState = viewModel.dateStream.collectAsState().value
+    val dateState = dateStream.collectAsState().value
     val millis = localDateToMillis(dateState)
 
     Box(modifier = Modifier.wrapContentSize(Alignment.BottomCenter)) {
@@ -252,7 +248,7 @@ fun CalendarView(viewModel: DateStreamViewModel) {
                             views.setOnDateChangeListener { _, year, month, dayOfMonth ->
                                 val cal = Calendar.getInstance()
                                 cal.set(year, month, dayOfMonth)
-                                viewModel.dateStream.value = millisToLocalDate(cal.timeInMillis)
+                                dateStream.value = millisToLocalDate(cal.timeInMillis)
                                 showingDatePicker = false
                             }
                         }

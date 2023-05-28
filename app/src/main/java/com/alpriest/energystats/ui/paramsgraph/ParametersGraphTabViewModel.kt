@@ -143,20 +143,20 @@ class ParametersGraphTabViewModel(
         producer.setEntries(entries)
     }
 
-//    fun toggleVisibility(statsGraphVariable: StatsGraphVariable) {
-//        val updated = graphVariablesStream.value.map {
-//            if (it.type == statsGraphVariable.type) {
-//                return@map StatsGraphVariable(it.type, !it.enabled)
-//            } else {
-//                return@map it
-//            }
-//        }
-//
-//        if (updated.count { it.enabled } == 0) {
-//            return
-//        }
-//
-//        graphVariablesStream.value = updated
-//        refresh()
-//    }
+    fun toggleVisibility(parametersGraphVariable: ParametersGraphVariable) {
+        val updated = graphVariablesStream.value.map {
+            if (it.type == parametersGraphVariable.type) {
+                return@map ParametersGraphVariable(it.type, !it.enabled, it.isSelected)
+            } else {
+                return@map it
+            }
+        }
+
+        if (updated.count { it.enabled } == 0) {
+            return
+        }
+
+        graphVariablesStream.value = updated
+        refresh()
+    }
 }

@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : DateStreamViewModel, ViewModel() {
+class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
     var rangeStream = MutableStateFlow(DatePickerRange.DAY)
     var monthStream = MutableStateFlow(0)
     var yearStream = MutableStateFlow(0)
-    override var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
+    var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
     var isInitialised = false
 
     init {
