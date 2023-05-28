@@ -1,6 +1,8 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.ui.statsgraph.GraphVariable
 import java.time.LocalDate
 
 data class ParametersDisplayMode(
@@ -12,6 +14,9 @@ data class ParametersGraphValue(val graphPoint: Int, val value: Double, val type
 
 data class ParameterGraphVariable(
     val type: RawVariable,
-    val enabled: Boolean,
+    override val enabled: Boolean,
     val isSelected: Boolean
-)
+) : GraphVariable {
+    override val colour: Color
+        get() = type.colour()
+}

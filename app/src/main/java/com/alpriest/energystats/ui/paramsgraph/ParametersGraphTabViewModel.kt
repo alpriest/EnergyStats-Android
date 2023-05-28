@@ -10,9 +10,11 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.statsgraph.localDateTimeToMillis
 import com.alpriest.energystats.ui.statsgraph.localDateToMillis
+import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -86,7 +88,6 @@ class ParametersGraphTabViewModel(
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
         val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type }.toList()
-        val formatter = DateTimeFormatter.ofPattern(dateFormat)
 
         val raw = networking.fetchRaw(
             device.deviceID,
@@ -103,9 +104,6 @@ class ParametersGraphTabViewModel(
             rawTotals[rawVariable] = response.data.sumOf { abs(it.value) }
 
             response.data.mapIndexed { index, item ->
-//                val localDateTime = ZonedDateTime.parse(item.time, formatter)
-//                val graphPoint: Long = localDateTimeToMillis(localDateTime)
-
                 maxY = max(maxY, item.value.toFloat() + 0.5f)
 
                 return@mapIndexed ParametersGraphValue(
@@ -116,7 +114,6 @@ class ParametersGraphTabViewModel(
             }
         }
 
-        // Fetch reports
         this.rawData = rawData
         totalsStream.value = rawTotals
         maxYStream.value = maxY
@@ -137,7 +134,11 @@ class ParametersGraphTabViewModel(
         chartColorsStream.value = grouped
             .map { it.key.colour() }
 
-        producer.setEntries(entries)
+        if (entries.isEmpty()) {
+            producer.setEntries(listOf<ChartEntry>())
+        } else {
+            producer.setEntries(entries)
+        }
     }
 
     fun toggleVisibility(parameterGraphVariable: ParameterGraphVariable) {
@@ -163,6 +164,10 @@ class ParametersGraphTabViewModel(
         viewModelScope.launch {
             load()
         }
+    }
+
+    fun total(variable: ParameterGraphVariable): Double? {
+        return totalsStream.value[variable.type]
     }
 
     companion object {

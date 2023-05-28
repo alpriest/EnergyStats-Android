@@ -102,7 +102,10 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
 
                 Button(
                     modifier = Modifier.weight(1f),
-                    onClick = { viewModel.apply() }
+                    onClick = {
+                        viewModel.apply()
+                        onCancel()
+                    }
                 ) {
                     Text("Apply")
                 }
@@ -144,7 +147,7 @@ fun ParameterGraphVariableChooserViewPreview() {
 
     EnergyStatsTheme {
         ParameterGraphVariableChooserView(
-            viewModel = ParameterGraphVariableChooserViewModel(variables, onApply = { } ),
+            viewModel = ParameterGraphVariableChooserViewModel(variables, onApply = { }),
             onCancel = {}
         )
     }

@@ -1,9 +1,13 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -34,7 +38,7 @@ class StatsGraphTabViewModel(
         StatsGraphVariable(it, true)
     })
     var rawData: List<StatsGraphValue> = listOf()
-    var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
+    var totals: MutableMap<ReportVariable, Double> = mutableMapOf()
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
@@ -83,10 +87,8 @@ class StatsGraphTabViewModel(
             }
         }
 
-        totalsStream.value = rawTotals
-
+        totals = rawTotals
         maxYStream.value = maxY
-
         refresh()
     }
 
@@ -148,6 +150,23 @@ class StatsGraphTabViewModel(
 
         graphVariablesStream.value = updated
         refresh()
+    }
+
+    fun total(variable: StatsGraphVariable): Double? {
+        return totals[variable.type]
+    }
+}
+
+interface GraphVariable {
+    val enabled: Boolean
+    val colour: Color
+}
+
+@Composable
+fun title(usage: ValueUsage): String {
+    return when (usage) {
+        ValueUsage.SNAPSHOT -> stringResource(R.string.power)
+        ValueUsage.TOTAL -> stringResource(R.string.energy)
     }
 }
 

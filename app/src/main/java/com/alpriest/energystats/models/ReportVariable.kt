@@ -2,9 +2,9 @@ package com.alpriest.energystats.models
 
 import androidx.compose.ui.graphics.Color
 
-enum class ValueUsage(private val stringValue: String) {
-    SNAPSHOT("snapshot"),
-    TOTAL("total");
+enum class ValueUsage {
+    SNAPSHOT,
+    TOTAL;
 }
 
 enum class ReportVariable {
@@ -26,11 +26,11 @@ enum class ReportVariable {
 
     fun colour(): Color {
         return when (this) {
-            Generation -> Color(248, 216, 87)
-            FeedIn -> Color(105, 207, 202)
+            Generation -> Color(244, 184, 96)
+            FeedIn -> Color(181, 121, 223)
             ChargeEnergyToTal -> Color(125, 208, 130)
-            DischargeEnergyToTal -> Color(241, 162, 154)
-            GridConsumption -> Color(237, 108, 96)
+            DischargeEnergyToTal -> Color(80, 147, 248)
+            GridConsumption -> Color(236, 109, 96)
         }
     }
 
