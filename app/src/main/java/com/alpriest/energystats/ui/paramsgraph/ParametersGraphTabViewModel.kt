@@ -7,12 +7,17 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.statsgraph.localDateTimeToMillis
+import com.alpriest.energystats.ui.statsgraph.localDateToMillis
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -60,7 +65,7 @@ class ParametersGraphTabViewModel(
 
                     if (queryDate != updatedDate) {
                         queryDate = updatedDate
-                        loadData()
+                        load()
                     }
                     if (it.hours != previousHours) {
                         hours = it.hours
@@ -70,23 +75,22 @@ class ParametersGraphTabViewModel(
         }
     }
 
-    fun decrease() {
-        TODO("Not yet implemented")
-    }
-
     fun increase() {
         TODO("Not yet implemented")
     }
 
-    suspend fun loadData() {
-        val device = configManager.currentDevice.value ?: return
-        val graphVariables = graphVariablesStream.value
+    fun decrease() {
+        TODO("Not yet implemented")
+    }
 
-        val displayMode = displayModeStream.value
+    suspend fun load() {
+        val device = configManager.currentDevice.value ?: return
+        val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type }.toList()
+        val formatter = DateTimeFormatter.ofPattern(dateFormat)
 
         val raw = networking.fetchRaw(
             device.deviceID,
-            variables = graphVariables.map { it.type }.toList(),
+            variables = rawGraphVariables,
             queryDate = queryDate
         )
 
@@ -99,9 +103,10 @@ class ParametersGraphTabViewModel(
             rawTotals[rawVariable] = response.data.sumOf { abs(it.value) }
 
             response.data.map {
-                val graphPoint: Int = it.time.length
+                val localDateTime = ZonedDateTime.parse(it.time, formatter)
+                val graphPoint: Long = localDateTimeToMillis(localDateTime)
 
-                maxY = max(maxY, graphPoint + 0.5f)
+                maxY = max(maxY, it.value.toFloat() + 0.5f)
 
                 return@map ParametersGraphValue(
                     graphPoint = graphPoint,
@@ -111,6 +116,7 @@ class ParametersGraphTabViewModel(
             }
         }
 
+        // Fetch reports
         this.rawData = rawData
         refresh()
 
@@ -151,6 +157,14 @@ class ParametersGraphTabViewModel(
 
         graphVariablesStream.value = updated
         refresh()
+    }
+
+    fun setGraphVariables(graphVariables: List<ParameterGraphVariable>) {
+        graphVariablesStream.value = graphVariables
+
+        viewModelScope.launch {
+            load()
+        }
     }
 
     companion object {

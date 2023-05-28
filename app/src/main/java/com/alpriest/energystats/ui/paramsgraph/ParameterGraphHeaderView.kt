@@ -1,9 +1,11 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
@@ -29,12 +31,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 
 @Composable
-fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel) {
+fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
     var hours by remember { mutableStateOf(0) }
     var showingVariables by remember { mutableStateOf(false) }
     var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
 
-    Row {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
         ParameterGraphVariableChooserButton(viewModel)
 
         Spacer(Modifier.defaultMinSize(minWidth = 8.dp))

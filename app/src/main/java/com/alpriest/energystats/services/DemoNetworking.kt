@@ -3,9 +3,15 @@ package com.alpriest.energystats.services
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.statsgraph.ReportType
+import com.alpriest.energystats.ui.statsgraph.localDateToMillis
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -54,11 +60,19 @@ class DemoNetworking : Networking {
 
     override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
         val result = rawData(deviceID)
+        val formatter = DateTimeFormatter.ofPattern(dateFormat)
+        val now = LocalDate.now()
+
         return ArrayList(result.map { response ->
             RawResponse(
                 variable = response.variable,
                 data = ArrayList(response.data.map {
-                    RawData(time = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date()), value = it.value)
+                    val localDateTime = ZonedDateTime.parse(it.time, formatter)
+                        .withYear(now.year)
+                        .withMonth(now.monthValue)
+                        .withDayOfMonth(now.dayOfMonth)
+
+                    RawData(time = localDateTime.format(formatter), value = it.value)
                 }.toList())
             )
         }.toList())

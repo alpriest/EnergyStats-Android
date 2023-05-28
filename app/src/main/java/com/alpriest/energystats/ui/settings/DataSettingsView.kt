@@ -18,6 +18,8 @@ import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
@@ -110,7 +112,9 @@ private fun RawDataDump(rawDataStore: RawDataStoring) {
 @Composable
 fun DataSettingsViewPreview() {
     val store = RawDataStore()
-    val now = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
+    val formatter = DateTimeFormatter.ofPattern(dateFormat)
+    val now = LocalDateTime.now().format(formatter)
+
     store.store(
         raw = listOf(
             RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),

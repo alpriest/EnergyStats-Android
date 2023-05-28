@@ -1,5 +1,6 @@
 package com.alpriest.energystats.models
 
+import java.time.LocalDateTime
 import java.util.*
 
 data class RawRequest(

@@ -36,7 +36,7 @@ class StatsGraphTabViewModel(
     var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
 
-    suspend fun loadData() {
+    suspend fun load() {
         val device = configManager.currentDevice.value ?: return
         val graphVariables = graphVariablesStream.value
 

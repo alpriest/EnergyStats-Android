@@ -47,6 +47,8 @@ import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class PowerFlowTabViewModelFactory(
@@ -179,7 +181,9 @@ class PowerFlowTabView(
 @Composable
 fun PowerFlowTabViewPreview() {
     val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore())
-    val now = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
+    val formatter = DateTimeFormatter.ofPattern(dateFormat)
+    val now = LocalDateTime.now().format(formatter)
+
     val homePowerFlowViewModel = SummaryPowerFlowViewModel(
         FakeConfigManager(),
         2.3,

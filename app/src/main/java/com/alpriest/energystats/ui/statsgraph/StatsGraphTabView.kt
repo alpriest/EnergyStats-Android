@@ -50,7 +50,7 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableSta
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true
         viewModel.displayModeStream
-            .onEach { viewModel.loadData() }
+            .onEach { viewModel.load() }
             .collect { isLoading = false }
     }
 

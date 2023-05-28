@@ -265,6 +265,10 @@ fun localDateToMillis(localDate: LocalDate): Long {
     return localDateTime.atZone(zoneId).toInstant().toEpochMilli()
 }
 
+fun localDateTimeToMillis(dateTime: ZonedDateTime): Long {
+    return dateTime.toInstant().toEpochMilli()
+}
+
 fun millisToLocalDate(millis: Long): LocalDate {
     val instant = Instant.ofEpochMilli(millis)
     val zoneId = ZoneId.systemDefault()

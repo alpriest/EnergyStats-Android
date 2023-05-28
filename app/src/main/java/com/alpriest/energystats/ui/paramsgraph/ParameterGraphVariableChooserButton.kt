@@ -44,7 +44,7 @@ fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel) 
                 onDismissRequest = { showing = false },
             ) {
                 ParameterGraphVariableChooserView(
-                    ParameterGraphVariableChooserViewModel(graphVariables),
+                    ParameterGraphVariableChooserViewModel(graphVariables, onApply = { viewModel.setGraphVariables(it) }),
                     onCancel = { showing = false }
                 )
             }

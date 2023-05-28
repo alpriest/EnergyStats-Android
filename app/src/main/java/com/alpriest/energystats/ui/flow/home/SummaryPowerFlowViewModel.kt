@@ -6,9 +6,11 @@ import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
-const val dateFormat = "yyyy-MM-dd HH:mm:ss"
+const val dateFormat = "yyyy-MM-dd HH:mm:ss zZ"
 
 class SummaryPowerFlowViewModel(
     val configManager: ConfigManaging,
@@ -29,7 +31,8 @@ class SummaryPowerFlowViewModel(
     val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
     val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
     val batteryViewModel: BatteryPowerViewModel = BatteryPowerViewModel(configManager, batteryStateOfCharge, battery, batteryTemperature)
-    val latestUpdate = raw.currentData("gridConsumptionPower")?.time?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it) } ?: Date()
+    val formatter = DateTimeFormatter.ofPattern(dateFormat)
+    val latestUpdate = raw.currentData("gridConsumptionPower")?.time?.let { LocalDateTime.parse(it, formatter) } ?: LocalDateTime.now()
 }
 
 private fun List<RawResponse>.currentValue(forKey: String): Double {

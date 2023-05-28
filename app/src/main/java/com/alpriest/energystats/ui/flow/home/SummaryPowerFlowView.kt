@@ -26,6 +26,8 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
@@ -135,7 +137,8 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
 @Preview(showBackground = true, widthDp = 700, heightDp = 600)
 @Composable
 fun SummaryPowerFlowViewPreview() {
-    val now = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
+    val formatter = DateTimeFormatter.ofPattern(dateFormat)
+    val now = LocalDateTime.now().format(formatter)
 
     EnergyStatsTheme {
         SummaryPowerFlowView(

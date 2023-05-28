@@ -29,64 +29,6 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.settings.RoundedColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-
-class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphVariable>) {
-    private var _variablesState = MutableStateFlow(variables.sortedBy { it.type.name })
-    val variablesState: StateFlow<List<ParameterGraphVariable>> = _variablesState.asStateFlow()
-
-    fun chooseDefaultVariables() {
-        val newVariables = ParametersGraphTabViewModel.DefaultGraphVariables
-        select(newVariables)
-    }
-
-    fun chooseCompareStringsValues() {
-        select(
-            listOf(
-                "pv1Power",
-                "pv2Power",
-                "pv3Power",
-                "pv4Power"
-            )
-        )
-    }
-
-    fun chooseTemperaturesVariables() {
-        select(
-            listOf(
-                "ambientTemperation",
-                "boostTemperation",
-                "invTemperation",
-                "chargeTemperature",
-                "batTemperature",
-                "dspTemperature"
-            )
-        )
-    }
-
-    fun chooseNoVariables() {
-        select(listOf())
-    }
-
-    private fun select(newVariables: List<String>) {
-        _variablesState.value = _variablesState.value.map {
-            val select = newVariables.contains(it.type.variable)
-            return@map it.copy(isSelected = select, enabled = select)
-        }
-    }
-
-    fun toggle(updating: ParameterGraphVariable) {
-        _variablesState.value = _variablesState.value.map {
-            if (it.type.variable == updating.type.variable) {
-                return@map it.copy(isSelected = !it.isSelected, enabled = !it.isSelected)
-            }
-
-            return@map it
-        }
-    }
-}
 
 @Composable
 fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel, onCancel: () -> Unit) {
@@ -107,7 +49,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            RoundedColumnWithChild {
+            RoundedColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
                 SettingsTitleView("ALL")
 
                 RoundedColumnWithChild {
@@ -160,7 +102,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
 
                 Button(
                     modifier = Modifier.weight(1f),
-                    onClick = { /*TODO*/ }
+                    onClick = { viewModel.apply() }
                 ) {
                     Text("Apply")
                 }
@@ -202,7 +144,7 @@ fun ParameterGraphVariableChooserViewPreview() {
 
     EnergyStatsTheme {
         ParameterGraphVariableChooserView(
-            viewModel = ParameterGraphVariableChooserViewModel(variables),
+            viewModel = ParameterGraphVariableChooserViewModel(variables, onApply = { } ),
             onCancel = {}
         )
     }
