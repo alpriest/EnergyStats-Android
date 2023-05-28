@@ -132,7 +132,6 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
     override fun select(device: Device) {
         selectedDeviceID = device.deviceID
-        Log.d("AWP", "Selected ${device.deviceID}")
         currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
     }
 

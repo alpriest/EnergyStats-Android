@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
@@ -10,6 +11,7 @@ import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.math.abs
 import kotlin.math.max
@@ -28,48 +30,44 @@ class ParametersGraphTabViewModel(
     var queryDate = QueryDate()
     var hours: Int = 24
 
-    val DefaultGraphVariables = listOf(
-        "generationPower",
-        "batChargePower",
-        "batDischargePower",
-        "feedinPower",
-        "gridConsumptionPower"
-    )
-
     init {
-        configManager.currentDevice
-            .onEach { it ->
-                it?.let { device ->
-                    graphVariablesStream.value = device.variables.mapNotNull { rawVariable: RawVariable ->
-                        val variable = configManager.variables.firstOrNull { it.variable == rawVariable.variable }
+        viewModelScope.launch {
+            configManager.currentDevice
+                .collect { it ->
+                    it?.let { device ->
+                        graphVariablesStream.value = device.variables.mapNotNull { rawVariable: RawVariable ->
+                            val variable = configManager.variables.firstOrNull { it.variable == rawVariable.variable }
 
-                        if (variable != null) {
-                            return@mapNotNull ParameterGraphVariable(
-                                variable,
-                                isSelected = DefaultGraphVariables.contains(variable.variable),
-                                enabled = DefaultGraphVariables.contains(variable.variable),
-                            )
-                        } else {
-                            return@mapNotNull null
+                            if (variable != null) {
+                                return@mapNotNull ParameterGraphVariable(
+                                    variable,
+                                    isSelected = DefaultGraphVariables.contains(variable.variable),
+                                    enabled = DefaultGraphVariables.contains(variable.variable),
+                                )
+                            } else {
+                                return@mapNotNull null
+                            }
                         }
                     }
                 }
-            }
+        }
 
-        displayModeStream
-            .onEach { it ->
-                val previousHours = hours
-                val updatedDate = QueryDate(it.date.year, it.date.monthValue, it.date.dayOfMonth)
+        viewModelScope.launch {
+            displayModeStream
+                .collect { it ->
+                    val previousHours = hours
+                    val updatedDate = QueryDate(it.date.year, it.date.monthValue, it.date.dayOfMonth)
 
-                if (queryDate != updatedDate) {
-                    queryDate = updatedDate
-                    loadData()
+                    if (queryDate != updatedDate) {
+                        queryDate = updatedDate
+                        loadData()
+                    }
+                    if (it.hours != previousHours) {
+                        hours = it.hours
+                        refresh()
+                    }
                 }
-                if (it.hours != previousHours) {
-                    hours = it.hours
-                    refresh()
-                }
-            }
+        }
     }
 
     fun decrease() {
@@ -153,5 +151,15 @@ class ParametersGraphTabViewModel(
 
         graphVariablesStream.value = updated
         refresh()
+    }
+
+    companion object {
+        val DefaultGraphVariables = listOf(
+            "generationPower",
+            "batChargePower",
+            "batDischargePower",
+            "feedinPower",
+            "gridConsumptionPower"
+        )
     }
 }

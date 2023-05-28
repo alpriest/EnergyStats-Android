@@ -74,30 +74,11 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
-        return listOf(
-            RawVariable("PV1Volt", "pv1Volt", "V"),
-            RawVariable("PV1Current", "pv1Current", "A"),
-            RawVariable("PV1Power", "pv1Power", "kW"),
-            RawVariable("PVPower", "pvPower", "kW"),
-            RawVariable("PV2Volt", "pv2Volt", "V"),
-            RawVariable("PV2Current", "pv2Current", "A"),
-            RawVariable("aPV1Current", "pv1Current", "A"),
-            RawVariable("aPV1Power", "pv1Power", "kW"),
-            RawVariable("aPVPower", "pvPower", "kW"),
-            RawVariable("aPV2Volt", "pv2Volt", "V"),
-            RawVariable("aPV2Current", "pv2Current", "A"),
-            RawVariable("bPV1Current", "pv1Current", "A"),
-            RawVariable("bPV1Power", "pv1Power", "kW"),
-            RawVariable("bPVPower", "pvPower", "kW"),
-            RawVariable("bPV2Volt", "pv2Volt", "V"),
-            RawVariable("cPV2Current", "pv2Current", "A"),
-            RawVariable("cPV1Current", "pv1Current", "A"),
-            RawVariable("cPV1Power", "pv1Power", "kW"),
-            RawVariable("cPVPower", "pvPower", "kW"),
-            RawVariable("cPV2Volt", "pv2Volt", "V"),
-            RawVariable("dPV2Current", "pv2Current", "A"),
-            RawVariable("dPV2Power", "pv2Power", "kW")
-        )
+        val fileContent = this::class.java.classLoader?.getResource("res/raw/variables.json")?.readText()
+
+        val data: NetworkResponse<VariablesResponse> = Gson().fromJson(fileContent, object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type)
+
+        return data.result?.variables ?: listOf()
     }
 
     private fun rawData(deviceID: String): List<RawResponse> {

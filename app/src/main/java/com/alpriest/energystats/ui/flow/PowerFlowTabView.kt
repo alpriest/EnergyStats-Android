@@ -104,7 +104,7 @@ class PowerFlowTabView(
             is LoadedLoadState -> loadedBackground
             is ErrorLoadState -> errorBackground
         }
-        
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -117,6 +117,7 @@ class PowerFlowTabView(
                 is LoadingLoadState -> LoadingView("Loading...").run {
                     viewModel.timerFired()
                 }
+
                 is ErrorLoadState -> Error((uiState.state as ErrorLoadState).reason) { coroutineScope.launch { viewModel.timerFired() } }
                 is LoadedLoadState -> Loaded(viewModel, (uiState.state as LoadedLoadState).viewModel, themeStream)
             }
@@ -161,7 +162,9 @@ class PowerFlowTabView(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize().padding(12.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp)
         ) {
             SummaryPowerFlowView(
                 powerFlowViewModel = viewModel,

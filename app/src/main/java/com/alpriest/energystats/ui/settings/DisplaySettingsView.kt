@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
@@ -34,7 +35,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         SettingsTitleView(stringResource(R.string.display))
 
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { largeDisplayState.value = !largeDisplayState.value }
+                .fillMaxWidth()
         ) {
             Checkbox(
                 checked = largeDisplayState.value,
@@ -42,13 +46,16 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     largeDisplayState.value = it
                     config.useLargeDisplay = it
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
             Text(stringResource(R.string.increase_sizes_for_large_display))
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { colouredFlowLinesState.value = !colouredFlowLinesState.value }
+                .fillMaxWidth()
         ) {
             Checkbox(
                 checked = colouredFlowLinesState.value,
@@ -56,13 +63,16 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     colouredFlowLinesState.value = it
                     config.useColouredFlowLines = it
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
             Text(stringResource(R.string.show_coloured_flow_lines))
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { showTotalYieldState.value = !showTotalYieldState.value }
+                .fillMaxWidth()
         ) {
             Checkbox(
                 checked = showTotalYieldState.value,
@@ -70,13 +80,16 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     showTotalYieldState.value = it
                     config.showTotalYield = it
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
             Text(stringResource(R.string.show_total_yield))
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { showBatteryTemperatureState.value = !showBatteryTemperatureState.value }
+                .fillMaxWidth()
         ) {
             Checkbox(
                 checked = showBatteryTemperatureState.value,
@@ -84,13 +97,16 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     showBatteryTemperatureState.value = it
                     config.showBatteryTemperature = it
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
             Text(stringResource(R.string.show_battery_temperature))
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { showBatteryEstimateState.value = !showBatteryEstimateState.value }
+                .fillMaxWidth()
         ) {
             Checkbox(
                 checked = showBatteryEstimateState.value,
@@ -98,13 +114,16 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     showBatteryEstimateState.value = it
                     config.showBatteryEstimate = it
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
             Text(stringResource(R.string.show_battery_full_empty_estimate))
         }
 
         Row(
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
+            modifier = Modifier
+                .clickable { showUsableBatteryOnlyState.value = !showUsableBatteryOnlyState.value }
+                .fillMaxWidth()
         ) {
             Checkbox(
                 checked = showUsableBatteryOnlyState.value,
@@ -112,7 +131,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     showUsableBatteryOnlyState.value = it
                     config.showUsableBatteryOnly = it
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
 
             Column {
@@ -131,7 +150,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { showSunnyBackgroundState.value = !showSunnyBackgroundState.value }
+                .fillMaxWidth()
         ) {
             Checkbox(
                 checked = showSunnyBackgroundState.value,
@@ -139,13 +161,13 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     showSunnyBackgroundState.value = it
                     config.showSunnyBackground = it
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
             Text(stringResource(R.string.show_sunny_background))
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(stringResource(R.string.decimal_places))
             listOf(2, 3).map {
@@ -155,7 +177,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                         decimalPlacesState.value = it
                         config.decimalPlaces = it
                     },
-                    colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colors.primary)
+                    colors = RadioButtonDefaults.colors(selectedColor = colors.primary)
                 )
                 Text(
                     it.toString(),

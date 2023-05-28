@@ -40,7 +40,7 @@ fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel) 
             Dialog(
                 onDismissRequest = { showing = false },
             ) {
-                ParameterGraphVariableChooserView(ParameterGraphVariableChooserViewModel(variables = listOf())) // TODO
+                ParameterGraphVariableChooserView(ParameterGraphVariableChooserViewModel(viewModel.graphVariablesStream))
             }
         }
     }

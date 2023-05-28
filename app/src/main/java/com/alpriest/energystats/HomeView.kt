@@ -33,6 +33,8 @@ import com.alpriest.energystats.ui.statsgraph.StatsGraphTabView
 import com.alpriest.energystats.ui.statsgraph.StatsGraphTabViewModel
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabView
+import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import com.alpriest.energystats.ui.settings.SettingsView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
@@ -69,6 +71,7 @@ fun HomeView(
     val titles = listOf(
         TitleItem(stringResource(R.string.power_flow_tab), Icons.Default.SwapVert, false),
         TitleItem(stringResource(R.string.stats_tab), Icons.Default.BarChart, false),
+        TitleItem("Parameters", Icons.Default.BarChart, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
 
@@ -83,7 +86,8 @@ fun HomeView(
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
                     1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network), themeStream)
-                    2 -> SettingsView(
+                    2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network), themeStream)
+                    3 -> SettingsView(
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,
