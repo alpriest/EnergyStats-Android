@@ -12,14 +12,6 @@ data class ParametersGraphValue(val graphPoint: Int, val value: Double, val type
 
 data class ParameterGraphVariable(
     val type: RawVariable,
-    var enabled: Boolean,
-    var isSelected: Boolean
-) {
-    val id: String
-        get() = type.title()
-
-    fun setIsSelected(selected: Boolean) {
-        isSelected = selected
-        enabled = selected
-    }
-}
+    val enabled: Boolean,
+    val isSelected: Boolean
+)

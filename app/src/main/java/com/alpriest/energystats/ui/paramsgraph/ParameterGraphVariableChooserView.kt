@@ -9,15 +9,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -31,22 +30,19 @@ import com.alpriest.energystats.ui.settings.RoundedColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class ParameterGraphVariableChooserViewModel(var variablesStream: MutableStateFlow<List<ParameterGraphVariable>>) {
+class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphVariable>) {
+    private var _variablesState = MutableStateFlow(variables.sortedBy { it.type.name })
+    val variablesState: StateFlow<List<ParameterGraphVariable>> = _variablesState.asStateFlow()
+
     fun chooseDefaultVariables() {
         val newVariables = ParametersGraphTabViewModel.DefaultGraphVariables
         select(newVariables)
     }
 
-    private fun select(newVariables: List<String>) {
-        variablesStream.value = variablesStream.value.map {
-            it.isSelected = newVariables.contains(it.type.variable)
-
-            return@map it
-        }
-    }
-
-    fun chooseCompareStrings() {
+    fun chooseCompareStringsValues() {
         select(
             listOf(
                 "pv1Power",
@@ -56,17 +52,51 @@ class ParameterGraphVariableChooserViewModel(var variablesStream: MutableStateFl
             )
         )
     }
+
+    fun chooseTemperaturesVariables() {
+        select(
+            listOf(
+                "ambientTemperation",
+                "boostTemperation",
+                "invTemperation",
+                "chargeTemperature",
+                "batTemperature",
+                "dspTemperature"
+            )
+        )
+    }
+
+    fun chooseNoVariables() {
+        select(listOf())
+    }
+
+    private fun select(newVariables: List<String>) {
+        _variablesState.value = _variablesState.value.map {
+            val select = newVariables.contains(it.type.variable)
+            return@map it.copy(isSelected = select, enabled = select)
+        }
+    }
+
+    fun toggle(updating: ParameterGraphVariable) {
+        _variablesState.value = _variablesState.value.map {
+            if (it.type.variable == updating.type.variable) {
+                return@map it.copy(isSelected = !it.isSelected, enabled = !it.isSelected)
+            }
+
+            return@map it
+        }
+    }
 }
 
 @Composable
-fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel) {
+fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel, onCancel: () -> Unit) {
     val scrollState = rememberScrollState()
-    val variables = viewModel.variablesStream.collectAsState().value
+    val variables = viewModel.variablesState.collectAsState().value
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .wrapContentSize(Alignment.BottomCenter)
+            .padding(vertical = 44.dp)
             .background(colors.background)
     ) {
         Column(
@@ -78,28 +108,30 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             RoundedColumnWithChild {
-                SettingsTitleView("PREDEFINED SELECTIONS")
-
-                OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text("Default") }
-                OutlinedButton(onClick = { viewModel.chooseCompareStrings() }) { Text("Compare strings") }
-                OutlinedButton(onClick = { /*TODO*/ }) { Text("Temperatures") }
-                OutlinedButton(onClick = { /*TODO*/ }) { Text("None") }
-            }
-
-            RoundedColumnWithChild {
                 SettingsTitleView("ALL")
 
-                variables.map { variable ->
+                RoundedColumnWithChild {
+                    SettingsTitleView("PREDEFINED SELECTIONS")
+
+                    OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text("Default") }
+                    OutlinedButton(onClick = { viewModel.chooseCompareStringsValues() }) { Text("Compare strings") }
+                    OutlinedButton(onClick = { viewModel.chooseTemperaturesVariables() }) { Text("Temperatures") }
+                    OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text("None") }
+                }
+            }
+
+            Column {
+                variables.forEach { variable ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .clickable { variable.isSelected = !variable.isSelected }
+                            .clickable { viewModel.toggle(variable) }
                             .fillMaxWidth()
                     ) {
                         Checkbox(
                             checked = variable.isSelected,
                             onCheckedChange = {
-                                variable.isSelected = it
+                                viewModel.toggle(variable)
                             },
                             colors = CheckboxDefaults.colors(checkedColor = colors.primary)
                         )
@@ -112,9 +144,9 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
                 .background(Color.White)
                 .padding(12.dp)
+                .align(Alignment.BottomCenter)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -122,7 +154,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
             ) {
                 Button(
                     modifier = Modifier.weight(1f),
-                    onClick = { /*TODO*/ }) {
+                    onClick = { onCancel() }) {
                     Text("Cancel")
                 }
 
@@ -169,6 +201,9 @@ fun ParameterGraphVariableChooserViewPreview() {
     }
 
     EnergyStatsTheme {
-        ParameterGraphVariableChooserView(viewModel = ParameterGraphVariableChooserViewModel(MutableStateFlow(variables)))
+        ParameterGraphVariableChooserView(
+            viewModel = ParameterGraphVariableChooserViewModel(variables),
+            onCancel = {}
+        )
     }
 }

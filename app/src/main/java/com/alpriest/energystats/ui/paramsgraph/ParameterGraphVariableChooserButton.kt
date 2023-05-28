@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -10,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +24,7 @@ import androidx.compose.ui.window.Dialog
 @Composable
 fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel) {
     var showing by remember { mutableStateOf(false) }
+    val graphVariables = viewModel.graphVariablesStream.collectAsState().value
 
     Box(modifier = Modifier.wrapContentSize(Alignment.BottomCenter)) {
         Button(
@@ -40,7 +43,10 @@ fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel) 
             Dialog(
                 onDismissRequest = { showing = false },
             ) {
-                ParameterGraphVariableChooserView(ParameterGraphVariableChooserViewModel(viewModel.graphVariablesStream))
+                ParameterGraphVariableChooserView(
+                    ParameterGraphVariableChooserViewModel(graphVariables),
+                    onCancel = { showing = false }
+                )
             }
         }
     }
