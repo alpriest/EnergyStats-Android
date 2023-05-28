@@ -226,7 +226,7 @@ fun CalendarView(dateStream: MutableStateFlow<LocalDate>) {
     val dateState = dateStream.collectAsState().value
     val millis = localDateToMillis(dateState)
 
-    Box(modifier = Modifier.wrapContentSize(Alignment.BottomCenter)) {
+    Box(modifier = Modifier.wrapContentSize(Alignment.BottomCenter).padding(end = 14.dp)) {
         Button(
             onClick = { showingDatePicker = true }
         ) {
@@ -263,10 +263,6 @@ fun localDateToMillis(localDate: LocalDate): Long {
     val localDateTime = LocalDateTime.of(localDate, LocalTime.MIDNIGHT)
     val zoneId = ZoneId.systemDefault()
     return localDateTime.atZone(zoneId).toInstant().toEpochMilli()
-}
-
-fun localDateTimeToMillis(dateTime: ZonedDateTime): Long {
-    return dateTime.toInstant().toEpochMilli()
 }
 
 fun millisToLocalDate(millis: Long): LocalDate {

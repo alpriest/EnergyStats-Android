@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +34,6 @@ import java.time.LocalDate
 @Composable
 fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
     var hours by remember { mutableStateOf(0) }
-    var showingVariables by remember { mutableStateOf(false) }
     var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
 
     Row(
@@ -42,27 +42,22 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
     ) {
         ParameterGraphVariableChooserButton(viewModel)
 
-        Spacer(Modifier.defaultMinSize(minWidth = 8.dp))
-
         CalendarView(dateStream = dateStream)
-
-        Spacer(Modifier.defaultMinSize(minWidth = 8.dp))
 
         HourPicker(hours, onHoursChanged = { hours = it })
 
-        Spacer(Modifier.defaultMinSize(minWidth = 8.dp))
+        Spacer(modifier = Modifier.weight(2.0f))
 
         Button(
             modifier = Modifier
                 .padding(vertical = 6.dp)
+                .padding(end = 14.dp)
                 .size(36.dp),
             onClick = { viewModel.decrease() },
             contentPadding = PaddingValues(0.dp)
         ) {
             Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
         }
-
-        Spacer(Modifier.defaultMinSize(minWidth = 8.dp))
 
         Button(
             modifier = Modifier
@@ -80,52 +75,54 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
 private fun HourPicker(hours: Int, onHoursChanged: (Int) -> Unit) {
     var showingHours by remember { mutableStateOf(false) }
 
-    Button(
-        onClick = { showingHours = true },
-        modifier = Modifier
-            .padding(vertical = 6.dp)
-            .size(36.dp),
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        Icon(
-            imageVector = Icons.Default.Schedule,
-            contentDescription = null
-        )
-    }
-
-    DropdownMenu(expanded = showingHours, onDismissRequest = { showingHours = false }) {
-        DropdownMenuItem(onClick = {
-            onHoursChanged(6)
-            showingHours = false
-        }) {
-            Text("6 hours")
-            if (hours == 6) {
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-            }
+    Box {
+        Button(
+            onClick = { showingHours = true },
+            modifier = Modifier
+                .padding(vertical = 6.dp)
+                .size(36.dp),
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Schedule,
+                contentDescription = null
+            )
         }
-        Divider()
 
-        DropdownMenuItem(onClick = {
-            onHoursChanged(12)
-            showingHours = false
-        }) {
-            Text("12 hours")
-            if (hours == 12) {
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+        DropdownMenu(expanded = showingHours, onDismissRequest = { showingHours = false }) {
+            DropdownMenuItem(onClick = {
+                onHoursChanged(6)
+                showingHours = false
+            }) {
+                Text("6 hours")
+                if (hours == 6) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                }
             }
-        }
-        Divider()
+            Divider()
 
-        DropdownMenuItem(onClick = {
-            onHoursChanged(24)
-            showingHours = false
-        }) {
-            Text("24 hours")
-            if (hours == 24) {
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+            DropdownMenuItem(onClick = {
+                onHoursChanged(12)
+                showingHours = false
+            }) {
+                Text("12 hours")
+                if (hours == 12) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                }
+            }
+            Divider()
+
+            DropdownMenuItem(onClick = {
+                onHoursChanged(24)
+                showingHours = false
+            }) {
+                Text("24 hours")
+                if (hours == 24) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                }
             }
         }
     }

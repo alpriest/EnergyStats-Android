@@ -26,7 +26,11 @@ fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel) 
     var showing by remember { mutableStateOf(false) }
     val graphVariables = viewModel.graphVariablesStream.collectAsState().value
 
-    Box(modifier = Modifier.wrapContentSize(Alignment.BottomCenter)) {
+    Box(
+        modifier = Modifier
+            .wrapContentSize(Alignment.BottomCenter)
+            .padding(end = 14.dp)
+    ) {
         Button(
             onClick = { showing = true },
             modifier = Modifier

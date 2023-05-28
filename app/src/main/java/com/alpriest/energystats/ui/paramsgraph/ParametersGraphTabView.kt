@@ -1,7 +1,10 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +31,7 @@ import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
+    val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel.displayModeStream) {
@@ -40,15 +44,20 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
     if (isLoading) {
         Text(stringResource(R.string.loading))
     } else {
-        Column {
-            ParameterGraphHeaderView(viewModel = viewModel,)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp)
+                .verticalScroll(scrollState)
+        ) {
+            ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
             ParameterGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
             ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
 
             Text(
-                text = stringResource(R.string.stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals),
+                text = "Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time",
                 fontSize = 12.sp,
                 color = DimmedTextColor,
                 textAlign = TextAlign.Center,
@@ -61,5 +70,5 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
 @Preview
 @Composable
 fun PreviewParameterGraphHeaderView() {
-    ParameterGraphHeaderView(viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking()),)
+    ParameterGraphHeaderView(viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking()))
 }
