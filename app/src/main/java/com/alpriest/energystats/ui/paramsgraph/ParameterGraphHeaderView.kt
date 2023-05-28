@@ -13,7 +13,6 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
@@ -36,7 +35,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel) {
     var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
 
     Row {
-        ParameterGraphVariableChooserView(viewModel)
+        ParameterGraphVariableChooserView(ParameterGraphVariableChooserViewModel())
 
         Spacer(Modifier.defaultMinSize(minWidth = 8.dp))
 

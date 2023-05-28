@@ -1,74 +1,116 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.ui.statsgraph.millisToLocalDate
-import java.util.Calendar
+
+class ParameterGraphVariableChooserViewModel {
+
+}
 
 @Composable
-fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel) {
-    var showing by remember { mutableStateOf(false) }
-
-    Box(modifier = Modifier.wrapContentSize(Alignment.BottomCenter)) {
-        Button(
-            onClick = { showing = true },
-            modifier = Modifier
-                .padding(vertical = 6.dp)
-                .size(36.dp),
-            contentPadding = PaddingValues(0.dp)
+fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel) {
+    val scrollState = rememberScrollState()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.BottomCenter)
+    ) {
+        Column(
+            Modifier
+                .verticalScroll(scrollState)
+                .fillMaxSize()
+                .offset(y = -44.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Checklist,
-                contentDescription = null
-            )
-        }
-        if (showing) {
-            Dialog(
-                onDismissRequest = { showing = false },
+            Column(
+                modifier = Modifier
+
             ) {
-                ParameterGraphVariableChooserView(viewModel)
+                Text("Predefined selections")
+
+                OutlinedButton(onClick = { /*TODO*/ }) { Text("Default") }
+                OutlinedButton(onClick = { /*TODO*/ }) { Text("Compare strings") }
+                OutlinedButton(onClick = { /*TODO*/ }) { Text("Temperatures") }
+                OutlinedButton(onClick = { /*TODO*/ }) { Text("None") }
+            }
+
+            Column() {
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
+                Text("One")
             }
         }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .background(Color.White)
+                .padding(12.dp)
+        )
+        {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = { /*TODO*/ }) {
+                    Text("Cancel")
+                }
+
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = { /*TODO*/ }
+                ) {
+                    Text("Apply")
+                }
+            }
+            Text("Note that not all parameters contain values", modifier = Modifier.align(CenterHorizontally))
+        }
     }
 }
 
+@Preview(widthDp = 400, heightDp = 400)
 @Composable
-fun ParameterGraphVariableChooserView(viewModel: ParametersGraphTabViewModel) {
-    Column(
-        modifier = Modifier
-            .background(Color.White)
-    ) {
-        Text("Variable list here")
-    }
-}
-
-@Preview
-@Composable
-fun ParameterGraphVariableChooserButtonPreview() {
-    ParameterGraphVariableChooserButton(viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking()))
+fun ParameterGraphVariableChooserViewPreview() {
+    ParameterGraphVariableChooserView(viewModel = ParameterGraphVariableChooserViewModel())
 }
