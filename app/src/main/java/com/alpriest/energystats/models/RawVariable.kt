@@ -32,19 +32,14 @@ class RawVariable(
 
     fun colour(): Color {
         return when (this.variable) {
-            "generationPower" -> Color.Yellow
-            "feedInPower" -> Color.Green
-            "batChargePower" -> Color.Green
-            "batDischargePower" -> Color.Red
-            "gridConsumptionPower" -> Color.Red
+            "generationPower" -> Color(248, 216, 87)
+            "feedinPower" -> Color(105, 207, 202)
+            "batChargePower" -> Color(125, 208, 130)
+            "batDischargePower" -> Color(241, 162, 154)
+            "gridConsumptionPower" -> Color(237, 108, 96)
             "loadsPower" -> Color.Black
             else ->
-                Color.Black
-//                if val md5 = self.variable.md5() {
-//                    return Color(hex: String(md5.prefix(6)))
-//                } else {
-//                    return Color.black
-//                }
+                this.variable.md5()?.let { Color(android.graphics.Color.parseColor("#" + it.subSequence(0, 5).toString())) } ?: Color.Black
         }
     }
 

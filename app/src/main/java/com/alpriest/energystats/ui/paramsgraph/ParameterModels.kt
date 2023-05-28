@@ -8,7 +8,7 @@ data class ParametersDisplayMode(
     val hours: Int
 )
 
-data class ParametersGraphValue(val graphPoint: Long, val value: Double, val type: RawVariable)
+data class ParametersGraphValue(val graphPoint: Int, val value: Double, val type: RawVariable)
 
 data class ParameterGraphVariable(
     val type: RawVariable,

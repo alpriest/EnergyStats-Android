@@ -16,7 +16,7 @@ import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
 
 @Composable
-internal fun chartStyle(columnChartColors: List<Color>, lineChartColors: List<Color> = listOf()): ChartStyle {
+internal fun chartStyle(chartColors: List<Color>): ChartStyle {
     val isSystemInDarkTheme = isSystemInDarkTheme()
     val defaultColors = if (isSystemInDarkTheme) DefaultColors.Dark else DefaultColors.Light
     val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray
@@ -31,9 +31,9 @@ internal fun chartStyle(columnChartColors: List<Color>, lineChartColors: List<Co
             axisLabelTextSize = 8.sp
         ),
         ChartStyle.ColumnChart(
-            columnChartColors.map { columnChartColor ->
+            chartColors.map { color ->
                 LineComponent(
-                    columnChartColor.toArgb(),
+                    color.toArgb(),
                     DefaultDimens.COLUMN_WIDTH,
                     Shapes.rectShape
                 )
@@ -42,9 +42,9 @@ internal fun chartStyle(columnChartColors: List<Color>, lineChartColors: List<Co
             innerSpacing = 2.dp
         ),
         ChartStyle.LineChart(
-            lineChartColors.map { lineChartColor ->
+            chartColors.map { color ->
                 LineChart.LineSpec(
-                    lineColor = lineChartColor.toArgb(),
+                    lineColor = color.toArgb(),
                 )
             },
         ),

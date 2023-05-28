@@ -102,15 +102,15 @@ class ParametersGraphTabViewModel(
 
             rawTotals[rawVariable] = response.data.sumOf { abs(it.value) }
 
-            response.data.map {
-                val localDateTime = ZonedDateTime.parse(it.time, formatter)
-                val graphPoint: Long = localDateTimeToMillis(localDateTime)
+            response.data.mapIndexed { index, item ->
+//                val localDateTime = ZonedDateTime.parse(item.time, formatter)
+//                val graphPoint: Long = localDateTimeToMillis(localDateTime)
 
-                maxY = max(maxY, it.value.toFloat() + 0.5f)
+                maxY = max(maxY, item.value.toFloat() + 0.5f)
 
-                return@map ParametersGraphValue(
-                    graphPoint = graphPoint,
-                    value = it.value,
+                return@mapIndexed ParametersGraphValue(
+                    graphPoint = index,
+                    value = item.value,
                     type = rawVariable
                 )
             }
@@ -118,8 +118,6 @@ class ParametersGraphTabViewModel(
 
         // Fetch reports
         this.rawData = rawData
-        refresh()
-
         totalsStream.value = rawTotals
         maxYStream.value = maxY
 
