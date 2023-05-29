@@ -1,13 +1,16 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +36,7 @@ import kotlinx.coroutines.flow.onEach
 fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
     val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
+    val hasData = viewModel.hasDataStream.collectAsState().value
 
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true
@@ -52,9 +56,17 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
         ) {
             ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
-            ParameterGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+            if (hasData) {
+                ParameterGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
-            ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+                ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+            } else {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "No data. Try changing your filters",
+                    textAlign = TextAlign.Center
+                )
+            }
 
             Text(
                 text = "Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time",

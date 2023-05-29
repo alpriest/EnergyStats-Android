@@ -20,6 +20,7 @@ class ParametersGraphTabViewModel(
     val configManager: ConfigManaging,
     val networking: Networking
 ) : ViewModel() {
+    val hasDataStream = MutableStateFlow(false)
     var maxYStream = MutableStateFlow(0f)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
@@ -128,8 +129,9 @@ class ParametersGraphTabViewModel(
             .map { it.key.colour() }
 
         if (entries.isEmpty()) {
-            producer.setEntries(listOf<ChartEntry>())
+            hasDataStream.value = false
         } else {
+            hasDataStream.value = true
             producer.setEntries(entries)
         }
     }
