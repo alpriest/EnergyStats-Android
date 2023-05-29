@@ -71,14 +71,6 @@ class ParametersGraphTabViewModel(
         }
     }
 
-    fun increase() {
-        TODO("Not yet implemented")
-    }
-
-    fun decrease() {
-        TODO("Not yet implemented")
-    }
-
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
         val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type }.toList()

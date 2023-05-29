@@ -50,19 +50,17 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             RoundedColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
-                SettingsTitleView("ALL")
+                SettingsTitleView("PREDEFINED SELECTIONS")
 
-                RoundedColumnWithChild {
-                    SettingsTitleView("PREDEFINED SELECTIONS")
-
-                    OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text("Default") }
-                    OutlinedButton(onClick = { viewModel.chooseCompareStringsValues() }) { Text("Compare strings") }
-                    OutlinedButton(onClick = { viewModel.chooseTemperaturesVariables() }) { Text("Temperatures") }
-                    OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text("None") }
-                }
+                OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text("Default") }
+                OutlinedButton(onClick = { viewModel.chooseCompareStringsValues() }) { Text("Compare strings") }
+                OutlinedButton(onClick = { viewModel.chooseTemperaturesVariables() }) { Text("Temperatures") }
+                OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text("None") }
             }
 
-            Column {
+            RoundedColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
+                SettingsTitleView("ALL")
+
                 variables.forEach { variable ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

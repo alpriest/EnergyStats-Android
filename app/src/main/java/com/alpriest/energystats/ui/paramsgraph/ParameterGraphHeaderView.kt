@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,6 +20,8 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,12 +30,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.statsgraph.CalendarView
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 
 @Composable
 fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
     var hours by remember { mutableStateOf(0) }
-    var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
+    val candidateQueryDate = MutableStateFlow(viewModel.displayModeStream.collectAsState().value.date)
+    var hoursButtonEnabled by remember { mutableStateOf(true) }
+
+    LaunchedEffect(candidateQueryDate) {
+        candidateQueryDate
+            .onEach {
+                viewModel.displayModeStream.value = ParametersDisplayMode(it, hours)
+                hoursButtonEnabled = it == LocalDate.now()
+            }
+            .collect {}
+    }
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -42,9 +54,16 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
     ) {
         ParameterGraphVariableChooserButton(viewModel)
 
-        CalendarView(dateStream = dateStream)
+        CalendarView(dateStream = candidateQueryDate)
 
-        HourPicker(hours, onHoursChanged = { hours = it })
+        HourPicker(
+            hours,
+            enabled = hoursButtonEnabled,
+            onHoursChanged = {
+                hours = it
+                viewModel.displayModeStream.value = ParametersDisplayMode(candidateQueryDate.value, hours)
+            }
+        )
 
         Spacer(modifier = Modifier.weight(2.0f))
 
@@ -53,7 +72,10 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
                 .padding(vertical = 6.dp)
                 .padding(end = 14.dp)
                 .size(36.dp),
-            onClick = { viewModel.decrease() },
+            onClick = {
+                hours = 24
+                candidateQueryDate.value = candidateQueryDate.value.minusDays(1)
+            },
             contentPadding = PaddingValues(0.dp)
         ) {
             Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
@@ -63,7 +85,10 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .size(36.dp),
-            onClick = { viewModel.increase() },
+            onClick = {
+                hours = 24
+                candidateQueryDate.value = candidateQueryDate.value.plusDays(1)
+            },
             contentPadding = PaddingValues(0.dp)
         ) {
             Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
@@ -72,7 +97,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
 }
 
 @Composable
-private fun HourPicker(hours: Int, onHoursChanged: (Int) -> Unit) {
+private fun HourPicker(hours: Int, enabled: Boolean, onHoursChanged: (Int) -> Unit) {
     var showingHours by remember { mutableStateOf(false) }
 
     Box {
@@ -81,7 +106,8 @@ private fun HourPicker(hours: Int, onHoursChanged: (Int) -> Unit) {
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .size(36.dp),
-            contentPadding = PaddingValues(0.dp)
+            contentPadding = PaddingValues(0.dp),
+            enabled = enabled
         ) {
             Icon(
                 imageVector = Icons.Default.Schedule,
