@@ -40,8 +40,10 @@
     <string name="rate_this_app">Bewerten Sie diese App</string>
     <string name="buy_me_a_coffee">Kaufen Sie mir einen Kaffee</string>
     <string name="day">Tag</string>
-    <string name="month">Monat</string>
+    <string name="month">Monate</string>
     <string name="year">Jahr</string>
+    <string name="days">Tage</string>
+    <string name="months">Monate</string>
     <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Stats (Statistiken) werden von FoxESS für jeweils 1 Stunde, 1 Tag oder 1 Monat aufsummiert</string>
     <string name="feed_in">"Einspeise-%1s"</string>
     <string name="output_">"Ertrags-%1s"</string>

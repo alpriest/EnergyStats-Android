@@ -39,9 +39,8 @@
     <string name="get_in_touch">Get in touch</string>
     <string name="rate_this_app">Rate this app</string>
     <string name="buy_me_a_coffee">Buy me a coffee</string>
-    <string name="day">Day</string>
-    <string name="month">Month</string>
-    <string name="year">Year</string>
+    <string name="days">days</string>
+    <string name="months">months</string>
     <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Stats are aggregated by FoxESS into 1 hr, 1 day or 1 month totals</string>
     <string name="feed_in">"Feed-in %1s"</string>
     <string name="output_">"Output %1s"</string>
@@ -55,4 +54,7 @@
     <string name="solar_battery_power_coming_through_the_inverter">Solar / Battery power coming through the inverter</string>
     <string name="power_charging_the_battery">Power charging the battery</string>
     <string name="power_discharging_from_the_battery">Power discharging from the battery</string>
+    <string name="day">day</string>
+    <string name="month">month</string>
+    <string name="year">year</string>
 </resources>

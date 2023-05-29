@@ -60,9 +60,9 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
         }
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text(when (displayMode) {
-                is Day -> stringResource(R.string.day)
-                is StatsDisplayMode.Month -> stringResource(R.string.month)
-                is StatsDisplayMode.Year -> stringResource(R.string.year)
+                is Day -> stringResource(R.string.hours)
+                is StatsDisplayMode.Month -> stringResource(R.string.days)
+                is StatsDisplayMode.Year -> stringResource(R.string.months)
             })
         }
     }

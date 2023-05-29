@@ -7,12 +7,15 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -91,9 +94,12 @@ class ParametersGraphTabViewModel(
 
             response.data.mapIndexed { index, item ->
                 maxY = max(maxY, item.value.toFloat() + 0.5f)
+                val formatter = DateTimeFormatter.ofPattern(dateFormat)
+                val localDateTime = LocalDateTime.parse(item.time, formatter)
 
                 return@mapIndexed ParametersGraphValue(
                     graphPoint = index,
+                    time = localDateTime,
                     value = item.value,
                     type = rawVariable
                 )
@@ -109,7 +115,15 @@ class ParametersGraphTabViewModel(
 
     private fun refresh() {
         val hiddenVariables = graphVariablesStream.value.filter { !it.enabled }.map { it.type }
-        val grouped = rawData.filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
+        val hours = displayModeStream.value.hours
+        val now = LocalDateTime.now()
+        val oldest = displayModeStream.value.date.atTime(now.hour, now.minute).minusHours(hours.toLong())
+        val grouped = rawData
+            .filter { !hiddenVariables.contains(it.type) }
+            .filter {
+                it.time > oldest
+            }
+            .groupBy { it.type }
         val entries = grouped
             .map { group ->
                 group.value.map {

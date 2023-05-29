@@ -35,7 +35,7 @@ import java.time.LocalDate
 
 @Composable
 fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
-    var hours by remember { mutableStateOf(0) }
+    var hours by remember { mutableStateOf(viewModel.displayModeStream.value.hours) }
     val candidateQueryDate = MutableStateFlow(viewModel.displayModeStream.collectAsState().value.date)
     var hoursButtonEnabled by remember { mutableStateOf(true) }
 

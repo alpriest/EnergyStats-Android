@@ -4,13 +4,14 @@ import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.statsgraph.GraphVariable
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class ParametersDisplayMode(
     val date: LocalDate,
     val hours: Int
 )
 
-data class ParametersGraphValue(val graphPoint: Int, val value: Double, val type: RawVariable)
+data class ParametersGraphValue(val graphPoint: Int, val time: LocalDateTime, val value: Double, val type: RawVariable)
 
 data class ParameterGraphVariable(
     val type: RawVariable,
