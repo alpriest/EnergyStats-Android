@@ -1,19 +1,29 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.*
+import com.alpriest.energystats.models.AddressBookResponse
+import com.alpriest.energystats.models.BatteryResponse
+import com.alpriest.energystats.models.BatterySettingsResponse
+import com.alpriest.energystats.models.Earning
+import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.NetworkDevice
+import com.alpriest.energystats.models.PagedDeviceListResponse
+import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.RawData
+import com.alpriest.energystats.models.RawResponse
+import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.ReportResponse
+import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.SoftwareVersion
+import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.statsgraph.ReportType
-import com.alpriest.energystats.ui.statsgraph.localDateToMillis
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Locale
 
 class DemoNetworking : Networking {
     override suspend fun ensureHasToken() {
@@ -67,7 +77,8 @@ class DemoNetworking : Networking {
             RawResponse(
                 variable = response.variable,
                 data = ArrayList(response.data.map {
-                    val localDateTime = ZonedDateTime.parse(it.time, formatter)
+                    val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it.time)
+                    val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
                         .withYear(now.year)
                         .withMonth(now.monthValue)
                         .withDayOfMonth(now.dayOfMonth)

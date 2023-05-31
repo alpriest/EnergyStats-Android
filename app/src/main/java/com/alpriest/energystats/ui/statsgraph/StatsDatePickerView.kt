@@ -78,6 +78,7 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
     var showing by remember { mutableStateOf(false) }
     val month = viewModel.monthStream.collectAsState().value
     val calendar = Calendar.getInstance()
+    calendar.set(Calendar.DAY_OF_MONTH, 1)
     val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
 
     Box(
@@ -101,7 +102,7 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
                     showing = false
                 }) {
                     Text(monthName)
-                    if (monthIndex == month) {
+                    if (monthIndex == month - 1) {
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                     }

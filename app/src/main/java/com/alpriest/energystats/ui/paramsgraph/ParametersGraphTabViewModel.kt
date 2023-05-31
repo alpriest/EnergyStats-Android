@@ -13,9 +13,12 @@ import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -94,8 +97,8 @@ class ParametersGraphTabViewModel(
 
             response.data.mapIndexed { index, item ->
                 maxY = max(maxY, item.value.toFloat() + 0.5f)
-                val formatter = DateTimeFormatter.ofPattern(dateFormat)
-                val localDateTime = LocalDateTime.parse(item.time, formatter)
+                val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(item.time)
+                val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
                 return@mapIndexed ParametersGraphValue(
                     graphPoint = index,

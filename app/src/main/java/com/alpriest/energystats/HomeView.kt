@@ -71,7 +71,7 @@ fun HomeView(
     val titles = listOf(
         TitleItem(stringResource(R.string.power_flow_tab), Icons.Default.SwapVert, false),
         TitleItem(stringResource(R.string.stats_tab), Icons.Default.BarChart, false),
-        TitleItem("Parameters", Icons.Default.BarChart, false),
+//        TitleItem("Parameters", Icons.Default.BarChart, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
 
@@ -86,8 +86,8 @@ fun HomeView(
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
                     1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network), themeStream)
-                    2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network), themeStream)
-                    3 -> SettingsView(
+//                    2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network), themeStream)
+                    2 -> SettingsView(
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,

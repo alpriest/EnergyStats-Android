@@ -19,7 +19,7 @@ import com.patrykandpatrick.vico.core.component.shape.Shapes
 internal fun chartStyle(chartColors: List<Color>): ChartStyle {
     val isSystemInDarkTheme = isSystemInDarkTheme()
     val defaultColors = if (isSystemInDarkTheme) DefaultColors.Dark else DefaultColors.Light
-    val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray
+    val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray.copy(alpha = 0.5f)
 
     return ChartStyle(
         ChartStyle.Axis(
