@@ -37,7 +37,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable { largeDisplayState.value = !largeDisplayState.value }
+                .clickable {
+                    largeDisplayState.value = !largeDisplayState.value
+                    config.useLargeDisplay = largeDisplayState.value
+                }
                 .fillMaxWidth()
         ) {
             Checkbox(
@@ -54,7 +57,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable { colouredFlowLinesState.value = !colouredFlowLinesState.value }
+                .clickable {
+                    colouredFlowLinesState.value = !colouredFlowLinesState.value
+                    config.useColouredFlowLines = colouredFlowLinesState.value
+                }
                 .fillMaxWidth()
         ) {
             Checkbox(
@@ -71,7 +77,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable { showTotalYieldState.value = !showTotalYieldState.value }
+                .clickable {
+                    showTotalYieldState.value = !showTotalYieldState.value
+                    config.showTotalYield = showTotalYieldState.value
+                }
                 .fillMaxWidth()
         ) {
             Checkbox(
@@ -88,7 +97,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable { showBatteryTemperatureState.value = !showBatteryTemperatureState.value }
+                .clickable {
+                    showBatteryTemperatureState.value = !showBatteryTemperatureState.value
+                    config.showBatteryTemperature = showBatteryTemperatureState.value
+                }
                 .fillMaxWidth()
         ) {
             Checkbox(
@@ -105,7 +117,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable { showBatteryEstimateState.value = !showBatteryEstimateState.value }
+                .clickable {
+                    showBatteryEstimateState.value = !showBatteryEstimateState.value
+                    config.showBatteryEstimate = showBatteryEstimateState.value
+                }
                 .fillMaxWidth()
         ) {
             Checkbox(
@@ -122,7 +137,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.Top,
             modifier = Modifier
-                .clickable { showUsableBatteryOnlyState.value = !showUsableBatteryOnlyState.value }
+                .clickable {
+                    showUsableBatteryOnlyState.value = !showUsableBatteryOnlyState.value
+                    config.showUsableBatteryOnly = showUsableBatteryOnlyState.value
+                }
                 .fillMaxWidth()
         ) {
             Checkbox(
@@ -152,7 +170,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable { showSunnyBackgroundState.value = !showSunnyBackgroundState.value }
+                .clickable {
+                    showSunnyBackgroundState.value = !showSunnyBackgroundState.value
+                    config.showSunnyBackground = showSunnyBackgroundState.value
+                }
                 .fillMaxWidth()
         ) {
             Checkbox(
