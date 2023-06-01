@@ -86,7 +86,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                             onValueChange = {
                                 editingCapacity = it
                             },
-                            label = { Text("Total Wh of your battery") },
+                            label = { Text(stringResource(R.string.total_wh_of_your_battery)) },
                             modifier = Modifier.weight(1f)
                         )
                     } else {
@@ -108,10 +108,10 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                                 isEditingCapacity.value = false
                             }
                         ) {
-                            Text("OK")
+                            Text(stringResource(R.string.ok))
                         }
                         Button(onClick = { isEditingCapacity.value = false }) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.cancel))
                         }
                     }
                 }

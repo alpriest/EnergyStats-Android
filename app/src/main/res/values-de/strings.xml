@@ -9,7 +9,7 @@
     <string name="emptyIn">Leer in</string>
     <string name="yieldToday">Ertrag heute %1s</string>
     <string name="power_flow_tab">Leistungsfluss</string>
-    <string name="stats_tab">Stats</string>
+    <string name="stats_tab">Statistiken</string>
     <string name="settings_tab">Einstellungen</string>
     <string name="firmware_versions">Firmware-Versionen</string>
     <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Mehr Informationen über Firmware-Versionen gibt es auf der foxesscommunity.com Webseite</string>
@@ -26,7 +26,7 @@
     <string name="show_battery_temperature">Zeige die Batterie-Temperatur</string>
     <string name="show_battery_full_empty_estimate">Zeige die Schätzung für Batterie voll/leer</string>
     <string name="show_usable_battery_only">Zeige nur die verwendbare Batteriekapazität</string>
-    <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Leitet den minimalen SOC vom Batterieladezustand und -prozentsatz ab. Aufgrund von Ungenauigkeiten in der Art und Weise, wie der Batterieladezustand gemessen wird, kann dies manchmal zur Anzeige von einer negativen verbleibenden Restladung führen.</string>
+    <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">\'Zeige nur die verwendbare Batteriekapazität\' leitet den minimalen SOC vom Batterieladezustand und -prozentsatz ab. Aufgrund von Ungenauigkeiten in der Art und Weise, wie der Batterieladezustand gemessen wird, kann dies manchmal zur Anzeige von einer negativen verbleibenden Restladung führen.</string>
     <string name="show_sunny_background">Zeige den Sonnenschein-Hintergrund</string>
     <string name="refresh_frequency">Aktualisierungshäufigkeit</string>
     <string name="_1_min">1 min</string>
@@ -44,12 +44,12 @@
     <string name="year">Jahr</string>
     <string name="days">Tage</string>
     <string name="months">Monate</string>
-    <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Stats (Statistiken) werden von FoxESS für jeweils 1 Stunde, 1 Tag oder 1 Monat aufsummiert</string>
+    <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Statistiken werden von FoxESS für jeweils 1 Stunde, 1 Tag oder 1 Monat aufsummiert</string>
     <string name="feed_in">"Einspeise-%1s"</string>
     <string name="output_">"Ertrags-%1s"</string>
     <string name="power">Leistung</string>
     <string name="energy">Energie</string>
-    <string name="grid_consumption">"Grid consumption "</string>
+    <string name="grid_consumption">Netzverbrauchs-</string>
     <string name="charge">"Lade-"</string>
     <string name="discharge">"Entlade-"</string>
     <string name="power_being_sent_to_the_grid">Leistung zum Einspeisen ins Netz</string>
@@ -57,4 +57,20 @@
     <string name="solar_battery_power_coming_through_the_inverter">Solar-/Batterieleistung, die vom Wechselrichter geliefert wird</string>
     <string name="power_charging_the_battery">Leistung zum Laden der Batterie</string>
     <string name="power_discharging_from_the_battery">Leistung vom Entladen der Batterie</string>
+    <string name="retry">Wiederholen</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="enter_your_foxess_cloud_details">Geben Sie Ihre FoxESS-Cloud-Daten ein</string>
+    <string name="log_me_in">Einloggen</string>
+    <string name="try_demo">Demo ausprobieren</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="total_wh_of_your_battery">Gesamt Wh Ihrer Batterie</string>
+    <string name="apply">Anwenden</string>
+    <string name="note_that_not_all_parameters_contain_values">Beachten Sie, dass nicht alle Parameter Werte enthalten</string>
+    <string name="tap_to_reveal_your_latest_data_if_you_re_seeing_something_wrong_in_the_app_please_send_the_details_below_with_a_description_of_the_problem">Tippen Sie, um Ihre neuesten Daten anzuzeigen. Wenn Sie in der App etwas Falsches sehen, senden Sie bitte die untenstehenden Details mit einer Beschreibung des Problems.</string>
+    <string name="defalt">Standard</string>
+    <string name="compare_strings">Strings vergleichen</string>
+    <string name="temperatures">Temperaturen</string>
+    <string name="none">Keine</string>
 </resources>

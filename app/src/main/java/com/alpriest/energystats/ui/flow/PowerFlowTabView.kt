@@ -1,12 +1,18 @@
 package com.alpriest.energystats.ui.flow
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.material3.CardDefaults.outlinedCardColors
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,13 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RadialGradientShader
 import androidx.compose.ui.graphics.Shader
 import androidx.compose.ui.graphics.ShaderBrush
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawDataStoring
@@ -46,10 +53,8 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class PowerFlowTabViewModelFactory(
     private val network: Networking,
@@ -116,7 +121,7 @@ class PowerFlowTabView(
             contentAlignment = TopEnd
         ) {
             when (uiState.state) {
-                is LoadingLoadState -> LoadingView("Loading...").run {
+                is LoadingLoadState -> LoadingView(stringResource(R.string.loading)).run {
                     viewModel.timerFired()
                 }
 
@@ -150,7 +155,7 @@ class PowerFlowTabView(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                 modifier = Modifier.padding(top = 12.dp)
             ) {
-                Text("Retry")
+                Text(stringResource(R.string.retry))
             }
             Spacer(modifier = Modifier.weight(1f))
         }

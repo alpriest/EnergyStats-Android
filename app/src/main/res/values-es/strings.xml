@@ -57,4 +57,20 @@
     <string name="solar_battery_power_coming_through_the_inverter">Potencia solar / de batería que pasa a través del inversor</string>
     <string name="power_charging_the_battery">Potencia de carga de la batería</string>
     <string name="power_discharging_from_the_battery">Potencia de descarga de la batería</string>
+    <string name="retry">reintentar</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="enter_your_foxess_cloud_details">Ingrese los detalles de su cuenta en FoxESS Cloud</string>
+    <string name="log_me_in">Iniciar sesión</string>
+    <string name="try_demo">Probar demo</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="total_wh_of_your_battery">Total Wh de su batería</string>
+    <string name="apply">Aplicar</string>
+    <string name="note_that_not_all_parameters_contain_values">Tenga en cuenta que no todos los parámetros contienen valores</string>
+    <string name="tap_to_reveal_your_latest_data_if_you_re_seeing_something_wrong_in_the_app_please_send_the_details_below_with_a_description_of_the_problem">Toque para revelar sus últimos datos. Si ve algo incorrecto en la aplicación, envíe los detalles a continuación con una descripción del problema.</string>
+    <string name="defalt">Predeterminado</string>
+    <string name="compare_strings">Comparar cadenas</string>
+    <string name="temperatures">Temperaturas</string>
+    <string name="none">Ninguno</string>
 </resources>

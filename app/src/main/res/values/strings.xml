@@ -57,4 +57,20 @@
     <string name="day">day</string>
     <string name="month">month</string>
     <string name="year">year</string>
+    <string name="retry">Retry</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="enter_your_foxess_cloud_details">Enter your FoxESS Cloud details</string>
+    <string name="log_me_in">Log me in</string>
+    <string name="try_demo">Try demo</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="total_wh_of_your_battery">Total Wh of your battery</string>
+    <string name="apply">Apply</string>
+    <string name="note_that_not_all_parameters_contain_values">Note that not all parameters contain values</string>
+    <string name="tap_to_reveal_your_latest_data_if_you_re_seeing_something_wrong_in_the_app_please_send_the_details_below_with_a_description_of_the_problem">Tap to reveal your latest data. If you\'re seeing something wrong in the app please send the details below with a description of the problem.</string>
+    <string name="defalt">Default</string>
+    <string name="compare_strings">Compare strings</string>
+    <string name="temperatures">Temperatures</string>
+    <string name="none">None</string>
 </resources>

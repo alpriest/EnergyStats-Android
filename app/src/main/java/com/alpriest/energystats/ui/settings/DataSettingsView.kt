@@ -27,10 +27,10 @@ fun DataSettingsView(rawDataStore: RawDataStoring, modifier: Modifier = Modifier
     var showing by rememberSaveable { mutableStateOf(false) }
 
     RoundedColumnWithChild {
-        SettingsTitleView("Data")
+        SettingsTitleView("Debug")
 
         Text(
-            "Tap to reveal your latest data. If you're seeing something wrong in the app please send the details below with a description of the problem.",
+            stringResource(R.string.tap_to_reveal_your_latest_data_if_you_re_seeing_something_wrong_in_the_app_please_send_the_details_below_with_a_description_of_the_problem),
             modifier = Modifier.clickable { showing = !showing },
             color = MaterialTheme.colors.onSecondary
         )

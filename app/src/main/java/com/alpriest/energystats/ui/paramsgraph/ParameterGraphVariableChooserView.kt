@@ -23,8 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.settings.RoundedColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -52,10 +54,10 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
             RoundedColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
                 SettingsTitleView("PREDEFINED SELECTIONS")
 
-                OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text("Default") }
-                OutlinedButton(onClick = { viewModel.chooseCompareStringsValues() }) { Text("Compare strings") }
-                OutlinedButton(onClick = { viewModel.chooseTemperaturesVariables() }) { Text("Temperatures") }
-                OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text("None") }
+                OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
+                OutlinedButton(onClick = { viewModel.chooseCompareStringsValues() }) { Text(stringResource(R.string.compare_strings)) }
+                OutlinedButton(onClick = { viewModel.chooseTemperaturesVariables() }) { Text(stringResource(R.string.temperatures)) }
+                OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
             }
 
             RoundedColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
@@ -95,7 +97,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = { onCancel() }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
 
                 Button(
@@ -105,10 +107,10 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                         onCancel()
                     }
                 ) {
-                    Text("Apply")
+                    Text(stringResource(R.string.apply))
                 }
             }
-            Text("Note that not all parameters contain values", modifier = Modifier.align(CenterHorizontally))
+            Text(stringResource(R.string.note_that_not_all_parameters_contain_values), modifier = Modifier.align(CenterHorizontally))
         }
     }
 }
