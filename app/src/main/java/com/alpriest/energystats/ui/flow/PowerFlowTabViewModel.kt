@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.lang.Math.abs
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.Date
@@ -172,7 +173,7 @@ class PowerFlowTabViewModel(
     }
 
     private fun calculateTicks(summary: SummaryPowerFlowViewModel) {
-        val diff = Duration.between(LocalDateTime.now(), summary.latestUpdate).seconds
+        val diff = kotlin.math.abs(Duration.between(LocalDateTime.now(), summary.latestUpdate).seconds)
 
         totalSeconds = when (configManager.refreshFrequency) {
             RefreshFrequency.OneMinute -> 60
