@@ -170,10 +170,6 @@ class ParametersGraphTabViewModel(
         }
     }
 
-    fun total(variable: ParameterGraphVariable): Double? {
-        return totalsStream.value[variable.type]
-    }
-
     companion object {
         val DefaultGraphVariables = listOf(
             "generationPower",

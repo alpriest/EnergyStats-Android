@@ -6,6 +6,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
@@ -38,7 +39,7 @@ class StatsGraphTabViewModel(
         StatsGraphVariable(it, true)
     })
     var rawData: List<StatsGraphValue> = listOf()
-    var totals: MutableMap<ReportVariable, Double> = mutableMapOf()
+    var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
@@ -87,7 +88,7 @@ class StatsGraphTabViewModel(
             }
         }
 
-        totals = rawTotals
+        totalsStream.value = rawTotals
         maxYStream.value = maxY
         refresh()
     }
@@ -153,7 +154,7 @@ class StatsGraphTabViewModel(
     }
 
     fun total(variable: StatsGraphVariable): Double? {
-        return totals[variable.type]
+        return totalsStream.value[variable.type]
     }
 }
 

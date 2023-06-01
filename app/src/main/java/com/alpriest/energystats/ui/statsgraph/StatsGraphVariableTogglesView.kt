@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
+    val totals = viewModel.totalsStream.collectAsState()
 
     Column(modifier) {
         graphVariables.value.map {
@@ -37,7 +38,8 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
                 ReportVariable.DischargeEnergyToTal -> stringResource(R.string.power_discharging_from_the_battery)
             }
 
-            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, viewModel.total(it))
+            val total = totals.value[it.type]
+            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, total)
         }
     }
 }
