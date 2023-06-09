@@ -6,7 +6,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
@@ -52,7 +51,7 @@ class StatsGraphTabViewModel(
 
         val reportData = networking.fetchReport(
             device.deviceID,
-            variables = graphVariables.map { it.type }.toTypedArray(),
+            variables = graphVariables.map { it.type },
             queryDate = queryDate,
             reportType = reportType
         )

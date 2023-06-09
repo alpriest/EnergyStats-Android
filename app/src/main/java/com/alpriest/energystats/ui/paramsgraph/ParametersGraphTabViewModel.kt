@@ -8,7 +8,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.patrykandpatrick.vico.core.entry.ChartEntry
+import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.max
@@ -93,8 +92,6 @@ class ParametersGraphTabViewModel(
         val rawData: List<ParametersGraphValue> = raw.flatMap { response ->
             val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
 
-            rawTotals[rawVariable] = response.data.sumOf { abs(it.value) }
-
             response.data.mapIndexed { index, item ->
                 maxY = max(maxY, item.value.toFloat() + 0.5f)
                 val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(item.time)
@@ -106,6 +103,16 @@ class ParametersGraphTabViewModel(
                     value = item.value,
                     type = rawVariable
                 )
+            }
+        }
+
+        val reportVariables = rawGraphVariables.mapNotNull { it.reportVariable() }
+        val reports = networking.fetchReport(device.deviceID, variables = reportVariables, queryDate = queryDate, reportType = ReportType.day)
+        rawGraphVariables.forEach { rawVariable ->
+            rawVariable.reportVariable()?.let {reportVariable ->
+                reports.firstOrNull { it.variable.lowercase() == reportVariable.networkTitle().lowercase() }?.let { response ->
+                    rawTotals[rawVariable] = response.data.sumOf { abs(it.value) }
+                }
             }
         }
 

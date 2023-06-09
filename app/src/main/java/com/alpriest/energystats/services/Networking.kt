@@ -16,7 +16,7 @@ interface Networking {
     suspend fun fetchBattery(deviceID: String): BatteryResponse
     suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse
     suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse>
-    suspend fun fetchReport(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse>
+    suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse>
     suspend fun fetchAddressBook(deviceID: String): AddressBookResponse
     suspend fun fetchVariables(deviceID: String): List<RawVariable>
     suspend fun fetchEarnings(deviceID: String): EarningsResponse

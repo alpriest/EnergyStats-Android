@@ -44,7 +44,7 @@ class DemoNetworking : Networking {
 
     override suspend fun fetchReport(
         deviceID: String,
-        variables: Array<ReportVariable>,
+        variables: List<ReportVariable>,
         queryDate: QueryDate,
         reportType: ReportType
     ): ArrayList<ReportResponse> {

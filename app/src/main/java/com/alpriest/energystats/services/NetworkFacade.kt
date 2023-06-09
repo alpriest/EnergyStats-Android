@@ -46,7 +46,7 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
         }
     }
 
-    override suspend fun fetchReport(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse> {
+    override suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse> {
         return if (config.isDemoUser) {
             demoNetworking.fetchReport(deviceID, variables, queryDate, reportType)
         } else {

@@ -31,7 +31,7 @@ data class ReportRequest(
     val queryDate: QueryDate,
     val reportType: ReportType,
 ) {
-    constructor(deviceID: String, variables: Array<ReportVariable>, queryDate: QueryDate, reportType: ReportType) : this(
+    constructor(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType) : this(
         deviceID = deviceID,
         variables = variables.map { it.networkTitle() }.toTypedArray(),
         queryDate = queryDate,

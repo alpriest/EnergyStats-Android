@@ -20,4 +20,15 @@ class RawVariable(
                     Color(android.graphics.Color.parseColor("#" + it.subSequence(0, 6).toString())) } ?: Color.Black
         }
     }
+
+    fun reportVariable(): ReportVariable? {
+        return when (this.variable) {
+            "generationPower" -> ReportVariable.Generation
+            "feedinPower" -> ReportVariable.FeedIn
+            "batChargePower" -> ReportVariable.ChargeEnergyToTal
+            "batDischargePower" -> ReportVariable.DischargeEnergyToTal
+            "gridConsumptionPower" -> ReportVariable.GridConsumption
+            else -> null
+        }
+    }
 }
