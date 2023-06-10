@@ -37,10 +37,10 @@ fun FirmwareVersionView(config: ConfigManaging) {
 
             Text(
                 text = stringResource(R.string.find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website),
-                color = colors.onSecondary,
-                modifier = Modifier.clickable {
-                    uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
-                }
+                color = colors.onPrimary,
+                    modifier = Modifier.clickable {
+                        uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
+                    }
             )
         }
     }

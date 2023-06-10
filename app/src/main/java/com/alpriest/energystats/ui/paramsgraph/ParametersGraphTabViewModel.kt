@@ -9,6 +9,7 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.statsgraph.ReportType
+import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -137,7 +138,10 @@ class ParametersGraphTabViewModel(
         val entries = grouped
             .map { group ->
                 group.value.map {
-                    return@map FloatEntry(x = it.graphPoint.toFloat(), y = it.value.toFloat())
+                    return@map DateTimeFloatEntry(
+                        localDateTime = it.time,
+                        x = it.graphPoint.toFloat(),
+                        y = it.value.toFloat())
                 }.toList()
             }.toList()
 
@@ -186,4 +190,16 @@ class ParametersGraphTabViewModel(
             "gridConsumptionPower"
         )
     }
+}
+
+class DateTimeFloatEntry(
+    val localDateTime: LocalDateTime,
+    override val x: Float,
+    override val y: Float,
+) : ChartEntry {
+    override fun withY(y: Float): ChartEntry = DateTimeFloatEntry(
+        localDateTime = localDateTime,
+        x = x,
+        y = y,
+    )
 }

@@ -15,9 +15,15 @@ import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
+import com.patrykandpatrick.vico.core.axis.AxisPosition
+import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
+import com.patrykandpatrick.vico.core.chart.values.ChartValues
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
@@ -39,9 +45,23 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
                 bottomAxis = bottomAxis(
                     label = axisLabelComponent(horizontalPadding = 2.dp),
                     tickPosition = HorizontalAxis.TickPosition.Center(offset = 0, spacing = 20),
+                    valueFormatter = ParameterGraphFormatAxisValueFormatter()
                 ),
                 diffAnimationSpec = SnapSpec()
             )
         }
+    }
+}
+
+class ParameterGraphFormatAxisValueFormatter<Position : AxisPosition>() :
+    AxisValueFormatter<Position> {
+
+    override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
+        return (chartValues.chartEntryModel.entries.first().getOrNull(value.toInt()) as? DateTimeFloatEntry)
+            ?.localDateTime
+            ?.run {
+                "$hour"
+            }
+            .orEmpty()
     }
 }

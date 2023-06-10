@@ -53,7 +53,7 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
                 bottomAxis = bottomAxis(
                     label = axisLabelComponent(horizontalPadding = 2.dp),
                     tickPosition = HorizontalAxis.TickPosition.Center(offset = 0, spacing = 2),
-                    valueFormatter = CustomFormatAxisValueFormatter(displayMode)
+                    valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode)
                 ),
                 diffAnimationSpec = SnapSpec()
             )
@@ -74,7 +74,7 @@ fun StatsGraphViewPreview() {
     StatsGraphView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()))
 }
 
-class CustomFormatAxisValueFormatter<Position : AxisPosition>(private val displayMode: StatsDisplayMode) :
+class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val displayMode: StatsDisplayMode) :
     AxisValueFormatter<Position> {
 
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
@@ -82,7 +82,7 @@ class CustomFormatAxisValueFormatter<Position : AxisPosition>(private val displa
             is Day -> value.toInt().toString()
             is StatsDisplayMode.Month -> value.toInt().toString()
             is StatsDisplayMode.Year -> {
-                val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
+                val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
                 val calendar = Calendar.getInstance()
                 calendar.set(Calendar.MONTH, value.toInt())
                 return monthFormat.format(calendar.time)

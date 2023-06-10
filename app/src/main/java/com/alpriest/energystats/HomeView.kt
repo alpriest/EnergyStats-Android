@@ -6,6 +6,8 @@ import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Insights
+import androidx.compose.material.icons.filled.Monitor
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.runtime.Composable
@@ -71,7 +73,7 @@ fun HomeView(
     val titles = listOf(
         TitleItem(stringResource(R.string.power_flow_tab), Icons.Default.SwapVert, false),
         TitleItem(stringResource(R.string.stats_tab), Icons.Default.BarChart, false),
-//        TitleItem("Parameters", Icons.Default.BarChart, false),
+        TitleItem("Parameters", Icons.Default.Insights, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
 
@@ -86,8 +88,8 @@ fun HomeView(
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
                     1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network), themeStream)
-//                    2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network), themeStream)
-                    2 -> SettingsView(
+                    2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network), themeStream)
+                    3 -> SettingsView(
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,

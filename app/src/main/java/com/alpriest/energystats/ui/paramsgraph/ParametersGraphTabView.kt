@@ -1,7 +1,8 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,13 +25,9 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.ui.flow.home.preview
-import com.alpriest.energystats.ui.statsgraph.StatsGraphTabViewModel
-import com.alpriest.energystats.ui.statsgraph.StatsGraphVariableTogglesView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
@@ -40,13 +37,17 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
 
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true
-        viewModel.displayModeStream
-            .onEach { viewModel.load() }
-            .collect { isLoading = false }
+        viewModel.load()
+        isLoading = false
     }
 
     if (isLoading) {
-        Text(stringResource(R.string.loading))
+        Column(modifier = Modifier
+            .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(stringResource(R.string.loading))
+        }
     } else {
         Column(
             modifier = Modifier

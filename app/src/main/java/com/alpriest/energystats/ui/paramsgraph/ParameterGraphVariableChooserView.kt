@@ -12,20 +12,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.settings.RoundedColumnWithChild
@@ -36,6 +45,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel, onCancel: () -> Unit) {
     val scrollState = rememberScrollState()
     val variables = viewModel.variablesState.collectAsState().value
+    val uriHandler = LocalUriHandler.current
 
     Box(
         modifier = Modifier
@@ -81,6 +91,30 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                     }
                 }
             }
+
+            Column(modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            )
+            {
+                Button(
+                    onClick = {
+                        uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Fox-ESS-Cloud#search-parameters")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colors.primary,
+                        backgroundColor = Color.Transparent
+                    ),
+                    elevation = null,
+                ) {
+                    Icon(
+                        Icons.Default.OpenInBrowser, contentDescription = "Open In Browser", modifier = Modifier.padding(end = 5.dp)
+                    )
+                    Text(
+                        stringResource(R.string.find_out_more_about_these_variables),
+                        fontSize = 12.sp,
+                    )
+                }
+            }
         }
 
         Column(
@@ -120,26 +154,26 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
 fun ParameterGraphVariableChooserViewPreview() {
     val variables = listOf(
         RawVariable("PV1Volt", "pv1Volt", "V"),
-        RawVariable("PV1Current", "pv1Current", "A"),
-        RawVariable("PV1Power", "pv1Power", "kW"),
-        RawVariable("PVPower", "pvPower", "kW"),
-        RawVariable("PV2Volt", "pv2Volt", "V"),
-        RawVariable("PV2Current", "pv2Current", "A"),
-        RawVariable("aPV1Current", "pv1Current", "A"),
-        RawVariable("aPV1Power", "pv1Power", "kW"),
-        RawVariable("aPVPower", "pvPower", "kW"),
-        RawVariable("aPV2Volt", "pv2Volt", "V"),
-        RawVariable("aPV2Current", "pv2Current", "A"),
-        RawVariable("bPV1Current", "pv1Current", "A"),
-        RawVariable("bPV1Power", "pv1Power", "kW"),
-        RawVariable("bPVPower", "pvPower", "kW"),
-        RawVariable("bPV2Volt", "pv2Volt", "V"),
-        RawVariable("cPV2Current", "pv2Current", "A"),
-        RawVariable("cPV1Current", "pv1Current", "A"),
-        RawVariable("cPV1Power", "pv1Power", "kW"),
-        RawVariable("cPVPower", "pvPower", "kW"),
-        RawVariable("cPV2Volt", "pv2Volt", "V"),
-        RawVariable("dPV2Current", "pv2Current", "A"),
+//        RawVariable("PV1Current", "pv1Current", "A"),
+//        RawVariable("PV1Power", "pv1Power", "kW"),
+//        RawVariable("PVPower", "pvPower", "kW"),
+//        RawVariable("PV2Volt", "pv2Volt", "V"),
+//        RawVariable("PV2Current", "pv2Current", "A"),
+//        RawVariable("aPV1Current", "pv1Current", "A"),
+//        RawVariable("aPV1Power", "pv1Power", "kW"),
+//        RawVariable("aPVPower", "pvPower", "kW"),
+//        RawVariable("aPV2Volt", "pv2Volt", "V"),
+//        RawVariable("aPV2Current", "pv2Current", "A"),
+//        RawVariable("bPV1Current", "pv1Current", "A"),
+//        RawVariable("bPV1Power", "pv1Power", "kW"),
+//        RawVariable("bPVPower", "pvPower", "kW"),
+//        RawVariable("bPV2Volt", "pv2Volt", "V"),
+//        RawVariable("cPV2Current", "pv2Current", "A"),
+//        RawVariable("cPV1Current", "pv1Current", "A"),
+//        RawVariable("cPV1Power", "pv1Power", "kW"),
+//        RawVariable("cPVPower", "pvPower", "kW"),
+//        RawVariable("cPV2Volt", "pv2Volt", "V"),
+//        RawVariable("dPV2Current", "pv2Current", "A"),
         RawVariable("dPV2Power", "pv2Power", "kW")
     ).map { variable ->
         ParameterGraphVariable(variable, isSelected = listOf(true, false).random(), enabled = true)
