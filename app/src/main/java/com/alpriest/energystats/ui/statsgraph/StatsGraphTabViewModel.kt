@@ -155,6 +155,21 @@ class StatsGraphTabViewModel(
     fun total(variable: StatsGraphVariable): Double? {
         return totalsStream.value[variable.type]
     }
+
+//    fun saveFile() {
+//        val documentsDirectory = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+//        val file = File(documentsDirectory, fileName)
+//
+//        try {
+//            val fileOutputStream = FileOutputStream(file)
+//            fileOutputStream.write(content.toByteArray())
+//            fileOutputStream.close()
+//
+//            // Show a success message to the user
+//        } catch (e: Exception) {
+//            // Show an error message to the user
+//        }
+//    }
 }
 
 interface GraphVariable {

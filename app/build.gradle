@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.alpriest.energystats"
         minSdk 26
-        targetSdk 33
-        versionCode 39
-        versionName '1.20'
+        targetSdk 34
+        versionCode 40
+        versionName '1.21'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

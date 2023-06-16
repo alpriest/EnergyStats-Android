@@ -62,16 +62,17 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             RoundedColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
-                SettingsTitleView("PREDEFINED SELECTIONS")
+                SettingsTitleView(stringResource(id = R.string.predefined_selections))
 
                 OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
                 OutlinedButton(onClick = { viewModel.chooseCompareStringsValues() }) { Text(stringResource(R.string.compare_strings)) }
                 OutlinedButton(onClick = { viewModel.chooseTemperaturesVariables() }) { Text(stringResource(R.string.temperatures)) }
+                OutlinedButton(onClick = { viewModel.chooseBatteryVariables() }) { Text(stringResource(R.string.battery)) }
                 OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
             }
 
             RoundedColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
-                SettingsTitleView("ALL")
+                SettingsTitleView(stringResource(id = R.string.all))
 
                 variables.forEach { variable ->
                     Row(
@@ -87,12 +88,21 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                             },
                             colors = CheckboxDefaults.colors(checkedColor = colors.primary)
                         )
-                        Text(variable.type.name)
+                        Text(
+                            variable.type.name,
+                            modifier = Modifier.weight(0.5f)
+                        )
+
+                        Text(
+                            variable.type.unit,
+                            modifier = Modifier.padding(end = 4.dp)
+                        )
                     }
                 }
             }
 
-            Column(modifier = Modifier.fillMaxWidth(),
+            Column(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             )
             {

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphVariable>, val onApply: (List<ParameterGraphVariable>) -> Unit) {
-    private var _variablesState = MutableStateFlow(variables.sortedBy { it.type.name })
+    private var _variablesState = MutableStateFlow(variables.sortedBy { it.type.name.lowercase() })
     val variablesState: StateFlow<List<ParameterGraphVariable>> = _variablesState.asStateFlow()
 
     fun apply() {
@@ -43,6 +43,14 @@ class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphV
 
     fun chooseNoVariables() {
         select(listOf())
+    }
+
+    fun chooseBatteryVariables() {
+        select(listOf(
+            "batTemperature",
+            "batVolt",
+            "batCurrent"
+        ))
     }
 
     private fun select(newVariables: List<String>) {
