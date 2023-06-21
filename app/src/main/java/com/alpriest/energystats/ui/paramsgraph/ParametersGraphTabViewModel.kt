@@ -32,7 +32,6 @@ class ParametersGraphTabViewModel(
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     var rawData: List<ParametersGraphValue> = listOf()
-    var totalsStream: MutableStateFlow<MutableMap<RawVariable, Double>> = MutableStateFlow(mutableMapOf())
     val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(listOf())
     var queryDate = QueryDate()
     var hours: Int = 24
@@ -88,7 +87,6 @@ class ParametersGraphTabViewModel(
         )
 
         var maxY = 0f
-        val rawTotals: MutableMap<RawVariable, Double> = mutableMapOf()
 
         val rawData: List<ParametersGraphValue> = raw.flatMap { response ->
             val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
@@ -107,18 +105,7 @@ class ParametersGraphTabViewModel(
             }
         }
 
-        val reportVariables = rawGraphVariables.mapNotNull { it.reportVariable() }
-        val reports = networking.fetchReport(device.deviceID, variables = reportVariables, queryDate = queryDate, reportType = ReportType.day)
-        rawGraphVariables.forEach { rawVariable ->
-            rawVariable.reportVariable()?.let {reportVariable ->
-                reports.firstOrNull { it.variable.lowercase() == reportVariable.networkTitle().lowercase() }?.let { response ->
-                    rawTotals[rawVariable] = response.data.sumOf { abs(it.value) }
-                }
-            }
-        }
-
         this.rawData = rawData
-        totalsStream.value = rawTotals
         maxYStream.value = maxY
 
         refresh()

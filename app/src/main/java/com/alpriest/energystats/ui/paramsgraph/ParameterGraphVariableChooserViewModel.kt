@@ -49,7 +49,8 @@ class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphV
         select(listOf(
             "batTemperature",
             "batVolt",
-            "batCurrent"
+            "batCurrent",
+            "SoC"
         ))
     }
 

@@ -73,7 +73,7 @@
     <string name="compare_strings">Strings vergleichen</string>
     <string name="temperatures">Temperaturen</string>
     <string name="none">Nichts</string>
-    <string name="find_out_more_about_these_variables">Erfahren Sie mehr über diese Variablen</string>
+    <string name="find_out_more_about_these_variables">Mehr Informationen über diese Variablen</string>
     <string name="rawvariable_generationpower">Solar-/Batterieleistung, die vom Wechselrichter geliefert wird</string>
     <string name="rawvariable_feedinpower">Leistung, die zurück ins Netz eingespeist wird</string>
     <string name="rawvariable_batchargepower">Leistung zum Laden der Batterie</string>
