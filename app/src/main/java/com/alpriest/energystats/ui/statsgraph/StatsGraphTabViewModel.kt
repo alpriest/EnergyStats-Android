@@ -6,6 +6,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.lang.Math.abs
 import java.lang.Math.max
 import java.time.LocalDate
+import java.util.ArrayList
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
@@ -48,21 +50,20 @@ class StatsGraphTabViewModel(
 
         val queryDate = makeQueryDate(displayMode)
         val reportType = makeReportType(displayMode)
+        val reportVariables = graphVariables.map { it.type }
 
         val reportData = networking.fetchReport(
             device.deviceID,
-            variables = graphVariables.map { it.type },
+            variables = reportVariables,
             queryDate = queryDate,
             reportType = reportType
         )
 
         var maxY = 0f
-        val rawTotals: MutableMap<ReportVariable, Double> = mutableMapOf()
+        val rawTotals = generateTotals(device.deviceID, reportData, reportType, queryDate, reportVariables)
 
         rawData = reportData.flatMap { reportResponse ->
             val reportVariable = ReportVariable.parse(reportResponse.variable)
-
-            rawTotals[reportVariable] = reportResponse.data.map { abs(it.value) }.sum()
 
             return@flatMap reportResponse.data.map { dataPoint ->
                 val graphPoint: Int = when (displayMode) {
@@ -90,6 +91,33 @@ class StatsGraphTabViewModel(
         totalsStream.value = rawTotals
         maxYStream.value = maxY
         refresh()
+    }
+
+    private suspend fun generateTotals(
+        deviceID: String,
+        reportData: ArrayList<ReportResponse>,
+        reportType: ReportType,
+        queryDate: QueryDate,
+        reportVariables: List<ReportVariable>
+    ): MutableMap<ReportVariable, Double> {
+        val totals = mutableMapOf<ReportVariable, Double>()
+
+        if (reportType == ReportType.day) {
+            val reports = networking.fetchReport(deviceID, reportVariables, queryDate, ReportType.month)
+            reports.forEach {response ->
+                ReportVariable.parse(response.variable).let {
+                    totals[it] = (response.data.first { it.index == queryDate.day }.value) ?: 0.0
+                }
+            }
+        } else {
+            reportData.forEach {response ->
+                ReportVariable.parse(response.variable).let {
+                    totals[it] = response.data.sumOf { kotlin.math.abs(it.value) }
+                }
+            }
+        }
+
+        return totals
     }
 
     private fun refresh() {
@@ -152,11 +180,7 @@ class StatsGraphTabViewModel(
         refresh()
     }
 
-    fun total(variable: StatsGraphVariable): Double? {
-        return totalsStream.value[variable.type]
-    }
-
-//    fun saveFile() {
+    //    fun saveFile() {
 //        val documentsDirectory = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
 //        val file = File(documentsDirectory, fileName)
 //
