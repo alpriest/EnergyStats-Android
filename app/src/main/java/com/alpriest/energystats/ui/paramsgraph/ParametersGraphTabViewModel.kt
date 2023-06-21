@@ -8,10 +8,8 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -19,7 +17,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
-import kotlin.math.abs
 import kotlin.math.max
 
 class ParametersGraphTabViewModel(
@@ -35,6 +32,7 @@ class ParametersGraphTabViewModel(
     val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(listOf())
     var queryDate = QueryDate()
     var hours: Int = 24
+    var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
 
     init {
         viewModelScope.launch {
@@ -126,6 +124,7 @@ class ParametersGraphTabViewModel(
             .map { group ->
                 group.value.map {
                     return@map DateTimeFloatEntry(
+                        type = it.type,
                         localDateTime = it.time,
                         x = it.graphPoint.toFloat(),
                         y = it.value.toFloat())
@@ -183,10 +182,12 @@ class DateTimeFloatEntry(
     val localDateTime: LocalDateTime,
     override val x: Float,
     override val y: Float,
+    val type: RawVariable,
 ) : ChartEntry {
     override fun withY(y: Float): ChartEntry = DateTimeFloatEntry(
         localDateTime = localDateTime,
         x = x,
         y = y,
+        type = type,
     )
 }

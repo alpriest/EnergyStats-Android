@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
+    val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
 
     Column(modifier) {
         graphVariables.value.filter {it.isSelected}.map {
@@ -41,7 +42,9 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
                 else -> it.type.name
             }
 
-            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, null)
+            val value = selectedValues.firstOrNull { entry -> entry.type == it.type }
+
+            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, value?.y?.toDouble())
         }
     }
 }

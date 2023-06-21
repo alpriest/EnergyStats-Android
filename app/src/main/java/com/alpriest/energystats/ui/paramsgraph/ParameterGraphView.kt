@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import android.graphics.RectF
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,9 +22,9 @@ import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueForma
 import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import com.patrykandpatrick.vico.core.context.DrawContext
+import com.patrykandpatrick.vico.core.marker.Marker
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
@@ -47,6 +48,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
                     tickPosition = HorizontalAxis.TickPosition.Center(offset = 0, spacing = 20),
                     valueFormatter = ParameterGraphFormatAxisValueFormatter()
                 ),
+                marker = NonDisplayingMarker(viewModel.valuesAtTimeStream),
                 diffAnimationSpec = SnapSpec()
             )
         }
@@ -63,5 +65,11 @@ class ParameterGraphFormatAxisValueFormatter<Position : AxisPosition>() :
                 "$hour"
             }
             .orEmpty()
+    }
+}
+
+class NonDisplayingMarker(var valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>> = MutableStateFlow(listOf())) : Marker {
+    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>) {
+        valuesAtTimeStream.value = markedEntries.mapNotNull { it.entry as? DateTimeFloatEntry }
     }
 }

@@ -30,7 +30,7 @@ fun <T : GraphVariable> ToggleRowView(
     toggleVisibility: (T) -> Unit,
     title: String,
     description: String,
-    total: Double?
+    value: Double?
 ) {
     val textColor = if (it.enabled) MaterialTheme.colors.onBackground else DimmedTextColor
     val appTheme = themeStream.collectAsState().value
@@ -69,7 +69,7 @@ fun <T : GraphVariable> ToggleRowView(
                 )
 
                 Text(
-                    total?.kWh(decimalPlaces) ?: "",
+                    value?.kWh(decimalPlaces) ?: "",
                     color = textColor,
                     fontSize = fontSize,
                 )
