@@ -12,12 +12,13 @@ import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.lang.Math.abs
 import java.lang.Math.max
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.ArrayList
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
@@ -70,9 +71,11 @@ class StatsGraphTabViewModel(
                     is StatsDisplayMode.Day -> {
                         dataPoint.index - 1
                     }
+
                     is StatsDisplayMode.Month -> {
                         dataPoint.index
                     }
+
                     is StatsDisplayMode.Year -> {
                         dataPoint.index
                     }
@@ -104,13 +107,13 @@ class StatsGraphTabViewModel(
 
         if (reportType == ReportType.day) {
             val reports = networking.fetchReport(deviceID, reportVariables, queryDate, ReportType.month)
-            reports.forEach {response ->
+            reports.forEach { response ->
                 ReportVariable.parse(response.variable).let {
                     totals[it] = (response.data.first { it.index == queryDate.day }.value) ?: 0.0
                 }
             }
         } else {
-            reportData.forEach {response ->
+            reportData.forEach { response ->
                 ReportVariable.parse(response.variable).let {
                     totals[it] = response.data.sumOf { kotlin.math.abs(it.value) }
                 }
@@ -126,7 +129,12 @@ class StatsGraphTabViewModel(
         val entries = grouped
             .map { group ->
                 group.value.map {
-                    return@map FloatEntry(x = it.graphPoint.toFloat(), y = it.value.toFloat())
+                    return@map StatsChartEntry(
+                        x = it.graphPoint.toFloat(),
+                        y = it.value.toFloat(),
+                        type = it.type,
+//                        localDateTime = it.graphPoint
+                    )
                 }.toList()
             }.toList()
 
@@ -146,9 +154,11 @@ class StatsGraphTabViewModel(
                     day = date.dayOfMonth
                 )
             }
+
             is StatsDisplayMode.Month -> {
                 QueryDate(year = displayMode.year, month = displayMode.month + 1, day = null)
             }
+
             is StatsDisplayMode.Year -> {
                 QueryDate(year = displayMode.year, month = null, day = null)
             }
@@ -213,4 +223,17 @@ enum class ReportType {
     day,
     month,
     year,
+}
+
+data class StatsChartEntry(
+    override val x: Float,
+    override val y: Float,
+    val type: ReportVariable
+) : ChartEntry {
+
+    override fun withY(y: Float): ChartEntry = StatsChartEntry(
+        x = x,
+        y = y,
+        type = type
+    )
 }

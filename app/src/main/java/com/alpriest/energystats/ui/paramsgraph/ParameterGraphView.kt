@@ -56,7 +56,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
                 ),
                 marker = NonDisplayingMarker(viewModel.valuesAtTimeStream, lineComponent(
                     color = MaterialTheme.colorScheme.onSurface,
-                    thickness = 2.dp
+                    thickness = 1.dp
                 )),
                 diffAnimationSpec = SnapSpec()
             )
@@ -77,14 +77,14 @@ class ParameterGraphFormatAxisValueFormatter<Position : AxisPosition>() :
     }
 }
 
-class NonDisplayingMarker(
-    var valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>> = MutableStateFlow(listOf()),
+class NonDisplayingMarker<T>(
+    var valuesAtTimeStream: MutableStateFlow<List<T>> = MutableStateFlow(listOf()),
     val guideline: LineComponent?
 ) : Marker {
     override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>) {
         drawGuideline(context, bounds, markedEntries)
 
-        valuesAtTimeStream.value = markedEntries.mapNotNull { it.entry as? DateTimeFloatEntry }
+        valuesAtTimeStream.value = markedEntries.mapNotNull { it.entry as? T }
     }
 
     private fun drawGuideline(
