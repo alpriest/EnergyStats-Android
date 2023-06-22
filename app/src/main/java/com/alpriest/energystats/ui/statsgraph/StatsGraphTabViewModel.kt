@@ -20,6 +20,7 @@ import java.lang.Math.max
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.ArrayList
+import java.util.Calendar
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
@@ -42,6 +43,7 @@ class StatsGraphTabViewModel(
     })
     var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
+    var exportText: String? = null
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
@@ -94,6 +96,41 @@ class StatsGraphTabViewModel(
         totalsStream.value = rawTotals
         maxYStream.value = maxY
         refresh()
+        prepareExport(rawData, displayMode)
+    }
+
+    fun prepareExport(rawData: List<StatsGraphValue>, displayMode: StatsDisplayMode) {
+        val headers = listOf("Type", "Date", "Value").joinToString(",")
+        val rows = rawData.map {
+            listOf(it.type, it.graphPoint, it.value.toString()).joinToString(",")
+        }
+
+        exportText = (listOf(headers) + rows).joinToString(separator = "\n")
+//        val exportFileName: String
+//
+//        when (displayMode) {
+//            is StatsDisplayMode.Day -> {
+//                val calendar = Calendar.getInstance()
+//                calendar.time = displayMode.date
+//                val year = calendar.get(Calendar.YEAR)
+//                val month = calendar.get(Calendar.MONTH) + 1
+//                val day = calendar.get(Calendar.DAY_OF_MONTH)
+//
+//                val dateFormatter = SimpleDateFormat("MMMM", Locale.getDefault())
+//                exportFileName = "energystats_stats_${year}$month_$day.csv"
+//            }
+//            is StatsDisplayMode.Month -> {
+//                val month = displayMode.month + 1
+//                val year = displayMode.year
+//                exportFileName = "energystats_stats_${year}_$month.csv"
+//            }
+//            is StatsDisplayMode.Year -> {
+//                val year = displayMode.year
+//                exportFileName = "energystats_stats_$year.csv"
+//            }
+//        }
+
+//        val exportFile = CSVTextFile(text.joinToString("\n"), exportFileName)
     }
 
     private suspend fun generateTotals(
@@ -189,21 +226,6 @@ class StatsGraphTabViewModel(
         graphVariablesStream.value = updated
         refresh()
     }
-
-    //    fun saveFile() {
-//        val documentsDirectory = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-//        val file = File(documentsDirectory, fileName)
-//
-//        try {
-//            val fileOutputStream = FileOutputStream(file)
-//            fileOutputStream.write(content.toByteArray())
-//            fileOutputStream.close()
-//
-//            // Show a success message to the user
-//        } catch (e: Exception) {
-//            // Show an error message to the user
-//        }
-//    }
 }
 
 interface GraphVariable {
