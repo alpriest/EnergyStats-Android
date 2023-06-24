@@ -89,7 +89,7 @@ fun HomeView(
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
                     1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
-                    2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network), themeStream)
+                    2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     3 -> SettingsView(
                         config = configManager,
                         userManager = userManager,
@@ -187,7 +187,7 @@ fun HomepagePreview() {
             {},
             {},
             {},
-            { _, _1 -> null }
+            { _, _ -> null }
         )
     }
 }

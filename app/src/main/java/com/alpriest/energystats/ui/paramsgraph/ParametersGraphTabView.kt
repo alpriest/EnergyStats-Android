@@ -1,14 +1,20 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,7 +22,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,9 +49,12 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
         isLoading = false
     }
 
+    val context = LocalContext.current
+
     if (isLoading) {
-        Column(modifier = Modifier
-            .fillMaxHeight(),
+        Column(
+            modifier = Modifier
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.Center
         ) {
             Text(stringResource(R.string.loading))
@@ -74,8 +85,27 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
                 fontSize = 12.sp,
                 color = DimmedTextColor,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 44.dp)
+                modifier = Modifier.padding(top = 44.dp, bottom = 22.dp)
             )
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(modifier = Modifier.clickable {
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_STREAM, viewModel.exportFileUri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        type = "text/csv"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    context.startActivity(shareIntent)
+                }) {
+                    Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
+                    Text("Export CSV data")
+                }
+            }
         }
     }
 }
@@ -83,5 +113,5 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
 @Preview
 @Composable
 fun PreviewParameterGraphHeaderView() {
-    ParameterGraphHeaderView(viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking()))
+    ParameterGraphHeaderView(viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking(), onWriteTempFile = { _, _ -> null }))
 }

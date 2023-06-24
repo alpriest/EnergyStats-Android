@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import android.net.Uri
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,10 +9,13 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode
+import com.alpriest.energystats.ui.statsgraph.StatsGraphValue
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -21,8 +25,10 @@ import kotlin.math.max
 
 class ParametersGraphTabViewModel(
     val configManager: ConfigManaging,
-    val networking: Networking
+    val networking: Networking,
+    val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel() {
+    var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
     var maxYStream = MutableStateFlow(0f)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
@@ -127,7 +133,8 @@ class ParametersGraphTabViewModel(
                         type = it.type,
                         localDateTime = it.time,
                         x = it.graphPoint.toFloat(),
-                        y = it.value.toFloat())
+                        y = it.value.toFloat()
+                    )
                 }.toList()
             }.toList()
 
@@ -140,6 +147,27 @@ class ParametersGraphTabViewModel(
             hasDataStream.value = true
             producer.setEntries(entries)
         }
+
+        prepareExport(rawData, displayModeStream.value)
+    }
+
+    private fun prepareExport(rawData: List<ParametersGraphValue>, displayMode: ParametersDisplayMode) {
+        val headers = listOf("Type", "Date", "Value").joinToString(",")
+        val rows = rawData.map {
+            listOf(it.type.variable, it.time.toString(), it.value.toString()).joinToString(",")
+        }
+
+        val exportText = (listOf(headers) + rows).joinToString(separator = "\n")
+        val exportFileName: String
+
+        val date = displayMode.date
+        val year = date.year
+        val month = date.month.name
+        val day = date.dayOfMonth
+
+        exportFileName = "energystats_${year}_${month}_$day"
+
+        exportFileUri = onWriteTempFile(exportFileName, exportText)
     }
 
     fun toggleVisibility(parameterGraphVariable: ParameterGraphVariable) {

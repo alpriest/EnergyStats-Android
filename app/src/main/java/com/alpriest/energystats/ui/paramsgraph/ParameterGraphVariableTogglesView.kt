@@ -72,5 +72,5 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
 @Composable
 @Preview(widthDp = 340)
 fun ParameterGraphVariableTogglesViewPreview() {
-    ParameterGraphVariableTogglesView(ParametersGraphTabViewModel(FakeConfigManager(), DemoNetworking()), themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false)))
+    ParameterGraphVariableTogglesView(ParametersGraphTabViewModel(FakeConfigManager(), DemoNetworking(), onWriteTempFile = { _, _ -> null }), themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false)))
 }

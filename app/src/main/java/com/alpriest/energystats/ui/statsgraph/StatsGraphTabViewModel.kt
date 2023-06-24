@@ -101,13 +101,12 @@ class StatsGraphTabViewModel(
         totalsStream.value = rawTotals
         maxYStream.value = maxY
         refresh()
-        prepareExport(rawData, displayMode)
     }
 
-    fun prepareExport(rawData: List<StatsGraphValue>, displayMode: StatsDisplayMode) {
+    private fun prepareExport(rawData: List<StatsGraphValue>, displayMode: StatsDisplayMode) {
         val headers = listOf("Type", "Date", "Value").joinToString(",")
         val rows = rawData.map {
-            listOf(it.type, it.graphPoint, it.value.toString()).joinToString(",")
+            listOf(it.type.networkTitle(), it.graphPoint, it.value.toString()).joinToString(",")
         }
 
         val exportText = (listOf(headers) + rows).joinToString(separator = "\n")
@@ -151,7 +150,7 @@ class StatsGraphTabViewModel(
             val reports = networking.fetchReport(deviceID, reportVariables, queryDate, ReportType.month)
             reports.forEach { response ->
                 ReportVariable.parse(response.variable).let {
-                    totals[it] = (response.data.first { it.index == queryDate.day }.value) ?: 0.0
+                    totals[it] = response.data.first { it.index == queryDate.day }.value
                 }
             }
         } else {
@@ -175,7 +174,6 @@ class StatsGraphTabViewModel(
                         x = it.graphPoint.toFloat(),
                         y = it.value.toFloat(),
                         type = it.type,
-//                        localDateTime = it.graphPoint
                     )
                 }.toList()
             }.toList()
@@ -184,6 +182,7 @@ class StatsGraphTabViewModel(
             .map { it.key.colour() }
 
         producer.setEntries(entries)
+        prepareExport(rawData, displayModeStream.value)
     }
 
     private fun makeQueryDate(displayMode: StatsDisplayMode): QueryDate {
