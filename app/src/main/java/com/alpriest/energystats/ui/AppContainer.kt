@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.NetworkFacade
@@ -85,6 +86,12 @@ class AppContainer(private val context: Context) {
         val data = Uri.parse("https://buymeacoffee.com/alpriest")
         intent.data = data
         startActivity(context, intent, null)
+    }
+
+    fun writeToTempFile(baseFilename: String, text: String): Uri? {
+        val file = kotlin.io.path.createTempFile(baseFilename + "_", ".csv").toFile()
+        file.writeText(text)
+        return FileProvider.getUriForFile(context, "com.alpriest.energystats.ui.statsgraph.ExportFileProvider", file);
     }
 }
 

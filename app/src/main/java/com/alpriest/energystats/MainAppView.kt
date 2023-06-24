@@ -38,8 +38,10 @@ fun MainAppView(appContainer: AppContainer) {
                         rawDataStore = appContainer.rawDataStore,
                         { appContainer.openAppInPlayStore() },
                         { appContainer.sendUsEmail() },
-                        { appContainer.buyMeACoffee() }
+                        { appContainer.buyMeACoffee() },
+                        { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) }
                     )
+
                 is LoggedOut ->
                     CredentialsView(
                         errorMessage = loginStateValue.loadState.reason,

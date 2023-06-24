@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import android.content.Intent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -24,13 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
+import androidx.core.content.FileProvider.getUriForFile
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -67,12 +65,6 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableSta
             .collect { isLoading = false }
     }
 
-    val sendIntent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, viewModel.exportText)
-        type = "text/plain"
-    }
-    val shareIntent = Intent.createChooser(sendIntent, null)
     val context = LocalContext.current
 
     if (isLoading) {
@@ -102,7 +94,16 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableSta
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(modifier = Modifier.clickable { context.startActivity(shareIntent) }) {
+                Row(modifier = Modifier.clickable {
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_STREAM, viewModel.exportFileUri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        type = "text/csv"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    context.startActivity(shareIntent)
+                }) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
                     Text("Export CSV data")
                 }
@@ -114,5 +115,11 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableSta
 @Preview(widthDp = 400, heightDp = 800)
 @Composable
 fun StatsGraphTabViewPreview() {
-    StatsGraphTabView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()), themeStream = MutableStateFlow(AppTheme.preview()))
+    StatsGraphTabView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _1 -> null }, themeStream = MutableStateFlow(AppTheme.preview()))
+}
+
+class ExportFileProvider : FileProvider {
+    constructor() : super() {
+        context?.resources?.getXml(R.xml.file_paths)
+    }
 }

@@ -1,13 +1,10 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
@@ -17,8 +14,6 @@ import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 @Composable
 fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
@@ -52,5 +47,5 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
 @Composable
 @Preview(widthDp = 340)
 fun StatsGraphVariableTogglesViewPreview() {
-    StatsGraphVariableTogglesView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()), themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false)))
+    StatsGraphVariableTogglesView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }), themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false)))
 }

@@ -1,5 +1,6 @@
 package com.alpriest.energystats
 
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -7,7 +8,6 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Insights
-import androidx.compose.material.icons.filled.Monitor
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.runtime.Composable
@@ -31,13 +31,13 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.flow.home.preview
-import com.alpriest.energystats.ui.statsgraph.StatsGraphTabView
-import com.alpriest.energystats.ui.statsgraph.StatsGraphTabViewModel
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabView
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import com.alpriest.energystats.ui.settings.SettingsView
+import com.alpriest.energystats.ui.statsgraph.StatsGraphTabView
+import com.alpriest.energystats.ui.statsgraph.StatsGraphTabViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -65,7 +65,8 @@ fun HomeView(
     rawDataStore: RawDataStoring,
     onRateApp: () -> Unit,
     onSendUsEmail: () -> Unit,
-    onBuyMeCoffee: () -> Unit
+    onBuyMeCoffee: () -> Unit,
+    onWriteTempFile: (String, String) -> Uri?
 ) {
     val state = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -87,7 +88,7 @@ fun HomeView(
             ) { page ->
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
-                    1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network), themeStream)
+                    1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network), themeStream)
                     3 -> SettingsView(
                         config = configManager,
@@ -185,7 +186,8 @@ fun HomepagePreview() {
             rawDataStore = RawDataStore(),
             {},
             {},
-            {}
+            {},
+            { _, _1 -> null }
         )
     }
 }

@@ -1,8 +1,10 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
@@ -14,19 +16,22 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.lang.Math.max
+import java.net.URI
+import java.text.DateFormatSymbols
+import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.ArrayList
 import java.util.Calendar
+import java.util.Locale
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
 class StatsGraphTabViewModel(
     val configManager: ConfigManaging,
-    val networking: Networking
+    val networking: Networking,
+    val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel() {
     var maxYStream = MutableStateFlow(0f)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
@@ -43,7 +48,7 @@ class StatsGraphTabViewModel(
     })
     var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
-    var exportText: String? = null
+    var exportFileUri: Uri? = null
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
@@ -105,32 +110,32 @@ class StatsGraphTabViewModel(
             listOf(it.type, it.graphPoint, it.value.toString()).joinToString(",")
         }
 
-        exportText = (listOf(headers) + rows).joinToString(separator = "\n")
-//        val exportFileName: String
-//
-//        when (displayMode) {
-//            is StatsDisplayMode.Day -> {
-//                val calendar = Calendar.getInstance()
-//                calendar.time = displayMode.date
-//                val year = calendar.get(Calendar.YEAR)
-//                val month = calendar.get(Calendar.MONTH) + 1
-//                val day = calendar.get(Calendar.DAY_OF_MONTH)
-//
-//                val dateFormatter = SimpleDateFormat("MMMM", Locale.getDefault())
-//                exportFileName = "energystats_stats_${year}$month_$day.csv"
-//            }
-//            is StatsDisplayMode.Month -> {
-//                val month = displayMode.month + 1
-//                val year = displayMode.year
-//                exportFileName = "energystats_stats_${year}_$month.csv"
-//            }
-//            is StatsDisplayMode.Year -> {
-//                val year = displayMode.year
-//                exportFileName = "energystats_stats_$year.csv"
-//            }
-//        }
+        val exportText = (listOf(headers) + rows).joinToString(separator = "\n")
+        val exportFileName: String
 
-//        val exportFile = CSVTextFile(text.joinToString("\n"), exportFileName)
+        when (displayMode) {
+            is StatsDisplayMode.Day -> {
+                val date = displayMode.date
+
+                val year = date.year
+                val month = date.month.name
+                val day = date.dayOfMonth
+
+                exportFileName = "energystats_${year}_${month}_$day"
+            }
+            is StatsDisplayMode.Month -> {
+                val dateFormatSymbols = DateFormatSymbols.getInstance()
+                val month = dateFormatSymbols.months[displayMode.month]
+                val year = displayMode.year
+                exportFileName = "energystats_${year}_$month"
+            }
+            is StatsDisplayMode.Year -> {
+                val year = displayMode.year
+                exportFileName = "energystats_$year"
+            }
+        }
+
+        exportFileUri = onWriteTempFile(exportFileName, exportText)
     }
 
     private suspend fun generateTotals(

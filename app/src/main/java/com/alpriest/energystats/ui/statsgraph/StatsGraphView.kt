@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.ui.paramsgraph.NonDisplayingMarker
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
@@ -24,7 +22,6 @@ import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
-import com.patrykandpatrick.vico.compose.component.lineComponent
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
@@ -62,11 +59,13 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
             )
         }
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(when (displayMode) {
-                is Day -> stringResource(R.string.hours)
-                is StatsDisplayMode.Month -> stringResource(R.string.days)
-                is StatsDisplayMode.Year -> stringResource(R.string.months)
-            })
+            Text(
+                when (displayMode) {
+                    is Day -> stringResource(R.string.hours)
+                    is StatsDisplayMode.Month -> stringResource(R.string.days)
+                    is StatsDisplayMode.Year -> stringResource(R.string.months)
+                }
+            )
         }
     }
 }
@@ -74,7 +73,7 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
 @Composable
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
-    StatsGraphView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()))
+    StatsGraphView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }))
 }
 
 class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val displayMode: StatsDisplayMode) :
