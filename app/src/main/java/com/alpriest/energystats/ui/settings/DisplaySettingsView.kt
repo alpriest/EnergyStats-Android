@@ -28,6 +28,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
+    val showSelfSufficiencyEstimateState = rememberSaveable { mutableStateOf(config.showSelfSufficiencyEstimate) }
 
     RoundedColumnWithChild(
         modifier = modifier
@@ -80,6 +81,26 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 .clickable {
                     showTotalYieldState.value = !showTotalYieldState.value
                     config.showTotalYield = showTotalYieldState.value
+                }
+                .fillMaxWidth()
+        ) {
+            Checkbox(
+                checked = showTotalYieldState.value,
+                onCheckedChange = {
+                    showTotalYieldState.value = it
+                    config.showTotalYield = it
+                },
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
+            )
+            Text(stringResource(R.string.show_total_yield))
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable {
+                    showSelfSufficiencyEstimateState.value = !showSelfSufficiencyEstimateState.value
+                    config.showSelfSufficiencyEstimate = showSelfSufficiencyEstimateState.value
                 }
                 .fillMaxWidth()
         ) {

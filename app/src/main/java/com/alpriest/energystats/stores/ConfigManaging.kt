@@ -15,6 +15,7 @@ interface ConfigManaging {
     var decimalPlaces: Int
     var showTotalYield: Boolean
     var showSunnyBackground: Boolean
+    var showSelfSufficiencyEstimate: Boolean
     var showBatteryEstimate: Boolean
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean

@@ -50,7 +50,8 @@ fun AppTheme.Companion.preview(
     showSunnyBackground: Boolean = true,
     decimalPlaces: Int = 2,
     showUsableBatteryOnly: Boolean = false,
-    showTotalYield: Boolean = true
+    showTotalYield: Boolean = true,
+    showSelfSufficiencyEstimate: Boolean = true
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -60,6 +61,7 @@ fun AppTheme.Companion.preview(
         showSunnyBackground = showSunnyBackground,
         decimalPlaces = decimalPlaces,
         showUsableBatteryOnly = showUsableBatteryOnly,
-        showTotalYield = showTotalYield
+        showTotalYield = showTotalYield,
+        showSelfSufficiencyEstimate = showSelfSufficiencyEstimate
     )
 }

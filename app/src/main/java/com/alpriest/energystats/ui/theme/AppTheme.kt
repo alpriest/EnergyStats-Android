@@ -13,7 +13,8 @@ data class AppTheme(
     val decimalPlaces: Int,
     val showSunnyBackground: Boolean,
     val showUsableBatteryOnly: Boolean,
-    val showTotalYield: Boolean
+    val showTotalYield: Boolean,
+    val showSelfSufficiencyEstimate: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

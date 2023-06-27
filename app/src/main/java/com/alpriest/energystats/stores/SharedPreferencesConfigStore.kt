@@ -18,7 +18,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         DECIMAL_PLACES,
         SHOW_BATTERY_ESTIMATE,
         SHOW_USABLE_BATTERY_ONLY,
-        SHOW_TOTAL_YIELD
+        SHOW_TOTAL_YIELD,
+        SHOW_SELF_SUFFICIENCY_ESTIMATE
     }
 
     override var showTotalYield: Boolean
@@ -42,6 +43,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOW_BATTERY_ESTIMATE.name, value)
+            editor.apply()
+        }
+
+    override var showSelfSufficiencyEstimate: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_SELF_SUFFICIENCY_ESTIMATE.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_SELF_SUFFICIENCY_ESTIMATE.name, value)
             editor.apply()
         }
 
