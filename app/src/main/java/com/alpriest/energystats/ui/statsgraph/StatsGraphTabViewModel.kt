@@ -11,6 +11,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -49,6 +50,8 @@ class StatsGraphTabViewModel(
     var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileUri: Uri? = null
+    var selfSufficiencyCalculatorStream = MutableStateFlow<String?>(null)
+    var homeUsageStream = MutableStateFlow<Double?>(null)
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
@@ -101,6 +104,7 @@ class StatsGraphTabViewModel(
         totalsStream.value = rawTotals
         maxYStream.value = maxY
         refresh()
+        selfSufficiencyCalculatorStream.value = calculateSelfSufficiencyEstimate()
     }
 
     private fun prepareExport(rawData: List<StatsGraphValue>, displayMode: StatsDisplayMode) {
@@ -122,12 +126,14 @@ class StatsGraphTabViewModel(
 
                 exportFileName = "energystats_${year}_${month}_$day"
             }
+
             is StatsDisplayMode.Month -> {
                 val dateFormatSymbols = DateFormatSymbols.getInstance()
                 val month = dateFormatSymbols.months[displayMode.month]
                 val year = displayMode.year
                 exportFileName = "energystats_${year}_$month"
             }
+
             is StatsDisplayMode.Year -> {
                 val year = displayMode.year
                 exportFileName = "energystats_$year"
@@ -229,6 +235,32 @@ class StatsGraphTabViewModel(
 
         graphVariablesStream.value = updated
         refresh()
+    }
+
+    private fun calculateSelfSufficiencyEstimate(): String? {
+        val totals = totalsStream.value
+
+        val generation = totals[ReportVariable.Generation]
+        val feedIn = totals[ReportVariable.FeedIn]
+        val grid = totals[ReportVariable.GridConsumption]
+        val batteryCharge = totals[ReportVariable.ChargeEnergyToTal]
+        val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal]
+
+        if (generation == null || feedIn == null || grid == null || batteryCharge == null || batteryDischarge == null) {
+            return null
+        }
+
+        homeUsageStream.value = generation - feedIn + grid
+
+        val result = SelfSufficiencyCalculator().calculate(
+            generation,
+            feedIn,
+            grid,
+            batteryCharge,
+            batteryDischarge
+        )
+
+        return "${result}%"
     }
 }
 

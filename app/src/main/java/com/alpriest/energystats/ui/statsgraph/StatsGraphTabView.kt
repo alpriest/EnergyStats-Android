@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.home.preview
@@ -89,7 +90,7 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableSta
 
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
 
-            StatsApproximationView(themeStream, modifier = Modifier.padding(horizontal = 10.dp))
+            StatsApproximationView(viewModel = viewModel, modifier = Modifier.padding(horizontal = 10.dp), themeStream = themeStream)
 
             Text(
                 text = stringResource(R.string.stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals),
@@ -122,70 +123,75 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableSta
 }
 
 @Composable
-fun StatsApproximationView(appTheme: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-    val fontSize = appTheme.collectAsState().value.fontSize()
+fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: StatsGraphTabViewModel) {
+    val appTheme = themeStream.collectAsState().value
+    val fontSize = appTheme.fontSize()
+    val selfSufficiency = viewModel.selfSufficiencyCalculatorStream.collectAsState().value
+    val homeUsage = viewModel.homeUsageStream.collectAsState().value
 
-    Box(modifier) {
-        Column(
-            Modifier
-                .background(
-                    Color.hsl(189f, 0.52f, 0.95f),
-                    shape = RoundedCornerShape(size = 8.dp)
-                )
-                .border(
-                    width = 1.dp,
-                    color = Color.hsl(193f, 0.47f, 0.56f),
-                    shape = RoundedCornerShape(size = 8.dp)
-                )
-                .fillMaxWidth()
-                .fillMaxHeight()
-        ) {
+    if (appTheme.showSelfSufficiencyEstimate && selfSufficiency != null && homeUsage != null) {
+        Box(modifier) {
             Column(
                 Modifier
-                    .padding(16.dp)
+                    .background(
+                        Color.hsl(189f, 0.52f, 0.95f),
+                        shape = RoundedCornerShape(size = 8.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = Color.hsl(193f, 0.47f, 0.56f),
+                        shape = RoundedCornerShape(size = 8.dp)
+                    )
                     .fillMaxWidth()
+                    .fillMaxHeight()
             ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                Column(
+                    Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
                 ) {
-                    Text(
-                        "Self sufficiency",
-                        fontSize = fontSize
-                    )
-                    Text(
-                        "98%",
-                        fontSize = fontSize
-                    )
-                }
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            "Self sufficiency",
+                            fontSize = fontSize
+                        )
+                        Text(
+                            selfSufficiency,
+                            fontSize = fontSize
+                        )
+                    }
 
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        "Home usage",
-                        fontSize = fontSize
-                    )
-                    Text(
-                        "8,500kWh",
-                        fontSize = fontSize
-                    )
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            "Home usage",
+                            fontSize = fontSize
+                        )
+                        Text(
+                            homeUsage.kWh(decimalPlaces = appTheme.decimalPlaces),
+                            fontSize = fontSize
+                        )
+                    }
                 }
             }
-        }
 
-        Text(
-            "Approximations",
-            Modifier
-                .offset(x = 8.dp, y = (-11).dp)
-                .background(
-                    Color.hsl(193f, 0.47f, 0.56f),
-                    shape = RoundedCornerShape(size = 4.dp)
-                )
-                .padding(horizontal = 2.dp, vertical = 1.dp),
-            color = Color.White,
-        )
+            Text(
+                "Approximations",
+                Modifier
+                    .offset(x = 8.dp, y = (-11).dp)
+                    .background(
+                        Color.hsl(193f, 0.47f, 0.56f),
+                        shape = RoundedCornerShape(size = 4.dp)
+                    )
+                    .padding(horizontal = 2.dp, vertical = 1.dp),
+                color = Color.White,
+            )
+        }
     }
 }
 
