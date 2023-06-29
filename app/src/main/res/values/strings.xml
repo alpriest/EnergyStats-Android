@@ -106,4 +106,5 @@
     <string name="rawvariable_powerfactor">The ratio of the true power output in kilowatts (kW) to the apparent power output, in kilovolt-amps (kVA)</string>
     <string name="predefined_selections">Predefined selections</string>
     <string name="all">All</string>
+    <string name="show_self_sufficiency_estimates">Show self sufficiency estimates</string>
 </resources>

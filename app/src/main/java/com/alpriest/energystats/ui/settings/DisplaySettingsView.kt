@@ -105,14 +105,14 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 .fillMaxWidth()
         ) {
             Checkbox(
-                checked = showTotalYieldState.value,
+                checked = showSelfSufficiencyEstimateState.value,
                 onCheckedChange = {
-                    showTotalYieldState.value = it
+                    showSelfSufficiencyEstimateState.value = it
                     config.showTotalYield = it
                 },
                 colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
-            Text(stringResource(R.string.show_total_yield))
+            Text(stringResource(R.string.show_self_sufficiency_estimates))
         }
 
         Row(
