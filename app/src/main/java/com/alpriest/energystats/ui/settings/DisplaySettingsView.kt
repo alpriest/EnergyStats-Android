@@ -18,6 +18,24 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
+enum class SelfSufficiencyEstimateMode(val value: Int) {
+    Off(0),
+    Net(1),
+    Absolute(2);
+
+    fun title(): String {
+        return when (this) {
+            Net -> "Net"
+            Absolute -> "Absolute"
+            else -> "Off"
+        }
+    }
+
+    companion object {
+        fun fromInt(value: Int) = values().first { it.value == value }
+    }
+}
+
 @Composable
 fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
@@ -28,7 +46,6 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
-    val showSelfSufficiencyEstimateState = rememberSaveable { mutableStateOf(config.showSelfSufficiencyEstimate) }
 
     RoundedColumnWithChild(
         modifier = modifier
@@ -93,26 +110,6 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
             Text(stringResource(R.string.show_total_yield))
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clickable {
-                    showSelfSufficiencyEstimateState.value = !showSelfSufficiencyEstimateState.value
-                    config.showSelfSufficiencyEstimate = showSelfSufficiencyEstimateState.value
-                }
-                .fillMaxWidth()
-        ) {
-            Checkbox(
-                checked = showSelfSufficiencyEstimateState.value,
-                onCheckedChange = {
-                    showSelfSufficiencyEstimateState.value = it
-                    config.showTotalYield = it
-                },
-                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
-            )
-            Text(stringResource(R.string.show_self_sufficiency_estimates))
         }
 
         Row(

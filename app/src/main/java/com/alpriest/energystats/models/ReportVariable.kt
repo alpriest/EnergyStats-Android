@@ -12,7 +12,8 @@ enum class ReportVariable {
     Generation,
     GridConsumption,
     ChargeEnergyToTal,
-    DischargeEnergyToTal;
+    DischargeEnergyToTal,
+    Loads;
 
     fun networkTitle(): String {
         return when (this) {
@@ -21,6 +22,7 @@ enum class ReportVariable {
             GridConsumption -> "gridConsumption"
             ChargeEnergyToTal -> "chargeEnergyToTal"
             DischargeEnergyToTal -> "dischargeEnergyToTal"
+            Loads -> "loads"
         }
     }
 
@@ -31,6 +33,7 @@ enum class ReportVariable {
             ChargeEnergyToTal -> Color(125, 208, 130)
             DischargeEnergyToTal -> Color(80, 147, 248)
             GridConsumption -> Color(236, 109, 96)
+            Loads -> Color.Black
         }
     }
 
@@ -44,6 +47,7 @@ fun ReportVariable.Companion.parse(variable: String): ReportVariable {
         "gridconsumption" -> ReportVariable.GridConsumption
         "chargeenergytotal" -> ReportVariable.ChargeEnergyToTal
         "dischargeenergytotal" -> ReportVariable.DischargeEnergyToTal
+        "loads" -> ReportVariable.Loads
         else -> {
             ReportVariable.FeedIn
         }

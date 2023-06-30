@@ -1,6 +1,6 @@
 package com.alpriest.energystats.preview
 
-import com.alpriest.energystats.models.*
+import com.alpriest.energystats.models.ConfigInterface
 
 class FakeConfigStore(
     override var isDemoUser: Boolean = true,
@@ -15,6 +15,6 @@ class FakeConfigStore(
     override var showBatteryEstimate: Boolean = true,
     override var showUsableBatteryOnly: Boolean = false,
     override var showTotalYield: Boolean = true,
-    override var showSelfSufficiencyEstimate: Boolean = false
+    override var selfSufficiencyEstimateMode: Int = 0
 ) : ConfigInterface {
 }

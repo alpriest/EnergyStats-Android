@@ -26,6 +26,7 @@ import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.ApproximationHeaderText
 import com.alpriest.energystats.ui.theme.DarkApproximationBackground
@@ -39,10 +40,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: StatsGraphTabViewModel) {
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
-    val selfSufficiency = viewModel.selfSufficiencyCalculatorStream.collectAsState().value
+    val selfSufficiency = when (appTheme.selfSufficiencyEstimateMode) {
+        SelfSufficiencyEstimateMode.Off -> null
+        SelfSufficiencyEstimateMode.Net -> viewModel.netSelfSufficiencyEstimationStream.collectAsState().value
+        SelfSufficiencyEstimateMode.Absolute -> viewModel.absoluteSelfSufficiencyEstimationStream.collectAsState().value
+    }
     val homeUsage = viewModel.homeUsageStream.collectAsState().value
 
-    if (appTheme.showSelfSufficiencyEstimate && selfSufficiency != null && homeUsage != null) {
+    if (appTheme.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && selfSufficiency != null && homeUsage != null) {
         Box(modifier) {
             Column(
                 Modifier

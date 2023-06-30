@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 
 data class AppTheme(
     val useLargeDisplay: Boolean,
@@ -14,7 +15,7 @@ data class AppTheme(
     val showSunnyBackground: Boolean,
     val showUsableBatteryOnly: Boolean,
     val showTotalYield: Boolean,
-    val showSelfSufficiencyEstimate: Boolean
+    val selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

@@ -106,5 +106,9 @@
     <string name="rawvariable_powerfactor">The ratio of the true power output in kilowatts (kW) to the apparent power output, in kilovolt-amps (kVA)</string>
     <string name="predefined_selections">Predefined selections</string>
     <string name="all">All</string>
-    <string name="show_self_sufficiency_estimates">Show self sufficiency estimates</string>
+    <string name="self_sufficiency_estimates">Self sufficiency estimates</string>
+    <string name="loads">"Loads "</string>
+    <string name="power_used_by_the_house">Power used by the house</string>
+    <string name="net_self_sufficiency">Assumes if your net consumption is positive then you are self-sufficient.\n\nSufficiency = (export - import + batCharge - batDischarge) / houseUsage</string>
+    <string name="absolute_self_sufficiency">Assumes any amount taken from the grid reduces your self-sufficiency.\n\nSufficiency = grid / houseUsage</string>
 </resources>

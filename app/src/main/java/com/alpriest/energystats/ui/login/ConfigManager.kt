@@ -1,10 +1,10 @@
 package com.alpriest.energystats.ui.login
 
-import android.util.Log
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.RefreshFrequency
+import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
@@ -20,7 +20,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showBatteryEstimate = config.showBatteryEstimate,
             showUsableBatteryOnly = config.showUsableBatteryOnly,
             showTotalYield = config.showTotalYield,
-            showSelfSufficiencyEstimate = config.showSelfSufficiencyEstimate
+            selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode)
         )
     )
 
@@ -38,11 +38,11 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(showSunnyBackground = showSunnyBackground)
         }
 
-    override var showSelfSufficiencyEstimate: Boolean
-        get() = config.showSelfSufficiencyEstimate
+    override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode
+        get() = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode)
         set(value) {
-            config.showSelfSufficiencyEstimate = value
-            themeStream.value = themeStream.value.copy(showSelfSufficiencyEstimate = showSelfSufficiencyEstimate)
+            config.selfSufficiencyEstimateMode = value.value
+            themeStream.value = themeStream.value.copy(selfSufficiencyEstimateMode = selfSufficiencyEstimateMode)
         }
 
     override var showTotalYield: Boolean

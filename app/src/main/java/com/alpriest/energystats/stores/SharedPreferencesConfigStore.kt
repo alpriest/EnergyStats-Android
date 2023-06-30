@@ -19,7 +19,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_BATTERY_ESTIMATE,
         SHOW_USABLE_BATTERY_ONLY,
         SHOW_TOTAL_YIELD,
-        SHOW_SELF_SUFFICIENCY_ESTIMATE
+        SELF_SUFFICIENCY_ESTIMATE_MODE
     }
 
     override var showTotalYield: Boolean
@@ -46,11 +46,11 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var showSelfSufficiencyEstimate: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_SELF_SUFFICIENCY_ESTIMATE.name, true)
+    override var selfSufficiencyEstimateMode: Int
+        get() = sharedPreferences.getInt(SharedPreferenceKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name, 0)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceKey.SHOW_SELF_SUFFICIENCY_ESTIMATE.name, value)
+            editor.putInt(SharedPreferenceKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name, value)
             editor.apply()
         }
 

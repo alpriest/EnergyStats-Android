@@ -71,9 +71,9 @@ fun SettingsView(
             }
         }
 
-        DisplaySettingsView(
-            config = config
-        )
+        DisplaySettingsView(config)
+
+        SelfSufficiencySettingsView(config, modifier = Modifier.fillMaxWidth())
 
         RefreshFrequencySettingsView(config)
 
@@ -83,7 +83,7 @@ fun SettingsView(
     }
 }
 
-@Preview(showBackground = true, heightDp = 600, widthDp = 300)
+@Preview(showBackground = true, heightDp = 1200, widthDp = 300)
 @Composable
 fun SettingsViewPreview() {
     EnergyStatsTheme {

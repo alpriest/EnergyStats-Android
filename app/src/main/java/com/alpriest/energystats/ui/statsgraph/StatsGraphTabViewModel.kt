@@ -4,14 +4,12 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
-import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -19,13 +17,9 @@ import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.lang.Math.max
-import java.net.URI
 import java.text.DateFormatSymbols
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.ArrayList
-import java.util.Calendar
-import java.util.Locale
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
@@ -43,14 +37,16 @@ class StatsGraphTabViewModel(
         ReportVariable.FeedIn,
         ReportVariable.GridConsumption,
         ReportVariable.ChargeEnergyToTal,
-        ReportVariable.DischargeEnergyToTal
+        ReportVariable.DischargeEnergyToTal,
+        ReportVariable.Loads
     ).map {
         StatsGraphVariable(it, true)
     })
     var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileUri: Uri? = null
-    var selfSufficiencyCalculatorStream = MutableStateFlow<String?>(null)
+    var netSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
+    var absoluteSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
     var homeUsageStream = MutableStateFlow<Double?>(null)
 
     suspend fun load() {
@@ -104,7 +100,7 @@ class StatsGraphTabViewModel(
         totalsStream.value = rawTotals
         maxYStream.value = maxY
         refresh()
-        selfSufficiencyCalculatorStream.value = calculateSelfSufficiencyEstimate()
+        calculateSelfSufficiencyEstimate()
     }
 
     private fun prepareExport(rawData: List<StatsGraphValue>, displayMode: StatsDisplayMode) {
@@ -237,7 +233,7 @@ class StatsGraphTabViewModel(
         refresh()
     }
 
-    private fun calculateSelfSufficiencyEstimate(): String? {
+    private fun calculateSelfSufficiencyEstimate() {
         val totals = totalsStream.value
 
         val generation = totals[ReportVariable.Generation]
@@ -245,22 +241,28 @@ class StatsGraphTabViewModel(
         val grid = totals[ReportVariable.GridConsumption]
         val batteryCharge = totals[ReportVariable.ChargeEnergyToTal]
         val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal]
+        val loads = totals[ReportVariable.Loads]
 
-        if (generation == null || feedIn == null || grid == null || batteryCharge == null || batteryDischarge == null) {
-            return null
+        if (generation == null || feedIn == null || grid == null || batteryCharge == null || batteryDischarge == null || loads == null) {
+            return
         }
 
         homeUsageStream.value = generation - feedIn + grid
 
-        val result = SelfSufficiencyCalculator().calculate(
-            generation,
-            feedIn,
+        val netResult = NetSelfSufficiencyCalculator().calculate(
+            loads,
+            grid
+        )
+        netSelfSufficiencyEstimationStream.value = "${netResult}%"
+
+        val absoluteResult = AbsoluteSelfSufficiencyCalculator().calculate(
             grid,
+            feedIn,
+            loads,
             batteryCharge,
             batteryDischarge
         )
-
-        return "${result}%"
+        absoluteSelfSufficiencyEstimationStream.value = "${absoluteResult}%"
     }
 }
 

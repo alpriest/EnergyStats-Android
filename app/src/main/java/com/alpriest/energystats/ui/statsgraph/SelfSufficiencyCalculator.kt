@@ -3,18 +3,37 @@ package com.alpriest.energystats.ui.statsgraph
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class SelfSufficiencyCalculator {
-    fun calculate(generation: Double, feedIn: Double, grid: Double, batteryCharge: Double, batteryDischarge: Double): Double {
-        val homeConsumption = generation - feedIn + grid + batteryDischarge - batteryCharge
-        val selfServedPower = generation + batteryDischarge
+class AbsoluteSelfSufficiencyCalculator {
+    fun calculate(grid: Double, feedIn: Double, loads: Double, batteryCharge: Double, batteryDischarge: Double): Double {
+        val netGeneration = feedIn - grid + batteryDischarge - batteryCharge
+        val homeConsumption = loads
 
-        val result = maxOf(0.0, minOf(1.0, selfServedPower / homeConsumption)) - grid / homeConsumption
+        var result: Double = 0.0
+        if (netGeneration > 0) {
+            result = 1.0
+        } else if (netGeneration + homeConsumption < 0) {
+            result = 0.0
+        } else if (netGeneration + homeConsumption > 0) {
+            result = (netGeneration + homeConsumption) / homeConsumption
+        }
 
-        return result.roundTo(3) * 100.0
+        return (result * 100.0).roundTo(1)
     }
+}
 
-    private fun Double.roundTo(decimalPlaces: Int): Double {
-        val factor = 10.0.pow(decimalPlaces.toDouble())
-        return (this * factor).roundToInt() / factor
+class NetSelfSufficiencyCalculator {
+    fun calculate(loads: Double, grid: Double): Double {
+        if (loads <= 0) {
+            return 0.0
+        }
+
+        val result = 1 - (minOf(loads, maxOf(grid, 0.0)) / loads)
+
+        return (result * 100.0).roundTo(1)
     }
+}
+
+fun Double.roundTo(decimalPlaces: Int): Double {
+    val factor = 10.0.pow(decimalPlaces.toDouble())
+    return (this * factor).roundToInt() / factor
 }

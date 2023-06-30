@@ -1,9 +1,9 @@
 package com.alpriest.energystats.stores
 
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.settings.RefreshFrequency
+import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -15,7 +15,7 @@ interface ConfigManaging {
     var decimalPlaces: Int
     var showTotalYield: Boolean
     var showSunnyBackground: Boolean
-    var showSelfSufficiencyEstimate: Boolean
+    var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode
     var showBatteryEstimate: Boolean
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean

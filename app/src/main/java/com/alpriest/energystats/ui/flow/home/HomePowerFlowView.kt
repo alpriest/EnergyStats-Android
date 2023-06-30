@@ -8,6 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
+import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,7 +52,7 @@ fun AppTheme.Companion.preview(
     decimalPlaces: Int = 2,
     showUsableBatteryOnly: Boolean = false,
     showTotalYield: Boolean = true,
-    showSelfSufficiencyEstimate: Boolean = true
+    selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -62,6 +63,6 @@ fun AppTheme.Companion.preview(
         decimalPlaces = decimalPlaces,
         showUsableBatteryOnly = showUsableBatteryOnly,
         showTotalYield = showTotalYield,
-        showSelfSufficiencyEstimate = showSelfSufficiencyEstimate
+        selfSufficiencyEstimateMode = selfSufficiencyEstimateMode
     )
 }

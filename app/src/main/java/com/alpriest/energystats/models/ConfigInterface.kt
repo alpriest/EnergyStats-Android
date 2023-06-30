@@ -1,7 +1,7 @@
 package com.alpriest.energystats.models
 
 interface ConfigInterface {
-    var showSelfSufficiencyEstimate: Boolean
+    var selfSufficiencyEstimateMode: Int
     var showUsableBatteryOnly: Boolean
     var showBatteryEstimate: Boolean
     var showSunnyBackground: Boolean
