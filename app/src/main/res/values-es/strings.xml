@@ -116,4 +116,5 @@
     <string name="home_usage">Uso doméstico</string>
     <string name="export_csv_data">Exportar datos del gráfico</string>
     <string name="parameters_update_description">Los parámetros se actualizan cada 5 minutos por FoxESS y solo están disponibles para un solo día a la vez</string>
+    <string name="output">"Salida "</string>
 </resources>

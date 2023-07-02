@@ -45,8 +45,7 @@
     <string name="days">Tage</string>
     <string name="months">Monate</string>
     <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Statistiken werden von FoxESS für jeweils 1 Stunde, 1 Tag oder 1 Monat aufsummiert</string>
-    <string name="feed_in">"Einspeise-%1s"</string>
-    <string name="output_">"Ertrags-%1s"</string>
+    <string name="feed_in">"Einspeise-"</string>
     <string name="power">Leistung</string>
     <string name="energy">Energie</string>
     <string name="grid_consumption">Netzverbrauchs-</string>
@@ -116,4 +115,5 @@
     <string name="home_usage">Hausverbrauch</string>
     <string name="export_csv_data">Graphdaten exportieren</string>
     <string name="parameters_update_description">Die Parameter werden alle 5 Minuten von FoxESS aktualisiert und sind immer nur für einen Tag verfügbar</string>
+    <string name="output">Ertrags-</string>
 </resources>

@@ -42,8 +42,7 @@
     <string name="days">days</string>
     <string name="months">months</string>
     <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Stats are aggregated by FoxESS into 1 hr, 1 day or 1 month totals</string>
-    <string name="feed_in">"Feed-in %1s"</string>
-    <string name="output_">"Output %1s"</string>
+    <string name="feed_in">"Feed-in "</string>
     <string name="power">power</string>
     <string name="energy">energy</string>
     <string name="grid_consumption">"Grid consumption "</string>
@@ -115,4 +114,11 @@
     <string name="self_sufficiency">Self sufficiency</string>
     <string name="home_usage">Home usage</string>
     <string name="export_csv_data">Export graph data</string>
+    <string name="output">"Output "</string>
+    <string name="feed_in_energy">"Feed-in "</string>
+    <string name="charge_energy">Charge energy</string>
+    <string name="discharge_energy">Discharge energy</string>
+    <string name="grid_consumption_energy">Grid consumption energy</string>
+    <string name="loads_energy">Loads energy</string>
+    <string name="parameters_update_description">Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time</string>
 </resources>

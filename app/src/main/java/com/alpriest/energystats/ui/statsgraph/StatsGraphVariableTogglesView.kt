@@ -23,8 +23,8 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
     Column(modifier) {
         graphVariables.value.map {
             val title = when (it.type) {
-                ReportVariable.FeedIn -> stringResource(R.string.feed_in, title(ValueUsage.TOTAL))
-                ReportVariable.Generation -> stringResource(R.string.output_, title(ValueUsage.TOTAL))
+                ReportVariable.FeedIn -> stringResource(R.string.feed_in) + title(ValueUsage.TOTAL)
+                ReportVariable.Generation -> stringResource(R.string.output) + title(ValueUsage.TOTAL)
                 ReportVariable.GridConsumption -> stringResource(R.string.grid_consumption) + title(ValueUsage.TOTAL)
                 ReportVariable.ChargeEnergyToTal -> stringResource(R.string.charge) + title(ValueUsage.TOTAL)
                 ReportVariable.DischargeEnergyToTal -> stringResource(R.string.discharge) + title(ValueUsage.TOTAL)
@@ -49,5 +49,8 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
 @Composable
 @Preview(widthDp = 340)
 fun StatsGraphVariableTogglesViewPreview() {
-    StatsGraphVariableTogglesView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }), themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false)))
+    StatsGraphVariableTogglesView(
+        StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }),
+        themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false))
+    )
 }

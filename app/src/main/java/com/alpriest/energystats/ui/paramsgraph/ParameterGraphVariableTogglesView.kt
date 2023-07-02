@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.paramsgraph
 
-import android.content.res.Resources
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,13 +12,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.ToggleRowView
+import com.alpriest.energystats.ui.statsgraph.title
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.text.DateFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -32,12 +32,12 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
     Column(modifier) {
         graphVariables.value.filter { it.isSelected }.map {
             val title = when (it.type.variable) {
-                "generationPower" -> "Output energy"
-                "feedinPower" -> "Feed-in energy"
-                "batChargePower" -> "Charge energy"
-                "batDischargePower" -> "Discharge energy"
-                "gridConsumptionPower" -> "Grid consumption energy"
-                "loadsPower" -> "Loads energy"
+                "generationPower" -> stringResource(R.string.output) + title(ValueUsage.TOTAL)
+                "feedinPower" -> stringResource(R.string.feed_in) + title(ValueUsage.TOTAL)
+                "batChargePower" -> stringResource(R.string.charge) + title(ValueUsage.TOTAL)
+                "batDischargePower" -> stringResource(R.string.discharge) + title(ValueUsage.TOTAL)
+                "gridConsumptionPower" -> stringResource(R.string.grid_consumption) + title(ValueUsage.TOTAL)
+                "loadsPower" -> stringResource(R.string.loads) + title(ValueUsage.TOTAL)
                 else -> it.type.name
             }
 
@@ -60,7 +60,9 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
     selectedDateTime?.let {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .fillMaxWidth()
         ) {
             Text(
                 text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
