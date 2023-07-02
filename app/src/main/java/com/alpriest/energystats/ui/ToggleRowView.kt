@@ -17,7 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.rounded
+import com.alpriest.energystats.ui.paramsgraph.ParameterGraphBounds
 import com.alpriest.energystats.ui.statsgraph.GraphVariable
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
@@ -30,7 +33,8 @@ fun <T : GraphVariable> ToggleRowView(
     toggleVisibility: (T) -> Unit,
     title: String,
     description: String,
-    value: Double?
+    value: Double?,
+    boundsValue: ParameterGraphBounds?
 ) {
     val textColor = if (it.enabled) MaterialTheme.colors.onBackground else DimmedTextColor
     val appTheme = themeStream.collectAsState().value
@@ -62,24 +66,62 @@ fun <T : GraphVariable> ToggleRowView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    title,
-                    color = textColor,
-                    fontSize = fontSize
-                )
+                Column(
+                    modifier = Modifier.weight(1.0f)
+                ) {
+                    Text(
+                        title,
+                        color = textColor,
+                        fontSize = fontSize
+                    )
 
-                Text(
-                    value?.kWh(decimalPlaces) ?: "",
-                    color = textColor,
-                    fontSize = fontSize,
-                )
+                    Text(
+                        description,
+                        color = DimmedTextColor,
+                        fontSize = appTheme.smallFontSize()
+                    )
+                }
+
+                value?.let {
+                    Text(
+                        it.rounded(2).toString(),
+                        color = textColor,
+                        fontSize = fontSize,
+                    )
+                }
+
+                boundsValue?.let {
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(
+                            it.min.toDouble().rounded(2).toString(),
+                            color = textColor,
+                            fontSize = fontSize,
+                        )
+                        Text(
+                            "MIN",
+                            fontSize = 8.sp
+                        )
+                    }
+
+                    Column(
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        Text(
+                            it.max.toDouble().rounded(2).toString(),
+                            color = textColor,
+                            fontSize = fontSize,
+                        )
+                        Text(
+                            "MAX",
+                            fontSize = 8.sp
+                        )
+                    }
+                }
             }
 
-            Text(
-                description,
-                color = DimmedTextColor,
-                fontSize = appTheme.smallFontSize()
-            )
         }
     }
 }

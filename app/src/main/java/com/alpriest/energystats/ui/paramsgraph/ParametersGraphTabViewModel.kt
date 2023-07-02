@@ -39,6 +39,7 @@ class ParametersGraphTabViewModel(
     var queryDate = QueryDate()
     var hours: Int = 24
     var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
+    var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
 
     init {
         viewModelScope.launch {
@@ -137,6 +138,12 @@ class ParametersGraphTabViewModel(
                     )
                 }.toList()
             }.toList()
+
+        boundsStream.value = entries.map { entryList ->
+            val max = entryList.maxBy { it.y }.y
+            val min = entryList.minBy { it.y }.y
+            ParameterGraphBounds(entryList.first().type, min, max)
+        }
 
         chartColorsStream.value = grouped
             .map { it.key.colour() }

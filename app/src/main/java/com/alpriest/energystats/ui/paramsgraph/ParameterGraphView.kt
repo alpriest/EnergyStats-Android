@@ -8,6 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
@@ -26,16 +28,25 @@ import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueForma
 import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
+import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.component.shape.DashedShape
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.context.DrawContext
 import com.patrykandpatrick.vico.core.marker.Marker
+import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
     val chartColors = viewModel.chartColorsStream.collectAsState().value
     val maxY = viewModel.maxYStream.collectAsState().value
+    val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
+        override fun onMarkerHidden(marker: Marker) {
+            super.onMarkerHidden(marker)
+
+            viewModel.valuesAtTimeStream.value = listOf()
+        }
+    }
 
     Column(modifier = modifier.fillMaxWidth()) {
         ProvideChartStyle(chartStyle(chartColors)) {
@@ -58,7 +69,8 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
                     color = MaterialTheme.colorScheme.onSurface,
                     thickness = 1.dp
                 )),
-                diffAnimationSpec = SnapSpec()
+                diffAnimationSpec = SnapSpec(),
+                markerVisibilityChangeListener = markerVisibilityChangeListener
             )
         }
     }
@@ -81,7 +93,7 @@ class NonDisplayingMarker<T>(
     var valuesAtTimeStream: MutableStateFlow<List<T>> = MutableStateFlow(listOf()),
     val guideline: LineComponent?
 ) : Marker {
-    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>) {
+    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
         drawGuideline(context, bounds, markedEntries)
 
         valuesAtTimeStream.value = markedEntries.mapNotNull { it.entry as? T }

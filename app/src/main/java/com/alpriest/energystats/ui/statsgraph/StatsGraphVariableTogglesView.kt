@@ -41,7 +41,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
             }
 
             val total = totals.value[it.type]
-            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, total)
+            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, total, null)
         }
     }
 }

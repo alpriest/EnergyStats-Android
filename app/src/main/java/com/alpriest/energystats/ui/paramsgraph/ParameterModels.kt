@@ -21,3 +21,9 @@ data class ParameterGraphVariable(
     override val colour: Color
         get() = type.colour()
 }
+
+data class ParameterGraphBounds(
+    val type: RawVariable,
+    val min: Float,
+    val max: Float
+)
