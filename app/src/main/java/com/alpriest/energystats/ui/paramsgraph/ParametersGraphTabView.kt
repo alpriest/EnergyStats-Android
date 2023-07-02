@@ -81,7 +81,7 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
             }
 
             Text(
-                text = "Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time",
+                text = stringResource(id = R.string.parameters_update_description),
                 fontSize = 12.sp,
                 color = DimmedTextColor,
                 textAlign = TextAlign.Center,
@@ -103,7 +103,7 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
                     context.startActivity(shareIntent)
                 }) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
-                    Text("Export CSV data")
+                    Text(stringResource(R.string.export_csv_data))
                 }
             }
         }

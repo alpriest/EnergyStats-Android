@@ -105,7 +105,7 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableSta
                     context.startActivity(shareIntent)
                 }) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
-                    Text("Export CSV data")
+                    Text(stringResource(R.string.export_csv_data))
                 }
             }
         }

@@ -52,11 +52,12 @@
     <string name="grid_consumption">Netzverbrauchs-</string>
     <string name="charge">"Lade-"</string>
     <string name="discharge">"Entlade-"</string>
-    <string name="power_being_sent_to_the_grid">Leistung zum Einspeisen ins Netz</string>
-    <string name="power_coming_from_the_grid">Leistung, die vom Netz bezogen wird</string>
-    <string name="solar_battery_power_coming_through_the_inverter">Solar-/Batterieleistung, die vom Wechselrichter geliefert wird</string>
-    <string name="power_charging_the_battery">Leistung zum Laden der Batterie</string>
-    <string name="power_discharging_from_the_battery">Leistung vom Entladen der Batterie</string>
+    <string name="loads">Last-</string>
+    <string name="reportvariable_feedin">Leistung zum Einspeisen ins Netz</string>
+    <string name="reportvariable_gridconsumption">Leistung, die vom Netz bezogen wird</string>
+    <string name="reportvariable_generation">Solar-/Batterieleistung, die vom Wechselrichter geliefert wird</string>
+    <string name="reportvariable_chargeenergytotal">Leistung zum Laden der Batterie</string>
+    <string name="reportvariable_dischargeenergytotal">Leistung vom Entladen der Batterie</string>
     <string name="retry">Wiederholen</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
@@ -106,4 +107,13 @@
     <string name="rawvariable_powerfactor">Das Verhältnis der echten Ausgangsleistung in Kilowatt (kW) zur Schein-Ausgangsleistung in Kilovolt-Ampere (kVA)</string>
     <string name="predefined_selections">Vordefinierte Auswahl</string>
     <string name="all">Alle</string>
+    <string name="reportvariable_loads">"Energie, die im Haus verwendet wurde "</string>
+    <string name="net_self_sufficiency">Annahme von Autarkie falls der Nettoverbrauch positiv ist.\\n\\nAutarkie = (Export - Import + Batterieladung - Batterieentladung) / Hausverbrauch</string>
+    <string name="absolute_self_sufficiency">Annahme, dass jeder Strombezug vom Netz die Autarkie reduziert.\\n\\nAutarkie = Netzbezug / Hausverbrauch</string>
+    <string name="self_sufficiency_estimates">Autarkie-Schätzungen</string>
+    <string name="approximations">Schätzungen</string>
+    <string name="self_sufficiency">Autarkie</string>
+    <string name="home_usage">Hausverbrauch</string>
+    <string name="export_csv_data">Graphdaten exportieren</string>
+    <string name="parameters_update_description">Die Parameter werden alle 5 Minuten von FoxESS aktualisiert und sind immer nur für einen Tag verfügbar</string>
 </resources>

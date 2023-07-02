@@ -49,11 +49,11 @@
     <string name="grid_consumption">"Grid consumption "</string>
     <string name="charge">"Charge "</string>
     <string name="discharge">"Discharge "</string>
-    <string name="power_being_sent_to_the_grid">Power being sent to the grid</string>
-    <string name="power_coming_from_the_grid">Power coming from the grid</string>
-    <string name="solar_battery_power_coming_through_the_inverter">Solar / Battery power coming through the inverter</string>
-    <string name="power_charging_the_battery">Power charging the battery</string>
-    <string name="power_discharging_from_the_battery">Power discharging from the battery</string>
+    <string name="reportvariable_feedin">Power being sent to the grid</string>
+    <string name="reportvariable_gridconsumption">Power coming from the grid</string>
+    <string name="reportvariable_generation">Solar / Battery power coming through the inverter</string>
+    <string name="reportvariable_chargeenergytotal">Power charging the battery</string>
+    <string name="reportvariable_dischargeenergytotal">Power discharging from the battery</string>
     <string name="day">day</string>
     <string name="month">month</string>
     <string name="year">year</string>
@@ -106,9 +106,13 @@
     <string name="rawvariable_powerfactor">The ratio of the true power output in kilowatts (kW) to the apparent power output, in kilovolt-amps (kVA)</string>
     <string name="predefined_selections">Predefined selections</string>
     <string name="all">All</string>
-    <string name="self_sufficiency_estimates">Self sufficiency estimates</string>
     <string name="loads">"Loads "</string>
-    <string name="power_used_by_the_house">Power used by the house</string>
+    <string name="self_sufficiency_estimates">Self sufficiency estimates</string>
+    <string name="reportvariable_loads">Power used by the house</string>
     <string name="net_self_sufficiency">Assumes if your net consumption is positive then you are self-sufficient.\n\nSufficiency = (export - import + batCharge - batDischarge) / houseUsage</string>
     <string name="absolute_self_sufficiency">Assumes any amount taken from the grid reduces your self-sufficiency.\n\nSufficiency = grid / houseUsage</string>
+    <string name="approximations">Approximations</string>
+    <string name="self_sufficiency">Self sufficiency</string>
+    <string name="home_usage">Home usage</string>
+    <string name="export_csv_data">Export graph data</string>
 </resources>

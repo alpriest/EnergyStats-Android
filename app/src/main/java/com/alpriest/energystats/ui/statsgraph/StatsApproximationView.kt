@@ -20,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -73,7 +75,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Self sufficiency",
+                            stringResource(R.string.self_sufficiency),
                             fontSize = fontSize
                         )
                         Text(
@@ -87,7 +89,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Home usage",
+                            stringResource(R.string.home_usage),
                             fontSize = fontSize
                         )
                         Text(
@@ -99,7 +101,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
             }
 
             Text(
-                "Approximations",
+                stringResource(R.string.approximations),
                 Modifier
                     .offset(x = 8.dp, y = (-11).dp)
                     .background(
