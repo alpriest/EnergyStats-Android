@@ -76,11 +76,12 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
                 hours = 24
                 candidateQueryDate.value = candidateQueryDate.value.minusDays(1)
             },
-            contentPadding = PaddingValues(0.dp)
+            contentPadding = PaddingValues(0.dp),
         ) {
             Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
         }
 
+        val date = candidateQueryDate.collectAsState().value
         Button(
             modifier = Modifier
                 .padding(vertical = 6.dp)
@@ -89,7 +90,8 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
                 hours = 24
                 candidateQueryDate.value = candidateQueryDate.value.plusDays(1)
             },
-            contentPadding = PaddingValues(0.dp)
+            contentPadding = PaddingValues(0.dp),
+            enabled = date.atStartOfDay() < LocalDate.now().atStartOfDay()
         ) {
             Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
         }
