@@ -15,8 +15,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.GraphBounds
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.statsgraph.title
@@ -52,10 +54,11 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
             val description: String = if (id > 0) { stringResource(id) } else { it.type.variable }
 
             selectedValue?.let { entry ->
-                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, entry.y?.toDouble(), null)
+                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, entry.y?.toDouble()?.rounded(2)?.toString(), null)
             } ?: run {
                 val boundsValue = boundsValues.firstOrNull { entry -> entry.type == it.type }
-                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, null, boundsValue)
+                val graphBounds = boundsValue?.let { GraphBounds(it.min,it.max) }
+                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, null, graphBounds)
             }
         }
     }

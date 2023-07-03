@@ -5,12 +5,14 @@ class BatteryViewModel {
     var hasBattery: Boolean
     var chargePower: Double
     var chargeLevel: Double
+    var residual: Int
 
     constructor(battery: BatteryResponse) {
         chargeLevel = battery.soc / 100.0
         chargePower = 0 - battery.power
         hasBattery = true
         temperature = battery.temperature
+        residual = battery.residual
     }
 
     constructor() {
@@ -18,6 +20,7 @@ class BatteryViewModel {
         chargeLevel = 0.0
         chargePower = 0.0
         temperature = 0.0
+        residual = 0
     }
 
     companion object {

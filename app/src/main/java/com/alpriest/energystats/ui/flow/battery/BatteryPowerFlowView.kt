@@ -35,7 +35,7 @@ fun BatteryPowerFlow(
         modifier = modifier
     ) {
         PowerFlowView(
-            amount = viewModel.batteryChargePowerkWH,
+            amount = viewModel.chargePowerkWH,
             themeStream = themeStream,
             position = PowerFlowLinePosition.LEFT,
             useColouredLines = true,
@@ -86,7 +86,7 @@ fun BatteryIconView(
 
         if (showBatteryTemperature) {
             Text(
-                viewModel.batteryTemperature.asTemperature(),
+                viewModel.temperature.asTemperature(),
                 fontSize = fontSize
             )
         }
@@ -131,9 +131,10 @@ fun BatteryPowerFlowViewPreview() {
         BatteryPowerFlow(
             viewModel = BatteryPowerViewModel(
                 FakeConfigManager(),
-                actualBatteryStateOfCharge = 0.25,
-                batteryChargePowerkWH = -0.5,
-                batteryTemperature = 13.6
+                actualStateOfCharge = 0.25,
+                chargePowerkWH = -0.5,
+                temperature = 13.6,
+                residual = 5678
             ),
             modifier = Modifier,
             themeStream = MutableStateFlow(AppTheme.preview())

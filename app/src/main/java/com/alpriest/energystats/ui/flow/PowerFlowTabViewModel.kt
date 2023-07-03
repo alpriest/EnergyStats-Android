@@ -22,10 +22,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.lang.Math.abs
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.Date
 import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
@@ -151,11 +149,12 @@ class PowerFlowTabViewModel(
 
                 val summary = SummaryPowerFlowViewModel(
                     configManager = configManager,
-                    battery = battery.chargePower,
+                    batteryChargePower = battery.chargePower,
                     batteryStateOfCharge = battery.chargeLevel,
                     raw = raw,
                     batteryTemperature = battery.temperature,
-                    todaysGeneration = earnings.today.generation
+                    todaysGeneration = earnings.today.generation,
+                    batteryResidual = battery.residual
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

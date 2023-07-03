@@ -5,7 +5,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.House
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,7 +24,6 @@ import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -156,7 +154,8 @@ fun SummaryPowerFlowViewPreview() {
                     RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
                 ),
                 13.6,
-                todaysGeneration = 1.0
+                todaysGeneration = 1.0,
+                batteryResidual = 5678
             ),
             themeStream = MutableStateFlow(AppTheme.preview()),
         )

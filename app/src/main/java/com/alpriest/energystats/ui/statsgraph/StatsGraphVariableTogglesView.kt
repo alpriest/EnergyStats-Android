@@ -8,6 +8,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.models.kW
+import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
@@ -19,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val totals = viewModel.totalsStream.collectAsState()
+    val theme = themeStream.collectAsState().value
 
     Column(modifier) {
         graphVariables.value.map {
@@ -41,7 +45,8 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
             }
 
             val total = totals.value[it.type]
-            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, total, null)
+            val text = total?.let { total.kWh(theme.decimalPlaces) }
+            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, text, null)
         }
     }
 }

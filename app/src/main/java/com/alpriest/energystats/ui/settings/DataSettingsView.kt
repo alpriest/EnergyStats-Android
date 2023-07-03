@@ -126,7 +126,7 @@ fun DataSettingsViewPreview() {
         )
     )
     store.store(batterySettings = BatterySettingsResponse(30))
-    store.store(battery = BatteryResponse(power = 2000.0, soc = 20, residual = 1000.0, temperature = 13.6))
+    store.store(battery = BatteryResponse(power = 2000.0, soc = 20, residual = 1000, temperature = 13.6))
     store.store(
         deviceList = PagedDeviceListResponse(
             currentPage = 1, pageSize = 1, total = 1, devices = listOf(

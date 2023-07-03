@@ -3,7 +3,7 @@ package com.alpriest.energystats.models
 data class BatteryResponse(
     val power: Double,
     val soc: Int,
-    val residual: Double,
+    val residual: Int,
     val temperature: Double
 )
 

@@ -106,7 +106,7 @@
     <string name="rawvariable_powerfactor">Das Verhältnis der echten Ausgangsleistung in Kilowatt (kW) zur Schein-Ausgangsleistung in Kilovolt-Ampere (kVA)</string>
     <string name="predefined_selections">Vordefinierte Auswahl</string>
     <string name="all">Alle</string>
-    <string name="reportvariable_loads">"Energie, die im Haus verwendet wurde "</string>
+    <string name="reportvariable_loads">Leistung, die im Haus verbraucht wurde</string>
     <string name="net_self_sufficiency">Annahme von Autarkie falls der Nettoverbrauch positiv ist.\\n\\nAutarkie = (Export - Import + Batterieladung - Batterieentladung) / Hausverbrauch</string>
     <string name="absolute_self_sufficiency">Annahme, dass jeder Strombezug vom Netz die Autarkie reduziert.\\n\\nAutarkie = Netzbezug / Hausverbrauch</string>
     <string name="self_sufficiency_estimates">Autarkie-Schätzungen</string>

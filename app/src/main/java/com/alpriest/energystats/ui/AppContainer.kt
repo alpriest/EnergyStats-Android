@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawDataStoring
+import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.services.NetworkService
 import com.alpriest.energystats.services.Networking
@@ -27,13 +28,13 @@ class AppContainer(private val context: Context) {
             "com.alpriest.energystats",
             Context.MODE_PRIVATE
         )
-    private val credentialStore: CredentialStore =
-        SharedPreferencesCredentialStore(sharedPreferences)
+    private val credentialStore: CredentialStore = SharedPreferencesCredentialStore(sharedPreferences)
     private val config = SharedPreferencesConfigStore(sharedPreferences)
+    private val loggingStore = InMemoryLoggingNetworkStore()
 
     val networking: Networking by lazy {
         NetworkFacade(
-            network = NetworkService(credentialStore, config),
+            network = NetworkService(credentialStore, loggingStore),
             config = config
         )
     }

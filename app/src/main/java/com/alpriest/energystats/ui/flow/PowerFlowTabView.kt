@@ -203,6 +203,7 @@ fun PowerFlowTabViewPreview() {
         ),
         13.6,
         todaysGeneration = 5.4,
+        batteryResidual = 5600,
     )
 
     EnergyStatsTheme {

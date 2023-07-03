@@ -6,8 +6,11 @@ import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.lang.reflect.Type
+import java.net.NetworkInterface
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -17,7 +20,11 @@ interface NetworkResponseInterface {
     val errno: Int
 }
 
-class NetworkService(private val credentials: CredentialStore, private val config: ConfigInterface) : Networking {
+class InMemoryLoggingNetworkStore {
+
+}
+
+class NetworkService(private val credentials: CredentialStore, private val store: InMemoryLoggingNetworkStore) : Networking {
     private val okHttpClient by lazy {
         val userAgents = arrayOf(
             "Mozilla/5.0 (Linux; Android 12; SM-S906N Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/80.0.3987.119 Mobile Safari/537.36",
@@ -64,7 +71,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
 
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         val body = RequestBody.create(
-            MediaType.parse("application/json"),
+            "application/json".toMediaTypeOrNull(),
             Gson().toJson(DeviceListRequest())
         )
 
@@ -74,8 +81,9 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
-        val response: NetworkResponse<PagedDeviceListResponse> = fetch(request, type)
-        return response.result ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
+//        store.deviceListResponse = NetworkOperation(description = "fetchDeviceList", value = response.item, raw: response.text)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun verifyCredentials(username: String, password: String) {
@@ -105,8 +113,8 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkResponse<BatterySettingsResponse>>() {}.type
-        val response: NetworkResponse<BatterySettingsResponse> = fetch(request, type)
-        return response.result ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkResponse<BatterySettingsResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun fetchReport(
@@ -116,7 +124,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         reportType: ReportType
     ): ArrayList<ReportResponse> {
         val body = RequestBody.create(
-            MediaType.parse("application/json"),
+            "application/json".toMediaTypeOrNull(),
             Gson().toJson(ReportRequest(deviceID, variables, queryDate, reportType))
         )
 
@@ -126,8 +134,8 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkReportResponse>() {}.type
-        val response: NetworkReportResponse = fetch(request, type)
-        return response.result ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkReportResponse> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
@@ -143,15 +151,13 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkResponse<AddressBookResponse>>() {}.type
-        val response: NetworkResponse<AddressBookResponse> = fetch(request, type)
-        return response.result ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkResponse<AddressBookResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
-        val body = RequestBody.create(
-            MediaType.parse("application/json"),
-            Gson().toJson(RawRequest(deviceID, variables, queryDate))
-        )
+        val body = Gson().toJson(RawRequest(deviceID, variables, queryDate))
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .post(body)
@@ -159,8 +165,8 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkRawResponse>() {}.type
-        val response: NetworkRawResponse = fetch(request, type)
-        return response.result ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkRawResponse> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
@@ -176,8 +182,8 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkResponse<BatteryResponse>>() {}.type
-        val response: NetworkResponse<BatteryResponse> = fetch(request, type)
-        return response.result ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkResponse<BatteryResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
@@ -193,8 +199,8 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkResponse<EarningsResponse>>() {}.type
-        val response: NetworkResponse<EarningsResponse> = fetch(request, type)
-        return response.result ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkResponse<EarningsResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
@@ -210,8 +216,8 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type
-        val response: NetworkResponse<VariablesResponse> = fetch(request, type)
-        return response.result?.variables ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkResponse<VariablesResponse>> = fetch(request, type)
+        return response.item.result?.variables ?: throw MissingDataException()
     }
 
     private suspend fun fetchLoginToken(
@@ -225,7 +231,7 @@ class NetworkService(private val credentials: CredentialStore, private val confi
                 ?: throw BadCredentialsException()
 
         val body = RequestBody.create(
-            MediaType.parse("application/json"),
+            "application/json".toMediaTypeOrNull(),
             Gson().toJson(AuthRequest(user = usernameToUse, password = hashedPasswordToUse))
         )
 
@@ -235,15 +241,15 @@ class NetworkService(private val credentials: CredentialStore, private val confi
             .build()
 
         val type = object : TypeToken<NetworkResponse<AuthResponse>>() {}.type
-        val response: NetworkResponse<AuthResponse> = fetch(request, type)
-        return response.result?.token ?: throw MissingDataException()
+        val response: NetworkTuple<NetworkResponse<AuthResponse>> = fetch(request, type)
+        return response.item.result?.token ?: throw MissingDataException()
     }
 
     private suspend fun <T : NetworkResponseInterface> fetch(
         request: Request,
         type: Type,
         retry: Boolean = true
-    ): T {
+    ): NetworkTuple<T> {
         try {
             return suspendCoroutine { continuation ->
                 okHttpClient.newCall(request).enqueue(object : Callback {
@@ -253,12 +259,12 @@ class NetworkService(private val credentials: CredentialStore, private val confi
 
                     override fun onResponse(call: Call, response: Response) {
                         try {
-                            val text = response.body()?.string()
+                            val text = response.body?.string()
                             val body: T = Gson().fromJson(text, type)
                             val result: Result<T> = check(body)
 
                             result.fold(
-                                onSuccess = { continuation.resume(it) },
+                                onSuccess = { continuation.resume(NetworkTuple(it, text)) },
                                 onFailure = { continuation.resumeWithException(it) }
                             )
                         } catch (ex: Exception) {
@@ -300,3 +306,8 @@ class NetworkService(private val credentials: CredentialStore, private val confi
         return Result.success(item)
     }
 }
+
+data class NetworkTuple<T: NetworkResponseInterface>(
+    val item: T,
+    val text: String?
+)

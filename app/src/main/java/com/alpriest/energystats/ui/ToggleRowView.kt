@@ -26,6 +26,11 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
 
+data class GraphBounds(
+    val min: Float,
+    val max: Float
+)
+
 @Composable
 fun <T : GraphVariable> ToggleRowView(
     it: T,
@@ -33,13 +38,12 @@ fun <T : GraphVariable> ToggleRowView(
     toggleVisibility: (T) -> Unit,
     title: String,
     description: String,
-    value: Double?,
-    boundsValue: ParameterGraphBounds?
+    value: String?,
+    boundsValue: GraphBounds?
 ) {
     val textColor = if (it.enabled) MaterialTheme.colors.onBackground else DimmedTextColor
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
-    val decimalPlaces = appTheme.decimalPlaces
 
     Row(
         verticalAlignment = Alignment.Top,
@@ -84,7 +88,7 @@ fun <T : GraphVariable> ToggleRowView(
 
                 value?.let {
                     Text(
-                        it.rounded(2).toString(),
+                        it,
                         color = textColor,
                         fontSize = fontSize,
                     )
