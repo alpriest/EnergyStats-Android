@@ -68,7 +68,6 @@
     <string name="total_wh_of_your_battery">Total Wh de su batería</string>
     <string name="apply">Aplicar</string>
     <string name="note_that_not_all_parameters_contain_values">Tenga en cuenta que no todos los parámetros contienen valores</string>
-    <string name="tap_to_reveal_your_latest_data_if_you_re_seeing_something_wrong_in_the_app_please_send_the_details_below_with_a_description_of_the_problem">Toque para revelar sus últimos datos. Si ve algo incorrecto en la aplicación, envíe los detalles a continuación con una descripción del problema.</string>
     <string name="defalt">Predeterminado</string>
     <string name="compare_strings">Comparar cadenas</string>
     <string name="temperatures">Temperaturas</string>

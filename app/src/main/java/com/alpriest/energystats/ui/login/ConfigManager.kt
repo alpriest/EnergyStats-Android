@@ -9,7 +9,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 
-open class ConfigManager(var config: ConfigInterface, val networking: Networking, val rawDataStore: RawDataStoring, override var appVersion: String) : ConfigManaging {
+open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String) : ConfigManaging {
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
         AppTheme(
             useLargeDisplay = config.useLargeDisplay,
@@ -155,22 +155,31 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
     override suspend fun fetchDevices() {
         val deviceList = networking.fetchDeviceList()
+        var currentAction = ""
 
         try {
             val mappedDevices = ArrayList<Device>()
             deviceList.devices.asFlow().map {
-                val batteryCapacity: String?
-                val minSOC: String?
+                var batteryCapacity: String?
+                var minSOC: String?
 
+                currentAction = "fetch variables"
                 val variables = networking.fetchVariables(it.deviceID)
+                currentAction = "fetch firmware versions"
                 val firmware = fetchFirmwareVersions(it.deviceID)
 
                 if (it.hasBattery) {
+                    currentAction = "fetch battery"
                     val battery = networking.fetchBattery(it.deviceID)
-                    rawDataStore.store(battery = battery)
+                    currentAction = "fetch battery settings"
                     val batterySettings = networking.fetchBatterySettings(it.deviceSN)
-                    batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
-                    minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
+                    try {
+                        batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
+                        minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
+                    } catch (_: Exception) {
+                        batteryCapacity = null
+                        minSOC = null
+                    }
                 } else {
                     batteryCapacity = null
                     minSOC = null
@@ -192,9 +201,10 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
             devices = mappedDevices
             selectedDeviceID = devices?.firstOrNull()?.deviceID
-            rawDataStore.store(deviceList = deviceList)
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
+        } catch (ex: Exception) {
+            throw CouldNotFetchDeviceList(currentAction, ex)
         }
     }
 
@@ -234,4 +244,5 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
     }
 }
 
+class CouldNotFetchDeviceList(message: String, ex: Exception) : Exception("Could not fetch device list (${message}) (#${ex.localizedMessage})")
 class NoDeviceFoundException : Exception("No device found")

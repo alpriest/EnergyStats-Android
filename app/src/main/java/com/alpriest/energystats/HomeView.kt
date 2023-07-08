@@ -23,10 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.RawDataStore
-import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
@@ -35,7 +35,7 @@ import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabView
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
-import com.alpriest.energystats.ui.settings.SettingsView
+import com.alpriest.energystats.ui.settings.NavigableSettingsView
 import com.alpriest.energystats.ui.statsgraph.StatsGraphTabView
 import com.alpriest.energystats.ui.statsgraph.StatsGraphTabViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -62,7 +62,7 @@ fun HomeView(
     userManager: UserManaging,
     onLogout: () -> Unit,
     themeStream: MutableStateFlow<AppTheme>,
-    rawDataStore: RawDataStoring,
+    networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
     onSendUsEmail: () -> Unit,
     onBuyMeCoffee: () -> Unit,
@@ -87,14 +87,14 @@ fun HomeView(
                 state = pagerState
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(network, configManager, rawDataStore).Content(themeStream = themeStream)
+                    0 -> PowerFlowTabView(network, configManager, networkStore).Content(themeStream = themeStream)
                     1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
-                    3 -> SettingsView(
+                    3 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,
-                        rawDataStore = rawDataStore,
+                        networkStore = networkStore,
                         onRateApp = onRateApp,
                         onSendUsEmail = onSendUsEmail,
                         onBuyMeCoffee = onBuyMeCoffee
@@ -176,14 +176,13 @@ fun HomepagePreview() {
             ConfigManager(
                 config = FakeConfigStore(),
                 networking = DemoNetworking(),
-                rawDataStore = RawDataStore(),
                 appVersion = "1.19"
             ),
             network = DemoNetworking(),
             userManager = FakeUserManager(),
             {},
             themeStream = MutableStateFlow(AppTheme.preview()),
-            rawDataStore = RawDataStore(),
+            networkStore = InMemoryLoggingNetworkStore(),
             {},
             {},
             {},

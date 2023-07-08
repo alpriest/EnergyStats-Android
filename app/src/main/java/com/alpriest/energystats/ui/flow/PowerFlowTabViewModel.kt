@@ -28,8 +28,7 @@ import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
     private val network: Networking,
-    private val configManager: ConfigManaging,
-    private val rawDataStore: RawDataStoring
+    private val configManager: ConfigManaging
 ) : ViewModel() {
 
     var launchIn: Job? = null
@@ -137,11 +136,9 @@ class PowerFlowTabViewModel(
                     variables,
                     QueryDate()
                 )
-                rawDataStore.store(raw = raw)
 
                 val battery: BatteryViewModel = if (currentDevice.battery != null) {
                     val battery = network.fetchBattery(deviceID = currentDevice.deviceID)
-                    rawDataStore.store(battery = battery)
                     BatteryViewModel(battery)
                 } else {
                     BatteryViewModel.noBattery()

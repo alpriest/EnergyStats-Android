@@ -2,6 +2,7 @@ package com.alpriest.energystats.models
 
 import kotlinx.coroutines.flow.MutableStateFlow
 
+@Deprecated("Use InMemoryLoggingNetworkStore")
 class RawDataStore : RawDataStoring {
     override val rawStream: MutableStateFlow<List<RawResponse>?> = MutableStateFlow(null)
     override var batterySettingsStream: MutableStateFlow<BatterySettingsResponse?> = MutableStateFlow(null)

@@ -1,16 +1,36 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.*
+import com.alpriest.energystats.models.AddressBookResponse
+import com.alpriest.energystats.models.AuthRequest
+import com.alpriest.energystats.models.AuthResponse
+import com.alpriest.energystats.models.BatteryResponse
+import com.alpriest.energystats.models.BatterySettingsResponse
+import com.alpriest.energystats.models.DeviceListRequest
+import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.PagedDeviceListResponse
+import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.RawRequest
+import com.alpriest.energystats.models.RawResponse
+import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.ReportRequest
+import com.alpriest.energystats.models.ReportResponse
+import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import java.io.IOException
 import java.lang.reflect.Type
-import java.net.NetworkInterface
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -18,10 +38,6 @@ import kotlin.coroutines.suspendCoroutine
 
 interface NetworkResponseInterface {
     val errno: Int
-}
-
-class InMemoryLoggingNetworkStore {
-
 }
 
 class NetworkService(private val credentials: CredentialStore, private val store: InMemoryLoggingNetworkStore) : Networking {
@@ -82,7 +98,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
-//        store.deviceListResponse = NetworkOperation(description = "fetchDeviceList", value = response.item, raw: response.text)
+        store.deviceListResponseStream.value = NetworkOperation(description = "fetchDeviceList", value = response.item, raw = response.text)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -114,6 +130,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<BatterySettingsResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatterySettingsResponse>> = fetch(request, type)
+        store.batterySettingsResponseStream.value = NetworkOperation(description = "fetchBatterySettings", value = response.item, raw = response.text)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -135,6 +152,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkReportResponse>() {}.type
         val response: NetworkTuple<NetworkReportResponse> = fetch(request, type)
+        store.reportResponseStream.value = NetworkOperation(description = "fetchReport", value = response.item, raw = response.text)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -152,6 +170,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<AddressBookResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<AddressBookResponse>> = fetch(request, type)
+        store.addressBookResponseStream.value = NetworkOperation(description = "fetchAddressBook", value = response.item, raw = response.text)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -166,6 +185,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkRawResponse>() {}.type
         val response: NetworkTuple<NetworkRawResponse> = fetch(request, type)
+        store.rawResponseStream.value = NetworkOperation(description = "fetchRaw", value = response.item, raw = response.text)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -183,6 +203,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<BatteryResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatteryResponse>> = fetch(request, type)
+        store.batteryResponseStream.value = NetworkOperation(description = "fetchBattery", value = response.item, raw = response.text)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -200,6 +221,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<EarningsResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<EarningsResponse>> = fetch(request, type)
+        store.earningsResponseStream.value = NetworkOperation(description = "fetchEarnings", value = response.item, raw = response.text)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -217,6 +239,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<VariablesResponse>> = fetch(request, type)
+        store.variablesResponseStream.value = NetworkOperation(description = "fetchVariables", value = response.item, raw = response.text)
         return response.item.result?.variables ?: throw MissingDataException()
     }
 

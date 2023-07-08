@@ -33,7 +33,7 @@ enum class ReportVariable {
             ChargeEnergyToTal -> Color(125, 208, 130)
             DischargeEnergyToTal -> Color(80, 147, 248)
             GridConsumption -> Color(236, 109, 96)
-            Loads -> Color.Black
+            Loads -> Color(209,207,83)
         }
     }
 

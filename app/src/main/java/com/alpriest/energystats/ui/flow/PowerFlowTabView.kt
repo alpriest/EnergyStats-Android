@@ -36,11 +36,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawData
-import com.alpriest.energystats.models.RawDataStore
-import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
@@ -58,12 +57,11 @@ import java.time.format.DateTimeFormatter
 
 class PowerFlowTabViewModelFactory(
     private val network: Networking,
-    private val configManager: ConfigManaging,
-    private val rawDataStore: RawDataStoring
+    private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, RawDataStoring::class.java)
-            .newInstance(network, configManager, rawDataStore)
+        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java)
+            .newInstance(network, configManager)
     }
 }
 
@@ -78,7 +76,7 @@ fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier):
 class PowerFlowTabView(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val rawDataStore: RawDataStoring
+    private val networkStore: InMemoryLoggingNetworkStore
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -95,7 +93,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(network, configManager, rawDataStore)
+            factory = PowerFlowTabViewModelFactory(network, configManager)
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -185,7 +183,7 @@ class PowerFlowTabView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore())
+    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager())
     val formatter = DateTimeFormatter.ofPattern(dateFormat)
     val now = LocalDateTime.now().format(formatter)
 
@@ -210,7 +208,7 @@ fun PowerFlowTabViewPreview() {
         PowerFlowTabView(
             DemoNetworking(),
             FakeConfigManager(),
-            RawDataStore()
+            InMemoryLoggingNetworkStore()
         ).Loaded(
             viewModel = viewModel,
             summaryPowerFlowViewModel = homePowerFlowViewModel,

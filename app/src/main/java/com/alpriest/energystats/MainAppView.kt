@@ -35,7 +35,7 @@ fun MainAppView(appContainer: AppContainer) {
                         userManager = appContainer.userManager,
                         { appContainer.userManager.logout() },
                         themeStream = appContainer.configManager.themeStream,
-                        rawDataStore = appContainer.rawDataStore,
+                        networkStore = appContainer.networkStore,
                         { appContainer.openAppInPlayStore() },
                         { appContainer.sendUsEmail() },
                         { appContainer.buyMeACoffee() },

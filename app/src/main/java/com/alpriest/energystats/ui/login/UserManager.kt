@@ -62,11 +62,13 @@ class UserManager(
         }
 
         _loggedInState.value = LoginStateHolder(LoggingIn)
+        var currentAction = "fetch login Token"
 
         try {
             val hashedPassword = Encryption.md5(password)
             networking.verifyCredentials(username, hashedPassword)
             store.store(username, hashedPassword)
+            currentAction = "fetch devices"
             configManager.fetchDevices()
             _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: BadCredentialsException) {
@@ -74,7 +76,7 @@ class UserManager(
             _loggedInState.value = LoginStateHolder(LoggedOut("Wrong credentials, try again"))
         } catch (e: Exception) {
             logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut("Could not login. Check your internet connection. ${e.localizedMessage}"))
+            _loggedInState.value = LoginStateHolder(LoggedOut("Could not login (${currentAction}). ${e.localizedMessage}"))
         }
     }
 

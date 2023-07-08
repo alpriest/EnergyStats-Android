@@ -140,7 +140,7 @@ fun SummaryPowerFlowViewPreview() {
 
     EnergyStatsTheme {
         SummaryPowerFlowView(
-            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), RawDataStore()),
+            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager()),
             summaryPowerFlowViewModel = SummaryPowerFlowViewModel(
                 FakeConfigManager(),
                 2.3,

@@ -9,8 +9,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
-import com.alpriest.energystats.models.RawDataStore
-import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.services.NetworkService
@@ -22,7 +20,7 @@ import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
 import com.alpriest.energystats.ui.login.*
 
 class AppContainer(private val context: Context) {
-    val rawDataStore: RawDataStoring = RawDataStore()
+    val networkStore: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore()
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences(
             "com.alpriest.energystats",
@@ -30,11 +28,10 @@ class AppContainer(private val context: Context) {
         )
     private val credentialStore: CredentialStore = SharedPreferencesCredentialStore(sharedPreferences)
     private val config = SharedPreferencesConfigStore(sharedPreferences)
-    private val loggingStore = InMemoryLoggingNetworkStore()
 
     val networking: Networking by lazy {
         NetworkFacade(
-            network = NetworkService(credentialStore, loggingStore),
+            network = NetworkService(credentialStore, networkStore),
             config = config
         )
     }
@@ -43,7 +40,6 @@ class AppContainer(private val context: Context) {
         ConfigManager(
             config = config,
             networking = networking,
-            rawDataStore = rawDataStore,
             appVersion = getAppVersionName(context)
         )
     }

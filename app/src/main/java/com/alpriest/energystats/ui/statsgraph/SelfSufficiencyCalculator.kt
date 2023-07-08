@@ -8,7 +8,7 @@ class AbsoluteSelfSufficiencyCalculator {
         val netGeneration = feedIn - grid + batteryDischarge - batteryCharge
         val homeConsumption = loads
 
-        var result: Double = 0.0
+        var result = 0.0
         if (netGeneration > 0) {
             result = 1.0
         } else if (netGeneration + homeConsumption < 0) {

@@ -7,6 +7,5 @@ import com.alpriest.energystats.ui.login.ConfigManager
 class FakeConfigManager: ConfigManager(
     config = FakeConfigStore(),
     networking = DemoNetworking(),
-    rawDataStore = RawDataStore(),
     appVersion = "1.19"
 )

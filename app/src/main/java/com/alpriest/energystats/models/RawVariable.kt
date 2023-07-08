@@ -14,7 +14,7 @@ class RawVariable(
             "batChargePower" -> Color(125, 208, 130)
             "batDischargePower" -> Color(80, 147, 248)
             "gridConsumptionPower" -> Color(236, 109, 96)
-            "loadsPower" -> Color.Black
+            "loadsPower" -> Color(209,207,83)
             else ->
                 this.variable.md5()?.let {
                     Color(android.graphics.Color.parseColor("#" + it.subSequence(0, 6).toString())) } ?: Color.Black
