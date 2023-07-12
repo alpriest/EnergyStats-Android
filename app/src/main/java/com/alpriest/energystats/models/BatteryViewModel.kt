@@ -12,7 +12,7 @@ class BatteryViewModel {
         chargePower = 0 - battery.power
         hasBattery = true
         temperature = battery.temperature
-        residual = battery.residual
+        residual = battery.residual.toInt()
     }
 
     constructor() {
