@@ -106,8 +106,8 @@
     <string name="predefined_selections">Vordefinierte Auswahl</string>
     <string name="all">Alle</string>
     <string name="reportvariable_loads">Leistung, die im Haus verbraucht wurde</string>
-    <string name="net_self_sufficiency">Annahme von Autarkie falls der Nettoverbrauch positiv ist.\\n\\nAutarkie = (Export - Import + Batterieladung - Batterieentladung) / Hausverbrauch</string>
-    <string name="absolute_self_sufficiency">Annahme, dass jeder Strombezug vom Netz die Autarkie reduziert.\\n\\nAutarkie = Netzbezug / Hausverbrauch</string>
+    <string name="net_self_sufficiency">Annahme von Autarkie falls der Nettoverbrauch positiv ist.\n\nAutarkie = (Export - Import + Batterieladung - Batterieentladung) / Hausverbrauch</string>
+    <string name="absolute_self_sufficiency">Annahme, dass jeder Strombezug vom Netz die Autarkie reduziert.\n\nAutarkie = Netzbezug / Hausverbrauch</string>
     <string name="self_sufficiency_estimates">Autarkie-Schätzungen</string>
     <string name="approximations">Schätzungen</string>
     <string name="self_sufficiency">Autarkie</string>
@@ -115,4 +115,5 @@
     <string name="export_csv_data">Graphdaten exportieren</string>
     <string name="parameters_update_description">Die Parameter werden alle 5 Minuten von FoxESS aktualisiert und sind immer nur für einen Tag verfügbar</string>
     <string name="output">Ertrags-</string>
+    <string name="view_debug_data">Fehlerprotokolldaten anzeigen</string>
 </resources>

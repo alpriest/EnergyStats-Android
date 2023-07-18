@@ -120,4 +120,5 @@
     <string name="grid_consumption_energy">Grid consumption energy</string>
     <string name="loads_energy">Loads energy</string>
     <string name="parameters_update_description">Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time</string>
+    <string name="view_debug_data">View debug data</string>
 </resources>

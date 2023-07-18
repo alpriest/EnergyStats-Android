@@ -247,7 +247,7 @@ class StatsGraphTabViewModel(
             return
         }
 
-        homeUsageStream.value = generation - feedIn + grid
+        homeUsageStream.value = loads
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
             loads,
