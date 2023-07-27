@@ -31,7 +31,7 @@ fun SettingsFooterView(
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        RoundedColumnWithChild(
+        SettingsColumnWithChild(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp)
@@ -47,19 +47,10 @@ fun SettingsFooterView(
                     )
                 }
 
-                Button(
+                SettingsButton(
+                    title = stringResource(R.string.logout),
                     onClick = onLogout,
-                    elevation = ButtonDefaults.elevation(
-                        defaultElevation = 10.dp,
-                        pressedElevation = 15.dp,
-                        disabledElevation = 0.dp
-                    )
-                ) {
-                    Text(
-                        stringResource(R.string.logout),
-                        color = MaterialTheme.colors.onPrimary
-                    )
-                }
+                )
             }
         }
 

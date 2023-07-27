@@ -32,7 +32,7 @@ enum class RefreshFrequency(val value: Int) {
 fun RefreshFrequencySettingsView(config: ConfigManaging) {
     val refreshFrequency = rememberSaveable { mutableStateOf(RefreshFrequency.Auto) }
 
-    RoundedColumnWithChild {
+    SettingsColumnWithChild {
         SettingsTitleView(stringResource(R.string.refresh_frequency))
 
         Row(verticalAlignment = Alignment.CenterVertically) {

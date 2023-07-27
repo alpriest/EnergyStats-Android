@@ -19,7 +19,7 @@ fun InverterChoiceView(config: ConfigManaging) {
     val currentDevice = config.currentDevice.collectAsState()
 
     if ((config.devices?.count() ?: 0) > 1) {
-        RoundedColumnWithChild {
+        SettingsColumnWithChild {
             SettingsTitleView("Device selection")
 
             currentDevice.value?.let {

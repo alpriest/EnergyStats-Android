@@ -20,13 +20,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawVariable
-import com.alpriest.energystats.ui.settings.RoundedColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -61,7 +59,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            RoundedColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
+            SettingsColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
                 SettingsTitleView(stringResource(id = R.string.predefined_selections))
 
                 OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
@@ -71,7 +69,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                 OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
             }
 
-            RoundedColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
+            SettingsColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
                 SettingsTitleView(stringResource(id = R.string.all))
 
                 variables.forEach { variable ->

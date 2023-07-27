@@ -9,7 +9,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -41,7 +40,7 @@ fun NavGraphBuilder.debugGraph(navController: NavController, networkStore: InMem
 
 @Composable
 fun DebugDataSettingsView(navController: NavController) {
-    RoundedColumnWithChild {
+    SettingsColumnWithChild {
         SettingsTitleView("Debug")
 
         Button(onClick = { navController.navigate("raw") }) {

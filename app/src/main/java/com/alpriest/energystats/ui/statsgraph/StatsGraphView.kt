@@ -41,9 +41,7 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
     Column(modifier = modifier.fillMaxWidth()) {
         ProvideChartStyle(chartStyle(chartColors)) {
             Chart(
-                chart = columnChart(
-                    axisValuesOverrider = AxisValuesOverrider.fixed(minY = 0f, maxY = maxY)
-                ),
+                chart = columnChart(),
                 chartModelProducer = viewModel.producer,
                 chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                 startAxis = startAxis(

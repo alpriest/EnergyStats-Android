@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -34,6 +35,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
     val boundsValues = viewModel.boundsStream.collectAsState().value
+    val appTheme = themeStream.collectAsState().value
 
     Column(modifier) {
         graphVariables.value.filter { it.isSelected }.map {
@@ -50,12 +52,16 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
                 else -> it.type.name
             }
 
-            val id = LocalContext.current.getResources().getIdentifier("rawvariable_${it.type.variable.lowercase()}", "string", LocalContext.current.applicationInfo.packageName)
+            val id = LocalContext.current.resources.getIdentifier("rawvariable_${it.type.variable.lowercase()}", "string", LocalContext.current.applicationInfo.packageName)
             val description: String = if (id > 0) { stringResource(id) } else { it.type.variable }
 
-            selectedValue?.let { entry ->
-                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, entry.y?.toDouble()?.rounded(2)?.toString(), null)
-            } ?: run {
+            if (selectedValue != null) {
+                val formattedValue = when (it.type.unit) {
+                    "kW" -> selectedValue.y.toDouble().kW(appTheme.decimalPlaces)
+                    else -> "${selectedValue.y} ${it.type.unit}"
+                }
+                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, formattedValue, null)
+            } else {
                 val boundsValue = boundsValues.firstOrNull { entry -> entry.type == it.type }
                 val graphBounds = boundsValue?.let { GraphBounds(it.min,it.max) }
                 ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, null, graphBounds)

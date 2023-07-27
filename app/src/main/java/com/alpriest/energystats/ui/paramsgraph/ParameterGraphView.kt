@@ -51,9 +51,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
     Column(modifier = modifier.fillMaxWidth()) {
         ProvideChartStyle(chartStyle(chartColors)) {
             Chart(
-                chart = lineChart(
-                    axisValuesOverrider = AxisValuesOverrider.fixed(minY = 0f, maxY = maxY)
-                ),
+                chart = lineChart(),
                 chartModelProducer = viewModel.producer,
                 chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                 startAxis = startAxis(
