@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.settings
+package com.alpriest.energystats.ui.settings.battery
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +23,7 @@ import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable

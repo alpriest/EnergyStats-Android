@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.settings.battery.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable

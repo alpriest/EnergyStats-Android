@@ -30,6 +30,7 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable

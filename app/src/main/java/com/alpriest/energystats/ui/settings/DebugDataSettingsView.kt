@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.settings.battery.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.flow.MutableStateFlow

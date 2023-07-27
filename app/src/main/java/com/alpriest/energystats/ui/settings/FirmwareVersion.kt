@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.settings.battery.SettingsTitleView
 
 @Composable
 fun FirmwareVersionView(config: ConfigManaging) {
