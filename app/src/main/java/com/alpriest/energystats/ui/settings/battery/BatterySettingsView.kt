@@ -18,12 +18,15 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -37,7 +40,7 @@ fun SettingsTitleView(title: String) {
 }
 
 @Composable
-fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
+fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
     val isEditingCapacity = rememberSaveable { mutableStateOf(false) }
     var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacity.toString()) }
     val decimalPlaces = config.themeStream.collectAsState().value.decimalPlaces
@@ -55,13 +58,19 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        SettingsButton("Minimum charge levels") {
+            navController.navigate(SettingsScreen.BatterySOC.name)
+        }
+
+        SettingsButton("Charge times") {
+            navController.navigate(SettingsScreen.BatteryChargeTimes.name)
+        }
+
         SettingsColumnWithChild {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = modifier
             ) {
-                SettingsTitleView(stringResource(R.string.battery))
-
                 Column(modifier = modifier) {
                     Row(
                         modifier = Modifier
@@ -232,7 +241,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
 fun BatterySettingsViewPreview() {
     EnergyStatsTheme {
         BatterySettingsView(
-            config = FakeConfigManager()
+            config = FakeConfigManager(),
+            navController = navController
         )
     }
 }

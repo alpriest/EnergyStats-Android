@@ -50,7 +50,9 @@ fun SettingsColumnWithChild(
 enum class SettingsScreen() {
     Settings,
     Debug,
-    Battery
+    Battery,
+    BatterySOC,
+    BatteryChargeTimes
 }
 
 @Composable
@@ -81,7 +83,10 @@ fun NavigableSettingsView(
             )
         }
         composable(SettingsScreen.Battery.name) {
-            BatterySettingsView(config = config)
+            BatterySettingsView(
+                navController = navController,
+                config = config
+            )
         }
         debugGraph(navController, networkStore)
     }
