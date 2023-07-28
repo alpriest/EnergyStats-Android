@@ -85,4 +85,12 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
             network.fetchEarnings(deviceID)
         }
     }
+
+    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
+        return if(config.isDemoUser) {
+            demoNetworking.setSoc(minGridSOC, minSOC, deviceSN)
+        } else {
+            network.setSoc(minGridSOC, minSOC, deviceSN)
+        }
+    }
 }

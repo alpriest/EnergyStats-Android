@@ -117,4 +117,7 @@ class DemoNetworking : Networking {
     override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
         return EarningsResponse(Earning(generation = 11.5, earnings = 54.2))
     }
+
+    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
+    }
 }

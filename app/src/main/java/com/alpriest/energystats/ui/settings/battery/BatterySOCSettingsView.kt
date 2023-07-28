@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,8 +36,10 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModelFactory
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
+import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class BatterySOCSettingsViewModelFactory(
     private val network: Networking,
@@ -62,7 +65,17 @@ class BatterySOCSettingsViewModel(private val network: Networking, private val c
         }
     }
 
-    fun save() {}
+    suspend fun save() {
+        config.currentDevice.value?.let { device ->
+            val deviceSN = device.deviceSN
+
+            network.setSoc(
+                minSOC = minSOCStream.value.toInt(),
+                minGridSOC = minSOConGridStream.value.toInt(),
+                deviceSN = deviceSN
+            )
+        }
+    }
 }
 
 class BatterySOCSettings(
@@ -74,6 +87,7 @@ class BatterySOCSettings(
         val minSOC = viewModel.minSOCStream.collectAsState().value
         val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
         var isLoading by remember { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
 
         LaunchedEffect(null) {
             isLoading = true
@@ -91,80 +105,83 @@ class BatterySOCSettings(
             }
         } else {
             Column(
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
-                ) {
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .background(MaterialTheme.colors.surface)
-                                .padding(horizontal = 12.dp, vertical = 4.dp)
-                        ) {
-                            Text(
-                                "Min SoC",
-                                Modifier.weight(1.0f),
-                                style = MaterialTheme.typography.h4
-                            )
-                            OutlinedTextField(
-                                value = minSOC,
-                                onValueChange = { },
-                                modifier = Modifier.width(100.dp),
-                                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                                trailingIcon = { Text("%") }
-                            )
-                        }
-
+                Column {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .background(MaterialTheme.colors.surface)
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                    ) {
                         Text(
-                            "The minimum charge the battery should maintain.",
-                            color = MaterialTheme.colors.onSecondary,
-                            modifier = Modifier.padding(horizontal = 12.dp)
+                            "Min SoC",
+                            Modifier.weight(1.0f),
+                            style = MaterialTheme.typography.h4
+                        )
+                        OutlinedTextField(
+                            value = minSOC,
+                            onValueChange = { viewModel.minSOCStream.value = it },
+                            modifier = Modifier.width(100.dp),
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                            trailingIcon = { Text("%") }
                         )
                     }
 
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier
-                                .background(MaterialTheme.colors.surface)
-                                .padding(horizontal = 12.dp, vertical = 4.dp)
-                        ) {
-                            Text(
-                                "Min SoC on Grid",
-                                Modifier.weight(1.0f),
-                                style = MaterialTheme.typography.h4
-                            )
-                            OutlinedTextField(
-                                value = minSOConGrid,
-                                onValueChange = { viewModel.minSOConGridStream.value = it },
-                                modifier = Modifier.width(100.dp),
-                                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                                trailingIcon = { Text("%") }
-                            )
-                        }
+                    Text(
+                        "The minimum charge the battery should maintain.",
+                        color = MaterialTheme.colors.onSecondary,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+                }
 
-                        Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-                            Text(
-                                "The minimum charge the battery should maintain when grid power is present.",
-                                color = MaterialTheme.colors.onSecondary,
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
+                Column {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .background(MaterialTheme.colors.surface)
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                    ) {
+                        Text(
+                            "Min SoC on Grid",
+                            Modifier.weight(1.0f),
+                            style = MaterialTheme.typography.h4
+                        )
+                        OutlinedTextField(
+                            value = minSOConGrid,
+                            onValueChange = { viewModel.minSOConGridStream.value = it },
+                            modifier = Modifier.width(100.dp),
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                            trailingIcon = { Text("%") }
+                        )
+                    }
 
-                            Text(
-                                "For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.",
-                                color = MaterialTheme.colors.onSecondary,
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
+                    Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+                        Text(
+                            "The minimum charge the battery should maintain when grid power is present.",
+                            color = MaterialTheme.colors.onSecondary,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
 
-                            Text(
-                                "If you're not sure then set both values the same.",
-                                color = MaterialTheme.colors.onSecondary,
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
-                        }
+                        Text(
+                            "For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.",
+                            color = MaterialTheme.colors.onSecondary,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+
+                        Text(
+                            "If you're not sure then set both values the same.",
+                            color = MaterialTheme.colors.onSecondary,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
+                }
+
+                SettingsButton("Save") {
+                    coroutineScope.launch {
+                        viewModel.save()
                     }
                 }
             }

@@ -15,6 +15,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportRequest
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -243,6 +244,27 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result?.variables ?: throw MissingDataException()
     }
 
+    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("c/v0/device/battery/soc/set")
+            .build()
+
+        val body = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            Gson().toJson(SetSOCRequest(minGridSoc = minGridSOC, minSoc = minSOC, sn = deviceSN))
+        )
+
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
+    }
+
     private suspend fun fetchLoginToken(
         username: String? = null,
         hashedPassword: String? = null
@@ -330,7 +352,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 }
 
-data class NetworkTuple<T: NetworkResponseInterface>(
+data class NetworkTuple<T : NetworkResponseInterface>(
     val item: T,
     val text: String?
 )

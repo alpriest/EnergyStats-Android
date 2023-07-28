@@ -7,8 +7,8 @@ class InvalidTokenException : Exception("Invalid Token")
 class BadCredentialsException : Exception("Bad Credentials")
 class TryLaterException : Exception("Try Later")
 class MaintenanceModeException: Exception("Fox servers are offline. Please try later.")
-
 class MissingDataException : Exception("Missing data")
+
 interface Networking {
     suspend fun fetchDeviceList(): PagedDeviceListResponse
     suspend fun ensureHasToken()
@@ -20,6 +20,7 @@ interface Networking {
     suspend fun fetchAddressBook(deviceID: String): AddressBookResponse
     suspend fun fetchVariables(deviceID: String): List<RawVariable>
     suspend fun fetchEarnings(deviceID: String): EarningsResponse
+    suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface
