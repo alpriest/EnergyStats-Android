@@ -1,111 +1,172 @@
 package com.alpriest.energystats.ui.settings.battery
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material3.Divider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.SettingsButton
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.flow.PowerFlowTabViewModelFactory
+import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
-@Composable
-fun BatterySOCSettingsView(config: ConfigManaging, network: Networking) {
-    var minSOC by rememberSaveable { mutableStateOf("20") }
-    var minSOConGrid by rememberSaveable { mutableStateOf("20") }
+class BatterySOCSettingsViewModelFactory(
+    private val network: Networking,
+    private val configManager: ConfigManaging
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java)
+            .newInstance(network, configManager)
+    }
+}
 
-    SettingsColumnWithChild(
-        modifier = Modifier.padding(horizontal = 12.dp)
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        "Min SoC",
-                        Modifier.weight(1.0f),
-                        style = MaterialTheme.typography.h4
-                    )
-                    OutlinedTextField(
-                        value = minSOC,
-                        onValueChange = { minSOC = it },
-                        modifier = Modifier.width(100.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                        trailingIcon = { Text("%") }
-                    )
-                }
+class BatterySOCSettingsViewModel(private val network: Networking, private val config: ConfigManaging) : ViewModel() {
+    var minSOCStream = MutableStateFlow("")
+    var minSOConGridStream = MutableStateFlow("")
 
-                Text(
-                    "The minimum charge the battery should maintain.",
-                    color = MaterialTheme.colors.onSecondary
-                )
+    suspend fun load() {
+        config.currentDevice.value?.let { device ->
+            val deviceSN = device.deviceSN
+
+            val result = network.fetchBatterySettings(deviceSN)
+            minSOCStream.value = result.minSoc.toString()
+            minSOConGridStream.value = result.minGridSoc.toString()
+        }
+    }
+
+    fun save() {}
+}
+
+class BatterySOCSettings(
+    private val network: Networking,
+    private val configManager: ConfigManaging
+) {
+    @Composable
+    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager))) {
+        val minSOC = viewModel.minSOCStream.collectAsState().value
+        val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
+        var isLoading by remember { mutableStateOf(false) }
+
+        LaunchedEffect(null) {
+            isLoading = true
+            viewModel.load()
+            isLoading = false
+        }
+
+        if (isLoading) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                androidx.compose.material.Text(stringResource(R.string.loading))
             }
-
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+        } else {
+            Column(
+                modifier = Modifier.padding(12.dp)
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
                 ) {
-                    Text(
-                        "Min SoC on Grid",
-                        Modifier.weight(1.0f),
-                        style = MaterialTheme.typography.h4
-                    )
-                    OutlinedTextField(
-                        value = minSOConGrid,
-                        onValueChange = { minSOConGrid = it },
-                        modifier = Modifier.width(100.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                        trailingIcon = { Text("%") }
-                    )
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .background(MaterialTheme.colors.surface)
+                                .padding(horizontal = 12.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                "Min SoC",
+                                Modifier.weight(1.0f),
+                                style = MaterialTheme.typography.h4
+                            )
+                            OutlinedTextField(
+                                value = minSOC,
+                                onValueChange = { },
+                                modifier = Modifier.width(100.dp),
+                                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                                trailingIcon = { Text("%") }
+                            )
+                        }
+
+                        Text(
+                            "The minimum charge the battery should maintain.",
+                            color = MaterialTheme.colors.onSecondary,
+                            modifier = Modifier.padding(horizontal = 12.dp)
+                        )
+                    }
+
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .background(MaterialTheme.colors.surface)
+                                .padding(horizontal = 12.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                "Min SoC on Grid",
+                                Modifier.weight(1.0f),
+                                style = MaterialTheme.typography.h4
+                            )
+                            OutlinedTextField(
+                                value = minSOConGrid,
+                                onValueChange = { viewModel.minSOConGridStream.value = it },
+                                modifier = Modifier.width(100.dp),
+                                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
+                                trailingIcon = { Text("%") }
+                            )
+                        }
+
+                        Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+                            Text(
+                                "The minimum charge the battery should maintain when grid power is present.",
+                                color = MaterialTheme.colors.onSecondary,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+
+                            Text(
+                                "For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.",
+                                color = MaterialTheme.colors.onSecondary,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+
+                            Text(
+                                "If you're not sure then set both values the same.",
+                                color = MaterialTheme.colors.onSecondary,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                        }
+                    }
                 }
-
-                Text(
-                    "The minimum charge the battery should maintain when grid power is present.",
-                    color = MaterialTheme.colors.onSecondary,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-
-                Text(
-                    "For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.",
-                    color = MaterialTheme.colors.onSecondary,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-
-                Text(
-                    "If you're not sure then set both values the same.",
-                    color = MaterialTheme.colors.onSecondary,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
             }
         }
     }
@@ -115,9 +176,9 @@ fun BatterySOCSettingsView(config: ConfigManaging, network: Networking) {
 @Composable
 fun BatterySOCSettingsViewPreview() {
     EnergyStatsTheme {
-        BatterySOCSettingsView(
-            config = FakeConfigManager(),
+        BatterySOCSettings(
+            configManager = FakeConfigManager(),
             network = DemoNetworking()
-        )
+        ).Content()
     }
 }

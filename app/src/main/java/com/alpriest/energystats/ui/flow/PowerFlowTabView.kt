@@ -39,7 +39,6 @@ import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
@@ -75,8 +74,7 @@ fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier):
 
 class PowerFlowTabView(
     private val network: Networking,
-    private val configManager: ConfigManaging,
-    private val networkStore: InMemoryLoggingNetworkStore
+    private val configManager: ConfigManaging
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -207,8 +205,7 @@ fun PowerFlowTabViewPreview() {
     EnergyStatsTheme {
         PowerFlowTabView(
             DemoNetworking(),
-            FakeConfigManager(),
-            InMemoryLoggingNetworkStore()
+            FakeConfigManager()
         ).Loaded(
             viewModel = viewModel,
             summaryPowerFlowViewModel = homePowerFlowViewModel,

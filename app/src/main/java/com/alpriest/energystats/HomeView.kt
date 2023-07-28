@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -87,13 +86,14 @@ fun HomeView(
                 state = pagerState
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(network, configManager, networkStore).Content(themeStream = themeStream)
+                    0 -> PowerFlowTabView(network, configManager).Content(themeStream = themeStream)
                     1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     3 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,
+                        network = network,
                         networkStore = networkStore,
                         onRateApp = onRateApp,
                         onSendUsEmail = onSendUsEmail,

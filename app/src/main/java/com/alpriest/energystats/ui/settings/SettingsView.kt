@@ -28,8 +28,10 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -63,7 +65,8 @@ fun NavigableSettingsView(
     networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
     onSendUsEmail: () -> Unit,
-    onBuyMeCoffee: () -> Unit
+    onBuyMeCoffee: () -> Unit,
+    network: Networking
 ) {
     val navController = rememberNavController()
 
@@ -87,6 +90,9 @@ fun NavigableSettingsView(
                 navController = navController,
                 config = config
             )
+        }
+        composable(SettingsScreen.BatterySOC.name) {
+            BatterySOCSettings(configManager = config, network = network).Content()
         }
         debugGraph(navController, networkStore)
     }

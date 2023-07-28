@@ -39,7 +39,7 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-        return BatterySettingsResponse(20)
+        return BatterySettingsResponse(20, minSoc = 30)
     }
 
     override suspend fun fetchReport(
