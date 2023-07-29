@@ -36,6 +36,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
+import com.alpriest.energystats.ui.settings.battery.BatteryTimePeriodView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -96,6 +97,9 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.BatterySOC.name) {
             BatterySOCSettings(configManager = config, network = network, navController = navController).Content()
+        }
+        composable(SettingsScreen.BatteryChargeTimes.name) {
+            BatteryTimePeriodView()
         }
         debugGraph(navController, networkStore)
     }
