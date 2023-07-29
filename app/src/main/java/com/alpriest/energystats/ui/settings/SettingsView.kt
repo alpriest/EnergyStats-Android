@@ -3,7 +3,10 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -92,7 +95,7 @@ fun NavigableSettingsView(
             )
         }
         composable(SettingsScreen.BatterySOC.name) {
-            BatterySOCSettings(configManager = config, network = network).Content()
+            BatterySOCSettings(configManager = config, network = network, navController = navController).Content()
         }
         debugGraph(navController, networkStore)
     }

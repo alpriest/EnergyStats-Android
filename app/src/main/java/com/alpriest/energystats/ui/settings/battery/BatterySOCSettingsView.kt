@@ -14,96 +14,51 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.alpriest.energystats.R
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.PowerFlowTabViewModelFactory
-import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-
-class BatterySOCSettingsViewModelFactory(
-    private val network: Networking,
-    private val configManager: ConfigManaging
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java)
-            .newInstance(network, configManager)
-    }
-}
-
-class BatterySOCSettingsViewModel(private val network: Networking, private val config: ConfigManaging) : ViewModel() {
-    var minSOCStream = MutableStateFlow("")
-    var minSOConGridStream = MutableStateFlow("")
-
-    suspend fun load() {
-        config.currentDevice.value?.let { device ->
-            val deviceSN = device.deviceSN
-
-            val result = network.fetchBatterySettings(deviceSN)
-            minSOCStream.value = result.minSoc.toString()
-            minSOConGridStream.value = result.minGridSoc.toString()
-        }
-    }
-
-    suspend fun save() {
-        config.currentDevice.value?.let { device ->
-            val deviceSN = device.deviceSN
-
-            network.setSoc(
-                minSOC = minSOCStream.value.toInt(),
-                minGridSOC = minSOConGridStream.value.toInt(),
-                deviceSN = deviceSN
-            )
-        }
-    }
-}
 
 class BatterySOCSettings(
     private val network: Networking,
-    private val configManager: ConfigManaging
+    private val configManager: ConfigManaging,
+    private val navController: NavController
 ) {
     @Composable
-    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager))) {
+    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager, navController))) {
         val minSOC = viewModel.minSOCStream.collectAsState().value
         val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
-        var isLoading by remember { mutableStateOf(false) }
+        val isActive = viewModel.activityStream.collectAsState().value
         val coroutineScope = rememberCoroutineScope()
 
         LaunchedEffect(null) {
-            isLoading = true
             viewModel.load()
-            isLoading = false
         }
 
-        if (isLoading) {
+        isActive?.let {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
-                androidx.compose.material.Text(stringResource(R.string.loading))
+                androidx.compose.material.Text(it)
             }
-        } else {
+        } ?: run {
             Column(
                 modifier = Modifier.padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -195,7 +150,8 @@ fun BatterySOCSettingsViewPreview() {
     EnergyStatsTheme {
         BatterySOCSettings(
             configManager = FakeConfigManager(),
-            network = DemoNetworking()
+            network = DemoNetworking(),
+            navController = NavHostController(LocalContext.current)
         ).Content()
     }
 }
