@@ -15,12 +15,17 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -40,20 +45,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class BatteryForceChargeTimesViewModelFactory(
-    private val network: Networking,
-    private val configManager: ConfigManaging,
-    private val navController: NavController
+    private val network: Networking, private val configManager: ConfigManaging, private val navController: NavController
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, NavController::class.java)
-            .newInstance(network, configManager, navController)
+        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, NavController::class.java).newInstance(network, configManager, navController)
     }
 }
 
 class BatteryForceChargeTimesViewModel(
-    private val network: Networking,
-    private val config: ConfigManaging,
-    private val navController: NavController
+    private val network: Networking, private val config: ConfigManaging, private val navController: NavController
 ) : ViewModel() {
     val timePeriod1Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
     val timePeriod2Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
@@ -69,17 +69,13 @@ class BatteryForceChargeTimesViewModel(
                 val result = network.fetchBatteryTimes(deviceSN)
                 result.times.getOrNull(0)?.let {
                     timePeriod1Stream.value = ChargeTimePeriod(
-                        start = it.startTime,
-                        end = it.endTime,
-                        enabled = it.enableGrid
+                        start = it.startTime, end = it.endTime, enabled = it.enableGrid
                     )
                 }
 
                 result.times.getOrNull(1)?.let {
                     timePeriod2Stream.value = ChargeTimePeriod(
-                        start = it.startTime,
-                        end = it.endTime,
-                        enabled = it.enableGrid
+                        start = it.startTime, end = it.endTime, enabled = it.enableGrid
                     )
                 }
             }
@@ -114,17 +110,13 @@ private fun Time.Companion.zero(): Time {
 }
 
 class BatteryForceChargeTimes(
-    private val network: Networking,
-    private val configManager: ConfigManaging,
-    private val navController: NavController
+    private val network: Networking, private val configManager: ConfigManaging, private val navController: NavController
 ) {
     @Composable
     fun Content(
         viewModel: BatteryForceChargeTimesViewModel = viewModel(
             factory = BatteryForceChargeTimesViewModelFactory(
-                network = network,
-                configManager = configManager,
-                navController = navController
+                network = network, configManager = configManager, navController = navController
             )
         )
     ) {
@@ -154,47 +146,65 @@ class BatteryForceChargeTimes(
     @Composable
     fun BatteryTimePeriodView(timePeriodStream: MutableStateFlow<ChargeTimePeriod>, periodTitle: String) {
         val timePeriod = timePeriodStream.collectAsState().value
+        val timeError = remember { mutableStateOf(false) }
+        val errorMessage = remember { mutableStateOf<String?>(null) }
+        val textColor = remember { mutableStateOf(Color.Black) }
 
-        SettingsColumnWithChild {
+        LaunchedEffect(null) {
+            timePeriodStream.collect {
+                if (it.start.after(timePeriod.end)) {
+                    timeError.value = true
+                }
+                errorMessage.value = it.validate
+            }
+        }
+
+        Column {
             Text(periodTitle)
 
-            Divider()
-
-            Row(
-                verticalAlignment = CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Enable charge from grid")
-                Switch(
-                    checked = timePeriod.enabled,
-                    onCheckedChange = {
+            SettingsColumnWithChild {
+                Row(
+                    verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Enable charge from grid")
+                    Switch(checked = timePeriod.enabled, onCheckedChange = {
                         timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)
-                    }
-                )
+                    })
+                }
+
+                Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+                TimePeriodView(
+                    timePeriod.start,
+                    "Start",
+                    textStyle = TextStyle(color = textColor.value)
+                ) { hour, minute ->
+                    timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
+                }
+
+                Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+                TimePeriodView(
+                    timePeriod.end,
+                    "End",
+                    textStyle = TextStyle(color = textColor.value)
+                ) { hour, minute ->
+                    timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
+                }
             }
 
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
-            TimePeriodView(timePeriod.start, "Start") { hour, minute ->
-                timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
-            }
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
-            TimePeriodView(timePeriod.end, "End") { hour, minute ->
-                timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
+            timePeriod.description?.let {
+                Text(it)
             }
         }
     }
 
     @Composable
-    fun TimePeriodView(time: Time, title: String, onChange: (Int, Int) -> Unit) {
+    fun TimePeriodView(time: Time, title: String, textStyle: TextStyle, onChange: (Int, Int) -> Unit) {
         val dialog = TimePickerDialog(
-            LocalContext.current,
-            { _, mHour: Int, mMinute: Int ->
+            LocalContext.current, { _, mHour: Int, mMinute: Int ->
                 onChange(mHour, mMinute)
-            },
-            time.hour,
-            time.minute,
-            false
+            }, time.hour, time.minute, false
         )
 
         Row(
@@ -202,14 +212,14 @@ class BatteryForceChargeTimes(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(title)
+            Text(title, style = textStyle)
 
             Text(
                 "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}",
+                style = textStyle,
                 modifier = Modifier.clickable {
                     dialog.show()
-                }
-            )
+                })
         }
     }
 }
@@ -219,9 +229,7 @@ class BatteryForceChargeTimes(
 fun BatteryForceChargeTimesViewPreview() {
     EnergyStatsTheme {
         BatteryForceChargeTimes(
-            configManager = FakeConfigManager(),
-            network = DemoNetworking(),
-            navController = NavHostController(LocalContext.current)
+            configManager = FakeConfigManager(), network = DemoNetworking(), navController = NavHostController(LocalContext.current)
         ).Content()
     }
 }
