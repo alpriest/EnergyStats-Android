@@ -78,15 +78,15 @@ class BatteryForceChargeTimesViewModel(
         if (!period1.enabled && !period2.enabled) {
             result = "Your battery will not be force charged from the grid."
         } else if (period1.enabled && period2.enabled) {
-            result = "Your battery will be force charged from the grid ${period1.description}, and ${period2.description}"
+            result = "Your battery will be force charged from the grid between ${period1.description}, and ${period2.description}"
 
             if (period1.overlaps(period2)) {
                 result = "$result. These periods overlap, you may want to update them."
             }
         } else if (period1.enabled) {
-            result = "Your battery will be force charged from the grid ${period1.description}"
+            result = "Your battery will be force charged from the grid between ${period1.description}"
         } else if (period2.enabled) {
-            result = "Your battery will be force charged from the grid ${period2.description}"
+            result = "Your battery will be force charged from the grid between ${period2.description}"
         }
 
         summaryStream.value = result

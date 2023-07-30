@@ -9,7 +9,7 @@ data class ChargeTimePeriod(
 ) {
     val description: String?
         get() = if (enabled) {
-            String.format("from %02d:%02d to %02d:%02d", start.hour, start.minute, end.hour, end.minute)
+            String.format("%02d:%02d to %02d:%02d", start.hour, start.minute, end.hour, end.minute)
         } else {
             null
         }
@@ -26,7 +26,7 @@ data class ChargeTimePeriod(
 }
 
 fun Time.after(end: Time): Boolean {
-    return (hour * 60) + minute > (end.hour * 60 + end.minute)
+    return (hour * 60) + minute > ((end.hour * 60) + end.minute)
 }
 
 fun Time.Companion.zero(): Time {

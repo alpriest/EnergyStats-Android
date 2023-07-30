@@ -103,14 +103,15 @@ class BatteryForceChargeTimes(
     @Composable
     fun BatteryTimePeriodView(timePeriodStream: MutableStateFlow<ChargeTimePeriod>, periodTitle: String) {
         val timePeriod = timePeriodStream.collectAsState().value
-        val timeError = remember { mutableStateOf(false) }
         val errorMessage = remember { mutableStateOf<String?>(null) }
         val textColor = remember { mutableStateOf(Color.Black) }
 
         LaunchedEffect(null) {
             timePeriodStream.collect {
-                if (it.start.after(timePeriod.end)) {
-                    timeError.value = true
+                if (it.start.after(it.end)) {
+                    textColor.value = Color.Red
+                } else {
+                    textColor.value = Color.Black
                 }
                 errorMessage.value = it.validate
             }
@@ -149,6 +150,13 @@ class BatteryForceChargeTimes(
                     timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
                 }
             }
+
+            errorMessage.value?.let {
+                Text(
+                    text = it,
+                    style = TextStyle(color = textColor.value)
+                )
+            }
         }
     }
 
@@ -157,7 +165,10 @@ class BatteryForceChargeTimes(
         val dialog = TimePickerDialog(
             LocalContext.current, { _, mHour: Int, mMinute: Int ->
                 onChange(mHour, mMinute)
-            }, time.hour, time.minute, false
+            },
+            time.hour,
+            time.minute,
+            true
         )
 
         Row(
