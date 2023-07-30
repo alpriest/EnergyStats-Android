@@ -9,14 +9,14 @@ data class ChargeTimePeriod(
 ) {
     val description: String?
         get() = if (enabled) {
-            String.format("%02d:%02d - %02d:%02d", start.hour, start.minute, end.hour, end.minute)
+            String.format("from %02d:%02d to %02d:%02d", start.hour, start.minute, end.hour, end.minute)
         } else {
             null
         }
 
     val validate: String?
         get() = if (start.after(end)) {
-            "Charge time period validation failed."
+            "Start time must be before the end time"
         } else {
             null
         }
@@ -27,4 +27,8 @@ data class ChargeTimePeriod(
 
 fun Time.after(end: Time): Boolean {
     return (hour * 60) + minute > (end.hour * 60 + end.minute)
+}
+
+fun Time.Companion.zero(): Time {
+    return Time(0, 0)
 }

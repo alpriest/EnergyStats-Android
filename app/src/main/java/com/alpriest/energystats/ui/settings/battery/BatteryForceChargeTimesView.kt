@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -44,71 +45,6 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class BatteryForceChargeTimesViewModelFactory(
-    private val network: Networking, private val configManager: ConfigManaging, private val navController: NavController
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, NavController::class.java).newInstance(network, configManager, navController)
-    }
-}
-
-class BatteryForceChargeTimesViewModel(
-    private val network: Networking, private val config: ConfigManaging, private val navController: NavController
-) : ViewModel() {
-    val timePeriod1Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
-    val timePeriod2Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
-    var activityStream = MutableStateFlow<String?>(null)
-
-    suspend fun load() {
-        activityStream.value = "Loading"
-
-        runCatching {
-            config.currentDevice.value?.let { device ->
-                val deviceSN = device.deviceSN
-
-                val result = network.fetchBatteryTimes(deviceSN)
-                result.times.getOrNull(0)?.let {
-                    timePeriod1Stream.value = ChargeTimePeriod(
-                        start = it.startTime, end = it.endTime, enabled = it.enableGrid
-                    )
-                }
-
-                result.times.getOrNull(1)?.let {
-                    timePeriod2Stream.value = ChargeTimePeriod(
-                        start = it.startTime, end = it.endTime, enabled = it.enableGrid
-                    )
-                }
-            }
-        }.also {
-            activityStream.value = null
-        }
-    }
-
-    suspend fun save() {
-//        activityStream.value = "Saving"
-//
-//        runCatching {
-//            config.currentDevice.value?.let { device ->
-//                val deviceSN = device.deviceSN
-//
-//                network.setSoc(
-//                    minSOC = minSOCStream.value.toInt(),
-//                    minGridSOC = minSOConGridStream.value.toInt(),
-//                    deviceSN = deviceSN
-//                )
-//
-//                navController.popBackStack()
-//            } ?: run {
-//                activityStream.value = null
-//            }
-//        }
-    }
-}
-
-private fun Time.Companion.zero(): Time {
-    return Time(0, 0)
-}
-
 class BatteryForceChargeTimes(
     private val network: Networking, private val configManager: ConfigManaging, private val navController: NavController
 ) {
@@ -122,22 +58,43 @@ class BatteryForceChargeTimes(
     ) {
         val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
+        val chargeSummary = viewModel.summaryStream.collectAsState().value
+        val isActive = viewModel.activityStream.collectAsState().value
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background)
-                .padding(12.dp)
-                .verticalScroll(scrollState),
-            horizontalAlignment = CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            BatteryTimePeriodView(viewModel.timePeriod1Stream, "Period 1")
-            BatteryTimePeriodView(viewModel.timePeriod2Stream, "Period 2")
+        LaunchedEffect(null) {
+            viewModel.load()
+        }
 
-            SettingsButton("Save") {
-                coroutineScope.launch {
-                    viewModel.save()
+        isActive?.let {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                androidx.compose.material.Text(it)
+            }
+        } ?: run {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.background)
+                    .padding(12.dp)
+                    .verticalScroll(scrollState),
+                horizontalAlignment = CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                BatteryTimePeriodView(viewModel.timePeriod1Stream, "Period 1")
+                BatteryTimePeriodView(viewModel.timePeriod2Stream, "Period 2")
+
+                Column {
+                    SettingsTitleView("Summary")
+                    Text(chargeSummary)
+                }
+
+                SettingsButton("Save") {
+                    coroutineScope.launch {
+                        viewModel.save()
+                    }
                 }
             }
         }
@@ -160,7 +117,7 @@ class BatteryForceChargeTimes(
         }
 
         Column {
-            Text(periodTitle)
+            SettingsTitleView(periodTitle)
 
             SettingsColumnWithChild {
                 Row(
@@ -191,10 +148,6 @@ class BatteryForceChargeTimes(
                 ) { hour, minute ->
                     timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
                 }
-            }
-
-            timePeriod.description?.let {
-                Text(it)
             }
         }
     }
