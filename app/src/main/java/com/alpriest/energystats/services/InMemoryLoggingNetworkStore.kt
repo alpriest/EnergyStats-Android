@@ -3,6 +3,7 @@ package com.alpriest.energystats.services
 import com.alpriest.energystats.models.AddressBookResponse
 import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
+import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.RawResponse
@@ -18,4 +19,5 @@ class InMemoryLoggingNetworkStore {
     var reportResponseStream: MutableStateFlow<NetworkOperation<NetworkReportResponse>?> = MutableStateFlow(null)
     var batterySettingsResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<BatterySettingsResponse>>?> = MutableStateFlow(null)
     var deviceListResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<PagedDeviceListResponse>>?> = MutableStateFlow(null)
+    val batteryTimesResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<BatteryTimesResponse>>?> = MutableStateFlow(null)
 }

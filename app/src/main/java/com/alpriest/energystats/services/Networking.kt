@@ -21,6 +21,7 @@ interface Networking {
     suspend fun fetchVariables(deviceID: String): List<RawVariable>
     suspend fun fetchEarnings(deviceID: String): EarningsResponse
     suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
+    suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

@@ -93,4 +93,12 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
             network.setSoc(minGridSOC, minSOC, deviceSN)
         }
     }
+
+    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
+        return if(config.isDemoUser) {
+            demoNetworking.fetchBatteryTimes(deviceSN)
+        } else {
+            network.fetchBatteryTimes(deviceSN)
+        }
+    }
 }

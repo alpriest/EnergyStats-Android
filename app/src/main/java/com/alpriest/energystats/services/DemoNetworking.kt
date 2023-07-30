@@ -3,6 +3,8 @@ package com.alpriest.energystats.services
 import com.alpriest.energystats.models.AddressBookResponse
 import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
+import com.alpriest.energystats.models.BatteryTimesResponse
+import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.NetworkDevice
@@ -14,6 +16,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.SoftwareVersion
+import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -119,5 +122,15 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
+    }
+
+    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
+        return BatteryTimesResponse(
+            sn = deviceSN,
+            times = listOf(
+                ChargeTime(enableGrid = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0)),
+                ChargeTime(enableGrid = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0)),
+            )
+        )
     }
 }

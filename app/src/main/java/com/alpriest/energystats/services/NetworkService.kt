@@ -5,6 +5,7 @@ import com.alpriest.energystats.models.AuthRequest
 import com.alpriest.energystats.models.AuthResponse
 import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
+import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
@@ -263,6 +264,24 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)
+    }
+
+    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("c/v0/device/battery/time/get")
+            .addQueryParameter("deviceSN", deviceSN)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
+        store.batteryTimesResponseStream.value = NetworkOperation(description = "batteryTimesResponse", value = response.item, raw = response.text)
+        return response.item.result ?: throw MissingDataException()
     }
 
     private suspend fun fetchLoginToken(
