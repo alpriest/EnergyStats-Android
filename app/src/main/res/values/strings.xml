@@ -134,4 +134,5 @@
     <string name="end">End</string>
     <string name="period_1">Force charge period 1</string>
     <string name="period_2">Force charge period 2</string>
+    <string name="start_time_must_be_before_the_end_time">Start time must be before the end time</string>
 </resources>

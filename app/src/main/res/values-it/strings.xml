@@ -135,4 +135,5 @@
     <string name="end">Fine</string>
     <string name="period_1">Forza periodo di carica 1</string>
     <string name="period_2">Forza periodo di carica 2</string>
+    <string name="start_time_must_be_before_the_end_time">L\'ora di inizio deve essere prima dell\'ora di fine</string>
 </resources>

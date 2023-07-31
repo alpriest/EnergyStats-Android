@@ -106,6 +106,7 @@ class BatteryForceChargeTimes(
         val timePeriod = timePeriodStream.collectAsState().value
         val errorMessage = remember { mutableStateOf<String?>(null) }
         val textColor = remember { mutableStateOf(Color.Black) }
+        val timeErrorMessage = stringResource(R.string.start_time_must_be_before_the_end_time)
 
         LaunchedEffect(null) {
             timePeriodStream.collect {
@@ -114,7 +115,7 @@ class BatteryForceChargeTimes(
                 } else {
                     textColor.value = Color.Black
                 }
-                errorMessage.value = it.validate
+                errorMessage.value = if (it.isValid) "" else timeErrorMessage
             }
         }
 

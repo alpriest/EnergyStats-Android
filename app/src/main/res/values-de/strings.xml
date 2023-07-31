@@ -129,4 +129,5 @@
     <string name="end">Ende</string>
     <string name="period_1">Erzwinge Ladezeitraum 1</string>
     <string name="period_2">Erzwinge Ladezeitraum 2</string>
+    <string name="start_time_must_be_before_the_end_time">Die Startzeit muss vor der Endzeit liegen.</string>
 </resources>

@@ -15,15 +15,15 @@ data class ChargeTimePeriod(
             null
         }
 
-    val validate: String?
-        get() = if (start.after(end)) {
-            "Start time must be before the end time"
-        } else {
-            null
-        }
-
+//    val validate: String?
+//        get() = if (start.after(end)) {
+//            "Start time must be before the end time"
+//        } else {
+//            null
+//        }
+//
     val isValid: Boolean
-        get() = validate == null
+        get() = !start.after(end)
 
     fun asChargeTime(): ChargeTime {
         return ChargeTime(
