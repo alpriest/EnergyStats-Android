@@ -6,6 +6,7 @@ import com.alpriest.energystats.models.AuthResponse
 import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
+import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
@@ -16,9 +17,11 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportRequest
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.stores.CredentialStore
+import com.alpriest.energystats.ui.settings.battery.ChargeTimePeriod
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -282,6 +285,27 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
         store.batteryTimesResponseStream.value = NetworkOperation(description = "batteryTimesResponse", value = response.item, raw = response.text)
         return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("c/v0/device/battery/time/set")
+            .build()
+
+        val body = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            Gson().toJson(SetBatteryTimesRequest(sn = deviceSN, times = times))
+        )
+
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
     }
 
     private suspend fun fetchLoginToken(

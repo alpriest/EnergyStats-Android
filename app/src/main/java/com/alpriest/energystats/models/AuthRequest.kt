@@ -10,3 +10,8 @@ data class SetSOCRequest(
     val minSoc: Int,
     val sn: String
 )
+
+data class SetBatteryTimesRequest(
+    val sn: String,
+    val times: List<ChargeTime>
+)

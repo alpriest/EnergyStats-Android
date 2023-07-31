@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.battery
 
+import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.Time
 
 data class ChargeTimePeriod(
@@ -23,6 +24,14 @@ data class ChargeTimePeriod(
 
     val isValid: Boolean
         get() = validate == null
+
+    fun asChargeTime(): ChargeTime {
+        return ChargeTime(
+            enableGrid = enabled,
+            startTime = start,
+            endTime = end
+        )
+    }
 }
 
 fun Time.after(end: Time): Boolean {

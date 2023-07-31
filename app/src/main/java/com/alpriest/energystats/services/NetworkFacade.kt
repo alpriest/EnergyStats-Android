@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
+import com.alpriest.energystats.ui.settings.battery.ChargeTimePeriod
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class NetworkFacade(private val network: Networking, private val config: ConfigInterface) : Networking {
@@ -99,6 +100,14 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
             demoNetworking.fetchBatteryTimes(deviceSN)
         } else {
             network.fetchBatteryTimes(deviceSN)
+        }
+    }
+
+    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+        return if(config.isDemoUser) {
+            demoNetworking.setBatteryTimes(deviceSN, times)
+        } else {
+            network.setBatteryTimes(deviceSN, times)
         }
     }
 }

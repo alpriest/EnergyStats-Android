@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
+import com.alpriest.energystats.ui.settings.battery.ChargeTimePeriod
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class InvalidTokenException : Exception("Invalid Token")
@@ -22,6 +23,7 @@ interface Networking {
     suspend fun fetchEarnings(deviceID: String): EarningsResponse
     suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
     suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
+    suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

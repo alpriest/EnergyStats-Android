@@ -93,22 +93,22 @@ class BatteryForceChargeTimesViewModel(
     }
 
     suspend fun save() {
-//        activityStream.value = "Saving"
-//
-//        runCatching {
-//            config.currentDevice.value?.let { device ->
-//                val deviceSN = device.deviceSN
-//
-//                network.setSoc(
-//                    minSOC = minSOCStream.value.toInt(),
-//                    minGridSOC = minSOConGridStream.value.toInt(),
-//                    deviceSN = deviceSN
-//                )
-//
-//                navController.popBackStack()
-//            } ?: run {
-//                activityStream.value = null
-//            }
-//        }
+        activityStream.value = "Saving"
+
+        runCatching {
+            config.currentDevice.value?.let { device ->
+                val deviceSN = device.deviceSN
+                val times = listOf(timePeriod1Stream.value, timePeriod2Stream.value).map { it.asChargeTime() }
+
+                network.setBatteryTimes(
+                    deviceSN = deviceSN,
+                    times = times
+                )
+
+                navController.popBackStack()
+            } ?: run {
+                activityStream.value = null
+            }
+        }
     }
 }

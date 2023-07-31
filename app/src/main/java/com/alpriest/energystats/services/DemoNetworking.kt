@@ -19,6 +19,7 @@ import com.alpriest.energystats.models.SoftwareVersion
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.settings.battery.ChargeTimePeriod
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -132,5 +133,8 @@ class DemoNetworking : Networking {
                 ChargeTime(enableGrid = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0)),
             )
         )
+    }
+
+    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
     }
 }
