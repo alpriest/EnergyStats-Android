@@ -30,6 +30,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
@@ -51,13 +52,7 @@ class BatterySOCSettings(
         }
 
         isActive?.let {
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                androidx.compose.material.Text(it)
-            }
+            LoadingView(it)
         } ?: run {
             Column(
                 modifier = Modifier.padding(12.dp),
