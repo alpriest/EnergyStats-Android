@@ -122,4 +122,17 @@
     <string name="loads_energy">Energia dei carichi</string>
     <string name="parameters_update_description">I parametri vengono aggiornati ogni 5 minuti da FoxESS e sono disponibili solo per un singolo giorno alla volta</string>
     <string name="view_debug_data">Visualizza dati di debug</string>
+    <string name="minimum_charge_levels">Livelli di carica minimi</string>
+    <string name="charge_times">Tempi di carica</string>
+    <string name="min_battery_charge_soc">Livello minimo di carica della batteria (SOC)</string>
+    <string name="no_battery_charge">La tua batteria non verrà caricata forzatamente dalla rete.</string>
+    <string name="both_battery_charge_periods">La tua batteria verrà caricata forzatamente dalla rete tra %1s e %2s</string>
+    <string name="battery_periods_overlap">. Questi periodi si sovrappongono, potresti volerli aggiornare.</string>
+    <string name="one_battery_charge_period">La tua batteria verrà caricata forzatamente dalla rete tra %1s</string>
+    <string name="saving">Risparmio</string>
+    <string name="enable_charge_from_grid">Abilita carica dalla rete</string>
+    <string name="start">Inizio</string>
+    <string name="end">Fine</string>
+    <string name="period_1">Forza periodo di carica 1</string>
+    <string name="period_2">Forza periodo di carica 2</string>
 </resources>

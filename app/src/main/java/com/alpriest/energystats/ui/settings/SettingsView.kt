@@ -35,7 +35,6 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatteryForceChargeTimes
-import com.alpriest.energystats.ui.settings.battery.BatteryForceChargeTimesViewModel
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -74,6 +73,7 @@ fun NavigableSettingsView(
     network: Networking
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
 
     NavHost(
         navController = navController,
@@ -97,10 +97,10 @@ fun NavigableSettingsView(
             )
         }
         composable(SettingsScreen.BatterySOC.name) {
-            BatterySOCSettings(configManager = config, network = network, navController = navController).Content()
+            BatterySOCSettings(configManager = config, network = network, navController = navController, context = context).Content()
         }
         composable(SettingsScreen.BatteryChargeTimes.name) {
-            BatteryForceChargeTimes(configManager = config, network = network, navController = navController).Content()
+            BatteryForceChargeTimes(configManager = config, network = network, navController = navController, context = context).Content()
         }
         debugGraph(navController, networkStore)
     }

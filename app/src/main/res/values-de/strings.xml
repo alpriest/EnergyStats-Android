@@ -116,4 +116,17 @@
     <string name="parameters_update_description">Die Parameter werden alle 5 Minuten von FoxESS aktualisiert und sind immer nur für einen Tag verfügbar</string>
     <string name="output">Ertrags-</string>
     <string name="view_debug_data">Fehlerprotokolldaten anzeigen</string>
+    <string name="minimum_charge_levels">Mindestladepegel</string>
+    <string name="charge_times">Ladezeiten</string>
+    <string name="min_battery_charge_soc">Minimale Batterieladung (SOC)</string>
+    <string name="no_battery_charge">Ihr Akku wird nicht von der Stromversorgung erzwungen geladen.</string>
+    <string name="battery_periods_overlap">. Diese Zeiträume überschneiden sich möglicherweise, Sie möchten sie möglicherweise aktualisieren.</string>
+    <string name="one_battery_charge_period">Ihr Akku wird zwischen %1s von der Stromversorgung erzwungen geladen.</string>
+    <string name="both_battery_charge_periods">Ihr Akku wird zwischen %1s und %2s von der Stromversorgung erzwungen geladen.</string>
+    <string name="saving">Sparen</string>
+    <string name="enable_charge_from_grid">Laden aus dem Netz aktivieren</string>
+    <string name="start">Start</string>
+    <string name="end">Ende</string>
+    <string name="period_1">Erzwinge Ladezeitraum 1</string>
+    <string name="period_2">Erzwinge Ladezeitraum 2</string>
 </resources>

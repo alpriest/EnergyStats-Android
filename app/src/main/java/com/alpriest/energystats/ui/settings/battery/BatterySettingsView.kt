@@ -59,11 +59,11 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        SettingsButton("Minimum charge levels") {
+        SettingsButton(stringResource(R.string.minimum_charge_levels)) {
             navController.navigate(SettingsScreen.BatterySOC.name)
         }
 
-        SettingsButton("Charge times") {
+        SettingsButton(stringResource(R.string.charge_times)) {
             navController.navigate(SettingsScreen.BatteryChargeTimes.name)
         }
 
@@ -80,7 +80,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         verticalAlignment = Alignment.Bottom
                     ) {
                         Text(
-                            "Min battery charge (SoC)",
+                            stringResource(R.string.min_battery_charge_soc),
                             style = MaterialTheme.typography.h4
                         )
                         Spacer(Modifier.weight(1f))

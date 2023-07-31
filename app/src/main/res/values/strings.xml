@@ -121,4 +121,17 @@
     <string name="loads_energy">Loads energy</string>
     <string name="parameters_update_description">Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time</string>
     <string name="view_debug_data">View debug data</string>
+    <string name="minimum_charge_levels">Minimum charge levels</string>
+    <string name="charge_times">Charge times</string>
+    <string name="min_battery_charge_soc">Min battery charge (SoC)</string>
+    <string name="no_battery_charge">Your battery will not be force charged from the grid.</string>
+    <string name="battery_periods_overlap">. These periods overlap, you may want to update them.</string>
+    <string name="one_battery_charge_period">Your battery will be force charged from the grid between %1s</string>
+    <string name="both_battery_charge_periods">Your battery will be force charged from the grid between %1s, and %2s</string>
+    <string name="saving">Saving</string>
+    <string name="enable_charge_from_grid">Enable charge from grid</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="period_1">Force charge period 1</string>
+    <string name="period_2">Force charge period 2</string>
 </resources>

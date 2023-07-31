@@ -116,4 +116,17 @@
     <string name="parameters_update_description">Los parámetros se actualizan cada 5 minutos por FoxESS y solo están disponibles para un solo día a la vez</string>
     <string name="output">"Salida "</string>
     <string name="view_debug_data">Ver datos de depuración</string>
+    <string name="minimum_charge_levels">Niveles mínimos de carga</string>
+    <string name="charge_times">Tiempos de carga</string>
+    <string name="min_battery_charge_soc">Carga mínima de la batería (SOC)</string>
+    <string name="no_battery_charge">Su batería no será cargada forzadamente desde la red eléctrica.</string>
+    <string name="both_battery_charge_periods">Su batería será cargada forzadamente desde la red eléctrica entre %1s y %2s.</string>
+    <string name="battery_periods_overlap">Estos períodos se superponen, puede que desee actualizarlos.</string>
+    <string name="one_battery_charge_period">Su batería será cargada forzadamente desde la red eléctrica entre %1s.</string>
+    <string name="saving">Ahorro</string>
+    <string name="enable_charge_from_grid">Activar carga desde la red</string>
+    <string name="start">Inicio</string>
+    <string name="end">Fin</string>
+    <string name="period_1">Forzar periodo de carga 1</string>
+    <string name="period_2">Forzar periodo de carga 2</string>
 </resources>

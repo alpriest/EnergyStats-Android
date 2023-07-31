@@ -1,8 +1,10 @@
 package com.alpriest.energystats.ui.settings.battery
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -11,10 +13,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class BatteryForceChargeTimesViewModelFactory(
-    private val network: Networking, private val configManager: ConfigManaging, private val navController: NavController
+    private val network: Networking,
+    private val configManager: ConfigManaging,
+    private val navController: NavController,
+    private val context: Context
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, NavController::class.java).newInstance(network, configManager, navController)
+        return modelClass.getConstructor(
+            Networking::class.java,
+            ConfigManaging::class.java,
+            NavController::class.java,
+            Context::class.java
+        ).newInstance(network, configManager, navController, context)
     }
 }
 
@@ -24,15 +34,18 @@ private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
 }
 
 class BatteryForceChargeTimesViewModel(
-    private val network: Networking, private val config: ConfigManaging, private val navController: NavController
+    private val network: Networking,
+    private val config: ConfigManaging,
+    private val navController: NavController,
+    private val context: Context
 ) : ViewModel() {
     val timePeriod1Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
     val timePeriod2Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
     var activityStream = MutableStateFlow<String?>(null)
-    val summaryStream = MutableStateFlow<String>("")
+    val summaryStream = MutableStateFlow("")
 
     suspend fun load() {
-        activityStream.value = "Loading"
+        activityStream.value = context.getString(R.string.loading)
 
         runCatching {
             config.currentDevice.value?.let { device ->
@@ -76,24 +89,24 @@ class BatteryForceChargeTimesViewModel(
         var result = ""
 
         if (!period1.enabled && !period2.enabled) {
-            result = "Your battery will not be force charged from the grid."
+            result = context.getString(R.string.no_battery_charge)
         } else if (period1.enabled && period2.enabled) {
-            result = "Your battery will be force charged from the grid between ${period1.description}, and ${period2.description}"
+            result = String.format(context.getString(R.string.both_battery_charge_periods), period1.description, period2.description)
 
             if (period1.overlaps(period2)) {
-                result = "$result. These periods overlap, you may want to update them."
+                result += context.getString(R.string.battery_periods_overlap)
             }
         } else if (period1.enabled) {
-            result = "Your battery will be force charged from the grid between ${period1.description}"
+            result = String.format(context.getString(R.string.one_battery_charge_period), period1.description)
         } else if (period2.enabled) {
-            result = "Your battery will be force charged from the grid between ${period2.description}"
+            result = String.format(context.getString(R.string.one_battery_charge_period), period2.description)
         }
 
         summaryStream.value = result
     }
 
     suspend fun save() {
-        activityStream.value = "Saving"
+        activityStream.value = context.getString(R.string.saving)
 
         runCatching {
             config.currentDevice.value?.let { device ->

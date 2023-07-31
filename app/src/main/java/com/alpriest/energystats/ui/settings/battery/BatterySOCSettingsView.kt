@@ -1,10 +1,10 @@
 package com.alpriest.energystats.ui.settings.battery
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
@@ -21,8 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -38,7 +36,8 @@ import kotlinx.coroutines.launch
 class BatterySOCSettings(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val navController: NavController
+    private val navController: NavController,
+    private val context: Context
 ) {
     @Composable
     fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager, navController))) {
@@ -144,9 +143,10 @@ class BatterySOCSettings(
 fun BatterySOCSettingsViewPreview() {
     EnergyStatsTheme {
         BatterySOCSettings(
-            configManager = FakeConfigManager(),
             network = DemoNetworking(),
-            navController = NavHostController(LocalContext.current)
+            configManager = FakeConfigManager(),
+            navController = NavHostController(LocalContext.current),
+            context = LocalContext.current
         ).Content()
     }
 }

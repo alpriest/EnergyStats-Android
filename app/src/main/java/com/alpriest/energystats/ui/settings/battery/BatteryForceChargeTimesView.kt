@@ -1,12 +1,12 @@
 package com.alpriest.energystats.ui.settings.battery
 
 import android.app.TimePickerDialog
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -26,12 +26,14 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -45,13 +47,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class BatteryForceChargeTimes(
-    private val network: Networking, private val configManager: ConfigManaging, private val navController: NavController
+    private val network: Networking,
+    private val configManager: ConfigManaging,
+    private val navController: NavController,
+    private val context: Context
 ) {
     @Composable
     fun Content(
         viewModel: BatteryForceChargeTimesViewModel = viewModel(
             factory = BatteryForceChargeTimesViewModelFactory(
-                network = network, configManager = configManager, navController = navController
+                network = network,
+                configManager = configManager,
+                navController = navController,
+                context = context
             )
         )
     ) {
@@ -76,8 +84,8 @@ class BatteryForceChargeTimes(
                 horizontalAlignment = CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                BatteryTimePeriodView(viewModel.timePeriod1Stream, "Period 1")
-                BatteryTimePeriodView(viewModel.timePeriod2Stream, "Period 2")
+                BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
+                BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 
                 Column {
                     SettingsTitleView("Summary")
@@ -117,7 +125,7 @@ class BatteryForceChargeTimes(
                 Row(
                     verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Enable charge from grid")
+                    Text(stringResource(R.string.enable_charge_from_grid))
                     Switch(checked = timePeriod.enabled, onCheckedChange = {
                         timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)
                     })
@@ -127,7 +135,7 @@ class BatteryForceChargeTimes(
 
                 TimePeriodView(
                     timePeriod.start,
-                    "Start",
+                    stringResource(R.string.start),
                     textStyle = TextStyle(color = textColor.value)
                 ) { hour, minute ->
                     timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
@@ -137,7 +145,7 @@ class BatteryForceChargeTimes(
 
                 TimePeriodView(
                     timePeriod.end,
-                    "End",
+                    stringResource(R.string.end),
                     textStyle = TextStyle(color = textColor.value)
                 ) { hour, minute ->
                     timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
@@ -181,12 +189,15 @@ class BatteryForceChargeTimes(
     }
 }
 
-@Preview(showBackground = true, widthDp = 300)
+@Preview(showBackground = true, widthDp = 300, locale = "de")
 @Composable
 fun BatteryForceChargeTimesViewPreview() {
     EnergyStatsTheme {
         BatteryForceChargeTimes(
-            configManager = FakeConfigManager(), network = DemoNetworking(), navController = NavHostController(LocalContext.current)
+            network = DemoNetworking(),
+            configManager = FakeConfigManager(),
+            navController = NavHostController(LocalContext.current),
+            context = LocalContext.current
         ).Content()
     }
 }
