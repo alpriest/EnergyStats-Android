@@ -135,4 +135,12 @@
     <string name="period_1">Force charge period 1</string>
     <string name="period_2">Force charge period 2</string>
     <string name="start_time_must_be_before_the_end_time">Start time must be before the end time</string>
+    <string name="summary">Summary</string>
+    <string name="save">Save</string>
+    <string name="min_soc">Min SoC</string>
+    <string name="minsoc_description">The minimum charge the battery should maintain.</string>
+    <string name="min_soc_on_grid">Min SoC on Grid</string>
+    <string name="minsocgrid_description">The minimum charge the battery should maintain when grid power is present.</string>
+    <string name="minsoc_detail">For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.</string>
+    <string name="minsoc_notsure_footnote">If you\'re not sure then set both values the same.</string>
 </resources>

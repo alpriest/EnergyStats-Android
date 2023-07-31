@@ -18,12 +18,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
@@ -40,7 +42,7 @@ class BatterySOCSettings(
     private val context: Context
 ) {
     @Composable
-    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager, navController))) {
+    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager, navController, context))) {
         val minSOC = viewModel.minSOCStream.collectAsState().value
         val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
         val isActive = viewModel.activityStream.collectAsState().value
@@ -65,13 +67,13 @@ class BatterySOCSettings(
                             .padding(horizontal = 12.dp, vertical = 4.dp)
                     ) {
                         Text(
-                            "Min SoC",
+                            stringResource(R.string.min_soc),
                             Modifier.weight(1.0f),
                             style = MaterialTheme.typography.h4
                         )
                         OutlinedTextField(
                             value = minSOC,
-                            onValueChange = { viewModel.minSOCStream.value = it },
+                            onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
                             modifier = Modifier.width(100.dp),
                             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
                             trailingIcon = { Text("%") }
@@ -79,7 +81,7 @@ class BatterySOCSettings(
                     }
 
                     Text(
-                        "The minimum charge the battery should maintain.",
+                        stringResource(R.string.minsoc_description),
                         color = MaterialTheme.colors.onSecondary,
                         modifier = Modifier.padding(horizontal = 12.dp)
                     )
@@ -94,13 +96,13 @@ class BatterySOCSettings(
                             .padding(horizontal = 12.dp, vertical = 4.dp)
                     ) {
                         Text(
-                            "Min SoC on Grid",
+                            stringResource(R.string.min_soc_on_grid),
                             Modifier.weight(1.0f),
                             style = MaterialTheme.typography.h4
                         )
                         OutlinedTextField(
                             value = minSOConGrid,
-                            onValueChange = { viewModel.minSOConGridStream.value = it },
+                            onValueChange = { viewModel.minSOConGridStream.value = it.filter { it.isDigit() }},
                             modifier = Modifier.width(100.dp),
                             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
                             trailingIcon = { Text("%") }
@@ -109,26 +111,26 @@ class BatterySOCSettings(
 
                     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
                         Text(
-                            "The minimum charge the battery should maintain when grid power is present.",
+                            stringResource(R.string.minsocgrid_description),
                             color = MaterialTheme.colors.onSecondary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
                         Text(
-                            "For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.",
+                            stringResource(R.string.minsoc_detail),
                             color = MaterialTheme.colors.onSecondary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
                         Text(
-                            "If you're not sure then set both values the same.",
+                            stringResource(R.string.minsoc_notsure_footnote),
                             color = MaterialTheme.colors.onSecondary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
                 }
 
-                SettingsButton("Save") {
+                SettingsButton(stringResource(R.string.save)) {
                     coroutineScope.launch {
                         viewModel.save()
                     }

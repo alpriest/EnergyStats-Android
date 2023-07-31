@@ -88,11 +88,11 @@ class BatteryForceChargeTimes(
                 BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 
                 Column {
-                    SettingsTitleView("Summary")
+                    SettingsTitleView(stringResource(R.string.summary))
                     Text(chargeSummary)
                 }
 
-                SettingsButton("Save") {
+                SettingsButton(stringResource(R.string.save)) {
                     coroutineScope.launch {
                         viewModel.save()
                     }
