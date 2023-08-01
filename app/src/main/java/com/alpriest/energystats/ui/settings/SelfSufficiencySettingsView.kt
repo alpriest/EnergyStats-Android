@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
@@ -43,17 +44,20 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
                             selfSufficiencyEstimateModeState.value = it
                             config.selfSufficiencyEstimateMode = it
                         },
-                        colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colors.primary)
+                        colors = RadioButtonDefaults.colors(selectedColor = colors.primary)
                     )
                     Text(
                         it.toString(),
-                        color = Color.DarkGray
+                        color = colors.onSecondary,
                     )
                 }
             }
 
-            if (!description.isEmpty()) {
-                Text(description)
+            if (description.isNotEmpty()) {
+                Text(
+                    description,
+                    color = colors.onSecondary,
+                )
             }
         }
     }

@@ -63,7 +63,7 @@ fun HomeView(
     themeStream: MutableStateFlow<AppTheme>,
     networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
-    onSendUsEmail: () -> Unit,
+    onOpenUrl: (String) -> Unit,
     onBuyMeCoffee: () -> Unit,
     onWriteTempFile: (String, String) -> Uri?
 ) {
@@ -96,7 +96,7 @@ fun HomeView(
                         network = network,
                         networkStore = networkStore,
                         onRateApp = onRateApp,
-                        onSendUsEmail = onSendUsEmail,
+                        onOpenUrl = onOpenUrl,
                         onBuyMeCoffee = onBuyMeCoffee
                     )
                 }
@@ -185,9 +185,8 @@ fun HomepagePreview() {
             networkStore = InMemoryLoggingNetworkStore(),
             {},
             {},
-            {},
-            { _, _ -> null }
-        )
+            {}
+        ) { _, _ -> null }
     }
 }
 

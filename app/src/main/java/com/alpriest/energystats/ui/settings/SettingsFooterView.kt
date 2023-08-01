@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocalCafe
@@ -23,8 +24,12 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun SettingsFooterView(
-    config: ConfigManaging, userManager: UserManaging, onLogout: () -> Unit, onRateApp: () -> Unit,
-    onSendUsEmail: () -> Unit, onBuyMeCoffee: () -> Unit
+    config: ConfigManaging,
+    userManager: UserManaging,
+    onLogout: () -> Unit,
+    onRateApp: () -> Unit,
+    onOpenUrl: (String) -> Unit,
+    onBuyMeCoffee: () -> Unit
 ) {
     Column(
         Modifier
@@ -43,7 +48,8 @@ fun SettingsFooterView(
                 userManager.getUsername()?.let {
                     Text(
                         modifier = Modifier.padding(bottom = 24.dp),
-                        text = stringResource(R.string.you_are_logged_in_as, it)
+                        text = stringResource(R.string.you_are_logged_in_as, it),
+                        color = colors.onSecondary,
                     )
                 }
 
@@ -56,7 +62,7 @@ fun SettingsFooterView(
 
         Row {
             Button(
-                onClick = onSendUsEmail,
+                onClick = { onOpenUrl("mailto:energystatsapp@gmail.com?subject=Android+App") },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colors.primary,
                     backgroundColor = Color.Transparent
@@ -132,6 +138,7 @@ fun SettingsFooterViewPreview() {
     EnergyStatsTheme {
         SettingsFooterView(config = FakeConfigManager(),
             userManager = FakeUserManager(), onLogout = {}, onRateApp = {},
-            onSendUsEmail = {}, onBuyMeCoffee = {})
+            onOpenUrl = {},
+            onBuyMeCoffee = {})
     }
 }

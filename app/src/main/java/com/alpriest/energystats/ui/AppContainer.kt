@@ -67,11 +67,10 @@ class AppContainer(private val context: Context) {
         }
     }
 
-    fun sendUsEmail() {
+    fun openUrl(url: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.flags = FLAG_ACTIVITY_NEW_TASK
-        val subject = "Android App"
-        val data = Uri.parse("mailto:energystatsapp@gmail.com?subject=" + Uri.encode(subject))
+        val data = Uri.parse(url)
         intent.data = data
         startActivity(context, intent, null)
     }

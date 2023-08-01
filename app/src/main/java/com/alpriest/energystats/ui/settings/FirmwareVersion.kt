@@ -28,17 +28,17 @@ fun FirmwareVersionView(config: ConfigManaging) {
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
-                Column { Text("Manager: " + it.manager) }
-                Column { Text("Slave: " + it.slave) }
-                Column { Text("Master: " + it.master) }
+                Column { Text("Manager: " + it.manager, color = colors.onSecondary) }
+                Column { Text("Slave: " + it.slave, color = colors.onSecondary) }
+                Column { Text("Master: " + it.master, color = colors.onSecondary) }
             }
 
             Text(
                 text = stringResource(R.string.find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website),
-                color = colors.primary,
-                    modifier = Modifier.clickable {
-                        uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
-                    }
+                color = colors.onSecondary,
+                modifier = Modifier.clickable {
+                    uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
+                }
             )
         }
     }

@@ -114,15 +114,10 @@
     <string name="home_usage">Home usage</string>
     <string name="export_csv_data">Export graph data</string>
     <string name="output">"Output "</string>
-    <string name="feed_in_energy">"Feed-in "</string>
-    <string name="charge_energy">Charge energy</string>
-    <string name="discharge_energy">Discharge energy</string>
-    <string name="grid_consumption_energy">Grid consumption energy</string>
-    <string name="loads_energy">Loads energy</string>
     <string name="parameters_update_description">Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time</string>
     <string name="view_debug_data">View debug data</string>
     <string name="minimum_charge_levels">Minimum charge levels</string>
-    <string name="charge_times">Charge times</string>
+    <string name="charge_times">Charge schedule</string>
     <string name="min_battery_charge_soc">Min battery charge (SoC)</string>
     <string name="no_battery_charge">Your battery will not be force charged from the grid.</string>
     <string name="battery_periods_overlap">. These periods overlap, you may want to update them.</string>
@@ -132,10 +127,10 @@
     <string name="enable_charge_from_grid">Enable charge from grid</string>
     <string name="start">Start</string>
     <string name="end">End</string>
-    <string name="period_1">Force charge period 1</string>
-    <string name="period_2">Force charge period 2</string>
+    <string name="period_1">Time period 1</string>
+    <string name="period_2">Time period 2</string>
     <string name="start_time_must_be_before_the_end_time">Start time must be before the end time</string>
-    <string name="summary">Summary</string>
+    <string name="summary">Schedule Summary</string>
     <string name="save">Save</string>
     <string name="min_soc">Min SoC</string>
     <string name="minsoc_description">The minimum charge the battery should maintain.</string>
@@ -143,4 +138,6 @@
     <string name="minsocgrid_description">The minimum charge the battery should maintain when grid power is present.</string>
     <string name="minsoc_detail">For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.</string>
     <string name="minsoc_notsure_footnote">If you\'re not sure then set both values the same.</string>
+    <string name="both_battery_freeze_periods">Your batteries will not charge or discharge between %1s and %2s. Any house load will come from the grid between these times. Reset time periods to disable this.</string>
+    <string name="one_battery_freeze_period">Your batteries will not charge or discharge between %1s. Any house load will come from the grid between these times. Reset the time period to disable this.</string>
 </resources>

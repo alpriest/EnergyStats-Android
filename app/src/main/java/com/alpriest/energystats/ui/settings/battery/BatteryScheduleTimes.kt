@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -46,7 +47,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class BatteryForceChargeTimes(
+class BatteryScheduleTimes(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
@@ -54,8 +55,8 @@ class BatteryForceChargeTimes(
 ) {
     @Composable
     fun Content(
-        viewModel: BatteryForceChargeTimesViewModel = viewModel(
-            factory = BatteryForceChargeTimesViewModelFactory(
+        viewModel: BatteryScheduleTimesViewModel = viewModel(
+            factory = BatteryScheduleTimesViewModelFactory(
                 network = network,
                 configManager = configManager,
                 navController = navController,
@@ -89,7 +90,10 @@ class BatteryForceChargeTimes(
 
                 Column {
                     SettingsTitleView(stringResource(R.string.summary))
-                    Text(chargeSummary)
+                    Text(
+                        chargeSummary,
+                        color = colors.onSecondary,
+                    )
                 }
 
                 SettingsButton(stringResource(R.string.save)) {
@@ -126,7 +130,10 @@ class BatteryForceChargeTimes(
                 Row(
                     verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(stringResource(R.string.enable_charge_from_grid))
+                    Text(
+                        stringResource(R.string.enable_charge_from_grid),
+                        color = colors.onSecondary,
+                    )
                     Switch(checked = timePeriod.enabled, onCheckedChange = {
                         timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)
                     })
@@ -153,6 +160,14 @@ class BatteryForceChargeTimes(
                 }
             }
 
+            Text(
+                "Reset times",
+                modifier = Modifier.clickable {
+                    timePeriodStream.value = ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false)
+                },
+                color = colors.primary,
+            )
+
             errorMessage.value?.let {
                 Text(
                     text = it,
@@ -178,11 +193,16 @@ class BatteryForceChargeTimes(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(title, style = textStyle)
+            Text(
+                title,
+                style = textStyle,
+                color = colors.onSecondary,
+            )
 
             Text(
                 "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}",
                 style = textStyle,
+                color = colors.onSecondary,
                 modifier = Modifier.clickable {
                     dialog.show()
                 })
@@ -190,11 +210,11 @@ class BatteryForceChargeTimes(
     }
 }
 
-@Preview(showBackground = true, widthDp = 300, locale = "de")
+@Preview(showBackground = true, widthDp = 300)
 @Composable
 fun BatteryForceChargeTimesViewPreview() {
-    EnergyStatsTheme {
-        BatteryForceChargeTimes(
+    EnergyStatsTheme(darkTheme = true) {
+        BatteryScheduleTimes(
             network = DemoNetworking(),
             configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current),

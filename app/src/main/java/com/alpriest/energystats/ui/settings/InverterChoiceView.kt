@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
@@ -28,7 +29,8 @@ fun InverterChoiceView(config: ConfigManaging) {
                     Button(onClick = { expanded = !expanded }) {
                         Text(
                             it.deviceDisplayName,
-                            fontSize = 12.sp
+                            fontSize = 12.sp,
+                            color = colors.onSecondary,
                         )
                         Icon(
                             imageVector = Icons.Filled.ArrowDropDown,
@@ -64,7 +66,7 @@ private val Device.deviceDisplayName: String
 @Preview(showBackground = true, heightDp = 600, widthDp = 400)
 @Composable
 fun InverterSettingsViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(darkTheme = true) {
         InverterChoiceView(FakeConfigManager())
     }
 }

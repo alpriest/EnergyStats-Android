@@ -117,7 +117,7 @@
     <string name="output">Ertrags-</string>
     <string name="view_debug_data">Fehlerprotokolldaten anzeigen</string>
     <string name="minimum_charge_levels">Mindestladepegel</string>
-    <string name="charge_times">Ladezeiten</string>
+    <string name="charge_times">Ladeplan</string>
     <string name="min_battery_charge_soc">Minimale Batterieladung (SOC)</string>
     <string name="no_battery_charge">Ihr Akku wird nicht von der Stromversorgung erzwungen geladen.</string>
     <string name="battery_periods_overlap">. Diese Zeiträume überschneiden sich möglicherweise, Sie möchten sie möglicherweise aktualisieren.</string>
@@ -130,7 +130,7 @@
     <string name="period_1">Erzwinge Ladezeitraum 1</string>
     <string name="period_2">Erzwinge Ladezeitraum 2</string>
     <string name="start_time_must_be_before_the_end_time">Die Startzeit muss vor der Endzeit liegen.</string>
-    <string name="summary">Zusammenfassung</string>
+    <string name="summary">Zeitplan Zusammenfassung</string>
     <string name="save">Speichern</string>
     <string name="min_soc">Min. SoC</string>
     <string name="minsoc_description">Der minimale Ladestand, den die Batterie aufrechterhalten sollte.</string>
@@ -138,4 +138,6 @@
     <string name="minsocgrid_description">Der minimale Ladestand, den die Batterie aufrechterhalten sollte, wenn Netzstrom vorhanden ist.</string>
     <string name="minsoc_detail">Im Wesentlichen ist dies die Einstellung, die bestimmt, wann die Batterien nicht mehr verwendet werden. Wenn Sie diese Einstellung höher als Min SoC setzen, wird die Batterieleistung für einen Netzwerkausfall reserviert. Wenn Sie zum Beispiel Min SoC auf 10% und Min SoC am Netz auf 20% setzen, wird der Wechselrichter die Stromversorgung aus den Batterien bei 20% stoppen, und die Haushaltslast wird vom Netz versorgt. Bei einem Netzwerkausfall könnten die Batterien (über einen EPS-Schalter) verwendet werden, um Notstrom zu liefern, bis die Batterieladung auf 10% sinkt.</string>
     <string name="minsoc_notsure_footnote">Wenn Sie sich nicht sicher sind, dann setzen Sie beide Werte gleich.</string>
+    <string name="both_battery_freeze_periods">Ihre Batterien werden zwischen %1s und %2s weder aufgeladen noch entladen. Jeglicher Hausverbrauch wird in dieser Zeit von der Netzversorgung gedeckt. Zur Deaktivierung setzen Sie die Zeitperioden zurück.</string>
+    <string name="one_battery_freeze_period">Ihre Batterien werden zwischen %1s weder aufgeladen noch entladen. Jeglicher Hausverbrauch wird in dieser Zeit von der Netzversorgung gedeckt. Zur Deaktivierung setzen Sie die Zeitperiode zurück.</string>
 </resources>

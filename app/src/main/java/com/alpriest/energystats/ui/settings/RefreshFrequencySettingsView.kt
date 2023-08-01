@@ -51,7 +51,8 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
                         RefreshFrequency.OneMinute -> stringResource(R.string._1_min)
                         RefreshFrequency.FiveMinutes -> stringResource(R.string._5_mins)
                         RefreshFrequency.Auto -> stringResource(R.string.auto)
-                    }
+                    },
+                    color = colors.onSecondary,
                 )
             }
         }

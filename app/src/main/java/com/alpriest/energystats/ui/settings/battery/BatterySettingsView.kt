@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withStyle
@@ -35,7 +36,8 @@ fun SettingsTitleView(title: String) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
-            style = MaterialTheme.typography.h4
+            style = MaterialTheme.typography.h4,
+            color = colors.onSecondary,
         )
     }
 }
@@ -81,10 +83,14 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     ) {
                         Text(
                             stringResource(R.string.min_battery_charge_soc),
-                            style = MaterialTheme.typography.h4
+                            style = MaterialTheme.typography.h4,
+                            color = colors.onSecondary,
                         )
                         Spacer(Modifier.weight(1f))
-                        Text(text = config.minSOC.asPercent())
+                        Text(
+                            text = config.minSOC.asPercent(),
+                            color = colors.onSecondary,
+                        )
                     }
                 }
             }
@@ -98,7 +104,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 ) {
                     Text(
                         stringResource(R.string.capacity),
-                        style = MaterialTheme.typography.h4
+                        style = MaterialTheme.typography.h4,
+                        color = colors.onSecondary,
                     )
                     Spacer(Modifier.weight(1f))
 
@@ -108,13 +115,20 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                             onValueChange = {
                                 editingCapacity = it
                             },
-                            label = { Text(stringResource(R.string.total_wh_of_your_battery)) },
+                            label = {
+                                Text(
+                                    stringResource(R.string.total_wh_of_your_battery),
+                                    color = colors.onSecondary
+                                )
+                            },
+                            textStyle = TextStyle(colors.onSecondary),
                             modifier = Modifier.weight(1f)
                         )
                     } else {
                         Text(
                             text = config.batteryCapacity.Wh(decimalPlaces),
-                            modifier = Modifier.clickable { isEditingCapacity.value = true }
+                            modifier = Modifier.clickable { isEditingCapacity.value = true },
+                            color = colors.onSecondary,
                         )
                     }
                 }
@@ -130,10 +144,16 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                                 isEditingCapacity.value = false
                             }
                         ) {
-                            Text(stringResource(R.string.ok))
+                            Text(
+                                stringResource(R.string.ok),
+                                color = colors.onSecondary,
+                            )
                         }
                         Button(onClick = { isEditingCapacity.value = false }) {
-                            Text(stringResource(R.string.cancel))
+                            Text(
+                                stringResource(R.string.cancel),
+                                color = colors.onSecondary,
+                            )
                         }
                     }
                 }
@@ -178,7 +198,10 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     },
                     colors = CheckboxDefaults.colors(checkedColor = colors.primary)
                 )
-                Text(stringResource(R.string.show_battery_full_empty_estimate))
+                Text(
+                    stringResource(R.string.show_battery_full_empty_estimate),
+                    color = colors.onSecondary,
+                )
             }
 
             Row(
@@ -202,7 +225,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 Column {
                     Text(
                         modifier = Modifier.padding(top = 14.dp),
-                        text = stringResource(R.string.show_usable_battery_only)
+                        text = stringResource(R.string.show_usable_battery_only),
+                        color = colors.onSecondary
                     )
 
                     Text(
@@ -231,7 +255,10 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     },
                     colors = CheckboxDefaults.colors(checkedColor = colors.primary)
                 )
-                Text(stringResource(R.string.show_battery_temperature))
+                Text(
+                    stringResource(R.string.show_battery_temperature),
+                    color = colors.onSecondary,
+                )
             }
         }
     }
@@ -240,7 +267,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 @Preview(showBackground = true)
 @Composable
 fun BatterySettingsViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(darkTheme = true) {
         BatterySettingsView(
             config = FakeConfigManager(),
             navController = NavHostController(LocalContext.current)

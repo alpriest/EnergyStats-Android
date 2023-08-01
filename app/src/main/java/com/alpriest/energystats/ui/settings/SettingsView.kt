@@ -34,7 +34,7 @@ import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.settings.battery.BatteryForceChargeTimes
+import com.alpriest.energystats.ui.settings.battery.BatteryScheduleTimes
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -68,7 +68,7 @@ fun NavigableSettingsView(
     onLogout: () -> Unit,
     networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
-    onSendUsEmail: () -> Unit,
+    onOpenUrl: (String) -> Unit,
     onBuyMeCoffee: () -> Unit,
     network: Networking
 ) {
@@ -86,7 +86,7 @@ fun NavigableSettingsView(
                 userManager = userManager,
                 onLogout = onLogout,
                 onRateApp = onRateApp,
-                onSendUsEmail = onSendUsEmail,
+                onOpenUrl = onOpenUrl,
                 onBuyMeCoffee = onBuyMeCoffee
             )
         }
@@ -100,7 +100,7 @@ fun NavigableSettingsView(
             BatterySOCSettings(configManager = config, network = network, navController = navController, context = context).Content()
         }
         composable(SettingsScreen.BatteryChargeTimes.name) {
-            BatteryForceChargeTimes(configManager = config, network = network, navController = navController, context = context).Content()
+            BatteryScheduleTimes(configManager = config, network = network, navController = navController, context = context).Content()
         }
         debugGraph(navController, networkStore)
     }
@@ -130,7 +130,7 @@ fun SettingsView(
     userManager: UserManaging,
     onLogout: () -> Unit,
     onRateApp: () -> Unit,
-    onSendUsEmail: () -> Unit,
+    onOpenUrl: (String) -> Unit,
     onBuyMeCoffee: () -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -161,26 +161,38 @@ fun SettingsView(
 
         RefreshFrequencySettingsView(config)
 
-        SettingsButton(
-            title = stringResource(R.string.view_debug_data),
-            onClick = { navController.navigate(SettingsScreen.Debug.name) }
-        )
+        Column {
+            SettingsButton(
+                title = "FoxESS Cloud Status",
+                onClick = { onOpenUrl("https://monitor.foxesscommunity.com/status/foxess") }
+            )
 
-        SettingsFooterView(config, userManager, onLogout, onRateApp, onSendUsEmail, onBuyMeCoffee)
+            SettingsButton(
+                title = "Facebook group",
+                onClick = { onOpenUrl("https://www.facebook.com/groups/foxessownersgroup") }
+            )
+
+            SettingsButton(
+                title = stringResource(R.string.view_debug_data),
+                onClick = { navController.navigate(SettingsScreen.Debug.name) }
+            )
+        }
+
+        SettingsFooterView(config, userManager, onLogout, onRateApp, onOpenUrl, onBuyMeCoffee)
     }
 }
 
 @Preview(showBackground = true, heightDp = 1200, widthDp = 300)
 @Composable
 fun SettingsViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(darkTheme = true) {
         SettingsView(
             navController = NavHostController(LocalContext.current),
             config = FakeConfigManager(),
             userManager = FakeUserManager(),
             onLogout = {},
             onRateApp = {},
-            onSendUsEmail = {}
+            onOpenUrl = {}
         ) {}
     }
 }

@@ -12,7 +12,12 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class BatteryForceChargeTimesViewModelFactory(
+private val ChargeTimePeriod.hasTimes: Boolean
+    get() {
+        return start != Time.zero() || end != Time.zero()
+    }
+
+class BatteryScheduleTimesViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
@@ -33,7 +38,7 @@ private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
             start.hour > period2.end.hour || (start.hour == period2.end.hour && start.minute >= period2.end.minute))
 }
 
-class BatteryForceChargeTimesViewModel(
+class BatteryScheduleTimesViewModel(
     private val network: Networking,
     private val config: ConfigManaging,
     private val navController: NavController,
@@ -89,7 +94,15 @@ class BatteryForceChargeTimesViewModel(
         var result = ""
 
         if (!period1.enabled && !period2.enabled) {
-            result = context.getString(R.string.no_battery_charge)
+            if (period1.hasTimes && period2.hasTimes) {
+                result = String.format(context.getString(R.string.both_battery_freeze_periods), period1.description, period2.description)
+            } else if (period1.hasTimes) {
+                result = String.format(context.getString(R.string.one_battery_freeze_period), period1.description)
+            } else if (period2.hasTimes) {
+                result = String.format("one_battery_freeze_period", period2.description)
+            } else {
+                result = context.getString(R.string.no_battery_charge)
+            }
         } else if (period1.enabled && period2.enabled) {
             result = String.format(context.getString(R.string.both_battery_charge_periods), period1.description, period2.description)
 

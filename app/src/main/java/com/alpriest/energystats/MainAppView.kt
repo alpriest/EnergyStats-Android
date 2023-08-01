@@ -37,10 +37,9 @@ fun MainAppView(appContainer: AppContainer) {
                         themeStream = appContainer.configManager.themeStream,
                         networkStore = appContainer.networkStore,
                         { appContainer.openAppInPlayStore() },
-                        { appContainer.sendUsEmail() },
-                        { appContainer.buyMeACoffee() },
-                        { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) }
-                    )
+                        { appContainer.openUrl(it) },
+                        { appContainer.buyMeACoffee() }
+                    ) { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) }
 
                 is LoggedOut ->
                     CredentialsView(

@@ -8,20 +8,9 @@ data class ChargeTimePeriod(
     var end: Time,
     var enabled: Boolean
 ) {
-    val description: String?
-        get() = if (enabled) {
-            String.format("%02d:%02d to %02d:%02d", start.hour, start.minute, end.hour, end.minute)
-        } else {
-            null
-        }
+    val description: String
+        get() = String.format("%02d:%02d to %02d:%02d", start.hour, start.minute, end.hour, end.minute)
 
-//    val validate: String?
-//        get() = if (start.after(end)) {
-//            "Start time must be before the end time"
-//        } else {
-//            null
-//        }
-//
     val isValid: Boolean
         get() = !start.after(end)
 
@@ -32,6 +21,8 @@ data class ChargeTimePeriod(
             endTime = end
         )
     }
+
+    companion object
 }
 
 fun Time.after(end: Time): Boolean {

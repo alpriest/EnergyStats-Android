@@ -68,7 +68,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
-            Text(stringResource(R.string.increase_sizes_for_large_display))
+            Text(
+                stringResource(R.string.increase_sizes_for_large_display),
+                color = colors.onSecondary,
+            )
         }
 
         Row(
@@ -88,7 +91,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
-            Text(stringResource(R.string.show_coloured_flow_lines))
+            Text(
+                stringResource(R.string.show_coloured_flow_lines),
+                color = colors.onSecondary,
+            )
         }
 
         Row(
@@ -108,7 +114,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
-            Text(stringResource(R.string.show_total_yield))
+            Text(
+                stringResource(R.string.show_total_yield),
+                color = colors.onSecondary,
+            )
         }
 
         Row(
@@ -128,13 +137,19 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 },
                 colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
-            Text(stringResource(R.string.show_sunny_background))
+            Text(
+                stringResource(R.string.show_sunny_background),
+                color = colors.onSecondary,
+            )
         }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(stringResource(R.string.decimal_places))
+            Text(
+                stringResource(R.string.decimal_places),
+                color = colors.onSecondary,
+            )
             listOf(2, 3).map {
                 RadioButton(
                     selected = decimalPlacesState.value == it,
@@ -146,7 +161,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 )
                 Text(
                     it.toString(),
-                    color = Color.DarkGray
+                    color = colors.onSecondary,
                 )
             }
         }
@@ -159,7 +174,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
 )
 @Composable
 fun DisplaySettingsViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(darkTheme = false) {
         DisplaySettingsView(config = FakeConfigManager(), modifier = Modifier.padding(horizontal = 12.dp))
     }
 }
