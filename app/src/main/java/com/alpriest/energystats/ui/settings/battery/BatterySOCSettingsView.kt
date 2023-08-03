@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -69,20 +70,21 @@ class BatterySOCSettings(
                         Text(
                             stringResource(R.string.min_soc),
                             Modifier.weight(1.0f),
-                            style = MaterialTheme.typography.h4
+                            style = MaterialTheme.typography.h4,
+                            color = colors.onSecondary
                         )
                         OutlinedTextField(
                             value = minSOC,
                             onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
                             modifier = Modifier.width(100.dp),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                            trailingIcon = { Text("%") }
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colors.onSecondary),
+                            trailingIcon = { Text("%", color = colors.onSecondary) }
                         )
                     }
 
                     Text(
                         stringResource(R.string.minsoc_description),
-                        color = MaterialTheme.colors.onSecondary,
+                        color = colors.onSecondary,
                         modifier = Modifier.padding(horizontal = 12.dp)
                     )
                 }
@@ -98,33 +100,34 @@ class BatterySOCSettings(
                         Text(
                             stringResource(R.string.min_soc_on_grid),
                             Modifier.weight(1.0f),
-                            style = MaterialTheme.typography.h4
+                            style = MaterialTheme.typography.h4,
+                            color = colors.onSecondary
                         )
                         OutlinedTextField(
                             value = minSOConGrid,
-                            onValueChange = { viewModel.minSOConGridStream.value = it.filter { it.isDigit() }},
+                            onValueChange = { viewModel.minSOConGridStream.value = it.filter { it.isDigit() } },
                             modifier = Modifier.width(100.dp),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                            trailingIcon = { Text("%") }
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colors.onSecondary),
+                            trailingIcon = { Text("%", color = colors.onSecondary) }
                         )
                     }
 
                     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
                         Text(
                             stringResource(R.string.minsocgrid_description),
-                            color = MaterialTheme.colors.onSecondary,
+                            color = colors.onSecondary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
                         Text(
                             stringResource(R.string.minsoc_detail),
-                            color = MaterialTheme.colors.onSecondary,
+                            color = colors.onSecondary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
                         Text(
                             stringResource(R.string.minsoc_notsure_footnote),
-                            color = MaterialTheme.colors.onSecondary,
+                            color = colors.onSecondary,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
@@ -143,7 +146,7 @@ class BatterySOCSettings(
 @Preview(showBackground = true)
 @Composable
 fun BatterySOCSettingsViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(darkTheme = true) {
         BatterySOCSettings(
             network = DemoNetworking(),
             configManager = FakeConfigManager(),

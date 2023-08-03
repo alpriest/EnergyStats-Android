@@ -36,6 +36,7 @@ fun NavGraphBuilder.debugGraph(navController: NavController, networkStore: InMem
         composable("batterySettings") { ResponseDebugView(networkStore) { networkStore.batterySettingsResponseStream } }
         composable("deviceList") { ResponseDebugView(networkStore) { networkStore.deviceListResponseStream } }
         composable("addressBook") { ResponseDebugView(networkStore) { networkStore.addressBookResponseStream } }
+        composable("batteryTimes") { ResponseDebugView(networkStore) { networkStore.batteryTimesResponseStream } }
     }
 }
 
@@ -66,6 +67,10 @@ fun DebugDataSettingsView(navController: NavController) {
 
         Button(onClick = { navController.navigate("addressBook") }) {
             Text("Address Book")
+        }
+
+        Button(onClick = { navController.navigate("batteryTimes") }) {
+            Text("Battery times")
         }
     }
 }

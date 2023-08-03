@@ -274,7 +274,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .scheme("https")
             .host("www.foxesscloud.com")
             .addPathSegments("c/v0/device/battery/time/get")
-            .addQueryParameter("deviceSN", deviceSN)
+            .addQueryParameter("sn", deviceSN)
             .build()
 
         val request = Request.Builder()
