@@ -115,11 +115,6 @@
     <string name="home_usage">Uso domestico</string>
     <string name="export_csv_data">Esporta dati del grafico</string>
     <string name="output">"Produzione "</string>
-    <string name="feed_in_energy">"Alimentazione in rete "</string>
-    <string name="charge_energy">Energia di carica</string>
-    <string name="discharge_energy">Energia di scarica</string>
-    <string name="grid_consumption_energy">Energia di consumo dalla rete</string>
-    <string name="loads_energy">Energia dei carichi</string>
     <string name="parameters_update_description">I parametri vengono aggiornati ogni 5 minuti da FoxESS e sono disponibili solo per un singolo giorno alla volta</string>
     <string name="view_debug_data">Visualizza dati di debug</string>
     <string name="minimum_charge_levels">Livelli di carica minimi</string>

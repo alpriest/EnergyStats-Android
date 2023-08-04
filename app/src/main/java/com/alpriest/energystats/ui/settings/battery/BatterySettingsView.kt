@@ -51,6 +51,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
     val scrollState = rememberScrollState()
+    val minSOC = config.minSOC.collectAsState()
 
     Column(
         modifier = Modifier
@@ -70,27 +71,29 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumnWithChild {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = modifier
-            ) {
-                Column(modifier = modifier) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        Text(
-                            stringResource(R.string.min_battery_charge_soc),
-                            style = MaterialTheme.typography.h4,
-                            color = colors.onSecondary,
-                        )
-                        Spacer(Modifier.weight(1f))
-                        Text(
-                            text = config.minSOC.asPercent(),
-                            color = colors.onSecondary,
-                        )
+            minSOC.value?.let { minSOC ->
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = modifier
+                ) {
+                    Column(modifier = modifier) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.Bottom
+                        ) {
+                            Text(
+                                stringResource(R.string.min_battery_charge_soc),
+                                style = MaterialTheme.typography.h4,
+                                color = colors.onSecondary,
+                            )
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                text = minSOC.asPercent(),
+                                color = colors.onSecondary,
+                            )
+                        }
                     }
                 }
             }

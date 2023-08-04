@@ -8,14 +8,15 @@ class BatteryPowerViewModel(
     private val actualStateOfCharge: Double,
     val chargePowerkWH: Double,
     val temperature: Double,
-    val residual: Int
+    val residual: Int,
+    val minSOC: Double
 ) : ViewModel() {
     private val calculator: BatteryCapacityCalculator
 
     init {
         calculator = BatteryCapacityCalculator(
             capacityW = configManager.batteryCapacity.toDouble().toInt(),
-            configManager.minSOC
+            minSOC
         )
     }
 

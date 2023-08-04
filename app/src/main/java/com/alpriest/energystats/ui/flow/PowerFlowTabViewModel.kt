@@ -151,7 +151,8 @@ class PowerFlowTabViewModel(
                     raw = raw,
                     batteryTemperature = battery.temperature,
                     todaysGeneration = earnings.today.generation,
-                    batteryResidual = battery.residual
+                    batteryResidual = battery.residual,
+                    hasBattery = battery.hasBattery
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

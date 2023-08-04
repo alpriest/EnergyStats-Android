@@ -19,7 +19,8 @@ class SummaryPowerFlowViewModel(
     val raw: List<RawResponse>,
     val batteryTemperature: Double,
     val todaysGeneration: Double,
-    val batteryResidual: Int
+    val batteryResidual: Int,
+    val hasBattery: Boolean
 ) : ViewModel() {
     val solar: Double = java.lang.Double.max(
         0.0,
@@ -31,7 +32,10 @@ class SummaryPowerFlowViewModel(
     )
     val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
     val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
-    val batteryViewModel: BatteryPowerViewModel = BatteryPowerViewModel(configManager, batteryStateOfCharge, batteryChargePower, batteryTemperature, batteryResidual)
+    val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
+        BatteryPowerViewModel(configManager, batteryStateOfCharge, batteryChargePower, batteryTemperature, batteryResidual, configManager.minSOC.value ?: 0.0)
+    else
+        null
     val latestUpdate = raw.currentData("gridConsumptionPower")?.time?.let {
         SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
     } ?: LocalDateTime.now()

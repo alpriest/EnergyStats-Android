@@ -18,6 +18,7 @@ import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
@@ -52,20 +53,25 @@ fun SummaryPowerFlowView(
             modifier = Modifier
                 .weight(1f)
         ) {
-            BatteryPowerFlow(
-                viewModel = summaryPowerFlowViewModel.batteryViewModel,
-                modifier = Modifier
-                    .weight(2f),
-                themeStream = themeStream
-            )
-            InverterSpacer(
-                modifier = Modifier.weight(1f),
-                themeStream = themeStream
-            )
+            summaryPowerFlowViewModel.batteryViewModel?.let { model ->
+                if (summaryPowerFlowViewModel.hasBattery) {
+                    BatteryPowerFlow(
+                        viewModel = model,
+                        modifier = Modifier
+                            .weight(2f),
+                        themeStream = themeStream
+                    )
+                    InverterSpacer(
+                        modifier = Modifier.weight(1f),
+                        themeStream = themeStream
+                    )
+                }
+            }
             HomePowerFlowView(
                 amount = summaryPowerFlowViewModel.home,
                 modifier = Modifier.weight(2f),
-                themeStream = themeStream
+                themeStream = themeStream,
+                position = if (summaryPowerFlowViewModel.hasBattery) PowerFlowLinePosition.MIDDLE else PowerFlowLinePosition.LEFT
             )
             InverterSpacer(
                 modifier = Modifier.weight(1f),
@@ -79,16 +85,18 @@ fun SummaryPowerFlowView(
         }
 
         Row {
-            BatteryIconView(
-                viewModel = summaryPowerFlowViewModel.batteryViewModel,
-                themeStream = themeStream,
-                modifier = Modifier.weight(2f),
-                iconHeight = iconHeight
-            )
+            summaryPowerFlowViewModel.batteryViewModel?.let { model ->
+                BatteryIconView(
+                    viewModel = model,
+                    themeStream = themeStream,
+                    modifier = Modifier.weight(2f),
+                    iconHeight = iconHeight
+                )
 
-            Spacer(
-                modifier = Modifier.weight(1f)
-            )
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+            }
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -155,7 +163,8 @@ fun SummaryPowerFlowViewPreview() {
                 ),
                 13.6,
                 todaysGeneration = 1.0,
-                batteryResidual = 5678
+                batteryResidual = 5678,
+                hasBattery = true
             ),
             themeStream = MutableStateFlow(AppTheme.preview()),
         )

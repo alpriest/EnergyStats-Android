@@ -59,8 +59,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(showBatteryEstimate = showBatteryEstimate)
         }
 
-    override val minSOC: Double
-        get() = (currentDevice.value?.battery?.minSOC ?: "0.2").toDouble()
+    override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(null)
 
     override val batteryCapacity: Int
         get() = (currentDevice.value?.battery?.capacity ?: "2600").toDouble().toInt()
@@ -128,9 +127,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
         }
 
-    override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(
-        devices?.firstOrNull { it.deviceID == selectedDeviceID }
-    )
+    final override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(null)
 
     override var selectedDeviceID: String?
         get() = config.selectedDeviceID
@@ -241,6 +238,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                 it
             }
         }
+    }
+
+    init {
+        currentDevice.onEach {
+            minSOC.value = it?.battery?.minSOC?.toDouble()
+        }
+        currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceID == selectedDeviceID })
     }
 }
 
