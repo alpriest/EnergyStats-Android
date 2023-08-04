@@ -13,7 +13,8 @@ class NetworkDevice(
     val deviceSN: String,
     val hasBattery: Boolean,
     val hasPV: Boolean,
-    val deviceType: String
+    val deviceType: String,
+    val moduleSN: String
 )
 
 data class DeviceListRequest(
@@ -40,7 +41,8 @@ data class Device(
     val battery: Battery?,
     val deviceType: String?,
     val firmware: DeviceFirmwareVersion?,
-    val variables: List<RawVariable>
+    val variables: List<RawVariable>,
+    val moduleSN: String
 )
 
 data class Battery(

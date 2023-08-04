@@ -19,7 +19,6 @@ import com.alpriest.energystats.models.SoftwareVersion
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.alpriest.energystats.ui.settings.battery.ChargeTimePeriod
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -96,8 +95,8 @@ class DemoNetworking : Networking {
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return PagedDeviceListResponse(
             currentPage = 1, pageSize = 1, total = 1, devices = arrayListOf(
-                NetworkDevice(plantName = "plant 1", deviceID = "f3000_deviceid", deviceSN = "123123", hasBattery = true, hasPV = true, deviceType = "F3000"),
-                NetworkDevice(plantName = "plant 2", deviceID = "h1_deviceid", deviceSN = "998877", hasBattery = true, hasPV = true, deviceType = "H1-3.7-E")
+                NetworkDevice(plantName = "plant 1", deviceID = "f3000_deviceid", deviceSN = "123123", hasBattery = true, hasPV = true, deviceType = "F3000", moduleSN = "12"),
+                NetworkDevice(plantName = "plant 2", deviceID = "h1_deviceid", deviceSN = "998877", hasBattery = true, hasPV = true, deviceType = "H1-3.7-E", moduleSN = "ab")
             )
         )
     }

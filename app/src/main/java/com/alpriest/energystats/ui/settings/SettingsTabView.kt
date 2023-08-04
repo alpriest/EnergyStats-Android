@@ -37,6 +37,9 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatteryScheduleTimes
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
+import com.alpriest.energystats.ui.settings.inverter.FirmwareVersionView
+import com.alpriest.energystats.ui.settings.inverter.InverterChoiceView
+import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -58,7 +61,8 @@ enum class SettingsScreen() {
     Debug,
     Battery,
     BatterySOC,
-    BatteryChargeTimes
+    BatteryChargeTimes,
+    Inverter
 }
 
 @Composable
@@ -101,6 +105,9 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.BatteryChargeTimes.name) {
             BatteryScheduleTimes(configManager = config, network = network, navController = navController, context = context).Content()
+        }
+        composable(SettingsScreen.Inverter.name) {
+            InverterSettingsView(configManager = config)
         }
         debugGraph(navController, networkStore)
     }
@@ -145,13 +152,13 @@ fun SettingsTabView(
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        InverterChoiceView(config = config)
+        Column {
+            SettingsButton("Inverter") { navController.navigate(SettingsScreen.Inverter.name) }
 
-        FirmwareVersionView(config)
-
-        currentDevice.value?.let {
-            if (it.battery != null) {
-                SettingsButton("Battery") { navController.navigate(SettingsScreen.Battery.name) }
+            currentDevice.value?.let {
+                if (it.battery != null) {
+                    SettingsButton("Battery") { navController.navigate(SettingsScreen.Battery.name) }
+                }
             }
         }
 

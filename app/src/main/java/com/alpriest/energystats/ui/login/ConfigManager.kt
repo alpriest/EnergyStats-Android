@@ -191,7 +191,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                         battery = if (it.hasBattery) Battery(batteryCapacity, minSOC) else null,
                         deviceType = it.deviceType,
                         firmware = firmware,
-                        variables = variables
+                        variables = variables,
+                        moduleSN = it.moduleSN
                     )
                 )
             }.collect()
