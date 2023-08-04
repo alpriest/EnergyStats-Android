@@ -80,7 +80,7 @@ fun NavigableSettingsView(
         startDestination = SettingsScreen.Settings.name
     ) {
         composable(SettingsScreen.Settings.name) {
-            SettingsView(
+            SettingsTabView(
                 navController,
                 config = config,
                 userManager = userManager,
@@ -124,7 +124,7 @@ fun SettingsButton(title: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun SettingsView(
+fun SettingsTabView(
     navController: NavHostController,
     config: ConfigManaging,
     userManager: UserManaging,
@@ -186,7 +186,7 @@ fun SettingsView(
 @Composable
 fun SettingsViewPreview() {
     EnergyStatsTheme(darkTheme = true) {
-        SettingsView(
+        SettingsTabView(
             navController = NavHostController(LocalContext.current),
             config = FakeConfigManager(),
             userManager = FakeUserManager(),
