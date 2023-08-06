@@ -109,7 +109,7 @@ fun NavigableSettingsView(
         composable(SettingsScreen.Inverter.name) {
             InverterSettingsView(configManager = config)
         }
-        debugGraph(navController, networkStore)
+        debugGraph(navController, networkStore, config, network)
     }
 }
 

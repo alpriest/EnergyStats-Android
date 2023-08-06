@@ -19,24 +19,61 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
+import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.battery.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import java.net.NetworkInterface
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun NavGraphBuilder.debugGraph(navController: NavController, networkStore: InMemoryLoggingNetworkStore) {
+fun NavGraphBuilder.debugGraph(
+    navController: NavController,
+    networkStore: InMemoryLoggingNetworkStore,
+    configManager: ConfigManaging,
+    network: Networking
+) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") { DebugDataSettingsView(navController) }
-        composable("raw") { ResponseDebugView(networkStore) { networkStore.rawResponseStream } }
-        composable("report") { ResponseDebugView(networkStore) { networkStore.reportResponseStream } }
-        composable("battery") { ResponseDebugView(networkStore) { networkStore.batteryResponseStream } }
-        composable("batterySettings") { ResponseDebugView(networkStore) { networkStore.batterySettingsResponseStream } }
-        composable("deviceList") { ResponseDebugView(networkStore) { networkStore.deviceListResponseStream } }
-        composable("addressBook") { ResponseDebugView(networkStore) { networkStore.addressBookResponseStream } }
-        composable("batteryTimes") { ResponseDebugView(networkStore) { networkStore.batteryTimesResponseStream } }
+        composable("raw") { ResponseDebugView(networkStore, mapper = { networkStore.rawResponseStream }, fetcher = null) }
+        composable("report") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
+        composable("battery") {
+            ResponseDebugView(networkStore, mapper = { networkStore.batteryResponseStream }, fetcher = {
+                configManager.currentDevice.value?.deviceID?.let {
+                    network.fetchBattery(it)
+                }
+            })
+        }
+        composable("batterySettings") {
+            ResponseDebugView(networkStore, mapper = { networkStore.batterySettingsResponseStream }, fetcher = {
+                configManager.currentDevice.value?.deviceSN?.let {
+                    network.fetchBatterySettings(it)
+                }
+            })
+        }
+        composable("batteryTimes") {
+            ResponseDebugView(networkStore, mapper = { networkStore.batteryTimesResponseStream }, fetcher = {
+                configManager.currentDevice.value?.deviceSN?.let {
+                    network.fetchBatteryTimes(it)
+                }
+            })
+        }
+        composable("deviceList") {
+            ResponseDebugView(networkStore, mapper = { networkStore.deviceListResponseStream }, fetcher = {
+                network.fetchDeviceList()
+            })
+        }
+        composable("addressBook") {
+            ResponseDebugView(networkStore, mapper = { networkStore.addressBookResponseStream }, fetcher = {
+                configManager.currentDevice.value?.deviceID?.let {
+                    network.fetchAddressBook(it)
+                }
+            })
+        }
     }
 }
 
@@ -61,6 +98,10 @@ fun DebugDataSettingsView(navController: NavController) {
             Text("Battery Settings")
         }
 
+        Button(onClick = { navController.navigate("batteryTimes") }) {
+            Text("Battery Charge Schedule")
+        }
+
         Button(onClick = { navController.navigate("deviceList") }) {
             Text("Device List")
         }
@@ -68,26 +109,26 @@ fun DebugDataSettingsView(navController: NavController) {
         Button(onClick = { navController.navigate("addressBook") }) {
             Text("Address Book")
         }
-
-        Button(onClick = { navController.navigate("batteryTimes") }) {
-            Text("Battery times")
-        }
     }
 }
 
 @Composable
 private fun <T> ResponseDebugView(
-    networkStore: InMemoryLoggingNetworkStore, mapper: (InMemoryLoggingNetworkStore) -> MutableStateFlow<NetworkOperation<T>?>
+    networkStore: InMemoryLoggingNetworkStore,
+    mapper: (InMemoryLoggingNetworkStore) -> MutableStateFlow<NetworkOperation<T>?>,
+    fetcher: (suspend () -> Unit)?
 ) {
     val stream = mapper(networkStore).collectAsState()
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
 
-    stream.value?.let {
-        Column(
-            modifier = Modifier.verticalScroll(scrollState)
-        ) {
+    Column(
+        modifier = Modifier.verticalScroll(scrollState)
+    ) {
+        stream.value?.let {
             SettingsTitleView(it.description)
             Text("${it.time}")
+            Text(it.request.url.toString())
 
             val raw = it.raw?.let {
                 prettyPrintJson(it).split("\n").map {
@@ -97,6 +138,16 @@ private fun <T> ResponseDebugView(
                         )
                     }
                 }
+            }
+        }
+
+        fetcher?.let {
+            Button(onClick = {
+                scope.launch {
+                    it()
+                }
+            }) {
+                Text("Fetch now")
             }
         }
     }
@@ -118,46 +169,18 @@ fun DataSettingsViewPreview() {
     val now = LocalDateTime.now().format(formatter)
     val navController = rememberNavController()
 
-//    store.addressBookResponse = NetworkOperation(
-//        "Address book",
-//        value = NetworkResponse(
-//            errno = 0,
-//            result = AddressBookResponse(SoftwareVersion("1.21", "1.9", "0.9"))
-//        ),
-//        raw = null
-//    )
-
-//    store.store(
-//        raw = listOf(
-//            RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
-//            RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
-//            RawResponse("batChargePower", arrayListOf(RawData(now, 2.45))),
-//            RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
-//            RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
-//            RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
-//        )
-//    )
-//    store.store(batterySettings = BatterySettingsResponse(30))
-//    store.store(battery = BatteryResponse(power = 2000.0, soc = 20, residual = 1000, temperature = 13.6))
-//    store.store(
-//        deviceList = PagedDeviceListResponse(
-//            currentPage = 1, pageSize = 1, total = 1, devices = listOf(
-//                NetworkDevice(plantName = "plant1", deviceID = "ABC123", deviceSN = "JJJ999", hasBattery = true, hasPV = true, deviceType = "F3000")
-//            )
-//        )
-//    )
     EnergyStatsTheme {
         NavHost(
             navController = navController,
             startDestination = "debug"
         ) {
             composable("debug") { DebugDataSettingsView(navController) }
-            composable("raw") { ResponseDebugView(networkStore) { networkStore.rawResponseStream } }
-            composable("report") { ResponseDebugView(networkStore) { networkStore.reportResponseStream } }
-            composable("battery") { ResponseDebugView(networkStore) { networkStore.batteryResponseStream } }
-            composable("batterySettings") { ResponseDebugView(networkStore) { networkStore.batterySettingsResponseStream } }
-            composable("deviceList") { ResponseDebugView(networkStore) { networkStore.deviceListResponseStream } }
-            composable("addressBook") { ResponseDebugView(networkStore) { networkStore.addressBookResponseStream } }
+            composable("raw") { ResponseDebugView(networkStore, { networkStore.rawResponseStream }, null) }
+            composable("report") { ResponseDebugView(networkStore, { networkStore.reportResponseStream }, null) }
+            composable("battery") { ResponseDebugView(networkStore, { networkStore.batteryResponseStream }, null) }
+            composable("batterySettings") { ResponseDebugView(networkStore, { networkStore.batterySettingsResponseStream }, null) }
+            composable("deviceList") { ResponseDebugView(networkStore, { networkStore.deviceListResponseStream }, null) }
+            composable("addressBook") { ResponseDebugView(networkStore, { networkStore.addressBookResponseStream }, null) }
         }
     }
 }

@@ -27,9 +27,9 @@ fun Double.kW(decimalPlaces: Int): String {
     return dec.format(divided) + " kW"
 }
 
-fun Double.w(decimalPlaces: Int): String {
+fun Double.w(): String {
     val divided = (this * 1000.0).roundToLong()
-    val dec = DecimalFormat("#,###,##0." + "0".repeat(decimalPlaces))
+    val dec = DecimalFormat("#,###")
     return dec.format(divided) + " W"
 }
 

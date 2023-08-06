@@ -145,7 +145,7 @@ fun PowerFlowView(
                     text = if (asKw) {
                         amount.kW(theme.decimalPlaces)
                     } else {
-                        amount.w(theme.decimalPlaces)
+                        amount.w()
                     },
                     color = powerTextColor,
                     fontWeight = FontWeight.Bold,

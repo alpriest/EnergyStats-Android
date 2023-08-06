@@ -21,7 +21,6 @@ import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.ui.settings.battery.ChargeTimePeriod
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -103,7 +102,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
-        store.deviceListResponseStream.value = NetworkOperation(description = "fetchDeviceList", value = response.item, raw = response.text)
+        store.deviceListResponseStream.value = NetworkOperation(description = "fetchDeviceList", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -135,7 +134,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<BatterySettingsResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatterySettingsResponse>> = fetch(request, type)
-        store.batterySettingsResponseStream.value = NetworkOperation(description = "fetchBatterySettings", value = response.item, raw = response.text)
+        store.batterySettingsResponseStream.value = NetworkOperation(description = "fetchBatterySettings", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -157,7 +156,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkReportResponse>() {}.type
         val response: NetworkTuple<NetworkReportResponse> = fetch(request, type)
-        store.reportResponseStream.value = NetworkOperation(description = "fetchReport", value = response.item, raw = response.text)
+        store.reportResponseStream.value = NetworkOperation(description = "fetchReport", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -175,7 +174,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<AddressBookResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<AddressBookResponse>> = fetch(request, type)
-        store.addressBookResponseStream.value = NetworkOperation(description = "fetchAddressBook", value = response.item, raw = response.text)
+        store.addressBookResponseStream.value = NetworkOperation(description = "fetchAddressBook", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -190,7 +189,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkRawResponse>() {}.type
         val response: NetworkTuple<NetworkRawResponse> = fetch(request, type)
-        store.rawResponseStream.value = NetworkOperation(description = "fetchRaw", value = response.item, raw = response.text)
+        store.rawResponseStream.value = NetworkOperation(description = "fetchRaw", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -208,7 +207,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<BatteryResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatteryResponse>> = fetch(request, type)
-        store.batteryResponseStream.value = NetworkOperation(description = "fetchBattery", value = response.item, raw = response.text)
+        store.batteryResponseStream.value = NetworkOperation(description = "fetchBattery", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -226,7 +225,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<EarningsResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<EarningsResponse>> = fetch(request, type)
-        store.earningsResponseStream.value = NetworkOperation(description = "fetchEarnings", value = response.item, raw = response.text)
+        store.earningsResponseStream.value = NetworkOperation(description = "fetchEarnings", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -244,7 +243,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<VariablesResponse>> = fetch(request, type)
-        store.variablesResponseStream.value = NetworkOperation(description = "fetchVariables", value = response.item, raw = response.text)
+        store.variablesResponseStream.value = NetworkOperation(description = "fetchVariables", value = response.item, raw = response.text, request)
         return response.item.result?.variables ?: throw MissingDataException()
     }
 
@@ -283,7 +282,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
-        store.batteryTimesResponseStream.value = NetworkOperation(description = "batteryTimesResponse", value = response.item, raw = response.text)
+        store.batteryTimesResponseStream.value = NetworkOperation(description = "batteryTimesResponse", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 

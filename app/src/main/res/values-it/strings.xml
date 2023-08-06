@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Energy Stats</string>
-    <string name="loading">Caricamento in corso...</string>
+    <string name="loading">Caricamento in corso…</string>
     <string name="mins">minuti</string>
     <string name="hour">ora</string>
     <string name="hours">ore</string>
