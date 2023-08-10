@@ -110,4 +110,20 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
             network.setBatteryTimes(deviceSN, times)
         }
     }
+
+    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetRequest {
+        return if(config.isDemoUser) {
+            demoNetworking.fetchWorkMode(deviceID)
+        } else {
+            network.fetchWorkMode(deviceID)
+        }
+    }
+
+    override suspend fun setWorkMode(deviceID: String, workMode: String) {
+        return if(config.isDemoUser) {
+            demoNetworking.setWorkMode(deviceID, workMode)
+        } else {
+            network.setWorkMode(deviceID, workMode)
+        }
+    }
 }

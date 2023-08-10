@@ -5,6 +5,8 @@ import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DeviceSettingsGetRequest
+import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.NetworkDevice
@@ -135,5 +137,12 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+    }
+
+    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetRequest {
+        return DeviceSettingsGetRequest(protocol = "H11300", values = DeviceSettingsValues(operationMode_workMode = "SelfUse"))
+    }
+
+    override suspend fun setWorkMode(deviceID: String, workMode: String) {
     }
 }

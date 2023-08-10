@@ -39,3 +39,12 @@ data class Time(
 ) {
     companion object
 }
+
+data class DeviceSettingsGetRequest(
+    val protocol: String,
+    val values: DeviceSettingsValues
+)
+
+data class DeviceSettingsValues(
+    val operationMode_workMode: String
+)

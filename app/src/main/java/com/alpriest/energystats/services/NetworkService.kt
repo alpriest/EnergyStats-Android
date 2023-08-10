@@ -8,6 +8,8 @@ import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceListRequest
+import com.alpriest.energystats.models.DeviceSettingsGetRequest
+import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -305,6 +307,15 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)
+    }
+
+    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetRequest {
+        // TODO
+        return DeviceSettingsGetRequest("h1130", values = DeviceSettingsValues("Feedin"))
+    }
+
+    override suspend fun setWorkMode(deviceID: String, workMode: String) {
+        // TODO
     }
 
     private suspend fun fetchLoginToken(

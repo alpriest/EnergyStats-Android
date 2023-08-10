@@ -24,6 +24,8 @@ interface Networking {
     suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
     suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
     suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)
+    suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetRequest
+    suspend fun setWorkMode(deviceID: String, workMode: String)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

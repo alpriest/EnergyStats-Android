@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.inverter
 
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -28,8 +29,7 @@ class WorkModeViewModel(
     val navController: NavController,
     val context: Context
 ) : ViewModel() {
-    var minSOCStream = MutableStateFlow("")
-    var minSOConGridStream = MutableStateFlow("")
+    var workModeStream = MutableStateFlow(WorkMode.SELF_USE)
     var activityStream = MutableStateFlow<String?>(null)
 
     suspend fun load() {
@@ -37,11 +37,10 @@ class WorkModeViewModel(
 
         runCatching {
             config.currentDevice.value?.let { device ->
-                val deviceSN = device.deviceSN
+                val deviceID = device.deviceID
 
-                val result = network.fetchBatterySettings(deviceSN)
-                minSOCStream.value = result.minSoc.toString()
-                minSOConGridStream.value = result.minGridSoc.toString()
+                val result = network.fetchWorkMode(deviceID)
+                workModeStream.value = InverterWorkMode.from(result.values.operationMode_workMode).asWorkMode()
             }
         }.also {
             activityStream.value = null
@@ -53,18 +52,23 @@ class WorkModeViewModel(
 
         runCatching {
             config.currentDevice.value?.let { device ->
-                val deviceSN = device.deviceSN
+                val deviceID = device.deviceID
 
-                network.setSoc(
-                    minSOC = minSOCStream.value.toInt(),
-                    minGridSOC = minSOConGridStream.value.toInt(),
-                    deviceSN = deviceSN
+                network.setWorkMode(
+                    deviceID = deviceID,
+                    workMode = workModeStream.value.asInverterWorkMode().name,
                 )
+
+                Toast.makeText(context, "Inverter work mode was saved", Toast.LENGTH_LONG).show()
 
                 navController.popBackStack()
             } ?: run {
                 activityStream.value = null
             }
         }
+    }
+
+    fun select(workMode: WorkMode) {
+        workModeStream.value = workMode
     }
 }
