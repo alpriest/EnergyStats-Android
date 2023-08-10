@@ -31,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -45,9 +47,11 @@ import kotlinx.coroutines.launch
 class WorkModeView(
     private val network: Networking,
     private val configManager: ConfigManaging,
+    private val navController: NavController,
+    private val context: Context
 ) {
     @Composable
-    fun Content(viewModel: WorkModeViewModel = viewModel(factory = WorkModeViewModelFactory(network, configManager))) {
+    fun Content(viewModel: WorkModeViewModel = viewModel(factory = WorkModeViewModelFactory(network, configManager, navController, context))) {
         val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
         val coroutineScope = rememberCoroutineScope()
@@ -158,7 +162,9 @@ fun WorkModeViewPreview() {
     EnergyStatsTheme(darkTheme = false) {
         WorkModeView(
             DemoNetworking(),
-            FakeConfigManager()
+            FakeConfigManager(),
+            NavHostController(LocalContext.current),
+            LocalContext.current
         ).Content()
     }
 }

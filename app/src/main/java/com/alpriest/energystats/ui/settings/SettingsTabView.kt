@@ -107,7 +107,7 @@ fun NavigableSettingsView(
             InverterSettingsView(configManager = config, navController = navController)
         }
         composable(SettingsScreen.InverterWorkMode.name) {
-            WorkModeView(configManager = config, network = network).Content()
+            WorkModeView(configManager = config, network = network, navController = navController, context = context).Content()
         }
         debugGraph(navController, networkStore, config, network)
     }
