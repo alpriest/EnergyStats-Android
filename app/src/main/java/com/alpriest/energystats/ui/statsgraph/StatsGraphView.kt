@@ -50,7 +50,7 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
                 ),
                 bottomAxis = bottomAxis(
                     label = axisLabelComponent(horizontalPadding = 2.dp),
-                    tickPosition = HorizontalAxis.TickPosition.Center(offset = 0, spacing = 2),
+                    labelSpacing = 2,
                     valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode)
                 ),
                 diffAnimationSpec = SnapSpec()

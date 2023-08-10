@@ -22,12 +22,10 @@ import com.alpriest.energystats.services.NetworkOperation
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.alpriest.energystats.ui.settings.battery.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.net.NetworkInterface
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

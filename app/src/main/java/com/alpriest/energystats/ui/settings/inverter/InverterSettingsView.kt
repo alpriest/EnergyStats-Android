@@ -1,42 +1,29 @@
 package com.alpriest.energystats.ui.settings.inverter
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun InverterSettingsView(configManager: ConfigManaging) {
-    val scrollState = rememberScrollState()
+fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController) {
     val currentDevice = configManager.currentDevice.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.background)
-            .padding(12.dp)
-            .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
+    SettingsPage {
         InverterChoiceView(configManager)
 
         currentDevice.value?.let {
+            SettingsButton("Configure Work Mode") { navController.navigate(SettingsScreen.InverterWorkMode.name) }
+
             FirmwareVersionView(it)
             DeviceVersionView(it)
         }
@@ -62,6 +49,7 @@ fun InverterSettingsViewPreview() {
     EnergyStatsTheme(darkTheme = true) {
         InverterSettingsView(
             FakeConfigManager(),
+            NavHostController(LocalContext.current)
         )
     }
 }

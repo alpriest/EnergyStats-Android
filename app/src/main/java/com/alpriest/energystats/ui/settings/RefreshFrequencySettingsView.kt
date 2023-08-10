@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.battery.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 enum class RefreshFrequency(val value: Int) {

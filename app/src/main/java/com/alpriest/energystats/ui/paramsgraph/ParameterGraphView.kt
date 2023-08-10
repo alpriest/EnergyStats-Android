@@ -6,15 +6,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
+import com.patrykandpatrick.vico.compose.axis.axisLineComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
@@ -39,7 +42,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
     val chartColors = viewModel.chartColorsStream.collectAsState().value
-    val maxY = viewModel.maxYStream.collectAsState().value
     val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
         override fun onMarkerHidden(marker: Marker) {
             super.onMarkerHidden(marker)
@@ -47,6 +49,9 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
             viewModel.valuesAtTimeStream.value = listOf()
         }
     }
+    val entries = viewModel.entriesStream.collectAsState().value.first()
+    val firstHour = entries.firstOrNull()?.localDateTime?.hour ?: 0
+    val firstLabelOffset = entries.indexOfFirst { it.localDateTime.hour > firstHour }
 
     Column(modifier = modifier.fillMaxWidth()) {
         ProvideChartStyle(chartStyle(chartColors)) {
@@ -59,14 +64,16 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
                     valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                 ),
                 bottomAxis = bottomAxis(
-                    label = axisLabelComponent(horizontalPadding = 2.dp),
-                    tickPosition = HorizontalAxis.TickPosition.Center(offset = 0, spacing = 20),
+                    labelSpacing = 23,
+                    labelOffset = firstLabelOffset,
                     valueFormatter = ParameterGraphFormatAxisValueFormatter()
                 ),
-                marker = NonDisplayingMarker(viewModel.valuesAtTimeStream, lineComponent(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    thickness = 1.dp
-                )),
+                marker = NonDisplayingMarker(
+                    viewModel.valuesAtTimeStream, lineComponent(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        thickness = 1.dp
+                    )
+                ),
                 diffAnimationSpec = SnapSpec(),
                 markerVisibilityChangeListener = markerVisibilityChangeListener
             )
@@ -81,7 +88,7 @@ class ParameterGraphFormatAxisValueFormatter<Position : AxisPosition>() :
         return (chartValues.chartEntryModel.entries.first().getOrNull(value.toInt()) as? DateTimeFloatEntry)
             ?.localDateTime
             ?.run {
-                "$hour"
+                String.format("%d:%02d", hour, minute)
             }
             .orEmpty()
     }

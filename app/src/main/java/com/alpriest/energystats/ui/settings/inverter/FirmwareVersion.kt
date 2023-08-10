@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.battery.SettingsTitleView
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 
 @Composable
 fun SettingsRow(title: String, value: String?) {

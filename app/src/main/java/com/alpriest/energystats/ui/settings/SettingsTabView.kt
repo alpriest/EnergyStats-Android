@@ -3,12 +3,9 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
@@ -17,7 +14,6 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -37,9 +33,9 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatteryScheduleTimes
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
-import com.alpriest.energystats.ui.settings.inverter.FirmwareVersionView
-import com.alpriest.energystats.ui.settings.inverter.InverterChoiceView
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
+import com.alpriest.energystats.ui.settings.inverter.WorkModeView
+import com.alpriest.energystats.ui.settings.inverter.WorkModeViewModel
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -62,7 +58,8 @@ enum class SettingsScreen() {
     Battery,
     BatterySOC,
     BatteryChargeTimes,
-    Inverter
+    Inverter,
+    InverterWorkMode
 }
 
 @Composable
@@ -107,19 +104,22 @@ fun NavigableSettingsView(
             BatteryScheduleTimes(configManager = config, network = network, navController = navController, context = context).Content()
         }
         composable(SettingsScreen.Inverter.name) {
-            InverterSettingsView(configManager = config)
+            InverterSettingsView(configManager = config, navController = navController)
+        }
+        composable(SettingsScreen.InverterWorkMode.name) {
+            WorkModeView(configManager = config, network = network).Content()
         }
         debugGraph(navController, networkStore, config, network)
     }
 }
 
 @Composable
-fun SettingsButton(title: String, onClick: () -> Unit) {
+fun SettingsButton(title: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
 
     Button(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .indication(interactionSource, rememberRipple())
     ) {
@@ -140,18 +140,9 @@ fun SettingsTabView(
     onOpenUrl: (String) -> Unit,
     onBuyMeCoffee: () -> Unit
 ) {
-    val scrollState = rememberScrollState()
     val currentDevice = config.currentDevice.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colors.background)
-            .padding(12.dp)
-            .verticalScroll(scrollState),
-        horizontalAlignment = CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
+    SettingsPage {
         Column {
             SettingsButton("Inverter") { navController.navigate(SettingsScreen.Inverter.name) }
 

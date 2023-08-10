@@ -1,10 +1,7 @@
 package com.alpriest.energystats.ui.settings.battery
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
@@ -27,20 +24,11 @@ import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.SettingsButton
+import com.alpriest.energystats.ui.settings.SettingsButtonList
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-
-@Composable
-fun SettingsTitleView(title: String) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h4,
-            color = colors.onSecondary,
-        )
-    }
-}
 
 @Composable
 fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
@@ -50,24 +38,17 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
-    val scrollState = rememberScrollState()
     val minSOC = config.minSOC.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colors.background)
-            .padding(12.dp)
-            .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        SettingsButton(stringResource(R.string.minimum_charge_levels)) {
-            navController.navigate(SettingsScreen.BatterySOC.name)
-        }
+    SettingsPage {
+        SettingsButtonList {
+            SettingsButton(stringResource(R.string.minimum_charge_levels)) {
+                navController.navigate(SettingsScreen.BatterySOC.name)
+            }
 
-        SettingsButton(stringResource(R.string.charge_times)) {
-            navController.navigate(SettingsScreen.BatteryChargeTimes.name)
+            SettingsButton(stringResource(R.string.charge_times)) {
+                navController.navigate(SettingsScreen.BatteryChargeTimes.name)
+            }
         }
 
         SettingsColumnWithChild {

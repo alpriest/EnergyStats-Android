@@ -40,6 +40,7 @@ class ParametersGraphTabViewModel(
     var hours: Int = 24
     var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
+    var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
 
     init {
         viewModelScope.launch {
@@ -150,8 +151,10 @@ class ParametersGraphTabViewModel(
 
         if (entries.isEmpty()) {
             hasDataStream.value = false
+            entriesStream.value = listOf()
         } else {
             hasDataStream.value = true
+            entriesStream.value = entries
             producer.setEntries(entries)
         }
 

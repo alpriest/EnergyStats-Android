@@ -140,4 +140,15 @@
     <string name="minsoc_notsure_footnote">If you\'re not sure then set both values the same.</string>
     <string name="both_battery_freeze_periods">Your batteries will not charge or discharge between %1s and %2s. Any house load will come from the grid between these times. Reset time periods to disable this.</string>
     <string name="one_battery_freeze_period">Your batteries will not charge or discharge between %1s. Any house load will come from the grid between these times. Reset the time period to disable this.</string>
+    <string name="self_use">Self Use</string>
+    <string name="feed_in_first">Feed In First</string>
+    <string name="backup">Backup</string>
+    <string name="power_station">Power Station</string>
+    <string name="peak_shaving">Peak Shaving</string>
+    <string name="self_use_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Battery Charging\n3. Export</string>
+    <string name="feed_in_first_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Export\n3. Battery Charging</string>
+    <string name="backup_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. Battery Charging\n2. House Load\n3. Export</string>
+    <string name="powerstation_mode">This mode has unknown behaviour</string>
+    <string name="peak_shaving_mode">This mode has unknown behaviour</string>
+    <string name="find_out_more_about_work_modes">Find out more about work modes</string>
 </resources>

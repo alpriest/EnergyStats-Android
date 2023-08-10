@@ -33,6 +33,7 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.settings.SettingsButton
+import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
@@ -56,15 +57,12 @@ class BatterySOCSettings(
         isActive?.let {
             LoadingView(it)
         } ?: run {
-            Column(
-                modifier = Modifier.padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
+            SettingsPage {
                 Column {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .background(MaterialTheme.colors.surface)
+                            .background(colors.surface)
                             .padding(horizontal = 12.dp, vertical = 4.dp)
                     ) {
                         Text(
@@ -94,7 +92,7 @@ class BatterySOCSettings(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .background(MaterialTheme.colors.surface)
+                            .background(colors.surface)
                             .padding(horizontal = 12.dp, vertical = 4.dp)
                     ) {
                         Text(

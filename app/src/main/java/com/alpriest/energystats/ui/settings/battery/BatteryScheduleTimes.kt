@@ -2,16 +2,12 @@ package com.alpriest.energystats.ui.settings.battery
 
 import android.app.TimePickerDialog
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Switch
@@ -22,7 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +38,8 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -64,7 +61,6 @@ class BatteryScheduleTimes(
             )
         )
     ) {
-        val scrollState = rememberScrollState()
         val coroutineScope = rememberCoroutineScope()
         val chargeSummary = viewModel.summaryStream.collectAsState().value
         val isActive = viewModel.activityStream.collectAsState().value
@@ -76,15 +72,7 @@ class BatteryScheduleTimes(
         isActive?.let {
             LoadingView(it)
         } ?: run {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colors.background)
-                    .padding(12.dp)
-                    .verticalScroll(scrollState),
-                horizontalAlignment = CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
+            SettingsPage {
                 BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
                 BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 

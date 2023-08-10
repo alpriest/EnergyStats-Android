@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.battery
 
 import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController

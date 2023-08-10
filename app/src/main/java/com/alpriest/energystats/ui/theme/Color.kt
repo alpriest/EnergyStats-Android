@@ -2,8 +2,8 @@ package com.alpriest.energystats.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val PaleWhite = Color(0xFFEAECEC)
-val PaleHeader = Color(0xFFDFDFDF)
+val PaleWhite = Color(0xFFEDEDF3)
+val PaleHeader = Color(0xFFFFFFFF)
 val DarkBackground = Color(0xFF161616)
 val DarkHeader = Color(0xFF252525)
 val DimmedTextColor = Color(190, 190, 190)

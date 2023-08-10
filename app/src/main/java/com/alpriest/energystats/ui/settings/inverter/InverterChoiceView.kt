@@ -13,15 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.NetworkDevice
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.battery.SettingsTitleView
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun InverterChoiceView(
