@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings.inverter
 
 import android.content.Context
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,10 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -43,29 +39,8 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.battery.BatterySOCSettingsViewModel
-import com.alpriest.energystats.ui.settings.battery.BatterySOCSettingsViewModelFactory
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
-
-class WorkModeViewModelFactory(
-    private val network: Networking,
-    private val configManager: ConfigManaging
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java)
-            .newInstance(network, configManager)
-    }
-}
-
-class WorkModeViewModel(
-    val network: Networking,
-    val configManager: ConfigManaging
-) : ViewModel() {
-    init {
-        println("AWP WorkModeViewModel")
-    }
-}
 
 class WorkModeView(
     private val network: Networking,
