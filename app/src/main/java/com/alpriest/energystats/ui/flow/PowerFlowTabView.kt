@@ -200,7 +200,8 @@ fun PowerFlowTabViewPreview() {
         13.6,
         todaysGeneration = 5.4,
         batteryResidual = 5600,
-        hasBattery = true
+        hasBattery = true,
+        earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99"
     )
 
     EnergyStatsTheme {

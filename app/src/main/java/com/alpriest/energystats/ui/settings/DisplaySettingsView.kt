@@ -77,6 +77,28 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             onConfigUpdate = { config.showSunnyBackground = it }
         )
 
+        SettingsCheckbox(
+            title = "Show estimated earnings",
+            state = showEstimatedEarningsState,
+            onConfigUpdate = { config.showEstimatedEarnings = it }
+        )
+
+        Text(
+            buildAnnotatedString {
+                append("Shows earnings today, this month, this year, and all-time based on a crude calculation of")
+                append(" ")
+                withStyle(
+                    style = SpanStyle(fontStyle = FontStyle.Italic, color = colors.onSecondary)
+                ) {
+                    append("feed-in kWh * price per kWh")
+                }
+                append(" ")
+                append("as configured on FoxESS cloud.")
+            },
+            modifier = Modifier.padding(start = 48.dp),
+            color = colors.onSecondary
+        )
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -99,28 +121,6 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 )
             }
         }
-
-        SettingsCheckbox(
-            title = "Show estimated earnings",
-            state = showEstimatedEarningsState,
-            onConfigUpdate = { config.showEstimatedEarnings = it }
-        )
-
-        Text(
-            buildAnnotatedString {
-                append("Shows earnings today, this month, this year, and all-time based on a crude calculation of")
-                append(" ")
-                withStyle(
-                    style = SpanStyle(fontStyle = FontStyle.Italic, color = colors.onSecondary)
-                ) {
-                    append("feed-in kWh * price per kWh")
-                }
-                append(" ")
-                append("as configured on FoxESS cloud.")
-            },
-            modifier = Modifier.padding(start = 48.dp),
-            color = colors.onSecondary
-        )
     }
 }
 

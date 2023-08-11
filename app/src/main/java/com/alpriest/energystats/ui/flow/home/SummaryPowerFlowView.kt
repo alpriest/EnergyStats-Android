@@ -163,7 +163,8 @@ fun SummaryPowerFlowViewPreview() {
                 13.6,
                 todaysGeneration = 1.0,
                 batteryResidual = 5678,
-                hasBattery = true
+                hasBattery = true,
+                earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99"
             ),
             themeStream = MutableStateFlow(AppTheme.preview()),
         )

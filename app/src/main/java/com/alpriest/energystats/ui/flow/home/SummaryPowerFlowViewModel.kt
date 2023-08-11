@@ -20,9 +20,9 @@ class SummaryPowerFlowViewModel(
     val batteryTemperature: Double,
     val todaysGeneration: Double,
     val batteryResidual: Int,
-    val hasBattery: Boolean
+    val hasBattery: Boolean,
+    val earnings: String
 ) : ViewModel() {
-    val earnings: String = "Earnings £.283, £26.44, £437.31, £578.82"
     val solar: Double = java.lang.Double.max(
         0.0,
         raw.currentValue("loadsPower") + raw.currentValue("batChargePower") + raw.currentValue("feedInPower") - raw.currentValue(

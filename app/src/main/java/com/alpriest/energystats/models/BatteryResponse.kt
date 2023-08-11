@@ -15,8 +15,26 @@ data class BatterySettingsResponse(
 )
 
 data class EarningsResponse(
-    val today: Earning
-)
+    val today: Earning,
+    val currency: String,
+    val month: Earning,
+    val year: Earning,
+    val cumulate: Earning
+) {
+    fun currencySymbol(): String {
+        if (currency.startsWith("GBP")) {
+            return "£"
+        } else if(currency.startsWith("EUR")) {
+            return "€"
+        }
+
+        return currency
+    }
+
+    fun currencyCode(): String {
+        return currency.take(3)
+    }
+}
 
 data class Earning(
     val generation: Double,
@@ -54,6 +72,6 @@ data class DeviceSettingsValues(
 data class DeviceSettingsSetRequest(
     val id: String,
     val key: String,
-    val values : DeviceSettingsValues
+    val values: DeviceSettingsValues
 )
 

@@ -4,9 +4,11 @@ import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowViewModel
@@ -22,8 +24,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.Currency
+import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
@@ -152,7 +157,8 @@ class PowerFlowTabViewModel(
                     batteryTemperature = battery.temperature,
                     todaysGeneration = earnings.today.generation,
                     batteryResidual = battery.residual,
-                    hasBattery = battery.hasBattery
+                    hasBattery = battery.hasBattery,
+                    earnings = makeEarnings(earnings)
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
@@ -177,5 +183,28 @@ class PowerFlowTabViewModel(
             RefreshFrequency.FiveMinutes -> 300
             RefreshFrequency.Auto -> (300 - diff + 10).toInt()
         }
+    }
+
+    private fun makeEarnings(response: EarningsResponse): String {
+        return listOf(
+            response.today.earnings.roundedToString(2, response.currencyCode(), response.currencySymbol()),
+            response.month.earnings.roundedToString(2, response.currencyCode(), response.currencySymbol()),
+            response.year.earnings.roundedToString(2, response.currencyCode(), response.currencySymbol()),
+            response.cumulate.earnings.roundedToString(2, response.currencyCode(), response.currencySymbol())
+        ).joinToString(separator = " ⋅ ")
+    }
+}
+
+fun Double.roundedToString(decimalPlaces: Int, currencyCode: String, currencySymbol: String): String {
+    val roundedNumber = this.rounded(decimalPlaces)
+
+    try {
+        val numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+        numberFormat.currency = Currency.getInstance(currencyCode)
+        numberFormat.maximumFractionDigits = decimalPlaces
+
+        return numberFormat.format(roundedNumber)
+    } catch (ex: Exception) {
+        return currencySymbol + roundedNumber.toString()
     }
 }
