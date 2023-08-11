@@ -8,8 +8,7 @@ import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceListRequest
-import com.alpriest.energystats.models.DeviceSettingsGetRequest
-import com.alpriest.energystats.models.DeviceSettingsValues
+import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -309,9 +308,24 @@ class NetworkService(private val credentials: CredentialStore, private val store
         fetch<NetworkResponse<String>>(request, type)
     }
 
-    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetRequest {
-        // TODO
-        return DeviceSettingsGetRequest("h1130", values = DeviceSettingsValues("Feedin"))
+    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("c/v0/device/setting/get")
+            .addQueryParameter("id", deviceID)
+            .addQueryParameter("hasVersionHead", "1")
+            .addQueryParameter("key", "operation_mode__work_mode")
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<DeviceSettingsGetResponse>() {}.type
+        val response: NetworkTuple<NetworkResponse<DeviceSettingsGetResponse>> = fetch(request, type)
+        store.deviceSettingsGetResponse.value = NetworkOperation(description = "deviceSettingsGetResponse", value = response.item, raw = response.text, request)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun setWorkMode(deviceID: String, workMode: String) {

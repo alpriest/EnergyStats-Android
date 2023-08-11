@@ -34,6 +34,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.inverter.CancelSaveButtonView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
@@ -83,7 +84,9 @@ class BatterySOCSettings(
                     Text(
                         stringResource(R.string.minsoc_description),
                         color = colors.onSecondary,
-                        modifier = Modifier.padding(horizontal = 12.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .padding(top = 4.dp)
                     )
                 }
 
@@ -110,7 +113,11 @@ class BatterySOCSettings(
                         )
                     }
 
-                    Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .padding(top = 4.dp)
+                    ) {
                         Text(
                             stringResource(R.string.minsocgrid_description),
                             color = colors.onSecondary,
@@ -131,11 +138,7 @@ class BatterySOCSettings(
                     }
                 }
 
-                SettingsButton(stringResource(R.string.save)) {
-                    coroutineScope.launch {
-                        viewModel.save()
-                    }
-                }
+                CancelSaveButtonView(navController, onSave = { viewModel.save() } )
             }
         }
     }

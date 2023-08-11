@@ -251,7 +251,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 @Preview(showBackground = true)
 @Composable
 fun BatterySettingsViewPreview() {
-    EnergyStatsTheme(darkTheme = true) {
+    EnergyStatsTheme(darkTheme = false) {
         BatterySettingsView(
             config = FakeConfigManager(),
             navController = NavHostController(LocalContext.current)

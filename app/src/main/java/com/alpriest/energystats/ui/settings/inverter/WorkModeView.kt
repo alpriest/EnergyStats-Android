@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings.inverter
 
 import android.content.Context
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -60,7 +61,6 @@ class WorkModeView(
     fun Content(viewModel: WorkModeViewModel = viewModel(factory = WorkModeViewModelFactory(network, configManager, navController, context))) {
         val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
-        val coroutineScope = rememberCoroutineScope()
         val selectedWorkMode = viewModel.workModeStream.collectAsState().value
         val isActive = viewModel.activityStream.collectAsState().value
 
@@ -102,8 +102,10 @@ class WorkModeView(
 
                 SettingsColumnWithChild {
                     WorkMode.values().forEach { workMode ->
-                        Row(modifier = Modifier.padding(bottom = 24.dp)) {
-                            Column(modifier = Modifier.clickable { viewModel.select(workMode) }) {
+                        Row {
+                            Column(modifier = Modifier
+                                .clickable { viewModel.select(workMode) }
+                                .padding(bottom = 24.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     RadioButton(
                                         selected = selectedWorkMode == workMode,
@@ -155,19 +157,26 @@ class WorkModeView(
                     }
                 }
 
-                Row {
-                    SettingsButton(stringResource(R.string.cancel), modifier = Modifier.weight(1.0f)) {
-                        navController.popBackStack()
-                    }
+                CancelSaveButtonView(navController, onSave = { viewModel.save() } )
+            }
+        }
+    }
+}
 
-                    Spacer(modifier = Modifier.width(12.dp))
+@Composable
+fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Unit) {
+    val coroutineScope = rememberCoroutineScope()
 
-                    SettingsButton(stringResource(R.string.save), modifier = Modifier.weight(1.0f)) {
-                        coroutineScope.launch {
-                            viewModel.save()
-                        }
-                    }
-                }
+    Row {
+        SettingsButton(stringResource(R.string.cancel), modifier = Modifier.weight(1.0f)) {
+            navController.popBackStack()
+        }
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        SettingsButton(stringResource(R.string.save), modifier = Modifier.weight(1.0f)) {
+            coroutineScope.launch {
+                onSave()
             }
         }
     }

@@ -40,7 +40,7 @@ data class Time(
     companion object
 }
 
-data class DeviceSettingsGetRequest(
+data class DeviceSettingsGetResponse(
     val protocol: String,
     val values: DeviceSettingsValues
 )
