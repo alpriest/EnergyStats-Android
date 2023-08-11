@@ -3,8 +3,10 @@ package com.alpriest.energystats.ui.settings.inverter
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -22,7 +24,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
         InverterChoiceView(configManager)
 
         currentDevice.value?.let {
-            SettingsButton("Configure Work Mode") { navController.navigate(SettingsScreen.InverterWorkMode.name) }
+            SettingsButton(stringResource(R.string.configure_work_mode)) { navController.navigate(SettingsScreen.InverterWorkMode.name) }
 
             FirmwareVersionView(it)
             DeviceVersionView(it)

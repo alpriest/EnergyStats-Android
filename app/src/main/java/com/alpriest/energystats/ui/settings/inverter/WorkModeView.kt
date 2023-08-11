@@ -87,7 +87,7 @@ class WorkModeView(
                             .width(24.dp)
                     )
                     Text(
-                        "Only change these values if you know what you are doing",
+                        stringResource(R.string.only_change_these_values_if_you_know_what_you_are_doing),
                         color = colors.onSecondary,
                         modifier = Modifier.weight(1f)
                     )

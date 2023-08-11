@@ -152,4 +152,7 @@
     <string name="powerstation_mode">Ten tryb ma nieznane zachowanie</string>
     <string name="peak_shaving_mode">Ten tryb ma nieznane zachowanie</string>
     <string name="find_out_more_about_work_modes">Dowiedz się więcej o trybach pracy</string>
+    <string name="inverter">Falownik</string>
+    <string name="configure_work_mode">Skonfiguruj tryb pracy</string>
+    <string name="only_change_these_values_if_you_know_what_you_are_doing">Zmieniaj te wartości tylko, jeśli wiesz, co robisz</string>
 </resources>

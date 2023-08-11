@@ -144,11 +144,11 @@ fun SettingsTabView(
 
     SettingsPage {
         Column {
-            SettingsButton("Inverter") { navController.navigate(SettingsScreen.Inverter.name) }
+            SettingsButton(stringResource(R.string.inverter)) { navController.navigate(SettingsScreen.Inverter.name) }
 
             currentDevice.value?.let {
                 if (it.battery != null) {
-                    SettingsButton("Battery") { navController.navigate(SettingsScreen.Battery.name) }
+                    SettingsButton(stringResource(R.string.battery)) { navController.navigate(SettingsScreen.Battery.name) }
                 }
             }
         }

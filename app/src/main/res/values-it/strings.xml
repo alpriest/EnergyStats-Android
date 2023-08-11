@@ -152,4 +152,7 @@
     <string name="powerstation_mode">Questa modalità ha un comportamento sconosciuto</string>
     <string name="peak_shaving_mode">Questa modalità ha un comportamento sconosciuto</string>
     <string name="find_out_more_about_work_modes">Scopri di più sui modi di lavoro</string>
+    <string name="inverter">Inverter</string>
+    <string name="configure_work_mode">Configura modalità di lavoro</string>
+    <string name="only_change_these_values_if_you_know_what_you_are_doing">Modificare questi valori solo se si sa cosa si sta facendo</string>
 </resources>

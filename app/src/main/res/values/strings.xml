@@ -151,4 +151,7 @@
     <string name="powerstation_mode">This mode has unknown behaviour</string>
     <string name="peak_shaving_mode">This mode has unknown behaviour</string>
     <string name="find_out_more_about_work_modes">Find out more about work modes</string>
+    <string name="inverter">Inverter</string>
+    <string name="configure_work_mode">Configure Work Mode</string>
+    <string name="only_change_these_values_if_you_know_what_you_are_doing">Only change these values if you know what you are doing</string>
 </resources>

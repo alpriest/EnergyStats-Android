@@ -123,7 +123,7 @@
     <string name="battery_periods_overlap">. Diese Zeiträume überschneiden sich möglicherweise, Sie möchten sie möglicherweise aktualisieren.</string>
     <string name="one_battery_charge_period">Ihr Akku wird zwischen %1s von der Stromversorgung erzwungen geladen.</string>
     <string name="both_battery_charge_periods">Ihr Akku wird zwischen %1s und %2s von der Stromversorgung erzwungen geladen.</string>
-    <string name="saving">Sparen</string>
+    <string name="saving">Speichern</string>
     <string name="enable_charge_from_grid">Laden aus dem Netz aktivieren</string>
     <string name="start">Start</string>
     <string name="end">Ende</string>
@@ -151,4 +151,7 @@
     <string name="powerstation_mode">In diesem Modus ist das Verhalten unbekannt</string>
     <string name="peak_shaving_mode">In diesem Modus ist das Verhalten unbekannt</string>
     <string name="find_out_more_about_work_modes">Erfahren Sie mehr über Arbeitsmodi</string>
+    <string name="inverter">Wechselrichter</string>
+    <string name="configure_work_mode">Arbeitsmodus konfigurieren</string>
+    <string name="only_change_these_values_if_you_know_what_you_are_doing">Ändern Sie diese Werte nur, wenn Sie wissen, was Sie tun</string>
 </resources>
