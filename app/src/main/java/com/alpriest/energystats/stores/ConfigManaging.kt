@@ -14,6 +14,7 @@ interface ConfigManaging {
     val themeStream: MutableStateFlow<AppTheme>
     var decimalPlaces: Int
     var showTotalYield: Boolean
+    var showEstimatedEarnings: Boolean
     var showSunnyBackground: Boolean
     var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode
     var showBatteryEstimate: Boolean

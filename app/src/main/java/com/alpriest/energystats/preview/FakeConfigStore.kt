@@ -15,6 +15,7 @@ class FakeConfigStore(
     override var showBatteryEstimate: Boolean = true,
     override var showUsableBatteryOnly: Boolean = false,
     override var showTotalYield: Boolean = true,
-    override var selfSufficiencyEstimateMode: Int = 0
+    override var selfSufficiencyEstimateMode: Int = 0,
+    override var showEstimatedEarnings: Boolean = false
 ) : ConfigInterface {
 }

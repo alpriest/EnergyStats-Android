@@ -20,7 +20,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showBatteryEstimate = config.showBatteryEstimate,
             showUsableBatteryOnly = config.showUsableBatteryOnly,
             showTotalYield = config.showTotalYield,
-            selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode)
+            selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
+            showEstimatedEarnings = config.showEstimatedEarnings
         )
     )
 
@@ -50,6 +51,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showTotalYield = value
             themeStream.value = themeStream.value.copy(showTotalYield = showTotalYield)
+        }
+
+    override var showEstimatedEarnings: Boolean
+        get() = config.showEstimatedEarnings
+        set(value) {
+            config.showEstimatedEarnings = value
+            themeStream.value = themeStream.value.copy(showEstimatedEarnings = showEstimatedEarnings)
         }
 
     override var showBatteryEstimate: Boolean

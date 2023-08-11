@@ -52,17 +52,19 @@ fun AppTheme.Companion.preview(
     decimalPlaces: Int = 2,
     showUsableBatteryOnly: Boolean = false,
     showTotalYield: Boolean = true,
-    selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off
+    selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
+    showEstimatedEarnings: Boolean = true
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
         useColouredLines = useColouredLines,
         showBatteryTemperature = showBatteryTemperature,
         showBatteryEstimate = showBatteryEstimate,
-        showSunnyBackground = showSunnyBackground,
         decimalPlaces = decimalPlaces,
+        showSunnyBackground = showSunnyBackground,
         showUsableBatteryOnly = showUsableBatteryOnly,
         showTotalYield = showTotalYield,
-        selfSufficiencyEstimateMode = selfSufficiencyEstimateMode
+        selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
+        showEstimatedEarnings = showEstimatedEarnings
     )
 }

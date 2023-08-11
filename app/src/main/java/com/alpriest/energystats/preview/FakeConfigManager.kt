@@ -25,6 +25,7 @@ class FakeConfigManager : ConfigManaging {
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off
     override var showBatteryEstimate: Boolean = false
     override var showBatteryTemperature: Boolean = false
+    override var showEstimatedEarnings: Boolean = false
     override var useLargeDisplay: Boolean = false
     override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(20.0)
     override val batteryCapacity: Int = 3000

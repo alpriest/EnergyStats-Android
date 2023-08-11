@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,9 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,5 +79,31 @@ fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Uni
                 onSave()
             }
         }
+    }
+}
+
+@Composable
+fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onConfigUpdate: (Boolean) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clickable {
+                state.value = !state.value
+                onConfigUpdate(state.value)
+            }
+            .fillMaxWidth()
+    ) {
+        Checkbox(
+            checked = state.value,
+            onCheckedChange = {
+                state.value = it
+                onConfigUpdate(it)
+            },
+            colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+        )
+        Text(
+            title,
+            color = MaterialTheme.colors.onSecondary,
+        )
     }
 }

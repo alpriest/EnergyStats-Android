@@ -14,4 +14,5 @@ interface ConfigInterface {
     var isDemoUser: Boolean
     var decimalPlaces: Int
     var showTotalYield: Boolean
+    var showEstimatedEarnings: Boolean
 }
