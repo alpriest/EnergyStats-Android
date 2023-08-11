@@ -9,7 +9,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlin.coroutines.coroutineContext
 
 class WorkModeViewModelFactory(
     private val network: Networking,
@@ -39,11 +38,15 @@ class WorkModeViewModel(
             config.currentDevice.value?.let { device ->
                 val deviceID = device.deviceID
 
-                val result = network.fetchWorkMode(deviceID)
-                workModeStream.value = InverterWorkMode.from(result.values.operationMode_workMode).asWorkMode()
+                try {
+                    val result = network.fetchWorkMode(deviceID)
+                    workModeStream.value = InverterWorkMode.from(result.values.operation_mode__work_mode).asWorkMode()
+                } catch (ex: Exception) {
+                    Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                }
+            }.also {
+                activityStream.value = null
             }
-        }.also {
-            activityStream.value = null
         }
     }
 
@@ -54,14 +57,18 @@ class WorkModeViewModel(
             config.currentDevice.value?.let { device ->
                 val deviceID = device.deviceID
 
-                network.setWorkMode(
-                    deviceID = deviceID,
-                    workMode = workModeStream.value.asInverterWorkMode().name,
-                )
+                try {
+                    network.setWorkMode(
+                        deviceID = deviceID,
+                        workMode = workModeStream.value.asInverterWorkMode().text,
+                    )
 
-                Toast.makeText(context, "Inverter work mode was saved", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Inverter work mode was saved", Toast.LENGTH_LONG).show()
 
-                navController.popBackStack()
+                    navController.popBackStack()
+                } catch (ex: Exception) {
+                    Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                }
             } ?: run {
                 activityStream.value = null
             }

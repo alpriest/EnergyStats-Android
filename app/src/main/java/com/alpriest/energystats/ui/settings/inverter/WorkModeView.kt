@@ -217,7 +217,7 @@ enum class WorkMode {
     }
 }
 
-enum class InverterWorkMode(private val text: String) {
+enum class InverterWorkMode(val text: String) {
     SELF_USE("SelfUse"),
     FEED_IN_FIRST("Feedin"),
     BACKUP("Backup"),

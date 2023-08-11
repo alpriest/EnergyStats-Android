@@ -140,7 +140,7 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
-        return DeviceSettingsGetResponse(protocol = "H11300", values = DeviceSettingsValues(operationMode_workMode = "SelfUse"))
+        return DeviceSettingsGetResponse(protocol = "H11300", values = DeviceSettingsValues("SelfUse"))
     }
 
     override suspend fun setWorkMode(deviceID: String, workMode: String) {

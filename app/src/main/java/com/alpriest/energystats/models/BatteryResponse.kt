@@ -1,5 +1,7 @@
 package com.alpriest.energystats.models
 
+import com.google.gson.annotations.SerializedName
+
 data class BatteryResponse(
     val power: Double,
     val soc: Int,
@@ -46,5 +48,12 @@ data class DeviceSettingsGetResponse(
 )
 
 data class DeviceSettingsValues(
-    val operationMode_workMode: String
+    val operation_mode__work_mode: String
 )
+
+data class DeviceSettingsSetRequest(
+    val id: String,
+    val key: String,
+    val values : DeviceSettingsValues
+)
+

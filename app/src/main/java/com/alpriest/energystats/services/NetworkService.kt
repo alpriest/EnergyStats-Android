@@ -9,6 +9,8 @@ import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
+import com.alpriest.energystats.models.DeviceSettingsSetRequest
+import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -322,14 +324,31 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .url(url)
             .build()
 
-        val type = object : TypeToken<DeviceSettingsGetResponse>() {}.type
+        val type = object : TypeToken<NetworkResponse<DeviceSettingsGetResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<DeviceSettingsGetResponse>> = fetch(request, type)
         store.deviceSettingsGetResponse.value = NetworkOperation(description = "deviceSettingsGetResponse", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun setWorkMode(deviceID: String, workMode: String) {
-        // TODO
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("c/v0/device/setting/set")
+            .build()
+
+        val body = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            Gson().toJson(DeviceSettingsSetRequest(id = deviceID, key = "operation_mode__work_mode", values = DeviceSettingsValues(workMode)))
+        )
+
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
     }
 
     private suspend fun fetchLoginToken(
@@ -413,6 +432,10 @@ class NetworkService(private val credentials: CredentialStore, private val store
             30000 -> {
                 return Result.failure(MaintenanceModeException())
             }
+        }
+
+        if (item.errno > 0) {
+            return Result.failure(UnknownNetworkException(item.errno))
         }
 
         return Result.success(item)
