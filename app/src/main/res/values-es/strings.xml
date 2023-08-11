@@ -140,4 +140,15 @@
     <string name="minsoc_notsure_footnote">Si no estás seguro, entonces configura ambos valores iguales.</string>
     <string name="both_battery_freeze_periods">Sus baterías no se cargarán ni se descargaran entre %1s y %2s. Cualquier consumo de la casa vendrá de la red eléctrica durante estos periodos. Restablezca los periodos de tiempo para desactivar esta función.</string>
     <string name="one_battery_freeze_period">Su batería no se cargará ni se descargará entre %1s. Cualquier consumo de la casa vendrá de la red eléctrica durante este periodo. Restablezca el periodo de tiempo para desactivar esta función.</string>
+    <string name="self_use">Autoconsumo</string>
+    <string name="feed_in_first">Inyección Prioritaria</string>
+    <string name="backup">Respaldo</string>
+    <string name="power_station">Estación de Energía</string>
+    <string name="peak_shaving">Reducción de Picos</string>
+    <string name="self_use_mode">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\\n\\n1. Carga de la casa\\n2. Carga de batería\\n3. Exportar</string>
+    <string name="feed_in_first_mode">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\\n\\n1. Carga de la casa\\n2. Exportar\\n3. Carga de batería</string>
+    <string name="backup_mode">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\\n\\n1. Carga de batería\\n2. Carga de la casa\\n3. Exportar</string>
+    <string name="powerstation_mode">Este modo tiene un comportamiento desconocido</string>
+    <string name="peak_shaving_mode">Este modo tiene un comportamiento desconocido</string>
+    <string name="find_out_more_about_work_modes">Obtén más información sobre los modos de trabajo</string>
 </resources>

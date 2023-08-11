@@ -141,4 +141,15 @@
     <string name="minsoc_notsure_footnote">Jeśli nie jesteś pewien, ustaw obie wartości takie same.</string>
     <string name="both_battery_freeze_periods">Twoje baterie nie będą się ładować ani rozładowywać między %1s i %2s. Wszystkie obciążenia domu będą pochodzić z sieci w tym czasie. Aby wyłączyć tę funkcję, zresetuj okresy czasu.</string>
     <string name="one_battery_freeze_period">Twoje baterie nie będą się ładować ani rozładowywać między %1s. Wszystkie obciążenia domu będą pochodzić z sieci w tym czasie. Aby wyłączyć tę funkcję, zresetuj okres czasu.</string>
+    <string name="self_use">Samozużycie</string>
+    <string name="feed_in_first">Wprowadź najpierw</string>
+    <string name="backup">Zapasowy</string>
+    <string name="power_station">Elektrownia</string>
+    <string name="peak_shaving">Ograniczanie Szczytów</string>
+    <string name="self_use_mode">W tym trybie inwerter priorytetowo alokuje moc zgodnie z następującym porządkiem:\\n\\n1. Obciążenie domu\\n2. Ładowanie baterii\\n3. Eksport</string>
+    <string name="feed_in_first_mode">W tym trybie inwerter priorytetowo alokuje moc zgodnie z następującym porządkiem:\\n\\n1. Obciążenie domu\\n2. Eksport\\n3. Ładowanie baterii</string>
+    <string name="backup_mode">W tym trybie inwerter priorytetowo alokuje moc zgodnie z następującym porządkiem:\\n\\n1. Ładowanie baterii\\n2. Obciążenie domu\\n3. Eksport</string>
+    <string name="powerstation_mode">Ten tryb ma nieznane zachowanie</string>
+    <string name="peak_shaving_mode">Ten tryb ma nieznane zachowanie</string>
+    <string name="find_out_more_about_work_modes">Dowiedz się więcej o trybach pracy</string>
 </resources>

@@ -141,4 +141,15 @@
     <string name="minsoc_notsure_footnote">Se non sei sicuro, imposta entrambi i valori allo stesso livello.</string>
     <string name="both_battery_freeze_periods">Le tue batterie non si caricheranno né si scaricheranno tra %1s e %2s. Ogni carico dell\'abitazione verrà fornito dalla rete in questi orari. Reimposta i periodi di tempo per disabilitare questa funzione.</string>
     <string name="one_battery_freeze_period">Le tue batterie non si caricheranno né si scaricheranno tra %1s. Ogni carico dell\'abitazione verrà fornito dalla rete in questi orari. Reimposta il periodo di tempo per disabilitare questa funzione.</string>
+    <string name="self_use">Autoconsumo</string>
+    <string name="feed_in_first">Alimentazione in Primo Luogo</string>
+    <string name="backup">Backup</string>
+    <string name="power_station">Stazione di Energia</string>
+    <string name="peak_shaving">Riduzione dei Picchi</string>
+    <string name="self_use_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\\n\\n1. Carico della casa\\n2. Carica della batteria\\n3. Esportazione</string>
+    <string name="feed_in_first_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\\n\\n1. Carico della casa\\n2. Esportazione\\n3. Carica della batteria</string>
+    <string name="backup_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\\n\\n1. Carica della batteria\\n2. Carico della casa\\n3. Esportazione</string>
+    <string name="powerstation_mode">Questa modalità ha un comportamento sconosciuto</string>
+    <string name="peak_shaving_mode">Questa modalità ha un comportamento sconosciuto</string>
+    <string name="find_out_more_about_work_modes">Scopri di più sui modi di lavoro</string>
 </resources>

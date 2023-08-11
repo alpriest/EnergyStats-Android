@@ -140,4 +140,15 @@
     <string name="minsoc_notsure_footnote">Wenn Sie sich nicht sicher sind, dann setzen Sie beide Werte gleich.</string>
     <string name="both_battery_freeze_periods">Ihre Batterien werden zwischen %1s und %2s weder aufgeladen noch entladen. Jeglicher Hausverbrauch wird in dieser Zeit von der Netzversorgung gedeckt. Zur Deaktivierung setzen Sie die Zeitperioden zurück.</string>
     <string name="one_battery_freeze_period">Ihre Batterien werden zwischen %1s weder aufgeladen noch entladen. Jeglicher Hausverbrauch wird in dieser Zeit von der Netzversorgung gedeckt. Zur Deaktivierung setzen Sie die Zeitperiode zurück.</string>
+    <string name="self_use">Eigenverbrauch</string>
+    <string name="feed_in_first">Einspeisung zuerst</string>
+    <string name="backup">Backup</string>
+    <string name="power_station">Stromstation</string>
+    <string name="peak_shaving">Lastspitzenabdeckung</string>
+    <string name="self_use_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\\n\\n1. Hauslast\\n2. Batterieladung\\n3. Einspeisung</string>
+    <string name="feed_in_first_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\\n\\n1. Hauslast\\n2. Einspeisung\\n3. Batterieladung</string>
+    <string name="backup_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\\n\\n1. Batterieladung\\n2. Hauslast\\n3. Einspeisung</string>
+    <string name="powerstation_mode">In diesem Modus ist das Verhalten unbekannt</string>
+    <string name="peak_shaving_mode">In diesem Modus ist das Verhalten unbekannt</string>
+    <string name="find_out_more_about_work_modes">Erfahren Sie mehr über Arbeitsmodi</string>
 </resources>
