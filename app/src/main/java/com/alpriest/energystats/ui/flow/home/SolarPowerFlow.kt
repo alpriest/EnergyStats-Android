@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import com.alpriest.energystats.R
 
 @Composable
-fun SolarPowerFlow(amount: Double, todaysGeneration: Double, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
+fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: String, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -70,6 +70,12 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, modifier: Modifier,
         if (theme.showTotalYield) {
             val yieldString = todaysGeneration.kWh(theme.decimalPlaces)
             Text(text = stringResource(id = R.string.yieldToday, yieldString))
+        }
+
+        if (theme.showEstimatedEarnings) {
+            Text(
+                earnings
+            )
         }
 
         Box(
@@ -175,6 +181,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 0.0,
                 todaysGeneration = 1.0,
+                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
@@ -183,6 +190,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 0.5,
                 todaysGeneration = 1.0,
+                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
@@ -191,6 +199,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 1.5,
                 todaysGeneration = 1.0,
+                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
@@ -199,6 +208,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 2.5,
                 todaysGeneration = 1.0,
+                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
@@ -207,6 +217,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 3.5,
                 todaysGeneration = 1.0,
+                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())

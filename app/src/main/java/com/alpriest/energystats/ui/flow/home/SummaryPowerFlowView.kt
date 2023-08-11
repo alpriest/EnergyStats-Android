@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.models.RawData
-import com.alpriest.energystats.models.RawDataStore
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -27,7 +26,6 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 @Composable
 fun SummaryPowerFlowView(
@@ -44,6 +42,7 @@ fun SummaryPowerFlowView(
         SolarPowerFlow(
             summaryPowerFlowViewModel.solar,
             summaryPowerFlowViewModel.todaysGeneration,
+            summaryPowerFlowViewModel.earnings,
             modifier = Modifier.fillMaxHeight(0.4f),
             iconHeight = iconHeight * 1.1f,
             themeStream = themeStream

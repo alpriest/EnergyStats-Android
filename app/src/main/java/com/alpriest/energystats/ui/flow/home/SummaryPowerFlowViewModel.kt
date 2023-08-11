@@ -8,7 +8,7 @@ import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
+import java.util.Locale
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
 
@@ -22,6 +22,7 @@ class SummaryPowerFlowViewModel(
     val batteryResidual: Int,
     val hasBattery: Boolean
 ) : ViewModel() {
+    val earnings: String = "Earnings £.283, £26.44, £437.31, £578.82"
     val solar: Double = java.lang.Double.max(
         0.0,
         raw.currentValue("loadsPower") + raw.currentValue("batChargePower") + raw.currentValue("feedInPower") - raw.currentValue(
