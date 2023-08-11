@@ -45,6 +45,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.settings.CancelSaveButtonView
 import com.alpriest.energystats.ui.settings.SettingsButton
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -158,25 +159,6 @@ class WorkModeView(
                 }
 
                 CancelSaveButtonView(navController, onSave = { viewModel.save() } )
-            }
-        }
-    }
-}
-
-@Composable
-fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Unit) {
-    val coroutineScope = rememberCoroutineScope()
-
-    Row {
-        SettingsButton(stringResource(R.string.cancel), modifier = Modifier.weight(1.0f)) {
-            navController.popBackStack()
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        SettingsButton(stringResource(R.string.save), modifier = Modifier.weight(1.0f)) {
-            coroutineScope.launch {
-                onSave()
             }
         }
     }

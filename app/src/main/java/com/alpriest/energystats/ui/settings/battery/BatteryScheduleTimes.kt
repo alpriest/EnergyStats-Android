@@ -36,14 +36,12 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
-import com.alpriest.energystats.ui.settings.SettingsButton
+import com.alpriest.energystats.ui.settings.CancelSaveButtonView
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
-import com.alpriest.energystats.ui.settings.inverter.CancelSaveButtonView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 class BatteryScheduleTimes(
     private val network: Networking,
