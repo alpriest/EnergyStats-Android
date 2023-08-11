@@ -154,4 +154,8 @@
     <string name="inverter">Inverter</string>
     <string name="configure_work_mode">Configure Work Mode</string>
     <string name="only_change_these_values_if_you_know_what_you_are_doing">Only change these values if you know what you are doing</string>
+    <string name="show_estimated_earnings">Show estimated earnings</string>
+    <string name="shows_earnings_today_this_month_this_year_and_all_time_based_on_a_crude_calculation_of">Shows earnings today, this month, this year, and all-time based on a crude calculation of</string>
+    <string name="feed_in_kwh_price_per_kwh">feed-in kWh * price per kWh</string>
+    <string name="as_configured_on_foxess_cloud">as configured on FoxESS cloud.</string>
 </resources>

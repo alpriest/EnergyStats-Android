@@ -78,22 +78,22 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         )
 
         SettingsCheckbox(
-            title = "Show estimated earnings",
+            title = stringResource(R.string.show_estimated_earnings),
             state = showEstimatedEarningsState,
             onConfigUpdate = { config.showEstimatedEarnings = it }
         )
 
         Text(
             buildAnnotatedString {
-                append("Shows earnings today, this month, this year, and all-time based on a crude calculation of")
+                append(stringResource(R.string.shows_earnings_today_this_month_this_year_and_all_time_based_on_a_crude_calculation_of))
                 append(" ")
                 withStyle(
                     style = SpanStyle(fontStyle = FontStyle.Italic, color = colors.onSecondary)
                 ) {
-                    append("feed-in kWh * price per kWh")
+                    append(stringResource(R.string.feed_in_kwh_price_per_kwh))
                 }
                 append(" ")
-                append("as configured on FoxESS cloud.")
+                append(stringResource(R.string.as_configured_on_foxess_cloud))
             },
             modifier = Modifier.padding(start = 48.dp),
             color = colors.onSecondary
