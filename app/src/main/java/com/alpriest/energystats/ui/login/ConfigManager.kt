@@ -21,7 +21,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showUsableBatteryOnly = config.showUsableBatteryOnly,
             showTotalYield = config.showTotalYield,
             selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
-            showEstimatedEarnings = config.showEstimatedEarnings
+            showEstimatedEarnings = config.showEstimatedEarnings,
+            showValuesInWatts = config.showValuesInWatts
         )
     )
 
@@ -65,6 +66,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showBatteryEstimate = value
             themeStream.value = themeStream.value.copy(showBatteryEstimate = showBatteryEstimate)
+        }
+
+    override var showValuesInWatts: Boolean
+        get() = config.showValuesInWatts
+        set(value) {
+            config.showValuesInWatts = value
+            themeStream.value = themeStream.value.copy(showValuesInWatts = showValuesInWatts)
         }
 
     override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(null)

@@ -8,6 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.models.rounded
@@ -45,7 +46,13 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
             }
 
             val total = totals.value[it.type]
-            val text = total?.let { total.kWh(theme.decimalPlaces) }
+            val text = total?.let {
+                if (theme.showValuesInWatts) {
+                    total.Wh(theme.decimalPlaces)
+                } else {
+                    total.kWh(theme.decimalPlaces)
+                }
+            }
             ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, text, null)
         }
     }

@@ -142,10 +142,10 @@ fun PowerFlowView(
                 colors = cardColors(containerColor = verticalLineColor)
             ) {
                 Text(
-                    text = if (asKw) {
-                        amount.kW(theme.decimalPlaces)
-                    } else {
+                    text = if (theme.showValuesInWatts) {
                         amount.w()
+                    } else {
+                        amount.kW(theme.decimalPlaces)
                     },
                     color = powerTextColor,
                     fontWeight = FontWeight.Bold,

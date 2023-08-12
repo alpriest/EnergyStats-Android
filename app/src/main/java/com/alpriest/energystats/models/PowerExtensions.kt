@@ -15,6 +15,12 @@ fun Int.Wh(decimalPlaces: Int): String {
     return dec.format(divided) + " Wh"
 }
 
+fun Double.Wh(decimalPlaces: Int): String {
+    val divided = (this * 1000.0).rounded(decimalPlaces)
+    val dec = DecimalFormat("#,###,###")
+    return dec.format(divided) + " Wh"
+}
+
 fun Double.kWh(decimalPlaces: Int): String {
     val divided = this.rounded(decimalPlaces)
     val dec = DecimalFormat("#,###,##0." + "0".repeat(decimalPlaces))

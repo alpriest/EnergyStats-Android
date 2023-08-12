@@ -47,6 +47,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val decimalPlacesState = rememberSaveable { mutableStateOf(config.decimalPlaces) }
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
     val showEstimatedEarningsState = rememberSaveable { mutableStateOf(config.showEstimatedEarnings) }
+    val showValuesInWattsState = rememberSaveable { mutableStateOf(config.showValuesInWatts) }
 
     SettingsColumnWithChild(
         modifier = modifier
@@ -97,6 +98,12 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             },
             modifier = Modifier.padding(start = 48.dp),
             color = colors.onSecondary
+        )
+
+        SettingsCheckbox(
+            title = "Show values in Watts",
+            state = showValuesInWattsState,
+            onConfigUpdate = { config.showValuesInWatts = it }
         )
 
         Row(

@@ -15,4 +15,5 @@ interface ConfigInterface {
     var decimalPlaces: Int
     var showTotalYield: Boolean
     var showEstimatedEarnings: Boolean
+    var showValuesInWatts: Boolean
 }

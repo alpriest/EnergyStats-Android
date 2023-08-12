@@ -53,7 +53,8 @@ fun AppTheme.Companion.preview(
     showUsableBatteryOnly: Boolean = false,
     showTotalYield: Boolean = true,
     selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
-    showEstimatedEarnings: Boolean = true
+    showEstimatedEarnings: Boolean = true,
+    showValuesInWatts: Boolean = true
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -65,6 +66,7 @@ fun AppTheme.Companion.preview(
         showUsableBatteryOnly = showUsableBatteryOnly,
         showTotalYield = showTotalYield,
         selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
-        showEstimatedEarnings = showEstimatedEarnings
+        showEstimatedEarnings = showEstimatedEarnings,
+        showValuesInWatts = showValuesInWatts
     )
 }

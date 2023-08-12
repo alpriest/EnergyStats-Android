@@ -20,18 +20,6 @@
       </configuration>
     </facet>
   </component>
-  <component name="ModuleClassLoaderOverlays">
-    <paths>
-      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay14375395688883966944" />
-      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay9146939682581807614" />
-      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay10345592408870324216" />
-      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay11919718790052742208" />
-      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay11919718790052742208" />
-      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay14913455988919605257" />
-      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay15853220152245983615" />
-      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay8174223030536240296" />
-    </paths>
-  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../app/build/intermediates/javac/debug/classes" />
     <output-test url="file://$MODULE_DIR$/../../../app/build/intermediates/javac/debugUnitTest/classes" />

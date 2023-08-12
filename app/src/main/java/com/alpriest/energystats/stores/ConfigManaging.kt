@@ -20,6 +20,7 @@ interface ConfigManaging {
     var showBatteryEstimate: Boolean
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean
+    var showValuesInWatts: Boolean
     val minSOC: MutableStateFlow<Double?>
     val batteryCapacity: Int
     var isDemoUser: Boolean

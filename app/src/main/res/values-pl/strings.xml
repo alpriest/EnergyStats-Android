@@ -159,5 +159,4 @@
     <string name="shows_earnings_today_this_month_this_year_and_all_time_based_on_a_crude_calculation_of">Wyświetla dzisiejsze zarobki, zarobki w tym miesiącu, w tym roku i ogólnie, oparte na przybliżonych obliczeniach</string>
     <string name="feed_in_kwh_price_per_kwh">Wkład kWh * cena za kWh</string>
     <string name="as_configured_on_foxess_cloud">zgodnie z konfiguracją w chmurze FoxESS.</string>
-    <string name="as_configured_on_foxess_cloud">zgodnie z konfiguracją w chmurze FoxESS.</string>
 </resources>

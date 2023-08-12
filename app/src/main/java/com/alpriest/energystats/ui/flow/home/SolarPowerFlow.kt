@@ -32,6 +32,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.Wh
 
 @Composable
 fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: String, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
@@ -50,16 +51,19 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: String, m
                 glowing = false
                 sunColor = Sunny
             }
+
             in 2 until 3 -> {
                 glowing = true
                 glowColor = Sunny
                 sunColor = orange
             }
+
             in 3 until 500 -> {
                 glowing = true
                 glowColor = orange
                 sunColor = Color.Red
             }
+
             else -> {
                 glowing = false
                 sunColor = MaterialTheme.colors.onBackground
@@ -68,7 +72,7 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: String, m
         }
 
         if (theme.showTotalYield) {
-            val yieldString = todaysGeneration.kWh(theme.decimalPlaces)
+            val yieldString = if (theme.showValuesInWatts) todaysGeneration.Wh(theme.decimalPlaces) else todaysGeneration.kWh(theme.decimalPlaces)
             Text(text = stringResource(id = R.string.yieldToday, yieldString))
         }
 

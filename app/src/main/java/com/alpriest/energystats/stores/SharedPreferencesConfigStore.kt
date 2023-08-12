@@ -20,7 +20,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_USABLE_BATTERY_ONLY,
         SHOW_TOTAL_YIELD,
         SELF_SUFFICIENCY_ESTIMATE_MODE,
-        SHOW_ESTIMATED_EARNINGS
+        SHOW_ESTIMATED_EARNINGS,
+        SHOW_VALUES_IN_WATTS
     }
 
     override var showTotalYield: Boolean
@@ -132,6 +133,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOW_ESTIMATED_EARNINGS.name, value)
+            editor.apply()
+        }
+
+    override var showValuesInWatts: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_VALUES_IN_WATTS.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_VALUES_IN_WATTS.name, value)
             editor.apply()
         }
 }
