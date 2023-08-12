@@ -125,4 +125,12 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
             network.setWorkMode(deviceID, workMode)
         }
     }
+
+    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
+        return if(config.isDemoUser) {
+            demoNetworking.fetchDataLoggers()
+        } else {
+            network.fetchDataLoggers()
+        }
+    }
 }

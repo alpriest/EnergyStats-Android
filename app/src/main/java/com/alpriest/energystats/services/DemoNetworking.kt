@@ -10,6 +10,7 @@ import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.NetworkDevice
+import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawData
@@ -126,7 +127,7 @@ class DemoNetworking : Networking {
                 earnings = 54.2
             ),
             currency = "GBP (£)",
-            month =Earning(
+            month = Earning(
                 generation = 31.5,
                 earnings = 154.2
             ),
@@ -162,5 +163,14 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun setWorkMode(deviceID: String, workMode: String) {
+    }
+
+    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
+        return PagedDataLoggerListResponse(
+            1, 10, 1, listOf(
+                PagedDataLoggerListResponse.DataLogger(moduleSN = "ABC123DEF456", moduleType = "W2", plantName = "John Doe", version = "3.08", signal = 3, communication = 1),
+                PagedDataLoggerListResponse.DataLogger(moduleSN = "123DEF456ABC", moduleType = "W2", plantName = "Jane Doe", version = "3.08", signal = 1, communication = 0)
+            )
+        )
     }
 }

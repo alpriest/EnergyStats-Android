@@ -12,6 +12,7 @@ import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsSetRequest
 import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawRequest
@@ -349,6 +350,23 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)
+    }
+
+    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("c/v0/module/list")
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetch(request, type)
+        store.dataLoggerListResponse.value = NetworkOperation(description = "DataLoggerListResponse", value = response.item, raw = response.text, request)
+        return response.item.result ?: throw MissingDataException()
     }
 
     private suspend fun fetchLoginToken(

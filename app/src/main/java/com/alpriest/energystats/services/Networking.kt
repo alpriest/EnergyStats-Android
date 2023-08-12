@@ -26,6 +26,7 @@ interface Networking {
     suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)
     suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse
     suspend fun setWorkMode(deviceID: String, workMode: String)
+    suspend fun fetchDataLoggers(): PagedDataLoggerListResponse
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

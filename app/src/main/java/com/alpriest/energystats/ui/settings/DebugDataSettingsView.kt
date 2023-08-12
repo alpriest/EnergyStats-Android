@@ -72,6 +72,21 @@ fun NavGraphBuilder.debugGraph(
                 }
             })
         }
+        composable("deviceSettings") {
+            ResponseDebugView(networkStore, mapper = { networkStore.deviceSettingsGetResponse }, fetcher = null)
+        }
+        composable("earnings") {
+            ResponseDebugView(networkStore, mapper = { networkStore.earningsResponseStream }, fetcher = {
+                configManager.currentDevice.value?.deviceID?.let {
+                    network.fetchEarnings(it)
+                }
+            })
+        }
+        composable("dataLoggers") {
+            ResponseDebugView(networkStore, mapper = { networkStore.dataLoggerListResponse }, fetcher = {
+                network.fetchDataLoggers()
+            })
+        }
     }
 }
 
@@ -106,6 +121,18 @@ fun DebugDataSettingsView(navController: NavController) {
 
         Button(onClick = { navController.navigate("addressBook") }) {
             Text("Address Book")
+        }
+
+        Button(onClick = { navController.navigate("earnings") }) {
+            Text("Earnings")
+        }
+
+        Button(onClick = { navController.navigate("deviceSettings") }) {
+            Text("Device Settings")
+        }
+
+        Button(onClick = { navController.navigate("dataLoggers") }) {
+            Text("Dataloggers")
         }
     }
 }
@@ -182,3 +209,4 @@ fun DataSettingsViewPreview() {
         }
     }
 }
+
