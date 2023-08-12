@@ -47,7 +47,6 @@ class BatterySOCSettings(
         val minSOC = viewModel.minSOCStream.collectAsState().value
         val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
         val isActive = viewModel.activityStream.collectAsState().value
-        val coroutineScope = rememberCoroutineScope()
 
         LaunchedEffect(null) {
             viewModel.load()

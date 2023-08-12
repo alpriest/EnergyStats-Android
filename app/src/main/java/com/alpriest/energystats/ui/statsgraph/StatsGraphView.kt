@@ -18,11 +18,14 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
+import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
+import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
@@ -44,13 +47,13 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
                 chart = columnChart(),
                 chartModelProducer = viewModel.producer,
                 chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                startAxis = startAxis(
-                    maxLabelCount = 5,
+                startAxis = rememberStartAxis(
+                    itemPlacer = AxisItemPlacer.Vertical.default(5),
                     valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                 ),
-                bottomAxis = bottomAxis(
+                bottomAxis = rememberBottomAxis(
+                    itemPlacer = AxisItemPlacer.Horizontal.default(2),
                     label = axisLabelComponent(horizontalPadding = 2.dp),
-                    labelSpacing = 2,
                     valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode)
                 ),
                 diffAnimationSpec = SnapSpec()

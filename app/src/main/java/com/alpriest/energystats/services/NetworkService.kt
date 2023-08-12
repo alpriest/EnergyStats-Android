@@ -7,6 +7,7 @@ import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DataLoggerListRequest
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsSetRequest
@@ -359,8 +360,14 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .addPathSegments("c/v0/module/list")
             .build()
 
+        val body = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            Gson().toJson(DataLoggerListRequest())
+        )
+
         val request = Request.Builder()
             .url(url)
+            .post(body)
             .build()
 
         val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type

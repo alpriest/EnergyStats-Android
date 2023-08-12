@@ -24,7 +24,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
@@ -34,10 +33,9 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatteryScheduleTimes
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
-import com.alpriest.energystats.ui.settings.dataloggers.DataloggerView
+import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeView
-import com.alpriest.energystats.ui.settings.inverter.WorkModeViewModel
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -113,7 +111,7 @@ fun NavigableSettingsView(
             WorkModeView(configManager = config, network = network, navController = navController, context = context).Content()
         }
         composable(SettingsScreen.Dataloggers.name) {
-            DataloggerView(network = network, configManager = config, navController = navController, context = context).Content()
+            DataLoggerViewContainer(network = network, configManager = config, navController = navController, context = context).Content()
         }
         debugGraph(navController, networkStore, config, network)
     }

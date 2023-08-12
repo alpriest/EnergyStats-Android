@@ -19,22 +19,28 @@ import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.axisLineComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
+import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.component.lineComponent
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
+import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
+import com.patrykandpatrick.vico.core.chart.dimensions.HorizontalDimensions
+import com.patrykandpatrick.vico.core.chart.draw.ChartDrawContext
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.component.shape.DashedShape
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.context.DrawContext
+import com.patrykandpatrick.vico.core.context.MeasureContext
 import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,14 +65,14 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
                 chart = lineChart(),
                 chartModelProducer = viewModel.producer,
                 chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                startAxis = startAxis(
-                    maxLabelCount = 5,
+                startAxis = rememberStartAxis(
+                    itemPlacer = AxisItemPlacer.Vertical.default(5),
                     valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                 ),
-                bottomAxis = bottomAxis(
-                    labelSpacing = 23,
-                    labelOffset = firstLabelOffset,
-                    valueFormatter = ParameterGraphFormatAxisValueFormatter()
+                bottomAxis = rememberBottomAxis(
+                    itemPlacer = AxisItemPlacer.Horizontal.default(23, firstLabelOffset),
+                    valueFormatter = ParameterGraphFormatAxisValueFormatter(),
+                    guideline = null
                 ),
                 marker = NonDisplayingMarker(
                     viewModel.valuesAtTimeStream, lineComponent(

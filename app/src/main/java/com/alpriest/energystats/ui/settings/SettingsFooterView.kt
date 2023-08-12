@@ -1,8 +1,15 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocalCafe
@@ -11,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +30,34 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+
+@Composable
+fun SettingsFooterRowView(imageContent: @Composable () -> Unit, text: String, onClick: () -> Unit) {
+    Row {
+        Button(
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(
+                contentColor = colors.primary,
+                backgroundColor = Color.Transparent
+            ),
+            elevation = null
+        ) {
+            imageContent()
+            Text(
+                text,
+                fontSize = 12.sp,
+            )
+        }
+    }
+}
+
+@Composable
+fun SettingsFooterRowView(image: ImageVector, imageDescription: String, text: String, onClick: () -> Unit) {
+    SettingsFooterRowView(
+        imageContent = { Icon(image, contentDescription = imageDescription, modifier = Modifier.padding(end = 5.dp)) },
+        text = text, onClick = onClick
+    )
+}
 
 @Composable
 fun SettingsFooterView(
@@ -60,68 +97,16 @@ fun SettingsFooterView(
             }
         }
 
-        Row {
-            Button(
-                onClick = { onOpenUrl("mailto:energystatsapp@gmail.com?subject=Android+App") },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colors.primary,
-                    backgroundColor = Color.Transparent
-                ),
-                elevation = null
-            ) {
-                Icon(
-                    Icons.Default.Email, contentDescription = "Email", modifier = Modifier.padding(end = 5.dp)
-                )
-                Text(
-                    stringResource(R.string.get_in_touch),
-                    fontSize = 12.sp,
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp), horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = onRateApp,
-                modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colors.primary,
-                    backgroundColor = Color.Transparent
-                ),
-                elevation = null
-            ) {
-                Icon(
-                    Icons.Default.ThumbUp, contentDescription = "Thumbs Up", modifier = Modifier.padding(end = 5.dp)
-                )
-                Text(
-                    text = stringResource(R.string.rate_this_app),
-                    fontSize = 12.sp,
-                )
-            }
-
-            Spacer(modifier = Modifier.widthIn(min = 20.dp))
-
-            Button(
-                onClick = onBuyMeCoffee,
-                modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colors.primary,
-                    backgroundColor = Color.Transparent
-                ),
-                elevation = null
-            ) {
-                Icon(
-                    Icons.Default.LocalCafe, contentDescription = "Coffee Cup", modifier = Modifier.padding(end = 5.dp)
-                )
-                Text(
-                    text = stringResource(R.string.buy_me_a_coffee),
-                    fontSize = 12.sp,
-                )
-            }
-        }
+        SettingsFooterRowView(Icons.Default.Email, "Get in touch", stringResource(R.string.get_in_touch)) { onOpenUrl("mailto:energystatsapp@gmail.com?subject=Android+App") }
+        SettingsFooterRowView(Icons.Default.ThumbUp, "Rate this app", stringResource(R.string.rate_this_app), onRateApp)
+        SettingsFooterRowView(Icons.Default.LocalCafe, "Buy me a coffee", stringResource(R.string.buy_me_a_coffee), onBuyMeCoffee)
+        SettingsFooterRowView({
+            Image(
+                painter = painterResource(id = R.drawable.paypal_logo),
+                contentDescription = "DonateA",
+                modifier = Modifier.padding(end = 6.dp)
+            )
+        }, "Donate via PayPal") { onOpenUrl("https://www.paypal.me/alpriest") }
 
         Text(
             "Version " + config.appVersion,

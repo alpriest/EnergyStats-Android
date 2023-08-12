@@ -22,16 +22,25 @@ import com.alpriest.energystats.ui.settings.SettingsTitleView
 
 @Composable
 fun SettingsRow(title: String, value: String?) {
+    SettingsRow(title = title) {
+        Text(value ?: "(unknown)", color = colors.onSecondary)
+    }
+}
+
+@Composable
+fun SettingsRow(title: String, content: @Composable () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
     ) {
         Text(title,
             color = colors.onSecondary,
             style = TextStyle.Default.copy(fontWeight = FontWeight.Medium)
         )
-        Text(value ?: "(unknown)", color = colors.onSecondary)
+        content()
     }
 }
 
@@ -50,9 +59,11 @@ fun FirmwareVersionView(device: Device) {
             Text(
                 text = stringResource(R.string.find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website),
                 color = colors.onSecondary,
-                modifier = Modifier.clickable {
-                    uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
-                }.padding(top = 12.dp)
+                modifier = Modifier
+                    .clickable {
+                        uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
+                    }
+                    .padding(top = 12.dp)
             )
         }
     }
