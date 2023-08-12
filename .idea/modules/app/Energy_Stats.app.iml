@@ -20,6 +20,11 @@
       </configuration>
     </facet>
   </component>
+  <component name="ModuleClassLoaderOverlays">
+    <paths>
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay2322774462422282781" />
+    </paths>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../app/build/intermediates/javac/debug/classes" />
     <output-test url="file://$MODULE_DIR$/../../../app/build/intermediates/javac/debugUnitTest/classes" />

@@ -101,7 +101,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         )
 
         SettingsCheckbox(
-            title = "Show values in Watts",
+            title = stringResource(R.string.show_values_in_watts),
             state = showValuesInWattsState,
             onConfigUpdate = { config.showValuesInWatts = it }
         )

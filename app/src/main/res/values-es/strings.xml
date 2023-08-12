@@ -158,4 +158,5 @@
     <string name="shows_earnings_today_this_month_this_year_and_all_time_based_on_a_crude_calculation_of">Muestra las ganancias de hoy, este mes, este año y de manera global basadas en un cálculo básico de</string>
     <string name="feed_in_kwh_price_per_kwh">kWh de inyección * precio por kWh</string>
     <string name="as_configured_on_foxess_cloud">según la configuración en la nube de FoxESS.</string>
+    <string name="show_values_in_watts">Mostrar valores en vatios</string>
 </resources>
