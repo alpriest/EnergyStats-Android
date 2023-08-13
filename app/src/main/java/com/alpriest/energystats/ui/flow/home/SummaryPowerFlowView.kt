@@ -1,7 +1,9 @@
 package com.alpriest.energystats.ui.flow.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.House
 import androidx.compose.runtime.Composable
@@ -12,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
@@ -21,6 +24,7 @@ import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
+import com.alpriest.energystats.ui.flow.battery.asTemperature
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,39 +52,76 @@ fun SummaryPowerFlowView(
             themeStream = themeStream
         )
 
-        Row(
-            modifier = Modifier
-                .weight(1f)
-        ) {
-            summaryPowerFlowViewModel.batteryViewModel?.let { model ->
-                if (summaryPowerFlowViewModel.hasBattery) {
-                    BatteryPowerFlow(
-                        viewModel = model,
-                        modifier = Modifier
-                            .weight(2f),
-                        themeStream = themeStream
-                    )
-                    InverterSpacer(
-                        modifier = Modifier.weight(1f),
-                        themeStream = themeStream
+        Box(modifier = Modifier.weight(1f)) {
+            Row {
+                summaryPowerFlowViewModel.batteryViewModel?.let { model ->
+                    if (summaryPowerFlowViewModel.hasBattery) {
+                        BatteryPowerFlow(
+                            viewModel = model,
+                            modifier = Modifier
+                                .weight(2f),
+                            themeStream = themeStream
+                        )
+                        InverterSpacer(
+                            modifier = Modifier.weight(1f),
+                            themeStream = themeStream
+                        )
+                    }
+                }
+                HomePowerFlowView(
+                    amount = summaryPowerFlowViewModel.home,
+                    modifier = Modifier.weight(2f),
+                    themeStream = themeStream,
+                    position = if (summaryPowerFlowViewModel.hasBattery) PowerFlowLinePosition.MIDDLE else PowerFlowLinePosition.LEFT
+                )
+                InverterSpacer(
+                    modifier = Modifier.weight(1f),
+                    themeStream = themeStream
+                )
+                GridPowerFlowView(
+                    amount = summaryPowerFlowViewModel.grid,
+                    modifier = Modifier.weight(2f),
+                    themeStream = themeStream
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .offset(y = -14.dp)
+                    .background(colors.background)
+                    .padding(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row {
+                    Text(
+                        "Inverter"
                     )
                 }
+
+                Row {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(end = 4.dp)
+                    ) {
+                        Text(
+                            21.9.asTemperature(),
+                        )
+                        Text(
+                            "INTERNAL",
+                            fontSize = 8.sp
+                        )
+                    }
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(18.1.asTemperature())
+                        Text(
+                            "EXTERNAL",
+                            fontSize = 8.sp
+                        )
+                    }
+                }
             }
-            HomePowerFlowView(
-                amount = summaryPowerFlowViewModel.home,
-                modifier = Modifier.weight(2f),
-                themeStream = themeStream,
-                position = if (summaryPowerFlowViewModel.hasBattery) PowerFlowLinePosition.MIDDLE else PowerFlowLinePosition.LEFT
-            )
-            InverterSpacer(
-                modifier = Modifier.weight(1f),
-                themeStream = themeStream
-            )
-            GridPowerFlowView(
-                amount = summaryPowerFlowViewModel.grid,
-                modifier = Modifier.weight(2f),
-                themeStream = themeStream
-            )
         }
 
         Row {
@@ -139,7 +180,7 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
     )
 }
 
-@Preview(showBackground = true, widthDp = 700, heightDp = 600)
+@Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun SummaryPowerFlowViewPreview() {
     val formatter = DateTimeFormatter.ofPattern(dateFormat)
