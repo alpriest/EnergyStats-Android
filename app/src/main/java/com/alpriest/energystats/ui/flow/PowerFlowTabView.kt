@@ -56,11 +56,12 @@ import java.time.format.DateTimeFormatter
 
 class PowerFlowTabViewModelFactory(
     private val network: Networking,
-    private val configManager: ConfigManaging
+    private val configManager: ConfigManaging,
+    private val themeStream: MutableStateFlow<AppTheme>
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java)
-            .newInstance(network, configManager)
+        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, MutableStateFlow::class.java)
+            .newInstance(network, configManager, themeStream)
     }
 }
 
@@ -74,7 +75,8 @@ fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier):
 
 class PowerFlowTabView(
     private val network: Networking,
-    private val configManager: ConfigManaging
+    private val configManager: ConfigManaging,
+    private val themeStream: MutableStateFlow<AppTheme>
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -91,7 +93,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(network, configManager)
+            factory = PowerFlowTabViewModelFactory(network, configManager, this.themeStream)
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -181,7 +183,7 @@ class PowerFlowTabView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager())
+    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview()))
     val formatter = DateTimeFormatter.ofPattern(dateFormat)
     val now = LocalDateTime.now().format(formatter)
 
@@ -207,7 +209,8 @@ fun PowerFlowTabViewPreview() {
     EnergyStatsTheme {
         PowerFlowTabView(
             DemoNetworking(),
-            FakeConfigManager()
+            FakeConfigManager(),
+            MutableStateFlow(AppTheme.preview())
         ).Loaded(
             viewModel = viewModel,
             summaryPowerFlowViewModel = homePowerFlowViewModel,

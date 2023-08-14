@@ -31,10 +31,12 @@ import java.time.LocalDateTime
 import java.util.Currency
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.system.measureTimeMillis
 
 class PowerFlowTabViewModel(
     private val network: Networking,
-    private val configManager: ConfigManaging
+    private val configManager: ConfigManaging,
+    private val themeStream: MutableStateFlow<AppTheme>
 ) : ViewModel() {
 
     var launchIn: Job? = null
@@ -58,6 +60,14 @@ class PowerFlowTabViewModel(
 
     init {
         appLifecycleObserver.attach()
+
+        viewModelScope.launch {
+            themeStream.collect { it ->
+                if (it.showInverterTemperatures) {
+                    timerFired()
+                }
+            }
+        }
     }
 
     fun finalize() {

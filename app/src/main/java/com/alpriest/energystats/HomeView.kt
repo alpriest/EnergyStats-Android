@@ -86,7 +86,7 @@ fun HomeView(
                 state = pagerState
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(network, configManager).Content(themeStream = themeStream)
+                    0 -> PowerFlowTabView(network, configManager, themeStream).Content(themeStream = themeStream)
                     1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     3 -> NavigableSettingsView(

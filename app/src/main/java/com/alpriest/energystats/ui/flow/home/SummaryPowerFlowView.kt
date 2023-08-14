@@ -195,7 +195,7 @@ fun SummaryPowerFlowViewPreview() {
 
     EnergyStatsTheme {
         SummaryPowerFlowView(
-            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager()),
+            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview())),
             summaryPowerFlowViewModel = SummaryPowerFlowViewModel(
                 FakeConfigManager(),
                 2.3,
