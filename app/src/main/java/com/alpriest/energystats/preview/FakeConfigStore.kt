@@ -17,6 +17,7 @@ class FakeConfigStore(
     override var showTotalYield: Boolean = true,
     override var selfSufficiencyEstimateMode: Int = 0,
     override var showEstimatedEarnings: Boolean = false,
-    override var showValuesInWatts: Boolean = false
+    override var showValuesInWatts: Boolean = false,
+    override var showInverterTemperatures: Boolean = false
 ) : ConfigInterface {
 }

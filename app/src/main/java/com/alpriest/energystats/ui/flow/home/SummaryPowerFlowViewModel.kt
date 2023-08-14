@@ -12,6 +12,16 @@ import java.util.Locale
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
 
+data class InverterTemperatures(
+    val ambient: Double,
+    val inverter: Double
+)
+
+data class InverterViewModel(
+    val temperatures: InverterTemperatures,
+    val name: String
+)
+
 class SummaryPowerFlowViewModel(
     val configManager: ConfigManaging,
     val batteryChargePower: Double,
@@ -40,6 +50,17 @@ class SummaryPowerFlowViewModel(
     val latestUpdate = raw.currentData("gridConsumptionPower")?.time?.let {
         SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
     } ?: LocalDateTime.now()
+    val inverterViewModel = makeInverterViewModel()
+
+    private fun makeInverterViewModel(): InverterViewModel? {
+        if (raw.find { it.variable == "ambientTemperation" } != null &&
+                raw.find { it.variable == "invTemperation"} != null) {
+            val temperatures = InverterTemperatures(raw.currentValue("ambientTemperation"), raw.currentValue("invTemperation"))
+            return InverterViewModel(temperatures, name = configManager.currentDevice.value?.deviceType ?: "")
+        } else {
+            return null
+        }
+    }
 }
 
 private fun List<RawResponse>.currentValue(forKey: String): Double {

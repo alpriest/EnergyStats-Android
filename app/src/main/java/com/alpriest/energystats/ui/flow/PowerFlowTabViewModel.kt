@@ -17,6 +17,7 @@ import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageSt
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.ui.settings.RefreshFrequency
+import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -128,7 +129,7 @@ class PowerFlowTabViewModel(
 
                 val earnings = network.fetchEarnings(deviceID = currentDevice.deviceID)
 
-                val variables: List<RawVariable> = listOfNotNull(
+                var variables: List<RawVariable> = listOfNotNull(
                     variable("feedInPower"),
                     variable("gridConsumptionPower"),
                     variable("generationPower"),
@@ -136,6 +137,16 @@ class PowerFlowTabViewModel(
                     variable("batChargePower"),
                     variable("batDischargePower")
                 )
+
+                if (configManager.showInverterTemperatures) {
+                    variables = variables.plus(
+                        listOfNotNull(
+                            variable("ambientTemperation"),
+                            variable("invTemperation")
+                        )
+                    )
+                }
+
                 val raw = network.fetchRaw(
                     deviceID = currentDevice.deviceID,
                     variables,

@@ -21,7 +21,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_TOTAL_YIELD,
         SELF_SUFFICIENCY_ESTIMATE_MODE,
         SHOW_ESTIMATED_EARNINGS,
-        SHOW_VALUES_IN_WATTS
+        SHOW_VALUES_IN_WATTS,
+        SHOW_INVERTER_TEMPERATURES
     }
 
     override var showTotalYield: Boolean
@@ -141,6 +142,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOW_VALUES_IN_WATTS.name, value)
+            editor.apply()
+        }
+
+    override var showInverterTemperatures: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_INVERTER_TEMPERATURES.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_INVERTER_TEMPERATURES.name, value)
             editor.apply()
         }
 }

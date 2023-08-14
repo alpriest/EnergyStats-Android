@@ -130,13 +130,13 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         ) {
                             Text(
                                 stringResource(R.string.ok),
-                                color = colors.onSecondary,
+                                color = colors.onPrimary,
                             )
                         }
                         Button(onClick = { isEditingCapacity.value = false }) {
                             Text(
                                 stringResource(R.string.cancel),
-                                color = colors.onSecondary,
+                                color = colors.onPrimary,
                             )
                         }
                     }

@@ -33,6 +33,7 @@ class FakeConfigManager : ConfigManaging {
     override var useColouredFlowLines: Boolean = true
     override var refreshFrequency: RefreshFrequency = RefreshFrequency.Auto
     override var showValuesInWatts: Boolean = false
+    override var showInverterTemperatures: Boolean = false
     override var devices: List<Device>? = listOf(
         Device(
             plantName = "plant 1",

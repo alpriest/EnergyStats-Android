@@ -22,7 +22,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showTotalYield = config.showTotalYield,
             selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
             showEstimatedEarnings = config.showEstimatedEarnings,
-            showValuesInWatts = config.showValuesInWatts
+            showValuesInWatts = config.showValuesInWatts,
+            showInverterTemperatures = config.showInverterTemperatures
         )
     )
 
@@ -104,6 +105,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showBatteryTemperature = value
             themeStream.value = themeStream.value.copy(showBatteryTemperature = showBatteryTemperature)
+        }
+
+    override var showInverterTemperatures: Boolean
+        get() = config.showInverterTemperatures
+        set(value) {
+            config.showInverterTemperatures = value
+            themeStream.value = themeStream.value.copy(showInverterTemperatures = showInverterTemperatures)
         }
 
     override var useLargeDisplay: Boolean

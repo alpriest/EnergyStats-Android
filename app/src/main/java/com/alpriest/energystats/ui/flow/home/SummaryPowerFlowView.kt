@@ -38,6 +38,7 @@ fun SummaryPowerFlowView(
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
+    val appTheme = themeStream.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -85,40 +86,46 @@ fun SummaryPowerFlowView(
                 )
             }
 
-            Column(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .offset(y = -14.dp)
-                    .background(colors.background)
-                    .padding(4.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row {
-                    Text(
-                        "Inverter"
-                    )
-                }
-
-                Row {
+            if (appTheme.showInverterTemperatures) {
+                summaryPowerFlowViewModel.inverterViewModel?.let {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(end = 4.dp)
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .offset(y = -14.dp)
+                            .background(colors.background)
+                            .padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            21.9.asTemperature(),
-                        )
-                        Text(
-                            "INTERNAL",
-                            fontSize = 8.sp
-                        )
-                    }
+                        Row {
+                            Text(it.name)
+                        }
 
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(18.1.asTemperature())
-                        Text(
-                            "EXTERNAL",
-                            fontSize = 8.sp
-                        )
+                        Row {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(end = 4.dp)
+                            ) {
+                                Text(
+                                    it.temperatures.ambient.asTemperature(),
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    "INTERNAL",
+                                    fontSize = 8.sp
+                                )
+                            }
+
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(
+                                    it.temperatures.inverter.asTemperature(),
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    "EXTERNAL",
+                                    fontSize = 8.sp
+                                )
+                            }
+                        }
                     }
                 }
             }

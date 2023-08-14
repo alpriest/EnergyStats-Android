@@ -102,7 +102,7 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
                     showing = false
                 }) {
                     Text(monthName)
-                    if (monthIndex == month - 1) {
+                    if (monthIndex == month) {
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                     }

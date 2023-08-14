@@ -35,4 +35,5 @@ interface ConfigManaging {
     suspend fun refreshFirmwareVersion()
     fun select(device: Device)
     var appVersion: String
+    var showInverterTemperatures: Boolean
 }

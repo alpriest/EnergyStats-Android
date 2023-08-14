@@ -16,4 +16,5 @@ interface ConfigInterface {
     var showTotalYield: Boolean
     var showEstimatedEarnings: Boolean
     var showValuesInWatts: Boolean
+    var showInverterTemperatures: Boolean
 }

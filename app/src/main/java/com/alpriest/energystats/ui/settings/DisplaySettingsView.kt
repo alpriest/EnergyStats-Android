@@ -48,6 +48,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
     val showEstimatedEarningsState = rememberSaveable { mutableStateOf(config.showEstimatedEarnings) }
     val showValuesInWattsState = rememberSaveable { mutableStateOf(config.showValuesInWatts) }
+    val showInverterTemperaturesState = rememberSaveable { mutableStateOf(config.showInverterTemperatures) }
 
     SettingsColumnWithChild(
         modifier = modifier
@@ -104,6 +105,12 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             title = stringResource(R.string.show_values_in_watts),
             state = showValuesInWattsState,
             onConfigUpdate = { config.showValuesInWatts = it }
+        )
+
+        SettingsCheckbox(
+            title = "Show inverter temperatures",
+            state = showInverterTemperaturesState,
+            onConfigUpdate = { config.showInverterTemperatures = it }
         )
 
         Row(

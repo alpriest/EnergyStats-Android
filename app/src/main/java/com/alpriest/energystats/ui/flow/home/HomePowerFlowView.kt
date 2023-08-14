@@ -54,7 +54,8 @@ fun AppTheme.Companion.preview(
     showTotalYield: Boolean = true,
     selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
     showEstimatedEarnings: Boolean = true,
-    showValuesInWatts: Boolean = true
+    showValuesInWatts: Boolean = true,
+    showInverterTemperatures: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -67,6 +68,7 @@ fun AppTheme.Companion.preview(
         showTotalYield = showTotalYield,
         selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
         showEstimatedEarnings = showEstimatedEarnings,
-        showValuesInWatts = showValuesInWatts
+        showValuesInWatts = showValuesInWatts,
+        showInverterTemperatures = showInverterTemperatures
     )
 }
