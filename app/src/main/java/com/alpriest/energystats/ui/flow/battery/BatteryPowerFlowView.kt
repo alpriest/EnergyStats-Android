@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.flow.battery
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -7,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,27 +70,27 @@ fun BatteryIconView(
                 .padding(5.dp)
         )
 
-        Box(modifier = Modifier.clickable { percentage = !percentage }) {
+        if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Row {
-                if (percentage) {
+                BatteryPercentage({ percentage = !percentage }, percentage, viewModel, fontSize, decimalPlaces)
+
+                if (showBatteryTemperature) {
                     Text(
-                        viewModel.batteryStateOfCharge().asPercent(),
-                        fontSize = fontSize
-                    )
-                } else {
-                    Text(
-                        viewModel.batteryStoredCharge().kWh(decimalPlaces),
-                        fontSize = fontSize
+                        viewModel.temperature.asTemperature(),
+                        fontSize = fontSize,
+                        modifier = Modifier.padding(start = 12.dp)
                     )
                 }
             }
-        }
+        } else {
+            BatteryPercentage({ percentage = !percentage }, percentage, viewModel, fontSize, decimalPlaces)
 
-        if (showBatteryTemperature) {
-            Text(
-                viewModel.temperature.asTemperature(),
-                fontSize = fontSize
-            )
+            if (showBatteryTemperature) {
+                Text(
+                    viewModel.temperature.asTemperature(),
+                    fontSize = fontSize
+                )
+            }
         }
 
         if (showBatteryEstimate) {
@@ -98,6 +100,31 @@ fun BatteryIconView(
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     color = Color.Gray,
+                    fontSize = fontSize
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BatteryPercentage(
+    onClick: () -> Unit,
+    percentage: Boolean,
+    viewModel: BatteryPowerViewModel,
+    fontSize: TextUnit,
+    decimalPlaces: Int
+) {
+    Box(modifier = Modifier.clickable {onClick() }) {
+        Row {
+            if (percentage) {
+                Text(
+                    viewModel.batteryStateOfCharge().asPercent(),
+                    fontSize = fontSize
+                )
+            } else {
+                Text(
+                    viewModel.batteryStoredCharge().kWh(decimalPlaces),
                     fontSize = fontSize
                 )
             }
@@ -124,11 +151,11 @@ fun duration(estimate: BatteryCapacityEstimate): String {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 800, heightDp = 300)
 @Composable
 fun BatteryPowerFlowViewPreview() {
     EnergyStatsTheme {
-        BatteryPowerFlow(
+        BatteryIconView(
             viewModel = BatteryPowerViewModel(
                 FakeConfigManager(),
                 actualStateOfCharge = 0.25,
@@ -137,8 +164,8 @@ fun BatteryPowerFlowViewPreview() {
                 residual = 5678,
                 minSOC = 0.2
             ),
-            modifier = Modifier,
-            themeStream = MutableStateFlow(AppTheme.preview())
+            themeStream = MutableStateFlow(AppTheme.preview(showBatteryTemperature = true, showBatteryEstimate = true)),
+            iconHeight = 24.dp
         )
     }
 }

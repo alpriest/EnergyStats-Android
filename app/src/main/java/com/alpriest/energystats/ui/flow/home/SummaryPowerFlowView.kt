@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.flow.home
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -12,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -96,33 +98,21 @@ fun SummaryPowerFlowView(
                             .padding(4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Row {
-                            Text(it.name)
-                        }
-
-                        Row {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.padding(end = 4.dp)
-                            ) {
-                                Text(
-                                    it.temperatures.ambient.asTemperature(),
-                                    fontSize = 12.sp
-                                )
-                                Text(
-                                    "INTERNAL",
-                                    fontSize = 8.sp
-                                )
+                        if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            Row {
+                                InverterTemperatures(it)
                             }
 
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Row {
+                                Text(it.name)
+                            }
+                        } else {
+                            Row {
+                                InverterTemperatures(it)
+
                                 Text(
-                                    it.temperatures.inverter.asTemperature(),
-                                    fontSize = 12.sp
-                                )
-                                Text(
-                                    "EXTERNAL",
-                                    fontSize = 8.sp
+                                    it.name,
+                                    modifier = Modifier.padding(start = 12.dp)
                                 )
                             }
                         }
@@ -175,6 +165,34 @@ fun SummaryPowerFlowView(
 }
 
 @Composable
+private fun InverterTemperatures(viewModel: InverterViewModel) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(end = 4.dp)
+    ) {
+        Text(
+            viewModel.temperatures.ambient.asTemperature(),
+            fontSize = 12.sp
+        )
+        Text(
+            "INTERNAL",
+            fontSize = 8.sp
+        )
+    }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            viewModel.temperatures.inverter.asTemperature(),
+            fontSize = 12.sp
+        )
+        Text(
+            "EXTERNAL",
+            fontSize = 8.sp
+        )
+    }
+}
+
+@Composable
 fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
     val updateState by viewModel.updateMessage.collectAsState()
 
@@ -187,7 +205,7 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
     )
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 600)
+@Preview(showBackground = true, widthDp = 640, heightDp = 320)
 @Composable
 fun SummaryPowerFlowViewPreview() {
     val formatter = DateTimeFormatter.ofPattern(dateFormat)
@@ -206,7 +224,9 @@ fun SummaryPowerFlowViewPreview() {
                     RawResponse("batChargePower", arrayListOf(RawData(now, 2.45))),
                     RawResponse("batDischargePower", arrayListOf(RawData(now, 2.45))),
                     RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
-                    RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
+                    RawResponse("loadsPower", arrayListOf(RawData(now, 2.45))),
+                    RawResponse("ambientTemperation", arrayListOf(RawData(now, 2.45))),
+                    RawResponse("invTemperation", arrayListOf(RawData(now, 2.45)))
                 ),
                 13.6,
                 todaysGeneration = 1.0,
@@ -214,7 +234,7 @@ fun SummaryPowerFlowViewPreview() {
                 hasBattery = true,
                 earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99"
             ),
-            themeStream = MutableStateFlow(AppTheme.preview()),
+            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true)),
         )
     }
 }
