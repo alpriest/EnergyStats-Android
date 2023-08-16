@@ -114,7 +114,7 @@
     <string name="home_usage">Home usage</string>
     <string name="export_csv_data">Export graph data</string>
     <string name="output">"Output "</string>
-    <string name="parameters_update_description">Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time</string>
+    <string name="parameters_update_description">Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time. Tap the graph to view data at a specific time.</string>
     <string name="view_debug_data">View debug data</string>
     <string name="minimum_charge_levels">Minimum charge levels</string>
     <string name="charge_times">Charge schedule</string>

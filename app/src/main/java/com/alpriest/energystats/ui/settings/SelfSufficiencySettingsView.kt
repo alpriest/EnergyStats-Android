@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -34,19 +35,15 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
             SettingsTitleView(stringResource(R.string.self_sufficiency_estimates))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                listOf(SelfSufficiencyEstimateMode.Off, SelfSufficiencyEstimateMode.Net, SelfSufficiencyEstimateMode.Absolute).map {
-                    RadioButton(
-                        selected = selfSufficiencyEstimateModeState.value == it,
-                        onClick = {
-                            selfSufficiencyEstimateModeState.value = it
-                            config.selfSufficiencyEstimateMode = it
-                        },
-                        colors = RadioButtonDefaults.colors(selectedColor = colors.primary)
-                    )
-                    Text(
-                        it.toString(),
-                        color = colors.onSecondary,
-                    )
+                val items = listOf(SelfSufficiencyEstimateMode.Off, SelfSufficiencyEstimateMode.Net, SelfSufficiencyEstimateMode.Absolute)
+                SegmentedControl(
+                    items = items.map { it.title() },
+                    useFixedWidth = true,
+                    defaultSelectedItemIndex = items.indexOf(selfSufficiencyEstimateModeState.value),
+                    color = colors.primary
+                ) {
+                    selfSufficiencyEstimateModeState.value = items[it]
+                    config.selfSufficiencyEstimateMode = items[it]
                 }
             }
 

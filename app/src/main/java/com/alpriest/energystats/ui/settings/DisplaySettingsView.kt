@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 enum class SelfSufficiencyEstimateMode(val value: Int) {
@@ -48,7 +48,6 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
     val showEstimatedEarningsState = rememberSaveable { mutableStateOf(config.showEstimatedEarnings) }
     val showValuesInWattsState = rememberSaveable { mutableStateOf(config.showValuesInWatts) }
-    val showInverterTemperaturesState = rememberSaveable { mutableStateOf(config.showInverterTemperatures) }
 
     SettingsColumnWithChild(
         modifier = modifier
@@ -79,14 +78,37 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             onConfigUpdate = { config.showSunnyBackground = it }
         )
 
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                stringResource(R.string.decimal_places),
+                color = colors.onSecondary,
+                modifier = Modifier.weight(1f)
+            )
+
+            val items = listOf("2","3")
+            SegmentedControl(
+                items = items,
+                defaultSelectedItemIndex = items.indexOf(decimalPlacesState.value.toString()),
+                color = colors.primary
+            ) {
+                decimalPlacesState.value = items[it].toInt()
+                config.decimalPlaces = items[it].toInt()
+            }
+        }
+
+        SettingsCheckbox(
+            title = stringResource(R.string.show_values_in_watts),
+            state = showValuesInWattsState,
+            onConfigUpdate = { config.showValuesInWatts = it }
+        )
+
         SettingsCheckbox(
             title = stringResource(R.string.show_estimated_earnings),
             state = showEstimatedEarningsState,
-            onConfigUpdate = { config.showEstimatedEarnings = it }
-        )
-
-        Text(
-            buildAnnotatedString {
+            onConfigUpdate = { config.showEstimatedEarnings = it },
+            footer = buildAnnotatedString {
                 append(stringResource(R.string.shows_earnings_today_this_month_this_year_and_all_time_based_on_a_crude_calculation_of))
                 append(" ")
                 withStyle(
@@ -96,45 +118,8 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 }
                 append(" ")
                 append(stringResource(R.string.as_configured_on_foxess_cloud))
-            },
-            modifier = Modifier.padding(start = 48.dp),
-            color = colors.onSecondary
-        )
-
-        SettingsCheckbox(
-            title = stringResource(R.string.show_values_in_watts),
-            state = showValuesInWattsState,
-            onConfigUpdate = { config.showValuesInWatts = it }
-        )
-
-        SettingsCheckbox(
-            title = "Show inverter temperatures",
-            state = showInverterTemperaturesState,
-            onConfigUpdate = { config.showInverterTemperatures = it }
-        )
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                stringResource(R.string.decimal_places),
-                color = colors.onSecondary,
-            )
-            listOf(2, 3).map {
-                RadioButton(
-                    selected = decimalPlacesState.value == it,
-                    onClick = {
-                        decimalPlacesState.value = it
-                        config.decimalPlaces = it
-                    },
-                    colors = RadioButtonDefaults.colors(selectedColor = colors.primary)
-                )
-                Text(
-                    it.toString(),
-                    color = colors.onSecondary,
-                )
             }
-        }
+        )
     }
 }
 

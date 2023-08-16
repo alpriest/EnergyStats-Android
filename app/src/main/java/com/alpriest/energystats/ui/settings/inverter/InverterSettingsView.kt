@@ -2,6 +2,8 @@ package com.alpriest.energystats.ui.settings.inverter
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -11,6 +13,7 @@ import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.SettingsButton
+import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -19,12 +22,21 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 @Composable
 fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController) {
     val currentDevice = configManager.currentDevice.collectAsState()
+    val showInverterTemperaturesState = rememberSaveable { mutableStateOf(configManager.showInverterTemperatures) }
 
     SettingsPage {
         InverterChoiceView(configManager)
 
         currentDevice.value?.let {
             SettingsButton(stringResource(R.string.configure_work_mode)) { navController.navigate(SettingsScreen.InverterWorkMode.name) }
+
+            SettingsColumnWithChild {
+                SettingsCheckbox(
+                    title = "Show inverter temperatures",
+                    state = showInverterTemperaturesState,
+                    onConfigUpdate = { configManager.showInverterTemperatures = it }
+                )
+            }
 
             FirmwareVersionView(it)
             DeviceVersionView(it)

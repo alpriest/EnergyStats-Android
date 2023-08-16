@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 enum class RefreshFrequency(val value: Int) {
@@ -36,23 +37,22 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
         SettingsTitleView(stringResource(R.string.refresh_frequency))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            RefreshFrequency.values().map {
-                RadioButton(
-                    selected = refreshFrequency.value == it,
-                    onClick = {
-                        refreshFrequency.value = it
-                        config.refreshFrequency = it
-                    },
-                    colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colors.primary)
-                )
-                Text(
-                    when (it) {
-                        RefreshFrequency.OneMinute -> stringResource(R.string._1_min)
-                        RefreshFrequency.FiveMinutes -> stringResource(R.string._5_mins)
-                        RefreshFrequency.Auto -> stringResource(R.string.auto)
-                    },
-                    color = colors.onSecondary,
-                )
+            val items = RefreshFrequency.values()
+
+            val itemTitles = listOf(
+                stringResource(R.string._1_min),
+                stringResource(R.string._5_mins),
+                stringResource(R.string.auto)
+            )
+
+            SegmentedControl(
+                items = itemTitles,
+                defaultSelectedItemIndex = items.indexOf(refreshFrequency.value),
+                useFixedWidth = true,
+                color = colors.primary
+            ) {
+                refreshFrequency.value = items[it]
+                config.refreshFrequency = items[it]
             }
         }
 

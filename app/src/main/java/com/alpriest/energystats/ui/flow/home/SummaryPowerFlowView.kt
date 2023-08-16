@@ -27,6 +27,7 @@ import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.flow.battery.asTemperature
+import com.alpriest.energystats.ui.flow.inverter.InverterView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -90,23 +91,40 @@ fun SummaryPowerFlowView(
 
             if (appTheme.showInverterTemperatures) {
                 summaryPowerFlowViewModel.inverterViewModel?.let {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .offset(y = -14.dp)
-                            .background(colors.background)
-                            .padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                            Row {
+                    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .offset(y = (-24).dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            InverterView(
+                                modifier = Modifier
+                                    .width(45.dp)
+                                    .height(50.dp)
+                                    .padding(bottom = 4.dp)
+                                    .background(colors.background)
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .background(colors.background)
+                                    .padding(4.dp),
+                                text = it.name
+                            )
+
+                            Row(modifier = Modifier.background(colors.background)) {
                                 InverterTemperatures(it)
                             }
-
-                            Row {
-                                Text(it.name)
-                            }
-                        } else {
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .offset(y = (-12.dp))
+                                .background(colors.background)
+                                .padding(2.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Row {
                                 InverterTemperatures(it)
 
@@ -117,6 +135,20 @@ fun SummaryPowerFlowView(
                             }
                         }
                     }
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .offset(y = (-24).dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    InverterView(
+                        modifier = Modifier
+                            .width(45.dp)
+                            .height(50.dp)
+                            .padding(bottom = 4.dp)
+                    )
                 }
             }
         }
@@ -205,7 +237,7 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
     )
 }
 
-@Preview(showBackground = true, widthDp = 640, heightDp = 320)
+@Preview(showBackground = true, widthDp = 380, heightDp = 640)
 @Composable
 fun SummaryPowerFlowViewPreview() {
     val formatter = DateTimeFormatter.ofPattern(dateFormat)

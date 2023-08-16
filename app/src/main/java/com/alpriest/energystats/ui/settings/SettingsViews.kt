@@ -21,6 +21,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
@@ -83,27 +88,40 @@ fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Uni
 }
 
 @Composable
-fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onConfigUpdate: (Boolean) -> Unit) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable {
-                state.value = !state.value
-                onConfigUpdate(state.value)
-            }
-            .fillMaxWidth()
-    ) {
-        Checkbox(
-            checked = state.value,
-            onCheckedChange = {
-                state.value = it
-                onConfigUpdate(it)
-            },
-            colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
-        )
-        Text(
-            title,
-            color = MaterialTheme.colors.onSecondary,
-        )
+fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onConfigUpdate: (Boolean) -> Unit, footer: AnnotatedString? = null) {
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable {
+                    state.value = !state.value
+                    onConfigUpdate(state.value)
+                }
+                .fillMaxWidth()
+        ) {
+            Text(
+                title,
+                color = MaterialTheme.colors.onSecondary,
+                modifier = Modifier.weight(1f)
+            )
+
+            Checkbox(
+                checked = state.value,
+                onCheckedChange = {
+                    state.value = it
+                    onConfigUpdate(it)
+                },
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+            )
+        }
+
+        footer?.let {
+            Text(
+                it,
+                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.onSecondary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
     }
 }
