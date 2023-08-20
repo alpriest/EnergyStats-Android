@@ -100,7 +100,7 @@ fun SummaryPowerFlowView(
                         ) {
                             InverterView(
                                 modifier = Modifier
-                                    .width(45.dp)
+                                    .width(43.dp)
                                     .height(50.dp)
                                     .padding(bottom = 4.dp)
                                     .background(colors.background)
@@ -145,7 +145,7 @@ fun SummaryPowerFlowView(
                 ) {
                     InverterView(
                         modifier = Modifier
-                            .width(45.dp)
+                            .width(43.dp)
                             .height(50.dp)
                             .padding(bottom = 4.dp)
                     )

@@ -2,6 +2,12 @@ package com.alpriest.energystats.ui.flow.inverter
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Colors
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ElectricBolt
 import androidx.compose.runtime.Composable
@@ -16,10 +22,24 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.ui.theme.DarkApproximationHeader
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.LightApproximationHeader
+
+val Colors.InverterBackground: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) Color.White else Color.Black
+
+val Colors.BoltTint: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) Color.Black else Color.White
 
 @Composable
 fun InverterView(modifier: Modifier = Modifier) {
     val painter = rememberVectorPainter(Icons.Default.ElectricBolt)
+    val inverterBackground = colors.InverterBackground
+    val boltTint = colors.BoltTint
 
     Canvas(
         modifier = modifier
@@ -37,7 +57,7 @@ fun InverterView(modifier: Modifier = Modifier) {
         drawRoundRect(
             topLeft = Offset(x = inverterLineWidth / 2.0f, y = inverterLineWidth / 2.0f),
             size = Size(width = size.width - inverterLineWidth, height = size.height - inverterLineWidth - cablesHeight),
-            color = Color.Black,
+            color = inverterBackground,
             style = Fill,
         )
 
@@ -53,14 +73,14 @@ fun InverterView(modifier: Modifier = Modifier) {
         drawRect(
             topLeft = Offset(x = cablesWidth * 1.5f, y = size.height - cablesHeight - cablesLineWidth),
             size =  Size(width = cablesWidth, height = cablesHeight),
-            color = Color.Black,
+            color = inverterBackground,
             style = Stroke(width = cablesLineWidth)
         )
 
         drawRect(
             topLeft = Offset(x = cablesWidth * 3.5f, y = size.height - cablesHeight - cablesLineWidth),
             size =  Size(width = cablesWidth, height = cablesHeight),
-            color = Color.Black,
+            color = inverterBackground,
             style = Stroke(width = cablesLineWidth)
         )
 
@@ -75,14 +95,18 @@ fun InverterView(modifier: Modifier = Modifier) {
             translate(left = (size.width / 2.2f) + 15f, top = 15f) {
                 draw(
                     size = boltSize,
-                    colorFilter = ColorFilter.tint(Color.White)
+                    colorFilter = ColorFilter.tint(boltTint)
                 )
             }
         }
     }
 }
 
-@Preview(showBackground = true, widthDp = 55, heightDp = 60)
+@Preview(showBackground = true, widthDp = 200, heightDp = 300)
 @Composable fun InverterViewPreview() {
-    InverterView()
+    Column {
+        EnergyStatsTheme(darkTheme = true) {
+            InverterView(modifier = Modifier.width(50.dp).height(65.dp))
+        }
+    }
 }
