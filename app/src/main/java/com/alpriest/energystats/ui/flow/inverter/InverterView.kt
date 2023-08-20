@@ -10,6 +10,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
@@ -29,14 +30,14 @@ fun InverterView(modifier: Modifier = Modifier) {
         val panelY = size.height * 0.2f
         val cornerSize = CornerRadius(x = 8f, y = 8f)
         val inverterLineWidth = 5f
-        val cablesLineWidth = 3f
-        val boltSize = Size(size.width / 3f, size.width / 3f)
+        val cablesLineWidth = 5f
+        val boltSize = Size(size.width / 2.5f, size.width / 2f)
 
         // Inverter box
         drawRoundRect(
             topLeft = Offset(x = inverterLineWidth / 2.0f, y = inverterLineWidth / 2.0f),
             size = Size(width = size.width - inverterLineWidth, height = size.height - inverterLineWidth - cablesHeight),
-            color = Color.White,
+            color = Color.Black,
             style = Fill,
         )
 
@@ -71,9 +72,10 @@ fun InverterView(modifier: Modifier = Modifier) {
         )
 
         with(painter) {
-            translate(left = (size.width / 2f) + 15f, top = 15f) {
+            translate(left = (size.width / 2.2f) + 15f, top = 15f) {
                 draw(
-                    size = boltSize
+                    size = boltSize,
+                    colorFilter = ColorFilter.tint(Color.White)
                 )
             }
         }
