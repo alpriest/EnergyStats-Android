@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -40,7 +42,7 @@ enum class SelfSufficiencyEstimateMode(val value: Int) {
 }
 
 @Composable
-fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
+fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController, modifier: Modifier = Modifier) {
     val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
     val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
@@ -120,6 +122,8 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 append(stringResource(R.string.as_configured_on_foxess_cloud))
             }
         )
+
+        SettingsNavButton(stringResource(R.string.approximations)) { navController.navigate(SettingsScreen.Approximations.name) }
     }
 }
 
@@ -127,6 +131,6 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
 @Composable
 fun DisplaySettingsViewPreview() {
     EnergyStatsTheme(darkTheme = false) {
-        DisplaySettingsView(config = FakeConfigManager(), modifier = Modifier.padding(horizontal = 12.dp))
+        DisplaySettingsView(config = FakeConfigManager(), navController = NavHostController(LocalContext.current), modifier = Modifier.padding(horizontal = 12.dp))
     }
 }

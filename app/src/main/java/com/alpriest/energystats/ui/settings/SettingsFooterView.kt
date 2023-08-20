@@ -90,8 +90,9 @@ fun SettingsFooterView(
                     )
                 }
 
-                SettingsButton(
+                SettingsNavButton(
                     title = stringResource(R.string.logout),
+                    disclosureIcon = null,
                     onClick = onLogout,
                 )
             }

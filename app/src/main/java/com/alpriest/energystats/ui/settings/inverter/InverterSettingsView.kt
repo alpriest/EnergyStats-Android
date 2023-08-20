@@ -12,7 +12,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.SettingsButton
+import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsScreen
@@ -28,7 +28,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
         InverterChoiceView(configManager)
 
         currentDevice.value?.let {
-            SettingsButton(stringResource(R.string.configure_work_mode)) { navController.navigate(SettingsScreen.InverterWorkMode.name) }
+            SettingsNavButton(stringResource(R.string.configure_work_mode)) { navController.navigate(SettingsScreen.InverterWorkMode.name) }
 
             SettingsColumnWithChild {
                 SettingsCheckbox(

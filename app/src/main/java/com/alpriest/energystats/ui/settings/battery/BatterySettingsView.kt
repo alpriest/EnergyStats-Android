@@ -23,7 +23,7 @@ import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.SettingsButton
+import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsButtonList
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
@@ -43,11 +43,11 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 
     SettingsPage {
         SettingsButtonList {
-            SettingsButton(stringResource(R.string.minimum_charge_levels)) {
+            SettingsNavButton(stringResource(R.string.minimum_charge_levels)) {
                 navController.navigate(SettingsScreen.BatterySOC.name)
             }
 
-            SettingsButton(stringResource(R.string.charge_times)) {
+            SettingsNavButton(stringResource(R.string.charge_times)) {
                 navController.navigate(SettingsScreen.BatteryChargeTimes.name)
             }
         }

@@ -22,10 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
@@ -73,13 +69,13 @@ fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Uni
     val coroutineScope = rememberCoroutineScope()
 
     Row {
-        SettingsButton(stringResource(R.string.cancel), modifier = Modifier.weight(1.0f)) {
+        SettingsNavButton(stringResource(R.string.cancel), modifier = Modifier.weight(1.0f)) {
             navController.popBackStack()
         }
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        SettingsButton(stringResource(R.string.save), modifier = Modifier.weight(1.0f)) {
+        SettingsNavButton(stringResource(R.string.save), modifier = Modifier.weight(1.0f)) {
             coroutineScope.launch {
                 onSave()
             }
