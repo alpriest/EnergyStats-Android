@@ -91,20 +91,7 @@ class BatteryScheduleTimes(
     @Composable
     fun BatteryTimePeriodView(timePeriodStream: MutableStateFlow<ChargeTimePeriod>, periodTitle: String) {
         val timePeriod = timePeriodStream.collectAsState().value
-        val errorMessage = remember { mutableStateOf<String?>(null) }
         val textColor = remember { mutableStateOf(Color.Black) }
-        val timeErrorMessage = stringResource(R.string.start_time_must_be_before_the_end_time)
-
-        LaunchedEffect(null) {
-            timePeriodStream.collect {
-                if (it.start.after(it.end)) {
-                    textColor.value = Color.Red
-                } else {
-                    textColor.value = Color.Black
-                }
-                errorMessage.value = if (it.isValid) "" else timeErrorMessage
-            }
-        }
 
         Column {
             SettingsTitleView(periodTitle)
@@ -150,13 +137,6 @@ class BatteryScheduleTimes(
                 },
                 color = colors.primary,
             )
-
-            errorMessage.value?.let {
-                Text(
-                    text = it,
-                    style = TextStyle(color = textColor.value)
-                )
-            }
         }
     }
 

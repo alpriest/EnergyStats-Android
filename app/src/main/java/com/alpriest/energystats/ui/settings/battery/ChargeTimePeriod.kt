@@ -11,9 +11,6 @@ data class ChargeTimePeriod(
     val description: String
         get() = String.format("%02d:%02d to %02d:%02d", start.hour, start.minute, end.hour, end.minute)
 
-    val isValid: Boolean
-        get() = !start.after(end)
-
     fun asChargeTime(): ChargeTime {
         return ChargeTime(
             enableGrid = enabled,
@@ -23,10 +20,6 @@ data class ChargeTimePeriod(
     }
 
     companion object
-}
-
-fun Time.after(end: Time): Boolean {
-    return (hour * 60) + minute > ((end.hour * 60) + end.minute)
 }
 
 fun Time.Companion.zero(): Time {
