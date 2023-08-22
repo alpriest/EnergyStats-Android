@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -77,7 +78,8 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
                 .fillMaxWidth()
         ) {
             Text(
-                text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                color = colors.onSecondary
             )
         }
     }

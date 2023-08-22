@@ -4,6 +4,7 @@ import android.graphics.RectF
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
@@ -76,7 +77,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
                 ),
                 marker = NonDisplayingMarker(
                     viewModel.valuesAtTimeStream, lineComponent(
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = colors.onSurface,
                         thickness = 1.dp
                     )
                 ),

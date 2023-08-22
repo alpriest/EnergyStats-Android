@@ -1,6 +1,9 @@
 package com.alpriest.energystats.ui.settings.inverter
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.End
+import androidx.compose.foundation.layout.Arrangement.SpaceBetween
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
@@ -19,6 +22,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun InverterChoiceView(
@@ -34,48 +38,54 @@ fun InverterChoiceView(
             currentDevice.value?.let {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         "Inverter",
                         color = colors.onSecondary
                     )
-                    Button(onClick = { expanded = !expanded }) {
-                        Text(
-                            it.deviceDisplayName,
-                            fontSize = 12.sp,
-                            color = colors.onSecondary,
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.ArrowDropDown,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
 
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                    ) {
-                        configManager.devices?.forEach { device ->
-                            DropdownMenuItem(onClick = {
-                                expanded = false
-                                configManager.select(device)
-                            }) {
-                                Text(text = device.deviceDisplayName)
+                    Box(contentAlignment = Alignment.TopEnd) {
+                        Button(onClick = { expanded = !expanded }) {
+                            Text(
+                                it.deviceDisplayName,
+                                fontSize = 12.sp,
+                                color = colors.onPrimary,
+                            )
+                            Icon(
+                                imageVector = Icons.Filled.ArrowDropDown,
+                                contentDescription = null,
+                                tint = colors.onPrimary
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            configManager.devices?.forEach { device ->
+                                DropdownMenuItem(onClick = {
+                                    expanded = false
+                                    configManager.select(device)
+                                }) {
+                                    Text(text = device.deviceDisplayName)
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
     }
 }
 
 private val Device.deviceDisplayName: String
     get() {
-        return deviceType ?: "$deviceID Re-login to update"
+        return deviceType?.let {
+            "$it ($plantName)"
+        } ?: "$deviceID Re-login to update"
     }
 
 @Preview(showBackground = true, heightDp = 600, widthDp = 400)
