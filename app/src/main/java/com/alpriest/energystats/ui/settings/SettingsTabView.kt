@@ -193,7 +193,14 @@ fun SettingsTabView(
         Column {
             SettingsNavButton(
                 title = "FoxESS Cloud Status",
+                disclosureIcon = { Icons.Default.OpenInBrowser },
                 onClick = { onOpenUrl("https://monitor.foxesscommunity.com/status/foxess") }
+            )
+
+            SettingsNavButton(
+                title = "FoxESS Community",
+                disclosureIcon = { Icons.Default.OpenInBrowser },
+                onClick = { onOpenUrl("https://www.foxesscommunity.com/") }
             )
 
             SettingsNavButton(
