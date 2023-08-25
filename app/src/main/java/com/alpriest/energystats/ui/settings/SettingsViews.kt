@@ -69,13 +69,20 @@ fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Uni
     val coroutineScope = rememberCoroutineScope()
 
     Row {
-        SettingsNavButton(stringResource(R.string.cancel), modifier = Modifier.weight(1.0f)) {
+        SettingsNavButton(
+            stringResource(R.string.cancel),
+            modifier = Modifier.weight(1.0f),
+            disclosureIcon = null
+        ) {
             navController.popBackStack()
         }
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        SettingsNavButton(stringResource(R.string.save), modifier = Modifier.weight(1.0f)) {
+        SettingsNavButton(
+            stringResource(R.string.save), modifier = Modifier.weight(1.0f),
+            disclosureIcon = null
+        ) {
             coroutineScope.launch {
                 onSave()
             }

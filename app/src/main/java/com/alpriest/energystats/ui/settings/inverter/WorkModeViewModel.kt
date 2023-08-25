@@ -63,9 +63,9 @@ class WorkModeViewModel(
                         workMode = workModeStream.value.asInverterWorkMode().text,
                     )
 
-                    Toast.makeText(context, "Inverter work mode was saved", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, context.getString(R.string.inverter_work_mode_was_saved), Toast.LENGTH_LONG).show()
 
-                    navController.popBackStack()
+                    activityStream.value = null
                 } catch (ex: Exception) {
                     Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
                 }

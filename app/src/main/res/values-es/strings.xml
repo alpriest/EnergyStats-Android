@@ -159,4 +159,7 @@
     <string name="feed_in_kwh_price_per_kwh">kWh de inyección * precio por kWh</string>
     <string name="as_configured_on_foxess_cloud">según la configuración en la nube de FoxESS.</string>
     <string name="show_values_in_watts">Mostrar valores en vatios</string>
+    <string name="battery_charge_schedule_was_saved">Se ha guardado el horario de carga de la batería</string>
+    <string name="battery_soc_changes_were_saved">Los cambios en el SOC de la batería han sido guardados</string>
+    <string name="inverter_work_mode_was_saved">El modo de trabajo del inversor se ha guardado</string>
 </resources>

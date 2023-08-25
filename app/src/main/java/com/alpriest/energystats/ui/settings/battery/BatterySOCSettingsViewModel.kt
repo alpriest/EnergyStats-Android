@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.battery
 
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -60,7 +61,9 @@ class BatterySOCSettingsViewModel(
                     deviceSN = deviceSN
                 )
 
-                navController.popBackStack()
+                Toast.makeText(context, context.getString(R.string.battery_soc_changes_were_saved), Toast.LENGTH_LONG).show()
+
+                activityStream.value = null
             } ?: run {
                 activityStream.value = null
             }

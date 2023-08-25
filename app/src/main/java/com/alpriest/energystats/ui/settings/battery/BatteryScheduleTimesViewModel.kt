@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.battery
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -132,7 +133,9 @@ class BatteryScheduleTimesViewModel(
                     times = times
                 )
 
-                navController.popBackStack()
+                Toast.makeText(context, context.getString(R.string.battery_charge_schedule_was_saved), Toast.LENGTH_LONG).show()
+
+                activityStream.value = null
             } ?: run {
                 activityStream.value = null
             }

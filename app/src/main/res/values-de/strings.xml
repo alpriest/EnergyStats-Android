@@ -159,4 +159,7 @@
     <string name="feed_in_kwh_price_per_kwh">EinspeisekWh * Preis pro kWh</string>
     <string name="as_configured_on_foxess_cloud">wie in der FoxESS Cloud konfiguriert.</string>
     <string name="show_values_in_watts">Werte in Watt anzeigen</string>
+    <string name="battery_charge_schedule_was_saved">Der Batterieladezeitplan wurde gespeichert</string>
+    <string name="battery_soc_changes_were_saved">Batterie-SOC-Änderungen wurden gespeichert</string>
+    <string name="inverter_work_mode_was_saved">Der Arbeitsmodus des Wechselrichters wurde gespeichert</string>
 </resources>
