@@ -34,7 +34,6 @@ import java.time.format.FormatStyle
 fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
-    val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
     val boundsValues = viewModel.boundsStream.collectAsState().value
     val appTheme = themeStream.collectAsState().value
 
@@ -67,20 +66,6 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
                 val graphBounds = boundsValue?.let { GraphBounds(it.min,it.max) }
                 ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, null, graphBounds)
             }
-        }
-    }
-
-    selectedDateTime?.let {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(top = 24.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                color = colors.onSecondary
-            )
         }
     }
 }

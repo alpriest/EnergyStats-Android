@@ -18,7 +18,7 @@ class NetworkDevice(
 )
 
 data class DeviceListRequest(
-    val pageSize: Int = 10,
+    val pageSize: Int = 20,
     val currentPage: Int = 1,
     val total: Int = 0,
     val condition: Condition = Condition()

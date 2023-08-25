@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
@@ -36,12 +37,16 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
     val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
     val hasData = viewModel.hasDataStream.collectAsState().value
+    val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
+    val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
 
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true
@@ -69,6 +74,22 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
             ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
             if (hasData) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth()
+                ) {
+                    selectedDateTime?.let {
+                        androidx.compose.material3.Text(
+                            text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                            color = MaterialTheme.colors.onSecondary
+                        )
+                    } ?: run {
+                        Text(stringResource(R.string.touch_the_graph_to_see_values_at_that_time))
+                    }
+                }
+
                 ParameterGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
                 ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
