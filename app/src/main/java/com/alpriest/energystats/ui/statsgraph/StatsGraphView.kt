@@ -39,7 +39,6 @@ import java.util.*
 fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val chartColors = viewModel.chartColorsStream.collectAsState().value
-    val maxY = viewModel.maxYStream.collectAsState().value
 
     Column(modifier = modifier.fillMaxWidth()) {
         ProvideChartStyle(chartStyle(chartColors)) {

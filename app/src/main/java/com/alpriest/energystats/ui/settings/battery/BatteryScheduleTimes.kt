@@ -60,7 +60,6 @@ class BatteryScheduleTimes(
             )
         )
     ) {
-        val coroutineScope = rememberCoroutineScope()
         val chargeSummary = viewModel.summaryStream.collectAsState().value
         val isActive = viewModel.activityStream.collectAsState().value
 

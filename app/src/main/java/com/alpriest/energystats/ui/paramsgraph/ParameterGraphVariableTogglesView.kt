@@ -53,7 +53,11 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
             }
 
             val id = LocalContext.current.resources.getIdentifier("rawvariable_${it.type.variable.lowercase()}", "string", LocalContext.current.applicationInfo.packageName)
-            val description: String = if (id > 0) { stringResource(id) } else { it.type.variable }
+            val description: String = if (id > 0) {
+                stringResource(id)
+            } else {
+                it.type.variable
+            }
 
             if (selectedValue != null) {
                 val formattedValue = when (it.type.unit) {
@@ -63,7 +67,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
                 ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, formattedValue, null)
             } else {
                 val boundsValue = boundsValues.firstOrNull { entry -> entry.type == it.type }
-                val graphBounds = boundsValue?.let { GraphBounds(it.min,it.max) }
+                val graphBounds = boundsValue?.let { GraphBounds(it.min, it.max, it.now) }
                 ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, null, graphBounds)
             }
         }

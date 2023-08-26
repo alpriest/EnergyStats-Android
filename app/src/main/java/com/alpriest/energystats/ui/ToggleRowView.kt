@@ -28,7 +28,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 data class GraphBounds(
     val min: Float,
-    val max: Float
+    val max: Float,
+    val now: Float
 )
 
 @Composable
@@ -111,7 +112,8 @@ fun <T : GraphVariable> ToggleRowView(
                     }
 
                     Column(
-                        horizontalAlignment = Alignment.End
+                        horizontalAlignment = Alignment.End,
+                        modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
                             it.max.toDouble().rounded(2).toString(),
@@ -120,6 +122,20 @@ fun <T : GraphVariable> ToggleRowView(
                         )
                         Text(
                             "MAX",
+                            fontSize = 8.sp
+                        )
+                    }
+
+                    Column(
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        Text(
+                            it.now.toDouble().rounded(2).toString(),
+                            color = textColor,
+                            fontSize = fontSize,
+                        )
+                        Text(
+                            "NOW",
                             fontSize = 8.sp
                         )
                     }

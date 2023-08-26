@@ -25,5 +25,6 @@ data class ParameterGraphVariable(
 data class ParameterGraphBounds(
     val type: RawVariable,
     val min: Float,
-    val max: Float
+    val max: Float,
+    val now: Float
 )

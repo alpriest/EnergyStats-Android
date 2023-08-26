@@ -143,7 +143,8 @@ class ParametersGraphTabViewModel(
         boundsStream.value = entries.map { entryList ->
             val max = entryList.maxBy { it.y }.y
             val min = entryList.minBy { it.y }.y
-            ParameterGraphBounds(entryList.first().type, min, max)
+
+            ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
         }
 
         chartColorsStream.value = grouped
