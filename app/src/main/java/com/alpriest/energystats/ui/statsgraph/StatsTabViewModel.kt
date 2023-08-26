@@ -23,7 +23,7 @@ import java.util.ArrayList
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
-class StatsGraphTabViewModel(
+class StatsTabViewModel(
     val configManager: ConfigManaging,
     val networking: Networking,
     val onWriteTempFile: (String, String) -> Uri?
@@ -48,6 +48,7 @@ class StatsGraphTabViewModel(
     var netSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
     var absoluteSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
     var homeUsageStream = MutableStateFlow<Double?>(null)
+    var solarUsageStream = MutableStateFlow<Double?>(null)
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
@@ -248,6 +249,7 @@ class StatsGraphTabViewModel(
         }
 
         homeUsageStream.value = loads
+        solarUsageStream.value = loads - grid
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
             loads,

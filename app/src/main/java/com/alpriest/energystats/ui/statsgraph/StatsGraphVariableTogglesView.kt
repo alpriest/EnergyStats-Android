@@ -9,9 +9,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.Wh
-import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.kWh
-import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
@@ -20,7 +18,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val totals = viewModel.totalsStream.collectAsState()
     val theme = themeStream.collectAsState().value
@@ -62,7 +60,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsGraphTabViewModel, themeStream
 @Preview(widthDp = 340)
 fun StatsGraphVariableTogglesViewPreview() {
     StatsGraphVariableTogglesView(
-        StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }),
+        StatsTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }),
         themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false))
     )
 }

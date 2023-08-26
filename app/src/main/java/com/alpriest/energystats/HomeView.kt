@@ -35,8 +35,8 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabView
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
-import com.alpriest.energystats.ui.statsgraph.StatsGraphTabView
-import com.alpriest.energystats.ui.statsgraph.StatsGraphTabViewModel
+import com.alpriest.energystats.ui.statsgraph.StatsTabView
+import com.alpriest.energystats.ui.statsgraph.StatsTabViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -87,7 +87,7 @@ fun HomeView(
             ) { page ->
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, themeStream).Content(themeStream = themeStream)
-                    1 -> StatsGraphTabView(StatsGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
+                    1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     3 -> NavigableSettingsView(
                         config = configManager,

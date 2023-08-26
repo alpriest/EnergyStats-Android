@@ -40,7 +40,7 @@ import com.alpriest.energystats.ui.theme.LightApproximationHeader
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: StatsGraphTabViewModel) {
+fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: StatsTabViewModel) {
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
     val selfSufficiency = when (appTheme.selfSufficiencyEstimateMode) {
@@ -49,28 +49,29 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
         SelfSufficiencyEstimateMode.Absolute -> viewModel.absoluteSelfSufficiencyEstimationStream.collectAsState().value
     }
     val homeUsage = viewModel.homeUsageStream.collectAsState().value
+    val solarUsage = viewModel.solarUsageStream.collectAsState().value
 
-    if (appTheme.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && selfSufficiency != null && homeUsage != null) {
-        Box(modifier) {
+    Box(modifier) {
+        Column(
+            Modifier
+                .background(
+                    colors.ApproximationBackground,
+                    shape = RoundedCornerShape(size = 8.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = colors.ApproximationHeader,
+                    shape = RoundedCornerShape(size = 8.dp)
+                )
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
             Column(
                 Modifier
-                    .background(
-                        colors.ApproximationBackground,
-                        shape = RoundedCornerShape(size = 8.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = colors.ApproximationHeader,
-                        shape = RoundedCornerShape(size = 8.dp)
-                    )
+                    .padding(16.dp)
                     .fillMaxWidth()
-                    .fillMaxHeight()
             ) {
-                Column(
-                    Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
+                if (appTheme.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && selfSufficiency != null) {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -84,7 +85,9 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                             fontSize = fontSize
                         )
                     }
+                }
 
+                homeUsage?.let {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -94,25 +97,41 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                             fontSize = fontSize
                         )
                         Text(
-                            if (appTheme.showValuesInWatts) homeUsage.Wh(decimalPlaces = appTheme.decimalPlaces) else homeUsage.kWh(decimalPlaces = appTheme.decimalPlaces),
+                            if (appTheme.showValuesInWatts) it.Wh(decimalPlaces = appTheme.decimalPlaces) else it.kWh(decimalPlaces = appTheme.decimalPlaces),
+                            fontSize = fontSize
+                        )
+                    }
+                }
+
+                solarUsage?.let {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            "Solar consumption",
+                            fontSize = fontSize
+                        )
+                        Text(
+                            if (appTheme.showValuesInWatts) it.Wh(decimalPlaces = appTheme.decimalPlaces) else it.kWh(decimalPlaces = appTheme.decimalPlaces),
                             fontSize = fontSize
                         )
                     }
                 }
             }
-
-            Text(
-                stringResource(R.string.approximations),
-                Modifier
-                    .offset(x = 8.dp, y = (-11).dp)
-                    .background(
-                        colors.ApproximationHeader,
-                        shape = RoundedCornerShape(size = 4.dp)
-                    )
-                    .padding(horizontal = 2.dp, vertical = 1.dp),
-                color = ApproximationHeaderText,
-            )
         }
+
+        Text(
+            stringResource(R.string.approximations),
+            Modifier
+                .offset(x = 8.dp, y = (-11).dp)
+                .background(
+                    colors.ApproximationHeader,
+                    shape = RoundedCornerShape(size = 4.dp)
+                )
+                .padding(horizontal = 2.dp, vertical = 1.dp),
+            color = ApproximationHeaderText,
+        )
     }
 }
 
@@ -121,7 +140,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
 @Composable
 fun StatsApproximationViewPreview() {
     EnergyStatsTheme() {
-        StatsApproximationView(themeStream = MutableStateFlow(AppTheme.preview()), viewModel = StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null }, )
+        StatsApproximationView(themeStream = MutableStateFlow(AppTheme.preview()), viewModel = StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null })
     }
 }
 

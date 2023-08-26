@@ -17,10 +17,8 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
-import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
@@ -29,14 +27,12 @@ import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
-import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
-import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modifier) {
+fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val chartColors = viewModel.chartColorsStream.collectAsState().value
 
@@ -73,7 +69,7 @@ fun StatsGraphView(viewModel: StatsGraphTabViewModel, modifier: Modifier = Modif
 @Composable
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
-    StatsGraphView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }))
+    StatsGraphView(StatsTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }))
 }
 
 class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val displayMode: StatsDisplayMode) :

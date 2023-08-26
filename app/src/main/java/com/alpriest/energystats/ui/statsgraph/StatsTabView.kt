@@ -52,7 +52,7 @@ sealed class StatsDisplayMode {
 }
 
 @Composable
-fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
+fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
     val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
 
@@ -115,5 +115,5 @@ fun StatsGraphTabView(viewModel: StatsGraphTabViewModel, themeStream: MutableSta
 @Preview(widthDp = 400, heightDp = 800)
 @Composable
 fun StatsGraphTabViewPreview() {
-    StatsGraphTabView(StatsGraphTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null }, themeStream = MutableStateFlow(AppTheme.preview()))
+    StatsTabView(StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null }, themeStream = MutableStateFlow(AppTheme.preview()))
 }
