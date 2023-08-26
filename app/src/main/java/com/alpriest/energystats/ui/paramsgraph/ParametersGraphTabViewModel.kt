@@ -53,8 +53,8 @@ class ParametersGraphTabViewModel(
                             if (variable != null) {
                                 return@mapNotNull ParameterGraphVariable(
                                     variable,
-                                    isSelected = DefaultGraphVariables.contains(variable.variable),
-                                    enabled = DefaultGraphVariables.contains(variable.variable),
+                                    isSelected = defaultGraphVariables().contains(variable.variable),
+                                    enabled = defaultGraphVariables().contains(variable.variable),
                                 )
                             } else {
                                 return@mapNotNull null
@@ -206,14 +206,8 @@ class ParametersGraphTabViewModel(
         }
     }
 
-    companion object {
-        val DefaultGraphVariables = listOf(
-            "generationPower",
-            "batChargePower",
-            "batDischargePower",
-            "feedinPower",
-            "gridConsumptionPower"
-        )
+    fun defaultGraphVariables(): List<String> {
+        return ParameterGraphVariableChooserViewModel.DefaultGraphVariables
     }
 }
 

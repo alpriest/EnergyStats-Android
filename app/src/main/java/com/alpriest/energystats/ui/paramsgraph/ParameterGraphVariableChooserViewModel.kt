@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariableChooserViewModel.Companion.DefaultGraphVariables
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +14,7 @@ class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphV
     }
 
     fun chooseDefaultVariables() {
-        val newVariables = ParametersGraphTabViewModel.DefaultGraphVariables
+        val newVariables = DefaultGraphVariables
         select(newVariables)
     }
 
@@ -46,12 +47,14 @@ class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphV
     }
 
     fun chooseBatteryVariables() {
-        select(listOf(
-            "batTemperature",
-            "batVolt",
-            "batCurrent",
-            "SoC"
-        ))
+        select(
+            listOf(
+                "batTemperature",
+                "batVolt",
+                "batCurrent",
+                "SoC"
+            )
+        )
     }
 
     private fun select(newVariables: List<String>) {
@@ -69,5 +72,15 @@ class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphV
 
             return@map it
         }
+    }
+
+    companion object {
+        val DefaultGraphVariables = listOf(
+            "generationPower",
+            "batChargePower",
+            "batDischargePower",
+            "feedinPower",
+            "gridConsumptionPower"
+        )
     }
 }
