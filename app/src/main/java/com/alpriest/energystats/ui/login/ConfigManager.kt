@@ -265,6 +265,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         }
     }
 
+    override var selectedParameterGraphVariables: List<String>
+        get() = config.selectedParameterGraphVariables
+        set(value) {
+            config.selectedParameterGraphVariables = value
+        }
+
     init {
         currentDevice.onEach {
             minSOC.value = it?.battery?.minSOC?.toDouble()

@@ -18,6 +18,7 @@ class FakeConfigStore(
     override var selfSufficiencyEstimateMode: Int = 0,
     override var showEstimatedEarnings: Boolean = false,
     override var showValuesInWatts: Boolean = false,
-    override var showInverterTemperatures: Boolean = false
+    override var showInverterTemperatures: Boolean = false,
+    override var selectedParameterGraphVariables: List<String> = listOf()
 ) : ConfigInterface {
 }

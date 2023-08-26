@@ -53,8 +53,8 @@ class ParametersGraphTabViewModel(
                             if (variable != null) {
                                 return@mapNotNull ParameterGraphVariable(
                                     variable,
-                                    isSelected = defaultGraphVariables().contains(variable.variable),
-                                    enabled = defaultGraphVariables().contains(variable.variable),
+                                    isSelected = selectedGraphVariables().contains(variable.variable),
+                                    enabled = selectedGraphVariables().contains(variable.variable),
                                 )
                             } else {
                                 return@mapNotNull null
@@ -160,6 +160,7 @@ class ParametersGraphTabViewModel(
         }
 
         prepareExport(rawData, displayModeStream.value)
+        storeVariables()
     }
 
     private fun prepareExport(rawData: List<ParametersGraphValue>, displayMode: ParametersDisplayMode) {
@@ -206,8 +207,16 @@ class ParametersGraphTabViewModel(
         }
     }
 
-    fun defaultGraphVariables(): List<String> {
-        return ParameterGraphVariableChooserViewModel.DefaultGraphVariables
+    fun selectedGraphVariables(): List<String> {
+        if (configManager.selectedParameterGraphVariables.isEmpty()) {
+            return ParameterGraphVariableChooserViewModel.DefaultGraphVariables
+        } else {
+            return configManager.selectedParameterGraphVariables
+        }
+    }
+
+    private fun storeVariables() {
+        configManager.selectedParameterGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type.variable }
     }
 }
 

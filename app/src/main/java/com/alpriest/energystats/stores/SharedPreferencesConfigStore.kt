@@ -2,6 +2,8 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
     ConfigInterface {
@@ -22,7 +24,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SELF_SUFFICIENCY_ESTIMATE_MODE,
         SHOW_ESTIMATED_EARNINGS,
         SHOW_VALUES_IN_WATTS,
-        SHOW_INVERTER_TEMPERATURES
+        SHOW_INVERTER_TEMPERATURES,
+        SELECTED_PARAMETER_GRAPH_VARIABLES
     }
 
     override var showTotalYield: Boolean
@@ -150,6 +153,18 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOW_INVERTER_TEMPERATURES.name, value)
+            editor.apply()
+        }
+
+    override var selectedParameterGraphVariables: List<String>
+        get() {
+            val variables = sharedPreferences.getString(SharedPreferenceKey.SELECTED_PARAMETER_GRAPH_VARIABLES.name, Gson().toJson(listOf<String>()))
+            return Gson().fromJson(variables, object: TypeToken<List<String>>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceKey.SELECTED_PARAMETER_GRAPH_VARIABLES.name, jsonString)
             editor.apply()
         }
 }

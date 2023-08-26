@@ -17,4 +17,5 @@ interface ConfigInterface {
     var showEstimatedEarnings: Boolean
     var showValuesInWatts: Boolean
     var showInverterTemperatures: Boolean
+    var selectedParameterGraphVariables: List<String>
 }

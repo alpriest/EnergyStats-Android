@@ -36,4 +36,5 @@ interface ConfigManaging {
     fun select(device: Device)
     var appVersion: String
     var showInverterTemperatures: Boolean
+    var selectedParameterGraphVariables: List<String>
 }
