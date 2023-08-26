@@ -144,8 +144,7 @@ class PowerFlowTabViewModel(
                     variable("gridConsumptionPower"),
                     variable("generationPower"),
                     variable("loadsPower"),
-                    variable("batChargePower"),
-                    variable("batDischargePower")
+                    variable("pvPower")
                 )
 
                 if (configManager.showInverterTemperatures) {

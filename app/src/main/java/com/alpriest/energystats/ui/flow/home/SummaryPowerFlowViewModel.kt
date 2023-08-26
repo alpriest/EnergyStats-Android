@@ -33,14 +33,7 @@ class SummaryPowerFlowViewModel(
     val hasBattery: Boolean,
     val earnings: String
 ) : ViewModel() {
-    val solar: Double = java.lang.Double.max(
-        0.0,
-        raw.currentValue("loadsPower") + raw.currentValue("batChargePower") + raw.currentValue("feedInPower") - raw.currentValue(
-            "gridConsumptionPower"
-        ) - raw.currentValue(
-            "batDischargePower"
-        )
-    )
+    val solar: Double = raw.currentValue("pvPower")
     val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
     val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
