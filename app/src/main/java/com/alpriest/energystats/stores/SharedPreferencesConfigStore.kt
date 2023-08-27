@@ -25,7 +25,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_ESTIMATED_EARNINGS,
         SHOW_VALUES_IN_WATTS,
         SHOW_INVERTER_TEMPERATURES,
-        SELECTED_PARAMETER_GRAPH_VARIABLES
+        SELECTED_PARAMETER_GRAPH_VARIABLES,
+        SHOW_INVERTER_ICON
     }
 
     override var showTotalYield: Boolean
@@ -33,6 +34,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOW_TOTAL_YIELD.name, value)
+            editor.apply()
+        }
+
+    override var showInverterIcon: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_INVERTER_ICON.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_INVERTER_ICON.name, value)
             editor.apply()
         }
 

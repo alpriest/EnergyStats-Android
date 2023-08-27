@@ -18,4 +18,5 @@ interface ConfigInterface {
     var showValuesInWatts: Boolean
     var showInverterTemperatures: Boolean
     var selectedParameterGraphVariables: List<String>
+    var showInverterIcon: Boolean
 }

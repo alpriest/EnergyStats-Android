@@ -23,6 +23,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController) {
     val currentDevice = configManager.currentDevice.collectAsState()
     val showInverterTemperaturesState = rememberSaveable { mutableStateOf(configManager.showInverterTemperatures) }
+    val showInverterIconState = rememberSaveable { mutableStateOf(configManager.showInverterIcon) }
 
     SettingsPage {
         InverterChoiceView(configManager)
@@ -35,6 +36,12 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                     title = "Show inverter temperatures",
                     state = showInverterTemperaturesState,
                     onConfigUpdate = { configManager.showInverterTemperatures = it }
+                )
+
+                SettingsCheckbox(
+                    title = "Show inverter icon",
+                    state = showInverterIconState,
+                    onConfigUpdate = { configManager.showInverterIcon = it }
                 )
             }
 

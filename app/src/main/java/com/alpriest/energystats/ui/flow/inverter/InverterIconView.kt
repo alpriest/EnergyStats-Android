@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.flow.inverter
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -23,9 +22,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.ui.theme.DarkApproximationHeader
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.LightApproximationHeader
 
 val Colors.InverterBackground: Color
     @Composable
@@ -36,7 +33,7 @@ val Colors.BoltTint: Color
     get() = if (isSystemInDarkTheme()) Color.Black else Color.White
 
 @Composable
-fun InverterView(modifier: Modifier = Modifier) {
+fun InverterIconView(modifier: Modifier = Modifier) {
     val painter = rememberVectorPainter(Icons.Default.ElectricBolt)
     val inverterBackground = colors.InverterBackground
     val boltTint = colors.BoltTint
@@ -106,7 +103,7 @@ fun InverterView(modifier: Modifier = Modifier) {
 @Composable fun InverterViewPreview() {
     Column {
         EnergyStatsTheme(darkTheme = true) {
-            InverterView(modifier = Modifier.width(50.dp).height(65.dp))
+            InverterIconView(modifier = Modifier.width(50.dp).height(65.dp))
         }
     }
 }

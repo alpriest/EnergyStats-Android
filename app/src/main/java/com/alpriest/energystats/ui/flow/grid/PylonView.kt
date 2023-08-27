@@ -78,7 +78,7 @@ fun PylonView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modi
 @Preview(showBackground = true)
 @Composable
 fun PylonViewPreview() {
-    val pylonHeight = 80.dp
+    val pylonHeight = 45.dp
 
     EnergyStatsTheme {
         Box(

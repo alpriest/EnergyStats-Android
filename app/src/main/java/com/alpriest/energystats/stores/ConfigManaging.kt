@@ -37,4 +37,5 @@ interface ConfigManaging {
     var appVersion: String
     var showInverterTemperatures: Boolean
     var selectedParameterGraphVariables: List<String>
+    var showInverterIcon: Boolean
 }

@@ -23,7 +23,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
             showEstimatedEarnings = config.showEstimatedEarnings,
             showValuesInWatts = config.showValuesInWatts,
-            showInverterTemperatures = config.showInverterTemperatures
+            showInverterTemperatures = config.showInverterTemperatures,
+            showInverterIcon = config.showInverterIcon
         )
     )
 
@@ -131,6 +132,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showUsableBatteryOnly = value
             themeStream.value = themeStream.value.copy(showUsableBatteryOnly = showUsableBatteryOnly)
+        }
+
+    override var showInverterIcon: Boolean
+        get() = config.showInverterIcon
+        set(value) {
+            config.showInverterIcon = value
+            themeStream.value = themeStream.value.copy(showInverterIcon = showInverterIcon)
         }
 
     final override var devices: List<Device>?

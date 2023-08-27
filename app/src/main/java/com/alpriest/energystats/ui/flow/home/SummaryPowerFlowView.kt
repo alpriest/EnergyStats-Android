@@ -1,10 +1,7 @@
 package com.alpriest.energystats.ui.flow.home
 
-import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.House
 import androidx.compose.runtime.Composable
@@ -13,10 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
@@ -26,8 +21,6 @@ import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
-import com.alpriest.energystats.ui.flow.battery.asTemperature
-import com.alpriest.energystats.ui.flow.inverter.InverterView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +34,6 @@ fun SummaryPowerFlowView(
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
-    val appTheme = themeStream.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,68 +81,7 @@ fun SummaryPowerFlowView(
                 )
             }
 
-            if (appTheme.showInverterTemperatures) {
-                summaryPowerFlowViewModel.inverterViewModel?.let {
-                    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .offset(y = (-24).dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            InverterView(
-                                modifier = Modifier
-                                    .width(43.dp)
-                                    .height(50.dp)
-                                    .padding(bottom = 4.dp)
-                                    .background(colors.background)
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .background(colors.background)
-                                    .padding(4.dp),
-                                text = it.name
-                            )
-
-                            Row(modifier = Modifier.background(colors.background)) {
-                                InverterTemperatures(it)
-                            }
-                        }
-                    } else {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .offset(y = (-12.dp))
-                                .background(colors.background)
-                                .padding(2.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Row {
-                                InverterTemperatures(it)
-
-                                Text(
-                                    it.name,
-                                    modifier = Modifier.padding(start = 12.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-            } else {
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .offset(y = (-24).dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    InverterView(
-                        modifier = Modifier
-                            .width(43.dp)
-                            .height(50.dp)
-                            .padding(bottom = 4.dp)
-                    )
-                }
-            }
+            InverterView(themeStream, summaryPowerFlowViewModel)
         }
 
         Row {
@@ -193,34 +124,6 @@ fun SummaryPowerFlowView(
         }
 
         UpdateMessage(viewModel = powerFlowViewModel)
-    }
-}
-
-@Composable
-private fun InverterTemperatures(viewModel: InverterViewModel) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(end = 4.dp)
-    ) {
-        Text(
-            viewModel.temperatures.ambient.asTemperature(),
-            fontSize = 12.sp
-        )
-        Text(
-            "INTERNAL",
-            fontSize = 8.sp
-        )
-    }
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            viewModel.temperatures.inverter.asTemperature(),
-            fontSize = 12.sp
-        )
-        Text(
-            "EXTERNAL",
-            fontSize = 8.sp
-        )
     }
 }
 

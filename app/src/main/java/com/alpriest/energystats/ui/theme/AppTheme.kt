@@ -18,7 +18,8 @@ data class AppTheme(
     val selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode,
     val showEstimatedEarnings: Boolean,
     val showValuesInWatts: Boolean,
-    val showInverterTemperatures: Boolean
+    val showInverterTemperatures: Boolean,
+    val showInverterIcon: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
