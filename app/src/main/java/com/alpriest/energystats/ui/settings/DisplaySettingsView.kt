@@ -76,7 +76,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         )
 
         SettingsCheckbox(
-            title = "Show home usage total",
+            title = stringResource(R.string.show_home_usage_total),
             state = showHomeTotalState,
             onConfigUpdate = { config.showHomeTotal = it }
         )

@@ -163,4 +163,5 @@
     <string name="battery_soc_changes_were_saved">Battery SOC changes were saved</string>
     <string name="inverter_work_mode_was_saved">Inverter work mode was saved</string>
     <string name="touch_the_graph_to_see_values_at_that_time">Touch the graph to see values at that time</string>
+    <string name="show_home_usage_total">Show home usage total</string>
 </resources>

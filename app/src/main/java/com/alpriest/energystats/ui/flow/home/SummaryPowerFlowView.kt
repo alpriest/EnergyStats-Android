@@ -50,6 +50,7 @@ fun SummaryPowerFlowView(
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val showHomeTotal = themeStream.collectAsState().value.showHomeTotal
     val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
+    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -138,7 +139,7 @@ fun SummaryPowerFlowView(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
-                            summaryPowerFlowViewModel.homeTotal.kWh(2), // TODO
+                            summaryPowerFlowViewModel.homeTotal.kWh(decimalPlaces),
                             fontSize = fontSize,
                         )
                         Text(
