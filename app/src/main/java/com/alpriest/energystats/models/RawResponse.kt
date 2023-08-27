@@ -1,7 +1,6 @@
 package com.alpriest.energystats.models
 
-import java.time.LocalDateTime
-import java.util.*
+import java.util.Calendar
 
 data class RawRequest(
     val deviceID: String,

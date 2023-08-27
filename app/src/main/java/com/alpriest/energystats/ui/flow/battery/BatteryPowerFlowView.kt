@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -67,7 +68,6 @@ fun BatteryIconView(
             modifier = Modifier
                 .height(iconHeight)
                 .width(iconHeight * 1.25f)
-                .padding(5.dp)
         )
 
         if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {

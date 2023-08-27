@@ -50,6 +50,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
     val showEstimatedEarningsState = rememberSaveable { mutableStateOf(config.showEstimatedEarnings) }
     val showValuesInWattsState = rememberSaveable { mutableStateOf(config.showValuesInWatts) }
+    val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
 
     SettingsColumnWithChild(
         modifier = modifier
@@ -72,6 +73,12 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             title = stringResource(R.string.show_total_yield),
             state = showTotalYieldState,
             onConfigUpdate = { config.showTotalYield = it }
+        )
+
+        SettingsCheckbox(
+            title = "Show home usage total",
+            state = showHomeTotalState,
+            onConfigUpdate = { config.showHomeTotal = it }
         )
 
         SettingsCheckbox(

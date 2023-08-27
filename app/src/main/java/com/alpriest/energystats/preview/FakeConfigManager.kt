@@ -36,6 +36,7 @@ class FakeConfigManager : ConfigManaging {
     override var showInverterTemperatures: Boolean = true
     override var selectedParameterGraphVariables: List<String> = listOf()
     override var showInverterIcon: Boolean = true
+    override var showHomeTotal: Boolean = true
     override var devices: List<Device>? = listOf(
         Device(
             plantName = "plant 1",

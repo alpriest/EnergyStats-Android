@@ -26,9 +26,9 @@ fun PylonView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modi
         val vSize: Float = size.height * 0.1f
 
         val leftLegBottom = Offset(x = hSize * 2.5f, y = size.height)
-        val leftLegTop = Offset(x = hSize * 4, y = 0f)
+        val leftLegTop = Offset(x = hSize * 4, y = 0f - (strokeWidth / 2.0f))
         val rightLegBottom = Offset(x = hSize * 7.5f, y = size.height)
-        val rightLegTop = Offset(x = hSize * 6.0f, y = 0f)
+        val rightLegTop = Offset(x = hSize * 6.0f, y = 0f - (strokeWidth / 2.0f))
 
         drawLine(
             color = color,

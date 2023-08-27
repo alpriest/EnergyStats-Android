@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawDataStoring
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -17,6 +17,7 @@ import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageSt
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.ui.settings.RefreshFrequency
+import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +32,6 @@ import java.time.LocalDateTime
 import java.util.Currency
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
-import kotlin.system.measureTimeMillis
 
 class PowerFlowTabViewModel(
     private val network: Networking,
@@ -162,6 +162,13 @@ class PowerFlowTabViewModel(
                     QueryDate()
                 )
 
+                val report = network.fetchReport(
+                    currentDevice.deviceID,
+                    listOf(ReportVariable.Loads),
+                    QueryDate(),
+                    ReportType.month
+                )
+
                 val battery: BatteryViewModel = if (currentDevice.battery != null) {
                     val battery = network.fetchBattery(deviceID = currentDevice.deviceID)
                     BatteryViewModel(battery)
@@ -178,7 +185,8 @@ class PowerFlowTabViewModel(
                     todaysGeneration = earnings.today.generation,
                     batteryResidual = battery.residual,
                     hasBattery = battery.hasBattery,
-                    earnings = makeEarnings(earnings)
+                    earnings = makeEarnings(earnings),
+                    report = report
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

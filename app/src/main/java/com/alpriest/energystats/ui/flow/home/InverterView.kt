@@ -26,12 +26,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun InverterView(
     themeStream: MutableStateFlow<AppTheme>,
-    summaryPowerFlowViewModel: SummaryPowerFlowViewModel
+    homePowerFlowViewModel: SummaryPowerFlowViewModel
 ) {
     val appTheme = themeStream.collectAsState().value
 
     if (appTheme.showInverterTemperatures) {
-        summaryPowerFlowViewModel.inverterViewModel?.let {
+        homePowerFlowViewModel.inverterViewModel?.let {
             if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 Column(
                     modifier = Modifier

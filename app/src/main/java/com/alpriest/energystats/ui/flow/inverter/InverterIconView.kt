@@ -1,11 +1,9 @@
 package com.alpriest.energystats.ui.flow.inverter
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ElectricBolt
@@ -24,19 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
-val Colors.InverterBackground: Color
-    @Composable
-    get() = if (isSystemInDarkTheme()) Color.White else Color.Black
-
-val Colors.BoltTint: Color
-    @Composable
-    get() = if (isSystemInDarkTheme()) Color.Black else Color.White
-
 @Composable
 fun InverterIconView(modifier: Modifier = Modifier) {
     val painter = rememberVectorPainter(Icons.Default.ElectricBolt)
-    val inverterBackground = colors.InverterBackground
-    val boltTint = colors.BoltTint
+    val inverterBackground = colors.onBackground
+    val boltTint = colors.background
 
     Canvas(
         modifier = modifier
@@ -61,7 +51,7 @@ fun InverterIconView(modifier: Modifier = Modifier) {
         drawRoundRect(
             topLeft = Offset(x = inverterLineWidth / 2.0f, y = inverterLineWidth / 2.0f),
             size = Size(width = size.width - inverterLineWidth, height = size.height - inverterLineWidth - cablesHeight),
-            color = Color.Black,
+            color = inverterBackground,
             style = Stroke(width = inverterLineWidth),
             cornerRadius = cornerSize
         )
@@ -99,10 +89,10 @@ fun InverterIconView(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 200, heightDp = 300)
+@Preview(showBackground = false, widthDp = 200, heightDp = 300)
 @Composable fun InverterViewPreview() {
     Column {
-        EnergyStatsTheme(darkTheme = true) {
+        EnergyStatsTheme(darkTheme = false) {
             InverterIconView(modifier = Modifier.width(50.dp).height(65.dp))
         }
     }

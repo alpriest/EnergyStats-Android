@@ -19,7 +19,8 @@ data class AppTheme(
     val showEstimatedEarnings: Boolean,
     val showValuesInWatts: Boolean,
     val showInverterTemperatures: Boolean,
-    val showInverterIcon: Boolean
+    val showInverterIcon: Boolean,
+    val showHomeTotal: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

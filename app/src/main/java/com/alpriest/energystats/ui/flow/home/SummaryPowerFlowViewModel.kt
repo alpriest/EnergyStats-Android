@@ -3,11 +3,14 @@ package com.alpriest.energystats.ui.flow.home
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
+import com.alpriest.energystats.models.ReportData
+import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.Calendar
 import java.util.Locale
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -31,8 +34,10 @@ class SummaryPowerFlowViewModel(
     val todaysGeneration: Double,
     val batteryResidual: Int,
     val hasBattery: Boolean,
-    val earnings: String
+    val earnings: String,
+    val report: List<ReportResponse>
 ) : ViewModel() {
+    val homeTotal: Double = report.todayValue(forKey = "loads")
     val solar: Double = raw.currentValue("pvPower")
     val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
     val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
@@ -40,20 +45,30 @@ class SummaryPowerFlowViewModel(
         BatteryPowerViewModel(configManager, batteryStateOfCharge, batteryChargePower, batteryTemperature, batteryResidual, configManager.minSOC.value ?: 0.0)
     else
         null
-    val latestUpdate = raw.currentData("gridConsumptionPower")?.time?.let {
+    val latestUpdate: LocalDateTime = raw.currentData("gridConsumptionPower")?.time?.let {
         SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
     } ?: LocalDateTime.now()
     val inverterViewModel = makeInverterViewModel()
 
     private fun makeInverterViewModel(): InverterViewModel? {
-        if (raw.find { it.variable == "ambientTemperation" } != null &&
-                raw.find { it.variable == "invTemperation"} != null) {
+        return if (raw.find { it.variable == "ambientTemperation" } != null &&
+            raw.find { it.variable == "invTemperation"} != null) {
             val temperatures = InverterTemperatures(raw.currentValue("ambientTemperation"), raw.currentValue("invTemperation"))
-            return InverterViewModel(temperatures, name = configManager.currentDevice.value?.deviceType ?: "")
+            InverterViewModel(temperatures, name = configManager.currentDevice.value?.deviceType ?: "")
         } else {
-            return null
+            null
         }
     }
+}
+
+private fun List<ReportResponse>.todayValue(forKey: String): Double {
+    val item = currentData(forKey)
+    return item?.value ?: 0.0
+}
+
+private fun List<ReportResponse>.currentData(forKey: String): ReportData? {
+    val todaysDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }?.data?.firstOrNull { it.index == todaysDate }
 }
 
 private fun List<RawResponse>.currentValue(forKey: String): Double {

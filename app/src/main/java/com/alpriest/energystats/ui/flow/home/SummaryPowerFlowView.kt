@@ -1,7 +1,17 @@
 package com.alpriest.energystats.ui.flow.home
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.House
 import androidx.compose.runtime.Composable
@@ -11,10 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
+import com.alpriest.energystats.models.ReportData
+import com.alpriest.energystats.models.ReportResponse
+import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
@@ -34,6 +48,8 @@ fun SummaryPowerFlowView(
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
+    val showHomeTotal = themeStream.collectAsState().value.showHomeTotal
+    val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,7 +105,9 @@ fun SummaryPowerFlowView(
                 BatteryIconView(
                     viewModel = model,
                     themeStream = themeStream,
-                    modifier = Modifier.weight(2f),
+                    modifier = Modifier
+                        .weight(2f)
+                        .padding(top = 4.dp),
                     iconHeight = iconHeight
                 )
 
@@ -103,13 +121,33 @@ fun SummaryPowerFlowView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f)
+                    .padding(top = 4.dp),
             ) {
                 Icon(
                     Icons.Rounded.House,
                     contentDescription = "House",
-                    modifier = Modifier.size(iconHeight),
+                    modifier = Modifier
+                        .size(iconHeight + 18.dp)
+                        .offset(y = (-8).dp),
                     tint = MaterialTheme.colors.onBackground
                 )
+
+                if (showHomeTotal) {
+                    Column(
+                        modifier = Modifier.offset(y = (-18).dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            summaryPowerFlowViewModel.homeTotal.kWh(2), // TODO
+                            fontSize = fontSize,
+                        )
+                        Text(
+                            "Used today",
+                            fontSize = fontSize,
+                            color = Color.Gray,
+                        )
+                    }
+                }
             }
 
             Spacer(
@@ -119,7 +157,9 @@ fun SummaryPowerFlowView(
             GridIconView(
                 iconHeight = iconHeight,
                 themeStream = themeStream,
-                modifier = Modifier.weight(2f)
+                modifier = Modifier
+                    .weight(2f)
+                    .padding(top = 4.dp)
             )
         }
 
@@ -167,9 +207,12 @@ fun SummaryPowerFlowViewPreview() {
                 todaysGeneration = 1.0,
                 batteryResidual = 5678,
                 hasBattery = true,
-                earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99"
+                earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
+                report = listOf(
+                    ReportResponse("loads", arrayOf(ReportData(index = 27, value = 5.0)))
+                )
             ),
-            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true)),
+            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true)),
         )
     }
 }

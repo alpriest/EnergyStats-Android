@@ -1,9 +1,12 @@
 package com.alpriest.energystats.ui.flow.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -38,13 +41,13 @@ fun GridIconView(iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>, modifi
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-            PylonView(
-                modifier = Modifier
-                    .height(iconHeight)
-                    .width(iconHeight * 1.125f)
-                    .padding(6.dp),
-                themeStream = themeStream
-            )
+        PylonView(
+            modifier = Modifier
+                .height(iconHeight)
+                .width(iconHeight * 1f)
+                .clipToBounds(),
+            themeStream = themeStream
+        )
     }
 }
 

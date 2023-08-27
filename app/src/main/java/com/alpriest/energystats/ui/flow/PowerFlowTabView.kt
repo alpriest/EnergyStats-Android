@@ -37,6 +37,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
+import com.alpriest.energystats.models.ReportData
+import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
@@ -162,7 +164,7 @@ class PowerFlowTabView(
     @Composable
     fun Loaded(
         viewModel: PowerFlowTabViewModel,
-        summaryPowerFlowViewModel: SummaryPowerFlowViewModel,
+        homePowerFlowViewModel: SummaryPowerFlowViewModel,
         themeStream: MutableStateFlow<AppTheme>
     ) {
         Column(
@@ -173,7 +175,7 @@ class PowerFlowTabView(
         ) {
             SummaryPowerFlowView(
                 powerFlowViewModel = viewModel,
-                summaryPowerFlowViewModel = summaryPowerFlowViewModel,
+                summaryPowerFlowViewModel = homePowerFlowViewModel,
                 themeStream = themeStream
             )
         }
@@ -203,7 +205,10 @@ fun PowerFlowTabViewPreview() {
         todaysGeneration = 5.4,
         batteryResidual = 5600,
         hasBattery = true,
-        earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99"
+        earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
+        report = listOf(
+            ReportResponse("loads", arrayOf(ReportData(index = 1, value = 5.0)))
+        )
     )
 
     EnergyStatsTheme {
@@ -213,7 +218,7 @@ fun PowerFlowTabViewPreview() {
             MutableStateFlow(AppTheme.preview())
         ).Loaded(
             viewModel = viewModel,
-            summaryPowerFlowViewModel = homePowerFlowViewModel,
+            homePowerFlowViewModel = homePowerFlowViewModel,
             themeStream = MutableStateFlow(AppTheme.preview())
         )
     }

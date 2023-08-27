@@ -56,7 +56,8 @@ fun AppTheme.Companion.preview(
     showEstimatedEarnings: Boolean = true,
     showValuesInWatts: Boolean = true,
     showInverterTemperatures: Boolean = false,
-    showInverterIcon: Boolean = true
+    showInverterIcon: Boolean = true,
+    showHomeTotal: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -71,6 +72,7 @@ fun AppTheme.Companion.preview(
         showEstimatedEarnings = showEstimatedEarnings,
         showValuesInWatts = showValuesInWatts,
         showInverterTemperatures = showInverterTemperatures,
-        showInverterIcon = showInverterIcon
+        showInverterIcon = showInverterIcon,
+        showHomeTotal = showHomeTotal
     )
 }
