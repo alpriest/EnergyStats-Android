@@ -101,7 +101,7 @@ fun <T : GraphVariable> ToggleRowView(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            it.min.toDouble().rounded(2).toString(),
+                            it.min.toDouble().rounded(appTheme.decimalPlaces).toString(),
                             color = textColor,
                             fontSize = fontSize,
                         )
@@ -116,7 +116,7 @@ fun <T : GraphVariable> ToggleRowView(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            it.max.toDouble().rounded(2).toString(),
+                            it.max.toDouble().rounded(appTheme.decimalPlaces).toString(),
                             color = textColor,
                             fontSize = fontSize,
                         )
@@ -130,7 +130,7 @@ fun <T : GraphVariable> ToggleRowView(
                         horizontalAlignment = Alignment.End
                     ) {
                         Text(
-                            it.now.toDouble().rounded(2).toString(),
+                            it.now.toDouble().rounded(appTheme.decimalPlaces).toString(),
                             color = textColor,
                             fontSize = fontSize,
                         )
