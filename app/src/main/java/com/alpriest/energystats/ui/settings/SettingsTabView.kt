@@ -70,7 +70,8 @@ enum class SettingsScreen() {
     Inverter,
     InverterWorkMode,
     Dataloggers,
-    Approximations
+    Approximations,
+    FAQ
 }
 
 @Composable
@@ -125,6 +126,9 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.Approximations.name) {
             ApproximationsView(config)
+        }
+        composable(SettingsScreen.FAQ.name) {
+            FAQView()
         }
         debugGraph(navController, networkStore, config, network)
     }
@@ -207,6 +211,11 @@ fun SettingsTabView(
                 title = "Facebook group",
                 disclosureIcon = { Icons.Default.OpenInBrowser },
                 onClick = { onOpenUrl("https://www.facebook.com/groups/foxessownersgroup") }
+            )
+
+            SettingsNavButton(
+                title = "Frequently Asked Questions",
+                onClick = { navController.navigate(SettingsScreen.FAQ.name) }
             )
 
             SettingsNavButton(
