@@ -4,9 +4,6 @@ import android.app.Application
 import android.content.Context
 import com.alpriest.energystats.ui.AppContainer
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 @OptIn(DelicateCoroutinesApi::class)
 class EnergyStatsApplication : Application() {

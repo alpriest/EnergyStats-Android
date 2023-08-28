@@ -38,7 +38,6 @@ fun PowerFlowView(
     modifier: Modifier = Modifier,
     useColouredLines: Boolean = false,
 ) {
-    var asKw by remember { mutableStateOf(true) }
     var height by remember { mutableStateOf(0f) }
     val phaseAnimation = rememberInfiniteTransition()
     val offsetModifier: (Float) -> Float = {
@@ -151,7 +150,6 @@ fun PowerFlowView(
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
                     modifier = Modifier
-                        .clickable { asKw = !asKw }
                         .padding(3.dp)
                         .padding(horizontal = 5.dp)
                 )

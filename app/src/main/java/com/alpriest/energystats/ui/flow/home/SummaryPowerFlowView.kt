@@ -20,14 +20,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.ReportData
 import com.alpriest.energystats.models.ReportResponse
+import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -45,12 +48,14 @@ import java.time.format.DateTimeFormatter
 fun SummaryPowerFlowView(
     powerFlowViewModel: PowerFlowTabViewModel,
     summaryPowerFlowViewModel: SummaryPowerFlowViewModel = viewModel(),
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppTheme>,
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val showHomeTotal = themeStream.collectAsState().value.showHomeTotal
-    val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
+    val fontSize = themeStream.collectAsState().value.fontSize()
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
+    val showValuesInWatts = themeStream.collectAsState().value.showValuesInWatts
+    val context = LocalContext.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -139,11 +144,11 @@ fun SummaryPowerFlowView(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
-                            summaryPowerFlowViewModel.homeTotal.kWh(decimalPlaces),
+                            text = if (showValuesInWatts) summaryPowerFlowViewModel.homeTotal.Wh(decimalPlaces) else summaryPowerFlowViewModel.homeTotal.kWh(decimalPlaces),
                             fontSize = fontSize,
                         )
                         Text(
-                            "Used today",
+                            context.getString(R.string.used_today),
                             fontSize = fontSize,
                             color = Color.Gray,
                         )
