@@ -215,7 +215,8 @@ fun SummaryPowerFlowViewPreview() {
                 earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
                 report = listOf(
                     ReportResponse("loads", arrayOf(ReportData(index = 27, value = 5.0)))
-                )
+                ),
+                solar = 1.0
             ),
             themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true)),
         )

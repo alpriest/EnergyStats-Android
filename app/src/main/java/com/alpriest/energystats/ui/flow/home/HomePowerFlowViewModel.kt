@@ -35,10 +35,10 @@ class HomePowerFlowViewModel(
     val batteryResidual: Int,
     val hasBattery: Boolean,
     val earnings: String,
-    val report: List<ReportResponse>
+    val report: List<ReportResponse>,
+    val solar: Double
 ) : ViewModel() {
     val homeTotal: Double = report.todayValue(forKey = "loads")
-    val solar: Double = raw.currentValue("pvPower")
     val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
     val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)

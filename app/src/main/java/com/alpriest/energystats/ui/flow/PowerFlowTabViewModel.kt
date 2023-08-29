@@ -4,8 +4,11 @@ import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.RawData
+import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
@@ -156,7 +159,7 @@ class PowerFlowTabViewModel(
                     )
                 }
 
-                val raw = network.fetchRaw(
+                val raws = network.fetchRaw(
                     deviceID = currentDevice.deviceID,
                     variables,
                     QueryDate()
@@ -169,6 +172,8 @@ class PowerFlowTabViewModel(
                     ReportType.month
                 )
 
+                val currentViewModel = CurrentStatusViewModel(currentDevice, raws, true) //TODO
+
                 val battery: BatteryViewModel = if (currentDevice.battery != null) {
                     val battery = network.fetchBattery(deviceID = currentDevice.deviceID)
                     BatteryViewModel(battery)
@@ -180,13 +185,14 @@ class PowerFlowTabViewModel(
                     configManager = configManager,
                     batteryChargePower = battery.chargePower,
                     batteryStateOfCharge = battery.chargeLevel,
-                    raw = raw,
+                    raw = raws,
                     batteryTemperature = battery.temperature,
                     todaysGeneration = earnings.today.generation,
                     batteryResidual = battery.residual,
                     hasBattery = battery.hasBattery,
                     earnings = makeEarnings(earnings),
-                    report = report
+                    report = report,
+                    solar = currentViewModel.solar
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
@@ -235,4 +241,17 @@ fun Double.roundedToString(decimalPlaces: Int, currencyCode: String, currencySym
     } catch (ex: Exception) {
         return currencySymbol + roundedNumber.toString()
     }
+}
+
+class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInvertCT2: Boolean) {
+    val solar: Double = raw.currentValue("pvPower")
+}
+
+private fun List<RawResponse>.currentValue(forKey: String): Double {
+    val item = currentData(forKey)
+    return item?.value ?: 0.0
+}
+
+private fun List<RawResponse>.currentData(forKey: String): RawData? {
+    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }?.data?.lastOrNull()
 }
