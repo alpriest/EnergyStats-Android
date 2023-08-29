@@ -45,7 +45,7 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowView
-import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -164,7 +164,7 @@ class PowerFlowTabView(
     @Composable
     fun Loaded(
         viewModel: PowerFlowTabViewModel,
-        homePowerFlowViewModel: SummaryPowerFlowViewModel,
+        homePowerFlowViewModel: HomePowerFlowViewModel,
         themeStream: MutableStateFlow<AppTheme>
     ) {
         Column(
@@ -175,7 +175,7 @@ class PowerFlowTabView(
         ) {
             SummaryPowerFlowView(
                 powerFlowViewModel = viewModel,
-                summaryPowerFlowViewModel = homePowerFlowViewModel,
+                homePowerFlowViewModel = homePowerFlowViewModel,
                 themeStream = themeStream
             )
         }
@@ -189,7 +189,7 @@ fun PowerFlowTabViewPreview() {
     val formatter = DateTimeFormatter.ofPattern(dateFormat)
     val now = LocalDateTime.now().format(formatter)
 
-    val homePowerFlowViewModel = SummaryPowerFlowViewModel(
+    val homePowerFlowViewModel = HomePowerFlowViewModel(
         FakeConfigManager(),
         2.3,
         0.5,
@@ -231,4 +231,4 @@ data class UiLoadState(
 sealed class LoadState
 class ErrorLoadState(val reason: String) : LoadState()
 object LoadingLoadState : LoadState()
-class LoadedLoadState(val viewModel: SummaryPowerFlowViewModel) : LoadState()
+class LoadedLoadState(val viewModel: HomePowerFlowViewModel) : LoadState()

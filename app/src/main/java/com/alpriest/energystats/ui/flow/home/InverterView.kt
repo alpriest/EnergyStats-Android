@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun InverterView(
     themeStream: MutableStateFlow<AppTheme>,
-    homePowerFlowViewModel: SummaryPowerFlowViewModel
+    homePowerFlowViewModel: HomePowerFlowViewModel
 ) {
     val appTheme = themeStream.collectAsState().value
 

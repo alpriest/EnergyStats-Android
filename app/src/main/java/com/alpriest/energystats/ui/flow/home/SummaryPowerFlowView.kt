@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
@@ -47,7 +46,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun SummaryPowerFlowView(
     powerFlowViewModel: PowerFlowTabViewModel,
-    summaryPowerFlowViewModel: SummaryPowerFlowViewModel = viewModel(),
+    homePowerFlowViewModel: HomePowerFlowViewModel = viewModel(),
     themeStream: MutableStateFlow<AppTheme>,
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
@@ -62,9 +61,9 @@ fun SummaryPowerFlowView(
         modifier = Modifier.fillMaxHeight()
     ) {
         SolarPowerFlow(
-            summaryPowerFlowViewModel.solar,
-            summaryPowerFlowViewModel.todaysGeneration,
-            summaryPowerFlowViewModel.earnings,
+            homePowerFlowViewModel.solar,
+            homePowerFlowViewModel.todaysGeneration,
+            homePowerFlowViewModel.earnings,
             modifier = Modifier.fillMaxHeight(0.4f),
             iconHeight = iconHeight * 1.1f,
             themeStream = themeStream
@@ -72,8 +71,8 @@ fun SummaryPowerFlowView(
 
         Box(modifier = Modifier.weight(1f)) {
             Row {
-                summaryPowerFlowViewModel.batteryViewModel?.let { model ->
-                    if (summaryPowerFlowViewModel.hasBattery) {
+                homePowerFlowViewModel.batteryViewModel?.let { model ->
+                    if (homePowerFlowViewModel.hasBattery) {
                         BatteryPowerFlow(
                             viewModel = model,
                             modifier = Modifier
@@ -87,27 +86,27 @@ fun SummaryPowerFlowView(
                     }
                 }
                 HomePowerFlowView(
-                    amount = summaryPowerFlowViewModel.home,
+                    amount = homePowerFlowViewModel.home,
                     modifier = Modifier.weight(2f),
                     themeStream = themeStream,
-                    position = if (summaryPowerFlowViewModel.hasBattery) PowerFlowLinePosition.MIDDLE else PowerFlowLinePosition.LEFT
+                    position = if (homePowerFlowViewModel.hasBattery) PowerFlowLinePosition.MIDDLE else PowerFlowLinePosition.LEFT
                 )
                 InverterSpacer(
                     modifier = Modifier.weight(1f),
                     themeStream = themeStream
                 )
                 GridPowerFlowView(
-                    amount = summaryPowerFlowViewModel.grid,
+                    amount = homePowerFlowViewModel.grid,
                     modifier = Modifier.weight(2f),
                     themeStream = themeStream
                 )
             }
 
-            InverterView(themeStream, summaryPowerFlowViewModel)
+            InverterView(themeStream, homePowerFlowViewModel)
         }
 
         Row {
-            summaryPowerFlowViewModel.batteryViewModel?.let { model ->
+            homePowerFlowViewModel.batteryViewModel?.let { model ->
                 BatteryIconView(
                     viewModel = model,
                     themeStream = themeStream,
@@ -144,7 +143,7 @@ fun SummaryPowerFlowView(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
-                            text = if (showValuesInWatts) summaryPowerFlowViewModel.homeTotal.Wh(decimalPlaces) else summaryPowerFlowViewModel.homeTotal.kWh(decimalPlaces),
+                            text = if (showValuesInWatts) homePowerFlowViewModel.homeTotal.Wh(decimalPlaces) else homePowerFlowViewModel.homeTotal.kWh(decimalPlaces),
                             fontSize = fontSize,
                         )
                         Text(
@@ -195,7 +194,7 @@ fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme {
         SummaryPowerFlowView(
             PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview())),
-            summaryPowerFlowViewModel = SummaryPowerFlowViewModel(
+            homePowerFlowViewModel = HomePowerFlowViewModel(
                 FakeConfigManager(),
                 2.3,
                 0.5,

@@ -25,7 +25,7 @@ data class InverterViewModel(
     val name: String
 )
 
-class SummaryPowerFlowViewModel(
+class HomePowerFlowViewModel(
     val configManager: ConfigManaging,
     val batteryChargePower: Double,
     val batteryStateOfCharge: Double,

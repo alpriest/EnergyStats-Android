@@ -11,7 +11,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
@@ -176,7 +176,7 @@ class PowerFlowTabViewModel(
                     BatteryViewModel.noBattery()
                 }
 
-                val summary = SummaryPowerFlowViewModel(
+                val summary = HomePowerFlowViewModel(
                     configManager = configManager,
                     batteryChargePower = battery.chargePower,
                     batteryStateOfCharge = battery.chargeLevel,
@@ -203,7 +203,7 @@ class PowerFlowTabViewModel(
         return configManager.variables.firstOrNull { it.variable.lowercase() == variableName.lowercase() }
     }
 
-    private fun calculateTicks(summary: SummaryPowerFlowViewModel) {
+    private fun calculateTicks(summary: HomePowerFlowViewModel) {
         val diff = kotlin.math.abs(Duration.between(LocalDateTime.now(), summary.latestUpdate).seconds)
 
         totalSeconds = when (configManager.refreshFrequency) {
