@@ -8,7 +8,8 @@ class BatteryPowerViewModel(
     private val actualStateOfCharge: Double,
     val chargePowerkWH: Double,
     val temperature: Double,
-    val residual: Int
+    val residual: Int,
+    val error: Error?
 ) : ViewModel() {
     private val calculator: BatteryCapacityCalculator
 
@@ -27,11 +28,21 @@ class BatteryPowerViewModel(
             )
         }
 
-    fun batteryStoredCharge(): Double {
+    fun batteryStoredChargekWh(): Double {
         return residual.toDouble() / 1000.0
     }
 
     fun batteryStateOfCharge(): Double {
         return calculator.effectiveBatteryStateOfCharge(batteryStateOfCharge = actualStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly)
     }
+
+    val hasBattery: Boolean
+        get() {
+            return configManager.hasBattery
+        }
+
+    val hasError: Boolean
+        get() {
+            return error != null
+        }
 }

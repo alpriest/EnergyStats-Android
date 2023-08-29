@@ -36,7 +36,7 @@ class HomePowerFlowViewModel(
 ) : ViewModel() {
     val homeTotal: Double = report.todayValue(forKey = "loads")
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
-        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperature, battery.residual)
+        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperature, battery.residual, battery.error)
     else
         null
 }

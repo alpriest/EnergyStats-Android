@@ -134,7 +134,7 @@ private fun BatteryPercentage(
                 )
             } else {
                 Text(
-                    viewModel.batteryStoredCharge().kWh(decimalPlaces),
+                    viewModel.batteryStoredChargekWh().kWh(decimalPlaces),
                     fontSize = fontSize
                 )
             }
@@ -171,7 +171,8 @@ fun BatteryPowerFlowViewPreview() {
                 actualStateOfCharge = 0.25,
                 chargePowerkWH = -0.5,
                 temperature = 13.6,
-                residual = 5678
+                residual = 5678,
+                error = null
             ),
             themeStream = MutableStateFlow(AppTheme.preview(showBatteryTemperature = true, showBatteryEstimate = true)),
             iconHeight = 24.dp
