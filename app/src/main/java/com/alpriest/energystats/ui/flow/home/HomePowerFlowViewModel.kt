@@ -38,24 +38,14 @@ class HomePowerFlowViewModel(
     val report: List<ReportResponse>,
     val solar: Double,
     val home: Double,
-    val grid: Double
+    val grid: Double,
+    val inverterViewModel: InverterViewModel?
 ) : ViewModel() {
     val homeTotal: Double = report.todayValue(forKey = "loads")
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
         BatteryPowerViewModel(configManager, batteryStateOfCharge, batteryChargePower, batteryTemperature, batteryResidual, configManager.minSOC.value ?: 0.0)
     else
         null
-    val inverterViewModel = makeInverterViewModel()
-
-    private fun makeInverterViewModel(): InverterViewModel? {
-        return if (raw.find { it.variable == "ambientTemperation" } != null &&
-            raw.find { it.variable == "invTemperation"} != null) {
-            val temperatures = InverterTemperatures(raw.currentValue("ambientTemperation"), raw.currentValue("invTemperation"))
-            InverterViewModel(temperatures, name = configManager.currentDevice.value?.deviceType ?: "")
-        } else {
-            null
-        }
-    }
 }
 
 private fun List<ReportResponse>.todayValue(forKey: String): Double {

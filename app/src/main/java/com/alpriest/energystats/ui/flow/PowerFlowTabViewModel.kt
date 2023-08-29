@@ -15,6 +15,8 @@ import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.InverterTemperatures
+import com.alpriest.energystats.ui.flow.home.InverterViewModel
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
@@ -197,7 +199,8 @@ class PowerFlowTabViewModel(
                     report = report,
                     solar = currentViewModel.solar,
                     home = currentViewModel.home,
-                    grid = currentViewModel.grid
+                    grid = currentViewModel.grid,
+                    inverterViewModel = currentViewModel.inverterViewModel
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
@@ -255,6 +258,17 @@ class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInver
     val latestUpdate: LocalDateTime = raw.currentData("gridConsumptionPower")?.time?.let {
         SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
     } ?: LocalDateTime.now()
+    val inverterViewModel = makeInverterViewModel(device, raw)
+
+    private fun makeInverterViewModel(device: Device, raw: List<RawResponse>): InverterViewModel? {
+        return if (raw.find { it.variable == "ambientTemperation" } != null &&
+            raw.find { it.variable == "invTemperation"} != null) {
+            val temperatures = InverterTemperatures(raw.currentValue("ambientTemperation"), raw.currentValue("invTemperation"))
+            InverterViewModel(temperatures, name = device.deviceType ?: "")
+        } else {
+            null
+        }
+    }
 }
 
 private fun List<RawResponse>.currentValue(forKey: String): Double {

@@ -218,7 +218,8 @@ fun SummaryPowerFlowViewPreview() {
                 ),
                 solar = 1.0,
                 home = 2.45,
-                grid = 2.45
+                grid = 2.45,
+                inverterViewModel = null
             ),
             themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true)),
         )
