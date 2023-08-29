@@ -192,7 +192,8 @@ class PowerFlowTabViewModel(
                     hasBattery = battery.hasBattery,
                     earnings = makeEarnings(earnings),
                     report = report,
-                    solar = currentViewModel.solar
+                    solar = currentViewModel.solar,
+                    home = currentViewModel.home
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
@@ -245,6 +246,7 @@ fun Double.roundedToString(decimalPlaces: Int, currencyCode: String, currencySym
 
 class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInvertCT2: Boolean) {
     val solar: Double = raw.currentValue("pvPower")
+    val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
 }
 
 private fun List<RawResponse>.currentValue(forKey: String): Double {

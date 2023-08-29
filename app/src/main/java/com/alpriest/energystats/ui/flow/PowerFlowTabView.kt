@@ -209,7 +209,8 @@ fun PowerFlowTabViewPreview() {
         report = listOf(
             ReportResponse("loads", arrayOf(ReportData(index = 1, value = 5.0)))
         ),
-        solar = 1.0
+        solar = 1.0,
+        home = 2.45
     )
 
     EnergyStatsTheme {
