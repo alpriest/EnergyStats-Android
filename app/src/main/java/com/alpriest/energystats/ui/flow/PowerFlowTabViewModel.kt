@@ -193,7 +193,8 @@ class PowerFlowTabViewModel(
                     earnings = makeEarnings(earnings),
                     report = report,
                     solar = currentViewModel.solar,
-                    home = currentViewModel.home
+                    home = currentViewModel.home,
+                    grid = currentViewModel.grid
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
@@ -233,20 +234,21 @@ class PowerFlowTabViewModel(
 fun Double.roundedToString(decimalPlaces: Int, currencyCode: String, currencySymbol: String): String {
     val roundedNumber = this.rounded(decimalPlaces)
 
-    try {
+    return try {
         val numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
         numberFormat.currency = Currency.getInstance(currencyCode)
         numberFormat.maximumFractionDigits = decimalPlaces
 
-        return numberFormat.format(roundedNumber)
+        numberFormat.format(roundedNumber)
     } catch (ex: Exception) {
-        return currencySymbol + roundedNumber.toString()
+        currencySymbol + roundedNumber.toString()
     }
 }
 
 class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInvertCT2: Boolean) {
     val solar: Double = raw.currentValue("pvPower")
     val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
+    val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
 }
 
 private fun List<RawResponse>.currentValue(forKey: String): Double {

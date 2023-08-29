@@ -37,10 +37,10 @@ class HomePowerFlowViewModel(
     val earnings: String,
     val report: List<ReportResponse>,
     val solar: Double,
-    val home: Double
+    val home: Double,
+    val grid: Double
 ) : ViewModel() {
     val homeTotal: Double = report.todayValue(forKey = "loads")
-    val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
         BatteryPowerViewModel(configManager, batteryStateOfCharge, batteryChargePower, batteryTemperature, batteryResidual, configManager.minSOC.value ?: 0.0)
     else
