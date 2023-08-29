@@ -4,20 +4,14 @@ import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawData
-import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
-import com.alpriest.energystats.ui.flow.home.InverterTemperatures
-import com.alpriest.energystats.ui.flow.home.InverterViewModel
-import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
@@ -33,10 +27,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.Currency
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
@@ -187,17 +179,16 @@ class PowerFlowTabViewModel(
                 }
 
                 val summary = HomePowerFlowViewModel(
-                    configManager = configManager,
-                    raw = raws,
-                    todaysGeneration = earnings.today.generation,
-                    hasBattery = battery.hasBattery,
-                    earnings = makeEarnings(earnings),
-                    report = report,
                     solar = currentViewModel.solar,
                     home = currentViewModel.home,
                     grid = currentViewModel.grid,
+                    todaysGeneration = earnings.today.generation,
+                    earnings = makeEarnings(earnings),
                     inverterViewModel = currentViewModel.inverterViewModel,
-                    battery = battery
+                    hasBattery = battery.hasBattery,
+                    report = report,
+                    battery = battery,
+                    configManager = configManager
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
@@ -246,33 +237,4 @@ fun Double.roundedToString(decimalPlaces: Int, currencyCode: String, currencySym
     } catch (ex: Exception) {
         currencySymbol + roundedNumber.toString()
     }
-}
-
-class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInvertCT2: Boolean) {
-    val solar: Double = raw.currentValue("pvPower")
-    val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
-    val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
-    val latestUpdate: LocalDateTime = raw.currentData("gridConsumptionPower")?.time?.let {
-        SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
-    } ?: LocalDateTime.now()
-    val inverterViewModel = makeInverterViewModel(device, raw)
-
-    private fun makeInverterViewModel(device: Device, raw: List<RawResponse>): InverterViewModel? {
-        return if (raw.find { it.variable == "ambientTemperation" } != null &&
-            raw.find { it.variable == "invTemperation"} != null) {
-            val temperatures = InverterTemperatures(raw.currentValue("ambientTemperation"), raw.currentValue("invTemperation"))
-            InverterViewModel(temperatures, name = device.deviceType ?: "")
-        } else {
-            null
-        }
-    }
-}
-
-private fun List<RawResponse>.currentValue(forKey: String): Double {
-    val item = currentData(forKey)
-    return item?.value ?: 0.0
-}
-
-private fun List<RawResponse>.currentData(forKey: String): RawData? {
-    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }?.data?.lastOrNull()
 }

@@ -171,8 +171,7 @@ fun BatteryPowerFlowViewPreview() {
                 actualStateOfCharge = 0.25,
                 chargePowerkWH = -0.5,
                 temperature = 13.6,
-                residual = 5678,
-                minSOC = 0.2
+                residual = 5678
             ),
             themeStream = MutableStateFlow(AppTheme.preview(showBatteryTemperature = true, showBatteryEstimate = true)),
             iconHeight = 24.dp
