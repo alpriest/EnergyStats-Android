@@ -15,6 +15,7 @@ import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
@@ -30,8 +31,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Currency
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
@@ -198,7 +201,7 @@ class PowerFlowTabViewModel(
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
-                calculateTicks(summary)
+                calculateTicks(currentViewModel)
             }
         } catch (ex: Exception) {
             stopTimer()
@@ -211,7 +214,7 @@ class PowerFlowTabViewModel(
         return configManager.variables.firstOrNull { it.variable.lowercase() == variableName.lowercase() }
     }
 
-    private fun calculateTicks(summary: HomePowerFlowViewModel) {
+    private fun calculateTicks(summary: CurrentStatusViewModel) {
         val diff = kotlin.math.abs(Duration.between(LocalDateTime.now(), summary.latestUpdate).seconds)
 
         totalSeconds = when (configManager.refreshFrequency) {
@@ -249,6 +252,9 @@ class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInver
     val solar: Double = raw.currentValue("pvPower")
     val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
     val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
+    val latestUpdate: LocalDateTime = raw.currentData("gridConsumptionPower")?.time?.let {
+        SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
+    } ?: LocalDateTime.now()
 }
 
 private fun List<RawResponse>.currentValue(forKey: String): Double {

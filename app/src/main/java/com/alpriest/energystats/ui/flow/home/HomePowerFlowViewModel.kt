@@ -45,9 +45,6 @@ class HomePowerFlowViewModel(
         BatteryPowerViewModel(configManager, batteryStateOfCharge, batteryChargePower, batteryTemperature, batteryResidual, configManager.minSOC.value ?: 0.0)
     else
         null
-    val latestUpdate: LocalDateTime = raw.currentData("gridConsumptionPower")?.time?.let {
-        SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
-    } ?: LocalDateTime.now()
     val inverterViewModel = makeInverterViewModel()
 
     private fun makeInverterViewModel(): InverterViewModel? {
