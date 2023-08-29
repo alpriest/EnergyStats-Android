@@ -188,19 +188,16 @@ class PowerFlowTabViewModel(
 
                 val summary = HomePowerFlowViewModel(
                     configManager = configManager,
-                    batteryChargePower = battery.chargePower,
-                    batteryStateOfCharge = battery.chargeLevel,
                     raw = raws,
-                    batteryTemperature = battery.temperature,
                     todaysGeneration = earnings.today.generation,
-                    batteryResidual = battery.residual,
                     hasBattery = battery.hasBattery,
                     earnings = makeEarnings(earnings),
                     report = report,
                     solar = currentViewModel.solar,
                     home = currentViewModel.home,
                     grid = currentViewModel.grid,
-                    inverterViewModel = currentViewModel.inverterViewModel
+                    inverterViewModel = currentViewModel.inverterViewModel,
+                    battery = battery
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

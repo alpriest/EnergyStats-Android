@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.ReportData
@@ -196,8 +197,6 @@ fun SummaryPowerFlowViewPreview() {
             PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview())),
             homePowerFlowViewModel = HomePowerFlowViewModel(
                 FakeConfigManager(),
-                2.3,
-                0.5,
                 raw = listOf(
                     RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
                     RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
@@ -208,9 +207,7 @@ fun SummaryPowerFlowViewPreview() {
                     RawResponse("ambientTemperation", arrayListOf(RawData(now, 2.45))),
                     RawResponse("invTemperation", arrayListOf(RawData(now, 2.45)))
                 ),
-                13.6,
                 todaysGeneration = 1.0,
-                batteryResidual = 5678,
                 hasBattery = true,
                 earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
                 report = listOf(
@@ -219,7 +216,8 @@ fun SummaryPowerFlowViewPreview() {
                 solar = 1.0,
                 home = 2.45,
                 grid = 2.45,
-                inverterViewModel = null
+                inverterViewModel = null,
+                battery = BatteryViewModel()
             ),
             themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true)),
         )

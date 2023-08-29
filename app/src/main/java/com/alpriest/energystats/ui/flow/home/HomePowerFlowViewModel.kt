@@ -1,17 +1,14 @@
 package com.alpriest.energystats.ui.flow.home
 
 import androidx.lifecycle.ViewModel
+import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.ReportData
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.Calendar
-import java.util.Locale
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
 
@@ -27,23 +24,20 @@ data class InverterViewModel(
 
 class HomePowerFlowViewModel(
     val configManager: ConfigManaging,
-    val batteryChargePower: Double,
-    val batteryStateOfCharge: Double,
     val raw: List<RawResponse>,
-    val batteryTemperature: Double,
     val todaysGeneration: Double,
-    val batteryResidual: Int,
     val hasBattery: Boolean,
     val earnings: String,
     val report: List<ReportResponse>,
     val solar: Double,
     val home: Double,
     val grid: Double,
-    val inverterViewModel: InverterViewModel?
+    val inverterViewModel: InverterViewModel?,
+    val battery: BatteryViewModel
 ) : ViewModel() {
     val homeTotal: Double = report.todayValue(forKey = "loads")
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
-        BatteryPowerViewModel(configManager, batteryStateOfCharge, batteryChargePower, batteryTemperature, batteryResidual, configManager.minSOC.value ?: 0.0)
+        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperature, battery.residual, configManager.minSOC.value ?: 0.0)
     else
         null
 }

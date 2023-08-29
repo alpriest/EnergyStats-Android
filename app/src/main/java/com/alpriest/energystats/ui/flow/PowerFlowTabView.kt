@@ -35,6 +35,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.ReportData
@@ -191,8 +192,6 @@ fun PowerFlowTabViewPreview() {
 
     val homePowerFlowViewModel = HomePowerFlowViewModel(
         FakeConfigManager(),
-        2.3,
-        0.5,
         raw = listOf(
             RawResponse("feedInPower", arrayListOf(RawData(now, 2.45))),
             RawResponse("generationPower", arrayListOf(RawData(now, 2.45))),
@@ -201,9 +200,7 @@ fun PowerFlowTabViewPreview() {
             RawResponse("gridConsumptionPower", arrayListOf(RawData(now, 2.45))),
             RawResponse("loadsPower", arrayListOf(RawData(now, 2.45)))
         ),
-        13.6,
         todaysGeneration = 5.4,
-        batteryResidual = 5600,
         hasBattery = true,
         earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
         report = listOf(
@@ -212,7 +209,8 @@ fun PowerFlowTabViewPreview() {
         solar = 1.0,
         home = 2.45,
         grid = 2.45,
-        inverterViewModel = null
+        inverterViewModel = null,
+        battery = BatteryViewModel()
     )
 
     EnergyStatsTheme {
