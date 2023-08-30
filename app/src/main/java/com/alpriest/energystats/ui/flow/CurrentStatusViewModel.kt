@@ -11,14 +11,14 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
 
-class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInvertCT2: Boolean) {
-    val currentSolarPower: Double = raw.currentValue("pvPower")
-    val currentHomeConsumption: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
-    val currentGrid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
-    val lastUpdate: LocalDateTime = raw.currentData("gridConsumptionPower")?.time?.let {
+class CurrentStatusViewModel(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean) {
+    val currentSolarPower: Double = calculateSolarPower(device, raws, shouldInvertCT2)
+    val currentHomeConsumption: Double = raws.currentValue("loadsPower")
+    val currentGrid: Double = raws.currentValue("feedInPower") - raws.currentValue("gridConsumptionPower")
+    val lastUpdate: LocalDateTime = raws.currentData("gridConsumptionPower")?.time?.let {
         SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
     } ?: LocalDateTime.now()
-    val inverterViewModel = makeInverterViewModel(device, raw)
+    val inverterViewModel = makeInverterViewModel(device, raws)
 
     private fun makeInverterViewModel(device: Device, raw: List<RawResponse>): InverterViewModel? {
         return if (raw.find { it.variable == "ambientTemperation" } != null &&
@@ -27,6 +27,16 @@ class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInver
             InverterViewModel(temperatures, name = device.deviceType ?: "")
         } else {
             null
+        }
+    }
+
+    private fun calculateSolarPower(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean): Double {
+        val ACtoDCconversion = 0.92
+
+        return if (device.hasPV) {
+            raws.currentValue("pvPower") + (if (shouldInvertCT2) 0 - raws.currentValue("meterPower2") else raws.currentValue("meterPower2")) / ACtoDCconversion
+        } else {
+            raws.currentValue("meterPower2") / ACtoDCconversion
         }
     }
 }
