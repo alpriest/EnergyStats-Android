@@ -169,7 +169,7 @@ class PowerFlowTabViewModel(
                     ReportType.month
                 )
 
-                val currentViewModel = CurrentStatusViewModel(currentDevice, raws, true) //TODO
+                val currentViewModel = CurrentStatusViewModel(currentDevice, raws, configManager.shouldInvertCT2)
 
                 val battery: BatteryViewModel = if (currentDevice.battery != null) {
                     val battery = network.fetchBattery(deviceID = currentDevice.deviceID)

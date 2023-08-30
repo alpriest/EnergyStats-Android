@@ -25,7 +25,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showValuesInWatts = config.showValuesInWatts,
             showInverterTemperatures = config.showInverterTemperatures,
             showInverterIcon = config.showInverterIcon,
-            showHomeTotal = config.showHomeTotal
+            showHomeTotal = config.showHomeTotal,
+            shouldInvertCT2 = config.shouldInvertCT2
         )
     )
 
@@ -147,6 +148,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showHomeTotal = value
             themeStream.value = themeStream.value.copy(showHomeTotal = showHomeTotal)
+        }
+
+    override var shouldInvertCT2: Boolean
+        get() = config.shouldInvertCT2
+        set(value) {
+            config.shouldInvertCT2 = value
+            themeStream.value = themeStream.value.copy(shouldInvertCT2 = shouldInvertCT2)
         }
 
     final override var devices: List<Device>?

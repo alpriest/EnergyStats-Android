@@ -27,7 +27,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_INVERTER_TEMPERATURES,
         SELECTED_PARAMETER_GRAPH_VARIABLES,
         SHOW_INVERTER_ICON,
-        SHOW_HOME_TOTAL
+        SHOW_HOME_TOTAL,
+        SHOULD_INVERT_CT2
     }
 
     override var showHomeTotal: Boolean
@@ -183,6 +184,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             val editor = sharedPreferences.edit()
             val jsonString = Gson().toJson(value)
             editor.putString(SharedPreferenceKey.SELECTED_PARAMETER_GRAPH_VARIABLES.name, jsonString)
+            editor.apply()
+        }
+
+    override var shouldInvertCT2: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOULD_INVERT_CT2.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOULD_INVERT_CT2.name, value)
             editor.apply()
         }
 }

@@ -20,4 +20,5 @@ interface ConfigInterface {
     var selectedParameterGraphVariables: List<String>
     var showInverterIcon: Boolean
     var showHomeTotal: Boolean
+    var shouldInvertCT2: Boolean
 }

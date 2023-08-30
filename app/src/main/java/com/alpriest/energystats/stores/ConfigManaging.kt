@@ -8,6 +8,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface ConfigManaging {
+    val shouldInvertCT2: Boolean
     val variables: List<RawVariable>
     val hasBattery: Boolean
     var showUsableBatteryOnly: Boolean

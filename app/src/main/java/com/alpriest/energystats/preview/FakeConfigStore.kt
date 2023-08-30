@@ -21,6 +21,7 @@ class FakeConfigStore(
     override var showInverterTemperatures: Boolean = false,
     override var selectedParameterGraphVariables: List<String> = listOf(),
     override var showInverterIcon: Boolean = false,
-    override var showHomeTotal: Boolean = false
+    override var showHomeTotal: Boolean = false,
+    override var shouldInvertCT2: Boolean = false
 ) : ConfigInterface {
 }
