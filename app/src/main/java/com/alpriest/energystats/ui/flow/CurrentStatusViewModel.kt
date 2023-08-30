@@ -12,10 +12,10 @@ import java.time.ZoneId
 import java.util.Locale
 
 class CurrentStatusViewModel(device: Device, raw: List<RawResponse>, shouldInvertCT2: Boolean) {
-    val solar: Double = raw.currentValue("pvPower")
-    val home: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
-    val grid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
-    val latestUpdate: LocalDateTime = raw.currentData("gridConsumptionPower")?.time?.let {
+    val currentSolarPower: Double = raw.currentValue("pvPower")
+    val currentHomeConsumption: Double = raw.currentValue("gridConsumptionPower") + raw.currentValue("generationPower") - raw.currentValue("feedInPower")
+    val currentGrid: Double = raw.currentValue("feedInPower") - raw.currentValue("gridConsumptionPower")
+    val lastUpdate: LocalDateTime = raw.currentData("gridConsumptionPower")?.time?.let {
         SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it)?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
     } ?: LocalDateTime.now()
     val inverterViewModel = makeInverterViewModel(device, raw)

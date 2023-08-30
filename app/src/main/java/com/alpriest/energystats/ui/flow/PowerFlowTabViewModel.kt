@@ -179,9 +179,9 @@ class PowerFlowTabViewModel(
                 }
 
                 val summary = HomePowerFlowViewModel(
-                    solar = currentViewModel.solar,
-                    home = currentViewModel.home,
-                    grid = currentViewModel.grid,
+                    solar = currentViewModel.currentSolarPower,
+                    home = currentViewModel.currentHomeConsumption,
+                    grid = currentViewModel.currentGrid,
                     todaysGeneration = earnings.today.generation,
                     earnings = makeEarnings(earnings),
                     inverterViewModel = currentViewModel.inverterViewModel,
@@ -206,7 +206,7 @@ class PowerFlowTabViewModel(
     }
 
     private fun calculateTicks(summary: CurrentStatusViewModel) {
-        val diff = kotlin.math.abs(Duration.between(LocalDateTime.now(), summary.latestUpdate).seconds)
+        val diff = kotlin.math.abs(Duration.between(LocalDateTime.now(), summary.lastUpdate).seconds)
 
         totalSeconds = when (configManager.refreshFrequency) {
             RefreshFrequency.OneMinute -> 60
