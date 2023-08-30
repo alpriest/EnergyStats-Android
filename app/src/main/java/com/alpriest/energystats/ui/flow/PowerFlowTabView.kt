@@ -185,8 +185,6 @@ class PowerFlowTabView(
 @Composable
 fun PowerFlowTabViewPreview() {
     val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview()))
-    val formatter = DateTimeFormatter.ofPattern(dateFormat)
-    val now = LocalDateTime.now().format(formatter)
 
     val homePowerFlowViewModel = HomePowerFlowViewModel(
         solar = 1.0,
