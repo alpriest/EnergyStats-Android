@@ -26,6 +26,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val currentDevice = configManager.currentDevice.collectAsState()
     val showInverterTemperaturesState = rememberSaveable { mutableStateOf(configManager.showInverterTemperatures) }
     val showInverterIconState = rememberSaveable { mutableStateOf(configManager.showInverterIcon) }
+    val shouldInvertCT2State = rememberSaveable { mutableStateOf(configManager.shouldInvertCT2) }
 
     SettingsPage {
         InverterChoiceView(configManager)
@@ -51,8 +52,8 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 SettingsTitleView(title = stringResource(R.string.advanced))
                 SettingsCheckbox(
                     title = stringResource(R.string.invert_ct2_values_when_detected),
-                    state = showInverterIconState,
-                    onConfigUpdate = { configManager.showInverterIcon = it },
+                    state = shouldInvertCT2State,
+                    onConfigUpdate = { configManager.shouldInvertCT2 = it },
                     footer = buildAnnotatedString { append("If you have multiple inverters and your PV generation values are incorrect try toggling this.") }
                 )
             }
@@ -76,7 +77,7 @@ fun DeviceVersionView(device: Device) {
     }
 }
 
-@Preview(widthDp = 400)
+@Preview(widthDp = 300)
 @Composable
 fun InverterSettingsViewPreview() {
     EnergyStatsTheme(darkTheme = true) {

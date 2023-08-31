@@ -38,7 +38,8 @@ fun SettingsRow(title: String, content: @Composable () -> Unit) {
     ) {
         Text(title,
             color = colors.onSecondary,
-            style = TextStyle.Default.copy(fontWeight = FontWeight.Medium)
+            style = TextStyle.Default.copy(fontWeight = FontWeight.Medium),
+            modifier = Modifier.padding(end = 8.dp)
         )
         content()
     }
