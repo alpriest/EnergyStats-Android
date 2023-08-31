@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.settings.battery
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -22,16 +21,14 @@ private val ChargeTimePeriod.hasTimes: Boolean
 class BatteryScheduleTimesViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val navController: NavController,
     private val context: Context
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return modelClass.getConstructor(
             Networking::class.java,
             ConfigManaging::class.java,
-            NavController::class.java,
             Context::class.java
-        ).newInstance(network, configManager, navController, context)
+        ).newInstance(network, configManager, context)
     }
 }
 
@@ -40,10 +37,9 @@ private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
             start.hour > period2.end.hour || (start.hour == period2.end.hour && start.minute >= period2.end.minute))
 }
 
-class BatteryScheduleTimesViewModel(
+class BatteryChargeScheduleSettingsViewModel(
     private val network: Networking,
     private val config: ConfigManaging,
-    private val navController: NavController,
     private val context: Context
 ) : ViewModel() {
     val timePeriod1Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
@@ -93,31 +89,47 @@ class BatteryScheduleTimesViewModel(
     }
 
     private fun generateSummary(period1: ChargeTimePeriod, period2: ChargeTimePeriod) {
-        var result = ""
+        val resultParts = mutableListOf<String>()
 
         if (!period1.enabled && !period2.enabled) {
             if (period1.hasTimes && period2.hasTimes) {
-                result = String.format(context.getString(R.string.both_battery_freeze_periods), period1.description, period2.description)
+                resultParts.add(String.format(context.getString(R.string.both_battery_freeze_periods), period1.description, period2.description))
             } else if (period1.hasTimes) {
-                result = String.format(context.getString(R.string.one_battery_freeze_period), period1.description)
+                resultParts.add(String.format(context.getString(R.string.one_battery_freeze_period), period1.description))
             } else if (period2.hasTimes) {
-                result = String.format("one_battery_freeze_period", period2.description)
+                resultParts.add(String.format("one_battery_freeze_period", period2.description))
             } else {
-                result = context.getString(R.string.no_battery_charge)
+                resultParts.add(context.getString(R.string.no_battery_charge))
             }
         } else if (period1.enabled && period2.enabled) {
-            result = String.format(context.getString(R.string.both_battery_charge_periods), period1.description, period2.description)
+            resultParts.add(String.format(context.getString(R.string.both_battery_charge_periods), period1.description, period2.description))
 
             if (period1.overlaps(period2)) {
-                result += context.getString(R.string.battery_periods_overlap)
+                resultParts.add(context.getString(R.string.battery_periods_overlap))
             }
         } else if (period1.enabled) {
-            result = String.format(context.getString(R.string.one_battery_charge_period), period1.description)
+            resultParts.add(String.format(context.getString(R.string.one_battery_charge_period), period1.description))
+
+            if (period2.hasTimes) {
+                resultParts.add(String.format(context.getString(R.string.one_battery_freeze_period), period2.description))
+            }
+
+            if (period1.overlaps(period2)) {
+                resultParts.add(context.getString(R.string.battery_periods_overlap))
+            }
         } else if (period2.enabled) {
-            result = String.format(context.getString(R.string.one_battery_charge_period), period2.description)
+            resultParts.add(String.format(context.getString(R.string.one_battery_charge_period), period2.description))
+
+            if (period1.hasTimes) {
+                resultParts.add(String.format(context.getString(R.string.one_battery_freeze_period), period1.description))
+            }
+
+            if (period1.overlaps(period2)) {
+                resultParts.add(context.getString(R.string.battery_periods_overlap))
+            }
         }
 
-        summaryStream.value = result
+        summaryStream.value = resultParts.joinToString(" ")
     }
 
     suspend fun save() {

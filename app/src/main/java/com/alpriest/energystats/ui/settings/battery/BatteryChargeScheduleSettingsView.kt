@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +42,7 @@ import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class BatteryScheduleTimes(
+class BatteryChargeScheduleSettingsView(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
@@ -51,11 +50,10 @@ class BatteryScheduleTimes(
 ) {
     @Composable
     fun Content(
-        viewModel: BatteryScheduleTimesViewModel = viewModel(
+        viewModel: BatteryChargeScheduleSettingsViewModel = viewModel(
             factory = BatteryScheduleTimesViewModelFactory(
                 network = network,
                 configManager = configManager,
-                navController = navController,
                 context = context
             )
         )
@@ -176,7 +174,7 @@ class BatteryScheduleTimes(
 @Composable
 fun BatteryForceChargeTimesViewPreview() {
     EnergyStatsTheme(darkTheme = true) {
-        BatteryScheduleTimes(
+        BatteryChargeScheduleSettingsView(
             network = DemoNetworking(),
             configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current),

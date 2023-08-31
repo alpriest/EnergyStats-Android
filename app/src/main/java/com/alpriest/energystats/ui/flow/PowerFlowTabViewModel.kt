@@ -171,7 +171,7 @@ class PowerFlowTabViewModel(
 
                 val currentViewModel = CurrentStatusViewModel(currentDevice, raws, configManager.shouldInvertCT2)
 
-                val battery: BatteryViewModel = if (currentDevice.battery != null) {
+                val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
                     val battery = network.fetchBattery(deviceID = currentDevice.deviceID)
                     BatteryViewModel(battery)
                 } else {

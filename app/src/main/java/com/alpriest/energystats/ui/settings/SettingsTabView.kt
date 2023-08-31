@@ -40,7 +40,7 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
-import com.alpriest.energystats.ui.settings.battery.BatteryScheduleTimes
+import com.alpriest.energystats.ui.settings.battery.BatteryChargeScheduleSettingsView
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
@@ -113,7 +113,7 @@ fun NavigableSettingsView(
             BatterySOCSettings(configManager = config, network = network, navController = navController, context = context).Content()
         }
         composable(SettingsScreen.BatteryChargeTimes.name) {
-            BatteryScheduleTimes(configManager = config, network = network, navController = navController, context = context).Content()
+            BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, context = context).Content()
         }
         composable(SettingsScreen.Inverter.name) {
             InverterSettingsView(configManager = config, navController = navController)

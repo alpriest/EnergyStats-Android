@@ -121,8 +121,8 @@
     <string name="min_battery_charge_soc">Min battery charge (SoC)</string>
     <string name="no_battery_charge">Your battery will not be force charged from the grid.</string>
     <string name="battery_periods_overlap">. These periods overlap, you may want to update them.</string>
-    <string name="one_battery_charge_period">Your battery will be force charged from the grid between %1s</string>
-    <string name="both_battery_charge_periods">Your battery will be force charged from the grid between %1s, and %2s</string>
+    <string name="one_battery_charge_period">Your battery will be force charged from the grid between %1s.</string>
+    <string name="both_battery_charge_periods">Your battery will be force charged from the grid between %1s, and %2s.</string>
     <string name="saving">Saving</string>
     <string name="enable_charge_from_grid">Enable charge from grid</string>
     <string name="start">Start</string>
@@ -165,4 +165,8 @@
     <string name="touch_the_graph_to_see_values_at_that_time">Touch the graph to see values at that time</string>
     <string name="show_home_usage_total">Show home usage total</string>
     <string name="used_today">Used today</string>
+    <string name="show_inverter_temperatures">Show inverter temperatures</string>
+    <string name="show_inverter_icon">Show inverter icon</string>
+    <string name="invert_ct2_values_when_detected">Invert CT2 values when detected</string>
+    <string name="advanced">Advanced</string>
 </resources>

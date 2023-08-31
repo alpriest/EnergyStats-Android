@@ -165,4 +165,8 @@
     <string name="touch_the_graph_to_see_values_at_that_time">Berühren Sie den Graphen, um Werte zu dieser Zeit anzuzeigen</string>
     <string name="show_home_usage_total">Zeige den Gesamtverbrauch zu Hause</string>
     <string name="used_today">Heute verwendet</string>
+    <string name="show_inverter_temperatures">Zeige Temperaturen des Wechselrichters</string>
+    <string name="show_inverter_icon">Inverter-Symbol anzeigen</string>
+    <string name="invert_ct2_values_when_detected">CT2-Werte umkehren, wenn erkannt</string>
+    <string name="advanced">Erweitert</string>
 </resources>

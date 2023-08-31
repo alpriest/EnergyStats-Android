@@ -121,9 +121,9 @@
     <string name="charge_times">Orario di ricarica</string>
     <string name="min_battery_charge_soc">Livello minimo di carica della batteria (SOC)</string>
     <string name="no_battery_charge">La tua batteria non verrà caricata forzatamente dalla rete.</string>
-    <string name="both_battery_charge_periods">La tua batteria verrà caricata forzatamente dalla rete tra %1s e %2s</string>
+    <string name="both_battery_charge_periods">La tua batteria verrà caricata forzatamente dalla rete tra %1s e %2s.</string>
     <string name="battery_periods_overlap">. Questi periodi si sovrappongono, potresti volerli aggiornare.</string>
-    <string name="one_battery_charge_period">La tua batteria verrà caricata forzatamente dalla rete tra %1s</string>
+    <string name="one_battery_charge_period">La tua batteria verrà caricata forzatamente dalla rete tra %1s.</string>
     <string name="saving">Risparmio</string>
     <string name="enable_charge_from_grid">Abilita carica dalla rete</string>
     <string name="start">Inizio</string>
@@ -166,4 +166,8 @@
     <string name="touch_the_graph_to_see_values_at_that_time">Tocca il grafico per visualizzare i valori in quel momento</string>
     <string name="show_home_usage_total">Mostra il totale dell\'uso domestico</string>
     <string name="used_today">Usato oggi</string>
+    <string name="show_inverter_temperatures">Mostra temperature dell\'inverter</string>
+    <string name="show_inverter_icon">Mostra icona dell\'inverter</string>
+    <string name="invert_ct2_values_when_detected">Inverti i valori di CT2 quando rilevato</string>
+    <string name="advanced">Avanzate</string>
 </resources>

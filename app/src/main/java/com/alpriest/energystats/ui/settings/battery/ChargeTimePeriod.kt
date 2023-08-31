@@ -19,9 +19,9 @@ data class ChargeTimePeriod(
         )
     }
 
-    companion object
-}
+    fun hasTimes(): Boolean {
+        return start != Time.zero() || end != Time.zero()
+    }
 
-fun Time.Companion.zero(): Time {
-    return Time(0, 0)
+    companion object
 }

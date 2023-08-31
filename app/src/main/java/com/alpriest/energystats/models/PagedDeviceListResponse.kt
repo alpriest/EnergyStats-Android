@@ -38,6 +38,7 @@ data class Device(
     val deviceID: String,
     val deviceSN: String,
     val hasPV: Boolean,
+    val hasBattery: Boolean,
     val battery: Battery?,
     val deviceType: String?,
     val firmware: DeviceFirmwareVersion?,

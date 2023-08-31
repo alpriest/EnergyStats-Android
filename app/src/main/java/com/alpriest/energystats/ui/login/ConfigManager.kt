@@ -236,6 +236,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                         deviceID = it.deviceID,
                         deviceSN = it.deviceSN,
                         hasPV = it.hasPV,
+                        hasBattery = it.hasBattery,
                         battery = if (it.hasBattery) Battery(batteryCapacity, minSOC) else null,
                         deviceType = it.deviceType,
                         firmware = firmware,

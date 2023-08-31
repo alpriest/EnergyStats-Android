@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
@@ -17,6 +18,7 @@ import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -33,15 +35,25 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 
             SettingsColumnWithChild {
                 SettingsCheckbox(
-                    title = "Show inverter temperatures",
+                    title = stringResource(R.string.show_inverter_temperatures),
                     state = showInverterTemperaturesState,
                     onConfigUpdate = { configManager.showInverterTemperatures = it }
                 )
 
                 SettingsCheckbox(
-                    title = "Show inverter icon",
+                    title = stringResource(R.string.show_inverter_icon),
                     state = showInverterIconState,
                     onConfigUpdate = { configManager.showInverterIcon = it }
+                )
+            }
+
+            SettingsColumnWithChild {
+                SettingsTitleView(title = stringResource(R.string.advanced))
+                SettingsCheckbox(
+                    title = stringResource(R.string.invert_ct2_values_when_detected),
+                    state = showInverterIconState,
+                    onConfigUpdate = { configManager.showInverterIcon = it },
+                    footer = buildAnnotatedString { append("If you have multiple inverters and your PV generation values are incorrect try toggling this.") }
                 )
             }
 
@@ -59,7 +71,7 @@ fun DeviceVersionView(device: Device) {
         SettingsRow("Device ID", device.deviceID)
         SettingsRow("Device Serial No.", device.deviceSN)
         SettingsRow("Module Serial No", device.moduleSN)
-        SettingsRow("Has Battery", if (device.battery != null) "true" else "false")
+        SettingsRow("Has Battery", if (device.hasBattery) "true" else "false")
         SettingsRow("Has Solar", if (device.hasPV) "true" else "false")
     }
 }

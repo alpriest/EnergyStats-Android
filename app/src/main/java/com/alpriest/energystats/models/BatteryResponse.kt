@@ -24,7 +24,7 @@ data class EarningsResponse(
     fun currencySymbol(): String {
         if (currency.startsWith("GBP")) {
             return "£"
-        } else if(currency.startsWith("EUR")) {
+        } else if (currency.startsWith("EUR")) {
             return "€"
         }
 
@@ -57,7 +57,11 @@ data class Time(
     val hour: Int,
     val minute: Int
 ) {
-    companion object
+    companion object {
+        fun zero(): Time {
+            return Time(0, 0)
+        }
+    }
 }
 
 data class DeviceSettingsGetResponse(
