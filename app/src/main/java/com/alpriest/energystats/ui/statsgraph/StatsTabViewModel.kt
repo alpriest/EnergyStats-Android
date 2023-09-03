@@ -250,7 +250,7 @@ class StatsTabViewModel(
         }
 
         homeUsageStream.value = loads
-        totalSolarGeneratedStream.value = min(0.0, (batteryCharge - batteryDischarge - grid + loads + feedIn))
+        totalSolarGeneratedStream.value = max(0.0, (batteryCharge - batteryDischarge - grid + loads + feedIn))
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
             loads,
