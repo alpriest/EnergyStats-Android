@@ -30,23 +30,14 @@ class HomePowerFlowViewModel(
     val earnings: String,
     val inverterViewModel: InverterViewModel?,
     val hasBattery: Boolean,
-    val report: List<ReportResponse>,
     val battery: BatteryViewModel,
-    val configManager: ConfigManaging
+    val configManager: ConfigManaging,
+    val homeTotal: Double,
+    val gridImportTotal: Double,
+    val gridExportTotal: Double
 ) : ViewModel() {
-    val homeTotal: Double = report.todayValue(forKey = "loads")
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
         BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperature, battery.residual, battery.error)
     else
         null
-}
-
-private fun List<ReportResponse>.todayValue(forKey: String): Double {
-    val item = currentData(forKey)
-    return item?.value ?: 0.0
-}
-
-private fun List<ReportResponse>.currentData(forKey: String): ReportData? {
-    val todaysDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }?.data?.firstOrNull { it.index == todaysDate }
 }

@@ -7,7 +7,10 @@ import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String) : ConfigManaging {
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
@@ -26,7 +29,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showInverterTemperatures = config.showInverterTemperatures,
             showInverterIcon = config.showInverterIcon,
             showHomeTotal = config.showHomeTotal,
-            shouldInvertCT2 = config.shouldInvertCT2
+            shouldInvertCT2 = config.shouldInvertCT2,
+            showGridTotals = config.showGridTotals
         )
     )
 
@@ -155,6 +159,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.shouldInvertCT2 = value
             themeStream.value = themeStream.value.copy(shouldInvertCT2 = shouldInvertCT2)
+        }
+
+    override var showGridTotals: Boolean
+        get() = config.showGridTotals
+        set(value) {
+            config.showGridTotals = value
+            themeStream.value = themeStream.value.copy(showGridTotals = showGridTotals)
         }
 
     final override var devices: List<Device>?
@@ -296,11 +307,15 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.selectedParameterGraphVariables = value
         }
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     init {
-        currentDevice.onEach {
-            minSOC.value = it?.battery?.minSOC?.toDouble()
-        }
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceID == selectedDeviceID })
+        coroutineScope.launch {
+            currentDevice.collect {
+                minSOC.value = it?.battery?.minSOC?.toDouble()
+            }
+        }
     }
 }
 

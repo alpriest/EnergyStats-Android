@@ -2,13 +2,13 @@ package com.alpriest.energystats.ui.flow.grid
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun PylonView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-    val color = MaterialTheme.colors.onBackground
+    val color = iconBackgroundColor()
     val strokeWidth = themeStream.collectAsState().value.strokeWidth()
 
     Canvas(

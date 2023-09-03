@@ -49,7 +49,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
         SelfSufficiencyEstimateMode.Absolute -> viewModel.absoluteSelfSufficiencyEstimationStream.collectAsState().value
     }
     val homeUsage = viewModel.homeUsageStream.collectAsState().value
-    val solarUsage = viewModel.solarUsageStream.collectAsState().value
+    val totalSolarGenerated = viewModel.totalSolarGeneratedStream.collectAsState().value
 
     Box(modifier) {
         Column(
@@ -103,13 +103,13 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                     }
                 }
 
-                solarUsage?.let {
+                totalSolarGenerated?.let {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Solar consumption",
+                            "Solar generated",
                             fontSize = fontSize
                         )
                         Text(

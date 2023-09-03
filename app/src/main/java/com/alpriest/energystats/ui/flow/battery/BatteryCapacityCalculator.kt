@@ -51,10 +51,6 @@ class BatteryCapacityCalculator(
         }
     }
 
-    fun currentEstimatedChargeAmountW(batteryStateOfCharge: Double, includeUnusableCapacity: Boolean = true): Double {
-        return (capacityW * batteryStateOfCharge) - (if (includeUnusableCapacity) 0.0 else minimumCharge)
-    }
-
     fun effectiveBatteryStateOfCharge(batteryStateOfCharge: Double, includeUnusableCapacity: Boolean = true): Double {
         if (batteryStateOfCharge > percentageConsideredFull) return 0.99
 

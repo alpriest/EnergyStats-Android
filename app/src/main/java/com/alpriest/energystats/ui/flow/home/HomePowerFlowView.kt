@@ -58,7 +58,8 @@ fun AppTheme.Companion.preview(
     showInverterTemperatures: Boolean = false,
     showInverterIcon: Boolean = true,
     showHomeTotal: Boolean = false,
-    shouldInvertCT2: Boolean = false
+    shouldInvertCT2: Boolean = false,
+    showGridTotals: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -75,6 +76,7 @@ fun AppTheme.Companion.preview(
         showInverterTemperatures = showInverterTemperatures,
         showInverterIcon = showInverterIcon,
         showHomeTotal = showHomeTotal,
-        shouldInvertCT2 = shouldInvertCT2
+        shouldInvertCT2 = shouldInvertCT2,
+        showGridTotals = showGridTotals
     )
 }

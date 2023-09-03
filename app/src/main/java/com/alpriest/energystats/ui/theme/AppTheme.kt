@@ -21,7 +21,8 @@ data class AppTheme(
     val showInverterTemperatures: Boolean,
     val showInverterIcon: Boolean,
     val showHomeTotal: Boolean,
-    val shouldInvertCT2: Boolean
+    val shouldInvertCT2: Boolean,
+    val showGridTotals: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

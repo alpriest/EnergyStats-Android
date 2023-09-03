@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.flow.home
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,6 +32,7 @@ import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Wh
+import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 
 @Composable
 fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: String, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
@@ -66,7 +66,7 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: String, m
 
             else -> {
                 glowing = false
-                sunColor = MaterialTheme.colors.onBackground
+                sunColor = iconBackgroundColor()
                 glowColor = Color.Transparent
             }
         }

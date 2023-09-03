@@ -21,4 +21,5 @@ interface ConfigInterface {
     var showInverterIcon: Boolean
     var showHomeTotal: Boolean
     var shouldInvertCT2: Boolean
+    var showGridTotals: Boolean
 }

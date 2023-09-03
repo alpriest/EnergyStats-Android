@@ -6,30 +6,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.House
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.ReportData
 import com.alpriest.energystats.models.ReportResponse
-import com.alpriest.energystats.models.Wh
-import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
@@ -49,11 +39,6 @@ fun SummaryPowerFlowView(
     themeStream: MutableStateFlow<AppTheme>,
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
-    val showHomeTotal = themeStream.collectAsState().value.showHomeTotal
-    val fontSize = themeStream.collectAsState().value.fontSize()
-    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
-    val showValuesInWatts = themeStream.collectAsState().value.showValuesInWatts
-    val context = LocalContext.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -120,45 +105,22 @@ fun SummaryPowerFlowView(
                 )
             }
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+            HomeIconView(
+                viewModel = homePowerFlowViewModel,
+                themeStream = themeStream,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f)
                     .padding(top = 4.dp),
-            ) {
-                Icon(
-                    Icons.Rounded.House,
-                    contentDescription = "House",
-                    modifier = Modifier
-                        .size(iconHeight + 18.dp)
-                        .offset(y = (-8).dp),
-                    tint = MaterialTheme.colors.onBackground
-                )
-
-                if (showHomeTotal) {
-                    Column(
-                        modifier = Modifier.offset(y = (-18).dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text(
-                            text = if (showValuesInWatts) homePowerFlowViewModel.homeTotal.Wh(decimalPlaces) else homePowerFlowViewModel.homeTotal.kWh(decimalPlaces),
-                            fontSize = fontSize,
-                        )
-                        Text(
-                            context.getString(R.string.used_today),
-                            fontSize = fontSize,
-                            color = Color.Gray,
-                        )
-                    }
-                }
-            }
+                iconHeight = iconHeight
+            )
 
             Spacer(
                 modifier = Modifier.weight(1f)
             )
 
             GridIconView(
+                viewModel = homePowerFlowViewModel,
                 iconHeight = iconHeight,
                 themeStream = themeStream,
                 modifier = Modifier
@@ -187,9 +149,6 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
 @Preview(showBackground = true, widthDp = 380, heightDp = 640)
 @Composable
 fun SummaryPowerFlowViewPreview() {
-    val formatter = DateTimeFormatter.ofPattern(dateFormat)
-    val now = LocalDateTime.now().format(formatter)
-
     EnergyStatsTheme {
         SummaryPowerFlowView(
             PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview())),
@@ -201,11 +160,11 @@ fun SummaryPowerFlowViewPreview() {
                 earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
                 inverterViewModel = null,
                 hasBattery = true,
-                report = listOf(
-                    ReportResponse("loads", arrayOf(ReportData(index = 27, value = 5.0)))
-                ),
                 battery = BatteryViewModel(),
-                FakeConfigManager()
+                FakeConfigManager(),
+                gridImportTotal = 1.0,
+                gridExportTotal = 2.0,
+                homeTotal = 1.0
             ),
             themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true)),
         )

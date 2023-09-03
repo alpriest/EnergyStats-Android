@@ -164,12 +164,13 @@ class PowerFlowTabViewModel(
 
                 val report = network.fetchReport(
                     currentDevice.deviceID,
-                    listOf(ReportVariable.Loads),
+                    listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption),
                     QueryDate(),
                     ReportType.month
                 )
 
                 val currentViewModel = CurrentStatusViewModel(currentDevice, raws, configManager.shouldInvertCT2)
+                val totals = TotalsViewModel(report)
 
                 val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
                     val battery = network.fetchBattery(deviceID = currentDevice.deviceID)
@@ -186,9 +187,11 @@ class PowerFlowTabViewModel(
                     earnings = makeEarnings(earnings),
                     inverterViewModel = currentViewModel.inverterViewModel,
                     hasBattery = battery.hasBattery,
-                    report = report,
                     battery = battery,
-                    configManager = configManager
+                    configManager = configManager,
+                    homeTotal = totals.homeTotal,
+                    gridImportTotal = totals.gridImportTotal,
+                    gridExportTotal = totals.gridExportTotal
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

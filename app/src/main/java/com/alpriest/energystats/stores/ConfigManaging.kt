@@ -40,4 +40,5 @@ interface ConfigManaging {
     var selectedParameterGraphVariables: List<String>
     var showInverterIcon: Boolean
     var showHomeTotal: Boolean
+    var showGridTotals: Boolean
 }

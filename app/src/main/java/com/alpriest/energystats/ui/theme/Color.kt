@@ -19,3 +19,5 @@ val LightApproximationBackground = Color(0xFFECF7F9)
 val ApproximationHeaderText = Color.White
 val DarkApproximationHeader = Color(0xFF2A7185)
 val DarkApproximationBackground = Color.Black
+val IconColorInDarkTheme = Color(0xFFFFFFFF)
+val IconColorInLightTheme = Color(0xFF000000)

@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -130,12 +131,14 @@ private fun BatteryPercentage(
             if (percentage) {
                 Text(
                     viewModel.batteryStateOfCharge().asPercent(),
-                    fontSize = fontSize
+                    fontSize = fontSize,
+                    fontWeight = FontWeight.Bold
                 )
             } else {
                 Text(
                     viewModel.batteryStoredChargekWh().kWh(decimalPlaces),
-                    fontSize = fontSize
+                    fontSize = fontSize,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -157,7 +160,8 @@ fun duration(estimate: BatteryCapacityEstimate): String {
         in 0..60 -> "$text ${estimate.duration} $mins"
         in 61..119 -> "$text ${estimate.duration / 60} $hour"
         in 120..1440 -> "$text ${Math.round(estimate.duration / 60.0)} $hours"
-        else -> "$text ${Math.round(estimate.duration / 1444.0)} days"
+        in 1441 .. 2880 -> "$text ${Math.round(estimate.duration / 1440.0)} day"
+        else -> "$text ${Math.round(estimate.duration / 1440.0)} days"
     }
 }
 

@@ -4,7 +4,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ElectricBolt
 import androidx.compose.runtime.Composable
@@ -20,13 +19,15 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
+import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun InverterIconView(modifier: Modifier = Modifier) {
     val painter = rememberVectorPainter(Icons.Default.ElectricBolt)
-    val inverterBackground = colors.onBackground
-    val boltTint = colors.background
+    val inverterBackground = iconBackgroundColor()
+    val boltTint = iconForegroundColor()
 
     Canvas(
         modifier = modifier

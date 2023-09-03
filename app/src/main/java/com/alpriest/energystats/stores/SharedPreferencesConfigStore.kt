@@ -28,8 +28,17 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SELECTED_PARAMETER_GRAPH_VARIABLES,
         SHOW_INVERTER_ICON,
         SHOW_HOME_TOTAL,
-        SHOULD_INVERT_CT2
+        SHOULD_INVERT_CT2,
+        SHOW_GRID_TOTALS
     }
+
+    override var showGridTotals: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_GRID_TOTALS.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_GRID_TOTALS.name, value)
+            editor.apply()
+        }
 
     override var showHomeTotal: Boolean
         get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_HOME_TOTAL.name, false)

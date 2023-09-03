@@ -194,11 +194,11 @@ fun PowerFlowTabViewPreview() {
         earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
         inverterViewModel = null,
         hasBattery = true,
-        report = listOf(
-            ReportResponse("loads", arrayOf(ReportData(index = 1, value = 5.0)))
-        ),
         battery = BatteryViewModel(),
-        FakeConfigManager()
+        FakeConfigManager(),
+        homeTotal = 1.0,
+        gridImportTotal = 1.0,
+        gridExportTotal = 2.0
     )
 
     EnergyStatsTheme {

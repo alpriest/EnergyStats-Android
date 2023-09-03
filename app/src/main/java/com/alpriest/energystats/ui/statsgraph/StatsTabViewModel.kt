@@ -17,6 +17,7 @@ import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.lang.Math.max
+import java.lang.Math.min
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 import java.util.ArrayList
@@ -48,7 +49,7 @@ class StatsTabViewModel(
     var netSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
     var absoluteSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
     var homeUsageStream = MutableStateFlow<Double?>(null)
-    var solarUsageStream = MutableStateFlow<Double?>(null)
+    var totalSolarGeneratedStream = MutableStateFlow<Double?>(null)
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
@@ -249,7 +250,7 @@ class StatsTabViewModel(
         }
 
         homeUsageStream.value = loads
-        solarUsageStream.value = loads - grid
+        totalSolarGeneratedStream.value = min(0.0, (batteryCharge - batteryDischarge - grid + loads + feedIn))
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
             loads,
