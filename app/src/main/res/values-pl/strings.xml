@@ -164,10 +164,13 @@
     <string name="battery_soc_changes_were_saved">Zmiany w SOC baterii zostały zapisane</string>
     <string name="inverter_work_mode_was_saved">Tryb pracy falownika został zapisany</string>
     <string name="touch_the_graph_to_see_values_at_that_time">Dotknij wykresu, aby zobaczyć wartości o danej godzinie</string>
-    <string name="show_home_usage_total">Pokaż łączny użytkowanie w domu</string>
+    <string name="show_home_usage_total">Pokaż codzienne sumy w domu</string>
     <string name="used_today">Użyte dzisiaj</string>
     <string name="show_inverter_temperatures">Pokaż temperatury falownika</string>
     <string name="show_inverter_icon">Pokaż ikonę falownika</string>
     <string name="invert_ct2_values_when_detected">Odwróć wartości CT2 po wykryciu</string>
     <string name="advanced">Zaawansowane</string>
+    <string name="total_import">Import całkowity</string>
+    <string name="total_export">Eksport całkowity</string>
+    <string name="show_daily_grid_totals">Pokaż codzienne sumy z sieci</string>
 </resources>

@@ -83,7 +83,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         )
 
         SettingsCheckbox(
-            title = "Show daily grid totals",
+            title = stringResource(R.string.show_daily_grid_totals),
             state = showGridTotalsState,
             onConfigUpdate = { config.showGridTotals = it }
         )

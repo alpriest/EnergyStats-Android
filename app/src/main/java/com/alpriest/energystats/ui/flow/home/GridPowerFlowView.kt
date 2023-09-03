@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -101,7 +102,7 @@ private fun GridTotals(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    "Total import",
+                    stringResource(R.string.total_import),
                     fontSize = fontSize,
                     color = Color.Gray,
                 )
@@ -112,7 +113,7 @@ private fun GridTotals(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    "Total export",
+                    stringResource(R.string.total_export),
                     fontSize = fontSize,
                     color = Color.Gray,
                 )
