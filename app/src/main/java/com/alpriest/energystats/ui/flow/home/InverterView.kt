@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -16,8 +17,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.battery.asTemperature
 import com.alpriest.energystats.ui.flow.inverter.InverterIconView
@@ -42,11 +45,12 @@ class InverterViewModel(
 @Composable
 fun InverterView(
     themeStream: MutableStateFlow<AppTheme>,
-    viewModel: InverterViewModel
+    viewModel: InverterViewModel,
+    orientation: Int = LocalConfiguration.current.orientation
 ) {
     val appTheme = themeStream.collectAsState().value
 
-    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+    if (orientation == Configuration.ORIENTATION_PORTRAIT) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,6 +166,22 @@ private fun InverterTemperatures(viewModel: InverterTemperaturesViewModel) {
         Text(
             "EXTERNAL",
             fontSize = 8.sp
+        )
+    }
+}
+
+@Composable
+@Preview
+fun InverterViewPreview() {
+    Column {
+        Spacer(modifier = Modifier.height(50.dp))
+
+        InverterView(
+            MutableStateFlow(
+                AppTheme.preview()
+            ),
+            InverterViewModel(temperatures = null, configManager = FakeConfigManager()),
+            orientation = Configuration.ORIENTATION_PORTRAIT
         )
     }
 }
