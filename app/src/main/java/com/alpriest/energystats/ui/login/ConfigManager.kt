@@ -232,13 +232,11 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         try {
             val mappedDevices = ArrayList<Device>()
             deviceList.devices.asFlow().map {
-                var batteryCapacity: String?
-                var minSOC: String?
-
                 currentAction = "fetch variables"
                 val variables = networking.fetchVariables(it.deviceID)
                 currentAction = "fetch firmware versions"
                 val firmware = fetchFirmwareVersions(it.deviceID)
+                var deviceBattery: Battery?
 
                 if (it.hasBattery) {
                     currentAction = "fetch battery"
@@ -246,15 +244,14 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                     currentAction = "fetch battery settings"
                     val batterySettings = networking.fetchBatterySettings(it.deviceSN)
                     try {
-                        batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
-                        minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
+                        val batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
+                        val minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
+                        deviceBattery = Battery(batteryCapacity, minSOC)
                     } catch (_: Exception) {
-                        batteryCapacity = null
-                        minSOC = null
+                        deviceBattery = null
                     }
                 } else {
-                    batteryCapacity = null
-                    minSOC = null
+                    deviceBattery = null
                 }
 
                 mappedDevices.add(
@@ -264,7 +261,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                         deviceSN = it.deviceSN,
                         hasPV = it.hasPV,
                         hasBattery = it.hasBattery,
-                        battery = if (it.hasBattery) Battery(batteryCapacity, minSOC) else null,
+                        battery = deviceBattery,
                         deviceType = it.deviceType,
                         firmware = firmware,
                         variables = variables,
