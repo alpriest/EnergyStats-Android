@@ -23,6 +23,8 @@ class FakeConfigStore(
     override var showInverterIcon: Boolean = false,
     override var showHomeTotal: Boolean = false,
     override var shouldInvertCT2: Boolean = false,
-    override var showGridTotals: Boolean = false
+    override var showGridTotals: Boolean = false,
+    override var showInverterTypeNameOnPowerflow: Boolean = true,
+    override var showInverterPlantNameOnPowerflow: Boolean = true
 ) : ConfigInterface {
 }

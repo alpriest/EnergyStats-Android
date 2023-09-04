@@ -1,7 +1,13 @@
 package com.alpriest.energystats.ui.flow.home
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -35,18 +41,12 @@ fun HomeIconView(viewModel: HomePowerFlowViewModel, themeStream: MutableStateFlo
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        Icon(
-            Icons.Rounded.House,
-            contentDescription = "House",
-            modifier = Modifier
-                .size(iconHeight + 18.dp)
-                .offset(y = (-8).dp),
-            tint = iconBackgroundColor()
+        HouseView(
+            modifier = Modifier.size(iconHeight)
         )
 
         if (showHomeTotal) {
             Column(
-                modifier = Modifier.offset(y = (-18).dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(

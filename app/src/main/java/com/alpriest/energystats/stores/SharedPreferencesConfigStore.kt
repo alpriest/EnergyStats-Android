@@ -29,7 +29,9 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_INVERTER_ICON,
         SHOW_HOME_TOTAL,
         SHOULD_INVERT_CT2,
-        SHOW_GRID_TOTALS
+        SHOW_GRID_TOTALS,
+        SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW,
+        SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW
     }
 
     override var showGridTotals: Boolean
@@ -201,6 +203,22 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOULD_INVERT_CT2.name, value)
+            editor.apply()
+        }
+
+    override var showInverterTypeNameOnPowerflow: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW.name, value)
+            editor.apply()
+        }
+
+    override var showInverterPlantNameOnPowerflow: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW.name, value)
             editor.apply()
         }
 }

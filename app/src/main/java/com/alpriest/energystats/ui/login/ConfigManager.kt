@@ -30,7 +30,9 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showInverterIcon = config.showInverterIcon,
             showHomeTotal = config.showHomeTotal,
             shouldInvertCT2 = config.shouldInvertCT2,
-            showGridTotals = config.showGridTotals
+            showGridTotals = config.showGridTotals,
+            showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
+            showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow
         )
     )
 
@@ -166,6 +168,20 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showGridTotals = value
             themeStream.value = themeStream.value.copy(showGridTotals = showGridTotals)
+        }
+
+    override var showInverterTypeNameOnPowerflow: Boolean
+        get() = config.showInverterTypeNameOnPowerflow
+        set(value) {
+            config.showInverterTypeNameOnPowerflow = value
+            themeStream.value = themeStream.value.copy(showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow)
+        }
+
+    override var showInverterPlantNameOnPowerflow: Boolean
+        get() = config.showInverterPlantNameOnPowerflow
+        set(value) {
+            config.showInverterPlantNameOnPowerflow = value
+            themeStream.value = themeStream.value.copy(showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow)
         }
 
     final override var devices: List<Device>?

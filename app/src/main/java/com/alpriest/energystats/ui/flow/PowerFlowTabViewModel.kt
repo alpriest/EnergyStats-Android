@@ -185,7 +185,7 @@ class PowerFlowTabViewModel(
                     grid = currentViewModel.currentGrid,
                     todaysGeneration = earnings.today.generation,
                     earnings = makeEarnings(earnings),
-                    inverterViewModel = currentViewModel.inverterViewModel,
+                    inverterTemperatures = currentViewModel.inverterTemperatures,
                     hasBattery = battery.hasBattery,
                     battery = battery,
                     configManager = configManager,

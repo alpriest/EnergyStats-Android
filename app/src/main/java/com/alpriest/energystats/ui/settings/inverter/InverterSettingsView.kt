@@ -27,6 +27,8 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val showInverterTemperaturesState = rememberSaveable { mutableStateOf(configManager.showInverterTemperatures) }
     val showInverterIconState = rememberSaveable { mutableStateOf(configManager.showInverterIcon) }
     val shouldInvertCT2State = rememberSaveable { mutableStateOf(configManager.shouldInvertCT2) }
+    val showInverterTypeNameState = rememberSaveable { mutableStateOf(configManager.showInverterTypeNameOnPowerflow) }
+    val showInverterPlantNameState = rememberSaveable { mutableStateOf(configManager.showInverterPlantNameOnPowerflow) }
 
     SettingsPage {
         InverterChoiceView(configManager)
@@ -45,6 +47,18 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                     title = stringResource(R.string.show_inverter_icon),
                     state = showInverterIconState,
                     onConfigUpdate = { configManager.showInverterIcon = it }
+                )
+
+                SettingsCheckbox(
+                    title = stringResource(R.string.show_inverter_type_name),
+                    state = showInverterTypeNameState,
+                    onConfigUpdate = { configManager.showInverterTypeNameOnPowerflow = it }
+                )
+
+                SettingsCheckbox(
+                    title = stringResource(R.string.show_inverter_plant_name),
+                    state = showInverterPlantNameState,
+                    onConfigUpdate = { configManager.showInverterPlantNameOnPowerflow = it }
                 )
             }
 

@@ -18,89 +18,128 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.battery.asTemperature
 import com.alpriest.energystats.ui.flow.inverter.InverterIconView
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
+class InverterViewModel(
+    private val configManager: ConfigManaging,
+    val temperatures: InverterTemperaturesViewModel?
+) {
+    val deviceType: String
+        get() {
+            return configManager.currentDevice.value?.deviceType ?: ""
+        }
+
+    val devicePlantName: String?
+        get() {
+            return configManager.currentDevice.value?.plantName
+        }
+}
+
 @Composable
 fun InverterView(
     themeStream: MutableStateFlow<AppTheme>,
-    homePowerFlowViewModel: HomePowerFlowViewModel
+    viewModel: InverterViewModel
 ) {
     val appTheme = themeStream.collectAsState().value
 
-    if (appTheme.showInverterTemperatures) {
-        homePowerFlowViewModel.inverterViewModel?.let {
-            if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(y = (-24).dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (appTheme.showInverterIcon) {
-                        InverterIconView(
-                            modifier = Modifier
-                                .width(43.dp)
-                                .height(50.dp)
-                                .padding(bottom = 4.dp)
-                                .background(MaterialTheme.colors.background)
-                        )
-                    }
-                    Text(
-                        modifier = Modifier
-                            .background(MaterialTheme.colors.background)
-                            .padding(4.dp),
-                        text = it.name
-                    )
-
-                    Row(modifier = Modifier.background(MaterialTheme.colors.background)) {
-                        InverterTemperatures(it)
-                    }
-                }
-            } else {
-                Column(
-                    modifier = Modifier
-                        .offset(y = (-12.dp))
-                        .fillMaxWidth()
-                        .padding(2.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row(
-                        modifier = Modifier.background(MaterialTheme.colors.background)
-                    ) {
-                        InverterTemperatures(it)
-
-                        Text(
-                            it.name,
-                            modifier = Modifier.padding(start = 12.dp)
-                        )
-                    }
-                }
-            }
-        }
-    } else {
-        if (appTheme.showInverterIcon) {
-            Column(
-                modifier = Modifier.Companion
-                    .fillMaxWidth()
-                    .offset(y = (-24).dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = (-24).dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (appTheme.showInverterIcon) {
                 InverterIconView(
                     modifier = Modifier
                         .width(43.dp)
                         .height(50.dp)
                         .padding(bottom = 4.dp)
+                        .background(MaterialTheme.colors.background)
                 )
+            }
+
+            inverterPortraitTitles(themeStream, viewModel)
+
+            if (appTheme.showInverterTemperatures) {
+                viewModel.temperatures?.let {
+                    Row(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                        InverterTemperatures(it)
+                    }
+                }
+            }
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .offset(y = (-12.dp))
+                .fillMaxWidth()
+                .padding(2.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier.background(MaterialTheme.colors.background)
+            ) {
+                viewModel.temperatures?.let {
+                    InverterTemperatures(it)
+                }
+
+                inverterLandscapeTitles(themeStream, viewModel)
             }
         }
     }
 }
 
 @Composable
-private fun InverterTemperatures(viewModel: InverterViewModel) {
+private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
+    val appTheme = themeStream.collectAsState().value
+
+    if (appTheme.showInverterTypeNameOnPowerflow) {
+        Text(
+            text = inverterTemperaturesViewModel.deviceType
+        )
+    }
+
+    if (appTheme.showInverterPlantNameOnPowerflow) {
+        inverterTemperaturesViewModel.devicePlantName?.let {
+            Text(
+                text = it
+            )
+        }
+    }
+}
+
+@Composable
+private fun inverterLandscapeTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
+    val appTheme = themeStream.collectAsState().value
+
+    if (appTheme.showInverterTypeNameOnPowerflow) {
+        Text(
+            modifier = Modifier
+                .background(MaterialTheme.colors.background)
+                .padding(4.dp),
+            text = inverterTemperaturesViewModel.deviceType
+        )
+    }
+
+    if (appTheme.showInverterPlantNameOnPowerflow) {
+        inverterTemperaturesViewModel.devicePlantName?.let {
+            Text(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.background)
+                    .padding(4.dp),
+                text = it
+            )
+        }
+    }
+}
+
+@Composable
+private fun InverterTemperatures(viewModel: InverterTemperaturesViewModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(end = 4.dp)

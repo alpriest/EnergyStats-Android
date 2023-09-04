@@ -39,6 +39,8 @@ class FakeConfigManager : ConfigManaging {
     override var showHomeTotal: Boolean = true
     override var shouldInvertCT2: Boolean = false
     override var showGridTotals: Boolean = false
+    override var showInverterPlantNameOnPowerflow: Boolean = false
+    override var showInverterTypeNameOnPowerflow: Boolean = false
     override var devices: List<Device>? = listOf(
         Device(
             plantName = "plant 1",

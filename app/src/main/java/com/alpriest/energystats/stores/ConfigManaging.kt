@@ -8,6 +8,8 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface ConfigManaging {
+    var showInverterTypeNameOnPowerflow: Boolean
+    var showInverterPlantNameOnPowerflow: Boolean
     var shouldInvertCT2: Boolean
     val variables: List<RawVariable>
     val hasBattery: Boolean

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.flow.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,10 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.ReportData
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
@@ -29,11 +29,10 @@ import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun SummaryPowerFlowView(
+    configManager: ConfigManaging,
     powerFlowViewModel: PowerFlowTabViewModel,
     homePowerFlowViewModel: HomePowerFlowViewModel = viewModel(),
     themeStream: MutableStateFlow<AppTheme>,
@@ -86,7 +85,7 @@ fun SummaryPowerFlowView(
                 )
             }
 
-            InverterView(themeStream, homePowerFlowViewModel)
+            InverterView(themeStream, InverterViewModel(configManager, temperatures = homePowerFlowViewModel.inverterTemperatures))
         }
 
         Row {
@@ -151,6 +150,7 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
 fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme {
         SummaryPowerFlowView(
+            FakeConfigManager(),
             PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview())),
             homePowerFlowViewModel = HomePowerFlowViewModel(
                 solar = 1.0,
@@ -158,7 +158,7 @@ fun SummaryPowerFlowViewPreview() {
                 grid = 2.45,
                 todaysGeneration = 1.0,
                 earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
-                inverterViewModel = null,
+                inverterTemperatures = null,
                 hasBattery = true,
                 battery = BatteryViewModel(),
                 FakeConfigManager(),

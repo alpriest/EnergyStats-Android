@@ -6,6 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
@@ -50,15 +53,17 @@ fun PylonView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modi
         )
         drawLine(
             color = color,
-            start = Offset(x = hSize * 1f, y = vSize * 2.5f),
-            end = Offset(x = hSize * 9, y = vSize * 2.5f),
-            strokeWidth = strokeWidth
+            start = Offset(x = hSize * 1.5f, y = vSize * 2.5f),
+            end = Offset(x = hSize * 8.5f, y = vSize * 2.5f),
+            strokeWidth = strokeWidth,
+            cap = StrokeCap.Round
         )
         drawLine(
             color = color,
-            start = Offset(x = 0f, y = vSize * 5f),
-            end = Offset(x = size.width, y = vSize * 5f),
-            strokeWidth = strokeWidth
+            start = Offset(x = 3f, y = vSize * 5f),
+            end = Offset(x = size.width - 3f, y = vSize * 5f),
+            strokeWidth = strokeWidth,
+            cap = StrokeCap.Round
         )
         drawLine(
             color = color,

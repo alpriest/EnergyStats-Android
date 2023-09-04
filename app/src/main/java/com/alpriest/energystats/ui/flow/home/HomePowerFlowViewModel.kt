@@ -2,13 +2,8 @@ package com.alpriest.energystats.ui.flow.home
 
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.RawData
-import com.alpriest.energystats.models.RawResponse
-import com.alpriest.energystats.models.ReportData
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
-import java.util.Calendar
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
 
@@ -17,9 +12,10 @@ data class InverterTemperatures(
     val inverter: Double
 )
 
-data class InverterViewModel(
+data class InverterTemperaturesViewModel(
     val temperatures: InverterTemperatures,
-    val name: String
+    val name: String,
+    val plantName: String?
 )
 
 class HomePowerFlowViewModel(
@@ -28,7 +24,7 @@ class HomePowerFlowViewModel(
     val grid: Double,
     val todaysGeneration: Double,
     val earnings: String,
-    val inverterViewModel: InverterViewModel?,
+    val inverterTemperatures: InverterTemperaturesViewModel?,
     val hasBattery: Boolean,
     val battery: BatteryViewModel,
     val configManager: ConfigManaging,

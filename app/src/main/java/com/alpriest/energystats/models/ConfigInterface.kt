@@ -22,4 +22,6 @@ interface ConfigInterface {
     var showHomeTotal: Boolean
     var shouldInvertCT2: Boolean
     var showGridTotals: Boolean
+    var showInverterTypeNameOnPowerflow: Boolean
+    var showInverterPlantNameOnPowerflow: Boolean
 }

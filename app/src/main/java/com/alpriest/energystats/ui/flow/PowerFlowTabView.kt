@@ -36,8 +36,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.ReportData
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
@@ -45,15 +43,12 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowView
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
-import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class PowerFlowTabViewModelFactory(
     private val network: Networking,
@@ -173,6 +168,7 @@ class PowerFlowTabView(
                 .padding(12.dp)
         ) {
             SummaryPowerFlowView(
+                configManager = configManager,
                 powerFlowViewModel = viewModel,
                 homePowerFlowViewModel = homePowerFlowViewModel,
                 themeStream = themeStream
@@ -192,7 +188,7 @@ fun PowerFlowTabViewPreview() {
         grid = 2.45,
         todaysGeneration = 5.4,
         earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
-        inverterViewModel = null,
+        inverterTemperatures = null,
         hasBattery = true,
         battery = BatteryViewModel(),
         FakeConfigManager(),

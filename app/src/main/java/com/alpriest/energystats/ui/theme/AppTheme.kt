@@ -22,7 +22,9 @@ data class AppTheme(
     val showInverterIcon: Boolean,
     val showHomeTotal: Boolean,
     val shouldInvertCT2: Boolean,
-    val showGridTotals: Boolean
+    val showGridTotals: Boolean,
+    val showInverterTypeNameOnPowerflow: Boolean,
+    val showInverterPlantNameOnPowerflow: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
