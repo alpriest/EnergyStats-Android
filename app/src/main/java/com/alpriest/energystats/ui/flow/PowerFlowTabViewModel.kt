@@ -217,7 +217,14 @@ class PowerFlowTabViewModel(
         totalSeconds = when (configManager.refreshFrequency) {
             RefreshFrequency.OneMinute -> 60
             RefreshFrequency.FiveMinutes -> 300
-            RefreshFrequency.Auto -> (300 - diff + 10).toInt()
+            RefreshFrequency.Auto -> {
+                var newTicks = (300 - diff + 10).toInt()
+                if (newTicks <= 0) {
+                    newTicks = 300
+                }
+
+                newTicks
+            }
         }
     }
 

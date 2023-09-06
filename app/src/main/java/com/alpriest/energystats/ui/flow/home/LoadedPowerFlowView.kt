@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.flow.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -138,25 +142,42 @@ fun LoadedPowerFlowView(
 @Composable
 fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
     val updateState by viewModel.updateMessage.collectAsState()
-    val showLastUpdateTimestamp = themeStream.collectAsState().value.showLastUpdateTimestamp
+    val appTheme = themeStream.collectAsState().value
+    var showLastUpdateTimestamp by remember { mutableStateOf(false) }
 
     Row(
         Modifier
             .padding(top = 12.dp)
             .padding(bottom = 4.dp)
     ) {
-        if (showLastUpdateTimestamp) {
+        if (appTheme.showLastUpdateTimestamp) {
             Text(
                 updateState.updateState.lastUpdateMessage(),
                 Modifier.padding(end = 10.dp),
                 color = Color.Gray,
             )
-        }
 
-        Text(
-            updateState.updateState.updateMessage(),
-            color = Color.Gray
-        )
+            Text(
+                updateState.updateState.updateMessage(),
+                color = Color.Gray
+            )
+        } else {
+            Row(
+                modifier = Modifier.clickable { showLastUpdateTimestamp = !showLastUpdateTimestamp },
+            ) {
+                if (showLastUpdateTimestamp) {
+                    Text(
+                        updateState.updateState.lastUpdateMessage(),
+                        color = Color.Gray,
+                    )
+                } else {
+                    Text(
+                        updateState.updateState.updateMessage(),
+                        color = Color.Gray
+                    )
+                }
+            }
+        }
     }
 }
 
