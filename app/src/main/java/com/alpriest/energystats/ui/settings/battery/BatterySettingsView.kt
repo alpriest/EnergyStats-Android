@@ -125,7 +125,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     ) {
                         Button(
                             onClick = {
-                                config.updateBatteryCapacity(editingCapacity)
+                                config.batteryCapacity = editingCapacity.toInt()
                                 isEditingCapacity.value = false
                             }
                         ) {

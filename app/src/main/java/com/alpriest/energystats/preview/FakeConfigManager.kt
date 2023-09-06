@@ -28,7 +28,7 @@ class FakeConfigManager : ConfigManaging {
     override var showEstimatedEarnings: Boolean = false
     override var useLargeDisplay: Boolean = false
     override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(20.0)
-    override val batteryCapacity: Int = 3000
+    override var batteryCapacity: Int = 3000
     override var isDemoUser: Boolean = true
     override var useColouredFlowLines: Boolean = true
     override var refreshFrequency: RefreshFrequency = RefreshFrequency.Auto
@@ -41,6 +41,7 @@ class FakeConfigManager : ConfigManaging {
     override var showGridTotals: Boolean = false
     override var showInverterPlantNameOnPowerflow: Boolean = false
     override var showInverterTypeNameOnPowerflow: Boolean = false
+    override var showLastUpdateTimestamp: Boolean = false
     override var devices: List<Device>? = listOf(
         Device(
             plantName = "plant 1",
@@ -84,9 +85,6 @@ class FakeConfigManager : ConfigManaging {
     override val selectedDeviceID: String? = "f3000_deviceid"
 
     override fun logout() {
-    }
-
-    override fun updateBatteryCapacity(capacity: String) {
     }
 
     override suspend fun fetchDevices() {

@@ -7,4 +7,9 @@ object EmptyUpdateMessageState : UpdateMessageState() {
     override fun updateMessage(): String {
         return " "
     }
+
+    @Composable
+    override fun lastUpdateMessage(): String {
+        return ""
+    }
 }

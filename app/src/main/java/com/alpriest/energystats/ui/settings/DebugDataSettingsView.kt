@@ -190,8 +190,6 @@ fun prettyPrintJson(jsonString: String): String {
 @Composable
 fun DataSettingsViewPreview() {
     val networkStore = InMemoryLoggingNetworkStore()
-    val formatter = DateTimeFormatter.ofPattern(dateFormat)
-    val now = LocalDateTime.now().format(formatter)
     val navController = rememberNavController()
 
     EnergyStatsTheme {

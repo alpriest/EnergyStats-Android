@@ -83,7 +83,7 @@ fun HouseView(modifier: Modifier = Modifier) {
         val doorHeight = soffitsTop * 0.9f
         drawRoundRect(
             color = foregroundColor,
-            topLeft = Offset(x = doorLeft, y = size.height - (soffitsTop * 0.1f) - doorHeight),
+            topLeft = Offset(x = doorLeft, y = size.height - (soffitsTop * 0.13f) - doorHeight),
             size = Size(doorWidth, doorHeight),
             cornerRadius = CornerRadius(2f, 2f)
         )

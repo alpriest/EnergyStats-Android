@@ -57,6 +57,7 @@ class PowerFlowTabViewModel(
     private var isLoading = false
     private var totalSeconds = 60
     private val lock = ReentrantLock()
+    private var lastUpdateTime = LocalDateTime.now()
 
     init {
         appLifecycleObserver.attach()
@@ -85,6 +86,7 @@ class PowerFlowTabViewModel(
             viewModelScope.launch {
                 try {
                     loadData()
+                    lastUpdateTime = LocalDateTime.now()
                     startTimer()
                 } finally {
                     isLoading = false
@@ -114,7 +116,7 @@ class PowerFlowTabViewModel(
         timer = object : CountDownTimer(totalSeconds * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds: Int = (millisUntilFinished / 1000).toInt()
-                _updateMessage.value = UiUpdateMessageState(PendingUpdateMessageState(seconds))
+                _updateMessage.value = UiUpdateMessageState(PendingUpdateMessageState(seconds, lastUpdateTime))
             }
 
             override fun onFinish() {

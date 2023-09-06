@@ -173,4 +173,8 @@
     <string name="total_import">Importazione totale</string>
     <string name="total_export">Esportazione totale</string>
     <string name="show_daily_grid_totals">Mostra totali giornalieri della rete</string>
+    <string name="show_inverter_type_name">Mostra nome inverter</string>
+    <string name="show_inverter_plant_name">Mostra nome impianto inverter</string>
+    <string name="logging_in">Accesso in corso…</string>
+    <string name="last_update">Ultimo aggiornamento %1s</string>
 </resources>

@@ -31,7 +31,9 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOULD_INVERT_CT2,
         SHOW_GRID_TOTALS,
         SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW,
-        SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW
+        SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW,
+        BATTERY_CAPACITY_OVERRIDES,
+        SHOW_LAST_UPDATE_TIMESTAMP
     }
 
     override var showGridTotals: Boolean
@@ -219,6 +221,26 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW.name, value)
+            editor.apply()
+        }
+
+    override var deviceBatteryOverrides: Map<String, String>
+        get() {
+            val variables = sharedPreferences.getString(SharedPreferenceKey.BATTERY_CAPACITY_OVERRIDES.name, Gson().toJson(listOf<String>()))
+            return Gson().fromJson(variables, object: TypeToken<Map<String, String>>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceKey.BATTERY_CAPACITY_OVERRIDES.name, jsonString)
+            editor.apply()
+        }
+
+    override var showLastUpdateTimestamp: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_LAST_UPDATE_TIMESTAMP.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_LAST_UPDATE_TIMESTAMP.name, value)
             editor.apply()
         }
 }

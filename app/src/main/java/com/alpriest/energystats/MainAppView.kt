@@ -3,9 +3,13 @@ package com.alpriest.energystats
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.login.CredentialsView
@@ -13,12 +17,23 @@ import com.alpriest.energystats.ui.login.LoggedIn
 import com.alpriest.energystats.ui.login.LoggedOut
 import com.alpriest.energystats.ui.login.LoggingIn
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainAppView(appContainer: AppContainer) {
     val theme = appContainer.configManager.themeStream.collectAsState()
     val loginState = appContainer.userManager.loggedInState.collectAsState()
+    val loadingStateFlow = remember { mutableStateOf(true) }
+    val isLoading = loadingStateFlow.value
+
+    LaunchedEffect(null) {
+        if (loginState.value.loadState == LoggedIn) {
+            appContainer.configManager.fetchDevices()
+            appContainer.configManager.refreshFirmwareVersion()
+            loadingStateFlow.value = false
+        }
+    }
 
     EnergyStatsTheme(useLargeDisplay = theme.value.useLargeDisplay) {
         Surface(
@@ -29,17 +44,22 @@ fun MainAppView(appContainer: AppContainer) {
 
             when (loginStateValue.loadState) {
                 is LoggedIn ->
-                    HomeView(
-                        configManager = appContainer.configManager,
-                        network = appContainer.networking,
-                        userManager = appContainer.userManager,
-                        { appContainer.userManager.logout() },
-                        themeStream = appContainer.configManager.themeStream,
-                        networkStore = appContainer.networkStore,
-                        { appContainer.openAppInPlayStore() },
-                        { appContainer.openUrl(it) },
-                        { appContainer.buyMeACoffee() }
-                    ) { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) }
+                    if (isLoading) {
+                        LoadingView(title = stringResource(R.string.loading))
+                    } else {
+                        TabbedView(
+                            configManager = appContainer.configManager,
+                            network = appContainer.networking,
+                            userManager = appContainer.userManager,
+                            { appContainer.userManager.logout() },
+                            themeStream = appContainer.configManager.themeStream,
+                            networkStore = appContainer.networkStore,
+                            { appContainer.openAppInPlayStore() },
+                            { appContainer.openUrl(it) },
+                            { appContainer.buyMeACoffee() },
+                            { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) }
+                        )
+                    }
 
                 is LoggedOut ->
                     CredentialsView(
@@ -58,8 +78,9 @@ fun MainAppView(appContainer: AppContainer) {
                             }
                         }
                     )
+
                 is LoggingIn ->
-                    LoadingView(title = "Logging in...")
+                    LoadingView(title = stringResource(R.string.logging_in))
             }
         }
     }

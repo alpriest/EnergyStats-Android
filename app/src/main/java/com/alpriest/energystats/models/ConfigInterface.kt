@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 interface ConfigInterface {
+    var showLastUpdateTimestamp: Boolean
     var selfSufficiencyEstimateMode: Int
     var showUsableBatteryOnly: Boolean
     var showBatteryEstimate: Boolean
@@ -24,4 +25,5 @@ interface ConfigInterface {
     var showGridTotals: Boolean
     var showInverterTypeNameOnPowerflow: Boolean
     var showInverterPlantNameOnPowerflow: Boolean
+    var deviceBatteryOverrides: Map<String, String>
 }

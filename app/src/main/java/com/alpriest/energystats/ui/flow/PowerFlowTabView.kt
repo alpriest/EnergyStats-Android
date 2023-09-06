@@ -41,7 +41,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
-import com.alpriest.energystats.ui.flow.home.SummaryPowerFlowView
+import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -115,10 +115,7 @@ class PowerFlowTabView(
             contentAlignment = TopEnd
         ) {
             when (uiState.state) {
-                is LoadingLoadState -> LoadingView(stringResource(R.string.loading)).run {
-                    viewModel.timerFired()
-                }
-
+                is LoadingLoadState -> LoadingView(stringResource(R.string.loading))
                 is ErrorLoadState -> Error((uiState.state as ErrorLoadState).reason) { coroutineScope.launch { viewModel.timerFired() } }
                 is LoadedLoadState -> Loaded(viewModel, (uiState.state as LoadedLoadState).viewModel, themeStream)
             }
@@ -167,7 +164,7 @@ class PowerFlowTabView(
                 .fillMaxSize()
                 .padding(12.dp)
         ) {
-            SummaryPowerFlowView(
+            LoadedPowerFlowView(
                 configManager = configManager,
                 powerFlowViewModel = viewModel,
                 homePowerFlowViewModel = homePowerFlowViewModel,

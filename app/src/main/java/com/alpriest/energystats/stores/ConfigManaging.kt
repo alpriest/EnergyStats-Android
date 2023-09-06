@@ -8,6 +8,12 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface ConfigManaging {
+    fun logout()
+    suspend fun fetchDevices()
+    suspend fun refreshFirmwareVersion()
+    fun select(device: Device)
+
+    var showLastUpdateTimestamp: Boolean
     var showInverterTypeNameOnPowerflow: Boolean
     var showInverterPlantNameOnPowerflow: Boolean
     var shouldInvertCT2: Boolean
@@ -25,18 +31,13 @@ interface ConfigManaging {
     var useLargeDisplay: Boolean
     var showValuesInWatts: Boolean
     val minSOC: MutableStateFlow<Double?>
-    val batteryCapacity: Int
+    var batteryCapacity: Int
     var isDemoUser: Boolean
     var useColouredFlowLines: Boolean
     var refreshFrequency: RefreshFrequency
     var devices: List<Device>?
     var currentDevice: MutableStateFlow<Device?>
     val selectedDeviceID: String?
-    fun logout()
-    fun updateBatteryCapacity(capacity: String)
-    suspend fun fetchDevices()
-    suspend fun refreshFirmwareVersion()
-    fun select(device: Device)
     var appVersion: String
     var showInverterTemperatures: Boolean
     var selectedParameterGraphVariables: List<String>

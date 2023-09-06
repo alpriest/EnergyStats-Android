@@ -9,4 +9,9 @@ object LoadingNowUpdateMessageState : UpdateMessageState() {
     override fun updateMessage(): String {
         return stringResource(R.string.loading)
     }
+
+    @Composable
+    override fun lastUpdateMessage(): String {
+        return ""
+    }
 }

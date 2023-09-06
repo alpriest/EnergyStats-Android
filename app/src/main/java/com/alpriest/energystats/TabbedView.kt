@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Insights
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +46,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 data class TitleItem(
@@ -55,7 +57,7 @@ data class TitleItem(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeView(
+fun TabbedView(
     configManager: ConfigManaging,
     network: Networking,
     userManager: UserManaging,
@@ -172,7 +174,7 @@ fun HomeView(
 @Composable
 fun HomepagePreview() {
     EnergyStatsTheme(darkTheme = true) {
-        HomeView(
+        TabbedView(
             ConfigManager(
                 config = FakeConfigStore(),
                 networking = DemoNetworking(),

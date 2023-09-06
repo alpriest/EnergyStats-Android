@@ -52,6 +52,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val showValuesInWattsState = rememberSaveable { mutableStateOf(config.showValuesInWatts) }
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
+    val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
 
     SettingsColumnWithChild(
         modifier = modifier
@@ -118,6 +119,12 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             title = stringResource(R.string.show_values_in_watts),
             state = showValuesInWattsState,
             onConfigUpdate = { config.showValuesInWatts = it }
+        )
+
+        SettingsCheckbox(
+            title = "Show last update timestamp",
+            state = showLastUpdateTimestampState,
+            onConfigUpdate = { config.showLastUpdateTimestamp = it }
         )
 
         SettingsCheckbox(

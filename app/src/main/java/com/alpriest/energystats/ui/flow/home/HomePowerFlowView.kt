@@ -61,7 +61,8 @@ fun AppTheme.Companion.preview(
     shouldInvertCT2: Boolean = false,
     showGridTotals: Boolean = false,
     showInverterTypeNameOnPowerflow: Boolean = false,
-    showInverterPlantNameOnPowerflow: Boolean = false
+    showInverterPlantNameOnPowerflow: Boolean = false,
+    showLastUpdateTimestamp: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -81,6 +82,7 @@ fun AppTheme.Companion.preview(
         shouldInvertCT2 = shouldInvertCT2,
         showGridTotals = showGridTotals,
         showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow,
-        showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow
+        showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow,
+        showLastUpdateTimestamp = showLastUpdateTimestamp
     )
 }

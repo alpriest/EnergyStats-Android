@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.flow.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,9 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -29,9 +30,11 @@ import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
-fun SummaryPowerFlowView(
+fun LoadedPowerFlowView(
     configManager: ConfigManaging,
     powerFlowViewModel: PowerFlowTabViewModel,
     homePowerFlowViewModel: HomePowerFlowViewModel = viewModel(),
@@ -128,28 +131,40 @@ fun SummaryPowerFlowView(
             )
         }
 
-        UpdateMessage(viewModel = powerFlowViewModel)
+        UpdateMessage(powerFlowViewModel, themeStream)
     }
 }
 
 @Composable
-fun UpdateMessage(viewModel: PowerFlowTabViewModel) {
+fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
     val updateState by viewModel.updateMessage.collectAsState()
+    val showLastUpdateTimestamp = themeStream.collectAsState().value.showLastUpdateTimestamp
 
-    Text(
-        updateState.updateState.updateMessage(),
-        color = Color.Gray,
-        modifier = Modifier
+    Row(
+        Modifier
             .padding(top = 12.dp)
             .padding(bottom = 4.dp)
-    )
+    ) {
+        if (showLastUpdateTimestamp) {
+            Text(
+                updateState.updateState.lastUpdateMessage(),
+                Modifier.padding(end = 10.dp),
+                color = Color.Gray,
+            )
+        }
+
+        Text(
+            updateState.updateState.updateMessage(),
+            color = Color.Gray
+        )
+    }
 }
 
 @Preview(showBackground = true, widthDp = 380, heightDp = 640)
 @Composable
 fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme {
-        SummaryPowerFlowView(
+        LoadedPowerFlowView(
             FakeConfigManager(),
             PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview())),
             homePowerFlowViewModel = HomePowerFlowViewModel(

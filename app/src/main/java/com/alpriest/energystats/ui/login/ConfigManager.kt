@@ -32,7 +32,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             shouldInvertCT2 = config.shouldInvertCT2,
             showGridTotals = config.showGridTotals,
             showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
-            showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow
+            showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow,
+            showLastUpdateTimestamp = config.showLastUpdateTimestamp
         )
     )
 
@@ -87,8 +88,24 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
     override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(null)
 
-    override val batteryCapacity: Int
-        get() = (currentDevice.value?.battery?.capacity ?: "2600").toDouble().toInt()
+    override var batteryCapacity: Int
+        get() {
+            return currentDevice.value?.let {
+                val override = config.deviceBatteryOverrides[it.deviceID]
+                return (override ?: it.battery?.capacity ?: "0").toDouble().toInt()
+            } ?: run {
+                2600
+            }
+        }
+        set(value) {
+            currentDevice.value?.let {
+                val map = config.deviceBatteryOverrides.toMutableMap()
+                map[it.deviceID] = value.toString()
+                config.deviceBatteryOverrides = map
+            }
+
+            devices = devices?.map { it }
+        }
 
     override var isDemoUser: Boolean
         get() = config.isDemoUser
@@ -182,6 +199,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showInverterPlantNameOnPowerflow = value
             themeStream.value = themeStream.value.copy(showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow)
+        }
+
+    override var showLastUpdateTimestamp: Boolean
+        get() = config.showLastUpdateTimestamp
+        set(value) {
+            config.showLastUpdateTimestamp = value
+            themeStream.value = themeStream.value.copy(showLastUpdateTimestamp = showLastUpdateTimestamp)
         }
 
     final override var devices: List<Device>?
@@ -302,16 +326,6 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             slave = firmware.softVersion.slave,
             manager = firmware.softVersion.manager
         )
-    }
-
-    override fun updateBatteryCapacity(capacity: String) {
-        devices = devices?.map {
-            if (it.deviceID == selectedDeviceID && it.battery != null) {
-                it.copy(battery = Battery(capacity, it.battery.minSOC))
-            } else {
-                it
-            }
-        }
     }
 
     override var selectedParameterGraphVariables: List<String>
