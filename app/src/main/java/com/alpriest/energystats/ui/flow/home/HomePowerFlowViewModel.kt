@@ -23,7 +23,7 @@ class HomePowerFlowViewModel(
     val home: Double,
     val grid: Double,
     val todaysGeneration: Double,
-    val earnings: String,
+    val earnings: EarningsViewModel,
     val inverterTemperatures: InverterTemperaturesViewModel?,
     val hasBattery: Boolean,
     val battery: BatteryViewModel,

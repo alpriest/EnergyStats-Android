@@ -176,4 +176,6 @@
     <string name="show_inverter_plant_name">Mostrar nombre de la planta del inversor</string>
     <string name="logging_in">Iniciando sesión…</string>
     <string name="last_update">Última actualización %1s</string>
+    <string name="today">hoy</string>
+    <string name="total">total</string>
 </resources>

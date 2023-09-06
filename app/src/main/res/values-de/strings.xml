@@ -176,4 +176,6 @@
     <string name="show_inverter_plant_name">Anlagenname anzeigen</string>
     <string name="logging_in">Anmelden…</string>
     <string name="last_update">Letzte Aktualisierung %1s</string>
+    <string name="today">heute</string>
+    <string name="total">gesamt</string>
 </resources>

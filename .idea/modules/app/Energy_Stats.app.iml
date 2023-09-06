@@ -19,6 +19,19 @@
       </configuration>
     </facet>
   </component>
+  <component name="ModuleClassLoaderOverlays">
+    <paths>
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay15469585511384282425" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay1991717217443089159" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay12316347255924366981" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay1602113346719775688" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay9081815893298412133" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay18432350732472873251" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay1105336725157821891" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay16810425346627500940" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay5077817798831836755" />
+    </paths>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../app">

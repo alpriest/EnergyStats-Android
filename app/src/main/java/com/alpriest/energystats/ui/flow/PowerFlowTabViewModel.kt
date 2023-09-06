@@ -11,6 +11,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.home.EarningsViewModel
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
@@ -220,13 +221,15 @@ class PowerFlowTabViewModel(
         }
     }
 
-    private fun makeEarnings(response: EarningsResponse): String {
-        return listOf(
-            response.today.earnings.roundedToString(2, response.currencyCode(), response.currencySymbol()),
-            response.month.earnings.roundedToString(2, response.currencyCode(), response.currencySymbol()),
-            response.year.earnings.roundedToString(2, response.currencyCode(), response.currencySymbol()),
-            response.cumulate.earnings.roundedToString(2, response.currencyCode(), response.currencySymbol())
-        ).joinToString(separator = " ⋅ ")
+    private fun makeEarnings(response: EarningsResponse): EarningsViewModel {
+        return EarningsViewModel(
+            today = response.today.earnings,
+            month = response.month.earnings,
+            year = response.year.earnings,
+            cumulate = response.cumulate.earnings,
+            currencyCode = response.currencyCode(),
+            currencySymbol = response.currencySymbol()
+        )
     }
 }
 

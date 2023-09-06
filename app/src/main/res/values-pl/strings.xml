@@ -177,4 +177,6 @@
     <string name="show_inverter_plant_name">Pokaż nazwę elektrowni inwertera</string>
     <string name="logging_in">Logowanie…</string>
     <string name="last_update">Ostatnia aktualizacja %1s</string>
+    <string name="today">dzisiaj</string>
+    <string name="total">łącznie</string>
 </resources>

@@ -36,11 +36,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.flow.home.EarningsViewModel
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.preview
@@ -184,7 +186,7 @@ fun PowerFlowTabViewPreview() {
         home = 2.45,
         grid = 2.45,
         todaysGeneration = 5.4,
-        earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
+        earnings = EarningsViewModel.preview(),
         inverterTemperatures = null,
         hasBattery = true,
         battery = BatteryViewModel(),

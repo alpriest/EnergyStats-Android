@@ -1,7 +1,15 @@
 package com.alpriest.energystats.ui.flow.home
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,19 +31,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
+import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
+import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
-import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Wh
-import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 
 @Composable
-fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: String, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
+fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: EarningsViewModel, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -77,9 +85,7 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: String, m
         }
 
         if (theme.showEstimatedEarnings) {
-            Text(
-                earnings
-            )
+            EarningsView(earnings, theme)
         }
 
         Box(
@@ -185,7 +191,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 0.0,
                 todaysGeneration = 1.0,
-                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
+                earnings = EarningsViewModel.preview(),
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
@@ -194,7 +200,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 0.5,
                 todaysGeneration = 1.0,
-                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
+                earnings = EarningsViewModel.preview(),
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
@@ -203,7 +209,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 1.5,
                 todaysGeneration = 1.0,
-                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
+                earnings = EarningsViewModel.preview(),
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
@@ -212,7 +218,7 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 2.5,
                 todaysGeneration = 1.0,
-                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
+                earnings = EarningsViewModel.preview(),
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
@@ -221,11 +227,15 @@ fun SolarPowerFlowViewPreview() {
             SolarPowerFlow(
                 amount = 3.5,
                 todaysGeneration = 1.0,
-                earnings = "Earnings £2.83, £26.44, £437.31, £578.82",
+                earnings = EarningsViewModel.preview(),
                 modifier = Modifier.width(100.dp),
                 iconHeight = 40.dp,
                 themeStream = MutableStateFlow(AppTheme.preview())
             )
         }
     }
+}
+
+fun EarningsViewModel.Companion.preview(): EarningsViewModel {
+    return EarningsViewModel(today = 1.0, month = 5.0, year = 50.0, cumulate = 500.0, currencySymbol = "£", currencyCode = "GBP")
 }

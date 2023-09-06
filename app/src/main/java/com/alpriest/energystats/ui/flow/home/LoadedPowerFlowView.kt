@@ -172,7 +172,7 @@ fun SummaryPowerFlowViewPreview() {
                 home = 2.45,
                 grid = 2.45,
                 todaysGeneration = 1.0,
-                earnings = "Earnings £2.52 · £12.28 · £89.99 · £145.99",
+                earnings = EarningsViewModel.preview(),
                 inverterTemperatures = null,
                 hasBattery = true,
                 battery = BatteryViewModel(),
