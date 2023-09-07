@@ -90,7 +90,7 @@ class FakeConfigManager : ConfigManaging {
     override suspend fun fetchDevices() {
     }
 
-    override suspend fun refreshFirmwareVersion() {
+    override suspend fun refreshFirmwareVersions() {
     }
 
     override fun select(device: Device) {

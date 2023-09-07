@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 interface ConfigManaging {
     fun logout()
     suspend fun fetchDevices()
-    suspend fun refreshFirmwareVersion()
+    suspend fun refreshFirmwareVersions()
     fun select(device: Device)
 
     var showLastUpdateTimestamp: Boolean

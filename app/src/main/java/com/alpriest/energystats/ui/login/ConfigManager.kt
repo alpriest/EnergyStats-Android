@@ -303,7 +303,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         }
     }
 
-    override suspend fun refreshFirmwareVersion() {
+    override suspend fun refreshFirmwareVersions() {
         try {
             devices = devices?.map {
                 val firmware = fetchFirmwareVersions(it.deviceID)

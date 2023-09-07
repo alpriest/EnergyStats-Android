@@ -87,7 +87,6 @@ class PowerFlowTabViewModel(
             viewModelScope.launch {
                 try {
                     loadData()
-                    lastUpdateTime = LocalDateTime.now()
                     startTimer()
                 } finally {
                     isLoading = false
@@ -198,6 +197,7 @@ class PowerFlowTabViewModel(
                 )
                 _uiState.value = UiLoadState(LoadedLoadState(summary))
                 _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
+                lastUpdateTime = currentViewModel.lastUpdate
                 calculateTicks(currentViewModel)
             }
         } catch (ex: Exception) {

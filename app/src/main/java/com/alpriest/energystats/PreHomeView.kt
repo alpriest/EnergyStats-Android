@@ -14,34 +14,19 @@ import kotlinx.coroutines.launch
 class PreHomeViewModel(
     private val configManager: ConfigManaging,
 ) : ViewModel() {
-    val _uiState: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val uiState: StateFlow<Boolean> = _uiState.asStateFlow()
-
-    init {
-        loadData()
-    }
-
-    private fun loadData() {
+    internal fun loadData() {
         viewModelScope.launch {
-            if (configManager.devices?.any { it.firmware == null } == true) {
-                configManager.fetchDevices()
-            } else {
-                launch {
-                    configManager.refreshFirmwareVersion()
-                }
-            }
-
-            _uiState.value = true
+            configManager.fetchDevices()
+            configManager.refreshFirmwareVersions()
         }
     }
 }
 
 @Composable
 fun PreHomeView(appContainer: AppContainer, viewModel: PreHomeViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    when (uiState) {
-        false -> LoadingView(title = "Loading...")
-        true -> MainAppView(appContainer)
+    LaunchedEffect(null) {
+        viewModel.loadData()
     }
+
+    MainAppView(appContainer)
 }

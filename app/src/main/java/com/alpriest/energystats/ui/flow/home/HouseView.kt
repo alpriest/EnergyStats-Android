@@ -87,6 +87,21 @@ fun HouseView(modifier: Modifier = Modifier) {
             size = Size(doorWidth, doorHeight),
             cornerRadius = CornerRadius(2f, 2f)
         )
+
+        // Chimney
+        val chimneyWidth = 9f
+        val chimneyHeight = 20f
+        drawRoundRect(
+            color = backgroundColor,
+            topLeft = Offset(houseMargin + houseSize.width - chimneyWidth, soffitsTop - 18f - chimneyHeight),
+            size = Size(chimneyWidth, chimneyHeight),
+            cornerRadius = CornerRadius(x = 2f, y = 2f)
+        )
+        drawRect(
+            color = backgroundColor,
+            topLeft = Offset(houseMargin + houseSize.width - (chimneyWidth / 2.0f), soffitsTop - 16f - chimneyHeight),
+            size = Size(chimneyWidth / 2.0f, chimneyHeight),
+        )
     }
 }
 
@@ -104,7 +119,7 @@ fun HouseViewPreview() {
             HouseView(
                 modifier = Modifier
                     .height(height)
-                    .width(height * 0.9f)
+                    .width(height * 1.1f)
             )
         }
     }

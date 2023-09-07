@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -42,7 +43,7 @@ fun HomeIconView(viewModel: HomePowerFlowViewModel, themeStream: MutableStateFlo
         modifier = modifier
     ) {
         HouseView(
-            modifier = Modifier.size(iconHeight)
+            modifier = Modifier.height(iconHeight).width(iconHeight * 1.1f)
         )
 
         if (showHomeTotal) {
