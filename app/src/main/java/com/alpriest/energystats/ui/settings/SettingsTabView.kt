@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -81,7 +82,6 @@ fun NavigableSettingsView(
     onLogout: () -> Unit,
     networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
-    onOpenUrl: (String) -> Unit,
     onBuyMeCoffee: () -> Unit,
     network: Networking
 ) {
@@ -99,7 +99,6 @@ fun NavigableSettingsView(
                 userManager = userManager,
                 onLogout = onLogout,
                 onRateApp = onRateApp,
-                onOpenUrl = onOpenUrl,
                 onBuyMeCoffee = onBuyMeCoffee
             )
         }
@@ -172,10 +171,10 @@ fun SettingsTabView(
     userManager: UserManaging,
     onLogout: () -> Unit,
     onRateApp: () -> Unit,
-    onOpenUrl: (String) -> Unit,
     onBuyMeCoffee: () -> Unit
 ) {
     val currentDevice = config.currentDevice.collectAsState()
+    val uriHandler = LocalUriHandler.current
 
     SettingsPage {
         Column {
@@ -198,19 +197,19 @@ fun SettingsTabView(
             SettingsNavButton(
                 title = "FoxESS Cloud Status",
                 disclosureIcon = { Icons.Default.OpenInBrowser },
-                onClick = { onOpenUrl("https://monitor.foxesscommunity.com/status/foxess") }
+                onClick = { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") }
             )
 
             SettingsNavButton(
                 title = "FoxESS Community",
                 disclosureIcon = { Icons.Default.OpenInBrowser },
-                onClick = { onOpenUrl("https://www.foxesscommunity.com/") }
+                onClick = { uriHandler.openUri("https://www.foxesscommunity.com/") }
             )
 
             SettingsNavButton(
                 title = "Facebook group",
                 disclosureIcon = { Icons.Default.OpenInBrowser },
-                onClick = { onOpenUrl("https://www.facebook.com/groups/foxessownersgroup") }
+                onClick = { uriHandler.openUri("https://www.facebook.com/groups/foxessownersgroup") }
             )
 
             SettingsNavButton(
@@ -224,7 +223,7 @@ fun SettingsTabView(
             )
         }
 
-        SettingsFooterView(config, userManager, onLogout, onRateApp, onOpenUrl, onBuyMeCoffee)
+        SettingsFooterView(config, userManager, onLogout, onRateApp, onBuyMeCoffee)
     }
 }
 
@@ -237,8 +236,7 @@ fun SettingsViewPreview() {
             config = FakeConfigManager(),
             userManager = FakeUserManager(),
             onLogout = {},
-            onRateApp = {},
-            onOpenUrl = {}
+            onRateApp = {}
         ) {}
     }
 }

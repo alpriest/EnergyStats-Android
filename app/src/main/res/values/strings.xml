@@ -178,4 +178,5 @@
     <string name="last_update">Last update %1s</string>
     <string name="today">today</string>
     <string name="total">total</string>
+    <string name="something_went_wrong_fetching_data_from_foxess_cloud">Something went wrong fetching data from FoxESS cloud.</string>
 </resources>

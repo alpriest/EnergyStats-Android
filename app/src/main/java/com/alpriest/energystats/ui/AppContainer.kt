@@ -7,6 +7,7 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
@@ -65,14 +66,6 @@ class AppContainer(private val context: Context) {
 
             startActivity(context, intent, null)
         }
-    }
-
-    fun openUrl(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.flags = FLAG_ACTIVITY_NEW_TASK
-        val data = Uri.parse(url)
-        intent.data = data
-        startActivity(context, intent, null)
     }
 
     fun buyMeACoffee() {

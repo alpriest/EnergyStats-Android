@@ -8,6 +8,8 @@ import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.flow.UiLoadState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class WorkModeViewModelFactory(
@@ -29,10 +31,10 @@ class WorkModeViewModel(
     val context: Context
 ) : ViewModel() {
     var workModeStream = MutableStateFlow(WorkMode.SELF_USE)
-    var activityStream = MutableStateFlow<String?>(null)
+    var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
 
     suspend fun load() {
-        activityStream.value = context.getString(R.string.loading)
+        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
         runCatching {
             config.currentDevice.value?.let { device ->
@@ -41,17 +43,18 @@ class WorkModeViewModel(
                 try {
                     val result = network.fetchWorkMode(deviceID)
                     workModeStream.value = InverterWorkMode.from(result.values.operation_mode__work_mode).asWorkMode()
+                    uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                    uiState.value = UiLoadState(LoadState.Error("Something went wrong fetching data from FoxESS cloud."))
                 }
-            }.also {
-                activityStream.value = null
+            } ?: {
+                uiState.value = UiLoadState(LoadState.Inactive)
             }
         }
     }
 
     suspend fun save() {
-        activityStream.value = context.getString(R.string.saving)
+        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
         runCatching {
             config.currentDevice.value?.let { device ->
@@ -65,12 +68,12 @@ class WorkModeViewModel(
 
                     Toast.makeText(context, context.getString(R.string.inverter_work_mode_was_saved), Toast.LENGTH_LONG).show()
 
-                    activityStream.value = null
+                    uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                    uiState.value = UiLoadState(LoadState.Error(context.getString(R.string.something_went_wrong_fetching_data_from_foxess_cloud)))
                 }
             } ?: run {
-                activityStream.value = null
+                uiState.value = UiLoadState(LoadState.Inactive)
             }
         }
     }

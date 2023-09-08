@@ -1,8 +1,10 @@
 package com.alpriest.energystats.ui.flow
 
+import android.content.Context
 import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.QueryDate
@@ -37,18 +39,16 @@ import java.util.concurrent.locks.ReentrantLock
 class PowerFlowTabViewModel(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val themeStream: MutableStateFlow<AppTheme>
+    private val themeStream: MutableStateFlow<AppTheme>,
+    private val context: Context
 ) : ViewModel() {
 
     var launchIn: Job? = null
 
     private var timer: CountDownTimer? = null
 
-    private val _uiState = MutableStateFlow(UiLoadState(LoadingLoadState))
-    val uiState: StateFlow<UiLoadState> = _uiState.asStateFlow()
-
-    private val _updateMessage: MutableStateFlow<UiUpdateMessageState> = MutableStateFlow(UiUpdateMessageState(EmptyUpdateMessageState))
-    val updateMessage: StateFlow<UiUpdateMessageState> = _updateMessage.asStateFlow()
+    val uiState = MutableStateFlow(UiPowerFlowLoadState(PowerFlowLoadState.Active("")))
+    val updateMessage: MutableStateFlow<UiUpdateMessageState> = MutableStateFlow(UiUpdateMessageState(EmptyUpdateMessageState))
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { timer?.cancel() },
@@ -116,7 +116,7 @@ class PowerFlowTabViewModel(
         timer = object : CountDownTimer(totalSeconds * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds: Int = (millisUntilFinished / 1000).toInt()
-                _updateMessage.value = UiUpdateMessageState(PendingUpdateMessageState(seconds, lastUpdateTime))
+                updateMessage.value = UiUpdateMessageState(PendingUpdateMessageState(seconds, lastUpdateTime))
             }
 
             override fun onFinish() {
@@ -133,9 +133,9 @@ class PowerFlowTabViewModel(
             }
 
             configManager.currentDevice.value?.let { currentDevice ->
-                _updateMessage.value = UiUpdateMessageState(LoadingNowUpdateMessageState)
-                if (_uiState.value.state is ErrorLoadState) {
-                    _uiState.value = UiLoadState(LoadingLoadState)
+                updateMessage.value = UiUpdateMessageState(LoadingNowUpdateMessageState)
+                if (uiState.value.state is PowerFlowLoadState.Error) {
+                    uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
                 }
                 network.ensureHasToken()
 
@@ -195,15 +195,15 @@ class PowerFlowTabViewModel(
                     gridImportTotal = totals.gridImportTotal,
                     gridExportTotal = totals.gridExportTotal
                 )
-                _uiState.value = UiLoadState(LoadedLoadState(summary))
-                _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
+                uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
+                updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
                 lastUpdateTime = currentViewModel.lastUpdate
                 calculateTicks(currentViewModel)
             }
         } catch (ex: Exception) {
             stopTimer()
-            _uiState.value = UiLoadState(ErrorLoadState(ex.localizedMessage ?: "Error unknown"))
-            _updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
+            uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Error(ex.localizedMessage ?: "Error unknown"))
+            updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
         }
     }
 

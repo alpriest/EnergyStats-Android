@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Insights
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +45,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 data class TitleItem(
@@ -65,7 +63,6 @@ fun TabbedView(
     themeStream: MutableStateFlow<AppTheme>,
     networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
-    onOpenUrl: (String) -> Unit,
     onBuyMeCoffee: () -> Unit,
     onWriteTempFile: (String, String) -> Uri?
 ) {
@@ -98,7 +95,6 @@ fun TabbedView(
                         network = network,
                         networkStore = networkStore,
                         onRateApp = onRateApp,
-                        onOpenUrl = onOpenUrl,
                         onBuyMeCoffee = onBuyMeCoffee
                     )
                 }
@@ -153,7 +149,9 @@ fun TabbedView(
                                                 "Demo",
                                                 color = Color.White,
                                                 fontWeight = FontWeight.Bold,
-                                                modifier = Modifier.padding(horizontal = 2.dp).padding(bottom = 2.dp),
+                                                modifier = Modifier
+                                                    .padding(horizontal = 2.dp)
+                                                    .padding(bottom = 2.dp),
                                                 fontSize = 10.sp
                                             )
                                         }
@@ -185,7 +183,6 @@ fun HomepagePreview() {
             {},
             themeStream = MutableStateFlow(AppTheme.preview()),
             networkStore = InMemoryLoggingNetworkStore(),
-            {},
             {},
             {}
         ) { _, _ -> null }

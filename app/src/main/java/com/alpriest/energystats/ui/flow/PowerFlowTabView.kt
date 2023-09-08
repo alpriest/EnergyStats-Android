@@ -1,23 +1,33 @@
 package com.alpriest.energystats.ui.flow
 
+import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
@@ -27,16 +37,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RadialGradientShader
 import androidx.compose.ui.graphics.Shader
 import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
@@ -55,11 +67,12 @@ import kotlinx.coroutines.launch
 class PowerFlowTabViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val themeStream: MutableStateFlow<AppTheme>
+    private val themeStream: MutableStateFlow<AppTheme>,
+    private val context: Context
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, MutableStateFlow::class.java)
-            .newInstance(network, configManager, themeStream)
+        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, MutableStateFlow::class.java, Context::class.java)
+            .newInstance(network, configManager, themeStream, context)
     }
 }
 
@@ -91,7 +104,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(network, configManager, this.themeStream)
+            factory = PowerFlowTabViewModelFactory(network, configManager, this.themeStream, LocalContext.current)
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -103,9 +116,9 @@ class PowerFlowTabView(
         val coroutineScope = rememberCoroutineScope()
         val showSunnyBackground = themeStream.collectAsState().value.showSunnyBackground
         val background = when (uiState.state) {
-            is LoadingLoadState -> loadingBackground
-            is LoadedLoadState -> loadedBackground
-            is ErrorLoadState -> errorBackground
+            is PowerFlowLoadState.Active -> loadingBackground
+            is PowerFlowLoadState.Loaded -> loadedBackground
+            is PowerFlowLoadState.Error -> errorBackground
         }
 
         Box(
@@ -117,61 +130,114 @@ class PowerFlowTabView(
             contentAlignment = TopEnd
         ) {
             when (uiState.state) {
-                is LoadingLoadState -> LoadingView(stringResource(R.string.loading))
-                is ErrorLoadState -> Error((uiState.state as ErrorLoadState).reason) { coroutineScope.launch { viewModel.timerFired() } }
-                is LoadedLoadState -> Loaded(viewModel, (uiState.state as LoadedLoadState).viewModel, themeStream)
+                is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
+                is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, (uiState.state as PowerFlowLoadState.Loaded).viewModel, themeStream)
+                is PowerFlowLoadState.Error -> ErrorView((uiState.state as PowerFlowLoadState.Error).reason) { coroutineScope.launch { viewModel.timerFired() } }
             }
         }
     }
+}
 
-    @Composable
-    fun Error(reason: String, onRetry: () -> Unit) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+@Composable
+fun LoadedView(
+    viewModel: PowerFlowTabViewModel,
+    configManager: ConfigManaging,
+    homePowerFlowViewModel: HomePowerFlowViewModel,
+    themeStream: MutableStateFlow<AppTheme>
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(12.dp)
+    ) {
+        LoadedPowerFlowView(
+            configManager = configManager,
+            powerFlowViewModel = viewModel,
+            homePowerFlowViewModel = homePowerFlowViewModel,
+            themeStream = themeStream
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ErrorPreview() {
+    ErrorView(reason = "BEGIN_OBJECT was expected but got something else instead", onRetry = {})
+}
+
+@Composable
+fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
+    var showingDetail by rememberSaveable { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+    val coroutineScope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+            .verticalScroll(scrollState)
+    ) {
+        Icon(
+            Icons.Rounded.ErrorOutline,
+            tint = Color.Red,
+            contentDescription = "",
             modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                Icons.Rounded.ErrorOutline,
-                tint = Color.Red,
-                contentDescription = "",
-                modifier = Modifier.size(128.dp)
-            )
-            Text(
-                reason,
-                textAlign = TextAlign.Center
-            )
+                .size(128.dp)
+                .clickable { showingDetail = !showingDetail }
+        )
+        Text(
+            "Something went wrong fetching data from FoxESS cloud.",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+        Text(
+            "Tap the icon for further detail.",
+            textAlign = TextAlign.Center
+        )
+
+        Row {
             Button(
-                onClick = onRetry,
+                onClick = { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .padding(end = 12.dp)
+            ) {
+                Text("FoxESS Cloud Status")
+            }
+
+            Button(
+                onClick = { coroutineScope.launch { onRetry() } },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                 modifier = Modifier.padding(top = 12.dp)
             ) {
                 Text(stringResource(R.string.retry))
             }
-            Spacer(modifier = Modifier.weight(1f))
         }
-    }
 
-    @Composable
-    fun Loaded(
-        viewModel: PowerFlowTabViewModel,
-        homePowerFlowViewModel: HomePowerFlowViewModel,
-        themeStream: MutableStateFlow<AppTheme>
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(12.dp)
-        ) {
-            LoadedPowerFlowView(
-                configManager = configManager,
-                powerFlowViewModel = viewModel,
-                homePowerFlowViewModel = homePowerFlowViewModel,
-                themeStream = themeStream
-            )
+        if (showingDetail) {
+            Dialog(
+                onDismissRequest = { showingDetail = false },
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.background)
+                        .padding(12.dp)
+                        .verticalScroll(scrollState),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    Text(
+                        reason,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
         }
     }
 }
@@ -179,7 +245,7 @@ class PowerFlowTabView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview()))
+    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview()), LocalContext.current)
 
     val homePowerFlowViewModel = HomePowerFlowViewModel(
         solar = 1.0,
@@ -197,23 +263,31 @@ fun PowerFlowTabViewPreview() {
     )
 
     EnergyStatsTheme {
-        PowerFlowTabView(
-            DemoNetworking(),
-            FakeConfigManager(),
-            MutableStateFlow(AppTheme.preview())
-        ).Loaded(
+        LoadedView(
             viewModel = viewModel,
+            configManager = FakeConfigManager(),
             homePowerFlowViewModel = homePowerFlowViewModel,
             themeStream = MutableStateFlow(AppTheme.preview())
         )
     }
 }
 
+data class UiPowerFlowLoadState(
+    val state: PowerFlowLoadState
+)
+
+sealed class PowerFlowLoadState {
+    data class Error(val reason: String) : PowerFlowLoadState()
+    data class Active(val value: String) : PowerFlowLoadState()
+    data class Loaded(val viewModel: HomePowerFlowViewModel) : PowerFlowLoadState()
+}
+
 data class UiLoadState(
     val state: LoadState
 )
 
-sealed class LoadState
-class ErrorLoadState(val reason: String) : LoadState()
-object LoadingLoadState : LoadState()
-class LoadedLoadState(val viewModel: HomePowerFlowViewModel) : LoadState()
+sealed class LoadState {
+    object Inactive : LoadState()
+    data class Error(val reason: String) : LoadState()
+    data class Active(val value: String) : LoadState()
+}

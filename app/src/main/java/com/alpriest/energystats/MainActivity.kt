@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val appContainer = (application as EnergyStatsApplication).appContainer
-        val preHomeViewModel = PreHomeViewModel(appContainer.configManager)
+        val preHomeViewModel = PreHomeViewModel(appContainer.configManager, appContainer.userManager)
 
         setContent {
             val systemUiController = rememberSystemUiController()

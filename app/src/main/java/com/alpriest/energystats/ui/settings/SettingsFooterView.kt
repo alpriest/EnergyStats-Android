@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,7 +57,8 @@ fun SettingsFooterRowView(imageContent: @Composable () -> Unit, text: String, on
 fun SettingsFooterRowView(image: ImageVector, imageDescription: String, text: String, onClick: () -> Unit) {
     SettingsFooterRowView(
         imageContent = { Icon(image, contentDescription = imageDescription, modifier = Modifier.padding(end = 5.dp)) },
-        text = text, onClick = onClick
+        text = text,
+        onClick = onClick
     )
 }
 
@@ -65,9 +68,10 @@ fun SettingsFooterView(
     userManager: UserManaging,
     onLogout: () -> Unit,
     onRateApp: () -> Unit,
-    onOpenUrl: (String) -> Unit,
     onBuyMeCoffee: () -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Column(
         Modifier
             .fillMaxWidth(),
@@ -98,7 +102,9 @@ fun SettingsFooterView(
             }
         }
 
-        SettingsFooterRowView(Icons.Default.Email, "Get in touch", stringResource(R.string.get_in_touch)) { onOpenUrl("mailto:energystatsapp@gmail.com?subject=Android+App") }
+        SettingsFooterRowView(Icons.Default.Email, "Get in touch", stringResource(R.string.get_in_touch)) {
+            uriHandler.openUri("mailto:energystatsapp@gmail.com?subject=Android+App")
+        }
         SettingsFooterRowView(Icons.Default.ThumbUp, "Rate this app", stringResource(R.string.rate_this_app), onRateApp)
         SettingsFooterRowView(Icons.Default.LocalCafe, "Buy me a coffee", stringResource(R.string.buy_me_a_coffee), onBuyMeCoffee)
         SettingsFooterRowView({
@@ -107,7 +113,7 @@ fun SettingsFooterView(
                 contentDescription = "Donate via PayPalde-",
                 modifier = Modifier.padding(end = 6.dp)
             )
-        }, "Donate via PayPal") { onOpenUrl("https://www.paypal.me/alpriest") }
+        }, "Donate via PayPal") { uriHandler.openUri("https://www.paypal.me/alpriest") }
 
         Text(
             "Version " + config.appVersion,
@@ -124,7 +130,6 @@ fun SettingsFooterViewPreview() {
     EnergyStatsTheme {
         SettingsFooterView(config = FakeConfigManager(),
             userManager = FakeUserManager(), onLogout = {}, onRateApp = {},
-            onOpenUrl = {},
             onBuyMeCoffee = {})
     }
 }
