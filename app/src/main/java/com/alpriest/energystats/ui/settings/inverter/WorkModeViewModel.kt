@@ -45,7 +45,7 @@ class WorkModeViewModel(
                     workModeStream.value = InverterWorkMode.from(result.values.operation_mode__work_mode).asWorkMode()
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error("Something went wrong fetching data from FoxESS cloud."))
+                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)

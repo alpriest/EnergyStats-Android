@@ -35,6 +35,8 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.flow.ErrorView
+import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.settings.CancelSaveButtonView
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -59,29 +61,30 @@ class BatteryChargeScheduleSettingsView(
         )
     ) {
         val chargeSummary = viewModel.summaryStream.collectAsState().value
-        val isActive = viewModel.activityStream.collectAsState().value
+        val loadState = viewModel.uiState.collectAsState().value.state
 
         LaunchedEffect(null) {
             viewModel.load()
         }
 
-        isActive?.let {
-            LoadingView(it)
-        } ?: run {
-            SettingsPage {
-                BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
-                BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
+        when (loadState) {
+            is LoadState.Active -> LoadingView(loadState.value)
+            is LoadState.Error -> ErrorView(loadState.reason) { viewModel.load() }
+            is LoadState.Inactive ->
+                SettingsPage {
+                    BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
+                    BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 
-                Column {
-                    SettingsTitleView(stringResource(R.string.summary))
-                    Text(
-                        chargeSummary,
-                        color = colors.onSecondary,
-                    )
+                    Column {
+                        SettingsTitleView(stringResource(R.string.summary))
+                        Text(
+                            chargeSummary,
+                            color = colors.onSecondary,
+                        )
+                    }
+
+                    CancelSaveButtonView(navController, onSave = { viewModel.save() })
                 }
-
-                CancelSaveButtonView(navController, onSave = { viewModel.save() } )
-            }
         }
     }
 

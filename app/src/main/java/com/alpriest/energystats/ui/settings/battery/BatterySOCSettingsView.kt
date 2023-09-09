@@ -32,6 +32,8 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.flow.ErrorView
+import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.settings.CancelSaveButtonView
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -43,100 +45,101 @@ class BatterySOCSettings(
     private val context: Context
 ) {
     @Composable
-    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager, navController, context))) {
+    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager, context))) {
         val minSOC = viewModel.minSOCStream.collectAsState().value
         val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
-        val isActive = viewModel.activityStream.collectAsState().value
+        val loadState = viewModel.uiState.collectAsState().value.state
 
         LaunchedEffect(null) {
             viewModel.load()
         }
 
-        isActive?.let {
-            LoadingView(it)
-        } ?: run {
-            SettingsPage {
-                Column {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .background(colors.surface)
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
-                    ) {
+        when (loadState) {
+            is LoadState.Active -> LoadingView(loadState.value)
+            is LoadState.Error -> ErrorView(loadState.reason) { viewModel.load() }
+            is LoadState.Inactive ->
+                SettingsPage {
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .background(colors.surface)
+                                .padding(horizontal = 12.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                stringResource(R.string.min_soc),
+                                Modifier.weight(1.0f),
+                                style = MaterialTheme.typography.h4,
+                                color = colors.onSecondary
+                            )
+                            OutlinedTextField(
+                                value = minSOC,
+                                onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
+                                modifier = Modifier.width(100.dp),
+                                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colors.onSecondary),
+                                trailingIcon = { Text("%", color = colors.onSecondary) }
+                            )
+                        }
+
                         Text(
-                            stringResource(R.string.min_soc),
-                            Modifier.weight(1.0f),
-                            style = MaterialTheme.typography.h4,
-                            color = colors.onSecondary
-                        )
-                        OutlinedTextField(
-                            value = minSOC,
-                            onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
-                            modifier = Modifier.width(100.dp),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colors.onSecondary),
-                            trailingIcon = { Text("%", color = colors.onSecondary) }
+                            stringResource(R.string.minsoc_description),
+                            color = colors.onSecondary,
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp)
+                                .padding(top = 4.dp)
                         )
                     }
 
-                    Text(
-                        stringResource(R.string.minsoc_description),
-                        color = colors.onSecondary,
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
-                            .padding(top = 4.dp)
-                    )
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .background(colors.surface)
+                                .padding(horizontal = 12.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                stringResource(R.string.min_soc_on_grid),
+                                Modifier.weight(1.0f),
+                                style = MaterialTheme.typography.h4,
+                                color = colors.onSecondary
+                            )
+                            OutlinedTextField(
+                                value = minSOConGrid,
+                                onValueChange = { viewModel.minSOConGridStream.value = it.filter { it.isDigit() } },
+                                modifier = Modifier.width(100.dp),
+                                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colors.onSecondary),
+                                trailingIcon = { Text("%", color = colors.onSecondary) }
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp)
+                                .padding(top = 4.dp)
+                        ) {
+                            Text(
+                                stringResource(R.string.minsocgrid_description),
+                                color = colors.onSecondary,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+
+                            Text(
+                                stringResource(R.string.minsoc_detail),
+                                color = colors.onSecondary,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+
+                            Text(
+                                stringResource(R.string.minsoc_notsure_footnote),
+                                color = colors.onSecondary,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                        }
+                    }
+
+                    CancelSaveButtonView(navController, onSave = { viewModel.save() })
                 }
-
-                Column {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .background(colors.surface)
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
-                    ) {
-                        Text(
-                            stringResource(R.string.min_soc_on_grid),
-                            Modifier.weight(1.0f),
-                            style = MaterialTheme.typography.h4,
-                            color = colors.onSecondary
-                        )
-                        OutlinedTextField(
-                            value = minSOConGrid,
-                            onValueChange = { viewModel.minSOConGridStream.value = it.filter { it.isDigit() } },
-                            modifier = Modifier.width(100.dp),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colors.onSecondary),
-                            trailingIcon = { Text("%", color = colors.onSecondary) }
-                        )
-                    }
-
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
-                            .padding(top = 4.dp)
-                    ) {
-                        Text(
-                            stringResource(R.string.minsocgrid_description),
-                            color = colors.onSecondary,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-
-                        Text(
-                            stringResource(R.string.minsoc_detail),
-                            color = colors.onSecondary,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-
-                        Text(
-                            stringResource(R.string.minsoc_notsure_footnote),
-                            color = colors.onSecondary,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                    }
-                }
-
-                CancelSaveButtonView(navController, onSave = { viewModel.save() } )
-            }
         }
     }
 }

@@ -9,6 +9,8 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.flow.UiLoadState
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -44,33 +46,37 @@ class BatteryChargeScheduleSettingsViewModel(
 ) : ViewModel() {
     val timePeriod1Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
     val timePeriod2Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
-    var activityStream = MutableStateFlow<String?>(null)
+    var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val summaryStream = MutableStateFlow("")
 
     suspend fun load() {
-        activityStream.value = context.getString(R.string.loading)
+        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
         runCatching {
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
-                val result = network.fetchBatteryTimes(deviceSN)
-                result.times.getOrNull(0)?.let {
-                    timePeriod1Stream.value = ChargeTimePeriod(
-                        start = it.startTime, end = it.endTime, enabled = it.enableGrid
-                    )
-                }
+                try {
+                    val result = network.fetchBatteryTimes(deviceSN)
+                    result.times.getOrNull(0)?.let {
+                        timePeriod1Stream.value = ChargeTimePeriod(
+                            start = it.startTime, end = it.endTime, enabled = it.enableGrid
+                        )
+                    }
 
-                result.times.getOrNull(1)?.let {
-                    timePeriod2Stream.value = ChargeTimePeriod(
-                        start = it.startTime, end = it.endTime, enabled = it.enableGrid
-                    )
-                }
+                    result.times.getOrNull(1)?.let {
+                        timePeriod2Stream.value = ChargeTimePeriod(
+                            start = it.startTime, end = it.endTime, enabled = it.enableGrid
+                        )
+                    }
 
-                generateSummary(timePeriod1Stream.value, timePeriod2Stream.value)
+                    generateSummary(timePeriod1Stream.value, timePeriod2Stream.value)
+                } catch (ex: Exception) {
+                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage))
+                }
+            } ?: {
+                uiState.value = UiLoadState(LoadState.Inactive)
             }
-        }.also {
-            activityStream.value = null
         }
 
         coroutineScope {
@@ -133,23 +139,27 @@ class BatteryChargeScheduleSettingsViewModel(
     }
 
     suspend fun save() {
-        activityStream.value = context.getString(R.string.saving)
+        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
         runCatching {
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
                 val times = listOf(timePeriod1Stream.value, timePeriod2Stream.value).map { it.asChargeTime() }
 
-                network.setBatteryTimes(
-                    deviceSN = deviceSN,
-                    times = times
-                )
+                try {
+                    network.setBatteryTimes(
+                        deviceSN = deviceSN,
+                        times = times
+                    )
 
-                Toast.makeText(context, context.getString(R.string.battery_charge_schedule_was_saved), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, context.getString(R.string.battery_charge_schedule_was_saved), Toast.LENGTH_LONG).show()
 
-                activityStream.value = null
-            } ?: run {
-                activityStream.value = null
+                    uiState.value = UiLoadState(LoadState.Inactive)
+                } catch (ex: Exception) {
+                    uiState.value = UiLoadState(LoadState.Error("Something went wrong fetching data from FoxESS cloud."))
+                }
+            } ?: {
+                uiState.value = UiLoadState(LoadState.Inactive)
             }
         }
     }
