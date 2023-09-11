@@ -295,7 +295,10 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             }.collect()
 
             devices = mappedDevices
-            selectedDeviceID = devices?.firstOrNull()?.deviceID
+
+            if (selectedDeviceID == null) {
+                selectedDeviceID = devices?.firstOrNull()?.deviceID
+            }
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         } catch (ex: Exception) {

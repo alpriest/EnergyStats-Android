@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -102,17 +103,22 @@ fun InverterView(
 private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
     val appTheme = themeStream.collectAsState().value
 
-    if (appTheme.showInverterTypeNameOnPowerflow) {
-        Text(
-            text = inverterTemperaturesViewModel.deviceType
-        )
-    }
-
-    if (appTheme.showInverterPlantNameOnPowerflow) {
-        inverterTemperaturesViewModel.devicePlantName?.let {
+    Column(
+        modifier = Modifier.background(colors.background),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (appTheme.showInverterTypeNameOnPowerflow) {
             Text(
-                text = it
+                text = inverterTemperaturesViewModel.deviceType
             )
+        }
+
+        if (appTheme.showInverterPlantNameOnPowerflow) {
+            inverterTemperaturesViewModel.devicePlantName?.let {
+                Text(
+                    text = it
+                )
+            }
         }
     }
 }

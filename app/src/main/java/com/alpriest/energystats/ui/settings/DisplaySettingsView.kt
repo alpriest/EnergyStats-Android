@@ -145,6 +145,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         )
 
         SettingsNavButton(stringResource(R.string.approximations)) { navController.navigate(SettingsScreen.Approximations.name) }
+        SettingsNavButton("Solar display") { navController.navigate(SettingsScreen.SolarBandings.name) }
     }
 }
 

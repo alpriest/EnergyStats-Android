@@ -72,7 +72,8 @@ enum class SettingsScreen() {
     InverterWorkMode,
     Dataloggers,
     Approximations,
-    FAQ
+    SolarBandings,
+    FAQ;
 }
 
 @Composable
@@ -125,6 +126,9 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.Approximations.name) {
             ApproximationsView(config)
+        }
+        composable(SettingsScreen.SolarBandings.name) {
+            SolarBandingSettingsView(navController)
         }
         composable(SettingsScreen.FAQ.name) {
             FAQView()
