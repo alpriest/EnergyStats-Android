@@ -1,6 +1,9 @@
 package com.alpriest.energystats.models
 
+import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+
 interface ConfigInterface {
+    var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean
     var selfSufficiencyEstimateMode: Int
     var showUsableBatteryOnly: Boolean

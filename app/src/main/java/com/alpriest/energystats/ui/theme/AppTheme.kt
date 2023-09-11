@@ -25,7 +25,8 @@ data class AppTheme(
     val showGridTotals: Boolean,
     val showInverterTypeNameOnPowerflow: Boolean,
     val showInverterPlantNameOnPowerflow: Boolean,
-    val showLastUpdateTimestamp: Boolean
+    val showLastUpdateTimestamp: Boolean,
+    val solarRangeDefinitions: SolarRangeDefinitions
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

@@ -33,7 +33,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showGridTotals = config.showGridTotals,
             showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
             showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow,
-            showLastUpdateTimestamp = config.showLastUpdateTimestamp
+            showLastUpdateTimestamp = config.showLastUpdateTimestamp,
+            solarRangeDefinitions = config.solarRangeDefinitions
         )
     )
 

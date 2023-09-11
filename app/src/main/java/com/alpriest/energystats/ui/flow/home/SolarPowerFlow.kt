@@ -56,18 +56,18 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: EarningsV
         val orange = Color(0xFFF2A53D)
         val theme by themeStream.collectAsState()
 
-        if (amount >= 0.001f && amount < 1f) {
+        if (amount >= 0.001f && amount < theme.solarRangeDefinitions.threshold1) {
             glowing = false
             sunColor = Sunny
-        } else if (amount >= 1f && amount < 2f) {
+        } else if (amount >= theme.solarRangeDefinitions.threshold1 && amount < theme.solarRangeDefinitions.threshold2) {
             glowing = true
             glowColor = Sunny.copy(alpha = 0.4f)
             sunColor = Sunny
-        } else if (amount >= 2f && amount < 3f) {
+        } else if (amount >= theme.solarRangeDefinitions.threshold2 && amount < theme.solarRangeDefinitions.threshold3) {
             glowing = true
             glowColor = Sunny.copy(alpha = 0.9f)
             sunColor = orange
-        } else if (amount >= 3f && amount < 500f) {
+        } else if (amount >= theme.solarRangeDefinitions.threshold3 && amount < 500f) {
             glowing = true
             glowColor = orange
             sunColor = Color.Red

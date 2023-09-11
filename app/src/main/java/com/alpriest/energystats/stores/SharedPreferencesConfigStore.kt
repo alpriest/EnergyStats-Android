@@ -2,6 +2,7 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -243,4 +244,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.putBoolean(SharedPreferenceKey.SHOW_LAST_UPDATE_TIMESTAMP.name, value)
             editor.apply()
         }
+
+    override var solarRangeDefinitions: SolarRangeDefinitions
+        get() = TODO("Not yet implemented")
+        set(value) {}
 }

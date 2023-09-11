@@ -1,6 +1,7 @@
 package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 class FakeConfigStore(
     override var isDemoUser: Boolean = true,
@@ -27,6 +28,7 @@ class FakeConfigStore(
     override var showInverterTypeNameOnPowerflow: Boolean = true,
     override var showInverterPlantNameOnPowerflow: Boolean = true,
     override var deviceBatteryOverrides: Map<String, String> = mapOf(),
-    override var showLastUpdateTimestamp: Boolean = false
+    override var showLastUpdateTimestamp: Boolean = false,
+    override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
 ) : ConfigInterface {
 }

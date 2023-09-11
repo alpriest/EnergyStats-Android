@@ -11,6 +11,7 @@ import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -62,7 +63,8 @@ fun AppTheme.Companion.preview(
     showGridTotals: Boolean = false,
     showInverterTypeNameOnPowerflow: Boolean = false,
     showInverterPlantNameOnPowerflow: Boolean = false,
-    showLastUpdateTimestamp: Boolean = false
+    showLastUpdateTimestamp: Boolean = false,
+    solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -83,6 +85,7 @@ fun AppTheme.Companion.preview(
         showGridTotals = showGridTotals,
         showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow,
         showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow,
-        showLastUpdateTimestamp = showLastUpdateTimestamp
+        showLastUpdateTimestamp = showLastUpdateTimestamp,
+        solarRangeDefinitions = solarRangeDefinitions
     )
 }
