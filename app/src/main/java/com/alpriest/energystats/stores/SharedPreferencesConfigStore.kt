@@ -34,7 +34,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW,
         SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW,
         BATTERY_CAPACITY_OVERRIDES,
-        SHOW_LAST_UPDATE_TIMESTAMP
+        SHOW_LAST_UPDATE_TIMESTAMP,
+        SOLAR_RANGE_DEFINITIONS
     }
 
     override var showGridTotals: Boolean
@@ -192,7 +193,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var selectedParameterGraphVariables: List<String>
         get() {
             val variables = sharedPreferences.getString(SharedPreferenceKey.SELECTED_PARAMETER_GRAPH_VARIABLES.name, Gson().toJson(listOf<String>()))
-            return Gson().fromJson(variables, object: TypeToken<List<String>>() {}.type)
+            return Gson().fromJson(variables, object : TypeToken<List<String>>() {}.type)
         }
         set(value) {
             val editor = sharedPreferences.edit()
@@ -228,7 +229,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var deviceBatteryOverrides: Map<String, String>
         get() {
             val variables = sharedPreferences.getString(SharedPreferenceKey.BATTERY_CAPACITY_OVERRIDES.name, Gson().toJson(listOf<String>()))
-            return Gson().fromJson(variables, object: TypeToken<Map<String, String>>() {}.type)
+            return Gson().fromJson(variables, object : TypeToken<Map<String, String>>() {}.type)
         }
         set(value) {
             val editor = sharedPreferences.edit()
@@ -246,6 +247,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         }
 
     override var solarRangeDefinitions: SolarRangeDefinitions
-        get() = TODO("Not yet implemented")
-        set(value) {}
+        get() {
+            val data = sharedPreferences.getString(SharedPreferenceKey.SOLAR_RANGE_DEFINITIONS.name, Gson().toJson(SolarRangeDefinitions.defaults))
+            return Gson().fromJson(data, object : TypeToken<SolarRangeDefinitions>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceKey.SOLAR_RANGE_DEFINITIONS.name, jsonString)
+            editor.apply()
+        }
 }

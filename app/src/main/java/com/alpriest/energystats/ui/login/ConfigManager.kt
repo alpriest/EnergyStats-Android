@@ -6,6 +6,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -207,6 +208,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showLastUpdateTimestamp = value
             themeStream.value = themeStream.value.copy(showLastUpdateTimestamp = showLastUpdateTimestamp)
+        }
+
+    override var solarRangeDefinitions: SolarRangeDefinitions
+        get() = config.solarRangeDefinitions
+        set(value) {
+            config.solarRangeDefinitions = value
+            themeStream.value = themeStream.value.copy(solarRangeDefinitions = solarRangeDefinitions)
         }
 
     final override var devices: List<Device>?

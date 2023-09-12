@@ -5,6 +5,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface ConfigManaging {
@@ -13,6 +14,7 @@ interface ConfigManaging {
     suspend fun refreshFirmwareVersions()
     fun select(device: Device)
 
+    var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean
     var showInverterTypeNameOnPowerflow: Boolean
     var showInverterPlantNameOnPowerflow: Boolean

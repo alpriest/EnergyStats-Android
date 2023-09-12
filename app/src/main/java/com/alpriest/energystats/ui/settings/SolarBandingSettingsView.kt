@@ -1,12 +1,21 @@
 package com.alpriest.energystats.ui.settings
 
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -17,12 +26,17 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.EarningsViewModel
 import com.alpriest.energystats.ui.flow.home.SolarPowerFlow
 import com.alpriest.energystats.ui.flow.home.preview
@@ -66,12 +80,13 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
 }
 
 @Composable
-fun SolarBandingSettingsView(navController: NavHostController, appTheme: MutableStateFlow<AppTheme>) {
+fun SolarBandingSettingsView(navController: NavHostController, configManager: ConfigManaging) {
     val amount = remember { mutableFloatStateOf(2.0f) }
-    val threshold1 = remember { mutableFloatStateOf(1.0f) }
-    val threshold2 = remember { mutableFloatStateOf(2.0f) }
-    val threshold3 = remember { mutableFloatStateOf(3.0f) }
-    val mutatedAppTheme = appTheme
+    val threshold1 = remember { mutableFloatStateOf(configManager.themeStream.value.solarRangeDefinitions.threshold1.toFloat()) }
+    val threshold2 = remember { mutableFloatStateOf(configManager.themeStream.value.solarRangeDefinitions.threshold2.toFloat()) }
+    val threshold3 = remember { mutableFloatStateOf(configManager.themeStream.value.solarRangeDefinitions.threshold3.toFloat()) }
+    val mutatedAppTheme = remember { MutableStateFlow(configManager.themeStream.value) }
+    val context = LocalContext.current
 
     LaunchedEffect(threshold1.value) {
         if (threshold1.value > threshold2.value) {
@@ -101,59 +116,100 @@ fun SolarBandingSettingsView(navController: NavHostController, appTheme: Mutable
         mutatedAppTheme.value = makeAppTheme(threshold1.value, threshold2.value, threshold3.value)
     }
 
-    SettingsPage {
-        ThresholdView(mutableStateValue = threshold1, title = "Low threshold", description = "Below this amount the sun will be yellow.")
-        ThresholdView(mutableStateValue = threshold2, title = "Medium threshold", description = "Between low and medium the sun will be yellow and glowing.")
-        ThresholdView(
-            mutableStateValue = threshold3,
-            title = "High threshold",
-            description = "Between medium and high the sun will be orange and glowing. Above high the sun will be red and glowing."
+    ContentWithBottomButtons(navController, onSave = {
+        configManager.solarRangeDefinitions = SolarRangeDefinitions(
+            threshold1 = threshold1.floatValue.toDouble(),
+            threshold2 = threshold2.floatValue.toDouble(),
+            threshold3 = threshold3.floatValue.toDouble()
         )
+        Toast.makeText(context, "Thresholds were saved", Toast.LENGTH_LONG).show()
+    }) {
+        SettingsPage {
+            ThresholdView(mutableStateValue = threshold1, title = "Low threshold", description = "Below this amount the sun will be yellow.")
+            ThresholdView(mutableStateValue = threshold2, title = "Medium threshold", description = "Between low and medium the sun will be yellow and glowing.")
+            ThresholdView(
+                mutableStateValue = threshold3,
+                title = "High threshold",
+                description = "Between medium and high the sun will be orange and glowing. Above high the sun will be red and glowing."
+            )
 
-        SettingsColumnWithChild {
-            SettingsTitleView("Example")
+            SettingsColumnWithChild {
+                SettingsTitleView("Example")
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                SolarPowerFlow(
-                    amount = amount.value.toDouble(),
-                    todaysGeneration = 1.0,
-                    earnings = EarningsViewModel.preview(),
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(100.dp),
-                    iconHeight = 40.dp,
-                    themeStream = mutatedAppTheme
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    SolarPowerFlow(
+                        amount = amount.value.toDouble(),
+                        todaysGeneration = 1.0,
+                        earnings = EarningsViewModel.preview(),
+                        modifier = Modifier
+                            .width(100.dp)
+                            .height(100.dp),
+                        iconHeight = 40.dp,
+                        themeStream = mutatedAppTheme
+                    )
+
+                    Slider(
+                        value = amount.value,
+                        onValueChange = { amount.value = it },
+                        valueRange = 0.0f..threshold3.value + 0.5f,
+                        colors = SliderDefaults.colors(
+                            activeTickColor = colors.primary,
+                            inactiveTickColor = colors.background,
+                            activeTrackColor = colors.primary,
+                            inactiveTrackColor = colors.background,
+                            thumbColor = colors.primary
+                        )
+                    )
+                }
+
+                Text(
+                    "Drag the slider above to see how your solar flow will display when generating different levels of power.",
+                    color = colors.onSecondary,
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
+            }
 
-                Slider(
-                    value = amount.value,
-                    onValueChange = { amount.value = it },
-                    valueRange = 0.0f..threshold3.value + 0.5f,
-                    colors = SliderDefaults.colors(
-                        activeTickColor = colors.primary,
-                        inactiveTickColor = colors.background,
-                        activeTrackColor = colors.primary,
-                        inactiveTrackColor = colors.background,
-                        thumbColor = colors.primary
+            SettingsNavButton(
+                "Restore defaults",
+                disclosureIcon = null
+            ) {
+                mutatedAppTheme.value = mutatedAppTheme.value.copy(
+                    solarRangeDefinitions = SolarRangeDefinitions(
+                        threshold1 = 1.0,
+                        threshold2 = 2.0,
+                        threshold3 = 3.0
                     )
                 )
             }
 
-            Text(
-                "Drag the slider above to see how your solar flow will display when generating different levels of power.",
-                color = MaterialTheme.colors.onSecondary,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            Spacer(modifier = Modifier.height(60.dp))
         }
+    }
+}
 
-        SettingsNavButton(
-            "Restore defaults",
-            disclosureIcon = null
+@Composable
+fun ContentWithBottomButtons(navController: NavHostController, onSave: () -> Unit, content: @Composable () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        content()
+
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier.fillMaxSize()
         ) {
-            // TODO
+            Column {
+                Divider(
+                    color = Color.LightGray, modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                )
+                CancelSaveButtonView(
+                    navController, onSave = onSave,
+                    modifier = Modifier
+                        .background(colors.surface)
+                        .padding(12.dp)
+                )
+            }
         }
-
-        CancelSaveButtonView(navController, onSave = { /* TODO */ })
     }
 }
 
@@ -176,7 +232,7 @@ fun SolarBandingSettingsPreview() {
     EnergyStatsTheme(darkTheme = false) {
         SolarBandingSettingsView(
             NavHostController(LocalContext.current),
-            appTheme = MutableStateFlow(AppTheme.preview().copy(showTotalYield = false, showEstimatedEarnings = false))
+            configManager = FakeConfigManager()
         )
     }
 }

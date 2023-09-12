@@ -9,6 +9,7 @@ import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeConfigManager : ConfigManaging {
@@ -41,6 +42,7 @@ class FakeConfigManager : ConfigManaging {
     override var showInverterPlantNameOnPowerflow: Boolean = false
     override var showInverterTypeNameOnPowerflow: Boolean = false
     override var showLastUpdateTimestamp: Boolean = false
+    override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
     override var devices: List<Device>? = listOf(
         Device(
             plantName = "plant 1",

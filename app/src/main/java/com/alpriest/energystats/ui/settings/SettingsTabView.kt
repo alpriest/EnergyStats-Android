@@ -128,7 +128,7 @@ fun NavigableSettingsView(
             ApproximationsView(config)
         }
         composable(SettingsScreen.SolarBandings.name) {
-            SolarBandingSettingsView(navController, config.themeStream)
+            SolarBandingSettingsView(navController, config)
         }
         composable(SettingsScreen.FAQ.name) {
             FAQView()

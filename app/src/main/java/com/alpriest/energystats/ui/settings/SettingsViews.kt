@@ -39,11 +39,11 @@ fun SettingsTitleView(title: String) {
 }
 
 @Composable
-fun SettingsPage(content: @Composable () -> Unit) {
+fun SettingsPage(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.background)
             .padding(12.dp)
@@ -65,10 +65,10 @@ fun SettingsButtonList(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Unit) {
+fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Unit, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
 
-    Row {
+    Row(modifier = modifier) {
         SettingsNavButton(
             stringResource(R.string.cancel),
             modifier = Modifier.weight(1.0f),
