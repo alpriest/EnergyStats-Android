@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.kWh
@@ -188,7 +189,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
 }
 
 @Composable
-fun ContentWithBottomButtons(navController: NavHostController, onSave: () -> Unit, content: @Composable () -> Unit) {
+fun ContentWithBottomButtons(navController: NavController, onSave: suspend () -> Unit, content: @Composable () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         content()
 
@@ -203,7 +204,8 @@ fun ContentWithBottomButtons(navController: NavHostController, onSave: () -> Uni
                         .height(1.dp)
                 )
                 CancelSaveButtonView(
-                    navController, onSave = onSave,
+                    navController,
+                    onSave = onSave,
                     modifier = Modifier
                         .background(colors.surface)
                         .padding(12.dp)

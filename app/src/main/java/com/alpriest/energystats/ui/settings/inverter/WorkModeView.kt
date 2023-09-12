@@ -43,6 +43,7 @@ import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.settings.CancelSaveButtonView
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -68,93 +69,94 @@ class WorkModeView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.reason) { viewModel.load() }
             is LoadState.Inactive ->
-                SettingsPage {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Warning,
-                            contentDescription = "Warning",
-                            tint = Color.Red,
-                            modifier = Modifier
-                                .height(24.dp)
-                                .width(24.dp)
-                        )
-                        Text(
-                            stringResource(R.string.only_change_these_values_if_you_know_what_you_are_doing),
-                            color = colors.onSecondary,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Icon(
-                            imageVector = Icons.Default.Warning,
-                            contentDescription = "Warning",
-                            tint = Color.Red,
-                            modifier = Modifier
-                                .height(24.dp)
-                                .width(24.dp)
-                        )
-                    }
+                ContentWithBottomButtons(navController, onSave = { viewModel.save() }) {
 
-                    SettingsColumnWithChild {
-                        WorkMode.values().forEach { workMode ->
-                            Row {
-                                Column(modifier = Modifier
-                                    .clickable { viewModel.select(workMode) }
-                                    .padding(bottom = 24.dp)) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        RadioButton(
-                                            selected = selectedWorkMode == workMode,
-                                            onClick = {
-                                                viewModel.select(workMode)
-                                            }
-                                        )
-                                        Text(
-                                            workMode.title(context),
-                                            style = MaterialTheme.typography.h4,
-                                            color = colors.onSecondary
-                                        )
-                                    }
+                    SettingsPage {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Warning",
+                                tint = Color.Red,
+                                modifier = Modifier
+                                    .height(24.dp)
+                                    .width(24.dp)
+                            )
+                            Text(
+                                stringResource(R.string.only_change_these_values_if_you_know_what_you_are_doing),
+                                color = colors.onSecondary,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Warning",
+                                tint = Color.Red,
+                                modifier = Modifier
+                                    .height(24.dp)
+                                    .width(24.dp)
+                            )
+                        }
 
-                                    Row(modifier = Modifier.padding(start = 48.dp)) {
-                                        Text(
-                                            workMode.subtitle(context),
-                                            color = colors.onSecondary
-                                        )
+                        SettingsColumnWithChild {
+                            WorkMode.values().forEach { workMode ->
+                                Row {
+                                    Column(modifier = Modifier
+                                        .clickable { viewModel.select(workMode) }
+                                        .padding(bottom = 24.dp)) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            RadioButton(
+                                                selected = selectedWorkMode == workMode,
+                                                onClick = {
+                                                    viewModel.select(workMode)
+                                                }
+                                            )
+                                            Text(
+                                                workMode.title(context),
+                                                style = MaterialTheme.typography.h4,
+                                                color = colors.onSecondary
+                                            )
+                                        }
 
+                                        Row(modifier = Modifier.padding(start = 48.dp)) {
+                                            Text(
+                                                workMode.subtitle(context),
+                                                color = colors.onSecondary
+                                            )
+
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    )
-                    {
-                        Button(
-                            onClick = {
-                                uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Inverter-Work-Modes")
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                contentColor = colors.primary,
-                                backgroundColor = Color.Transparent
-                            ),
-                            elevation = null,
-                        ) {
-                            androidx.compose.material.Icon(
-                                Icons.Default.OpenInBrowser, contentDescription = "Open In Browser", modifier = Modifier.padding(end = 5.dp)
-                            )
-                            androidx.compose.material.Text(
-                                stringResource(R.string.find_out_more_about_work_modes),
-                                fontSize = 12.sp,
-                            )
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        )
+                        {
+                            Button(
+                                onClick = {
+                                    uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Inverter-Work-Modes")
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    contentColor = colors.primary,
+                                    backgroundColor = Color.Transparent
+                                ),
+                                elevation = null,
+                            ) {
+                                androidx.compose.material.Icon(
+                                    Icons.Default.OpenInBrowser, contentDescription = "Open In Browser", modifier = Modifier.padding(end = 5.dp)
+                                )
+                                androidx.compose.material.Text(
+                                    stringResource(R.string.find_out_more_about_work_modes),
+                                    fontSize = 12.sp,
+                                )
+                            }
                         }
                     }
-
-                    CancelSaveButtonView(navController, onSave = { viewModel.save() })
                 }
         }
     }
