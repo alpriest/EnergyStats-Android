@@ -29,4 +29,5 @@ interface ConfigInterface {
     var showInverterTypeNameOnPowerflow: Boolean
     var showInverterPlantNameOnPowerflow: Boolean
     var deviceBatteryOverrides: Map<String, String>
+    fun clear()
 }

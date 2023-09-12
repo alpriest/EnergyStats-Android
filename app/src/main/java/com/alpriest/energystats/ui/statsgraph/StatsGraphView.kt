@@ -36,32 +36,36 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val chartColors = viewModel.chartColorsStream.collectAsState().value
 
-    Column(modifier = modifier.fillMaxWidth()) {
-        ProvideChartStyle(chartStyle(chartColors)) {
-            Chart(
-                chart = columnChart(),
-                chartModelProducer = viewModel.producer,
-                chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                startAxis = rememberStartAxis(
-                    itemPlacer = AxisItemPlacer.Vertical.default(5),
-                    valueFormatter = DecimalFormatAxisValueFormatter("0.0")
-                ),
-                bottomAxis = rememberBottomAxis(
-                    itemPlacer = AxisItemPlacer.Horizontal.default(2),
-                    label = axisLabelComponent(horizontalPadding = 2.dp),
-                    valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode)
-                ),
-                diffAnimationSpec = SnapSpec()
-            )
-        }
-        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(
-                when (displayMode) {
-                    is Day -> stringResource(R.string.hours)
-                    is StatsDisplayMode.Month -> stringResource(R.string.days)
-                    is StatsDisplayMode.Year -> stringResource(R.string.months)
-                }
-            )
+    if (viewModel.producer.getModel().entries.isEmpty()) {
+        Text("No data")
+    } else {
+        Column(modifier = modifier.fillMaxWidth()) {
+            ProvideChartStyle(chartStyle(chartColors)) {
+                Chart(
+                    chart = columnChart(),
+                    chartModelProducer = viewModel.producer,
+                    chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                    startAxis = rememberStartAxis(
+                        itemPlacer = AxisItemPlacer.Vertical.default(5),
+                        valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                    ),
+                    bottomAxis = rememberBottomAxis(
+                        itemPlacer = AxisItemPlacer.Horizontal.default(2),
+                        label = axisLabelComponent(horizontalPadding = 2.dp),
+                        valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode)
+                    ),
+                    diffAnimationSpec = SnapSpec()
+                )
+            }
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Text(
+                    when (displayMode) {
+                        is Day -> stringResource(R.string.hours)
+                        is StatsDisplayMode.Month -> stringResource(R.string.days)
+                        is StatsDisplayMode.Year -> stringResource(R.string.months)
+                    }
+                )
+            }
         }
     }
 }

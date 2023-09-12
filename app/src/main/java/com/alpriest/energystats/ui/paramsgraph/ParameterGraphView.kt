@@ -60,30 +60,32 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
     val firstHour = entries.firstOrNull()?.localDateTime?.hour ?: 0
     val firstLabelOffset = entries.indexOfFirst { it.localDateTime.hour > firstHour }
 
-    Column(modifier = modifier.fillMaxWidth()) {
-        ProvideChartStyle(chartStyle(chartColors)) {
-            Chart(
-                chart = lineChart(),
-                chartModelProducer = viewModel.producer,
-                chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                startAxis = rememberStartAxis(
-                    itemPlacer = AxisItemPlacer.Vertical.default(5),
-                    valueFormatter = DecimalFormatAxisValueFormatter("0.0")
-                ),
-                bottomAxis = rememberBottomAxis(
-                    itemPlacer = AxisItemPlacer.Horizontal.default(23, firstLabelOffset),
-                    valueFormatter = ParameterGraphFormatAxisValueFormatter(),
-                    guideline = null
-                ),
-                marker = NonDisplayingMarker(
-                    viewModel.valuesAtTimeStream, lineComponent(
-                        color = colors.onSurface,
-                        thickness = 1.dp
-                    )
-                ),
-                diffAnimationSpec = SnapSpec(),
-                markerVisibilityChangeListener = markerVisibilityChangeListener
-            )
+    if (entries.isNotEmpty()) {
+        Column(modifier = modifier.fillMaxWidth()) {
+            ProvideChartStyle(chartStyle(chartColors)) {
+                Chart(
+                    chart = lineChart(),
+                    chartModelProducer = viewModel.producer,
+                    chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                    startAxis = rememberStartAxis(
+                        itemPlacer = AxisItemPlacer.Vertical.default(5),
+                        valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                    ),
+                    bottomAxis = rememberBottomAxis(
+                        itemPlacer = AxisItemPlacer.Horizontal.default(23, firstLabelOffset),
+                        valueFormatter = ParameterGraphFormatAxisValueFormatter(),
+                        guideline = null
+                    ),
+                    marker = NonDisplayingMarker(
+                        viewModel.valuesAtTimeStream, lineComponent(
+                            color = colors.onSurface,
+                            thickness = 1.dp
+                        )
+                    ),
+                    diffAnimationSpec = SnapSpec(),
+                    markerVisibilityChangeListener = markerVisibilityChangeListener
+                )
+            }
         }
     }
 }

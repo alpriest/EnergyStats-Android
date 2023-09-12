@@ -257,4 +257,10 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.putString(SharedPreferenceKey.SOLAR_RANGE_DEFINITIONS.name, jsonString)
             editor.apply()
         }
+
+    override fun clear() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
 }

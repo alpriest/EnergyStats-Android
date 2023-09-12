@@ -31,4 +31,5 @@ class FakeConfigStore(
     override var showLastUpdateTimestamp: Boolean = false,
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
 ) : ConfigInterface {
+    override fun clear() {}
 }

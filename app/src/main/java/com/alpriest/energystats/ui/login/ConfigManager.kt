@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.login
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -150,8 +151,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         }
 
     override fun logout() {
-        config.devices = null
-        config.isDemoUser = false
+        config.clear()
     }
 
     override var showUsableBatteryOnly: Boolean

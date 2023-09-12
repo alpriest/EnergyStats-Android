@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
+import com.alpriest.energystats.services.NetworkCache
 import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.services.NetworkService
 import com.alpriest.energystats.services.Networking
@@ -32,7 +33,7 @@ class AppContainer(private val context: Context) {
 
     val networking: Networking by lazy {
         NetworkFacade(
-            network = NetworkService(credentialStore, networkStore),
+            network = NetworkCache(network = NetworkService(credentialStore, networkStore)),
             config = config
         )
     }
