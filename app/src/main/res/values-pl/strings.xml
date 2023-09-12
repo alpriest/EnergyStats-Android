@@ -179,4 +179,18 @@
     <string name="last_update">Ostatnia aktualizacja %1s</string>
     <string name="today">dzisiaj</string>
     <string name="total">łącznie</string>
+    <string name="something_went_wrong_fetching_data_from_foxess_cloud">Wystąpił problem podczas pobierania danych z chmury FoxESS.</string>
+    <string name="restore_defaults">Przywróć domyślne</string>
+    <string name="low_threshold">Niski próg</string>
+    <string name="medium_threshold">Średni próg</string>
+    <string name="high_threshold">Wysoki próg</string>
+    <string name="below_this_amount_the_sun_will_be_yellow">Poniżej tej ilości słońce będzie żółte.</string>
+    <string name="between_low_and_medium_the_sun_will_be_yellow_and_glowing">Między niskim a średnim słońce będzie żółte i świecące.</string>
+    <string name="between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing">Między średnim a wysokim słońce będzie pomarańczowe i świecące. Powyżej wysokiego słońce będzie czerwone i świecące.</string>
+    <string name="frequently_asked_questions">Najczęściej zadawane pytania</string>
+    <string name="facebook_group">Grupa na Facebooku</string>
+    <string name="foxess_community">Społeczność FoxESS</string>
+    <string name="foxess_cloud_status">Stan chmury FoxESS</string>
+    <string name="show_last_update_timestamp">Pokaż ostatni znacznik czasu aktualizacji</string>
+    <string name="sun_display_variation_thresholds">Progi zmienności wyświetlania słońca</string>
 </resources>

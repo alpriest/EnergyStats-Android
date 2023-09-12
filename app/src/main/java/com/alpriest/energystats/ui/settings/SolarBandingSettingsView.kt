@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -126,12 +127,12 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
         Toast.makeText(context, "Thresholds were saved", Toast.LENGTH_LONG).show()
     }) {
         SettingsPage {
-            ThresholdView(mutableStateValue = threshold1, title = "Low threshold", description = "Below this amount the sun will be yellow.")
-            ThresholdView(mutableStateValue = threshold2, title = "Medium threshold", description = "Between low and medium the sun will be yellow and glowing.")
+            ThresholdView(mutableStateValue = threshold1, title = stringResource(R.string.low_threshold), description = stringResource(R.string.below_this_amount_the_sun_will_be_yellow))
+            ThresholdView(mutableStateValue = threshold2, title = stringResource(R.string.medium_threshold), description = stringResource(R.string.between_low_and_medium_the_sun_will_be_yellow_and_glowing))
             ThresholdView(
                 mutableStateValue = threshold3,
-                title = "High threshold",
-                description = "Between medium and high the sun will be orange and glowing. Above high the sun will be red and glowing."
+                title = stringResource(R.string.high_threshold),
+                description = stringResource(R.string.between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing)
             )
 
             SettingsColumnWithChild {
@@ -171,16 +172,12 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             }
 
             SettingsNavButton(
-                "Restore defaults",
+                stringResource(R.string.restore_defaults),
                 disclosureIcon = null
             ) {
-                mutatedAppTheme.value = mutatedAppTheme.value.copy(
-                    solarRangeDefinitions = SolarRangeDefinitions(
-                        threshold1 = 1.0,
-                        threshold2 = 2.0,
-                        threshold3 = 3.0
-                    )
-                )
+                threshold1.value = 1.0f
+                threshold2.value = 2.0f
+                threshold3.value = 3.0f
             }
 
             Spacer(modifier = Modifier.height(60.dp))

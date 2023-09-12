@@ -71,6 +71,7 @@ class BatteryChargeScheduleSettingsViewModel(
                     }
 
                     generateSummary(timePeriod1Stream.value, timePeriod2Stream.value)
+                    uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage))
                 }

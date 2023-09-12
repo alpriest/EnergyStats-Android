@@ -199,25 +199,25 @@ fun SettingsTabView(
 
         Column {
             SettingsNavButton(
-                title = "FoxESS Cloud Status",
+                title = stringResource(R.string.foxess_cloud_status),
                 disclosureIcon = { Icons.Default.OpenInBrowser },
                 onClick = { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") }
             )
 
             SettingsNavButton(
-                title = "FoxESS Community",
+                title = stringResource(R.string.foxess_community),
                 disclosureIcon = { Icons.Default.OpenInBrowser },
                 onClick = { uriHandler.openUri("https://www.foxesscommunity.com/") }
             )
 
             SettingsNavButton(
-                title = "Facebook group",
+                title = stringResource(R.string.facebook_group),
                 disclosureIcon = { Icons.Default.OpenInBrowser },
                 onClick = { uriHandler.openUri("https://www.facebook.com/groups/foxessownersgroup") }
             )
 
             SettingsNavButton(
-                title = "Frequently Asked Questions",
+                title = stringResource(R.string.frequently_asked_questions),
                 onClick = { navController.navigate(SettingsScreen.FAQ.name) }
             )
 

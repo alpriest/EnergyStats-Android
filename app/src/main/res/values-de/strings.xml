@@ -178,4 +178,18 @@
     <string name="last_update">Letzte Aktualisierung %1s</string>
     <string name="today">heute</string>
     <string name="total">gesamt</string>
+    <string name="something_went_wrong_fetching_data_from_foxess_cloud">Beim Abrufen von Daten aus der FoxESS-Cloud ist ein Fehler aufgetreten.</string>
+    <string name="restore_defaults">Standardeinstellungen wiederherstellen</string>
+    <string name="low_threshold">Niedriger Schwellenwert</string>
+    <string name="medium_threshold">Mittlerer Schwellenwert</string>
+    <string name="high_threshold">Hoher Schwellenwert</string>
+    <string name="below_this_amount_the_sun_will_be_yellow">Unterhalb dieses Betrags wird die Sonne gelb sein.</string>
+    <string name="between_low_and_medium_the_sun_will_be_yellow_and_glowing">Zwischen niedrig und mittel wird die Sonne gelb und leuchtend sein.</string>
+    <string name="between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing">Zwischen mittel und hoch wird die Sonne orange und leuchtend sein. Über hoch wird die Sonne rot und leuchtend sein.</string>
+    <string name="frequently_asked_questions">Häufig gestellte Fragen</string>
+    <string name="facebook_group">Facebook-Gruppe</string>
+    <string name="foxess_community">FoxESS-Community</string>
+    <string name="foxess_cloud_status">FoxESS-Cloudstatus</string>
+    <string name="show_last_update_timestamp">Letzten Aktualisierungszeitpunkt anzeigen</string>
+    <string name="sun_display_variation_thresholds">Schwellenwerte der Sonnenanzeigevielfalt</string>
 </resources>

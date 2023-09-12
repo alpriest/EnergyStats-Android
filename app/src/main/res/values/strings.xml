@@ -179,4 +179,17 @@
     <string name="today">today</string>
     <string name="total">total</string>
     <string name="something_went_wrong_fetching_data_from_foxess_cloud">Something went wrong fetching data from FoxESS cloud.</string>
+    <string name="restore_defaults">Restore defaults</string>
+    <string name="low_threshold">Low threshold</string>
+    <string name="medium_threshold">Medium threshold</string>
+    <string name="high_threshold">High threshold</string>
+    <string name="below_this_amount_the_sun_will_be_yellow">Below this amount the sun will be yellow.</string>
+    <string name="between_low_and_medium_the_sun_will_be_yellow_and_glowing">Between low and medium the sun will be yellow and glowing.</string>
+    <string name="between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing">Between medium and high the sun will be orange and glowing. Above high the sun will be red and glowing.</string>
+    <string name="frequently_asked_questions">Frequently Asked Questions</string>
+    <string name="facebook_group">Facebook group</string>
+    <string name="foxess_community">FoxESS Community</string>
+    <string name="foxess_cloud_status">FoxESS Cloud Status</string>
+    <string name="show_last_update_timestamp">Show last update timestamp</string>
+    <string name="sun_display_variation_thresholds">Sun display variation thresholds</string>
 </resources>

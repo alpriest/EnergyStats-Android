@@ -122,7 +122,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         )
 
         SettingsCheckbox(
-            title = "Show last update timestamp",
+            title = stringResource(R.string.show_last_update_timestamp),
             state = showLastUpdateTimestampState,
             onConfigUpdate = { config.showLastUpdateTimestamp = it }
         )
@@ -145,7 +145,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         )
 
         SettingsNavButton(stringResource(R.string.approximations)) { navController.navigate(SettingsScreen.Approximations.name) }
-        SettingsNavButton("Sun display variation thresholds") { navController.navigate(SettingsScreen.SolarBandings.name) }
+        SettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
     }
 }
 

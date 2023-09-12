@@ -178,4 +178,18 @@
     <string name="last_update">Última actualización %1s</string>
     <string name="today">hoy</string>
     <string name="total">total</string>
+    <string name="something_went_wrong_fetching_data_from_foxess_cloud">Algo salió mal al obtener datos de la nube de FoxESS.</string>
+    <string name="restore_defaults">Restaurar valores predeterminados</string>
+    <string name="low_threshold">Umbral bajo</string>
+    <string name="medium_threshold">Umbral medio</string>
+    <string name="high_threshold">Umbral alto</string>
+    <string name="below_this_amount_the_sun_will_be_yellow">Por debajo de esta cantidad, el sol será amarillo.</string>
+    <string name="between_low_and_medium_the_sun_will_be_yellow_and_glowing">Entre bajo y medio, el sol será amarillo y brillante.</string>
+    <string name="between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing">Entre medio y alto, el sol será naranja y brillante. Por encima de alto, el sol será rojo y brillante.</string>
+    <string name="frequently_asked_questions">Preguntas frecuentes</string>
+    <string name="facebook_group">Grupo de Facebook</string>
+    <string name="foxess_community">Comunidad FoxESS</string>
+    <string name="foxess_cloud_status">Estado de la nube FoxESS</string>
+    <string name="show_last_update_timestamp">Mostrar último timestamp de actualización</string>
+    <string name="sun_display_variation_thresholds">Umbral de variación de visualización del sol</string>
 </resources>
