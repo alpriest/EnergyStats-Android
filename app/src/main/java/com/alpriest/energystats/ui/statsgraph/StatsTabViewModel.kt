@@ -7,7 +7,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
@@ -15,6 +17,7 @@ import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
+import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,20 +33,10 @@ class StatsTabViewModel(
     val networking: Networking,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel() {
-    var maxYStream = MutableStateFlow(0f)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
-    val graphVariablesStream = MutableStateFlow(listOf(
-        ReportVariable.Generation,
-        ReportVariable.FeedIn,
-        ReportVariable.GridConsumption,
-        ReportVariable.ChargeEnergyToTal,
-        ReportVariable.DischargeEnergyToTal,
-        ReportVariable.Loads
-    ).map {
-        StatsGraphVariable(it, true)
-    })
+    val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
     var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileUri: Uri? = null
@@ -59,14 +52,38 @@ class StatsTabViewModel(
 
     init {
         appLifecycleObserver.attach()
+        viewModelScope.launch {
+            configManager.currentDevice
+                .collect {
+                    it?.let { device ->
+                        updateGraphVariables(device)
+                    }
+                }
+        }
     }
 
     fun finalize() {
         appLifecycleObserver.detach()
     }
 
+    private fun updateGraphVariables(device: Device) {
+        graphVariablesStream.value = listOf(
+            ReportVariable.Generation,
+            ReportVariable.FeedIn,
+            ReportVariable.GridConsumption,
+            if (device.hasBattery) ReportVariable.ChargeEnergyToTal else null,
+            if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
+            ReportVariable.Loads
+        ).mapNotNull { it }.map {
+            StatsGraphVariable(it, true)
+        }
+    }
+
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
+        if (graphVariablesStream.value.isEmpty()) {
+            updateGraphVariables(device)
+        }
         val graphVariables = graphVariablesStream.value
 
         val displayMode = displayModeStream.value
@@ -82,7 +99,6 @@ class StatsTabViewModel(
             reportType = reportType
         )
 
-        var maxY = 0f
         val rawTotals = generateTotals(device.deviceID, reportData, reportType, queryDate, reportVariables)
 
         rawData = reportData.flatMap { reportResponse ->
@@ -103,8 +119,6 @@ class StatsTabViewModel(
                     }
                 }
 
-                maxY = max(maxY, dataPoint.value.toFloat() + 0.5f)
-
                 return@map StatsGraphValue(
                     graphPoint = graphPoint,
                     value = dataPoint.value,
@@ -114,7 +128,6 @@ class StatsTabViewModel(
         }
 
         totalsStream.value = rawTotals
-        maxYStream.value = maxY
         refresh()
         calculateSelfSufficiencyEstimate()
     }

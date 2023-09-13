@@ -31,7 +31,6 @@ class ParametersGraphTabViewModel(
 ) : ViewModel() {
     var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
-    var maxYStream = MutableStateFlow(0f)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
@@ -112,13 +111,10 @@ class ParametersGraphTabViewModel(
             queryDate = queryDate
         )
 
-        var maxY = 0f
-
         val rawData: List<ParametersGraphValue> = raw.flatMap { response ->
             val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
 
             response.data.mapIndexed { index, item ->
-                maxY = max(maxY, item.value.toFloat() + 0.5f)
                 val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(item.time)
                 val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
@@ -132,7 +128,6 @@ class ParametersGraphTabViewModel(
         }
 
         this.rawData = rawData
-        maxYStream.value = maxY
 
         refresh()
     }

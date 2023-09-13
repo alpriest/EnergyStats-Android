@@ -98,7 +98,7 @@ class DemoNetworking : Networking {
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return PagedDeviceListResponse(
             currentPage = 1, pageSize = 1, total = 1, devices = arrayListOf(
-                NetworkDevice(plantName = "plant 1", deviceID = "f3000_deviceid", deviceSN = "123123", hasBattery = true, hasPV = true, deviceType = "F3000", moduleSN = "12"),
+                NetworkDevice(plantName = "plant 1", deviceID = "f3000_deviceid", deviceSN = "123123", hasBattery = false, hasPV = true, deviceType = "F3000", moduleSN = "12"),
                 NetworkDevice(plantName = "plant 2", deviceID = "h1_deviceid", deviceSN = "998877", hasBattery = true, hasPV = true, deviceType = "H1-3.7-E", moduleSN = "ab")
             )
         )
