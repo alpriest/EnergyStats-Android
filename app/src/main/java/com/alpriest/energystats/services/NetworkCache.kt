@@ -15,16 +15,21 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.ui.statsgraph.ReportType
+import java.lang.Math.abs
 
 import java.util.Date
 
 data class CachedItem(val item: Any) {
     val cacheTime: Date = Date()
+
+    fun isFresherThan(seconds: Int): Boolean {
+        return abs(Date().time - cacheTime.time) < (seconds * 1000L)
+    }
 }
 
 class NetworkCache(private val network: Networking) : Networking {
     private var cache: MutableMap<String, CachedItem> = mutableMapOf()
-    private val shortCacheDurationInSeconds = 5
+    private val shortCacheDurationInSeconds = 3
 
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return network.fetchDeviceList()
@@ -42,7 +47,7 @@ class NetworkCache(private val network: Networking) : Networking {
         val key = makeKey("fetchBattery", deviceID)
 
         val cached = cache[key]
-        return if (cached != null && cached.item is BatteryResponse && Date().time - cached.cacheTime.time < shortCacheDurationInSeconds * 1000L) {
+        return if (cached != null && cached.item is BatteryResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
             cached.item
         } else {
             val fresh = network.fetchBattery(deviceID)
@@ -55,7 +60,7 @@ class NetworkCache(private val network: Networking) : Networking {
         val key = makeKey("fetchBatterySettings", deviceSN)
 
         val cached = cache[key]
-        return if (cached != null && cached.item is BatterySettingsResponse && Date().time - cached.cacheTime.time < shortCacheDurationInSeconds * 1000L) {
+        return if (cached != null && cached.item is BatterySettingsResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
             cached.item
         } else {
             val fresh = network.fetchBatterySettings(deviceSN)
@@ -76,7 +81,7 @@ class NetworkCache(private val network: Networking) : Networking {
         val key = makeKey("fetchAddressBook", deviceID)
 
         val cached = cache[key]
-        return if (cached != null && cached.item is AddressBookResponse && Date().time - cached.cacheTime.time < shortCacheDurationInSeconds * 1000L) {
+        return if (cached != null && cached.item is AddressBookResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
             cached.item
         } else {
             val fresh = network.fetchAddressBook(deviceID)
@@ -93,7 +98,7 @@ class NetworkCache(private val network: Networking) : Networking {
         val key = makeKey("fetchEarnings", deviceID)
 
         val cached = cache[key]
-        return if (cached != null && cached.item is EarningsResponse && Date().time - cached.cacheTime.time < shortCacheDurationInSeconds * 1000L) {
+        return if (cached != null && cached.item is EarningsResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
             cached.item
         } else {
             val fresh = network.fetchEarnings(deviceID)

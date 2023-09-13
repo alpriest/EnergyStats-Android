@@ -41,8 +41,7 @@ class PowerFlowTabViewModel(
     private val context: Context
 ) : ViewModel() {
 
-    var launchIn: Job? = null
-
+    private var launchIn: Job? = null
     private var timer: CountDownTimer? = null
 
     val uiState = MutableStateFlow(UiPowerFlowLoadState(PowerFlowLoadState.Active("")))

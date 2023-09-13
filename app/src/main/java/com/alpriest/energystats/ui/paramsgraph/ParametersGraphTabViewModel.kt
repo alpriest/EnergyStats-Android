@@ -8,6 +8,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode
 import com.alpriest.energystats.ui.statsgraph.StatsGraphValue
@@ -41,6 +42,11 @@ class ParametersGraphTabViewModel(
     var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
+
+    private val appLifecycleObserver = AppLifecycleObserver(
+        onAppGoesToBackground = { },
+        onAppEntersForeground = { appEntersForeground() }
+    )
 
     init {
         viewModelScope.launch {
@@ -79,6 +85,20 @@ class ParametersGraphTabViewModel(
                         refresh()
                     }
                 }
+        }
+
+        appLifecycleObserver.attach()
+    }
+
+    fun finalize() {
+        appLifecycleObserver.detach()
+    }
+
+    private fun appEntersForeground() {
+        if (rawData.isNotEmpty()) {
+            viewModelScope.launch {
+                load()
+            }
         }
     }
 

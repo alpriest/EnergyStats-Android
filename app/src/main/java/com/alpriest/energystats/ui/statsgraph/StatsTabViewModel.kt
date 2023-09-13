@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportResponse
@@ -13,14 +14,14 @@ import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.lang.Math.max
-import java.lang.Math.min
 import java.text.DateFormatSymbols
 import java.time.LocalDate
-import java.util.ArrayList
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
@@ -50,6 +51,19 @@ class StatsTabViewModel(
     var absoluteSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
     var homeUsageStream = MutableStateFlow<Double?>(null)
     var totalSolarGeneratedStream = MutableStateFlow<Double?>(null)
+
+    private val appLifecycleObserver = AppLifecycleObserver(
+        onAppGoesToBackground = { },
+        onAppEntersForeground = { appEntersForeground() }
+    )
+
+    init {
+        appLifecycleObserver.attach()
+    }
+
+    fun finalize() {
+        appLifecycleObserver.detach()
+    }
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
@@ -103,6 +117,14 @@ class StatsTabViewModel(
         maxYStream.value = maxY
         refresh()
         calculateSelfSufficiencyEstimate()
+    }
+
+    private fun appEntersForeground() {
+        if (totalsStream.value.isNotEmpty()) {
+            viewModelScope.launch {
+                load()
+            }
+        }
     }
 
     private fun prepareExport(rawData: List<StatsGraphValue>, displayMode: StatsDisplayMode) {
