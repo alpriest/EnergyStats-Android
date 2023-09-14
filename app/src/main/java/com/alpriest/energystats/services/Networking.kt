@@ -8,7 +8,7 @@ class BadCredentialsException : Exception("Bad Credentials")
 class TryLaterException : Exception("Try Later")
 class MaintenanceModeException: Exception("Fox servers are offline. Please try later.")
 class MissingDataException : Exception("Missing data")
-class UnknownNetworkException(errno: Int): Exception("Unknown error $errno")
+class UnknownNetworkException(errno: Int, message: String?): Exception("$errno $message")
 
 interface Networking {
     suspend fun fetchDeviceList(): PagedDeviceListResponse

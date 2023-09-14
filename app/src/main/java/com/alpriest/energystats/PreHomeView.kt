@@ -17,9 +17,10 @@ class PreHomeViewModel(
 ) : ViewModel() {
     internal fun loadData() {
         viewModelScope.launch {
+            network.fetchErrorMessages()
+
             try {
                 if (userManager.loggedInState.value.loadState == LoggedIn) {
-                    network.fetchErrorMessages()
                     configManager.fetchDevices()
                     configManager.refreshFirmwareVersions()
                 }

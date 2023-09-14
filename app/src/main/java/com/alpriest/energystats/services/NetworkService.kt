@@ -96,7 +96,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
             credentials.setToken(value)
         }
 
-    private var errorMessages = mutableMapOf<String, MutableMap<String, String>>()
+    private var errorMessages = mutableMapOf<String, String>()
 
     override suspend fun fetchErrorMessages() {
         val url = HttpUrl.Builder()
@@ -112,7 +112,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val type = object : TypeToken<NetworkResponse<ErrorMessagesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<ErrorMessagesResponse>> = fetch(request, type)
         response.item.result?.messages?.let {
-            this.errorMessages = it
+            this.errorMessages = it[it.keys.first()] ?: mutableMapOf()
         }
     }
 
@@ -482,7 +482,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         }
 
         if (item.errno > 0) {
-            return Result.failure(UnknownNetworkException(item.errno))
+            return Result.failure(UnknownNetworkException(item.errno, errorMessages[item.errno.toString()]))
         }
 
         return Result.success(item)

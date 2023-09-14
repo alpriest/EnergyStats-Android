@@ -260,21 +260,16 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
     override suspend fun fetchDevices() {
         val deviceList = networking.fetchDeviceList()
-        var currentAction = ""
 
         try {
             val mappedDevices = ArrayList<Device>()
             deviceList.devices.asFlow().map {
-                currentAction = "fetch variables"
                 val variables = networking.fetchVariables(it.deviceID)
-                currentAction = "fetch firmware versions"
                 val firmware = fetchFirmwareVersions(it.deviceID)
                 var deviceBattery: Battery?
 
                 if (it.hasBattery) {
-                    currentAction = "fetch battery"
                     val battery = networking.fetchBattery(it.deviceID)
-                    currentAction = "fetch battery settings"
                     val batterySettings = networking.fetchBatterySettings(it.deviceSN)
                     try {
                         val batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
@@ -311,7 +306,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         } catch (ex: Exception) {
-            throw CouldNotFetchDeviceList(currentAction, ex)
+            throw CouldNotFetchDeviceList(ex)
         }
     }
 
@@ -358,5 +353,5 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
     }
 }
 
-class CouldNotFetchDeviceList(message: String, ex: Exception) : Exception("Could not fetch device list (${message}) (#${ex.localizedMessage})")
+class CouldNotFetchDeviceList(ex: Exception) : Exception("Could not fetch device list (#${ex.localizedMessage})")
 class NoDeviceFoundException : Exception("No device found")

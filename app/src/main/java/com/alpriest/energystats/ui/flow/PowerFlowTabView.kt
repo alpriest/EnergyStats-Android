@@ -204,7 +204,10 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
             modifier = Modifier.padding(top = 12.dp)
         ) {
-            Text(stringResource(R.string.retry))
+            Text(
+                stringResource(R.string.retry),
+                color = MaterialTheme.colors.onSecondary,
+            )
         }
 
         Button(
@@ -214,7 +217,10 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
                 .padding(top = 12.dp)
                 .padding(end = 12.dp)
         ) {
-            Text("FoxESS Cloud Status")
+            Text(
+                stringResource(R.string.foxess_cloud_status),
+                color = MaterialTheme.colors.onSecondary,
+            )
         }
 
         if (showingDetail) {
