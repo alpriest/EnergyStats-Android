@@ -87,7 +87,7 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
     }
 
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
-        return if(config.isDemoUser) {
+        return if (config.isDemoUser) {
             demoNetworking.setSoc(minGridSOC, minSOC, deviceSN)
         } else {
             network.setSoc(minGridSOC, minSOC, deviceSN)
@@ -95,7 +95,7 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
     }
 
     override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-        return if(config.isDemoUser) {
+        return if (config.isDemoUser) {
             demoNetworking.fetchBatteryTimes(deviceSN)
         } else {
             network.fetchBatteryTimes(deviceSN)
@@ -103,7 +103,7 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
     }
 
     override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-        return if(config.isDemoUser) {
+        return if (config.isDemoUser) {
             demoNetworking.setBatteryTimes(deviceSN, times)
         } else {
             network.setBatteryTimes(deviceSN, times)
@@ -111,7 +111,7 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
     }
 
     override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
-        return if(config.isDemoUser) {
+        return if (config.isDemoUser) {
             demoNetworking.fetchWorkMode(deviceID)
         } else {
             network.fetchWorkMode(deviceID)
@@ -119,7 +119,7 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
     }
 
     override suspend fun setWorkMode(deviceID: String, workMode: String) {
-        return if(config.isDemoUser) {
+        return if (config.isDemoUser) {
             demoNetworking.setWorkMode(deviceID, workMode)
         } else {
             network.setWorkMode(deviceID, workMode)
@@ -127,10 +127,18 @@ class NetworkFacade(private val network: Networking, private val config: ConfigI
     }
 
     override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-        return if(config.isDemoUser) {
+        return if (config.isDemoUser) {
             demoNetworking.fetchDataLoggers()
         } else {
             network.fetchDataLoggers()
+        }
+    }
+
+    override suspend fun fetchErrorMessages() {
+        if (config.isDemoUser) {
+            demoNetworking.fetchErrorMessages()
+        } else {
+            network.fetchErrorMessages()
         }
     }
 }

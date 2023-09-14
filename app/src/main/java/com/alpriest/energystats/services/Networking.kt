@@ -27,6 +27,7 @@ interface Networking {
     suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse
     suspend fun setWorkMode(deviceID: String, workMode: String)
     suspend fun fetchDataLoggers(): PagedDataLoggerListResponse
+    suspend fun fetchErrorMessages()
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

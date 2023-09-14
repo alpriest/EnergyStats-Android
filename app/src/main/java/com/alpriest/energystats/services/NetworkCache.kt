@@ -131,6 +131,10 @@ class NetworkCache(private val network: Networking) : Networking {
         return network.fetchDataLoggers()
     }
 
+    override suspend fun fetchErrorMessages() {
+        network.fetchErrorMessages()
+    }
+
     fun makeKey(base: String, vararg arguments: String): String {
         return listOf(base, *arguments).joinToString(separator = "_")
     }

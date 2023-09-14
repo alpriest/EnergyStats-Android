@@ -13,6 +13,7 @@ import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsSetRequest
 import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.ErrorMessagesResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -77,7 +78,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
                     .header("Accept", "application/json, text/plain, */*")
                     .header(
                         "Referrer",
-                        "https://www.foxesscloud.com/bus/device/inverterDetail?id=xyz&flowType=1&status=1&hasPV=true&hasBattery=true"
+                        "https://www.foxesscloud.com/"
                     )
                     .header("Accept-Language", "en-US;q=0.9,en;q=0.8,de;q=0.7,nl;q=0.6")
                     .header("Content-Type", "application/json")
@@ -94,6 +95,26 @@ class NetworkService(private val credentials: CredentialStore, private val store
         set(value) {
             credentials.setToken(value)
         }
+
+    private var errorMessages = mutableMapOf<String, MutableMap<String, String>>()
+
+    override suspend fun fetchErrorMessages() {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("c/v0/errors/message")
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<ErrorMessagesResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<ErrorMessagesResponse>> = fetch(request, type)
+        response.item.result?.messages?.let {
+            this.errorMessages = it
+        }
+    }
 
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         val body = RequestBody.create(

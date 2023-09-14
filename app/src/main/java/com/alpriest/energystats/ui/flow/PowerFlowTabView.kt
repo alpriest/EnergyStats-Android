@@ -199,24 +199,22 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
             textAlign = TextAlign.Center
         )
 
-        Row {
-            Button(
-                onClick = { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .padding(end = 12.dp)
-            ) {
-                Text("FoxESS Cloud Status")
-            }
+        Button(
+            onClick = { coroutineScope.launch { onRetry() } },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+            modifier = Modifier.padding(top = 12.dp)
+        ) {
+            Text(stringResource(R.string.retry))
+        }
 
-            Button(
-                onClick = { coroutineScope.launch { onRetry() } },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-                modifier = Modifier.padding(top = 12.dp)
-            ) {
-                Text(stringResource(R.string.retry))
-            }
+        Button(
+            onClick = { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+            modifier = Modifier
+                .padding(top = 12.dp)
+                .padding(end = 12.dp)
+        ) {
+            Text("FoxESS Cloud Status")
         }
 
         if (showingDetail) {

@@ -3,6 +3,7 @@ package com.alpriest.energystats
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.login.LoggedIn
@@ -10,6 +11,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import kotlinx.coroutines.launch
 
 class PreHomeViewModel(
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging
 ) : ViewModel() {
@@ -17,6 +19,7 @@ class PreHomeViewModel(
         viewModelScope.launch {
             try {
                 if (userManager.loggedInState.value.loadState == LoggedIn) {
+                    network.fetchErrorMessages()
                     configManager.fetchDevices()
                     configManager.refreshFirmwareVersions()
                 }

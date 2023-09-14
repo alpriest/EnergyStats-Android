@@ -31,6 +31,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+
 class DemoNetworking : Networking {
     override suspend fun ensureHasToken() {
         // Do nothing
@@ -173,4 +174,6 @@ class DemoNetworking : Networking {
             )
         )
     }
+
+    override suspend fun fetchErrorMessages() {}
 }
