@@ -103,7 +103,7 @@
     <string name="rawvariable_soc">Stan naładowania baterii. Procent pojemności baterii, który jest dostępny</string>
     <string name="rawvariable_meterpower2">Moc odczytywana przez licznik 2 lub cewkę prądową CT2, w kW</string>
     <string name="rawvariable_powerfactor">Stosunek mocy rzeczywistej w kilowatach (kW) do mocy pozornej, w kilowoltamperach (kVA)</string>
-    <string name="predefined_selections">Predefiniowane wybory</string>
+    <string name="groups">Grupy</string>
     <string name="all">Wszystko</string>
     <string name="loads">Obciążenia</string>
     <string name="self_sufficiency_estimates">Szacunki samowystarczalności</string>
@@ -193,4 +193,5 @@
     <string name="foxess_cloud_status">Stan chmury FoxESS</string>
     <string name="show_last_update_timestamp">Pokaż ostatni znacznik czasu aktualizacji</string>
     <string name="sun_display_variation_thresholds">Progi zmienności wyświetlania słońca</string>
+    <string name="tap_the_icon_for_further_detail">Dotknij ikony, aby uzyskać więcej informacji</string>
 </resources>

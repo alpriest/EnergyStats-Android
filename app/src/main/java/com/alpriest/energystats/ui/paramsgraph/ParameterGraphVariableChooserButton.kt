@@ -20,6 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.alpriest.energystats.ui.settings.DebugDataSettingsView
+import com.alpriest.energystats.ui.settings.SettingsScreen
 
 @Composable
 fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel) {
@@ -43,14 +50,27 @@ fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel) 
                 contentDescription = null
             )
         }
+
         if (showing) {
             Dialog(
                 onDismissRequest = { showing = false },
-            ) {
-                ParameterGraphVariableChooserView(
-                    ParameterGraphVariableChooserViewModel(graphVariables, onApply = { viewModel.setGraphVariables(it) }),
-                    onCancel = { showing = false }
+                properties = DialogProperties(
+                    usePlatformDefaultWidth = false
                 )
+            ) {
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "chooser"
+                ) {
+                    composable("chooser") {
+                        ParameterGraphVariableChooserView(
+                            ParameterGraphVariableChooserViewModel(graphVariables, onApply = { viewModel.setGraphVariables(it) }),
+                            onCancel = { showing = false }
+                        )
+                    }
+                }
             }
         }
     }

@@ -103,7 +103,7 @@
     <string name="rawvariable_soc">Stato di carica della batteria. Percentuale della capacità della batteria disponibile</string>
     <string name="rawvariable_meterpower2">Potenza letta da contatore 2 o pinza amperometrica CT2, in kilowatt (kW)</string>
     <string name="rawvariable_powerfactor">Rapporto tra la potenza reale in kilowatt (kW) e la potenza apparente in kilovolt-ampere (kVA)</string>
-    <string name="predefined_selections">Selezioni predefinite</string>
+    <string name="groups">Gruppi</string>
     <string name="all">Tutto</string>
     <string name="loads">"Carichi "</string>
     <string name="self_sufficiency_estimates">Stime di autosufficienza</string>
@@ -193,4 +193,5 @@
     <string name="foxess_cloud_status">Stato della nuvola FoxESS</string>
     <string name="show_last_update_timestamp">Mostra l\'ultimo timestamp di aggiornamento</string>
     <string name="sun_display_variation_thresholds">Soglie di variazione della visualizzazione del sole</string>
+    <string name="tap_the_icon_for_further_detail">Tocca l\'icona per ulteriori dettagli</string>
 </resources>

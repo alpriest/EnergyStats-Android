@@ -103,7 +103,7 @@
     <string name="rawvariable_soc">Ladezustand (State of Charge / SoC) der Batterie. Der Prozentsatz der verfügbaren Batteriekapazität</string>
     <string name="rawvariable_meterpower2">Die Leistung, die vom Energie-Messgerät (Smart-Meter) 2 oder den Strom-Klemmen CT2 gemessen wird, in Kilowatt (kW)</string>
     <string name="rawvariable_powerfactor">Das Verhältnis der echten Ausgangsleistung in Kilowatt (kW) zur Schein-Ausgangsleistung in Kilovolt-Ampere (kVA)</string>
-    <string name="predefined_selections">Vordefinierte Auswahl</string>
+    <string name="groups">Gruppen</string>
     <string name="all">Alle</string>
     <string name="reportvariable_loads">Leistung, die im Haus verbraucht wurde</string>
     <string name="net_self_sufficiency">Annahme von Autarkie falls der Nettoverbrauch positiv ist.\n\nAutarkie = (Export - Import + Batterieladung - Batterieentladung) / Hausverbrauch</string>
@@ -192,4 +192,5 @@
     <string name="foxess_cloud_status">FoxESS-Cloudstatus</string>
     <string name="show_last_update_timestamp">Letzten Aktualisierungszeitpunkt anzeigen</string>
     <string name="sun_display_variation_thresholds">Schwellenwerte der Sonnenanzeigevielfalt</string>
+    <string name="tap_the_icon_for_further_detail">Tippen Sie auf das Symbol für weitere Details</string>
 </resources>

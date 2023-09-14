@@ -190,12 +190,12 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
                 .clickable { showingDetail = !showingDetail }
         )
         Text(
-            "Something went wrong fetching data from FoxESS cloud.",
+            text = stringResource(R.string.something_went_wrong_fetching_data_from_foxess_cloud),
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Text(
-            "Tap the icon for further detail.",
+            stringResource(R.string.tap_the_icon_for_further_detail),
             textAlign = TextAlign.Center
         )
 

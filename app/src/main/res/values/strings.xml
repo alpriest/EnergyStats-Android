@@ -102,7 +102,7 @@
     <string name="rawvariable_soc">State of Charge for the battery. The percentage of the battery capacity that is available</string>
     <string name="rawvariable_meterpower2">The power being read by meter 2 or current clamp CT2, in kilowatts (kW)</string>
     <string name="rawvariable_powerfactor">The ratio of the true power output in kilowatts (kW) to the apparent power output, in kilovolt-amps (kVA)</string>
-    <string name="predefined_selections">Predefined selections</string>
+    <string name="groups">Groups</string>
     <string name="all">All</string>
     <string name="loads">"Loads "</string>
     <string name="self_sufficiency_estimates">Self sufficiency estimates</string>
@@ -192,4 +192,5 @@
     <string name="foxess_cloud_status">FoxESS Cloud Status</string>
     <string name="show_last_update_timestamp">Show last update timestamp</string>
     <string name="sun_display_variation_thresholds">Sun display variation thresholds</string>
+    <string name="tap_the_icon_for_further_detail">Tap the icon for further detail</string>
 </resources>
