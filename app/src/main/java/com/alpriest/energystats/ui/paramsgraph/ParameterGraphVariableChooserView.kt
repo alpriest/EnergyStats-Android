@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -32,6 +34,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -43,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -54,6 +62,8 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
     val variables = viewModel.variablesState.collectAsState().value
     val uriHandler = LocalUriHandler.current
     val groups = viewModel.groups.collectAsState().value
+    val checkState = rememberSaveable { mutableStateOf(true) }
+    var isEditing by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -70,11 +80,11 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { isEditing = !isEditing }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "Localized description",
-                            tint = colors.onPrimary,
+                            tint = if (isEditing) colors.onSecondary else colors.onPrimary,
                         )
                     }
                 }
@@ -101,9 +111,17 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                     OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
 
                     groups.forEach {
-                        OutlinedButton(
-                            onClick = { viewModel.select(it.variables) }
-                        ) { Text(it.title) }
+                        Row {
+                            if (isEditing) {
+                                SettingsCheckbox(title = "sdf", state = checkState, onConfigUpdate = {})
+                            } else {
+                                OutlinedButton(
+                                    onClick = { viewModel.select(it.variables) }
+                                ) {
+                                    Text(it.title)
+                                }
+                            }
+                        }
                     }
 
                     OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
@@ -133,14 +151,14 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                 }
 
                 Column(
-                    modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.fillMaxWidth(), horizontalAlignment = CenterHorizontally
                 ) {
                     Button(
                         onClick = {
                             uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Fox-ESS-Cloud#search-parameters")
                         },
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = MaterialTheme.colors.primary, backgroundColor = Color.Transparent
+                            contentColor = colors.primary, backgroundColor = Color.Transparent
                         ),
                         elevation = null,
                     ) {
