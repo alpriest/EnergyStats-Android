@@ -50,8 +50,7 @@ class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphV
     }
 
     fun chooseDefaultVariables() {
-        val newVariables = DefaultGraphVariables
-        select(newVariables)
+        select(DefaultGraphVariables)
     }
 
     fun chooseNoVariables() {

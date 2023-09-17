@@ -79,15 +79,15 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                         style = typography.headlineSmall
                     )
                 },
-                actions = {
-                    IconButton(onClick = { isEditing = !isEditing }) {
-                        Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = "Localized description",
-                            tint = if (isEditing) colors.onSecondary else colors.onPrimary,
-                        )
-                    }
-                }
+//                actions = {
+//                    IconButton(onClick = { isEditing = !isEditing }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.Edit,
+//                            contentDescription = "Localized description",
+//                            tint = if (isEditing) colors.onSecondary else colors.onPrimary,
+//                        )
+//                    }
+//                }
             )
         },
     ) { innerPadding ->
@@ -113,7 +113,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                     groups.forEach {
                         Row {
                             if (isEditing) {
-                                SettingsCheckbox(title = "sdf", state = checkState, onConfigUpdate = {})
+                                SettingsCheckbox(title = "TODO", state = checkState, onConfigUpdate = {})
                             } else {
                                 OutlinedButton(
                                     onClick = { viewModel.select(it.variables) }

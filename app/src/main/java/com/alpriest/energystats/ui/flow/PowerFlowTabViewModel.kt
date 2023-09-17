@@ -62,7 +62,7 @@ class PowerFlowTabViewModel(
 
         viewModelScope.launch {
             themeStream.collect { it ->
-                if (it.showInverterTemperatures) {
+                if (it.showInverterTemperatures || it.shouldInvertCT2) {
                     timerFired()
                 }
             }
