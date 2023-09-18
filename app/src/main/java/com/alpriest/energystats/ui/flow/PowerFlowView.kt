@@ -57,7 +57,8 @@ fun PowerFlowView(
                     7000 - kotlin.math.abs(amount * 1000.0).toInt()
                 ), easing = LinearEasing
             )
-        )
+        ),
+        label = "ball y position"
     )
     val isFlowing = !amount.rounded(2).sameValueAs(0.0)
     val theme by themeStream.collectAsState()

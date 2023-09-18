@@ -261,6 +261,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override fun clear() {
         val editor = sharedPreferences.edit()
         editor.clear()
-        editor.apply()
+        editor.commit()
     }
 }

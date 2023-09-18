@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.flow.home
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"

@@ -66,7 +66,8 @@ fun BatteryIconView(
     modifier: Modifier = Modifier
 ) {
     var percentage by remember { mutableStateOf(true) }
-    val fontSize: TextUnit = themeStream.collectAsState().value.fontSize()
+    val fontSize = themeStream.collectAsState().value.fontSize()
+    val smallFontSize = themeStream.collectAsState().value.smallFontSize()
     val showBatteryTemperature = themeStream.collectAsState().value.showBatteryTemperature
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
     val showBatteryEstimate = themeStream.collectAsState().value.showBatteryEstimate
@@ -111,7 +112,7 @@ fun BatteryIconView(
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     color = Color.Gray,
-                    fontSize = fontSize
+                    fontSize = smallFontSize
                 )
             }
         }

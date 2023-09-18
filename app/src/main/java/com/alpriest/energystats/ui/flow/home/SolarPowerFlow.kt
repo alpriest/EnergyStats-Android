@@ -36,6 +36,8 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.ui.flow.EarningsView
+import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor

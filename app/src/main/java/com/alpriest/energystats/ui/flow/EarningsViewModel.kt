@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.flow.home
+package com.alpriest.energystats.ui.flow
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.theme.AppTheme
 
 @Composable

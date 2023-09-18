@@ -302,6 +302,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
             if (selectedDeviceID == null) {
                 selectedDeviceID = devices?.firstOrNull()?.deviceID
+                currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
             }
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
