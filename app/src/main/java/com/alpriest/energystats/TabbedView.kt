@@ -32,6 +32,7 @@ import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabView
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
@@ -87,7 +88,7 @@ fun TabbedView(
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, themeStream).Content(themeStream = themeStream)
                     1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), themeStream)
-                    2 -> ParametersGraphTabView(ParametersGraphTabViewModel(configManager, network, onWriteTempFile), themeStream)
+                    2 -> NavigableParametersGraphTabView(configManager, network, onWriteTempFile, themeStream)
                     3 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,

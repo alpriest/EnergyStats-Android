@@ -62,7 +62,7 @@ fun SettingsColumnWithChild(
     }
 }
 
-enum class SettingsScreen() {
+enum class SettingsScreen {
     Settings,
     Debug,
     Battery,
