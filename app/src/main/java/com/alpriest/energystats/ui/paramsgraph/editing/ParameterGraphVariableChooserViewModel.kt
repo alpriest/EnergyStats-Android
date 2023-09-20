@@ -1,6 +1,7 @@
-package com.alpriest.energystats.ui.paramsgraph
+package com.alpriest.energystats.ui.paramsgraph.editing
 
-import com.alpriest.energystats.ui.paramsgraph.ParameterGroup.Companion.defaultParameterGroups
+import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup.Companion.defaultParameterGroups
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

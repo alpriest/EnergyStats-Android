@@ -10,19 +10,16 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode
-import com.alpriest.energystats.ui.statsgraph.StatsGraphValue
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
-import kotlin.math.max
 
 class ParametersGraphTabViewModel(
     val configManager: ConfigManaging,
