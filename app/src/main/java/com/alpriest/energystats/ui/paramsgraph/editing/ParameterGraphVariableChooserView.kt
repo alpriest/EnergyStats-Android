@@ -52,6 +52,28 @@ import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
+@Composable
+fun ParameterVariableListView(variables: List<ParameterGraphVariable>, onTap: (ParameterGraphVariable) -> Unit) {
+    variables.forEach { variable ->
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .clickable { onTap(variable) }
+            .fillMaxWidth()) {
+            Checkbox(
+                checked = variable.isSelected, onCheckedChange = {
+                    onTap(variable)
+                }, colors = CheckboxDefaults.colors(checkedColor = colors.primary)
+            )
+            Text(
+                variable.type.name, modifier = Modifier.weight(0.5f)
+            )
+
+            Text(
+                variable.type.unit, modifier = Modifier.padding(end = 4.dp)
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel, onCancel: () -> Unit) {
@@ -127,24 +149,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                 SettingsColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
                     SettingsTitleView(stringResource(id = R.string.all))
 
-                    variables.forEach { variable ->
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                            .clickable { viewModel.toggle(variable) }
-                            .fillMaxWidth()) {
-                            Checkbox(
-                                checked = variable.isSelected, onCheckedChange = {
-                                    viewModel.toggle(variable)
-                                }, colors = CheckboxDefaults.colors(checkedColor = colors.primary)
-                            )
-                            Text(
-                                variable.type.name, modifier = Modifier.weight(0.5f)
-                            )
-
-                            Text(
-                                variable.type.unit, modifier = Modifier.padding(end = 4.dp)
-                            )
-                        }
-                    }
+                    ParameterVariableListView(variables, onTap = { viewModel.toggle(it) })
                 }
 
                 Column(
@@ -200,7 +205,13 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
 @Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun ParameterGraphVariableChooserViewPreview() {
-    val variables = listOf(
+    EnergyStatsTheme {
+        ParameterGraphVariableChooserView(viewModel = ParameterGraphVariableChooserViewModel(previewParameterGraphVariables(), onApply = { }), onCancel = {})
+    }
+}
+
+fun previewParameterGraphVariables(): List<ParameterGraphVariable> {
+    return listOf(
         RawVariable("PV1Volt", "pv1Volt", "V"),
         RawVariable("PV1Current", "pv1Current", "A"),
         RawVariable("PV1Power", "pv1Power", "kW"),
@@ -225,9 +236,5 @@ fun ParameterGraphVariableChooserViewPreview() {
         RawVariable("dPV2Power", "pv2Power", "kW")
     ).map { variable ->
         ParameterGraphVariable(variable, isSelected = listOf(true, false).random(), enabled = true)
-    }
-
-    EnergyStatsTheme {
-        ParameterGraphVariableChooserView(viewModel = ParameterGraphVariableChooserViewModel(variables, onApply = { }), onCancel = {})
     }
 }
