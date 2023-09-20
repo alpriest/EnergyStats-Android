@@ -39,14 +39,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
+import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -76,7 +79,7 @@ fun ParameterVariableListView(variables: List<ParameterGraphVariable>, onTap: (P
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel, onCancel: () -> Unit) {
+fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel, onCancel: () -> Unit, navController: NavHostController) {
     val scrollState = rememberScrollState()
     val variables = viewModel.variablesState.collectAsState().value
     val uriHandler = LocalUriHandler.current
@@ -99,7 +102,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                     )
                 },
                 actions = {
-                    IconButton(onClick = { isEditing = !isEditing }) {
+                    IconButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "Localized description",
@@ -206,7 +209,11 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
 @Composable
 fun ParameterGraphVariableChooserViewPreview() {
     EnergyStatsTheme {
-        ParameterGraphVariableChooserView(viewModel = ParameterGraphVariableChooserViewModel(previewParameterGraphVariables(), onApply = { }), onCancel = {})
+        ParameterGraphVariableChooserView(
+            viewModel = ParameterGraphVariableChooserViewModel(previewParameterGraphVariables(), onApply = { }),
+            onCancel = {},
+            navController = NavHostController(LocalContext.current)
+        )
     }
 }
 

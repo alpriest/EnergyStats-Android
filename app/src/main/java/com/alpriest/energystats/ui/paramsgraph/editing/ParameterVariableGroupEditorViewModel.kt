@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.paramsgraph.editing
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow
 
-// TODO from configManager
+// TODO groups2 from configManager
 class ParameterVariableGroupEditorViewModel(private val groups2: List<ParameterGroup>) {
     var variables = MutableStateFlow(previewParameterGraphVariables().sortedBy { it.type.name.lowercase() })
     val selected = MutableStateFlow(groups2.first())

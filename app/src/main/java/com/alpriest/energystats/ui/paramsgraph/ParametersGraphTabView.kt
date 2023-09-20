@@ -43,6 +43,9 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,6 +55,7 @@ import java.time.format.FormatStyle
 enum class ParametersScreen {
     Graph,
     ParameterChooser,
+    ParameterGroupEditor
 }
 
 @Composable
@@ -74,8 +78,21 @@ fun NavigableParametersGraphTabView(
         }
 
         composable(ParametersScreen.ParameterChooser.name) {
-            ParameterGraphVariableChooserView(ParameterGraphVariableChooserViewModel(graphVariables, onApply = { viewModel.setGraphVariables(it) }),
-                onCancel = { navController.popBackStack() })
+            ParameterGraphVariableChooserView(
+                ParameterGraphVariableChooserViewModel(graphVariables, onApply = { viewModel.setGraphVariables(it) }),
+                onCancel = { navController.popBackStack() },
+                navController = navController
+            )
+        }
+
+        composable(ParametersScreen.ParameterGroupEditor.name) {
+            ParameterVariableGroupEditorView(
+                ParameterVariableGroupEditorViewModel(listOf(
+                    ParameterGroup("first", listOf("a", "b", "c")),
+                    ParameterGroup("second", listOf("a", "b", "c"))
+                )),
+                navController = navController
+            )
         }
     }
 }

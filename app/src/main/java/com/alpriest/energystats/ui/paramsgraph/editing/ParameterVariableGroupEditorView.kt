@@ -32,6 +32,10 @@ import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.MaterialDialogState
+import com.vanpra.composematerialdialogs.input
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
 @Composable
 fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorViewModel, navController: NavHostController) {
@@ -39,6 +43,8 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
     val selectedGroup = viewModel.selected.collectAsState().value
     val variables = viewModel.variables.collectAsState().value
     val groups = viewModel.groups.collectAsState().value
+    var showingRename by remember { mutableStateOf(true) }
+    val createDialogState = rememberMaterialDialogState()
 
     ContentWithBottomButtons(navController = navController, onSave = {}) {
         SettingsPage {
@@ -88,7 +94,7 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { showingRename = true },
                         modifier = Modifier.padding(end = 12.dp)
                     ) {
                         Text(
@@ -97,7 +103,7 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
                         )
                     }
 
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = { createDialogState.show() }) {
                         Text(
                             "Create new...",
                             color = colors.onPrimary
@@ -110,6 +116,23 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
                 SettingsTitleView("Choose parameters")
                 ParameterVariableListView(variables = variables, onTap = { })
             }
+
+            TextEntryDialog(createDialogState, "dialogText") { }
+            TextEntryDialog(createDialogState, "dialogText") { }
+        }
+    }
+}
+
+@Composable
+fun TextEntryDialog(dialogState: MaterialDialogState, text: String, onConfirm: (String) -> Unit) {
+    var dialogText by remember { mutableStateOf(text) }
+
+    MaterialDialog(dialogState = dialogState, buttons = {
+        positiveButton("Ok", onClick = { onConfirm(dialogText) })
+        negativeButton("Cancel")
+    }) {
+        input(label = "Name", prefill = text, placeholder = "Jon Smith") { inputString ->
+            dialogText = inputString
         }
     }
 }
