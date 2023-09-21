@@ -262,7 +262,12 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var parameterGroups: List<ParameterGroup>
         get() {
-            val data = sharedPreferences.getString(SharedPreferenceKey.PARAMETER_GROUPS.name, Gson().toJson(ParameterGroup.defaults))
+            var data = sharedPreferences.getString(SharedPreferenceKey.PARAMETER_GROUPS.name, null)
+            if (data == null) {
+                data = Gson().toJson(ParameterGroup.defaults)
+                parameterGroups = ParameterGroup.defaults
+            }
+
             return Gson().fromJson(data, object : TypeToken<List<ParameterGroup>>() {}.type)
         }
         set(value) {

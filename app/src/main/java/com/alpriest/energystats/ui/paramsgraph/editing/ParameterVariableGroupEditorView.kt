@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -122,8 +123,12 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
                 ParameterVariableListView(variables = variables, onTap = { viewModel.toggle(it) })
             }
 
-            TextEntryDialog(createDialogState, "") { }
-            TextEntryDialog(renameDialogState, dialogText.value) { }
+            TextEntryDialog(createDialogState, "") {
+
+            }
+            TextEntryDialog(renameDialogState, dialogText.value) {
+                viewModel.rename(it)
+            }
         }
     }
 }
@@ -147,12 +152,7 @@ fun TextEntryDialog(dialogState: MaterialDialogState, text: String, onConfirm: (
 fun ParameterVariableGroupEditorViewPreview() {
     EnergyStatsTheme(darkTheme = false) {
         ParameterVariableGroupEditorView(
-            viewModel = ParameterVariableGroupEditorViewModel(
-                listOf(
-                    ParameterGroup("first", listOf("a", "b", "c")),
-                    ParameterGroup("second", listOf("a", "b", "c"))
-                )
-            ),
+            viewModel = ParameterVariableGroupEditorViewModel(FakeConfigManager(), previewParameterGraphVariables()),
             NavHostController(LocalContext.current)
         )
     }

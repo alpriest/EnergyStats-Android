@@ -87,10 +87,7 @@ fun NavigableParametersGraphTabView(
 
         composable(ParametersScreen.ParameterGroupEditor.name) {
             ParameterVariableGroupEditorView(
-                ParameterVariableGroupEditorViewModel(listOf(
-                    ParameterGroup("first", listOf("a", "b", "c")),
-                    ParameterGroup("second", listOf("a", "b", "c"))
-                )),
+                ParameterVariableGroupEditorViewModel(configManager, graphVariables),
                 navController = navController
             )
         }

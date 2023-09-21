@@ -139,7 +139,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
                                 SettingsCheckbox(title = "TODO", state = checkState, onConfigUpdate = {})
                             } else {
                                 OutlinedButton(
-                                    onClick = { viewModel.select(it.variables) }
+                                    onClick = { viewModel.select(it.parameterNames) }
                                 ) {
                                     Text(it.title)
                                 }

@@ -1,13 +1,13 @@
 package com.alpriest.energystats.ui.paramsgraph.editing
 
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow
 
-// TODO groups2 from configManager
-class ParameterVariableGroupEditorViewModel(private val groups2: List<ParameterGroup>) {
-    var variables = MutableStateFlow(previewParameterGraphVariables().sortedBy { it.type.name.lowercase() })
-    val selected = MutableStateFlow(groups2.first())
-    val groups = MutableStateFlow(groups2)
+class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, variables: List<ParameterGraphVariable>,) {
+    var variables = MutableStateFlow(variables.sortedBy { it.type.name.lowercase() })
+    val selected = MutableStateFlow(configManager.parameterGroups.first())
+    val groups = MutableStateFlow(configManager.parameterGroups)
 
     fun select(group: ParameterGroup) {
         selected.value = group
@@ -21,5 +21,19 @@ class ParameterVariableGroupEditorViewModel(private val groups2: List<ParameterG
 
             return@map it
         }
+    }
+
+    fun rename(title: String) {
+        val selectedId = selected.value.id
+
+        groups.value = groups.value.map { existingGroup ->
+                if (existingGroup.id == selectedId) {
+                    ParameterGroup(id = selectedId, title = title, parameterNames = selected.value.parameterNames)
+                } else {
+                    existingGroup
+                }
+        }
+
+        selected.value = groups.value.first { it.id == selectedId }
     }
 }

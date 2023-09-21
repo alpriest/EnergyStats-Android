@@ -5,13 +5,15 @@ import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.UUID
 
-data class ParameterGroup(val title: String, val variables: List<String>) {
+data class ParameterGroup(val id: String, val title: String, val parameterNames: List<String>) {
     companion object {
         val defaults: List<ParameterGroup>
             get() {
                 return listOf(
                     ParameterGroup(
+                        id = UUID.randomUUID().toString(),
                         "Compare strings", listOf(
                             "pv1Power",
                             "pv2Power",
@@ -20,6 +22,7 @@ data class ParameterGroup(val title: String, val variables: List<String>) {
                         )
                     ),
                     ParameterGroup(
+                        id = UUID.randomUUID().toString(),
                         "Temperatures", listOf(
                             "ambientTemperation",
                             "boostTemperation",
@@ -30,6 +33,7 @@ data class ParameterGroup(val title: String, val variables: List<String>) {
                         )
                     ),
                     ParameterGroup(
+                        id = UUID.randomUUID().toString(),
                         "Battery", listOf(
                             "batTemperature",
                             "batVolt",

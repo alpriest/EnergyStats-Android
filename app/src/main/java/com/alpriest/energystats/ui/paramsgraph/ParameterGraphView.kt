@@ -56,7 +56,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
             viewModel.valuesAtTimeStream.value = listOf()
         }
     }
-    val entries = viewModel.entriesStream.collectAsState().value.first()
+    val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
     val firstHour = entries.firstOrNull()?.localDateTime?.hour ?: 0
     val firstLabelOffset = entries.indexOfFirst { it.localDateTime.hour > firstHour }
 
