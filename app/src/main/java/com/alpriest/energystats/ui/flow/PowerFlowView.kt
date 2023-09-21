@@ -151,8 +151,8 @@ fun PowerFlowView(
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
                     modifier = Modifier
-                        .padding(3.dp)
-                        .padding(horizontal = 5.dp)
+                        .padding(vertical = 1.dp)
+                        .padding(horizontal = 3.dp)
                 )
             }
         }

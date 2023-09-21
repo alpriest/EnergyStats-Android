@@ -90,7 +90,6 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
                             }
                         }
                     }
-
                 }
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -120,7 +119,7 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
 
             SettingsColumnWithChild {
                 SettingsTitleView("Choose parameters")
-                ParameterVariableListView(variables = variables, onTap = { })
+                ParameterVariableListView(variables = variables, onTap = { viewModel.toggle(it) })
             }
 
             TextEntryDialog(createDialogState, "") { }
