@@ -2,6 +2,7 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -35,7 +36,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW,
         BATTERY_CAPACITY_OVERRIDES,
         SHOW_LAST_UPDATE_TIMESTAMP,
-        SOLAR_RANGE_DEFINITIONS
+        SOLAR_RANGE_DEFINITIONS,
+        PARAMETER_GROUPS
     }
 
     override var showGridTotals: Boolean
@@ -258,9 +260,21 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
+    override var parameterGroups: List<ParameterGroup>
+        get() {
+            val data = sharedPreferences.getString(SharedPreferenceKey.PARAMETER_GROUPS.name, Gson().toJson(ParameterGroup.defaults))
+            return Gson().fromJson(data, object : TypeToken<List<ParameterGroup>>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceKey.PARAMETER_GROUPS.name, jsonString)
+            editor.apply()
+        }
+
     override fun clear() {
         val editor = sharedPreferences.edit()
         editor.clear()
-        editor.commit()
+        editor.apply()
     }
 }

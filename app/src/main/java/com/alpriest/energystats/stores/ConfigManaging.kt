@@ -2,6 +2,7 @@ package com.alpriest.energystats.stores
 
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -14,6 +15,7 @@ interface ConfigManaging {
     suspend fun refreshFirmwareVersions()
     fun select(device: Device)
 
+    val parameterGroups: List<ParameterGroup>
     var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean
     var showInverterTypeNameOnPowerflow: Boolean

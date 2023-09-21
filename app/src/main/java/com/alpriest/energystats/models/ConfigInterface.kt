@@ -1,5 +1,6 @@
 package com.alpriest.energystats.models
 
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
@@ -29,5 +30,6 @@ interface ConfigInterface {
     var showInverterTypeNameOnPowerflow: Boolean
     var showInverterPlantNameOnPowerflow: Boolean
     var deviceBatteryOverrides: Map<String, String>
+    var parameterGroups: List<ParameterGroup>
     fun clear()
 }

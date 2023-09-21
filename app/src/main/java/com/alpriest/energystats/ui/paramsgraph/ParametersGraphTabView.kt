@@ -79,7 +79,7 @@ fun NavigableParametersGraphTabView(
 
         composable(ParametersScreen.ParameterChooser.name) {
             ParameterGraphVariableChooserView(
-                ParameterGraphVariableChooserViewModel(graphVariables, onApply = { viewModel.setGraphVariables(it) }),
+                ParameterGraphVariableChooserViewModel(configManager, graphVariables, onApply = { viewModel.setGraphVariables(it) }),
                 onCancel = { navController.popBackStack() },
                 navController = navController
             )

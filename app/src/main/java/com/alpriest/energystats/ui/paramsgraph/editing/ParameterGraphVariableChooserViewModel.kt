@@ -1,50 +1,51 @@
 package com.alpriest.energystats.ui.paramsgraph.editing
 
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup.Companion.defaultParameterGroups
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 data class ParameterGroup(val title: String, val variables: List<String>) {
     companion object {
-        fun defaultParameterGroups(): List<ParameterGroup> {
-            return listOf(
-                ParameterGroup(
-                    "Compare strings", listOf(
-                        "pv1Power",
-                        "pv2Power",
-                        "pv3Power",
-                        "pv4Power"
-                    )
-                ),
-                ParameterGroup(
-                    "Temperatures", listOf(
-                        "ambientTemperation",
-                        "boostTemperation",
-                        "invTemperation",
-                        "chargeTemperature",
-                        "batTemperature",
-                        "dspTemperature"
-                    )
-                ),
-                ParameterGroup(
-                    "Battery", listOf(
-                        "batTemperature",
-                        "batVolt",
-                        "batCurrent",
-                        "SoC"
-                    )
-                ),
-            )
-        }
+        val defaults: List<ParameterGroup>
+            get() {
+                return listOf(
+                    ParameterGroup(
+                        "Compare strings", listOf(
+                            "pv1Power",
+                            "pv2Power",
+                            "pv3Power",
+                            "pv4Power"
+                        )
+                    ),
+                    ParameterGroup(
+                        "Temperatures", listOf(
+                            "ambientTemperation",
+                            "boostTemperation",
+                            "invTemperation",
+                            "chargeTemperature",
+                            "batTemperature",
+                            "dspTemperature"
+                        )
+                    ),
+                    ParameterGroup(
+                        "Battery", listOf(
+                            "batTemperature",
+                            "batVolt",
+                            "batCurrent",
+                            "SoC"
+                        )
+                    ),
+                )
+            }
     }
 }
 
-class ParameterGraphVariableChooserViewModel(var variables: List<ParameterGraphVariable>, val onApply: (List<ParameterGraphVariable>) -> Unit) {
+class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: List<ParameterGraphVariable>, val onApply: (List<ParameterGraphVariable>) -> Unit) {
     private var _variablesState = MutableStateFlow(variables.sortedBy { it.type.name.lowercase() })
     val variablesState: StateFlow<List<ParameterGraphVariable>> = _variablesState.asStateFlow()
-    val groups = MutableStateFlow(defaultParameterGroups())
+    val groups = MutableStateFlow(configManager.parameterGroups)
 
     fun apply() {
         onApply(variablesState.value)

@@ -6,6 +6,7 @@ import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -43,6 +44,7 @@ class FakeConfigManager : ConfigManaging {
     override var showInverterTypeNameOnPowerflow: Boolean = false
     override var showLastUpdateTimestamp: Boolean = false
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
+    override val parameterGroups: List<ParameterGroup> = ParameterGroup.defaults
     override var devices: List<Device>? = listOf(
         Device(
             plantName = "plant 1",

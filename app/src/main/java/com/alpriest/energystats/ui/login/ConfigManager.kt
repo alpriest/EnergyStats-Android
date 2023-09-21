@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -340,6 +341,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.selectedParameterGraphVariables
         set(value) {
             config.selectedParameterGraphVariables = value
+        }
+
+    override var parameterGroups: List<ParameterGroup>
+        get() = config.parameterGroups
+        set(value) {
+            config.parameterGroups = value
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
@@ -210,7 +211,7 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
 fun ParameterGraphVariableChooserViewPreview() {
     EnergyStatsTheme {
         ParameterGraphVariableChooserView(
-            viewModel = ParameterGraphVariableChooserViewModel(previewParameterGraphVariables(), onApply = { }),
+            viewModel = ParameterGraphVariableChooserViewModel(FakeConfigManager(), previewParameterGraphVariables(), onApply = { }),
             onCancel = {},
             navController = NavHostController(LocalContext.current)
         )
