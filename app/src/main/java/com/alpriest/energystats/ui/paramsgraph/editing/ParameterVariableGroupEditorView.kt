@@ -43,8 +43,9 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
     val selectedGroup = viewModel.selected.collectAsState().value
     val variables = viewModel.variables.collectAsState().value
     val groups = viewModel.groups.collectAsState().value
-    var showingRename by remember { mutableStateOf(true) }
+    val renameDialogState = rememberMaterialDialogState()
     val createDialogState = rememberMaterialDialogState()
+    val dialogText = remember { mutableStateOf("") }
 
     ContentWithBottomButtons(navController = navController, onSave = {}) {
         SettingsPage {
@@ -94,7 +95,10 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Button(
-                        onClick = { showingRename = true },
+                        onClick = {
+                            dialogText.value = viewModel.selected.value.title
+                            renameDialogState.show()
+                        },
                         modifier = Modifier.padding(end = 12.dp)
                     ) {
                         Text(
@@ -103,7 +107,9 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
                         )
                     }
 
-                    Button(onClick = { createDialogState.show() }) {
+                    Button(onClick = {
+                        createDialogState.show()
+                    }) {
                         Text(
                             "Create new...",
                             color = colors.onPrimary
@@ -117,8 +123,8 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
                 ParameterVariableListView(variables = variables, onTap = { })
             }
 
-            TextEntryDialog(createDialogState, "dialogText") { }
-            TextEntryDialog(createDialogState, "dialogText") { }
+            TextEntryDialog(createDialogState, "") { }
+            TextEntryDialog(renameDialogState, dialogText.value) { }
         }
     }
 }
