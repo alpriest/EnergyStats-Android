@@ -18,9 +18,9 @@ class WorkModeViewModelFactory(
     private val navController: NavController,
     private val context: Context
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, NavController::class.java, Context::class.java)
-            .newInstance(network, configManager, navController, context)
+        return WorkModeViewModel(network, configManager, navController, context) as T
     }
 }
 

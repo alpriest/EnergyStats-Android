@@ -11,6 +11,7 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -20,17 +21,14 @@ private val ChargeTimePeriod.hasTimes: Boolean
         return start != Time.zero() || end != Time.zero()
     }
 
-class BatteryScheduleTimesViewModelFactory(
+class BatteryChargeScheduleSettingsViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val context: Context
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(
-            Networking::class.java,
-            ConfigManaging::class.java,
-            Context::class.java
-        ).newInstance(network, configManager, context)
+        return BatteryChargeScheduleSettingsViewModel(network, configManager, context) as T
     }
 }
 

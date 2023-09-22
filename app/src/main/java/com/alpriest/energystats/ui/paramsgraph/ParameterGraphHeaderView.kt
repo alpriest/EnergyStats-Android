@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 
 @Composable
-fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier, navController: NavHostController) {
+fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
     var hours by remember { mutableStateOf(viewModel.displayModeStream.value.hours) }
     val candidateQueryDate = MutableStateFlow(viewModel.displayModeStream.collectAsState().value.date)
     var hoursButtonEnabled by remember { mutableStateOf(true) }
@@ -53,7 +53,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        ParameterGraphVariableChooserButton(viewModel, navController)
+        ParameterGraphVariableChooserButton(viewModel.configManager, viewModel)
 
         CalendarView(dateStream = candidateQueryDate)
 

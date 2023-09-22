@@ -37,7 +37,6 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
-import com.alpriest.energystats.ui.settings.CancelSaveButtonView
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -54,7 +53,7 @@ class BatteryChargeScheduleSettingsView(
     @Composable
     fun Content(
         viewModel: BatteryChargeScheduleSettingsViewModel = viewModel(
-            factory = BatteryScheduleTimesViewModelFactory(
+            factory = BatteryChargeScheduleSettingsViewModelFactory(
                 network = network,
                 configManager = configManager,
                 context = context

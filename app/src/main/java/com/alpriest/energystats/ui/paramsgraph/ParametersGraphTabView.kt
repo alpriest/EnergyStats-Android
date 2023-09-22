@@ -1,7 +1,10 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,6 +35,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -43,9 +50,6 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,119 +70,139 @@ fun NavigableParametersGraphTabView(
     themeStream: MutableStateFlow<AppTheme>,
 ) {
     val navController = rememberNavController()
-    val viewModel = ParametersGraphTabViewModel(configManager, network, onWriteTempFile)
-    val graphVariables = viewModel.graphVariablesStream.collectAsState().value
+//    val viewModel = ParametersGraphTabViewModel(configManager, network, onWriteTempFile)
+//    val graphVariables = viewModel.graphVariablesStream.collectAsState().value
+//    val chooserViewModel = ParameterGraphVariableChooserViewModel(configManager, graphVariables) { viewModel.setGraphVariables(it) }
 
     NavHost(
         navController = navController,
-        startDestination = ParametersScreen.Graph.name
+        startDestination = ParametersScreen.Graph.name,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None }
     ) {
         composable(ParametersScreen.Graph.name) {
-            ParametersGraphTabView(viewModel, themeStream, navController)
+            ParametersGraphTabView(network, configManager, onWriteTempFile).Content(themeStream = themeStream)
         }
 
-        composable(ParametersScreen.ParameterChooser.name) {
-            ParameterGraphVariableChooserView(
-                ParameterGraphVariableChooserViewModel(configManager, graphVariables, onApply = { viewModel.setGraphVariables(it) }),
-                onCancel = { navController.popBackStack() },
-                navController = navController
-            )
-        }
+//        composable(ParametersScreen.ParameterChooser.name) {
+//            ParameterGraphVariableChooserView(configManager,
+//                chooserViewModel,
+//                onCancel = { navController.popBackStack() },
+//                navController = navController
+//            )
+//        }
 
-        composable(ParametersScreen.ParameterGroupEditor.name) {
-            ParameterVariableGroupEditorView(
-                ParameterVariableGroupEditorViewModel(configManager, graphVariables),
-                navController = navController
-            )
-        }
+//        composable(ParametersScreen.ParameterGroupEditor.name) {
+//            ParameterVariableGroupEditorView(
+//                ParameterVariableGroupEditorViewModel(configManager, graphVariables),
+//                navController = navController
+//            )
+//        }
     }
 }
 
-@Composable
-fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, navController: NavHostController) {
-    val scrollState = rememberScrollState()
-    var isLoading by remember { mutableStateOf(false) }
-    val hasData = viewModel.hasDataStream.collectAsState().value
-    val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
-    val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
-
-    LaunchedEffect(viewModel.displayModeStream) {
-        isLoading = true
-        viewModel.load()
-        isLoading = false
+class ParametersGraphTabViewModelFactory(
+    private val network: Networking,
+    private val configManager: ConfigManaging,
+    private val onWriteTempFile: (String, String) -> Uri?
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return ParametersGraphTabViewModel(network, configManager, onWriteTempFile) as T
     }
+}
 
-    val context = LocalContext.current
+class ParametersGraphTabView(
+    private val network: Networking,
+    private val configManager: ConfigManaging,
+    private val onWriteTempFile: (String, String) -> Uri?
+) {
+    @Composable
+    fun Content(viewModel: ParametersGraphTabViewModel = viewModel(factory = ParametersGraphTabViewModelFactory(network, configManager, onWriteTempFile)), themeStream: MutableStateFlow<AppTheme>) {
+        val scrollState = rememberScrollState()
+        var isLoading by remember { mutableStateOf(false) }
+        val hasData = viewModel.hasDataStream.collectAsState().value
+        val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
+        val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
 
-    if (isLoading) {
-        Column(
-            modifier = Modifier
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(stringResource(R.string.loading))
+        LaunchedEffect(viewModel.displayModeStream) {
+            isLoading = true
+            viewModel.load()
+            isLoading = false
         }
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(12.dp)
-                .verticalScroll(scrollState)
-        ) {
-            ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp), navController)
 
-            if (hasData) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .fillMaxWidth()
-                ) {
-                    selectedDateTime?.let {
-                        androidx.compose.material3.Text(
-                            text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                            color = MaterialTheme.colors.onSecondary
-                        )
-                    } ?: run {
-                        Text(stringResource(R.string.touch_the_graph_to_see_values_at_that_time))
+        val context = LocalContext.current
+
+        if (isLoading) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(stringResource(R.string.loading))
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp)
+                    .verticalScroll(scrollState)
+            ) {
+                ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+
+                if (hasData) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth()
+                    ) {
+                        selectedDateTime?.let {
+                            androidx.compose.material3.Text(
+                                text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                                color = MaterialTheme.colors.onSecondary
+                            )
+                        } ?: run {
+                            Text(stringResource(R.string.touch_the_graph_to_see_values_at_that_time))
+                        }
                     }
+
+                    ParameterGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+
+                    ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+                } else {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "No data. Try changing your filters",
+                        textAlign = TextAlign.Center
+                    )
                 }
 
-                ParameterGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
-
-                ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
-            } else {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "No data. Try changing your filters",
-                    textAlign = TextAlign.Center
+                    text = stringResource(id = R.string.parameters_update_description),
+                    fontSize = 12.sp,
+                    color = DimmedTextColor,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 44.dp, bottom = 22.dp)
                 )
-            }
 
-            Text(
-                text = stringResource(id = R.string.parameters_update_description),
-                fontSize = 12.sp,
-                color = DimmedTextColor,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 44.dp, bottom = 22.dp)
-            )
-
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(modifier = Modifier.clickable {
-                    val sendIntent: Intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_STREAM, viewModel.exportFileUri)
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                        type = "text/csv"
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(modifier = Modifier.clickable {
+                        val sendIntent: Intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_STREAM, viewModel.exportFileUri)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                            type = "text/csv"
+                        }
+                        val shareIntent = Intent.createChooser(sendIntent, null)
+                        context.startActivity(shareIntent)
+                    }) {
+                        Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
+                        Text(stringResource(R.string.export_csv_data))
                     }
-                    val shareIntent = Intent.createChooser(sendIntent, null)
-                    context.startActivity(shareIntent)
-                }) {
-                    Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
-                    Text(stringResource(R.string.export_csv_data))
                 }
             }
         }
@@ -189,7 +213,6 @@ fun ParametersGraphTabView(viewModel: ParametersGraphTabViewModel, themeStream: 
 @Composable
 fun PreviewParameterGraphHeaderView() {
     ParameterGraphHeaderView(
-        viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking(), onWriteTempFile = { _, _ -> null }),
-        navController = NavHostController(LocalContext.current)
+        viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking(), onWriteTempFile = { _, _ -> null })
     )
 }

@@ -68,9 +68,9 @@ class PowerFlowTabViewModelFactory(
     private val themeStream: MutableStateFlow<AppTheme>,
     private val context: Context
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, MutableStateFlow::class.java, Context::class.java)
-            .newInstance(network, configManager, themeStream, context)
+        return PowerFlowTabViewModel(network, configManager, themeStream, context) as T
     }
 }
 

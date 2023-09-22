@@ -25,10 +25,14 @@ import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
 
 @Composable
-fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel, navController: NavHostController) {
+fun ParameterGraphVariableChooserButton(configManager: ConfigManaging, viewModel: ParametersGraphTabViewModel) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState().value
+    var showing by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -36,7 +40,7 @@ fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel, 
             .padding(end = 14.dp)
     ) {
         Button(
-            onClick = { navController.navigate(ParametersScreen.ParameterChooser.name) },
+            onClick = { showing = true },
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .size(36.dp),
@@ -47,5 +51,30 @@ fun ParameterGraphVariableChooserButton(viewModel: ParametersGraphTabViewModel, 
                 contentDescription = null
             )
         }
+
+        if (showing) {
+            Dialog(
+                onDismissRequest = { showing = false },
+                properties = DialogProperties(
+                    usePlatformDefaultWidth = false
+                )
+            ) {
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "chooser"
+                ) {
+                    composable("chooser") {
+                        ParameterGraphVariableChooserView(
+                            configManager, graphVariables, onApply = { viewModel.setGraphVariables(it) })
+                            .Content(
+                                onCancel = { showing = false }
+                            )
+                    }
+                }
+            }
+        }
+
     }
 }

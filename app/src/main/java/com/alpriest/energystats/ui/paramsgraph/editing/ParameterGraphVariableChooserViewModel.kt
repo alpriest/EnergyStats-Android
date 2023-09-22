@@ -1,10 +1,14 @@
 package com.alpriest.energystats.ui.paramsgraph.editing
 
+import android.content.Context
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
+import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
 
 data class ParameterGroup(val id: String, val title: String, val parameterNames: List<String>) {
@@ -46,9 +50,19 @@ data class ParameterGroup(val id: String, val title: String, val parameterNames:
     }
 }
 
-class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: List<ParameterGraphVariable>, val onApply: (List<ParameterGraphVariable>) -> Unit) {
-    private var _variablesState = MutableStateFlow(variables.sortedBy { it.type.name.lowercase() })
-    val variablesState: StateFlow<List<ParameterGraphVariable>> = _variablesState.asStateFlow()
+class ParameterGraphVariableChooserViewModelFactory(
+    private val configManager: ConfigManaging,
+    private val variables: List<ParameterGraphVariable>,
+    private val onApply: (List<ParameterGraphVariable>) -> Unit
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return ParameterGraphVariableChooserViewModel(configManager, variables, onApply) as T
+    }
+}
+
+class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: List<ParameterGraphVariable>, val onApply: (List<ParameterGraphVariable>) -> Unit): ViewModel() {
+    val variablesState: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(variables.sortedBy { it.type.name.lowercase() })
     val groups = MutableStateFlow(configManager.parameterGroups)
 
     fun apply() {
@@ -64,14 +78,14 @@ class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, 
     }
 
     fun select(newVariables: List<String>) {
-        _variablesState.value = _variablesState.value.map {
+        variablesState.value = variablesState.value.map {
             val select = newVariables.contains(it.type.variable)
             return@map it.copy(isSelected = select, enabled = select)
         }
     }
 
     fun toggle(updating: ParameterGraphVariable) {
-        _variablesState.value = _variablesState.value.map {
+        variablesState.value = variablesState.value.map {
             if (it.type.variable == updating.type.variable) {
                 return@map it.copy(isSelected = !it.isSelected, enabled = !it.isSelected)
             }

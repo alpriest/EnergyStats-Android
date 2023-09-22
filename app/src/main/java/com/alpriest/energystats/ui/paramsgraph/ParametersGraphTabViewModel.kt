@@ -22,8 +22,8 @@ import java.time.ZoneId
 import java.util.Locale
 
 class ParametersGraphTabViewModel(
-    val configManager: ConfigManaging,
     val networking: Networking,
+    val configManager: ConfigManaging,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel() {
     var exportFileUri: Uri? = null
@@ -219,7 +219,7 @@ class ParametersGraphTabViewModel(
         }
     }
 
-    fun selectedGraphVariables(): List<String> {
+    private fun selectedGraphVariables(): List<String> {
         if (configManager.selectedParameterGraphVariables.isEmpty()) {
             return ParameterGraphVariableChooserViewModel.DefaultGraphVariables
         } else {

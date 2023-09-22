@@ -19,12 +19,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.primarySurface
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -45,16 +43,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
-import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun ParameterVariableListView(variables: List<ParameterGraphVariable>, onTap: (ParameterGraphVariable) -> Unit) {
@@ -78,129 +78,138 @@ fun ParameterVariableListView(variables: List<ParameterGraphVariable>, onTap: (P
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserViewModel, onCancel: () -> Unit, navController: NavHostController) {
-    val scrollState = rememberScrollState()
-    val variables = viewModel.variablesState.collectAsState().value
-    val uriHandler = LocalUriHandler.current
-    val groups = viewModel.groups.collectAsState().value
-    val checkState = rememberSaveable { mutableStateOf(true) }
-    var isEditing by rememberSaveable { mutableStateOf(false) }
+class ParameterGraphVariableChooserView(
+    private val configManager: ConfigManaging,
+    private val variables: List<ParameterGraphVariable>,
+    private val onApply: (List<ParameterGraphVariable>) -> Unit
+) {
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun Content(
+        viewModel: ParameterGraphVariableChooserViewModel = viewModel(factory = ParameterGraphVariableChooserViewModelFactory(configManager, variables, onApply)),
+        onCancel: () -> Unit
+    ) {
+        val scrollState = rememberScrollState()
+        val variables = viewModel.variablesState.collectAsState().value
+        val uriHandler = LocalUriHandler.current
+        val groups = viewModel.groups.collectAsState().value
+        val checkState = rememberSaveable { mutableStateOf(true) }
+        var isEditing by rememberSaveable { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = colors.primarySurface,
-                    titleContentColor = colors.primary,
-                ),
-                title = {
-                    Text(
-                        "Parameter Groups",
-                        color = colors.onPrimary,
-                        style = typography.headlineSmall
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
-                        Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = "Localized description",
-                            tint = if (isEditing) colors.onSecondary else colors.onPrimary,
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = colors.primarySurface,
+                        titleContentColor = colors.primary,
+                    ),
+                    title = {
+                        Text(
+                            "Parameter Groups",
+                            color = colors.onPrimary,
+                            style = typography.headlineSmall
                         )
-                    }
-                }
-            )
-        },
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(colors.background)
-        ) {
-            Column(
+                    },
+//                actions = {
+//                    IconButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.Edit,
+//                            contentDescription = "Localized description",
+//                            tint = if (isEditing) colors.onSecondary else colors.onPrimary,
+//                        )
+//                    }
+//                }
+                )
+            },
+        ) { innerPadding ->
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp)
-                    .padding(bottom = 94.dp)
-                    .verticalScroll(scrollState),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(colors.background)
             ) {
-                SettingsColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
-                    SettingsTitleView(stringResource(id = R.string.groups))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 94.dp)
+                        .verticalScroll(scrollState),
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                ) {
+                    SettingsColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
+                        SettingsTitleView(stringResource(id = R.string.groups))
 
-                    OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
+                        OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
 
-                    groups.forEach {
-                        Row {
-                            if (isEditing) {
-                                SettingsCheckbox(title = "TODO", state = checkState, onConfigUpdate = {})
-                            } else {
-                                OutlinedButton(
-                                    onClick = { viewModel.select(it.parameterNames) }
-                                ) {
-                                    Text(it.title)
+                        groups.forEach {
+                            Row {
+                                if (isEditing) {
+                                    SettingsCheckbox(title = "TODO", state = checkState, onConfigUpdate = {})
+                                } else {
+                                    OutlinedButton(
+                                        onClick = { viewModel.select(it.parameterNames) }
+                                    ) {
+                                        Text(it.title)
+                                    }
                                 }
                             }
                         }
+
+                        OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
                     }
 
-                    OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
-                }
+                    SettingsColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
+                        SettingsTitleView(stringResource(id = R.string.all))
 
-                SettingsColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
-                    SettingsTitleView(stringResource(id = R.string.all))
+                        ParameterVariableListView(variables, onTap = { viewModel.toggle(it) })
+                    }
 
-                    ParameterVariableListView(variables, onTap = { viewModel.toggle(it) })
+                    Column(
+                        modifier = Modifier.fillMaxWidth(), horizontalAlignment = CenterHorizontally
+                    ) {
+                        Button(
+                            onClick = {
+                                uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Fox-ESS-Cloud#search-parameters")
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = colors.primary, backgroundColor = Color.Transparent
+                            ),
+                            elevation = null,
+                        ) {
+                            Icon(
+                                Icons.Default.OpenInBrowser, contentDescription = "Open In Browser", modifier = Modifier.padding(end = 5.dp)
+                            )
+                            Text(
+                                stringResource(R.string.find_out_more_about_these_variables),
+                                fontSize = 12.sp,
+                            )
+                        }
+                    }
                 }
 
                 Column(
-                    modifier = Modifier.fillMaxWidth(), horizontalAlignment = CenterHorizontally
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .padding(12.dp)
+                        .align(Alignment.BottomCenter)
                 ) {
-                    Button(
-                        onClick = {
-                            uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Fox-ESS-Cloud#search-parameters")
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = colors.primary, backgroundColor = Color.Transparent
-                        ),
-                        elevation = null,
+                    Row(
+                        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Icon(
-                            Icons.Default.OpenInBrowser, contentDescription = "Open In Browser", modifier = Modifier.padding(end = 5.dp)
-                        )
-                        Text(
-                            stringResource(R.string.find_out_more_about_these_variables),
-                            fontSize = 12.sp,
-                        )
-                    }
-                }
-            }
+                        Button(modifier = Modifier.weight(1f), onClick = { onCancel() }) {
+                            Text(stringResource(R.string.cancel))
+                        }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(12.dp)
-                    .align(Alignment.BottomCenter)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Button(modifier = Modifier.weight(1f), onClick = { onCancel() }) {
-                        Text(stringResource(R.string.cancel))
+                        Button(modifier = Modifier.weight(1f), onClick = {
+                            viewModel.apply()
+                            onCancel()
+                        }) {
+                            Text(stringResource(R.string.apply))
+                        }
                     }
-
-                    Button(modifier = Modifier.weight(1f), onClick = {
-                        viewModel.apply()
-                        onCancel()
-                    }) {
-                        Text(stringResource(R.string.apply))
-                    }
+                    Text(stringResource(R.string.note_that_not_all_parameters_contain_values), modifier = Modifier.align(CenterHorizontally))
                 }
-                Text(stringResource(R.string.note_that_not_all_parameters_contain_values), modifier = Modifier.align(CenterHorizontally))
             }
         }
     }
@@ -211,10 +220,9 @@ fun ParameterGraphVariableChooserView(viewModel: ParameterGraphVariableChooserVi
 fun ParameterGraphVariableChooserViewPreview() {
     EnergyStatsTheme {
         ParameterGraphVariableChooserView(
-            viewModel = ParameterGraphVariableChooserViewModel(FakeConfigManager(), previewParameterGraphVariables(), onApply = { }),
-            onCancel = {},
-            navController = NavHostController(LocalContext.current)
-        )
+            FakeConfigManager(), previewParameterGraphVariables()
+        ) { }.Content {
+        }
     }
 }
 
