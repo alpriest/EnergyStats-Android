@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.paramsgraph
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.EnterTransition
@@ -49,7 +48,6 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,9 +68,7 @@ fun NavigableParametersGraphTabView(
     themeStream: MutableStateFlow<AppTheme>,
 ) {
     val navController = rememberNavController()
-//    val viewModel = ParametersGraphTabViewModel(configManager, network, onWriteTempFile)
-//    val graphVariables = viewModel.graphVariablesStream.collectAsState().value
-//    val chooserViewModel = ParameterGraphVariableChooserViewModel(configManager, graphVariables) { viewModel.setGraphVariables(it) }
+    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(listOf())
 
     NavHost(
         navController = navController,
@@ -81,16 +77,15 @@ fun NavigableParametersGraphTabView(
         exitTransition = { ExitTransition.None }
     ) {
         composable(ParametersScreen.Graph.name) {
-            ParametersGraphTabView(network, configManager, onWriteTempFile).Content(themeStream = themeStream)
+            ParametersGraphTabView(network, configManager, onWriteTempFile, graphVariablesStream, navController).Content(themeStream = themeStream)
         }
 
-//        composable(ParametersScreen.ParameterChooser.name) {
-//            ParameterGraphVariableChooserView(configManager,
-//                chooserViewModel,
-//                onCancel = { navController.popBackStack() },
-//                navController = navController
-//            )
-//        }
+        composable(ParametersScreen.ParameterChooser.name) {
+            ParameterGraphVariableChooserView(
+                configManager,
+                graphVariablesStream,
+            ).Content(onCancel = { navController.popBackStack() })
+        }
 
 //        composable(ParametersScreen.ParameterGroupEditor.name) {
 //            ParameterVariableGroupEditorView(
@@ -104,21 +99,27 @@ fun NavigableParametersGraphTabView(
 class ParametersGraphTabViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val onWriteTempFile: (String, String) -> Uri?
+    private val onWriteTempFile: (String, String) -> Uri?,
+    private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ParametersGraphTabViewModel(network, configManager, onWriteTempFile) as T
+        return ParametersGraphTabViewModel(network, configManager, onWriteTempFile, graphVariablesStream) as T
     }
 }
 
 class ParametersGraphTabView(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val onWriteTempFile: (String, String) -> Uri?
+    private val onWriteTempFile: (String, String) -> Uri?,
+    private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>,
+    private val navController: NavController
 ) {
     @Composable
-    fun Content(viewModel: ParametersGraphTabViewModel = viewModel(factory = ParametersGraphTabViewModelFactory(network, configManager, onWriteTempFile)), themeStream: MutableStateFlow<AppTheme>) {
+    fun Content(
+        viewModel: ParametersGraphTabViewModel = viewModel(factory = ParametersGraphTabViewModelFactory(network, configManager, onWriteTempFile, graphVariablesStream)),
+        themeStream: MutableStateFlow<AppTheme>
+    ) {
         val scrollState = rememberScrollState()
         var isLoading by remember { mutableStateOf(false) }
         val hasData = viewModel.hasDataStream.collectAsState().value
@@ -148,7 +149,7 @@ class ParametersGraphTabView(
                     .padding(12.dp)
                     .verticalScroll(scrollState)
             ) {
-                ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+                ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp), navController)
 
                 if (hasData) {
                     Column(
@@ -213,6 +214,12 @@ class ParametersGraphTabView(
 @Composable
 fun PreviewParameterGraphHeaderView() {
     ParameterGraphHeaderView(
-        viewModel = ParametersGraphTabViewModel(configManager = FakeConfigManager(), networking = DemoNetworking(), onWriteTempFile = { _, _ -> null })
+        viewModel = ParametersGraphTabViewModel(
+            configManager = FakeConfigManager(),
+            networking = DemoNetworking(),
+            onWriteTempFile = { _, _ -> null },
+            graphVariablesStream = MutableStateFlow(listOf()),
+        ),
+        navController = NavHostController(LocalContext.current)
     )
 }

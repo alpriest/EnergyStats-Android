@@ -23,6 +23,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.GraphBounds
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.ToggleRowView
+import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.title
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,7 +79,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
 @Preview(widthDp = 340)
 fun ParameterGraphVariableTogglesViewPreview() {
     ParameterGraphVariableTogglesView(
-        ParametersGraphTabViewModel(DemoNetworking(), FakeConfigManager(), onWriteTempFile = { _, _ -> null }),
+        ParametersGraphTabViewModel(DemoNetworking(), FakeConfigManager(), onWriteTempFile = { _, _ -> null }, MutableStateFlow(previewParameterGraphVariables())),
         themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false))
     )
 }

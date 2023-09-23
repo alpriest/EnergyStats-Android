@@ -24,7 +24,8 @@ import java.util.Locale
 class ParametersGraphTabViewModel(
     val networking: Networking,
     val configManager: ConfigManaging,
-    val onWriteTempFile: (String, String) -> Uri?
+    val onWriteTempFile: (String, String) -> Uri?,
+    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
 ) : ViewModel() {
     var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
@@ -32,7 +33,6 @@ class ParametersGraphTabViewModel(
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     var rawData: List<ParametersGraphValue> = listOf()
-    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(listOf())
     var queryDate = QueryDate()
     var hours: Int = 24
     var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())

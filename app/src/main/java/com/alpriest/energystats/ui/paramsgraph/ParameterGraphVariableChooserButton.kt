@@ -20,17 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.navigation.NavHostController
-import androidx.navigation.Navigation
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
 
 @Composable
-fun ParameterGraphVariableChooserButton(configManager: ConfigManaging, viewModel: ParametersGraphTabViewModel) {
+fun ParameterGraphVariableChooserButton(configManager: ConfigManaging, viewModel: ParametersGraphTabViewModel, navController: NavController) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState().value
     var showing by remember { mutableStateOf(false) }
 
@@ -40,7 +38,7 @@ fun ParameterGraphVariableChooserButton(configManager: ConfigManaging, viewModel
             .padding(end = 14.dp)
     ) {
         Button(
-            onClick = { showing = true },
+            onClick = { navController.navigate(ParametersScreen.ParameterChooser.name) },
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .size(36.dp),
@@ -52,29 +50,30 @@ fun ParameterGraphVariableChooserButton(configManager: ConfigManaging, viewModel
             )
         }
 
-        if (showing) {
-            Dialog(
-                onDismissRequest = { showing = false },
-                properties = DialogProperties(
-                    usePlatformDefaultWidth = false
-                )
-            ) {
-                val navController = rememberNavController()
-
-                NavHost(
-                    navController = navController,
-                    startDestination = "chooser"
-                ) {
-                    composable("chooser") {
-                        ParameterGraphVariableChooserView(
-                            configManager, graphVariables, onApply = { viewModel.setGraphVariables(it) })
-                            .Content(
-                                onCancel = { showing = false }
-                            )
-                    }
-                }
-            }
-        }
+//        if (showing) {
+//            Dialog(
+//                onDismissRequest = { showing = false },
+//                properties = DialogProperties(
+//                    usePlatformDefaultWidth = false
+//                )
+//            ) {
+//                val navController = rememberNavController()
+//
+//                NavHost(
+//                    navController = navController,
+//                    startDestination = "chooser"
+//                ) {
+//                    composable("chooser") {
+//                        ParameterGraphVariableChooserView(
+//                            configManager, graphVariables
+//                        )
+//                            .Content(
+//                                onCancel = { showing = false }
+//                            )
+//                    }
+//                }
+//            }
+//        }
 
     }
 }

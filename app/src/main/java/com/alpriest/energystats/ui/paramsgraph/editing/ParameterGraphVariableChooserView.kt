@@ -37,14 +37,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -80,13 +78,12 @@ fun ParameterVariableListView(variables: List<ParameterGraphVariable>, onTap: (P
 
 class ParameterGraphVariableChooserView(
     private val configManager: ConfigManaging,
-    private val variables: List<ParameterGraphVariable>,
-    private val onApply: (List<ParameterGraphVariable>) -> Unit
+    private val variables: MutableStateFlow<List<ParameterGraphVariable>>
 ) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content(
-        viewModel: ParameterGraphVariableChooserViewModel = viewModel(factory = ParameterGraphVariableChooserViewModelFactory(configManager, variables, onApply)),
+        viewModel: ParameterGraphVariableChooserViewModel = viewModel(factory = ParameterGraphVariableChooserViewModelFactory(configManager, variables)),
         onCancel: () -> Unit
     ) {
         val scrollState = rememberScrollState()
@@ -220,8 +217,8 @@ class ParameterGraphVariableChooserView(
 fun ParameterGraphVariableChooserViewPreview() {
     EnergyStatsTheme {
         ParameterGraphVariableChooserView(
-            FakeConfigManager(), previewParameterGraphVariables()
-        ) { }.Content {
+            FakeConfigManager(), MutableStateFlow(previewParameterGraphVariables())
+        ).Content {
         }
     }
 }

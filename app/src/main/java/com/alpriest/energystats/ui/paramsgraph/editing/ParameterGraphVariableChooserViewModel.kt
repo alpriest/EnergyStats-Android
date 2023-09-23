@@ -1,13 +1,9 @@
 package com.alpriest.energystats.ui.paramsgraph.editing
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
-import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
 
@@ -52,21 +48,20 @@ data class ParameterGroup(val id: String, val title: String, val parameterNames:
 
 class ParameterGraphVariableChooserViewModelFactory(
     private val configManager: ConfigManaging,
-    private val variables: List<ParameterGraphVariable>,
-    private val onApply: (List<ParameterGraphVariable>) -> Unit
+    private val variables: MutableStateFlow<List<ParameterGraphVariable>>
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ParameterGraphVariableChooserViewModel(configManager, variables, onApply) as T
+        return ParameterGraphVariableChooserViewModel(configManager, variables) as T
     }
 }
 
-class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: List<ParameterGraphVariable>, val onApply: (List<ParameterGraphVariable>) -> Unit): ViewModel() {
-    val variablesState: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(variables.sortedBy { it.type.name.lowercase() })
+class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: MutableStateFlow<List<ParameterGraphVariable>>): ViewModel() {
+    val variablesState: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
     val groups = MutableStateFlow(configManager.parameterGroups)
 
     fun apply() {
-        onApply(variablesState.value)
+        variables.value = variablesState.value
     }
 
     fun chooseDefaultVariables() {
