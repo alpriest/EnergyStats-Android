@@ -71,7 +71,7 @@ class BatteryChargeScheduleSettingsView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.reason) { viewModel.load() }
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save() }) {
+                ContentWithBottomButtons(navController, onSave = { viewModel.save() }, {
                     SettingsPage {
                         BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
                         BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
@@ -84,7 +84,7 @@ class BatteryChargeScheduleSettingsView(
                             )
                         }
                     }
-                }
+                }, Modifier)
         }
     }
 

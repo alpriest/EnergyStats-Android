@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings.battery
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,11 +33,9 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
-import com.alpriest.energystats.ui.settings.CancelSaveButtonView
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 class BatterySOCSettings(
     private val network: Networking,
@@ -61,7 +57,7 @@ class BatterySOCSettings(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.reason) { viewModel.load() }
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save() }) {
+                ContentWithBottomButtons(navController, onSave = { viewModel.save() }, {
                     SettingsPage {
                         Column {
                             Row(
@@ -142,7 +138,7 @@ class BatterySOCSettings(
                             }
                         }
                     }
-                }
+                }, Modifier)
         }
     }
 }

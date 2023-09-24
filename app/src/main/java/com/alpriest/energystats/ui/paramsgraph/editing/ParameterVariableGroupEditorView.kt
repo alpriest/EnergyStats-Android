@@ -37,6 +37,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.input
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorViewModel, navController: NavHostController) {
@@ -48,7 +49,7 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
     val createDialogState = rememberMaterialDialogState()
     val dialogText = remember { mutableStateOf("") }
 
-    ContentWithBottomButtons(navController = navController, onSave = {}) {
+    ContentWithBottomButtons(navController = navController, onSave = {}, {
         SettingsPage {
             Column {
                 SettingsColumnWithChild {
@@ -130,7 +131,7 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
                 viewModel.rename(it)
             }
         }
-    }
+    }, Modifier)
 }
 
 @Composable
@@ -152,7 +153,7 @@ fun TextEntryDialog(dialogState: MaterialDialogState, text: String, onConfirm: (
 fun ParameterVariableGroupEditorViewPreview() {
     EnergyStatsTheme(darkTheme = false) {
         ParameterVariableGroupEditorView(
-            viewModel = ParameterVariableGroupEditorViewModel(FakeConfigManager(), previewParameterGraphVariables()),
+            viewModel = ParameterVariableGroupEditorViewModel(FakeConfigManager(), MutableStateFlow(previewParameterGraphVariables())),
             NavHostController(LocalContext.current)
         )
     }

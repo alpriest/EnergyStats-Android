@@ -53,7 +53,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        ParameterGraphVariableChooserButton(viewModel.configManager, viewModel, navController)
+        ParameterGraphVariableChooserButton(navController)
 
         CalendarView(dateStream = candidateQueryDate)
 

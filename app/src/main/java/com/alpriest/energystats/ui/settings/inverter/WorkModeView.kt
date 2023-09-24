@@ -42,7 +42,6 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
-import com.alpriest.energystats.ui.settings.CancelSaveButtonView
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -69,7 +68,7 @@ class WorkModeView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.reason) { viewModel.load() }
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save() }) {
+                ContentWithBottomButtons(navController, onSave = { viewModel.save() }, {
 
                     SettingsPage {
                         Row(
@@ -157,7 +156,7 @@ class WorkModeView(
                             }
                         }
                     }
-                }
+                }, Modifier)
         }
     }
 }

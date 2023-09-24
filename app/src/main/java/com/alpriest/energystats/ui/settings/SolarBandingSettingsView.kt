@@ -121,10 +121,18 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             threshold3 = threshold3.floatValue.toDouble()
         )
         Toast.makeText(context, "Thresholds were saved", Toast.LENGTH_LONG).show()
-    }) {
+    }, {
         SettingsPage {
-            ThresholdView(mutableStateValue = threshold1, title = stringResource(R.string.low_threshold), description = stringResource(R.string.below_this_amount_the_sun_will_be_yellow))
-            ThresholdView(mutableStateValue = threshold2, title = stringResource(R.string.medium_threshold), description = stringResource(R.string.between_low_and_medium_the_sun_will_be_yellow_and_glowing))
+            ThresholdView(
+                mutableStateValue = threshold1,
+                title = stringResource(R.string.low_threshold),
+                description = stringResource(R.string.below_this_amount_the_sun_will_be_yellow)
+            )
+            ThresholdView(
+                mutableStateValue = threshold2,
+                title = stringResource(R.string.medium_threshold),
+                description = stringResource(R.string.between_low_and_medium_the_sun_will_be_yellow_and_glowing)
+            )
             ThresholdView(
                 mutableStateValue = threshold3,
                 title = stringResource(R.string.high_threshold),
@@ -178,34 +186,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
 
             Spacer(modifier = Modifier.height(60.dp))
         }
-    }
-}
-
-@Composable
-fun ContentWithBottomButtons(navController: NavController, onSave: suspend () -> Unit, content: @Composable () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        content()
-
-        Box(
-            contentAlignment = Alignment.BottomCenter,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column {
-                Divider(
-                    color = Color.LightGray, modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                )
-                CancelSaveButtonView(
-                    navController,
-                    onSave = onSave,
-                    modifier = Modifier
-                        .background(colors.surface)
-                        .padding(12.dp)
-                )
-            }
-        }
-    }
+    }, Modifier)
 }
 
 fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTheme {

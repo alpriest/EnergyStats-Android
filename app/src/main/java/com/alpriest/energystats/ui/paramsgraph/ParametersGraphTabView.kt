@@ -48,6 +48,8 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,15 +86,16 @@ fun NavigableParametersGraphTabView(
             ParameterGraphVariableChooserView(
                 configManager,
                 graphVariablesStream,
-            ).Content(onCancel = { navController.popBackStack() })
+                navController
+            ).Content(onCancel = { navController.popBackStack() },)
         }
 
-//        composable(ParametersScreen.ParameterGroupEditor.name) {
-//            ParameterVariableGroupEditorView(
-//                ParameterVariableGroupEditorViewModel(configManager, graphVariables),
-//                navController = navController
-//            )
-//        }
+        composable(ParametersScreen.ParameterGroupEditor.name) {
+            ParameterVariableGroupEditorView(
+                ParameterVariableGroupEditorViewModel(configManager, graphVariablesStream),
+                navController = navController
+            )
+        }
     }
 }
 

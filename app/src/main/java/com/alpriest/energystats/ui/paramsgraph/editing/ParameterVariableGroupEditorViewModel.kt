@@ -4,8 +4,8 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, variables: List<ParameterGraphVariable>,) {
-    var variables = MutableStateFlow(variables.sortedBy { it.type.name.lowercase() })
+class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, variables: MutableStateFlow<List<ParameterGraphVariable>>,) {
+    var variables = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
     val selected = MutableStateFlow(configManager.parameterGroups.first())
     val groups = MutableStateFlow(configManager.parameterGroups)
 
