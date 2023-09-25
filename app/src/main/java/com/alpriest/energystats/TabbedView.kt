@@ -88,7 +88,7 @@ fun TabbedView(
                 state = pagerState
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(network, configManager, themeStream).Content(themeStream = themeStream)
+                    0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
                     1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), themeStream)
                     2 -> NavigableParametersGraphTabView(configManager, network, onWriteTempFile, themeStream)
                     3 -> NavigableSettingsView(

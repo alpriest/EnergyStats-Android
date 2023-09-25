@@ -36,12 +36,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -51,6 +53,7 @@ class WorkModeView(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
+    private val userManager: UserManaging,
     private val context: Context
 ) {
     @Composable
@@ -66,7 +69,7 @@ class WorkModeView(
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.reason) { viewModel.load() }
+            is LoadState.Error -> ErrorView(loadState.reason, onRetry = {viewModel.load() }, onLogout = { userManager.logout() })
             is LoadState.Inactive ->
                 ContentWithBottomButtons(navController, onSave = { viewModel.save() }, {
 
@@ -170,6 +173,7 @@ fun WorkModeViewPreview() {
             DemoNetworking(),
             FakeConfigManager(),
             NavHostController(LocalContext.current),
+            FakeUserManager(),
             LocalContext.current
         ).Content()
     }

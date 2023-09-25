@@ -16,6 +16,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ErrorOutline
@@ -56,6 +57,8 @@ import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.login.UserManager
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
@@ -85,6 +88,7 @@ fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier):
 class PowerFlowTabView(
     private val network: Networking,
     private val configManager: ConfigManaging,
+    private val userManager: UserManaging,
     private val themeStream: MutableStateFlow<AppTheme>
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
@@ -130,7 +134,11 @@ class PowerFlowTabView(
             when (uiState.state) {
                 is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
                 is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, (uiState.state as PowerFlowLoadState.Loaded).viewModel, themeStream)
-                is PowerFlowLoadState.Error -> ErrorView((uiState.state as PowerFlowLoadState.Error).reason) { coroutineScope.launch { viewModel.timerFired() } }
+                is PowerFlowLoadState.Error -> ErrorView(
+                    (uiState.state as PowerFlowLoadState.Error).reason,
+                    onRetry = { coroutineScope.launch { viewModel.timerFired() } },
+                    onLogout = { userManager.logout() }
+                )
             }
         }
     }
@@ -161,11 +169,11 @@ fun LoadedView(
 @Preview
 @Composable
 fun ErrorPreview() {
-    ErrorView(reason = "BEGIN_OBJECT was expected but got something else instead", onRetry = {})
+    ErrorView(reason = "BEGIN_OBJECT was expected but got something else instead", onRetry = {}, onLogout = {})
 }
 
 @Composable
-fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
+fun ErrorView(reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
     var showingDetail by rememberSaveable { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
@@ -190,11 +198,13 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
         Text(
             text = stringResource(R.string.something_went_wrong_fetching_data_from_foxess_cloud),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
+            color = colors.onPrimary
         )
         Text(
             stringResource(R.string.tap_the_icon_for_further_detail),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = colors.onPrimary
         )
 
         Button(
@@ -204,7 +214,7 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
         ) {
             Text(
                 stringResource(R.string.retry),
-                color = MaterialTheme.colors.onSecondary,
+                color = colors.onSecondary,
             )
         }
 
@@ -217,7 +227,20 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit) {
         ) {
             Text(
                 stringResource(R.string.foxess_cloud_status),
-                color = MaterialTheme.colors.onSecondary,
+                color = colors.onSecondary,
+            )
+        }
+
+        Button(
+            onClick = { onLogout() },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+            modifier = Modifier
+                .padding(top = 12.dp)
+                .padding(end = 12.dp)
+        ) {
+            Text(
+                stringResource(R.string.logout),
+                color = colors.onSecondary,
             )
         }
 

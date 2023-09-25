@@ -110,16 +110,16 @@ fun NavigableSettingsView(
             )
         }
         composable(SettingsScreen.BatterySOC.name) {
-            BatterySOCSettings(configManager = config, network = network, navController = navController, context = context).Content()
+            BatterySOCSettings(configManager = config, network = network, navController = navController, userManager = userManager, context = context).Content()
         }
         composable(SettingsScreen.BatteryChargeTimes.name) {
-            BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, context = context).Content()
+            BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, userManager = userManager, context = context).Content()
         }
         composable(SettingsScreen.Inverter.name) {
             InverterSettingsView(configManager = config, navController = navController)
         }
         composable(SettingsScreen.InverterWorkMode.name) {
-            WorkModeView(configManager = config, network = network, navController = navController, context = context).Content()
+            WorkModeView(configManager = config, network = network, navController = navController, userManager = userManager, context = context).Content()
         }
         composable(SettingsScreen.Dataloggers.name) {
             DataLoggerViewContainer(network = network, configManager = config, navController = navController, context = context).Content()
