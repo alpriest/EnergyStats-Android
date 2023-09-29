@@ -1,5 +1,7 @@
 package com.alpriest.energystats
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,20 +25,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.CredentialStore
+import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
-import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabView
-import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
 import com.alpriest.energystats.ui.statsgraph.StatsTabView
 import com.alpriest.energystats.ui.statsgraph.StatsTabViewModel
@@ -67,7 +68,8 @@ fun TabbedView(
     networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
-    onWriteTempFile: (String, String) -> Uri?
+    onWriteTempFile: (String, String) -> Uri?,
+    credentialStore: CredentialStore
 ) {
     val state = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -98,7 +100,8 @@ fun TabbedView(
                         network = network,
                         networkStore = networkStore,
                         onRateApp = onRateApp,
-                        onBuyMeCoffee = onBuyMeCoffee
+                        onBuyMeCoffee = onBuyMeCoffee,
+                        credentialStore = credentialStore
                     )
                 }
             }
@@ -187,8 +190,10 @@ fun HomepagePreview() {
             themeStream = MutableStateFlow(AppTheme.preview()),
             networkStore = InMemoryLoggingNetworkStore(),
             {},
-            {}
-        ) { _, _ -> null }
+            {},
+            { _, _ -> null },
+            SharedPreferencesCredentialStore(LocalContext.current.getSharedPreferences("com.alpriest.energystats", Context.MODE_PRIVATE))
+        )
     }
 }
 

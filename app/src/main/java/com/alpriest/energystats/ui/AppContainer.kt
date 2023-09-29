@@ -7,7 +7,6 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
@@ -28,13 +27,13 @@ class AppContainer(private val context: Context) {
             "com.alpriest.energystats",
             Context.MODE_PRIVATE
         )
-    private val credentialStore: CredentialStore = SharedPreferencesCredentialStore(sharedPreferences)
+    internal val credentialStore: CredentialStore = SharedPreferencesCredentialStore(sharedPreferences)
     private val config = SharedPreferencesConfigStore(sharedPreferences)
 
     val networking: Networking by lazy {
         NetworkFacade(
             network = NetworkCache(network = NetworkService(credentialStore, networkStore)),
-            config = config
+            isDemoUser = { config.isDemoUser }
         )
     }
 

@@ -39,7 +39,8 @@ fun MainAppView(appContainer: AppContainer) {
                         networkStore = appContainer.networkStore,
                         { appContainer.openAppInPlayStore() },
                         { appContainer.buyMeACoffee() },
-                        { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) }
+                        { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) },
+                        credentialStore = appContainer.credentialStore
                     )
                 }
 

@@ -33,6 +33,7 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.HttpUrl
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -51,7 +52,7 @@ interface NetworkResponseInterface {
     val errno: Int
 }
 
-class NetworkService(private val credentials: CredentialStore, private val store: InMemoryLoggingNetworkStore) : Networking {
+class NetworkService(private val credentials: CredentialStore, private val store: InMemoryLoggingNetworkStore, interceptor: Interceptor? = null) : Networking {
     private val okHttpClient by lazy {
         val userAgents = arrayOf(
             "Mozilla/5.0 (Linux; Android 12; SM-S906N Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/80.0.3987.119 Mobile Safari/537.36",
@@ -64,7 +65,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
             "Mozilla/5.0 (iPhone13,2; U; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/15E148 Safari/602.1"
         )
 
-        OkHttpClient()
+        val builder = OkHttpClient()
             .newBuilder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
@@ -85,7 +86,12 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
                 chain.proceed(requestBuilder.build())
             }
-            .build()
+
+        interceptor?.let {
+            builder.addInterceptor(it)
+        }
+
+        builder.build()
     }
 
     private var token: String?

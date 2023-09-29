@@ -21,19 +21,19 @@ import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.stores.CredentialStore
+import com.alpriest.energystats.ui.settings.debug.networkTrace.NetworkTraceDebugView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 fun NavGraphBuilder.debugGraph(
     navController: NavController,
     networkStore: InMemoryLoggingNetworkStore,
     configManager: ConfigManaging,
-    network: Networking
+    network: Networking,
+    credentialStore: CredentialStore
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") { DebugDataSettingsView(navController) }
@@ -87,6 +87,9 @@ fun NavGraphBuilder.debugGraph(
                 network.fetchDataLoggers()
             })
         }
+        composable("networkTrace") {
+            NetworkTraceDebugView(configManager, credentialStore)
+        }
     }
 }
 
@@ -133,6 +136,10 @@ fun DebugDataSettingsView(navController: NavController) {
 
         Button(onClick = { navController.navigate("dataLoggers") }) {
             Text("Dataloggers")
+        }
+
+        Button(onClick = { navController.navigate("networkTrace") }) {
+            Text("Network trace")
         }
     }
 }
