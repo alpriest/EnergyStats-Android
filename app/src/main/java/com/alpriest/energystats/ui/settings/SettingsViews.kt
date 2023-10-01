@@ -177,3 +177,32 @@ fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onConfigUpdate
         }
     }
 }
+
+@Composable
+fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composable () -> Unit, footer: AnnotatedString? = null) {
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            title?.let {
+                Text(
+                    it,
+                    color = colors.onSecondary,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            segmentedControl()
+        }
+
+        footer?.let {
+            Text(
+                it,
+                style = MaterialTheme.typography.caption,
+                color = colors.onSecondary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
+    }
+}

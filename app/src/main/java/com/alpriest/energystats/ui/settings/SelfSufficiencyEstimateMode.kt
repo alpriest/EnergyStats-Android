@@ -1,15 +1,18 @@
 package com.alpriest.energystats.ui.settings
 
+import android.content.Context
+import com.alpriest.energystats.R
+
 enum class SelfSufficiencyEstimateMode(val value: Int) {
     Off(0),
     Net(1),
     Absolute(2);
 
-    fun title(): String {
+    fun title(context: Context): String {
         return when (this) {
-            Net -> "Net"
-            Absolute -> "Absolute"
-            else -> "Off"
+            Net -> context.getString(R.string.net)
+            Absolute -> context.getString(R.string.absolute)
+            else -> context.getString(R.string.off)
         }
     }
 

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +23,7 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
         SelfSufficiencyEstimateMode.Net -> stringResource(R.string.net_self_sufficiency)
         else -> null
     }
+    val context = LocalContext.current
 
     SettingsColumnWithChild(
         modifier = modifier
@@ -31,7 +33,7 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
         SettingsSegmentedControl(title = null, segmentedControl = {
             val items = listOf(SelfSufficiencyEstimateMode.Off, SelfSufficiencyEstimateMode.Net, SelfSufficiencyEstimateMode.Absolute)
             SegmentedControl(
-                items = items.map { it.title() },
+                items = items.map { it.title(context) },
                 useFixedWidth = true,
                 defaultSelectedItemIndex = items.indexOf(selfSufficiencyEstimateModeState.value),
                 color = colors.primary

@@ -1,19 +1,13 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -30,35 +24,6 @@ import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composable () -> Unit, footer: AnnotatedString? = null) {
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            title?.let {
-                Text(
-                    it,
-                    color = colors.onSecondary,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            segmentedControl()
-        }
-
-        footer?.let {
-            Text(
-                it,
-                style = MaterialTheme.typography.caption,
-                color = colors.onSecondary,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
-    }
-}
-
-@Composable
 fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController, modifier: Modifier = Modifier) {
     val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
     val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
@@ -70,6 +35,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
     val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
+    val context = LocalContext.current
 
     SettingsColumnWithChild(
         modifier = modifier
@@ -128,7 +94,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         )
 
         SettingsSegmentedControl(
-            title = "Units",
+            title = stringResource(R.string.units),
             segmentedControl = {
                 val items = listOf(
                     DisplayUnit.Watts,
@@ -136,7 +102,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
                     DisplayUnit.Adaptive
                 )
                 SegmentedControl(
-                    items = items.map { it.title() },
+                    items = items.map { it.title(context) },
                     defaultSelectedItemIndex = items.indexOf(displayUnitState.value),
                     color = colors.primary
                 ) {
