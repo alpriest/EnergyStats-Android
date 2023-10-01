@@ -200,4 +200,7 @@
     <string name="absolute">Absolute</string>
     <string name="off">Off</string>
     <string name="units">Units</string>
+    <string name="display_unit_kilowatts_description">All values are shown as kilowatts. E.g. %1$s, %2$s</string>
+    <string name="display_unit_watts_description">All values are shown as watts. E.g. %1$s, %2$s</string>
+    <string name="display_unit_adaptive_description">Values are shown as kilowatts unless under 1 kilowatt when they are shown as watts. E.g. %1$s, %2$s</string>
 </resources>

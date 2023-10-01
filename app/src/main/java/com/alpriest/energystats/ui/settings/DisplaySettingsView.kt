@@ -112,9 +112,14 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             },
             footer = buildAnnotatedString {
                 when (displayUnitState.value) {
-                    DisplayUnit.Kilowatts -> append("E.g. ${3.456.kW(decimalPlacesState.value)}, ${0.123.kW(decimalPlacesState.value)}")
-                    DisplayUnit.Watts -> append("E.g. ${3.456.w()}, ${0.123.w()}")
-                    DisplayUnit.Adaptive -> append("E.g. ${3.456.kW(decimalPlacesState.value)}, ${0.123.w()}")
+                    DisplayUnit.Kilowatts -> append(
+                        stringResource(
+                            R.string.display_unit_kilowatts_description,
+                            3.456.kW(decimalPlacesState.value),
+                            0.123.kW(decimalPlacesState.value)
+                        ))
+                    DisplayUnit.Watts -> append(stringResource(R.string.display_unit_watts_description, 3.456.w(), 0.123.w()))
+                    DisplayUnit.Adaptive -> append(stringResource(R.string.display_unit_adaptive_description, 3.456.kW(decimalPlacesState.value), 0.123.w()))
                 }
             }
         )
