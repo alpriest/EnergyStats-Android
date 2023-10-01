@@ -86,7 +86,7 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
             is StatsDisplayMode.Year -> {
                 val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
                 val calendar = Calendar.getInstance()
-                calendar.set(Calendar.MONTH, value.toInt())
+                calendar.set(Calendar.MONTH, value.toInt() - 1)
                 return monthFormat.format(calendar.time)
             }
         }
