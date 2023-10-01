@@ -1,10 +1,7 @@
 package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -12,6 +9,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -36,7 +34,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
     SettingsColumnWithChild {
         SettingsTitleView(stringResource(R.string.refresh_frequency))
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        SettingsSegmentedControl(title = null, segmentedControl = {
             val items = RefreshFrequency.values()
 
             val itemTitles = listOf(
@@ -54,13 +52,9 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
                 refreshFrequency.value = items[it]
                 config.refreshFrequency = items[it]
             }
-        }
-
-        Text(
-            modifier = Modifier,
-            text = stringResource(R.string.foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load),
-            color = colors.onSecondary
-        )
+        }, footer = buildAnnotatedString {
+            append(stringResource(R.string.foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load))
+        })
     }
 }
 

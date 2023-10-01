@@ -1,8 +1,11 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -20,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.kW
-import com.alpriest.energystats.models.power
 import com.alpriest.energystats.models.w
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -28,16 +30,18 @@ import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SettingsSegmentedControl(title: String, segmentedControl: @Composable () -> Unit, footer: AnnotatedString? = null) {
+fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composable () -> Unit, footer: AnnotatedString? = null) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                title,
-                color = colors.onSecondary,
-                modifier = Modifier.weight(1f)
-            )
+            title?.let {
+                Text(
+                    it,
+                    color = colors.onSecondary,
+                    modifier = Modifier.weight(1f)
+                )
+            }
 
             segmentedControl()
         }
