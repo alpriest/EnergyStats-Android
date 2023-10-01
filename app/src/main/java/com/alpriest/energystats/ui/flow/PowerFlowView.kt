@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.flow
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -142,11 +141,7 @@ fun PowerFlowView(
                 colors = cardColors(containerColor = verticalLineColor)
             ) {
                 Text(
-                    text = if (theme.showValuesInWatts) {
-                        amount.w()
-                    } else {
-                        amount.kW(theme.decimalPlaces)
-                    },
+                    text = amount.energy(theme.displayUnit, theme.decimalPlaces),
                     color = powerTextColor,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,

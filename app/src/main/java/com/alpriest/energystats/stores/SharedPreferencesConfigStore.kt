@@ -25,7 +25,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_TOTAL_YIELD,
         SELF_SUFFICIENCY_ESTIMATE_MODE,
         SHOW_ESTIMATED_EARNINGS,
-        SHOW_VALUES_IN_WATTS,
+        DISPLAY_UNIT,
         SHOW_INVERTER_TEMPERATURES,
         SELECTED_PARAMETER_GRAPH_VARIABLES,
         SHOW_INVERTER_ICON,
@@ -176,11 +176,11 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var showValuesInWatts: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_VALUES_IN_WATTS.name, false)
+    override var displayUnit: Int
+        get() = sharedPreferences.getInt(SharedPreferenceKey.DISPLAY_UNIT.name, 0)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceKey.SHOW_VALUES_IN_WATTS.name, value)
+            editor.putInt(SharedPreferenceKey.DISPLAY_UNIT.name, value)
             editor.apply()
         }
 

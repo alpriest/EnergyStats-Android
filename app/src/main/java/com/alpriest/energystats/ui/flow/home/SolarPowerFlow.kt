@@ -34,8 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Wh
-import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.power
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
@@ -80,12 +79,11 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: EarningsV
         }
 
         if (theme.showTotalYield) {
-            val yieldString = if (theme.showValuesInWatts) todaysGeneration.Wh(theme.decimalPlaces) else todaysGeneration.kWh(theme.decimalPlaces)
-            Text(text = stringResource(id = R.string.yieldToday, yieldString))
+            Text(text = stringResource(id = R.string.yieldToday, todaysGeneration.power(theme.displayUnit, theme.decimalPlaces)))
         }
 
         if (theme.showEstimatedEarnings) {
-            EarningsView(earnings, theme)
+            EarningsView(earnings)
         }
 
         Box(

@@ -19,7 +19,7 @@ class FakeConfigStore(
     override var showTotalYield: Boolean = true,
     override var selfSufficiencyEstimateMode: Int = 0,
     override var showEstimatedEarnings: Boolean = false,
-    override var showValuesInWatts: Boolean = false,
+    override var displayUnit: Int = 0,
     override var showInverterTemperatures: Boolean = false,
     override var selectedParameterGraphVariables: List<String> = listOf(),
     override var showInverterIcon: Boolean = false,

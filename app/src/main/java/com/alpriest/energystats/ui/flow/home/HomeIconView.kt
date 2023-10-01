@@ -13,8 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Wh
-import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.power
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -24,7 +23,7 @@ fun HomeIconView(viewModel: HomePowerFlowViewModel, themeStream: MutableStateFlo
     val fontSize = themeStream.collectAsState().value.fontSize()
     val smallFontSize = themeStream.collectAsState().value.smallFontSize()
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
-    val showValuesInWatts = themeStream.collectAsState().value.showValuesInWatts
+    val displayUnit = themeStream.collectAsState().value.displayUnit
     val context = LocalContext.current
 
     Column(
@@ -40,7 +39,7 @@ fun HomeIconView(viewModel: HomePowerFlowViewModel, themeStream: MutableStateFlo
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = if (showValuesInWatts) viewModel.homeTotal.Wh(decimalPlaces) else viewModel.homeTotal.kWh(decimalPlaces),
+                    text = viewModel.homeTotal.power(displayUnit, decimalPlaces),
                     fontSize = fontSize,
                     fontWeight = FontWeight.Bold
                 )

@@ -7,6 +7,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -33,7 +34,7 @@ class FakeConfigManager : ConfigManaging {
     override var isDemoUser: Boolean = true
     override var useColouredFlowLines: Boolean = true
     override var refreshFrequency: RefreshFrequency = RefreshFrequency.Auto
-    override var showValuesInWatts: Boolean = false
+    override var displayUnit = DisplayUnit.Kilowatts
     override var showInverterTemperatures: Boolean = true
     override var selectedParameterGraphVariables: List<String> = listOf()
     override var showInverterIcon: Boolean = true

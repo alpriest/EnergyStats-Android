@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -18,26 +19,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.kW
+import com.alpriest.energystats.models.power
+import com.alpriest.energystats.models.w
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
-enum class SelfSufficiencyEstimateMode(val value: Int) {
-    Off(0),
-    Net(1),
-    Absolute(2);
+@Composable
+fun SettingsSegmentedControl(title: String, segmentedControl: @Composable () -> Unit, footer: AnnotatedString? = null) {
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                title,
+                color = colors.onSecondary,
+                modifier = Modifier.weight(1f)
+            )
 
-    fun title(): String {
-        return when (this) {
-            Net -> "Net"
-            Absolute -> "Absolute"
-            else -> "Off"
+            segmentedControl()
         }
-    }
 
-    companion object {
-        fun fromInt(value: Int) = values().first { it.value == value }
+        footer?.let {
+            Text(
+                it,
+                style = MaterialTheme.typography.caption,
+                color = colors.onSecondary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
     }
 }
 
@@ -49,7 +62,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val decimalPlacesState = rememberSaveable { mutableStateOf(config.decimalPlaces) }
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
     val showEstimatedEarningsState = rememberSaveable { mutableStateOf(config.showEstimatedEarnings) }
-    val showValuesInWattsState = rememberSaveable { mutableStateOf(config.showValuesInWatts) }
+    val displayUnitState = rememberSaveable { mutableStateOf(config.displayUnit) }
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
     val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
@@ -95,30 +108,45 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             onConfigUpdate = { config.showSunnyBackground = it }
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                stringResource(R.string.decimal_places),
-                color = colors.onSecondary,
-                modifier = Modifier.weight(1f)
-            )
-
-            val items = listOf("2","3")
-            SegmentedControl(
-                items = items,
-                defaultSelectedItemIndex = items.indexOf(decimalPlacesState.value.toString()),
-                color = colors.primary
-            ) {
-                decimalPlacesState.value = items[it].toInt()
-                config.decimalPlaces = items[it].toInt()
+        SettingsSegmentedControl(
+            title = stringResource(R.string.decimal_places),
+            segmentedControl = {
+                val items = listOf("2", "3")
+                SegmentedControl(
+                    items = items,
+                    defaultSelectedItemIndex = items.indexOf(decimalPlacesState.value.toString()),
+                    color = colors.primary
+                ) {
+                    decimalPlacesState.value = items[it].toInt()
+                    config.decimalPlaces = items[it].toInt()
+                }
             }
-        }
+        )
 
-        SettingsCheckbox(
-            title = stringResource(R.string.show_values_in_watts),
-            state = showValuesInWattsState,
-            onConfigUpdate = { config.showValuesInWatts = it }
+        SettingsSegmentedControl(
+            title = "Units",
+            segmentedControl = {
+                val items = listOf(
+                    DisplayUnit.Watts,
+                    DisplayUnit.Kilowatts,
+                    DisplayUnit.Adaptive
+                )
+                SegmentedControl(
+                    items = items.map { it.title() },
+                    defaultSelectedItemIndex = items.indexOf(displayUnitState.value),
+                    color = colors.primary
+                ) {
+                    displayUnitState.value = items[it]
+                    config.displayUnit = items[it]
+                }
+            },
+            footer = buildAnnotatedString {
+                when (displayUnitState.value) {
+                    DisplayUnit.Kilowatts -> append("E.g. ${3.456.kW(decimalPlacesState.value)}, ${0.123.kW(decimalPlacesState.value)}")
+                    DisplayUnit.Watts -> append("E.g. ${3.456.w()}, ${0.123.w()}")
+                    DisplayUnit.Adaptive -> append("E.g. ${3.456.kW(decimalPlacesState.value)}, ${0.123.w()}")
+                }
+            }
         )
 
         SettingsCheckbox(

@@ -3,8 +3,8 @@ package com.alpriest.energystats.ui.login
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -28,7 +28,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showTotalYield = config.showTotalYield,
             selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
             showEstimatedEarnings = config.showEstimatedEarnings,
-            showValuesInWatts = config.showValuesInWatts,
+            displayUnit = DisplayUnit.fromInt(config.displayUnit),
             showInverterTemperatures = config.showInverterTemperatures,
             showInverterIcon = config.showInverterIcon,
             showHomeTotal = config.showHomeTotal,
@@ -83,11 +83,11 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(showBatteryEstimate = showBatteryEstimate)
         }
 
-    override var showValuesInWatts: Boolean
-        get() = config.showValuesInWatts
+    override var displayUnit: DisplayUnit
+        get() = DisplayUnit.fromInt(config.displayUnit)
         set(value) {
-            config.showValuesInWatts = value
-            themeStream.value = themeStream.value.copy(showValuesInWatts = showValuesInWatts)
+            config.displayUnit = value.value
+            themeStream.value = themeStream.value.copy(displayUnit = displayUnit)
         }
 
     override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(null)

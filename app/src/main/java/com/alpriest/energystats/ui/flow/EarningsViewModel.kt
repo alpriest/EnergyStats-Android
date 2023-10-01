@@ -12,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.ui.theme.AppTheme
 
 @Composable
 fun SubLabelledView(value: String, label: String, alignment: Alignment.Horizontal) {
@@ -32,7 +31,7 @@ fun SubLabelledView(value: String, label: String, alignment: Alignment.Horizonta
 }
 
 @Composable
-fun EarningsView(viewModel: EarningsViewModel, appTheme: AppTheme) {
+fun EarningsView(viewModel: EarningsViewModel) {
     Row {
         SubLabelledView(
             value = viewModel.today.roundedToString(2, currencyCode = viewModel.currencyCode, currencySymbol = viewModel.currencySymbol),

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.home.preview
@@ -97,7 +98,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                             fontSize = fontSize
                         )
                         Text(
-                            if (appTheme.showValuesInWatts) it.Wh(decimalPlaces = appTheme.decimalPlaces) else it.kWh(decimalPlaces = appTheme.decimalPlaces),
+                            it.power(appTheme.displayUnit, appTheme.decimalPlaces),
                             fontSize = fontSize
                         )
                     }
@@ -113,7 +114,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                             fontSize = fontSize
                         )
                         Text(
-                            if (appTheme.showValuesInWatts) it.Wh(decimalPlaces = appTheme.decimalPlaces) else it.kWh(decimalPlaces = appTheme.decimalPlaces),
+                            it.power(appTheme.displayUnit, appTheme.decimalPlaces),
                             fontSize = fontSize
                         )
                     }

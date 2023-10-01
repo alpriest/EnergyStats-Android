@@ -10,6 +10,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
@@ -24,7 +25,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
     val theme = themeStream.collectAsState().value
 
     Column(modifier) {
-        graphVariables.value.map {
+        graphVariables.value.map { it ->
             val title = when (it.type) {
                 ReportVariable.FeedIn -> stringResource(R.string.feed_in) + title(ValueUsage.TOTAL)
                 ReportVariable.Generation -> stringResource(R.string.output) + title(ValueUsage.TOTAL)
@@ -44,13 +45,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
             }
 
             val total = totals.value[it.type]
-            val text = total?.let {
-                if (theme.showValuesInWatts) {
-                    total.Wh(theme.decimalPlaces)
-                } else {
-                    total.kWh(theme.decimalPlaces)
-                }
-            }
+            val text = total?.let { total -> total.power(theme.displayUnit, theme.decimalPlaces) }
             ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, text, null)
         }
     }

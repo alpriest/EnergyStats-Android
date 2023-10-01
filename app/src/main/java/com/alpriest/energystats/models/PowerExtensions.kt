@@ -1,5 +1,6 @@
 package com.alpriest.energystats.models
 
+import com.alpriest.energystats.ui.settings.DisplayUnit
 import java.text.DecimalFormat
 import kotlin.math.abs
 import kotlin.math.pow
@@ -13,6 +14,30 @@ fun Int.Wh(decimalPlaces: Int): String {
     val divided = this.toDouble().rounded(decimalPlaces)
     val dec = DecimalFormat("#,###,###")
     return dec.format(divided) + " Wh"
+}
+
+fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
+    return when (displayUnit) {
+        DisplayUnit.Watts -> this.w()
+        DisplayUnit.Kilowatts -> this.kW(decimalPlaces)
+        DisplayUnit.Adaptive -> return if (this < 1) {
+            this.w()
+        } else {
+            this.kW(decimalPlaces)
+        }
+    }
+}
+
+fun Double.power(displayUnit: DisplayUnit, decimalPlaces: Int): String {
+    return when (displayUnit) {
+        DisplayUnit.Watts -> this.Wh(decimalPlaces)
+        DisplayUnit.Kilowatts -> this.kWh(decimalPlaces)
+        DisplayUnit.Adaptive -> return if (this < 1) {
+            this.Wh(decimalPlaces)
+        } else {
+            this.kWh(decimalPlaces)
+        }
+    }
 }
 
 fun Double.Wh(decimalPlaces: Int): String {

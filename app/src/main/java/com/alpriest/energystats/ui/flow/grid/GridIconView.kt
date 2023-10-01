@@ -22,6 +22,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
@@ -65,7 +66,7 @@ private fun GridTotals(
     decimalPlaces: Int,
     themeStream: MutableStateFlow<AppTheme>
 ) {
-    val showValuesInWatts = themeStream.collectAsState().value.showValuesInWatts
+    val displayUnit = themeStream.collectAsState().value.displayUnit
     val fontSize = themeStream.collectAsState().value.fontSize()
     val smallFontSize = themeStream.collectAsState().value.smallFontSize()
 
@@ -73,7 +74,7 @@ private fun GridTotals(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = if (showValuesInWatts) viewModel.gridImportTotal.Wh(decimalPlaces) else viewModel.gridImportTotal.kWh(decimalPlaces),
+            text = viewModel.gridImportTotal.power(displayUnit, decimalPlaces),
             fontSize = fontSize,
             fontWeight = FontWeight.Bold
         )
@@ -84,7 +85,7 @@ private fun GridTotals(
         )
 
         Text(
-            text = if (showValuesInWatts) viewModel.gridExportTotal.Wh(decimalPlaces) else viewModel.gridExportTotal.kWh(decimalPlaces),
+            text = viewModel.gridExportTotal.power(displayUnit, decimalPlaces),
             fontSize = fontSize,
             fontWeight = FontWeight.Bold
         )

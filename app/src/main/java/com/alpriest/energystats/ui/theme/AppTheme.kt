@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 
 data class AppTheme(
@@ -17,7 +18,7 @@ data class AppTheme(
     val showTotalYield: Boolean,
     val selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode,
     val showEstimatedEarnings: Boolean,
-    val showValuesInWatts: Boolean,
+    val displayUnit: DisplayUnit,
     val showInverterTemperatures: Boolean,
     val showInverterIcon: Boolean,
     val showHomeTotal: Boolean,

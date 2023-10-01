@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
@@ -20,7 +21,7 @@ interface ConfigInterface {
     var decimalPlaces: Int
     var showTotalYield: Boolean
     var showEstimatedEarnings: Boolean
-    var showValuesInWatts: Boolean
+    var displayUnit: Int
     var showInverterTemperatures: Boolean
     var selectedParameterGraphVariables: List<String>
     var showInverterIcon: Boolean

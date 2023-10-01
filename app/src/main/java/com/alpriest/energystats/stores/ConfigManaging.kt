@@ -3,6 +3,7 @@ package com.alpriest.energystats.stores
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -33,7 +34,7 @@ interface ConfigManaging {
     var showBatteryEstimate: Boolean
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean
-    var showValuesInWatts: Boolean
+    var displayUnit: DisplayUnit
     val minSOC: MutableStateFlow<Double?>
     var batteryCapacity: Int
     var isDemoUser: Boolean

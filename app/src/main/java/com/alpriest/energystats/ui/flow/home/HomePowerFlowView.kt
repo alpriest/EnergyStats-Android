@@ -8,6 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
+import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -55,7 +56,7 @@ fun AppTheme.Companion.preview(
     showTotalYield: Boolean = true,
     selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
     showEstimatedEarnings: Boolean = true,
-    showValuesInWatts: Boolean = true,
+    displayUnit: DisplayUnit = DisplayUnit.Kilowatts,
     showInverterTemperatures: Boolean = false,
     showInverterIcon: Boolean = true,
     showHomeTotal: Boolean = false,
@@ -77,7 +78,7 @@ fun AppTheme.Companion.preview(
         showTotalYield = showTotalYield,
         selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
         showEstimatedEarnings = showEstimatedEarnings,
-        showValuesInWatts = showValuesInWatts,
+        displayUnit = displayUnit,
         showInverterTemperatures = showInverterTemperatures,
         showInverterIcon = showInverterIcon,
         showHomeTotal = showHomeTotal,
