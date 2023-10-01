@@ -223,7 +223,6 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit)
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
             modifier = Modifier
                 .padding(top = 12.dp)
-                .padding(end = 12.dp)
         ) {
             Text(
                 stringResource(R.string.foxess_cloud_status),
@@ -236,7 +235,6 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit)
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
             modifier = Modifier
                 .padding(top = 12.dp)
-                .padding(end = 12.dp)
         ) {
             Text(
                 stringResource(R.string.logout),
