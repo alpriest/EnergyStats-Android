@@ -55,6 +55,7 @@ sealed class StatsDisplayMode {
 fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
     val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true
@@ -62,9 +63,7 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
             .onEach { viewModel.load() }
             .collect { isLoading = false }
     }
-
-    val context = LocalContext.current
-
+    
     if (isLoading) {
         Text(stringResource(R.string.loading))
     } else {
