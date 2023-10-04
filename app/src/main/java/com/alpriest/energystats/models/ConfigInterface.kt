@@ -1,10 +1,11 @@
 package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
-import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var financialModel: Int
     var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean
     var selfSufficiencyEstimateMode: Int
@@ -20,7 +21,7 @@ interface ConfigInterface {
     var isDemoUser: Boolean
     var decimalPlaces: Int
     var showTotalYield: Boolean
-    var showEstimatedEarnings: Boolean
+    var showFinancialSummary: Boolean
     var displayUnit: Int
     var showInverterTemperatures: Boolean
     var selectedParameterGraphVariables: List<String>

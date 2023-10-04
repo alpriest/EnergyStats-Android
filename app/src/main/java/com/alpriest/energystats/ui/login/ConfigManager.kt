@@ -5,6 +5,7 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -27,7 +28,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showUsableBatteryOnly = config.showUsableBatteryOnly,
             showTotalYield = config.showTotalYield,
             selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
-            showEstimatedEarnings = config.showEstimatedEarnings,
+            showFinancialSummary = config.showFinancialSummary,
             displayUnit = DisplayUnit.fromInt(config.displayUnit),
             showInverterTemperatures = config.showInverterTemperatures,
             showInverterIcon = config.showInverterIcon,
@@ -37,7 +38,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
             showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow,
             showLastUpdateTimestamp = config.showLastUpdateTimestamp,
-            solarRangeDefinitions = config.solarRangeDefinitions
+            solarRangeDefinitions = config.solarRangeDefinitions,
+            financialModel = FinancialModel.fromInt(config.financialModel)
         )
     )
 
@@ -69,11 +71,18 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(showTotalYield = showTotalYield)
         }
 
-    override var showEstimatedEarnings: Boolean
-        get() = config.showEstimatedEarnings
+    override var showFinancialSummary: Boolean
+        get() = config.showFinancialSummary
         set(value) {
-            config.showEstimatedEarnings = value
-            themeStream.value = themeStream.value.copy(showEstimatedEarnings = showEstimatedEarnings)
+            config.showFinancialSummary = value
+            themeStream.value = themeStream.value.copy(showFinancialSummary = showFinancialSummary)
+        }
+
+    override var financialModel: FinancialModel
+        get() = FinancialModel.fromInt(config.financialModel)
+        set(value) {
+            config.financialModel = value.value
+            themeStream.value = themeStream.value.copy(financialModel = financialModel)
         }
 
     override var showBatteryEstimate: Boolean

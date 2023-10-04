@@ -3,6 +3,7 @@ package com.alpriest.energystats.stores
 import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -37,7 +38,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         BATTERY_CAPACITY_OVERRIDES,
         SHOW_LAST_UPDATE_TIMESTAMP,
         SOLAR_RANGE_DEFINITIONS,
-        PARAMETER_GROUPS
+        PARAMETER_GROUPS,
+        FINANCIAL_MODEL
     }
 
     override var showGridTotals: Boolean
@@ -168,7 +170,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var showEstimatedEarnings: Boolean
+    override var showFinancialSummary: Boolean
         get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_ESTIMATED_EARNINGS.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
@@ -277,6 +279,13 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
+    override var financialModel: Int
+        get() = sharedPreferences.getInt(SharedPreferenceKey.FINANCIAL_MODEL.name, 0)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(SharedPreferenceKey.FINANCIAL_MODEL.name, value)
+            editor.apply()
+        }
     override fun clear() {
         val editor = sharedPreferences.edit()
         editor.clear()

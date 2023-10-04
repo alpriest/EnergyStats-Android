@@ -30,7 +30,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
     val decimalPlacesState = rememberSaveable { mutableStateOf(config.decimalPlaces) }
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
-    val showEstimatedEarningsState = rememberSaveable { mutableStateOf(config.showEstimatedEarnings) }
+    val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
     val displayUnitState = rememberSaveable { mutableStateOf(config.displayUnit) }
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
@@ -132,8 +132,8 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
 
         SettingsCheckbox(
             title = stringResource(R.string.show_estimated_earnings),
-            state = showEstimatedEarningsState,
-            onConfigUpdate = { config.showEstimatedEarnings = it },
+            state = showFinancialSummaryState,
+            onConfigUpdate = { config.showFinancialSummary = it },
             footer = buildAnnotatedString {
                 append(stringResource(R.string.shows_earnings_today_this_month_this_year_and_all_time_based_on_a_crude_calculation_of))
                 append(" ")

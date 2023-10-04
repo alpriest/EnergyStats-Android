@@ -2,6 +2,7 @@ package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 class FakeConfigStore(
@@ -18,7 +19,7 @@ class FakeConfigStore(
     override var showUsableBatteryOnly: Boolean = false,
     override var showTotalYield: Boolean = true,
     override var selfSufficiencyEstimateMode: Int = 0,
-    override var showEstimatedEarnings: Boolean = false,
+    override var showFinancialSummary: Boolean = false,
     override var displayUnit: Int = 0,
     override var showInverterTemperatures: Boolean = false,
     override var selectedParameterGraphVariables: List<String> = listOf(),
@@ -31,7 +32,8 @@ class FakeConfigStore(
     override var deviceBatteryOverrides: Map<String, String> = mapOf(),
     override var showLastUpdateTimestamp: Boolean = false,
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,
-    override var parameterGroups: List<ParameterGroup> = listOf()
+    override var parameterGroups: List<ParameterGroup> = listOf(),
+    override var financialModel: Int = 1
 ) : ConfigInterface {
     override fun clear() {}
 }

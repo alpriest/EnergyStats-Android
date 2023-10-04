@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -55,7 +56,7 @@ fun AppTheme.Companion.preview(
     showUsableBatteryOnly: Boolean = false,
     showTotalYield: Boolean = true,
     selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
-    showEstimatedEarnings: Boolean = true,
+    showFinancialSummary: Boolean = true,
     displayUnit: DisplayUnit = DisplayUnit.Kilowatts,
     showInverterTemperatures: Boolean = false,
     showInverterIcon: Boolean = true,
@@ -65,7 +66,8 @@ fun AppTheme.Companion.preview(
     showInverterTypeNameOnPowerflow: Boolean = false,
     showInverterPlantNameOnPowerflow: Boolean = false,
     showLastUpdateTimestamp: Boolean = false,
-    solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
+    solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,
+    financialModel: FinancialModel = FinancialModel.FoxESS
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -77,7 +79,7 @@ fun AppTheme.Companion.preview(
         showUsableBatteryOnly = showUsableBatteryOnly,
         showTotalYield = showTotalYield,
         selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
-        showEstimatedEarnings = showEstimatedEarnings,
+        showFinancialSummary = showFinancialSummary,
         displayUnit = displayUnit,
         showInverterTemperatures = showInverterTemperatures,
         showInverterIcon = showInverterIcon,
@@ -87,6 +89,7 @@ fun AppTheme.Companion.preview(
         showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow,
         showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow,
         showLastUpdateTimestamp = showLastUpdateTimestamp,
-        solarRangeDefinitions = solarRangeDefinitions
+        solarRangeDefinitions = solarRangeDefinitions,
+        financialModel = financialModel
     )
 }

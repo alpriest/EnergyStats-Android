@@ -82,7 +82,7 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: EarningsV
             Text(text = stringResource(id = R.string.yieldToday, todaysGeneration.power(theme.displayUnit, theme.decimalPlaces)))
         }
 
-        if (theme.showEstimatedEarnings) {
+        if (theme.showFinancialSummary) {
             EarningsView(earnings)
         }
 
@@ -191,7 +191,7 @@ fun SolarPowerFlowViewPreview() {
                     .width(100.dp)
                     .height(100.dp),
                 iconHeight = 40.dp,
-                themeStream = MutableStateFlow(AppTheme.preview().copy(showTotalYield = false, showEstimatedEarnings = false))
+                themeStream = MutableStateFlow(AppTheme.preview().copy(showTotalYield = false, showFinancialSummary = false))
             )
 
             Slider(
