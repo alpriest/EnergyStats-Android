@@ -16,6 +16,7 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeConfigManager : ConfigManaging {
+    override var currencySymbol: String = "£"
     override var financialModel: FinancialModel = FinancialModel.FoxESS
     override val variables: List<RawVariable>
         get() = listOf()

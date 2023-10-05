@@ -33,7 +33,8 @@ class FakeConfigStore(
     override var showLastUpdateTimestamp: Boolean = false,
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,
     override var parameterGroups: List<ParameterGroup> = listOf(),
-    override var financialModel: Int = 1
+    override var financialModel: Int = 1,
+    override var currencySymbol: String = "£"
 ) : ConfigInterface {
     override fun clear() {}
 }

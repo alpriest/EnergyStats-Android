@@ -203,4 +203,17 @@
     <string name="display_unit_kilowatts_description">All values are shown as kilowatts. E.g. %1$s, %2$s</string>
     <string name="display_unit_watts_description">All values are shown as watts. E.g. %1$s, %2$s</string>
     <string name="display_unit_adaptive_description">Values are shown as kilowatts unless under 1 kilowatt when they are shown as watts. E.g. %1$s, %2$s</string>
+    <string name="exported_income_short_title">exported</string>
+    <string name="exported_income_description">Approximate income received from exporting energy to the grid.</string>
+    <string name="exported_income_formula">Feed-In kWh * FeedInUnitPrice</string>
+    <string name="grid_import_avoided_short_title">avoided</string>
+    <string name="grid_import_description">Approximate expenditure avoided by generating your own solar power.</string>
+    <string name="grid_import_formula">(SolarGeneration kWh - Feed-In kWh) * ImportUnitPrice</string>
+    <string name="total_formula_description">Approximate total benefit of having your solar/battery installation.</string>
+    <string name="energy_stats">Energy Stats</string>
+    <string name="foxess">FoxESS</string>
+    <string name="feed_in_unit_price">Feed in Unit price</string>
+    <string name="grid_import_unit_price">Grid Import Unit price</string>
+    <string name="energy_stats_earnings_calculation_description">Shows financial estimates for today only on the flow page, and for the selected time period on the stats page.</string>
+    <string name="foxess_earnings_calculation_description">This unit price is managed on the FoxESS cloud.\\n\\nShows earnings today, this month, this year, and all -time based on a calculation of feed - in kWh * unit price.</string>
 </resources>

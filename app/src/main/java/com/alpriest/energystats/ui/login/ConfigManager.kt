@@ -50,6 +50,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(decimalPlaces = decimalPlaces)
         }
 
+    override var currencySymbol: String
+        get() = config.currencySymbol
+        set(value) {
+            config.currencySymbol = value
+        }
+
     override var showSunnyBackground: Boolean
         get() = config.showSunnyBackground
         set(value) {

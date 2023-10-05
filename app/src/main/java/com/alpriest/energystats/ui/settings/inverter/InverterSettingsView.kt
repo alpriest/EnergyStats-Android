@@ -40,25 +40,25 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_temperatures),
                     state = showInverterTemperaturesState,
-                    onConfigUpdate = { configManager.showInverterTemperatures = it }
+                    onUpdate = { configManager.showInverterTemperatures = it }
                 )
 
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_icon),
                     state = showInverterIconState,
-                    onConfigUpdate = { configManager.showInverterIcon = it }
+                    onUpdate = { configManager.showInverterIcon = it }
                 )
 
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_type_name),
                     state = showInverterTypeNameState,
-                    onConfigUpdate = { configManager.showInverterTypeNameOnPowerflow = it }
+                    onUpdate = { configManager.showInverterTypeNameOnPowerflow = it }
                 )
 
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_plant_name),
                     state = showInverterPlantNameState,
-                    onConfigUpdate = { configManager.showInverterPlantNameOnPowerflow = it }
+                    onUpdate = { configManager.showInverterPlantNameOnPowerflow = it }
                 )
             }
 
@@ -67,7 +67,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 SettingsCheckbox(
                     title = stringResource(R.string.invert_ct2_values_when_detected),
                     state = shouldInvertCT2State,
-                    onConfigUpdate = { configManager.shouldInvertCT2 = it },
+                    onUpdate = { configManager.shouldInvertCT2 = it },
                     footer = buildAnnotatedString { append("If you have multiple inverters and your PV generation values are incorrect try toggling this.") }
                 )
             }

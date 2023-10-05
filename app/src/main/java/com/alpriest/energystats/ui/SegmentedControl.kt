@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
@@ -28,12 +29,19 @@ fun SegmentedControl(
     itemWidth: Dp = 120.dp,
     cornerRadius: Int = 10,
     color: Color = Color.Red,
+    contentPadding: PaddingValues = PaddingValues(
+        start = 12.dp,
+        top = 8.dp,
+        end = 12.dp,
+        bottom = 8.dp
+    ),
     onItemSelection: (selectedItemIndex: Int) -> Unit
 ) {
     val selectedIndex = remember { mutableStateOf(defaultSelectedItemIndex) }
 
     items.forEachIndexed { index, item ->
         OutlinedButton(
+            contentPadding = contentPadding,
             modifier = when (index) {
                 0 -> {
                     if (useFixedWidth) {
@@ -125,7 +133,7 @@ fun SegmentedControl(
 @Preview
 @Composable
 fun SegmentedControlPreview() {
-    val genders = listOf("2", "3")
+    val genders = listOf("2", "3", "4", "5")
     SegmentedControl(
         items = genders,
         defaultSelectedItemIndex = 0

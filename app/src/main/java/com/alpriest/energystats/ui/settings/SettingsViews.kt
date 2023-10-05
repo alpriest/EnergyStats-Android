@@ -140,14 +140,14 @@ fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Uni
 }
 
 @Composable
-fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onConfigUpdate: (Boolean) -> Unit, footer: AnnotatedString? = null) {
+fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onUpdate: (Boolean) -> Unit, footer: AnnotatedString? = null) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .clickable {
                     state.value = !state.value
-                    onConfigUpdate(state.value)
+                    onUpdate(state.value)
                 }
                 .fillMaxWidth()
         ) {
@@ -161,7 +161,7 @@ fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onConfigUpdate
                 checked = state.value,
                 onCheckedChange = {
                     state.value = it
-                    onConfigUpdate(it)
+                    onUpdate(it)
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
             )

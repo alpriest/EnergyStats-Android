@@ -162,21 +162,21 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_full_empty_estimate),
                 state = showBatteryEstimateState,
-                onConfigUpdate = { config.showBatteryEstimate = it },
+                onUpdate = { config.showBatteryEstimate = it },
                 footer = buildAnnotatedString { append(stringResource(R.string.empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant)) }
             )
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_usable_battery_only),
                 state = showUsableBatteryOnlyState,
-                onConfigUpdate = { config.showUsableBatteryOnly = it },
+                onUpdate = { config.showUsableBatteryOnly = it },
                 footer = buildAnnotatedString { append(stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining)) }
             )
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_temperature),
                 state = showBatteryTemperatureState,
-                onConfigUpdate = { config.showBatteryTemperature = it }
+                onUpdate = { config.showBatteryTemperature = it }
             )
         }
     }

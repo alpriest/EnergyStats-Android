@@ -34,7 +34,6 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
             val items = listOf(SelfSufficiencyEstimateMode.Off, SelfSufficiencyEstimateMode.Net, SelfSufficiencyEstimateMode.Absolute)
             SegmentedControl(
                 items = items.map { it.title(context) },
-                useFixedWidth = true,
                 defaultSelectedItemIndex = items.indexOf(selfSufficiencyEstimateModeState.value),
                 color = colors.primary
             ) {

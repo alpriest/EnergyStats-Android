@@ -17,6 +17,7 @@ interface ConfigManaging {
     suspend fun refreshFirmwareVersions()
     fun select(device: Device)
 
+    var currencySymbol: String
     var financialModel: FinancialModel
     val parameterGroups: List<ParameterGroup>
     var solarRangeDefinitions: SolarRangeDefinitions

@@ -39,8 +39,17 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_LAST_UPDATE_TIMESTAMP,
         SOLAR_RANGE_DEFINITIONS,
         PARAMETER_GROUPS,
-        FINANCIAL_MODEL
+        FINANCIAL_MODEL,
+        CURRENCY_SYMBOL
     }
+
+    override var currencySymbol: String
+        get() = sharedPreferences.getString(SharedPreferenceKey.CURRENCY_SYMBOL.name, "£") ?: "£"
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putString(SharedPreferenceKey.CURRENCY_SYMBOL.name, value)
+            editor.apply()
+        }
 
     override var showGridTotals: Boolean
         get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_GRID_TOTALS.name, false)

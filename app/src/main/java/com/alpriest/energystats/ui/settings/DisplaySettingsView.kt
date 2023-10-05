@@ -1,7 +1,9 @@
 package com.alpriest.energystats.ui.settings
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,37 +47,37 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         SettingsCheckbox(
             title = stringResource(R.string.increase_sizes_for_large_display),
             state = largeDisplayState,
-            onConfigUpdate = { config.useLargeDisplay = it }
+            onUpdate = { config.useLargeDisplay = it }
         )
 
         SettingsCheckbox(
             title = stringResource(R.string.show_coloured_flow_lines),
             state = colouredFlowLinesState,
-            onConfigUpdate = { config.useColouredFlowLines = it }
+            onUpdate = { config.useColouredFlowLines = it }
         )
 
         SettingsCheckbox(
             title = stringResource(R.string.show_total_yield),
             state = showTotalYieldState,
-            onConfigUpdate = { config.showTotalYield = it }
+            onUpdate = { config.showTotalYield = it }
         )
 
         SettingsCheckbox(
             title = stringResource(R.string.show_home_usage_total),
             state = showHomeTotalState,
-            onConfigUpdate = { config.showHomeTotal = it }
+            onUpdate = { config.showHomeTotal = it }
         )
 
         SettingsCheckbox(
             title = stringResource(R.string.show_daily_grid_totals),
             state = showGridTotalsState,
-            onConfigUpdate = { config.showGridTotals = it }
+            onUpdate = { config.showGridTotals = it }
         )
 
         SettingsCheckbox(
             title = stringResource(R.string.show_sunny_background),
             state = showSunnyBackgroundState,
-            onConfigUpdate = { config.showSunnyBackground = it }
+            onUpdate = { config.showSunnyBackground = it }
         )
 
         SettingsSegmentedControl(
@@ -127,13 +129,13 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         SettingsCheckbox(
             title = stringResource(R.string.show_last_update_timestamp),
             state = showLastUpdateTimestampState,
-            onConfigUpdate = { config.showLastUpdateTimestamp = it }
+            onUpdate = { config.showLastUpdateTimestamp = it }
         )
 
         SettingsCheckbox(
             title = stringResource(R.string.show_estimated_earnings),
             state = showFinancialSummaryState,
-            onConfigUpdate = { config.showFinancialSummary = it },
+            onUpdate = { config.showFinancialSummary = it },
             footer = buildAnnotatedString {
                 append(stringResource(R.string.shows_earnings_today_this_month_this_year_and_all_time_based_on_a_crude_calculation_of))
                 append(" ")
