@@ -43,6 +43,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         )
     )
 
+    override var currencyCode: String
+        get() = config.currencyCode
+        set(value) {
+            config.currencyCode = value
+        }
+
     override var gridImportUnitPrice: Double
         get() = config.gridImportUnitPrice
         set(value) {

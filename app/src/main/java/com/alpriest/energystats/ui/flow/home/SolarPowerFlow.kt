@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -179,7 +180,7 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: EarningsV
 @Preview(showBackground = true, widthDp = 500)
 @Composable
 fun SolarPowerFlowViewPreview() {
-    val amount = remember { mutableStateOf(0.0f) }
+    val amount = remember { mutableFloatStateOf(0.0f) }
 
     EnergyStatsTheme {
         Column {

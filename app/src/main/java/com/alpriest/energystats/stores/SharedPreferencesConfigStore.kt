@@ -41,6 +41,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         PARAMETER_GROUPS,
         FINANCIAL_MODEL,
         CURRENCY_SYMBOL,
+        CURRENCY_CODE,
         FEED_IN_UNIT_PRICE,
         GRID_IMPORT_UNIT_PRICE
     }
@@ -58,6 +59,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putString(SharedPreferenceKey.FEED_IN_UNIT_PRICE.name, value.toString())
+            editor.apply()
+        }
+
+    override var currencyCode: String
+        get() = sharedPreferences.getString(SharedPreferenceKey.CURRENCY_CODE.name, "GBP") ?: "GBP"
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putString(SharedPreferenceKey.CURRENCY_CODE.name, value)
             editor.apply()
         }
 

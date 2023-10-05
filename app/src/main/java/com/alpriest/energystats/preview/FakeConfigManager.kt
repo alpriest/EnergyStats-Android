@@ -16,6 +16,7 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeConfigManager : ConfigManaging {
+    override var currencyCode: String = "GBP"
     override var feedInUnitPrice: Double = 0.05
     override var gridImportUnitPrice: Double = 0.15
     override var currencySymbol: String = "£"

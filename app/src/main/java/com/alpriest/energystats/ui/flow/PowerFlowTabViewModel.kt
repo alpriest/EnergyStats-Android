@@ -183,7 +183,7 @@ class PowerFlowTabViewModel(
                     home = currentViewModel.currentHomeConsumption,
                     grid = currentViewModel.currentGrid,
                     todaysGeneration = earnings.today.generation,
-                    earnings = makeEarnings(earnings),
+                    earnings = EarningsViewModel(earnings, EnergyStatsFinancialModel(totals, configManager)),
                     inverterTemperatures = currentViewModel.inverterTemperatures,
                     hasBattery = battery.hasBattery,
                     battery = battery,
@@ -223,10 +223,6 @@ class PowerFlowTabViewModel(
                 newTicks
             }
         }
-    }
-
-    private fun makeEarnings(response: EarningsResponse): EarningsViewModel {
-        return EarningsViewModel(response = response)
     }
 }
 
