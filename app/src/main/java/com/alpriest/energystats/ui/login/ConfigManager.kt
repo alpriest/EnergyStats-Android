@@ -43,6 +43,18 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         )
     )
 
+    override var gridImportUnitPrice: Double
+        get() = config.gridImportUnitPrice
+        set(value) {
+            config.gridImportUnitPrice = value
+        }
+
+    override var feedInUnitPrice: Double
+        get() = config.feedInUnitPrice
+        set(value) {
+            config.feedInUnitPrice = value
+        }
+
     override var decimalPlaces: Int
         get() = config.decimalPlaces
         set(value) {

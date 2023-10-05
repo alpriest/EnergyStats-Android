@@ -226,14 +226,7 @@ class PowerFlowTabViewModel(
     }
 
     private fun makeEarnings(response: EarningsResponse): EarningsViewModel {
-        return EarningsViewModel(
-            today = response.today.earnings,
-            month = response.month.earnings,
-            year = response.year.earnings,
-            cumulate = response.cumulate.earnings,
-            currencyCode = response.currencyCode(),
-            currencySymbol = response.currencySymbol()
-        )
+        return EarningsViewModel(response = response)
     }
 }
 

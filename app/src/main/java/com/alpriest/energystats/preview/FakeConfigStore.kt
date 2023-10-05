@@ -6,6 +6,8 @@ import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 class FakeConfigStore(
+    override var feedInUnitPrice: Double = 0.05,
+    override var gridImportUnitPrice: Double = 0.15,
     override var isDemoUser: Boolean = true,
     override var useLargeDisplay: Boolean = false,
     override var useColouredFlowLines: Boolean = true,

@@ -40,8 +40,26 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SOLAR_RANGE_DEFINITIONS,
         PARAMETER_GROUPS,
         FINANCIAL_MODEL,
-        CURRENCY_SYMBOL
+        CURRENCY_SYMBOL,
+        FEED_IN_UNIT_PRICE,
+        GRID_IMPORT_UNIT_PRICE
     }
+
+    override var gridImportUnitPrice: Double
+        get() = (sharedPreferences.getString(SharedPreferenceKey.GRID_IMPORT_UNIT_PRICE.name, "0.15") ?: "0.15").toDouble()
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putString(SharedPreferenceKey.GRID_IMPORT_UNIT_PRICE.name, value.toString())
+            editor.apply()
+        }
+
+    override var feedInUnitPrice: Double
+        get() = (sharedPreferences.getString(SharedPreferenceKey.FEED_IN_UNIT_PRICE.name, "0.05") ?: "0.05").toDouble()
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putString(SharedPreferenceKey.FEED_IN_UNIT_PRICE.name, value.toString())
+            editor.apply()
+        }
 
     override var currencySymbol: String
         get() = sharedPreferences.getString(SharedPreferenceKey.CURRENCY_SYMBOL.name, "£") ?: "£"

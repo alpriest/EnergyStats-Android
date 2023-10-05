@@ -32,7 +32,6 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
     val decimalPlacesState = rememberSaveable { mutableStateOf(config.decimalPlaces) }
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
-    val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
     val displayUnitState = rememberSaveable { mutableStateOf(config.displayUnit) }
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
@@ -119,7 +118,9 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
                             R.string.display_unit_kilowatts_description,
                             3.456.kW(decimalPlacesState.value),
                             0.123.kW(decimalPlacesState.value)
-                        ))
+                        )
+                    )
+
                     DisplayUnit.Watts -> append(stringResource(R.string.display_unit_watts_description, 3.456.w(), 0.123.w()))
                     DisplayUnit.Adaptive -> append(stringResource(R.string.display_unit_adaptive_description, 3.456.kW(decimalPlacesState.value), 0.123.w()))
                 }
@@ -130,23 +131,6 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             title = stringResource(R.string.show_last_update_timestamp),
             state = showLastUpdateTimestampState,
             onUpdate = { config.showLastUpdateTimestamp = it }
-        )
-
-        SettingsCheckbox(
-            title = stringResource(R.string.show_estimated_earnings),
-            state = showFinancialSummaryState,
-            onUpdate = { config.showFinancialSummary = it },
-            footer = buildAnnotatedString {
-                append(stringResource(R.string.shows_earnings_today_this_month_this_year_and_all_time_based_on_a_crude_calculation_of))
-                append(" ")
-                withStyle(
-                    style = SpanStyle(fontStyle = FontStyle.Italic, color = colors.onSecondary)
-                ) {
-                    append(stringResource(R.string.feed_in_kwh_price_per_kwh))
-                }
-                append(" ")
-                append(stringResource(R.string.as_configured_on_foxess_cloud))
-            }
         )
 
         SettingsNavButton(stringResource(R.string.approximations)) { navController.navigate(SettingsScreen.Approximations.name) }

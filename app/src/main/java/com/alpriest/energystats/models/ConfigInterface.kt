@@ -5,6 +5,8 @@ import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var gridImportUnitPrice: Double
+    var feedInUnitPrice: Double
     var currencySymbol: String
     var financialModel: Int
     var solarRangeDefinitions: SolarRangeDefinitions

@@ -83,7 +83,7 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: EarningsV
         }
 
         if (theme.showFinancialSummary) {
-            EarningsView(earnings)
+            EarningsView(themeStream, earnings)
         }
 
         Box(
@@ -252,8 +252,4 @@ fun SolarPowerFlowViewPreview() {
             }
         }
     }
-}
-
-fun EarningsViewModel.Companion.preview(): EarningsViewModel {
-    return EarningsViewModel(today = 1.0, month = 5.0, year = 50.0, cumulate = 500.0, currencySymbol = "£", currencyCode = "GBP")
 }

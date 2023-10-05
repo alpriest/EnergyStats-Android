@@ -61,6 +61,7 @@ fun ParameterVariableListView(variables: List<ParameterGraphVariable>, onTap: (P
                     onTap(variable)
                 }, colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
+
             Text(
                 variable.type.name, modifier = Modifier.weight(0.5f)
             )
@@ -129,16 +130,16 @@ class ParameterGraphVariableChooserView(
                         OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
                     }
 
-                    Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                        Spacer(modifier = Modifier.weight(1.0f))
-                        IconButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = "Localized description",
-                                tint = colors.onSecondary,
-                            )
-                        }
-                    }
+//                    Row(modifier = Modifier.padding(vertical = 8.dp)) {
+//                        Spacer(modifier = Modifier.weight(1.0f))
+//                        IconButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
+//                            Icon(
+//                                imageVector = Icons.Filled.Edit,
+//                                contentDescription = "Localized description",
+//                                tint = colors.onSecondary,
+//                            )
+//                        }
+//                    }
                 }
 
                 SettingsColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {

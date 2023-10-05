@@ -17,6 +17,8 @@ interface ConfigManaging {
     suspend fun refreshFirmwareVersions()
     fun select(device: Device)
 
+    var gridImportUnitPrice: Double
+    var feedInUnitPrice: Double
     var currencySymbol: String
     var financialModel: FinancialModel
     val parameterGroups: List<ParameterGroup>
