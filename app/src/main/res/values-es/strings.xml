@@ -193,4 +193,25 @@
     <string name="show_last_update_timestamp">Mostrar último timestamp de actualización</string>
     <string name="sun_display_variation_thresholds">Umbral de variación de visualización del sol</string>
     <string name="tap_the_icon_for_further_detail">Toca el icono para más detalles</string>
+    <string name="kilowatts">Kilovatios</string>
+    <string name="watts">Vatios</string>
+    <string name="adaptive">Adaptativo</string>
+    <string name="net">Red</string>
+    <string name="absolute">Absolute</string>
+    <string name="off">Apagado</string>
+    <string name="units">Unidades</string>
+    <string name="display_unit_kilowatts_description">Todos los valores se muestran en kilovatios. Por ejemplo, %1$@, %2$@</string>
+    <string name="display_unit_watts_description">Todos los valores se muestran en vatios. Por ejemplo, %1$@, %2$@</string>
+    <string name="display_unit_adaptive_description">Los valores se muestran en kilovatios a menos que sean menores de 1 kilovatio, en cuyo caso se muestran en vatios. Por ejemplo, %1$@, %2$@</string>
+    <string name="exported_income_short_title">exportado</string>
+    <string name="exported_income_description">Ingresos aproximados recibidos por exportar energía a la red.</string>
+    <string name="exported_income_formula">Feed-In kWh * FeedInUnitPrice</string>
+    <string name="grid_import_avoided_short_title">evitado</string>
+    <string name="grid_import_description">Gasto aproximado evitado al generar tu propia energía solar.</string>
+    <string name="grid_import_formula">(SolarGeneration kWh - Feed-In kWh) * ImportUnitPrice</string>
+    <string name="total_formula_description">Beneficio total aproximado de tener tu instalación solar/batería.</string>
+    <string name="feed_in_unit_price">Precio de la unidad de alimentación</string>
+    <string name="grid_import_unit_price">Precio unitario de importación de la red</string>
+    <string name="energy_stats_earnings_calculation_description">Muestra estimaciones financieras solo para hoy en la página de flujo, y para el período de tiempo seleccionado en la página de estadísticas.</string>
+    <string name="foxess_earnings_calculation_description">Este precio unitario se gestiona en la nube de FoxESS.</string>
 </resources>

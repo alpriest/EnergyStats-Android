@@ -193,9 +193,9 @@ class PowerFlowTabViewModel(
                     hasBattery = battery.hasBattery,
                     battery = battery,
                     configManager = configManager,
-                    homeTotal = totals.homeTotal,
-                    gridImportTotal = totals.gridImportTotal,
-                    gridExportTotal = totals.gridExportTotal
+                    homeTotal = totals.loads,
+                    gridImportTotal = totals.grid,
+                    gridExportTotal = totals.feedIn
                 )
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

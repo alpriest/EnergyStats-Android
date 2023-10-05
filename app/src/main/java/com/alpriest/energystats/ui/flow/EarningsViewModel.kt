@@ -83,22 +83,22 @@ class FinanceAmount(val type: FinanceAmountType, val amount: Double, private val
     }
 }
 
-class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, configManager: ConfigManaging) {
-    private val exportIncome: FinanceAmount
-    private val solarSaving: FinanceAmount
+class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager: ConfigManaging) {
+    val exportIncome: FinanceAmount
+    val solarSaving: FinanceAmount
     val total: FinanceAmount
 
     init {
         exportIncome = FinanceAmount(
             type = FinanceAmountType.EXPORTED,
-            amount = totalsViewModel.gridExportTotal * configManager.feedInUnitPrice,
+            amount = totalsViewModel.feedIn * configManager.feedInUnitPrice,
             currencySymbol = configManager.currencySymbol,
             currencyCode = configManager.currencyCode
         )
 
         solarSaving = FinanceAmount(
             type = FinanceAmountType.AVOIDED,
-            amount = (totalsViewModel.solar - totalsViewModel.gridExportTotal) * configManager.gridImportUnitPrice,
+            amount = (totalsViewModel.solar - totalsViewModel.feedIn) * configManager.gridImportUnitPrice,
             currencySymbol = configManager.currencySymbol,
             currencyCode = configManager.currencyCode
         )

@@ -6,17 +6,21 @@ import com.alpriest.energystats.models.ReportVariable
 import java.lang.Double.max
 import java.util.Calendar
 
-class TotalsViewModel(reports: List<ReportResponse>) {
-    val homeTotal: Double = reports.todayValue(forKey = ReportVariable.Loads.networkTitle())
-    val gridImportTotal: Double = reports.todayValue(forKey = ReportVariable.GridConsumption.networkTitle())
-    val gridExportTotal: Double = reports.todayValue(forKey = ReportVariable.FeedIn.networkTitle())
+class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, batteryCharge: Double, batteryDischarge: Double) {
     val solar: Double
 
     init {
-        val batteryCharge = reports.todayValue(forKey = ReportVariable.ChargeEnergyToTal.networkTitle())
-        val batteryDischarge = reports.todayValue(forKey = ReportVariable.DischargeEnergyToTal.networkTitle())
+        solar = max(0.0, batteryCharge - batteryDischarge - grid + loads + feedIn)
+    }
 
-        solar = max(0.0, batteryCharge - batteryDischarge - gridImportTotal + homeTotal + gridExportTotal)
+    constructor(reports: List<ReportResponse>) :
+            this(
+                grid = reports.todayValue(forKey = ReportVariable.GridConsumption.networkTitle()),
+                feedIn = reports.todayValue(forKey = ReportVariable.FeedIn.networkTitle()),
+                loads = reports.todayValue(forKey = ReportVariable.Loads.networkTitle()),
+                batteryCharge = reports.todayValue(forKey = ReportVariable.ChargeEnergyToTal.networkTitle()),
+                batteryDischarge = reports.todayValue(forKey = ReportVariable.DischargeEnergyToTal.networkTitle())
+            ) {
     }
 }
 

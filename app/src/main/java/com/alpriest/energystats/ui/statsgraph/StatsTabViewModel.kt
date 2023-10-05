@@ -17,7 +17,10 @@ import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
+import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
+import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
+import com.alpriest.energystats.ui.settings.FinancialModel
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +47,7 @@ class StatsTabViewModel(
     var absoluteSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
     var homeUsageStream = MutableStateFlow<Double?>(null)
     var totalSolarGeneratedStream = MutableStateFlow<Double?>(null)
+    var energyStatsFinancialModelStream = MutableStateFlow<EnergyStatsFinancialModel?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -273,19 +277,19 @@ class StatsTabViewModel(
     private fun calculateSelfSufficiencyEstimate() {
         val totals = totalsStream.value
 
-        val generation = totals[ReportVariable.Generation]
-        val feedIn = totals[ReportVariable.FeedIn]
-        val grid = totals[ReportVariable.GridConsumption]
-        val batteryCharge = totals[ReportVariable.ChargeEnergyToTal]
-        val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal]
-        val loads = totals[ReportVariable.Loads]
-
-        if (generation == null || feedIn == null || grid == null || batteryCharge == null || batteryDischarge == null || loads == null) {
-            return
-        }
+        val feedIn = totals[ReportVariable.FeedIn] ?: 0.0
+        val grid = totals[ReportVariable.GridConsumption] ?: 0.0
+        val batteryCharge = totals[ReportVariable.ChargeEnergyToTal] ?: 0.0
+        val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal] ?: 0.0
+        val loads = totals[ReportVariable.Loads] ?: 0.0
 
         homeUsageStream.value = loads
-        totalSolarGeneratedStream.value = max(0.0, (batteryCharge - batteryDischarge - grid + loads + feedIn))
+        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, batteryCharge, batteryDischarge)
+        totalSolarGeneratedStream.value = totalsViewModel.solar
+
+        if (configManager.financialModel == FinancialModel.EnergyStats) {
+            energyStatsFinancialModelStream.value = EnergyStatsFinancialModel(totalsViewModel, configManager)
+        }
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
             loads,

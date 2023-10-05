@@ -194,4 +194,25 @@
     <string name="show_last_update_timestamp">Pokaż ostatni znacznik czasu aktualizacji</string>
     <string name="sun_display_variation_thresholds">Progi zmienności wyświetlania słońca</string>
     <string name="tap_the_icon_for_further_detail">Dotknij ikony, aby uzyskać więcej informacji</string>
+    <string name="kilowatts">Kilowaty</string>
+    <string name="watts">Waty</string>
+    <string name="adaptive">Adaptacyjny</string>
+    <string name="net">Sieć</string>
+    <string name="absolute">Absolute</string>
+    <string name="off">Wyłączone</string>
+    <string name="units">Jednostki</string>
+    <string name="display_unit_kilowatts_description">Wszystkie wartości są wyświetlane w kilowatach. Na przykład %1$@, %2$@</string>
+    <string name="display_unit_watts_description">Wszystkie wartości są wyświetlane w watach. Na przykład %1$@, %2$@</string>
+    <string name="display_unit_adaptive_description">Wartości są wyświetlane w kilowatach, chyba że są mniejsze niż 1 kilowat, wtedy są wyświetlane w watach. Na przykład %1$@, %2$@</string>
+    <string name="exported_income_short_title">eksportowano</string>
+    <string name="exported_income_description">Przybliżone dochody uzyskane z eksportu energii do sieci.</string>
+    <string name="exported_income_formula">Feed-In kWh * FeedInUnitPrice</string>
+    <string name="grid_import_avoided_short_title">uniknięto</string>
+    <string name="grid_import_description">Przybliżone wydatki uniknięte dzięki własnemu wytwarzaniu energii słonecznej.</string>
+    <string name="grid_import_formula">(SolarGeneration kWh - Feed-In kWh) * ImportUnitPrice</string>
+    <string name="total_formula_description">Przybliżony ogólny korzyść z posiadania instalacji solarnej/baterii.</string>
+    <string name="feed_in_unit_price">Cena za oddawaną energię</string>
+    <string name="grid_import_unit_price">Cena za import energii z sieci</string>
+    <string name="energy_stats_earnings_calculation_description">Pokazuje szacunki finansowe tylko na stronie przepływu, a także dla wybranego okresu czasu na stronie statystyk.</string>
+    <string name="foxess_earnings_calculation_description">Ta cena jednostkowa jest zarządzana w chmurze FoxESS.</string>
 </resources>

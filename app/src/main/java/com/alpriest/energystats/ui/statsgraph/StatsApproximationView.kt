@@ -49,6 +49,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
     }
     val homeUsage = viewModel.homeUsageStream.collectAsState().value
     val totalSolarGenerated = viewModel.totalSolarGeneratedStream.collectAsState().value
+    val financialModel = viewModel.energyStatsFinancialModelStream.collectAsState().value
 
     Box(modifier) {
         Column(
@@ -113,6 +114,50 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                         )
                         Text(
                             it.power(appTheme.displayUnit, appTheme.decimalPlaces),
+                            fontSize = fontSize
+                        )
+                    }
+                }
+
+                financialModel?.let {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            "Export income",
+                            fontSize = fontSize
+                        )
+                        Text(
+                            it.exportIncome.formattedAmount(),
+                            fontSize = fontSize
+                        )
+                    }
+
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            "Grid import avoided",
+                            fontSize = fontSize
+                        )
+                        Text(
+                            it.solarSaving.formattedAmount(),
+                            fontSize = fontSize
+                        )
+                    }
+
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            "Total benefit",
+                            fontSize = fontSize
+                        )
+                        Text(
+                            it.total.formattedAmount(),
                             fontSize = fontSize
                         )
                     }

@@ -127,7 +127,7 @@ fun NavigableSettingsView(
             DataLoggerViewContainer(network = network, configManager = config, navController = navController, context = context).Content()
         }
         composable(SettingsScreen.Approximations.name) {
-            ApproximationsView(config)
+            ApproximationsSettingsView(config)
         }
         composable(SettingsScreen.SolarBandings.name) {
             SolarBandingSettingsView(navController, config)

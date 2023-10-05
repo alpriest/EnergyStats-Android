@@ -193,4 +193,25 @@
     <string name="show_last_update_timestamp">Letzten Aktualisierungszeitpunkt anzeigen</string>
     <string name="sun_display_variation_thresholds">Schwellenwerte der Sonnenanzeigevielfalt</string>
     <string name="tap_the_icon_for_further_detail">Tippen Sie auf das Symbol für weitere Details</string>
+    <string name="kilowatts">Kilowatt</string>
+    <string name="watts">Watt</string>
+    <string name="adaptive">Adaptiv</string>
+    <string name="net">Netto</string>
+    <string name="absolute">Absolut</string>
+    <string name="off">Aus</string>
+    <string name="units">Einheiten</string>
+    <string name="display_unit_kilowatts_description">Alle Werte werden in Kilowatt angezeigt. Zum Beispiel %1$@, %2$@</string>
+    <string name="display_unit_watts_description">Alle Werte werden in Watt angezeigt. Zum Beispiel %1$@, %2$@</string>
+    <string name="display_unit_adaptive_description">Die Werte werden in Kilowatt angezeigt, es sei denn, sie sind unter 1 Kilowatt, dann werden sie in Watt angezeigt. Zum Beispiel %1$@, %2$@</string>
+    <string name="exported_income_short_title">exportiert</string>
+    <string name="exported_income_description">Ungefähr erzielte Einnahmen aus dem Export von Energie ins Netz.</string>
+    <string name="exported_income_formula">Einspeiseenergie kWh * Einspeisevergütung</string>
+    <string name="grid_import_avoided_short_title">eingespart</string>
+    <string name="grid_import_description">Ungefähre eingesparte Ausgaben durch die Erzeugung Ihrer eigenen Solarenergie.</string>
+    <string name="grid_import_formula">(Solarenergie kWh - Einspeiseenergie kWh) * Netzbezugspreis</string>
+    <string name="total_formula_description">Ungefährer Gesamtnutzen Ihrer Solar-/Batterieanlage.</string>
+    <string name="feed_in_unit_price">Einspeisevergütung</string>
+    <string name="grid_import_unit_price">Netzbezugspreis</string>
+    <string name="energy_stats_earnings_calculation_description">Zeigt Finanzschätzungen nur für heute auf der Leistungsfluss-Seite und für den ausgewählten Zeitraum auf der Statistik-Seite.</string>
+    <string name="foxess_earnings_calculation_description">Dieser Einheitspreis wird in der FoxESS Cloud verwaltet.</string>
 </resources>

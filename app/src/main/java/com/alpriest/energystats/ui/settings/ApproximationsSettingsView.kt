@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import com.alpriest.energystats.stores.ConfigManaging
 
 @Composable
-fun ApproximationsView(config: ConfigManaging) {
+fun ApproximationsSettingsView(config: ConfigManaging) {
     SettingsPage {
         SelfSufficiencySettingsView(config, modifier = Modifier.fillMaxWidth())
         FinancialsSettingsView(config = config)
