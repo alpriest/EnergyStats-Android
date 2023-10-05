@@ -14,7 +14,7 @@ class TotalsViewModel(reports: List<ReportResponse>) {
 
     init {
         val batteryCharge = reports.todayValue(forKey = ReportVariable.ChargeEnergyToTal.networkTitle())
-         val batteryDischarge = reports.todayValue(forKey = ReportVariable.DischargeEnergyToTal.networkTitle())
+        val batteryDischarge = reports.todayValue(forKey = ReportVariable.DischargeEnergyToTal.networkTitle())
 
         solar = max(0.0, batteryCharge - batteryDischarge - gridImportTotal + homeTotal + gridExportTotal)
     }

@@ -161,9 +161,14 @@ class PowerFlowTabViewModel(
                     QueryDate()
                 )
 
+                var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption)
+                if (currentDevice.hasBattery) {
+                    reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
+                }
+
                 val report = network.fetchReport(
                     currentDevice.deviceID,
-                    listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption),
+                    reportVariables,
                     QueryDate(),
                     ReportType.month
                 )

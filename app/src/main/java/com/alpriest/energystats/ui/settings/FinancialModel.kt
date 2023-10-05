@@ -52,6 +52,8 @@ fun FinancialsSettingsView(config: ConfigManaging) {
     val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
     val financialModelState = rememberSaveable { mutableStateOf(config.financialModel) }
     val context = LocalContext.current
+    val feedInUnitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toString()) }
+    val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toString()) }
 
     SettingsColumnWithChild {
         SettingsCheckbox(title = "Show financial summary", state = showFinancialSummaryState, onUpdate = {
@@ -80,8 +82,11 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     Text(
                         stringResource(R.string.feed_in_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSecondary
                     )
-                    OutlinedTextField(value = config.feedInUnitPrice.toString(),
-                        onValueChange = { config.feedInUnitPrice = it.toDouble() },
+                    OutlinedTextField(value = feedInUnitPrice.value,
+                        onValueChange = {
+                            feedInUnitPrice.value = it
+                            config.feedInUnitPrice = it.toDouble()
+                        },
                         modifier = Modifier.width(100.dp),
                         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
                         leadingIcon = { Text(config.currencySymbol, color = MaterialTheme.colors.onSecondary) })
@@ -97,8 +102,11 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     Text(
                         stringResource(R.string.grid_import_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSecondary
                     )
-                    OutlinedTextField(value = config.gridImportUnitPrice.toString(),
-                        onValueChange = { config.gridImportUnitPrice = it.toDouble() },
+                    OutlinedTextField(value = gridImportUnitPrice.value,
+                        onValueChange = {
+                            gridImportUnitPrice.value = it
+                            config.gridImportUnitPrice = it.toDouble()
+                        },
                         modifier = Modifier.width(100.dp),
                         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
                         leadingIcon = { Text(config.currencySymbol, color = MaterialTheme.colors.onSecondary) })
@@ -126,6 +134,7 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     "${stringResource(R.string.exported_income_short_title)} + ${stringResource(R.string.grid_import_avoided_short_title)}"
                 )
             }
+
             FinancialModel.FoxESS -> {
                 stringResource(R.string.foxess_earnings_calculation_description)
             }
