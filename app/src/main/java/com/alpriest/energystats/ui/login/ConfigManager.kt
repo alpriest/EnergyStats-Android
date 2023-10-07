@@ -49,6 +49,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.currencyCode = value
         }
 
+    override var currencySymbol: String
+        get() = config.currencySymbol
+        set(value) {
+            config.currencySymbol = value
+        }
+
     override var gridImportUnitPrice: Double
         get() = config.gridImportUnitPrice
         set(value) {
@@ -66,12 +72,6 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.decimalPlaces = value
             themeStream.value = themeStream.value.copy(decimalPlaces = decimalPlaces)
-        }
-
-    override var currencySymbol: String
-        get() = config.currencySymbol
-        set(value) {
-            config.currencySymbol = value
         }
 
     override var showSunnyBackground: Boolean

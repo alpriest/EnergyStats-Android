@@ -136,6 +136,8 @@ class PowerFlowTabViewModel(
                 network.ensureHasToken()
 
                 val earnings = network.fetchEarnings(deviceID = currentDevice.deviceID)
+                configManager.currencyCode = earnings.currencyCode()
+                configManager.currencySymbol = earnings.currencySymbol()
 
                 var variables: List<RawVariable> = listOfNotNull(
                     variable("feedInPower"),
