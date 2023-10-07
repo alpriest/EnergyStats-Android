@@ -201,9 +201,9 @@
     <string name="absolute">Assoluta</string>
     <string name="off">Off</string>
     <string name="units">Unità</string>
-    <string name="display_unit_kilowatts_description">Tutti i valori sono espressi in kilowatt. Ad esempio, %1$@, %2$@</string>
-    <string name="display_unit_watts_description">Tutti i valori sono espressi in watt. Ad esempio, %1$@, %2$@</string>
-    <string name="display_unit_adaptive_description">I valori vengono espressi in kilowatt a meno che non siano inferiori a 1 kilowatt, momento in cui vengono espressi in watt. Ad esempio, %1$@, %2$@</string>
+    <string name="display_unit_kilowatts_description">Tutti i valori sono espressi in kilowatt. Ad esempio, %1$s, %2$s</string>
+    <string name="display_unit_watts_description">Tutti i valori sono espressi in watt. Ad esempio, %1$s, %2$s</string>
+    <string name="display_unit_adaptive_description">I valori vengono espressi in kilowatt a meno che non siano inferiori a 1 kilowatt, momento in cui vengono espressi in watt. Ad esempio, %1$s, %2$s</string>
     <string name="exported_income_short_title">esportato</string>
     <string name="exported_income_description">Entrate approssimative ricevute dall\'esportazione di energia nella rete.</string>
     <string name="exported_income_formula">Feed-In kWh * FeedInUnitPrice</string>
@@ -215,4 +215,5 @@
     <string name="grid_import_unit_price">Prezzo unitario dell\'importazione dalla rete</string>
     <string name="energy_stats_earnings_calculation_description">Mostra stime finanziarie solo per oggi sulla pagina di flusso e per il periodo di tempo selezionato sulla pagina delle statistiche.</string>
     <string name="foxess_earnings_calculation_description">Questo prezzo unitario è gestito sulla FoxESS Cloud.</string>
+    <string name="show_financial_summary">Mostra il riepilogo finanziario</string>
 </resources>

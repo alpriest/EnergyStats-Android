@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,6 +30,10 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import java.text.NumberFormat
+import java.text.ParseException
+import java.util.Currency
+import java.util.Locale
 
 enum class FinancialModel(val value: Int) {
     EnergyStats(0), FoxESS(1);
@@ -52,11 +55,11 @@ fun FinancialsSettingsView(config: ConfigManaging) {
     val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
     val financialModelState = rememberSaveable { mutableStateOf(config.financialModel) }
     val context = LocalContext.current
-    val feedInUnitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toString()) }
-    val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toString()) }
+    val feedInUnitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
+    val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
 
     SettingsColumnWithChild {
-        SettingsCheckbox(title = "Show financial summary", state = showFinancialSummaryState, onUpdate = {
+        SettingsCheckbox(title = stringResource(R.string.show_financial_summary), state = showFinancialSummaryState, onUpdate = {
             config.showFinancialSummary = it
         })
 
@@ -85,7 +88,7 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     OutlinedTextField(value = feedInUnitPrice.value,
                         onValueChange = {
                             feedInUnitPrice.value = it
-                            config.feedInUnitPrice = it.toDouble()
+                            config.feedInUnitPrice = it.safeToDouble()
                         },
                         modifier = Modifier.width(100.dp),
                         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
@@ -105,7 +108,7 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     OutlinedTextField(value = gridImportUnitPrice.value,
                         onValueChange = {
                             gridImportUnitPrice.value = it
-                            config.gridImportUnitPrice = it.toDouble()
+                            config.gridImportUnitPrice = it.safeToDouble()
                         },
                         modifier = Modifier.width(100.dp),
                         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
@@ -136,10 +139,30 @@ fun FinancialsSettingsView(config: ConfigManaging) {
             }
 
             FinancialModel.FoxESS -> {
-                stringResource(R.string.foxess_earnings_calculation_description)
+                Text(stringResource(R.string.foxess_earnings_calculation_description))
             }
         }
     }
+}
+
+private fun Double.toCurrency(): String {
+    val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+    val currencySymbol = currencyFormat.currency.symbol
+    return currencyFormat.format(this).replace(currencySymbol, "").trim()
+}
+
+private fun String.safeToDouble(): Double {
+    val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
+    try {
+        val parsedNumber = numberFormat.parse(this)
+        if (parsedNumber != null) {
+            return parsedNumber.toDouble()
+        }
+    } catch (e: ParseException) {
+        return 0.0
+    }
+
+    return 0.0
 }
 
 @Composable

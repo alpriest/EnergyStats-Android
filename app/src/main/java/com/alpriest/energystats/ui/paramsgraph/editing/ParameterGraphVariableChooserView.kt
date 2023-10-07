@@ -88,7 +88,10 @@ class ParameterGraphVariableChooserView(
         val uriHandler = LocalUriHandler.current
         val groups = viewModel.groups.collectAsState().value
 
-        ContentWithBottomButtons(navController, onSave = { onCancel() }, footer = {
+        ContentWithBottomButtons(navController, onSave = {
+            viewModel.apply()
+            navController.popBackStack()
+        }, footer = {
             Text(
                 stringResource(R.string.note_that_not_all_parameters_contain_values),
                 textAlign = TextAlign.Center,
