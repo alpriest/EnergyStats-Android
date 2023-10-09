@@ -25,8 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.power
-import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
+import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -38,18 +38,23 @@ import com.alpriest.energystats.ui.theme.LightApproximationBackground
 import com.alpriest.energystats.ui.theme.LightApproximationHeader
 import kotlinx.coroutines.flow.MutableStateFlow
 
+data class ApproximationsViewModel(
+    val netSelfSufficiencyEstimate: String?,
+    val absoluteSelfSufficiencyEstimate: String?,
+    val financialModel: EnergyStatsFinancialModel?,
+    val homeUsage: Double?,
+    val totalsViewModel: TotalsViewModel?
+)
+
 @Composable
-fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: StatsTabViewModel) {
+fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel) {
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
     val selfSufficiency = when (appTheme.selfSufficiencyEstimateMode) {
         SelfSufficiencyEstimateMode.Off -> null
-        SelfSufficiencyEstimateMode.Net -> viewModel.netSelfSufficiencyEstimationStream.collectAsState().value
-        SelfSufficiencyEstimateMode.Absolute -> viewModel.absoluteSelfSufficiencyEstimationStream.collectAsState().value
+        SelfSufficiencyEstimateMode.Net -> viewModel.netSelfSufficiencyEstimate
+        SelfSufficiencyEstimateMode.Absolute -> viewModel.absoluteSelfSufficiencyEstimate
     }
-    val homeUsage = viewModel.homeUsageStream.collectAsState().value
-    val totalSolarGenerated = viewModel.totalSolarGeneratedStream.collectAsState().value
-    val financialModel = viewModel.energyStatsFinancialModelStream.collectAsState().value
 
     Box(modifier) {
         Column(
@@ -60,7 +65,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                 )
                 .border(
                     width = 1.dp,
-                    color = colors.ApproximationHeader,
+                    color = ApproximationHeader,
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .fillMaxWidth()
@@ -87,7 +92,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                     }
                 }
 
-                homeUsage?.let {
+                viewModel.homeUsage?.let {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -103,7 +108,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                     }
                 }
 
-                totalSolarGenerated?.let {
+                viewModel.totalsViewModel?.solar?.let {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -119,7 +124,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
                     }
                 }
 
-                financialModel?.let {
+                viewModel.financialModel?.let {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -170,7 +175,7 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
             Modifier
                 .offset(x = 8.dp, y = (-11).dp)
                 .background(
-                    colors.ApproximationHeader,
+                    ApproximationHeader,
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 1.dp),
@@ -184,11 +189,26 @@ fun StatsApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Mo
 @Composable
 fun StatsApproximationViewPreview() {
     EnergyStatsTheme() {
-        StatsApproximationView(themeStream = MutableStateFlow(AppTheme.preview()), viewModel = StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null })
+        ApproximationView(
+            themeStream = MutableStateFlow(AppTheme.preview()),
+            viewModel = ApproximationsViewModel(
+                netSelfSufficiencyEstimate = "95%",
+                absoluteSelfSufficiencyEstimate = "100%",
+                financialModel = null,
+                homeUsage = 4.5,
+                totalsViewModel = TotalsViewModel(
+                    grid = 1.0,
+                    feedIn = 2.0,
+                    loads = 5.0,
+                    batteryCharge = 2.3,
+                    batteryDischarge = 1.2
+                )
+            )
+        )
     }
 }
 
-val Colors.ApproximationHeader: Color
+val ApproximationHeader: Color
     @Composable
     get() = if (isSystemInDarkTheme()) DarkApproximationHeader else LightApproximationHeader
 

@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
@@ -19,13 +18,11 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
-import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.lang.Math.max
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 
@@ -43,11 +40,7 @@ class StatsTabViewModel(
     var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileUri: Uri? = null
-    var netSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
-    var absoluteSelfSufficiencyEstimationStream = MutableStateFlow<String?>(null)
-    var homeUsageStream = MutableStateFlow<Double?>(null)
-    var totalSolarGeneratedStream = MutableStateFlow<Double?>(null)
-    var energyStatsFinancialModelStream = MutableStateFlow<EnergyStatsFinancialModel?>(null)
+    var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -283,19 +276,18 @@ class StatsTabViewModel(
         val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal] ?: 0.0
         val loads = totals[ReportVariable.Loads] ?: 0.0
 
-        homeUsageStream.value = loads
         val totalsViewModel = TotalsViewModel(grid, feedIn, loads, batteryCharge, batteryDischarge)
-        totalSolarGeneratedStream.value = totalsViewModel.solar
 
-        if (configManager.financialModel == FinancialModel.EnergyStats) {
-            energyStatsFinancialModelStream.value = EnergyStatsFinancialModel(totalsViewModel, configManager)
+        val financialModel: EnergyStatsFinancialModel? = if (configManager.financialModel == FinancialModel.EnergyStats) {
+            EnergyStatsFinancialModel(totalsViewModel, configManager)
+        } else {
+            null
         }
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
             loads,
             grid
         )
-        netSelfSufficiencyEstimationStream.value = "${netResult}%"
 
         val absoluteResult = AbsoluteSelfSufficiencyCalculator().calculate(
             grid,
@@ -304,7 +296,14 @@ class StatsTabViewModel(
             batteryCharge,
             batteryDischarge
         )
-        absoluteSelfSufficiencyEstimationStream.value = "${absoluteResult}%"
+
+        approximationsViewModelStream.value = ApproximationsViewModel(
+            absoluteSelfSufficiencyEstimate = "${absoluteResult}%",
+            netSelfSufficiencyEstimate = "${netResult}%",
+            financialModel = financialModel,
+            homeUsage = loads,
+            totalsViewModel = totalsViewModel
+        )
     }
 }
 

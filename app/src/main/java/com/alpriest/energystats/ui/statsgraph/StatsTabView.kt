@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -79,14 +80,16 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
 
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
 
-            StatsApproximationView(viewModel = viewModel, modifier = Modifier.padding(horizontal = 10.dp), themeStream = themeStream)
+            viewModel.approximationsViewModelStream.collectAsState().value?.let {
+                ApproximationView(viewModel = it, modifier = Modifier.padding(horizontal = 10.dp), themeStream = themeStream)
+            }
 
             Text(
                 text = stringResource(R.string.stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals),
                 fontSize = 12.sp,
                 color = DimmedTextColor,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 44.dp, bottom = 22.dp)
+                modifier = Modifier.padding(top = 44.dp, bottom = 22.dp).fillMaxWidth()
             )
 
             Column(
