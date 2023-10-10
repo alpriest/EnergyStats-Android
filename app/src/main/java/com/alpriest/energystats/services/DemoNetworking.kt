@@ -42,7 +42,10 @@ class DemoNetworking : Networking {
     }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-        return BatteryResponse(power = 0.131, soc = 25, residual = 2420.0, temperature = 13.6)
+        return when (deviceID) {
+            "f3000-deviceid" -> BatteryResponse(power = 0.28, soc = 76, residual = 7550.0, temperature = 17.3)
+            else -> BatteryResponse(power = 0.78, soc = 46, residual = 17510.0, temperature = 19.3)
+        }
     }
 
     override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {

@@ -25,15 +25,6 @@ data class BatteryViewModel(
         residual: Int = 0
     ) : this(hasBattery, chargeLevel, chargePower, temperature, residual, null)
 
-    constructor(error: Error) : this(
-        hasBattery = false,
-        chargeLevel = 0.0,
-        chargePower = 0.0,
-        temperature = 0.0,
-        residual = 0,
-        error = error
-    )
-
     companion object {
         fun noBattery(): BatteryViewModel {
             return BatteryViewModel()

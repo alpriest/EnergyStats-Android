@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
@@ -110,7 +111,6 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
                     .requiredSize(width = iconHeight, height = iconHeight)
                     .fillMaxSize()
             ) {
-
                 if (glowing) {
                     this.drawIntoCanvas {
                         it.drawCircle(
@@ -160,7 +160,8 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
         PowerFlowView(
             amount = amount,
             themeStream = themeStream,
-            position = PowerFlowLinePosition.NONE
+            position = PowerFlowLinePosition.NONE,
+            orientation = LineOrientation.VERTICAL
         )
     }
 }

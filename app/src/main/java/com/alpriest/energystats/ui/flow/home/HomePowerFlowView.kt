@@ -6,6 +6,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.settings.DisplayUnit
@@ -26,7 +27,8 @@ fun HomePowerFlowView(amount: Double, modifier: Modifier, themeStream: MutableSt
             PowerFlowView(
                 amount = amount,
                 themeStream = themeStream,
-                position = position
+                position = position,
+                orientation = LineOrientation.VERTICAL
             )
         }
     }

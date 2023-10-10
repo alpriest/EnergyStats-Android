@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,11 +36,14 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.EarningsViewModel
+import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
-import com.alpriest.energystats.ui.flow.VerticalLine
+import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
+import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
+import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -49,16 +52,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun CT2Icon(modifier: Modifier) {
+    val foregroundColor = iconForegroundColor()
+    val backgroundColor = iconBackgroundColor()
+
     Box(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(5.dp))
+            .background(backgroundColor, RoundedCornerShape(5.dp))
     ) {
         Text(
             text = "CT2",
             modifier = Modifier.align(Alignment.Center),
             fontSize = 16.sp,
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-            color = Color.White
+            color = foregroundColor
         )
     }
 }
@@ -73,7 +79,7 @@ fun LoadedPowerFlowView(
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val theme by themeStream.collectAsState()
     val ct2 = 1.0
-    val showCT2 = false
+    var showCT2 by remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,8 +94,8 @@ fun LoadedPowerFlowView(
         }
 
         Box(contentAlignment = Alignment.Center) {
-            Row {
-                if (showCT2) {
+            if (showCT2) {
+                Row {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
@@ -100,60 +106,53 @@ fun LoadedPowerFlowView(
                             modifier = Modifier.size(width = iconHeight + 4.dp, height = iconHeight + 4.dp)
                         )
 
-                        VerticalLine(
+                        PowerFlowView(
                             amount = ct2,
-                            color = Color.Red,
+                            themeStream = themeStream,
+                            position = PowerFlowLinePosition.NONE,
+                            orientation = LineOrientation.VERTICAL,
                             modifier = Modifier
                                 .padding(top = 2.dp)
-                                .weight(0.5f),
-                            powerTextColor = Color.Red,
-                            theme = theme
+                                .fillMaxHeight(0.7f)
                         )
+                    }
 
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(0.3f)
-                        ) {}
+                    Spacer(
+                        modifier = Modifier.weight(3f)
+                    )
+                }
+
+                Column(modifier = Modifier.fillMaxHeight(0.4f)) {
+                    Spacer(modifier = Modifier.fillMaxHeight(0.7f))
+
+                    Row(modifier = Modifier.fillMaxHeight(0.2f)) {
+                        Spacer(modifier = Modifier.weight(0.72f))
+
+                        Column(modifier = Modifier.weight(2.3f)) {
+                            Spacer(modifier = Modifier.height(iconHeight))
+
+                            PowerFlowView(
+                                amount = ct2,
+                                themeStream = themeStream,
+                                position = PowerFlowLinePosition.NONE,
+                                orientation = LineOrientation.HORIZONTAL,
+                                modifier = Modifier
+                                    .padding(top = 2.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.weight(3f))
                     }
                 }
-
-                SolarPowerFlow(
-                    homePowerFlowViewModel.solar,
-                    modifier = Modifier
-                        .fillMaxHeight(0.4f)
-                        .weight(1f),
-                    iconHeight = iconHeight * 1.1f,
-                    themeStream = themeStream
-                )
-
-                if (showCT2) {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxHeight(0.4f)
-                            .weight(1f)
-                    )
-                }
             }
 
-            if (showCT2) {
-                Row {
-                    Spacer(
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-
-//                    HorizontalLine(
-//                        amount = ct2,
-//                        modifier = Modifier.size(200.dp, 5.dp)
-//                    )
-
-                    Spacer(
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-                }
-            }
+            SolarPowerFlow(
+                homePowerFlowViewModel.solar,
+                modifier = Modifier
+                    .fillMaxHeight(0.4f),
+                iconHeight = iconHeight * 1.1f,
+                themeStream = themeStream
+            )
         }
 
         Box(modifier = Modifier.weight(1f)) {
@@ -162,8 +161,7 @@ fun LoadedPowerFlowView(
                     if (homePowerFlowViewModel.hasBattery) {
                         BatteryPowerFlow(
                             viewModel = model,
-                            modifier = Modifier
-                                .weight(2f),
+                            modifier = Modifier.weight(2f),
                             themeStream = themeStream
                         )
                         InverterSpacer(

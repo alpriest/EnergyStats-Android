@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.home.preview
@@ -24,7 +25,8 @@ fun GridPowerFlowView(amount: Double, modifier: Modifier = Modifier, themeStream
                 amount = amount,
                 themeStream = themeStream,
                 position = PowerFlowLinePosition.RIGHT,
-                useColouredLines = true
+                useColouredLines = true,
+                orientation = LineOrientation.VERTICAL
             )
         }
     }

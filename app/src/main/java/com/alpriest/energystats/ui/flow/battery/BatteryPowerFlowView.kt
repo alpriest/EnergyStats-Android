@@ -31,6 +31,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.home.preview
@@ -53,7 +54,8 @@ fun BatteryPowerFlow(
             themeStream = themeStream,
             position = PowerFlowLinePosition.LEFT,
             useColouredLines = true,
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier.fillMaxHeight(),
+            orientation = LineOrientation.VERTICAL
         )
     }
 }
