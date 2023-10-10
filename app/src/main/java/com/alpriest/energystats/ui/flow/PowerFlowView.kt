@@ -26,7 +26,8 @@ enum class PowerFlowLinePosition {
     LEFT,
     MIDDLE,
     RIGHT,
-    NONE
+    NONE,
+    HORIZONTAL
 }
 
 @Composable
@@ -84,12 +85,14 @@ fun PowerFlowView(
                 .fillMaxHeight()
                 .fillMaxWidth()
         ) {
-            drawLine(
-                color = verticalLineColor,
-                start = Offset(size.width / 2, 0f),
-                end = Offset(size.width / 2, size.height),
-                strokeWidth = strokeWidth
-            )
+            if (position != PowerFlowLinePosition.HORIZONTAL) {
+                drawLine(
+                    color = verticalLineColor,
+                    start = Offset(size.width / 2, 0f),
+                    end = Offset(size.width / 2, size.height),
+                    strokeWidth = strokeWidth
+                )
+            }
 
             when (position) {
                 PowerFlowLinePosition.LEFT -> {
@@ -115,6 +118,15 @@ fun PowerFlowView(
                         color = inverterColor,
                         start = Offset(size.width / 2 + (strokeWidth / 2), strokeWidth / 2),
                         end = Offset(0f, strokeWidth / 2),
+                        strokeWidth = strokeWidth
+                    )
+                }
+
+                PowerFlowLinePosition.HORIZONTAL -> {
+                    drawLine(
+                        color = verticalLineColor,
+                        start = Offset(0f, size.height * 0.7f),
+                        end = Offset(size.width, size.height * 0.7f),
                         strokeWidth = strokeWidth
                     )
                 }

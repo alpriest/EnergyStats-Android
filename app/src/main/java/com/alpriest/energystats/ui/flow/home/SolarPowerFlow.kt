@@ -1,9 +1,11 @@
 package com.alpriest.energystats.ui.flow.home
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -74,8 +76,8 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
 
         Box(
             modifier = Modifier
-                .padding(4.dp)
                 .requiredSize(width = iconHeight, height = iconHeight)
+                .background(Color.Red)
         ) {
             val paint = remember {
                 Paint().apply {
@@ -153,6 +155,8 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(4.dp))
 
         PowerFlowView(
             amount = amount,

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.flow.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,8 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,11 +23,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
@@ -31,15 +39,34 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.EarningsViewModel
+import com.alpriest.energystats.ui.flow.NewPowerFlowView.NewLine
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
+import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
+import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+
+@Composable
+fun CT2Icon(modifier: Modifier) {
+    Box(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(5.dp))
+    ) {
+        Text(
+            text = "CT2",
+            modifier = Modifier.align(Alignment.Center),
+            fontSize = 16.sp,
+            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+            color = Color.White
+        )
+    }
+}
 
 @Composable
 fun LoadedPowerFlowView(
@@ -50,6 +77,8 @@ fun LoadedPowerFlowView(
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val theme by themeStream.collectAsState()
+    val ct2 = 1.0
+    val showCT2 = true
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -63,12 +92,84 @@ fun LoadedPowerFlowView(
             EarningsView(themeStream, homePowerFlowViewModel.earnings)
         }
 
-        SolarPowerFlow(
-            homePowerFlowViewModel.solar,
-            modifier = Modifier.fillMaxHeight(0.4f),
-            iconHeight = iconHeight * 1.1f,
-            themeStream = themeStream
-        )
+        Box(contentAlignment = Alignment.Center) {
+            Row {
+                if (showCT2) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxHeight(0.4f)
+                            .weight(1f)
+                    ) {
+                        CT2Icon(
+                            modifier = Modifier.size(width = iconHeight + 4.dp, height = iconHeight + 4.dp)
+                        )
+
+                        PowerFlowView(
+                            amount = ct2,
+                            themeStream,
+                            position = PowerFlowLinePosition.NONE,
+                            modifier = Modifier
+                                .padding(top = 2.dp)
+                                .weight(0.5f)
+                        )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(0.3f)
+                        ) {}
+                    }
+                }
+
+                SolarPowerFlow(
+                    homePowerFlowViewModel.solar,
+                    modifier = Modifier
+                        .fillMaxHeight(0.4f)
+                        .weight(1f),
+                    iconHeight = iconHeight * 1.1f,
+                    themeStream = themeStream
+                )
+
+                if (showCT2) {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxHeight(0.4f)
+                            .weight(1f)
+                    )
+                }
+            }
+
+            if (showCT2) {
+                Row {
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+
+                    NewLine(
+                        amount = ct2,
+                        modifier = Modifier.size(200.dp, 5.dp)
+                    )
+//                    PowerFlowView(
+//                        amount = ct2,
+//                        themeStream,
+//                        position = PowerFlowLinePosition.NONE,
+//                        modifier = Modifier
+//                            .weight(1f)
+//                            .padding(top = 2.dp)
+//                            .background(Color.Cyan.copy(alpha = 0.2f))
+//                            .fillMaxHeight(0.4f)
+////                            .offset(x = -100.dp, y = 50.dp)
+//                    )
+
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                }
+            }
+        }
 
         Box(modifier = Modifier.weight(1f)) {
             Row {
