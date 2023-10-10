@@ -77,7 +77,6 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
         Box(
             modifier = Modifier
                 .requiredSize(width = iconHeight, height = iconHeight)
-                .background(Color.Red)
         ) {
             val paint = remember {
                 Paint().apply {

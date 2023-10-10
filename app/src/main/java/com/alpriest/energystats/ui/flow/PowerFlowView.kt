@@ -1,21 +1,13 @@
 package com.alpriest.energystats.ui.flow
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults.cardColors
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.foundation.Canvas
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.flow.home.preview
@@ -39,61 +31,26 @@ fun PowerFlowView(
     useColouredLines: Boolean = false,
 ) {
     var height by remember { mutableStateOf(0f) }
-    val phaseAnimation = rememberInfiniteTransition()
-    val offsetModifier: (Float) -> Float = {
-        if (amount > 0f) {
-            it
-        } else {
-            height - it
-        }
-    }
-    val ballYPosition by phaseAnimation.animateFloat(
-        initialValue = 0f,
-        targetValue = height,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                kotlin.math.max(
-                    400,
-                    7000 - kotlin.math.abs(amount * 1000.0).toInt()
-                ), easing = LinearEasing
-            )
-        ),
-        label = "ball y position"
-    )
     val isFlowing = !amount.rounded(2).sameValueAs(0.0)
     val theme by themeStream.collectAsState()
-    val strokeWidth: Float = theme.strokeWidth()
-    val fontSize: TextUnit = theme.fontSize()
     val inverterColor = Color.LightGray
-    val verticalLineColor = if (isFlowing && useColouredLines && theme.useColouredLines) flowingColour(amount) else {
+    val lineColor = if (isFlowing && useColouredLines && theme.useColouredLines) flowingColour(amount) else {
         Color.LightGray
     }
+    val strokeWidth = theme.strokeWidth()
 
     val powerTextColor = if (isFlowing && useColouredLines && theme.useColouredLines) textForeground(amount) else {
         PowerFlowNeutralText
     }
 
-    Box(
-        modifier = modifier
-            .onGloballyPositioned { coordinates ->
-                height = coordinates.size.height.toFloat()
-            },
-        contentAlignment = Alignment.Center
-    ) {
+    Box {
+        VerticalLine(amount = amount, color = lineColor, powerTextColor = powerTextColor, modifier = Modifier, theme = theme)
+
         Canvas(
             modifier
                 .fillMaxHeight()
                 .fillMaxWidth()
         ) {
-            if (position != PowerFlowLinePosition.HORIZONTAL) {
-                drawLine(
-                    color = verticalLineColor,
-                    start = Offset(size.width / 2, 0f),
-                    end = Offset(size.width / 2, size.height),
-                    strokeWidth = strokeWidth
-                )
-            }
-
             when (position) {
                 PowerFlowLinePosition.LEFT -> {
                     drawLine(
@@ -124,7 +81,7 @@ fun PowerFlowView(
 
                 PowerFlowLinePosition.HORIZONTAL -> {
                     drawLine(
-                        color = verticalLineColor,
+                        color = lineColor,
                         start = Offset(0f, size.height * 0.7f),
                         end = Offset(size.width, size.height * 0.7f),
                         strokeWidth = strokeWidth
@@ -135,35 +92,98 @@ fun PowerFlowView(
             }
         }
 
-        if (isFlowing) {
-            Canvas(
-                modifier = modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-            ) {
-                drawCircle(
-                    color = verticalLineColor,
-                    center = Offset(x = size.width / 2, y = offsetModifier(ballYPosition)),
-                    radius = strokeWidth * 2.0f
-                )
-            }
-
-            Card(
-                shape = RoundedCornerShape(4.dp),
-                colors = cardColors(containerColor = verticalLineColor)
-            ) {
-                Text(
-                    text = amount.energy(theme.displayUnit, theme.decimalPlaces),
-                    color = powerTextColor,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = fontSize,
-                    modifier = Modifier
-                        .padding(vertical = 1.dp)
-                        .padding(horizontal = 3.dp)
-                )
-            }
-        }
     }
+
+//        modifier = modifier
+//            .onGloballyPositioned { coordinates ->
+//                height = coordinates.size.height.toFloat()
+//            },
+//        contentAlignment = Alignment.Center
+//    ) {
+//        Canvas(
+//            modifier
+//                .fillMaxHeight()
+//                .fillMaxWidth()
+//        ) {
+//            if (position != PowerFlowLinePosition.HORIZONTAL) {
+//                drawLine(
+//                    color = verticalLineColor,
+//                    start = Offset(size.width / 2, 0f),
+//                    end = Offset(size.width / 2, size.height),
+//                    strokeWidth = strokeWidth
+//                )
+//            }
+//
+//            when (position) {
+//                PowerFlowLinePosition.LEFT -> {
+//                    drawLine(
+//                        color = inverterColor,
+//                        start = Offset(size.width / 2 - (strokeWidth / 2), strokeWidth / 2),
+//                        end = Offset(size.width, strokeWidth / 2),
+//                        strokeWidth = strokeWidth
+//                    )
+//                }
+//
+//                PowerFlowLinePosition.MIDDLE -> {
+//                    drawLine(
+//                        color = inverterColor,
+//                        start = Offset(0f, strokeWidth / 2),
+//                        end = Offset(size.width, strokeWidth / 2),
+//                        strokeWidth = strokeWidth
+//                    )
+//                }
+//
+//                PowerFlowLinePosition.RIGHT -> {
+//                    drawLine(
+//                        color = inverterColor,
+//                        start = Offset(size.width / 2 + (strokeWidth / 2), strokeWidth / 2),
+//                        end = Offset(0f, strokeWidth / 2),
+//                        strokeWidth = strokeWidth
+//                    )
+//                }
+//
+//                PowerFlowLinePosition.HORIZONTAL -> {
+//                    drawLine(
+//                        color = verticalLineColor,
+//                        start = Offset(0f, size.height * 0.7f),
+//                        end = Offset(size.width, size.height * 0.7f),
+//                        strokeWidth = strokeWidth
+//                    )
+//                }
+//
+//                PowerFlowLinePosition.NONE -> {}
+//            }
+//        }
+//
+//        if (isFlowing) {
+//            Canvas(
+//                modifier = modifier
+//                    .fillMaxHeight()
+//                    .fillMaxWidth()
+//            ) {
+//                drawCircle(
+//                    color = verticalLineColor,
+//                    center = Offset(x = size.width / 2, y = offsetModifier(ballYPosition)),
+//                    radius = strokeWidth * 2.0f
+//                )
+//            }
+//
+//            Card(
+//                shape = RoundedCornerShape(4.dp),
+//                colors = cardColors(containerColor = verticalLineColor)
+//            ) {
+//                Text(
+//                    text = amount.energy(theme.displayUnit, theme.decimalPlaces),
+//                    color = powerTextColor,
+//                    fontWeight = FontWeight.Bold,
+//                    fontSize = fontSize,
+//                    modifier = Modifier
+//                        .padding(vertical = 1.dp)
+//                        .padding(horizontal = 3.dp)
+//                )
+//            }
+//        }
+//    }
 }
 
 fun flowingColour(amount: Double): Color {

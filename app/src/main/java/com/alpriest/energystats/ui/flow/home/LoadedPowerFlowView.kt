@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -23,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -39,15 +36,13 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.EarningsViewModel
-import com.alpriest.energystats.ui.flow.NewPowerFlowView.NewLine
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
-import com.alpriest.energystats.ui.flow.PowerFlowView
+import com.alpriest.energystats.ui.flow.VerticalLine
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
-import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,7 +73,7 @@ fun LoadedPowerFlowView(
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val theme by themeStream.collectAsState()
     val ct2 = 1.0
-    val showCT2 = true
+    val showCT2 = false
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -105,13 +100,14 @@ fun LoadedPowerFlowView(
                             modifier = Modifier.size(width = iconHeight + 4.dp, height = iconHeight + 4.dp)
                         )
 
-                        PowerFlowView(
+                        VerticalLine(
                             amount = ct2,
-                            themeStream,
-                            position = PowerFlowLinePosition.NONE,
+                            color = Color.Red,
                             modifier = Modifier
                                 .padding(top = 2.dp)
-                                .weight(0.5f)
+                                .weight(0.5f),
+                            powerTextColor = Color.Red,
+                            theme = theme
                         )
 
                         Row(
@@ -147,20 +143,9 @@ fun LoadedPowerFlowView(
                             .weight(1f)
                     )
 
-                    NewLine(
-                        amount = ct2,
-                        modifier = Modifier.size(200.dp, 5.dp)
-                    )
-//                    PowerFlowView(
+//                    HorizontalLine(
 //                        amount = ct2,
-//                        themeStream,
-//                        position = PowerFlowLinePosition.NONE,
-//                        modifier = Modifier
-//                            .weight(1f)
-//                            .padding(top = 2.dp)
-//                            .background(Color.Cyan.copy(alpha = 0.2f))
-//                            .fillMaxHeight(0.4f)
-////                            .offset(x = -100.dp, y = 50.dp)
+//                        modifier = Modifier.size(200.dp, 5.dp)
 //                    )
 
                     Spacer(

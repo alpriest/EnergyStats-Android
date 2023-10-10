@@ -47,7 +47,7 @@ data class AppTheme(
 
     fun strokeWidth(): Float {
         return when (useLargeDisplay) {
-            false -> 6f
+            false -> 8f
             true -> 12f
         }
     }
