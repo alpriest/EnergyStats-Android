@@ -28,7 +28,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.home.SolarPowerFlow
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -138,8 +137,6 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     SolarPowerFlow(
                         amount = amount.value.toDouble(),
-                        todaysGeneration = 1.0,
-                        earnings = EarningsViewModel.preview(),
                         modifier = Modifier
                             .width(100.dp)
                             .height(100.dp),

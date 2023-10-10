@@ -19,13 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
@@ -45,15 +49,22 @@ fun LoadedPowerFlowView(
     themeStream: MutableStateFlow<AppTheme>,
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
+    val theme by themeStream.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
     ) {
+        if (theme.showTotalYield) {
+            Text(text = stringResource(id = R.string.yieldToday, homePowerFlowViewModel.todaysGeneration.power(theme.displayUnit, theme.decimalPlaces)))
+        }
+
+        if (theme.showFinancialSummary) {
+            EarningsView(themeStream, homePowerFlowViewModel.earnings)
+        }
+
         SolarPowerFlow(
             homePowerFlowViewModel.solar,
-            homePowerFlowViewModel.todaysGeneration,
-            homePowerFlowViewModel.earnings,
             modifier = Modifier.fillMaxHeight(0.4f),
             iconHeight = iconHeight * 1.1f,
             themeStream = themeStream

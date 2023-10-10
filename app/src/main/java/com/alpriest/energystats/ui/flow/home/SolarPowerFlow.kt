@@ -11,12 +11,10 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Slider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,14 +28,9 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.R
-import com.alpriest.energystats.models.power
-import com.alpriest.energystats.ui.flow.EarningsView
-import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
@@ -47,7 +40,7 @@ import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: EarningsViewModel, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
+fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -77,14 +70,6 @@ fun SolarPowerFlow(amount: Double, todaysGeneration: Double, earnings: EarningsV
             glowing = false
             sunColor = iconBackgroundColor()
             glowColor = Color.Transparent
-        }
-
-        if (theme.showTotalYield) {
-            Text(text = stringResource(id = R.string.yieldToday, todaysGeneration.power(theme.displayUnit, theme.decimalPlaces)))
-        }
-
-        if (theme.showFinancialSummary) {
-            EarningsView(themeStream, earnings)
         }
 
         Box(
@@ -186,8 +171,6 @@ fun SolarPowerFlowViewPreview() {
         Column {
             SolarPowerFlow(
                 amount = amount.value.toDouble(),
-                todaysGeneration = 1.0,
-                earnings = EarningsViewModel.preview(),
                 modifier = Modifier
                     .width(100.dp)
                     .height(100.dp),
@@ -208,8 +191,6 @@ fun SolarPowerFlowViewPreview() {
             ) {
                 SolarPowerFlow(
                     amount = 0.0,
-                    todaysGeneration = 1.0,
-                    earnings = EarningsViewModel.preview(),
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
                     themeStream = MutableStateFlow(AppTheme.preview())
@@ -217,8 +198,6 @@ fun SolarPowerFlowViewPreview() {
 
                 SolarPowerFlow(
                     amount = 0.5,
-                    todaysGeneration = 1.0,
-                    earnings = EarningsViewModel.preview(),
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
                     themeStream = MutableStateFlow(AppTheme.preview())
@@ -226,8 +205,6 @@ fun SolarPowerFlowViewPreview() {
 
                 SolarPowerFlow(
                     amount = 1.5,
-                    todaysGeneration = 1.0,
-                    earnings = EarningsViewModel.preview(),
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
                     themeStream = MutableStateFlow(AppTheme.preview())
@@ -235,8 +212,6 @@ fun SolarPowerFlowViewPreview() {
 
                 SolarPowerFlow(
                     amount = 2.5,
-                    todaysGeneration = 1.0,
-                    earnings = EarningsViewModel.preview(),
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
                     themeStream = MutableStateFlow(AppTheme.preview())
@@ -244,8 +219,6 @@ fun SolarPowerFlowViewPreview() {
 
                 SolarPowerFlow(
                     amount = 3.5,
-                    todaysGeneration = 1.0,
-                    earnings = EarningsViewModel.preview(),
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
                     themeStream = MutableStateFlow(AppTheme.preview())
