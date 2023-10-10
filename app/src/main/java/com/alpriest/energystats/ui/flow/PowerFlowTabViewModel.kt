@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
@@ -175,7 +174,7 @@ class PowerFlowTabViewModel(
                     ReportType.month
                 )
 
-                val currentViewModel = CurrentStatusViewModel(currentDevice, raws, configManager.shouldInvertCT2)
+                val currentViewModel = CurrentStatusCalculator(currentDevice, raws, configManager.shouldInvertCT2)
                 val totals = TotalsViewModel(report)
 
                 val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
@@ -215,7 +214,7 @@ class PowerFlowTabViewModel(
         return configManager.variables.firstOrNull { it.variable.lowercase() == variableName.lowercase() }
     }
 
-    private fun calculateTicks(summary: CurrentStatusViewModel) {
+    private fun calculateTicks(summary: CurrentStatusCalculator) {
         val diff = kotlin.math.abs(Duration.between(LocalDateTime.now(), summary.lastUpdate).seconds)
 
         totalSeconds = when (configManager.refreshFrequency) {

@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
 
-class CurrentStatusViewModel(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean) {
+class CurrentStatusCalculator(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean) {
     val currentSolarPower: Double = calculateSolarPower(device, raws, shouldInvertCT2)
     val currentHomeConsumption: Double = raws.currentValue("loadsPower")
     val currentGrid: Double = raws.currentValue("feedInPower") - raws.currentValue("gridConsumptionPower")
@@ -32,11 +32,12 @@ class CurrentStatusViewModel(device: Device, raws: List<RawResponse>, shouldInve
 
     private fun calculateSolarPower(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean): Double {
         val ACtoDCconversion = 0.92
+        val ct2 = (if (shouldInvertCT2) 0 - raws.currentValue("meterPower2") else raws.currentValue("meterPower2")) / ACtoDCconversion
 
         return if (device.hasPV) {
-            raws.currentValue("pvPower") + (if (shouldInvertCT2) 0 - raws.currentValue("meterPower2") else raws.currentValue("meterPower2")) / ACtoDCconversion
+            raws.currentValue("pvPower") + ct2
         } else {
-            raws.currentValue("meterPower2") / ACtoDCconversion
+            ct2
         }
     }
 }
