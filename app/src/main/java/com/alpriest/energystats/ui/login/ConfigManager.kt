@@ -39,9 +39,17 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow,
             showLastUpdateTimestamp = config.showLastUpdateTimestamp,
             solarRangeDefinitions = config.solarRangeDefinitions,
-            financialModel = FinancialModel.fromInt(config.financialModel)
+            financialModel = FinancialModel.fromInt(config.financialModel),
+            shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower
         )
     )
+
+    override var shouldCombineCT2WithPVPower: Boolean
+        get() = config.shouldCombineCT2WithPVPower
+        set(value) {
+            config.shouldCombineCT2WithPVPower = value
+            themeStream.value = themeStream.value.copy(shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower)
+        }
 
     override var currencyCode: String
         get() = config.currencyCode

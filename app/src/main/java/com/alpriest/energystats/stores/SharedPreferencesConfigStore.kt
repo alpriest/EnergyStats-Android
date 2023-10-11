@@ -43,8 +43,17 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         CURRENCY_SYMBOL,
         CURRENCY_CODE,
         FEED_IN_UNIT_PRICE,
-        GRID_IMPORT_UNIT_PRICE
+        GRID_IMPORT_UNIT_PRICE,
+        SHOULD_COMBINE_CT2_WITH_PVPOWER
     }
+
+    override var shouldCombineCT2WithPVPower: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, value)
+            editor.apply()
+        }
 
     override var gridImportUnitPrice: Double
         get() = (sharedPreferences.getString(SharedPreferenceKey.GRID_IMPORT_UNIT_PRICE.name, "0.15") ?: "0.15").toDouble()

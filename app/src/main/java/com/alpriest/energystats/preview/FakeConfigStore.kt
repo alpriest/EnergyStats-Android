@@ -6,6 +6,7 @@ import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 class FakeConfigStore(
+    override var shouldCombineCT2WithPVPower: Boolean = false,
     override var currencyCode: String = "GBP",
     override var feedInUnitPrice: Double = 0.05,
     override var gridImportUnitPrice: Double = 0.15,

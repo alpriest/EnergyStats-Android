@@ -29,7 +29,8 @@ data class AppTheme(
     val showInverterTypeNameOnPowerflow: Boolean,
     val showInverterPlantNameOnPowerflow: Boolean,
     val showLastUpdateTimestamp: Boolean,
-    val solarRangeDefinitions: SolarRangeDefinitions
+    val solarRangeDefinitions: SolarRangeDefinitions,
+    val shouldCombineCT2WithPVPower: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

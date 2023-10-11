@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.flow.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,7 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
@@ -42,32 +39,11 @@ import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
-import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
-import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-
-@Composable
-fun CT2Icon(modifier: Modifier) {
-    val foregroundColor = iconForegroundColor()
-    val backgroundColor = iconBackgroundColor()
-
-    Box(
-        modifier = modifier
-            .background(backgroundColor, RoundedCornerShape(5.dp))
-    ) {
-        Text(
-            text = "CT2",
-            modifier = Modifier.align(Alignment.Center),
-            fontSize = 16.sp,
-            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-            color = foregroundColor
-        )
-    }
-}
 
 @Composable
 fun LoadedPowerFlowView(
@@ -78,8 +54,6 @@ fun LoadedPowerFlowView(
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val theme by themeStream.collectAsState()
-    val ct2 = 1.0
-    var showCT2 by remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,7 +68,7 @@ fun LoadedPowerFlowView(
         }
 
         Box(contentAlignment = Alignment.Center) {
-            if (showCT2) {
+            if (!theme.shouldCombineCT2WithPVPower) {
                 Row {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -107,7 +81,7 @@ fun LoadedPowerFlowView(
                         )
 
                         PowerFlowView(
-                            amount = ct2,
+                            amount = homePowerFlowViewModel.ct2,
                             themeStream = themeStream,
                             position = PowerFlowLinePosition.NONE,
                             orientation = LineOrientation.VERTICAL,
@@ -132,7 +106,7 @@ fun LoadedPowerFlowView(
                             Spacer(modifier = Modifier.height(iconHeight))
 
                             PowerFlowView(
-                                amount = ct2,
+                                amount = homePowerFlowViewModel.ct2,
                                 themeStream = themeStream,
                                 position = PowerFlowLinePosition.NONE,
                                 orientation = LineOrientation.HORIZONTAL,
@@ -295,7 +269,8 @@ fun SummaryPowerFlowViewPreview() {
                 FakeConfigManager(),
                 gridImportTotal = 1.0,
                 gridExportTotal = 2.0,
-                homeTotal = 1.0
+                homeTotal = 1.0,
+                ct2 = 0.4,
             ),
             themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true)),
         )

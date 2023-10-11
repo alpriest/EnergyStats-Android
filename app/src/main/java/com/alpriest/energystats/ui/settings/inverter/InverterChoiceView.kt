@@ -76,12 +76,11 @@ fun InverterChoiceView(
                     }
                 }
             }
-
         }
     }
 }
 
-private val Device.deviceDisplayName: String
+val Device.deviceDisplayName: String
     get() {
         return deviceType?.let {
             "$it ($plantName)"

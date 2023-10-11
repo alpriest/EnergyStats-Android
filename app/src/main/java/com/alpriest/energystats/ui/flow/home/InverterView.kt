@@ -2,7 +2,9 @@ package com.alpriest.energystats.ui.flow.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,21 +12,36 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.battery.asTemperature
 import com.alpriest.energystats.ui.flow.inverter.InverterIconView
+import com.alpriest.energystats.ui.helpers.OptionalView
+import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -32,15 +49,24 @@ class InverterViewModel(
     private val configManager: ConfigManaging,
     val temperatures: InverterTemperaturesViewModel?
 ) {
-    val deviceType: String
-        get() {
-            return configManager.currentDevice.value?.deviceType ?: ""
-        }
+    val deviceType: String?
+        get() = configManager.currentDevice.value?.deviceType
 
     val devicePlantName: String?
-        get() {
-            return configManager.currentDevice.value?.plantName
-        }
+        get() = configManager.currentDevice.value?.plantName
+
+    val deviceDisplayName: String
+        get() = configManager.currentDevice.value?.deviceDisplayName ?: "Re-login to update"
+    
+    val devices: List<Device>
+        get() = configManager.devices ?: listOf()
+
+    val hasMultipleDevices: Boolean
+        get() = (configManager.devices?.count() ?: 0) > 1
+
+    fun select(device: Device) {
+        configManager.select(device)
+    }
 }
 
 @Composable
@@ -100,24 +126,57 @@ fun InverterView(
 }
 
 @Composable
-private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
+private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, viewModel: InverterViewModel) {
     val appTheme = themeStream.collectAsState().value
+    var expanded by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.background(colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (appTheme.showInverterTypeNameOnPowerflow) {
-            Text(
-                text = inverterTemperaturesViewModel.deviceType
-            )
-        }
+        if (viewModel.hasMultipleDevices) {
+            Box(contentAlignment = Alignment.TopEnd) {
+                Button(
+                    onClick = { expanded = !expanded },
+                    colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.White, contentColor = colors.onSecondary),
+                    contentPadding = PaddingValues(2.dp),
+                    elevation = ButtonDefaults.elevation(1.dp)
+                ) {
+                    Text(
+                        viewModel.deviceDisplayName,
+                        fontSize = 12.sp,
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = null,
+                    )
+                }
 
-        if (appTheme.showInverterPlantNameOnPowerflow) {
-            inverterTemperaturesViewModel.devicePlantName?.let {
-                Text(
-                    text = it
-                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    viewModel.devices.forEach { device ->
+                        DropdownMenuItem(onClick = {
+                            expanded = false
+                            viewModel.select(device)
+                        }) {
+                            Text(text = device.deviceDisplayName)
+                        }
+                    }
+                }
+            }
+        } else {
+            if (appTheme.showInverterTypeNameOnPowerflow) {
+                OptionalView(viewModel.deviceType) {
+                    Text(it)
+                }
+            }
+
+            if (appTheme.showInverterPlantNameOnPowerflow) {
+                OptionalView(viewModel.devicePlantName) {
+                    Text(it)
+                }
             }
         }
     }
@@ -128,16 +187,18 @@ private fun inverterLandscapeTitles(themeStream: MutableStateFlow<AppTheme>, inv
     val appTheme = themeStream.collectAsState().value
 
     if (appTheme.showInverterTypeNameOnPowerflow) {
-        Text(
-            modifier = Modifier
-                .background(MaterialTheme.colors.background)
-                .padding(4.dp),
-            text = inverterTemperaturesViewModel.deviceType
-        )
+        OptionalView(inverterTemperaturesViewModel.deviceType) {
+            Text(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.background)
+                    .padding(4.dp),
+                text = it
+            )
+        }
     }
 
     if (appTheme.showInverterPlantNameOnPowerflow) {
-        inverterTemperaturesViewModel.devicePlantName?.let {
+        OptionalView(inverterTemperaturesViewModel.devicePlantName) {
             Text(
                 modifier = Modifier
                     .background(MaterialTheme.colors.background)

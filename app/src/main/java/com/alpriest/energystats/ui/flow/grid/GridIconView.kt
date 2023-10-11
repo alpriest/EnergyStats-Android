@@ -112,7 +112,8 @@ fun GridIconViewPreview() {
         FakeConfigManager(),
         homeTotal = 1.0,
         gridImportTotal = 1.0,
-        gridExportTotal = 2.0
+        gridExportTotal = 2.0,
+        ct2 = 0.4
     )
 
     EnergyStatsTheme {

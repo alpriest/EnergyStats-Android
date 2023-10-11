@@ -174,7 +174,7 @@ class PowerFlowTabViewModel(
                     ReportType.month
                 )
 
-                val currentViewModel = CurrentStatusCalculator(currentDevice, raws, configManager.shouldInvertCT2)
+                val currentViewModel = CurrentStatusCalculator(currentDevice, raws, configManager.shouldInvertCT2, configManager.shouldCombineCT2WithPVPower)
                 val totals = TotalsViewModel(report)
 
                 val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
@@ -196,7 +196,8 @@ class PowerFlowTabViewModel(
                     configManager = configManager,
                     homeTotal = totals.loads,
                     gridImportTotal = totals.grid,
-                    gridExportTotal = totals.feedIn
+                    gridExportTotal = totals.feedIn,
+                    ct2 = currentViewModel.currentCT2
                 )
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

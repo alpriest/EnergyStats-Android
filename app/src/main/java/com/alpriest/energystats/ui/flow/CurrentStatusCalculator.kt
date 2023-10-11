@@ -11,8 +11,10 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
 
-class CurrentStatusCalculator(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean) {
-    val currentSolarPower: Double = calculateSolarPower(device, raws, shouldInvertCT2)
+class CurrentStatusCalculator(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean, shouldCombineCT2WithPVPower: Boolean) {
+    private val ACtoDCconversion = 0.92
+    val currentCT2: Double = (if (shouldInvertCT2) 0 - raws.currentValue("meterPower2") else raws.currentValue("meterPower2")) / ACtoDCconversion
+    val currentSolarPower: Double = calculateSolarPower(device, raws, shouldCombineCT2WithPVPower)
     val currentHomeConsumption: Double = raws.currentValue("loadsPower")
     val currentGrid: Double = raws.currentValue("feedInPower") - raws.currentValue("gridConsumptionPower")
     val lastUpdate: LocalDateTime = raws.currentData("gridConsumptionPower")?.time?.let {
@@ -22,7 +24,7 @@ class CurrentStatusCalculator(device: Device, raws: List<RawResponse>, shouldInv
 
     private fun makeInverterViewModel(device: Device, raw: List<RawResponse>): InverterTemperaturesViewModel? {
         return if (raw.find { it.variable == "ambientTemperation" } != null &&
-            raw.find { it.variable == "invTemperation"} != null) {
+            raw.find { it.variable == "invTemperation" } != null) {
             val temperatures = InverterTemperatures(raw.currentValue("ambientTemperation"), raw.currentValue("invTemperation"))
             InverterTemperaturesViewModel(temperatures, name = device.deviceType ?: "", plantName = device.plantName)
         } else {
@@ -30,14 +32,11 @@ class CurrentStatusCalculator(device: Device, raws: List<RawResponse>, shouldInv
         }
     }
 
-    private fun calculateSolarPower(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean): Double {
-        val ACtoDCconversion = 0.92
-        val ct2 = (if (shouldInvertCT2) 0 - raws.currentValue("meterPower2") else raws.currentValue("meterPower2")) / ACtoDCconversion
-
+    private fun calculateSolarPower(device: Device, raws: List<RawResponse>, shouldCombineCT2WithPVPower: Boolean): Double {
         return if (device.hasPV) {
-            raws.currentValue("pvPower") + ct2
+            raws.currentValue("pvPower") + (if (shouldCombineCT2WithPVPower) currentCT2 else 0.0)
         } else {
-            ct2
+            currentCT2
         }
     }
 }

@@ -5,6 +5,7 @@ import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var shouldCombineCT2WithPVPower: Boolean
     var currencyCode: String
     var gridImportUnitPrice: Double
     var feedInUnitPrice: Double

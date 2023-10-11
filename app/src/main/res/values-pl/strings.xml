@@ -169,7 +169,7 @@
     <string name="show_inverter_temperatures">Pokaż temperatury falownika</string>
     <string name="show_inverter_icon">Pokaż ikonę falownika</string>
     <string name="invert_ct2_values_when_detected">Odwróć wartości CT2 po wykryciu</string>
-    <string name="advanced">Zaawansowane</string>
+    <string name="ct2_settings">Ustawienia CT2</string>
     <string name="total_import">Import całkowity</string>
     <string name="total_export">Eksport całkowity</string>
     <string name="show_daily_grid_totals">Pokaż codzienne sumy z sieci</string>

@@ -69,7 +69,8 @@ fun AppTheme.Companion.preview(
     showInverterPlantNameOnPowerflow: Boolean = false,
     showLastUpdateTimestamp: Boolean = false,
     solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,
-    financialModel: FinancialModel = FinancialModel.FoxESS
+    financialModel: FinancialModel = FinancialModel.FoxESS,
+    shouldCombineCT2WithPVPower: Boolean = true
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -92,6 +93,7 @@ fun AppTheme.Companion.preview(
         showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow,
         showLastUpdateTimestamp = showLastUpdateTimestamp,
         solarRangeDefinitions = solarRangeDefinitions,
-        financialModel = financialModel
+        financialModel = financialModel,
+        shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower
     )
 }

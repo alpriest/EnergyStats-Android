@@ -17,6 +17,7 @@ interface ConfigManaging {
     suspend fun refreshFirmwareVersions()
     fun select(device: Device)
 
+    var shouldCombineCT2WithPVPower: Boolean
     var currencyCode: String
     var gridImportUnitPrice: Double
     var feedInUnitPrice: Double
