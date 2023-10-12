@@ -216,4 +216,6 @@
     <string name="energy_stats_earnings_calculation_description">Pokazuje szacunki finansowe tylko na stronie przepływu, a także dla wybranego okresu czasu na stronie statystyk.</string>
     <string name="foxess_earnings_calculation_description">Ta cena jednostkowa jest zarządzana w chmurze FoxESS.</string>
     <string name="show_financial_summary">Pokaż podsumowanie finansowe</string>
+    <string name="hide_graph">Ukryj wykres</string>
+    <string name="show_graph">Pokaż wykres</string>
 </resources>

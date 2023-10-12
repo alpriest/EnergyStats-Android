@@ -57,6 +57,7 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
     val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val graphShowing = viewModel.showingGraphStream.collectAsState().value
 
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true
@@ -74,9 +75,11 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
                 .padding(12.dp)
                 .verticalScroll(scrollState)
         ) {
-            StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), modifier = Modifier.padding(bottom = 24.dp))
+            StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), viewModel.showingGraphStream, modifier = Modifier.padding(bottom = 24.dp))
 
-            StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+            if (graphShowing) {
+                StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+            }
 
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
 
@@ -89,7 +92,9 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
                 fontSize = 12.sp,
                 color = DimmedTextColor,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 44.dp, bottom = 22.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(top = 44.dp, bottom = 22.dp)
+                    .fillMaxWidth()
             )
 
             Column(

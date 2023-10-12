@@ -156,7 +156,7 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
             ) {
             Text(
                 title,
-                color = MaterialTheme.colors.onPrimary
+                color = colors.onPrimary
             )
 
             disclosureIcon?.let {
@@ -236,7 +236,7 @@ fun SettingsTabView(
 @Preview(showBackground = true, heightDp = 1200, widthDp = 300)
 @Composable
 fun SettingsViewPreview() {
-    EnergyStatsTheme(darkTheme = true) {
+    EnergyStatsTheme(darkTheme = false) {
         SettingsTabView(
             navController = NavHostController(LocalContext.current),
             config = FakeConfigManager(),

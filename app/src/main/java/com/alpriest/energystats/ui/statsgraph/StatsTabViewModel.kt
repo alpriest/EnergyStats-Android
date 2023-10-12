@@ -41,6 +41,7 @@ class StatsTabViewModel(
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileUri: Uri? = null
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
+    var showingGraphStream = MutableStateFlow(true)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },

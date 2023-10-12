@@ -215,4 +215,6 @@
     <string name="energy_stats_earnings_calculation_description">Muestra estimaciones financieras solo para hoy en la página de flujo, y para el período de tiempo seleccionado en la página de estadísticas.</string>
     <string name="foxess_earnings_calculation_description">Este precio unitario se gestiona en la nube de FoxESS.</string>
     <string name="show_financial_summary">Mostrar resumen financiero</string>
+    <string name="hide_graph">Ocultar gráfico</string>
+    <string name="show_graph">Mostrar gráfico</string>
 </resources>

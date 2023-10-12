@@ -215,4 +215,6 @@
     <string name="energy_stats_earnings_calculation_description">Zeigt Finanzschätzungen nur für heute auf der Leistungsfluss-Seite und für den ausgewählten Zeitraum auf der Statistik-Seite.</string>
     <string name="foxess_earnings_calculation_description">Dieser Einheitspreis wird in der FoxESS Cloud verwaltet.</string>
     <string name="show_financial_summary">Finanzielle Zusammenfassung anzeigen</string>
+    <string name="hide_graph">Diagramm ausblenden</string>
+    <string name="show_graph">Diagramm anzeigen</string>
 </resources>

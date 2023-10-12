@@ -217,4 +217,6 @@
     <string name="energy_stats_earnings_calculation_description">Shows financial estimates for today only on the flow page, and for the selected time period on the stats page.</string>
     <string name="foxess_earnings_calculation_description">This unit price is managed on the FoxESS cloud.\\n\\nShows earnings today, this month, this year, and all -time based on a calculation of feed - in kWh * unit price.</string>
     <string name="show_financial_summary">Show financial summary</string>
+    <string name="hide_graph">Hide graph</string>
+    <string name="show_graph">Show graph</string>
 </resources>

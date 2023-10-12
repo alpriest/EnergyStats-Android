@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.R
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,11 +33,11 @@ enum class DatePickerRange {
 }
 
 @Composable
-fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, modifier: Modifier = Modifier) {
+fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: MutableStateFlow<Boolean>, modifier: Modifier = Modifier) {
     val range = viewModel.rangeStream.collectAsState().value
 
     Row(modifier = modifier) {
-        DateRangePicker(viewModel, range)
+        DateRangePicker(viewModel, range, graphShowingState)
 
         when (range) {
             DatePickerRange.DAY -> CalendarView(viewModel.dateStream)
@@ -155,9 +156,11 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
 @Composable
 private fun DateRangePicker(
     viewModel: StatsDatePickerViewModel,
-    range: DatePickerRange
+    range: DatePickerRange,
+    graphShowingState: MutableStateFlow<Boolean>
 ) {
     var showing by remember { mutableStateOf(false) }
+    val graphShowing = graphShowingState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -216,6 +219,19 @@ private fun DateRangePicker(
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }
             }
+
+            Divider(thickness = 4.dp)
+
+            DropdownMenuItem(onClick = {
+                graphShowingState.value = !graphShowing.value
+                showing = false
+            }) {
+                Text(if (graphShowing.value) stringResource(R.string.hide_graph) else stringResource(R.string.show_graph))
+                Spacer(modifier = Modifier
+                    .weight(1f)
+                    .widthIn(min = 50.dp))
+                Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
+            }
         }
     }
 }
@@ -227,7 +243,9 @@ fun CalendarView(dateStream: MutableStateFlow<LocalDate>) {
     val dateState = dateStream.collectAsState().value
     val millis = localDateToMillis(dateState)
 
-    Box(modifier = Modifier.wrapContentSize(Alignment.BottomCenter).padding(end = 14.dp)) {
+    Box(modifier = Modifier
+        .wrapContentSize(Alignment.BottomCenter)
+        .padding(end = 14.dp)) {
         Button(
             onClick = { showingDatePicker = true }
         ) {
@@ -276,5 +294,6 @@ fun millisToLocalDate(millis: Long): LocalDate {
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerView(viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))))
+    StatsDatePickerView(viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))),
+        graphShowingState = MutableStateFlow(false))
 }
