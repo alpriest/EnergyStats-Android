@@ -70,7 +70,7 @@ fun NavigableParametersGraphTabView(
     themeStream: MutableStateFlow<AppTheme>,
 ) {
     val navController = rememberNavController()
-    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(listOf())
+    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>> = remember { MutableStateFlow(listOf()) }
 
     NavHost(
         navController = navController,
