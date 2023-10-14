@@ -2,8 +2,10 @@ package com.alpriest.energystats.widget
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -27,7 +29,7 @@ import androidx.glance.layout.fillMaxWidth
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
+import com.alpriest.energystats.ui.theme.*
 
 class BatteryWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = BatteryWidget(0.4f)
@@ -48,10 +50,17 @@ fun BatteryWidgetContent(amount: Float) {
             modifier = GlanceModifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Image(
-                provider = ImageProvider(bitmap = gauge(0.4f).asAndroidBitmap()),
-                contentDescription = null
-            )
+            Box(contentAlignment = Alignment.BottomCenter) {
+                Image(
+                    provider = ImageProvider(bitmap = gauge(amount).asAndroidBitmap()),
+                    contentDescription = null
+                )
+
+                Image(
+                    provider = ImageProvider(bitmap = drawBattery().asAndroidBitmap()),
+                    contentDescription = null
+                )
+            }
 
             Text(
                 formatAsPercentage(amount),
@@ -90,7 +99,11 @@ fun gauge(percentage: Float): ImageBitmap {
     progressPaint.style = PaintingStyle.Stroke
     progressPaint.strokeCap = StrokeCap.Round
     progressPaint.strokeWidth = strokeWidth
-    progressPaint.color = Color.White
+    progressPaint.color = when (percentage) {
+        in 0f..0.4f -> Red
+        in 0.4f..0.7f -> Sunny
+        else -> Green
+    }
 
     val rect = Rect(
         Offset(strokeWidth / 2.0f, strokeWidth / 2.0f),
@@ -126,6 +139,91 @@ fun gauge(percentage: Float): ImageBitmap {
 
     return bitmap
 }
+
+fun drawBattery(): ImageBitmap {
+    val height = 40f
+    val size = Size(height * 1.25f, height)
+    val boxTop = (size.height * 0.11f)
+    val terminalInset = size.width * 0.2f
+    val terminalWidth = size.width * 0.2f
+    val barHeight = 4f
+    val halfBarHeight = barHeight / 2f
+
+    val blackPaint = Paint()
+    blackPaint.color = Color.Black
+    val whitePaint = Paint()
+    whitePaint.color = Color.White
+    val bitmap = ImageBitmap(size.width.toInt(), size.height.toInt())
+    val canvas = Canvas(bitmap)
+
+    fun drawRoundRect(paint: Paint, topLeft: Offset, size: Size, cornerRadius: CornerRadius) {
+        canvas.drawRoundRect(
+            left = topLeft.x,
+            top = topLeft.y,
+            bottom = topLeft.y + size.height,
+            paint = paint,
+            radiusX = cornerRadius.x,
+            radiusY = cornerRadius.y,
+            right = topLeft.x + size.width
+        )
+    }
+
+    // Battery
+    val batterySize = Size(size.width, size.height - boxTop)
+    drawRoundRect(
+        paint = blackPaint,
+        topLeft = Offset(x = 0f, y = boxTop),
+        size = batterySize,
+        cornerRadius = CornerRadius(x = 5f, y = 5f)
+    )
+
+    // Negative terminal
+    drawRoundRect(
+        paint = blackPaint,
+        topLeft = Offset(x = terminalInset, y = 0f),
+        size = Size(terminalWidth, boxTop + barHeight),
+        cornerRadius = CornerRadius(x = 3f, y = 3f)
+    )
+
+    // Positive terminal
+    drawRoundRect(
+        paint = blackPaint,
+        topLeft = Offset(x = size.width - 2 * terminalInset, y = 0f),
+        size = Size(terminalWidth, boxTop + barHeight),
+        cornerRadius = CornerRadius(x = 3f, y = 3f)
+    )
+
+    // Minus
+    drawRoundRect(
+        paint = whitePaint,
+        topLeft = Offset(x = terminalInset, y = boxTop + batterySize.height / 2.0f),
+        size = Size(terminalWidth, barHeight),
+        cornerRadius = CornerRadius(2f, 2f)
+    )
+
+    // Plus
+    drawRoundRect(
+        paint = whitePaint,
+        topLeft = Offset(
+            x = size.width - 2 * terminalInset,
+            y = boxTop + batterySize.height / 2.0f
+        ),
+        size = Size(terminalWidth, barHeight),
+        cornerRadius = CornerRadius(2f, 2f)
+    )
+    drawRoundRect(
+        paint = whitePaint,
+        topLeft = Offset(
+            x = size.width - 2 * terminalInset + (terminalInset / 2f) - halfBarHeight,
+            y = boxTop + batterySize.height / 2.0f - (terminalInset / 2f) + halfBarHeight
+        ),
+        size = Size(barHeight, terminalWidth),
+        cornerRadius = CornerRadius(2f, 2f)
+    )
+
+    return bitmap
+}
+
 
 //
 //@Composable
