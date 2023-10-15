@@ -211,14 +211,6 @@ class ParametersGraphTabViewModel(
         refresh()
     }
 
-    fun setGraphVariables(graphVariables: List<ParameterGraphVariable>) {
-        graphVariablesStream.value = graphVariables
-
-        viewModelScope.launch {
-            load()
-        }
-    }
-
     private fun selectedGraphVariables(): List<String> {
         if (configManager.selectedParameterGraphVariables.isEmpty()) {
             return ParameterGraphVariableChooserViewModel.DefaultGraphVariables

@@ -56,4 +56,5 @@ interface ConfigManaging {
     var showInverterIcon: Boolean
     var showHomeTotal: Boolean
     var showGridTotals: Boolean
+    var showGraphValueDescriptions: Boolean
 }

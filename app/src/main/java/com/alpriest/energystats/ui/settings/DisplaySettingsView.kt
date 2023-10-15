@@ -36,6 +36,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
     val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
+    val showGraphValueDescriptionsState = rememberSaveable { mutableStateOf(config.showGraphValueDescriptions) }
     val context = LocalContext.current
 
     SettingsColumnWithChild(
@@ -131,6 +132,12 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             title = stringResource(R.string.show_last_update_timestamp),
             state = showLastUpdateTimestampState,
             onUpdate = { config.showLastUpdateTimestamp = it }
+        )
+
+        SettingsCheckbox(
+            title = "Show graph value descriptions",
+            state = showGraphValueDescriptionsState,
+            onUpdate = { config.showGraphValueDescriptions = it }
         )
 
         SettingsNavButton(stringResource(R.string.approximations)) { navController.navigate(SettingsScreen.Approximations.name) }

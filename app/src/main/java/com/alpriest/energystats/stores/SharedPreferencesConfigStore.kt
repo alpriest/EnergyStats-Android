@@ -44,8 +44,17 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         CURRENCY_CODE,
         FEED_IN_UNIT_PRICE,
         GRID_IMPORT_UNIT_PRICE,
-        SHOULD_COMBINE_CT2_WITH_PVPOWER
+        SHOULD_COMBINE_CT2_WITH_PVPOWER,
+        SHOW_GRAPH_VALUE_DESCRIPTIONS
     }
+
+    override var showGraphValueDescriptions: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_GRAPH_VALUE_DESCRIPTIONS.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_GRAPH_VALUE_DESCRIPTIONS.name, value)
+            editor.apply()
+        }
 
     override var shouldCombineCT2WithPVPower: Boolean
         get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, true)

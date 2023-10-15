@@ -40,9 +40,17 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             showLastUpdateTimestamp = config.showLastUpdateTimestamp,
             solarRangeDefinitions = config.solarRangeDefinitions,
             financialModel = FinancialModel.fromInt(config.financialModel),
-            shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower
+            shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
+            showGraphValueDescriptions = config.showGraphValueDescriptions
         )
     )
+
+    override var showGraphValueDescriptions: Boolean
+        get() = config.showGraphValueDescriptions
+        set(value) {
+            config.showGraphValueDescriptions = value
+            themeStream.value = themeStream.value.copy(showGraphValueDescriptions = showGraphValueDescriptions)
+        }
 
     override var shouldCombineCT2WithPVPower: Boolean
         get() = config.shouldCombineCT2WithPVPower

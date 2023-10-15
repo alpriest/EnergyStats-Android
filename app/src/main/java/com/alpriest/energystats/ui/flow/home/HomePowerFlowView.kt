@@ -70,7 +70,8 @@ fun AppTheme.Companion.preview(
     showLastUpdateTimestamp: Boolean = false,
     solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,
     financialModel: FinancialModel = FinancialModel.FoxESS,
-    shouldCombineCT2WithPVPower: Boolean = true
+    shouldCombineCT2WithPVPower: Boolean = true,
+    showGraphValueDescriptions: Boolean = true
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -94,6 +95,7 @@ fun AppTheme.Companion.preview(
         showLastUpdateTimestamp = showLastUpdateTimestamp,
         solarRangeDefinitions = solarRangeDefinitions,
         financialModel = financialModel,
-        shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower
+        shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower,
+        showGraphValueDescriptions = showGraphValueDescriptions
     )
 }

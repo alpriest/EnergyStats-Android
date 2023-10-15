@@ -80,11 +80,13 @@ fun <T : GraphVariable> ToggleRowView(
                         fontSize = fontSize
                     )
 
-                    Text(
-                        description,
-                        color = DimmedTextColor,
-                        fontSize = appTheme.smallFontSize()
-                    )
+                    if (appTheme.showGraphValueDescriptions) {
+                        Text(
+                            description,
+                            color = DimmedTextColor,
+                            fontSize = appTheme.smallFontSize()
+                        )
+                    }
                 }
 
                 value?.let {
