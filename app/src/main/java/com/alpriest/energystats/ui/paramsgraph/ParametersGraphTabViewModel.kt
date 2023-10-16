@@ -46,27 +46,6 @@ class ParametersGraphTabViewModel(
 
     init {
         viewModelScope.launch {
-            configManager.currentDevice
-                .collect { it ->
-                    it?.let { device ->
-                        graphVariablesStream.value = device.variables.mapNotNull { rawVariable: RawVariable ->
-                            val variable = configManager.variables.firstOrNull { it.variable == rawVariable.variable }
-
-                            if (variable != null) {
-                                return@mapNotNull ParameterGraphVariable(
-                                    variable,
-                                    isSelected = selectedGraphVariables().contains(variable.variable),
-                                    enabled = selectedGraphVariables().contains(variable.variable),
-                                )
-                            } else {
-                                return@mapNotNull null
-                            }
-                        }
-                    }
-                }
-        }
-
-        viewModelScope.launch {
             displayModeStream
                 .collect { it ->
                     val previousHours = hours
@@ -209,14 +188,6 @@ class ParametersGraphTabViewModel(
 
         graphVariablesStream.value = updated
         refresh()
-    }
-
-    private fun selectedGraphVariables(): List<String> {
-        if (configManager.selectedParameterGraphVariables.isEmpty()) {
-            return ParameterGraphVariableChooserViewModel.DefaultGraphVariables
-        } else {
-            return configManager.selectedParameterGraphVariables
-        }
     }
 
     private fun storeVariables() {

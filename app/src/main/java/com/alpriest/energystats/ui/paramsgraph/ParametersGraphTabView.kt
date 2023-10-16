@@ -62,43 +62,6 @@ enum class ParametersScreen {
     ParameterGroupEditor
 }
 
-@Composable
-fun NavigableParametersGraphTabView(
-    configManager: ConfigManaging,
-    network: Networking,
-    onWriteTempFile: (String, String) -> Uri?,
-    themeStream: MutableStateFlow<AppTheme>,
-) {
-    val navController = rememberNavController()
-    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>> = remember { MutableStateFlow(listOf()) }
-
-    NavHost(
-        navController = navController,
-        startDestination = ParametersScreen.Graph.name,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None }
-    ) {
-        composable(ParametersScreen.Graph.name) {
-            ParametersGraphTabView(network, configManager, onWriteTempFile, graphVariablesStream, navController).Content(themeStream = themeStream)
-        }
-
-        composable(ParametersScreen.ParameterChooser.name) {
-            ParameterGraphVariableChooserView(
-                configManager,
-                graphVariablesStream,
-                navController
-            ).Content(onCancel = { navController.popBackStack() },)
-        }
-
-        composable(ParametersScreen.ParameterGroupEditor.name) {
-            ParameterVariableGroupEditorView(
-                ParameterVariableGroupEditorViewModel(configManager, graphVariablesStream),
-                navController = navController
-            )
-        }
-    }
-}
-
 class ParametersGraphTabViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
