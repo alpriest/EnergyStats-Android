@@ -59,7 +59,6 @@ class ParameterGraphVariableChooserViewModelFactory(
 
 class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: MutableStateFlow<List<ParameterGraphVariable>>): ViewModel() {
     val variablesState: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
-    val groups = MutableStateFlow(configManager.parameterGroups)
 
     fun apply() {
         variables.value = variablesState.value

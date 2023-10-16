@@ -4,7 +4,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, variables: MutableStateFlow<List<ParameterGraphVariable>>,) {
+class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, variables: MutableStateFlow<List<ParameterGraphVariable>>) {
     var variables = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
     val selected = MutableStateFlow(configManager.parameterGroups.first())
     val groups = MutableStateFlow(configManager.parameterGroups)
@@ -27,13 +27,30 @@ class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, v
         val selectedId = selected.value.id
 
         groups.value = groups.value.map { existingGroup ->
-                if (existingGroup.id == selectedId) {
-                    ParameterGroup(id = selectedId, title = title, parameterNames = selected.value.parameterNames)
-                } else {
-                    existingGroup
-                }
+            if (existingGroup.id == selectedId) {
+                ParameterGroup(id = selectedId, title = title, parameterNames = selected.value.parameterNames)
+            } else {
+                existingGroup
+            }
         }
 
         selected.value = groups.value.first { it.id == selectedId }
+    }
+
+    fun save() {
+        val selectedGroup = selected.value
+
+        groups.value = groups.value.map { existingGroup ->
+            if (existingGroup.title == selectedGroup.title) {
+                ParameterGroup(id = selectedGroup.id,
+                    title = selectedGroup.title,
+                    parameterNames = variables.value.filter { it.isSelected }.map { it.type.variable }
+                )
+            } else {
+                existingGroup
+            }
+        }
+
+        configManager.parameterGroups = groups.value
     }
 }

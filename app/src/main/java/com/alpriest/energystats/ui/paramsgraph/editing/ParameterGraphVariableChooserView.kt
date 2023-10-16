@@ -1,28 +1,27 @@
 package com.alpriest.energystats.ui.paramsgraph.editing
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,34 +39,12 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
+import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-
-@Composable
-fun ParameterVariableListView(variables: List<ParameterGraphVariable>, onTap: (ParameterGraphVariable) -> Unit) {
-    variables.forEach { variable ->
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-            .clickable { onTap(variable) }
-            .fillMaxWidth()) {
-            Checkbox(
-                checked = variable.isSelected, onCheckedChange = {
-                    onTap(variable)
-                }, colors = CheckboxDefaults.colors(checkedColor = colors.primary)
-            )
-
-            Text(
-                variable.type.name, modifier = Modifier.weight(0.5f)
-            )
-
-            Text(
-                variable.type.unit, modifier = Modifier.padding(end = 4.dp)
-            )
-        }
-    }
-}
 
 class ParameterGraphVariableChooserView(
     private val configManager: ConfigManaging,
@@ -82,7 +59,7 @@ class ParameterGraphVariableChooserView(
         val scrollState = rememberScrollState()
         val variables = viewModel.variablesState.collectAsState().value
         val uriHandler = LocalUriHandler.current
-        val groups = viewModel.groups.collectAsState().value
+        val groups = configManager.themeStream.collectAsState().value.parameterGroups
 
         ContentWithBottomButtons(navController, onSave = {
             viewModel.apply()
@@ -129,16 +106,16 @@ class ParameterGraphVariableChooserView(
                         OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
                     }
 
-//                    Row(modifier = Modifier.padding(vertical = 8.dp)) {
-//                        Spacer(modifier = Modifier.weight(1.0f))
-//                        IconButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
-//                            Icon(
-//                                imageVector = Icons.Filled.Edit,
-//                                contentDescription = "Localized description",
-//                                tint = colors.onSecondary,
-//                            )
-//                        }
-//                    }
+                    Row(modifier = Modifier.padding(vertical = 8.dp)) {
+                        Spacer(modifier = Modifier.weight(1.0f))
+                        IconButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
+                            Icon(
+                                imageVector = Icons.Filled.Edit,
+                                contentDescription = null,
+                                tint = colors.onSecondary,
+                            )
+                        }
+                    }
                 }
 
                 SettingsColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {

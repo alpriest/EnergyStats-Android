@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
+import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
@@ -71,7 +72,8 @@ fun AppTheme.Companion.preview(
     solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,
     financialModel: FinancialModel = FinancialModel.FoxESS,
     shouldCombineCT2WithPVPower: Boolean = true,
-    showGraphValueDescriptions: Boolean = true
+    showGraphValueDescriptions: Boolean = true,
+    parameterGroups: List<ParameterGroup> = listOf()
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -96,6 +98,7 @@ fun AppTheme.Companion.preview(
         solarRangeDefinitions = solarRangeDefinitions,
         financialModel = financialModel,
         shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower,
-        showGraphValueDescriptions = showGraphValueDescriptions
+        showGraphValueDescriptions = showGraphValueDescriptions,
+        parameterGroups = parameterGroups
     )
 }

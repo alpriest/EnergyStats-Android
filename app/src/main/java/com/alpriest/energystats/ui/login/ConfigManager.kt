@@ -41,7 +41,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             solarRangeDefinitions = config.solarRangeDefinitions,
             financialModel = FinancialModel.fromInt(config.financialModel),
             shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
-            showGraphValueDescriptions = config.showGraphValueDescriptions
+            showGraphValueDescriptions = config.showGraphValueDescriptions,
+            parameterGroups = config.parameterGroups
         )
     )
 
@@ -396,6 +397,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.parameterGroups
         set(value) {
             config.parameterGroups = value
+            themeStream.value = themeStream.value.copy(parameterGroups = parameterGroups)
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

@@ -16,6 +16,7 @@ interface ConfigManaging {
     suspend fun fetchDevices()
     suspend fun refreshFirmwareVersions()
     fun select(device: Device)
+    val themeStream: MutableStateFlow<AppTheme>
 
     var shouldCombineCT2WithPVPower: Boolean
     var currencyCode: String
@@ -23,7 +24,7 @@ interface ConfigManaging {
     var feedInUnitPrice: Double
     var currencySymbol: String
     var financialModel: FinancialModel
-    val parameterGroups: List<ParameterGroup>
+    var parameterGroups: List<ParameterGroup>
     var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean
     var showInverterTypeNameOnPowerflow: Boolean
@@ -32,7 +33,6 @@ interface ConfigManaging {
     val variables: List<RawVariable>
     val hasBattery: Boolean
     var showUsableBatteryOnly: Boolean
-    val themeStream: MutableStateFlow<AppTheme>
     var decimalPlaces: Int
     var showTotalYield: Boolean
     var showFinancialSummary: Boolean

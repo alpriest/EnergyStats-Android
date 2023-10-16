@@ -49,7 +49,10 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
     val createDialogState = rememberMaterialDialogState()
     val dialogText = remember { mutableStateOf("") }
 
-    ContentWithBottomButtons(navController = navController, onSave = {}, {
+    ContentWithBottomButtons(navController = navController, onSave = {
+        viewModel.save()
+        navController.popBackStack()
+    }, {
         SettingsPage {
             Column {
                 SettingsColumnWithChild {

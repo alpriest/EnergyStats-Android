@@ -53,7 +53,7 @@ class FakeConfigManager : ConfigManaging {
     override var showInverterTypeNameOnPowerflow: Boolean = false
     override var showLastUpdateTimestamp: Boolean = false
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
-    override val parameterGroups: List<ParameterGroup> = ParameterGroup.defaults
+    override var parameterGroups: List<ParameterGroup> = ParameterGroup.defaults
     override var devices: List<Device>? = listOf(
         Device(
             plantName = "plant 1",
