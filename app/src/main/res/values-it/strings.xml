@@ -218,4 +218,5 @@
     <string name="show_financial_summary">Mostra il riepilogo finanziario</string>
     <string name="hide_graph">Mostra grafico</string>
     <string name="show_graph">Nascondi grafico</string>
+    <string name="show_graph_value_descriptions">Mostra descrizioni dei valori del grafico</string>
 </resources>

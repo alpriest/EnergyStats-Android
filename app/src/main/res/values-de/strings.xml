@@ -217,4 +217,5 @@
     <string name="show_financial_summary">Finanzielle Zusammenfassung anzeigen</string>
     <string name="hide_graph">Diagramm ausblenden</string>
     <string name="show_graph">Diagramm anzeigen</string>
+    <string name="show_graph_value_descriptions">Werte-Beschreibungen im Diagramm anzeigen</string>
 </resources>

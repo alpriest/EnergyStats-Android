@@ -135,7 +135,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
         )
 
         SettingsCheckbox(
-            title = "Show graph value descriptions",
+            title = stringResource(R.string.show_graph_value_descriptions),
             state = showGraphValueDescriptionsState,
             onUpdate = { config.showGraphValueDescriptions = it }
         )
