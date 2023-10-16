@@ -15,8 +15,8 @@ data class ParametersGraphValue(val graphPoint: Int, val time: LocalDateTime, va
 
 data class ParameterGraphVariable(
     val type: RawVariable,
-    override val enabled: Boolean,
-    val isSelected: Boolean
+    val isSelected: Boolean,
+    override val enabled: Boolean
 ) : GraphVariable {
     override val colour: Color
         get() = type.colour()

@@ -89,7 +89,7 @@ class NavigableParametersGraphTabView(
                     configManager,
                     viewModel.graphVariablesStream,
                     navController
-                ).Content(onCancel = { navController.popBackStack() })
+                ).Content()
             }
 
             composable(ParametersScreen.ParameterGroupEditor.name) {

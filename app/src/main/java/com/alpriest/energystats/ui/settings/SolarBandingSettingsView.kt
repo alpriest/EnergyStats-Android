@@ -113,8 +113,8 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             threshold3 = threshold3.floatValue.toDouble()
         )
         Toast.makeText(context, "Thresholds were saved", Toast.LENGTH_LONG).show()
-    }, {
-        SettingsPage {
+    }, { modifier ->
+        SettingsPage(modifier) {
             ThresholdView(
                 mutableStateValue = threshold1,
                 title = stringResource(R.string.low_threshold),

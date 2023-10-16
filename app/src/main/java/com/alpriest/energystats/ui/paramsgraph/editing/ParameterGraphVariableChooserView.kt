@@ -53,8 +53,7 @@ class ParameterGraphVariableChooserView(
 ) {
     @Composable
     fun Content(
-        viewModel: ParameterGraphVariableChooserViewModel = viewModel(factory = ParameterGraphVariableChooserViewModelFactory(configManager, variables)),
-        onCancel: () -> Unit
+        viewModel: ParameterGraphVariableChooserViewModel = viewModel(factory = ParameterGraphVariableChooserViewModelFactory(configManager, variables))
     ) {
         val scrollState = rememberScrollState()
         val variables = viewModel.variablesState.collectAsState().value
@@ -70,12 +69,12 @@ class ParameterGraphVariableChooserView(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
-        }, content = {
+        }, content = { modifier ->
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp)
-                    .padding(bottom = 94.dp)
+                    .padding(bottom = 24.dp)
                     .verticalScroll(scrollState),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
@@ -88,7 +87,6 @@ class ParameterGraphVariableChooserView(
                                 color = colors.onSecondary,
                                 modifier = Modifier.weight(1.0f)
                             )
-
                         }
 
                         OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
@@ -158,9 +156,7 @@ fun ParameterGraphVariableChooserViewPreview() {
             FakeConfigManager(),
             MutableStateFlow(previewParameterGraphVariables()),
             NavHostController(LocalContext.current)
-        ).Content(
-            onCancel = {}
-        )
+        ).Content()
     }
 }
 

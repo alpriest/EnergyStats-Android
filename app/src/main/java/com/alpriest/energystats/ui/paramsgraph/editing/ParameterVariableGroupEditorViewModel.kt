@@ -3,14 +3,20 @@ package com.alpriest.energystats.ui.paramsgraph.editing
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.UUID
 
 class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, variables: MutableStateFlow<List<ParameterGraphVariable>>) {
     var variables = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
     val selected = MutableStateFlow(configManager.parameterGroups.first())
     val groups = MutableStateFlow(configManager.parameterGroups)
 
+    init {
+        updateVariables(selected.value)
+    }
+
     fun select(group: ParameterGroup) {
         selected.value = group
+        updateVariables(group)
     }
 
     fun toggle(updating: ParameterGraphVariable) {
@@ -52,5 +58,23 @@ class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, v
         }
 
         configManager.parameterGroups = groups.value
+    }
+
+    fun create(title: String) {
+        groups.value = groups.value.plus(
+            ParameterGroup(
+                id = UUID.randomUUID().toString(),
+                title = title,
+                parameterNames = variables.value.filter { it.isSelected }.map { it.type.variable }
+            )
+        )
+
+        configManager.parameterGroups = groups.value
+    }
+
+    private fun updateVariables(group: ParameterGroup) {
+        variables.value = configManager.variables.map { rawVariable ->
+            ParameterGraphVariable(rawVariable, isSelected = group.parameterNames.contains(rawVariable.variable), enabled = true)
+        }.sortedBy { it.type.name.lowercase() }
     }
 }

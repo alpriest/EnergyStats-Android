@@ -40,98 +40,104 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorViewModel, navController: NavHostController) {
+fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val selectedGroup = viewModel.selected.collectAsState().value
-    val variables = viewModel.variables.collectAsState().value
     val groups = viewModel.groups.collectAsState().value
     val renameDialogState = rememberMaterialDialogState()
     val createDialogState = rememberMaterialDialogState()
     val dialogText = remember { mutableStateOf("") }
 
-    ContentWithBottomButtons(navController = navController, onSave = {
-        viewModel.save()
-        navController.popBackStack()
-    }, {
-        SettingsPage {
-            Column {
-                SettingsColumnWithChild {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+    Column {
+        SettingsColumnWithChild {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    "Choose group to edit",
+                    color = colors.onSecondary
+                )
+
+                Box(contentAlignment = Alignment.TopEnd) {
+                    Button(onClick = { expanded = !expanded }) {
                         Text(
-                            "Choose group to edit",
-                            color = colors.onSecondary
+                            selectedGroup.title,
+                            fontSize = 12.sp,
+                            color = colors.onPrimary,
                         )
+                        Icon(
+                            imageVector = Icons.Filled.ArrowDropDown,
+                            contentDescription = null,
+                            tint = colors.onPrimary
+                        )
+                    }
 
-                        Box(contentAlignment = Alignment.TopEnd) {
-                            Button(onClick = { expanded = !expanded }) {
-                                Text(
-                                    selectedGroup.title,
-                                    fontSize = 12.sp,
-                                    color = colors.onPrimary,
-                                )
-                                Icon(
-                                    imageVector = Icons.Filled.ArrowDropDown,
-                                    contentDescription = null,
-                                    tint = colors.onPrimary
-                                )
-                            }
-
-                            DropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false }
-                            ) {
-                                groups.forEach { group ->
-                                    DropdownMenuItem(onClick = {
-                                        expanded = false
-                                        viewModel.select(group)
-                                    }) {
-                                        Text(group.title)
-                                    }
-                                }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        groups.forEach { group ->
+                            DropdownMenuItem(onClick = {
+                                expanded = false
+                                viewModel.select(group)
+                            }) {
+                                Text(group.title)
                             }
                         }
                     }
                 }
-
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Button(
-                        onClick = {
-                            dialogText.value = viewModel.selected.value.title
-                            renameDialogState.show()
-                        },
-                        modifier = Modifier.padding(end = 12.dp)
-                    ) {
-                        Text(
-                            "Rename...",
-                            color = colors.onPrimary
-                        )
-                    }
-
-                    Button(onClick = {
-                        createDialogState.show()
-                    }) {
-                        Text(
-                            "Create new...",
-                            color = colors.onPrimary
-                        )
-                    }
-                }
             }
+        }
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = {
+                    dialogText.value = viewModel.selected.value.title
+                    renameDialogState.show()
+                },
+                modifier = Modifier.padding(end = 12.dp)
+            ) {
+                Text(
+                    "Rename...",
+                    color = colors.onPrimary
+                )
+            }
+
+            Button(onClick = {
+                createDialogState.show()
+            }) {
+                Text(
+                    "Create new...",
+                    color = colors.onPrimary
+                )
+            }
+        }
+
+        TextEntryDialog(createDialogState, "") {
+            viewModel.create(it)
+        }
+        TextEntryDialog(renameDialogState, dialogText.value) {
+            viewModel.rename(it)
+        }
+    }
+}
+
+@Composable
+fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorViewModel, navController: NavHostController) {
+    val variables = viewModel.variables.collectAsState().value
+
+    ContentWithBottomButtons(navController = navController, onSave = {
+        viewModel.save()
+        navController.popBackStack()
+    }, { modifier ->
+        SettingsPage(modifier) {
+            Header(viewModel)
 
             SettingsColumnWithChild {
                 SettingsTitleView("Choose parameters")
                 ParameterVariableListView(variables = variables, onTap = { viewModel.toggle(it) })
-            }
-
-            TextEntryDialog(createDialogState, "") {
-
-            }
-            TextEntryDialog(renameDialogState, dialogText.value) {
-                viewModel.rename(it)
             }
         }
     }, Modifier)

@@ -60,8 +60,8 @@ class BatterySOCSettings(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load() }, onLogout = {userManager.logout()  })
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save() }, {
-                    SettingsPage {
+                ContentWithBottomButtons(navController, onSave = { viewModel.save() }, { modifier ->
+                    SettingsPage(modifier) {
                         Column {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
