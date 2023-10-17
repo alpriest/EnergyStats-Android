@@ -2,7 +2,6 @@ package com.alpriest.energystats.widget
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.CornerRadius
@@ -16,8 +15,6 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -31,7 +28,6 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.provideContent
-import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -50,27 +46,9 @@ import kotlinx.coroutines.runBlocking
 class BatteryWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = BatteryWidget()
 
-    override fun onEnabled(context: Context?) {
-        super.onEnabled(context)
-
-        Log.d("AWP", "AWP widget created")
-    }
-
-    override fun onDisabled(context: Context?) {
-        super.onDisabled(context)
-
-        Log.d("AWP", "AWP widget deleted")
-    }
-
-    override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-
-    }
-
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
 
-        Log.d("AWP", "AWP widget onUpdate")
         runBlocking {
             LatestDataRepository.getInstance().update(context)
         }
@@ -80,15 +58,15 @@ class BatteryWidgetReceiver : GlanceAppWidgetReceiver() {
 class BatteryWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            val battery = LatestDataRepository.getInstance().batteryPercentage
+            val repository = LatestDataRepository.getInstance()
 
-            BatteryWidgetContent(battery)
+            BatteryWidgetContent(repository.batteryPercentage, repository.chargeDescription)
         }
     }
 }
 
 @Composable
-fun BatteryWidgetContent(amount: Float) {
+fun BatteryWidgetContent(amount: Float, chargeDescription: String?) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
@@ -121,14 +99,16 @@ fun BatteryWidgetContent(amount: Float) {
             )
         }
 
-        Text(
-            "Empty in 24 days",
-            GlanceModifier.fillMaxWidth().padding(top = 8.dp),
-            style = TextStyle(
-                textAlign = TextAlign.Center,
-                color = ColorProvider(Color.White)
+        chargeDescription?.let {
+            Text(
+                it,
+                GlanceModifier.fillMaxWidth().padding(top = 8.dp),
+                style = TextStyle(
+                    textAlign = TextAlign.Center,
+                    color = ColorProvider(Color.White)
+                )
             )
-        )
+        }
     }
 }
 
