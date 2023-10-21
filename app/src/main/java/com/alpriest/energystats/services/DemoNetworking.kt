@@ -86,7 +86,7 @@ class DemoNetworking : Networking {
         return ArrayList(result.map { response ->
             RawResponse(
                 variable = response.variable,
-                data = ArrayList(response.data.map {
+                data = response.data.map {
                     val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it.time)
                     val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
                         .withYear(now.year)
@@ -94,7 +94,7 @@ class DemoNetworking : Networking {
                         .withDayOfMonth(now.dayOfMonth)
 
                     RawData(time = localDateTime.format(formatter), value = it.value)
-                }.toList())
+                }.toTypedArray()
             )
         }.toList())
     }

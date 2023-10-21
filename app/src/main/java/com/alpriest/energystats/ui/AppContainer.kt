@@ -13,6 +13,7 @@ import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkCache
 import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.services.NetworkService
+import com.alpriest.energystats.services.NetworkValueCleaner
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
@@ -31,9 +32,11 @@ class AppContainer(private val context: Context) {
     private val config = SharedPreferencesConfigStore(sharedPreferences)
 
     val networking: Networking by lazy {
-        NetworkFacade(
-            network = NetworkCache(network = NetworkService(credentialStore, networkStore)),
-            isDemoUser = { config.isDemoUser }
+        NetworkValueCleaner(
+            NetworkFacade(
+                network = NetworkCache(network = NetworkService(credentialStore, networkStore)),
+                isDemoUser = { config.isDemoUser }
+            )
         )
     }
 

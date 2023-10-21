@@ -123,10 +123,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
-        val body = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            Gson().toJson(DeviceListRequest())
-        )
+        val body = Gson().toJson(DeviceListRequest())
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .post(body)
@@ -177,10 +175,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
         queryDate: QueryDate,
         reportType: ReportType
     ): ArrayList<ReportResponse> {
-        val body = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            Gson().toJson(ReportRequest(deviceID, variables, queryDate, reportType))
-        )
+        val body = Gson().toJson(ReportRequest(deviceID, variables, queryDate, reportType))
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .post(body)
@@ -287,10 +283,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .addPathSegments("c/v0/device/battery/soc/set")
             .build()
 
-        val body = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            Gson().toJson(SetSOCRequest(minGridSoc = minGridSOC, minSoc = minSOC, sn = deviceSN))
-        )
+        val body = Gson().toJson(SetSOCRequest(minGridSoc = minGridSOC, minSoc = minSOC, sn = deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .url(url)
@@ -326,10 +320,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .addPathSegments("c/v0/device/battery/time/set")
             .build()
 
-        val body = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            Gson().toJson(SetBatteryTimesRequest(sn = deviceSN, times = times))
-        )
+        val body = Gson().toJson(SetBatteryTimesRequest(sn = deviceSN, times = times))
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .url(url)
@@ -367,10 +359,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .addPathSegments("c/v0/device/setting/set")
             .build()
 
-        val body = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            Gson().toJson(DeviceSettingsSetRequest(id = deviceID, key = "operation_mode__work_mode", values = DeviceSettingsValues(workMode)))
-        )
+        val body = Gson().toJson(DeviceSettingsSetRequest(id = deviceID, key = "operation_mode__work_mode", values = DeviceSettingsValues(workMode)))
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .url(url)
@@ -388,10 +378,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .addPathSegments("c/v0/module/list")
             .build()
 
-        val body = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            Gson().toJson(DataLoggerListRequest())
-        )
+        val body = Gson().toJson(DataLoggerListRequest())
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .url(url)
@@ -414,10 +402,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
             (hashedPassword ?: credentials.getHashedPassword())
                 ?: throw BadCredentialsException()
 
-        val body = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            Gson().toJson(AuthRequest(user = usernameToUse, password = hashedPasswordToUse))
-        )
+        val body = Gson().toJson(AuthRequest(user = usernameToUse, password = hashedPasswordToUse))
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .url("https://www.foxesscloud.com/c/v0/user/login")
