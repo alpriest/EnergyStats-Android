@@ -174,9 +174,10 @@ class ParametersGraphTabViewModel(
     }
 
     fun toggleVisibility(parameterGraphVariable: ParameterGraphVariable) {
-        val updated = graphVariablesStream.value.map {
+        val stream = graphVariablesStream.value
+        val updated = stream.map {
             if (it.type == parameterGraphVariable.type) {
-                return@map ParameterGraphVariable(it.type, !it.enabled, it.isSelected)
+                return@map ParameterGraphVariable(type = it.type, enabled = !it.enabled, isSelected = it.isSelected)
             } else {
                 return@map it
             }
