@@ -302,8 +302,8 @@ class StatsTabViewModel(
         approximationsViewModelStream.value = ApproximationsViewModel(
             netSelfSufficiencyEstimate = "${netResult.first}%",
             netSelfSufficiencyEstimateCalculationBreakdown = netResult.second,
-            absoluteSelfSufficiencyEstimate = "${absoluteResult}%",
-            absoluteSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("TODO", "TODO"),
+            absoluteSelfSufficiencyEstimate = "${absoluteResult.first}%",
+            absoluteSelfSufficiencyEstimateCalculationBreakdown = absoluteResult.second,
             financialModel = financialModel,
             homeUsage = loads,
             totalsViewModel = totalsViewModel

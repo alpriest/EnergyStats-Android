@@ -58,6 +58,7 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val graphShowing = viewModel.showingGraphStream.collectAsState().value
+    val showingApproximations = remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true
@@ -65,7 +66,7 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
             .onEach { viewModel.load() }
             .collect { isLoading = false }
     }
-    
+
     if (isLoading) {
         Text(stringResource(R.string.loading))
     } else {
@@ -84,7 +85,7 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
 
             viewModel.approximationsViewModelStream.collectAsState().value?.let {
-                ApproximationView(viewModel = it, modifier = Modifier.padding(horizontal = 10.dp), themeStream = themeStream)
+                ApproximationView(viewModel = it, modifier = Modifier.padding(horizontal = 10.dp), themeStream = themeStream, showingApproximations = showingApproximations)
             }
 
             Text(

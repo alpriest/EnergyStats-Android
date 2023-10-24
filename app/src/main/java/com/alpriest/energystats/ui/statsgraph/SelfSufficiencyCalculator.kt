@@ -8,7 +8,7 @@ class AbsoluteSelfSufficiencyCalculator {
     fun calculate(grid: Double, feedIn: Double, loads: Double, batteryCharge: Double, batteryDischarge: Double): Pair<Double, CalculationBreakdown> {
         val netGeneration = feedIn - grid + batteryDischarge - batteryCharge
         val homeConsumption = loads
-        var formula = "netGeneration = (feedIn - grid + batteryDischarge - batteryCharge)\n" +
+        val formula = "netGeneration = (feedIn - grid + batteryDischarge - batteryCharge)\n" +
                 "if (netGeneration > 0) {\n" +
                 "    result = 1.0\n" +
                 "} else if (netGeneration + homeConsumption < 0) {\n" +
@@ -28,7 +28,7 @@ class AbsoluteSelfSufficiencyCalculator {
 
         return Pair(
             (result * 100.0).roundTo(1),
-            CalculationBreakdown(formula,"TOOD")
+            CalculationBreakdown(formula,"TODO")
         )
     }
 }

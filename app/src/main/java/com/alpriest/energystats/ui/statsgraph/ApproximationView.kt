@@ -2,10 +2,8 @@ package com.alpriest.energystats.ui.statsgraph
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,6 +26,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -101,7 +100,7 @@ fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: Calculation
 }
 
 @Composable
-fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel) {
+fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel, showingApproximations: MutableState<Boolean>) {
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
     val selfSufficiency = when (appTheme.selfSufficiencyEstimateMode) {
@@ -114,7 +113,6 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
         SelfSufficiencyEstimateMode.Net -> viewModel.netSelfSufficiencyEstimateCalculationBreakdown
         SelfSufficiencyEstimateMode.Absolute -> viewModel.absoluteSelfSufficiencyEstimateCalculationBreakdown
     }
-    var showingApproximations by remember { mutableStateOf(true) }
 
     Box(modifier) {
         Column(
@@ -152,7 +150,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                     }
 
                     selfSufficiencyCalculations?.let {
-                        CalculationBreakdownView(showingApproximations, it, fontSize)
+                        CalculationBreakdownView(showingApproximations.value, it, fontSize)
                     }
                 }
 
@@ -246,21 +244,21 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
             color = ApproximationHeaderText,
         )
 
-        Icon(
-            imageVector = if (showingApproximations) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-            contentDescription = null,
-            tint = ApproximationHeaderText,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .offset(x = (-8).dp, y = (-11).dp)
-                .height(21.dp)
-                .background(
-                    ApproximationHeader,
-                    shape = RoundedCornerShape(size = 4.dp)
-                )
-                .padding(horizontal = 2.dp, vertical = 1.dp)
-                .clickable { showingApproximations = !showingApproximations }
-        )
+//        Icon(
+//            imageVector = if (showingApproximations.value) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+//            contentDescription = null,
+//            tint = ApproximationHeaderText,
+//            modifier = Modifier
+//                .align(Alignment.TopEnd)
+//                .offset(x = (-8).dp, y = (-11).dp)
+//                .height(21.dp)
+//                .background(
+//                    ApproximationHeader,
+//                    shape = RoundedCornerShape(size = 4.dp)
+//                )
+//                .padding(horizontal = 2.dp, vertical = 1.dp)
+//                .clickable { showingApproximations.value = !showingApproximations.value }
+//        )
     }
 }
 
@@ -268,9 +266,12 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
 @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun StatsApproximationViewPreview() {
+    val showingApproximations = remember { mutableStateOf(false) }
+
     EnergyStatsTheme() {
         ApproximationView(
             themeStream = MutableStateFlow(AppTheme.preview().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
+            modifier = Modifier.padding(24.dp),
             viewModel = ApproximationsViewModel(
                 netSelfSufficiencyEstimate = "95%",
                 netSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", "def"),
@@ -286,7 +287,7 @@ fun StatsApproximationViewPreview() {
                     batteryDischarge = 1.2
                 )
             ),
-            modifier = Modifier.padding(24.dp)
+            showingApproximations = showingApproximations
         )
     }
 }

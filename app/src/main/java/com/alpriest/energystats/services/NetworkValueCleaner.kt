@@ -111,6 +111,10 @@ class NetworkValueCleaner(private val network: Networking) : Networking {
 }
 
 private fun Double.capped(): Double {
-    val mask = 0x0FFFF
-    return ((this * 10).toInt() and mask).toDouble() / 10.0
+    return if (this > 0) {
+        val mask = 0x0FFFF
+        ((this * 10).toInt() and mask).toDouble() / 10.0
+    } else {
+        this
+    }
 }
