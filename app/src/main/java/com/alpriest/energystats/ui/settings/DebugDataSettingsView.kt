@@ -1,5 +1,8 @@
 package com.alpriest.energystats.ui.settings
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +12,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -153,12 +157,20 @@ private fun <T> ResponseDebugView(
     val stream = mapper(networkStore).collectAsState()
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.verticalScroll(scrollState)
     ) {
         stream.value?.let {
             SettingsTitleView(it.description)
+            Button(
+                onClick = {
+                    copyToClipboard(it, context)
+                }
+            ) {
+                Text("Copy")
+            }
             Text("${it.time}")
             Text(it.request.url.toString())
 
@@ -183,6 +195,13 @@ private fun <T> ResponseDebugView(
             }
         }
     }
+}
+
+fun <T> copyToClipboard(networkOperation: NetworkOperation<T>, context: Context) {
+    val text = networkOperation.raw?.let { prettyPrintJson(it) }
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("label", text)
+    clipboard.setPrimaryClip(clip)
 }
 
 fun prettyPrintJson(jsonString: String): String {

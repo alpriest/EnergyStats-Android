@@ -233,16 +233,25 @@ class PowerFlowTabViewModel(
     }
 }
 
-fun Double.roundedToString(decimalPlaces: Int, currencyCode: String, currencySymbol: String): String {
+fun Double.roundedToString(decimalPlaces: Int, currencyCode: String? = null, currencySymbol: String? = null): String {
     val roundedNumber = this.rounded(decimalPlaces)
 
-    return try {
-        val numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
-        numberFormat.currency = Currency.getInstance(currencyCode)
-        numberFormat.maximumFractionDigits = decimalPlaces
+    try {
+        return if (currencyCode != null) {
+            val numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+            numberFormat.currency = Currency.getInstance(currencyCode)
+            numberFormat.maximumFractionDigits = decimalPlaces
+            numberFormat.minimumFractionDigits = decimalPlaces
 
-        numberFormat.format(roundedNumber)
+            numberFormat.format(roundedNumber)
+        } else {
+            val numberFormat = NumberFormat.getNumberInstance()
+            numberFormat.maximumFractionDigits = decimalPlaces
+            numberFormat.minimumFractionDigits = decimalPlaces
+
+            numberFormat.format(roundedNumber)
+        }
     } catch (ex: Exception) {
-        currencySymbol + roundedNumber.toString()
+        return "$currencySymbol$roundedNumber.toString()"
     }
 }

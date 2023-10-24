@@ -1,6 +1,8 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.CalculationBreakdown
+import com.alpriest.energystats.ui.flow.roundedToString
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -8,14 +10,18 @@ class AbsoluteSelfSufficiencyCalculator {
     fun calculate(grid: Double, feedIn: Double, loads: Double, batteryCharge: Double, batteryDischarge: Double): Pair<Double, CalculationBreakdown> {
         val netGeneration = feedIn - grid + batteryDischarge - batteryCharge
         val homeConsumption = loads
-        val formula = "netGeneration = (feedIn - grid + batteryDischarge - batteryCharge)\n" +
-                "if (netGeneration > 0) {\n" +
-                "    result = 1.0\n" +
-                "} else if (netGeneration + homeConsumption < 0) {\n" +
-                "    result = 0.0\n" +
-                "} else if (netGeneration + homeConsumption > 0) {\n" +
-                "    result = (netGeneration + homeConsumption) / homeConsumption\n" +
-                "}"
+        val formula = """netGeneration = feedIn - grid + batteryCharge - batteryDischarge
+
+If netGeneration > 0 then result = 1
+Else if netGeneration + homeConsumption < 0 then result = 0
+Else if netGeneration + homeConsumption > 0 then result = (netGeneration + homeConsumption) / homeConsumption
+"""
+        val calculation = """netGeneration = $feedIn - $grid + $batteryCharge - $batteryDischarge
+
+If ${netGeneration.roundedToString(2)} > 0 then result = 1
+Else if ${netGeneration.roundedToString(2)} + ${homeConsumption.roundedToString(2)} < 0 then result = 0
+Else if ${netGeneration.roundedToString(2)} + ${homeConsumption.roundedToString(2)} > 0 then result = (${netGeneration.roundedToString(2)} + ${homeConsumption.roundedToString(2)}) / ${homeConsumption.roundedToString(2)}
+"""
 
         var result = 0.0
         if (netGeneration > 0) {
@@ -28,7 +34,7 @@ class AbsoluteSelfSufficiencyCalculator {
 
         return Pair(
             (result * 100.0).roundTo(1),
-            CalculationBreakdown(formula,"TODO")
+            CalculationBreakdown(formula, calculation)
         )
     }
 }

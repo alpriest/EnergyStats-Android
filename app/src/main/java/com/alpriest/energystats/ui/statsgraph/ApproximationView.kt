@@ -1,9 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,16 +25,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.power
@@ -64,40 +58,6 @@ data class ApproximationsViewModel(
     val homeUsage: Double?,
     val totalsViewModel: TotalsViewModel?
 )
-
-@Composable
-fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: CalculationBreakdown, fontSize: TextUnit) {
-    AnimatedVisibility(
-        visible = visible,
-        enter = expandVertically(),
-        exit = shrinkVertically()
-    ) {
-        Column(
-            Modifier
-                .padding(bottom = 8.dp)
-                .background(
-                    colors.ApproximationBackground,
-                    shape = RoundedCornerShape(size = 8.dp)
-                )
-                .border(
-                    width = 1.dp,
-                    color = ApproximationHeader,
-                    shape = RoundedCornerShape(size = 8.dp)
-                )
-                .padding(4.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                calculationBreakdown.calculation,
-                fontSize = fontSize
-            )
-            Text(
-                calculationBreakdown.formula,
-                fontSize = fontSize
-            )
-        }
-    }
-}
 
 @Composable
 fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel, showingApproximations: MutableState<Boolean>) {
@@ -244,21 +204,21 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
             color = ApproximationHeaderText,
         )
 
-//        Icon(
-//            imageVector = if (showingApproximations.value) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-//            contentDescription = null,
-//            tint = ApproximationHeaderText,
-//            modifier = Modifier
-//                .align(Alignment.TopEnd)
-//                .offset(x = (-8).dp, y = (-11).dp)
-//                .height(21.dp)
-//                .background(
-//                    ApproximationHeader,
-//                    shape = RoundedCornerShape(size = 4.dp)
-//                )
-//                .padding(horizontal = 2.dp, vertical = 1.dp)
-//                .clickable { showingApproximations.value = !showingApproximations.value }
-//        )
+        Icon(
+            imageVector = if (showingApproximations.value) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+            contentDescription = null,
+            tint = ApproximationHeaderText,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = (-8).dp, y = (-11).dp)
+                .height(21.dp)
+                .background(
+                    ApproximationHeader,
+                    shape = RoundedCornerShape(size = 4.dp)
+                )
+                .padding(horizontal = 2.dp, vertical = 1.dp)
+                .clickable { showingApproximations.value = !showingApproximations.value }
+        )
     }
 }
 
