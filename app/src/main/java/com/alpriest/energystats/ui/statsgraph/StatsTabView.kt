@@ -85,7 +85,7 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
 
             viewModel.approximationsViewModelStream.collectAsState().value?.let {
-                ApproximationView(viewModel = it, modifier = Modifier.padding(horizontal = 10.dp), themeStream = themeStream, showingApproximations = showingApproximations)
+                ApproximationView(viewModel = it, modifier = Modifier, themeStream = themeStream, showingApproximations = showingApproximations)
             }
 
             Text(

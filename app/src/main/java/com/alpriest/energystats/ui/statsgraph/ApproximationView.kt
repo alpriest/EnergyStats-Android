@@ -110,7 +110,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                     }
 
                     selfSufficiencyCalculations?.let {
-                        CalculationBreakdownView(showingApproximations.value, it, fontSize)
+                        CalculationBreakdownView(showingApproximations.value, it)
                     }
                 }
 
@@ -130,7 +130,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                     }
                 }
 
-                viewModel.totalsViewModel?.solar?.let {
+                viewModel.totalsViewModel?.let {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -140,10 +140,12 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                         Text(
-                            it.power(appTheme.displayUnit, appTheme.decimalPlaces),
+                            it.solar.power(appTheme.displayUnit, appTheme.decimalPlaces),
                             fontSize = fontSize
                         )
                     }
+
+                    CalculationBreakdownView(showingApproximations.value, it.solarBreakdown)
                 }
 
                 viewModel.financialModel?.let {

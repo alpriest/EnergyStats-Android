@@ -14,12 +14,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.CalculationBreakdown
 
 @Composable
-fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: CalculationBreakdown, fontSize: TextUnit) {
+fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: CalculationBreakdown) {
     AnimatedVisibility(
         visible = visible,
         enter = expandVertically(),
@@ -42,12 +42,12 @@ fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: Calculation
         ) {
             Text(
                 calculationBreakdown.formula,
-                fontSize = fontSize,
+                fontSize = 12.sp,
                 fontStyle = FontStyle.Italic
             )
             Text(
                 calculationBreakdown.calculation,
-                fontSize = fontSize
+                fontSize = 12.sp
             )
         }
     }
