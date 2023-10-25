@@ -218,4 +218,8 @@
     <string name="hide_graph">Diagramm ausblenden</string>
     <string name="show_graph">Diagramm anzeigen</string>
     <string name="show_graph_value_descriptions">Werte-Beschreibungen im Diagramm anzeigen</string>
+    <string name="solar_generated">Solar erzeugt</string>
+    <string name="export_income">Exporteinnahmen</string>
+    <string name="grid_import_avoided">Eingesparter Netzverbrauch</string>
+    <string name="total_benefit">Gesamtvorteil</string>
 </resources>

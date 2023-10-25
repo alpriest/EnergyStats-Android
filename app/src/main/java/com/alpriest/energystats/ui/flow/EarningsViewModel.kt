@@ -22,6 +22,7 @@ import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -89,6 +90,8 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
     val exportIncome: FinanceAmount
     val solarSaving: FinanceAmount
     val total: FinanceAmount
+    val exportBreakdown: CalculationBreakdown
+    val solarSavingBreakdown: CalculationBreakdown
 
     init {
         exportIncome = FinanceAmount(
@@ -97,12 +100,20 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
             currencySymbol = configManager.currencySymbol,
             currencyCode = configManager.currencyCode
         )
+        exportBreakdown = CalculationBreakdown(
+            formula = "gridExport * feedInUnitPrice",
+            calculation = "${totalsViewModel.feedIn.roundedToString(2)} * ${configManager.feedInUnitPrice.roundedToString(2)}"
+        )
 
         solarSaving = FinanceAmount(
             type = FinanceAmountType.AVOIDED,
             amount = (totalsViewModel.solar - totalsViewModel.feedIn) * configManager.gridImportUnitPrice,
             currencySymbol = configManager.currencySymbol,
             currencyCode = configManager.currencyCode
+        )
+        solarSavingBreakdown = CalculationBreakdown(
+            formula = "(solar - gridExport) * gridImportUnitPrice",
+            calculation = "(${totalsViewModel.solar.roundedToString(2)} - ${totalsViewModel.feedIn.roundedToString(2)}) * ${configManager.gridImportUnitPrice}"
         )
 
         total = FinanceAmount(

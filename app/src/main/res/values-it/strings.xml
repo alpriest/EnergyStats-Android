@@ -219,4 +219,8 @@
     <string name="hide_graph">Mostra grafico</string>
     <string name="show_graph">Nascondi grafico</string>
     <string name="show_graph_value_descriptions">Mostra descrizioni dei valori del grafico</string>
+    <string name="solar_generated">Generato da energia solare</string>
+    <string name="export_income">Entrate da esportazione</string>
+    <string name="grid_import_avoided">Importazione dalla rete evitata</string>
+    <string name="total_benefit">Beneficio totale</string>
 </resources>

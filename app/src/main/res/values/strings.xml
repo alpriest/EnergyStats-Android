@@ -220,4 +220,8 @@
     <string name="hide_graph">Hide graph</string>
     <string name="show_graph">Show graph</string>
     <string name="show_graph_value_descriptions">Show graph value descriptions</string>
+    <string name="solar_generated">Solar generated</string>
+    <string name="export_income">Export income</string>
+    <string name="grid_import_avoided">Grid import avoided</string>
+    <string name="total_benefit">Total benefit</string>
 </resources>

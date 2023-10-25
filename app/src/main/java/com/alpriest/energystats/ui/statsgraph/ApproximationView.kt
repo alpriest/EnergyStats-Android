@@ -136,7 +136,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Solar generated",
+                            stringResource(R.string.solar_generated),
                             fontSize = fontSize
                         )
                         Text(
@@ -154,7 +154,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Export income",
+                            stringResource(R.string.export_income),
                             fontSize = fontSize
                         )
                         Text(
@@ -162,13 +162,14 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                     }
+                    CalculationBreakdownView(showingApproximations.value, it.exportBreakdown)
 
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Grid import avoided",
+                            stringResource(R.string.grid_import_avoided),
                             fontSize = fontSize
                         )
                         Text(
@@ -176,13 +177,14 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                     }
+                    CalculationBreakdownView(showingApproximations.value, it.solarSavingBreakdown)
 
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Total benefit",
+                            stringResource(R.string.total_benefit),
                             fontSize = fontSize
                         )
                         Text(

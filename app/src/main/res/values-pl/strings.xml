@@ -219,4 +219,8 @@
     <string name="hide_graph">Ukryj wykres</string>
     <string name="show_graph">Pokaż wykres</string>
     <string name="show_graph_value_descriptions">Pokaż opisy wartości na wykresie</string>
+    <string name="solar_generated">Generowany przez energię słoneczną</string>
+    <string name="export_income">Eksportuj dochody</string>
+    <string name="grid_import_avoided">Oszczędność na imporcie z sieci</string>
+    <string name="total_benefit">Całkowity zysk</string>
 </resources>
