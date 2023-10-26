@@ -256,12 +256,12 @@ fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme {
         LoadedPowerFlowView(
             FakeConfigManager(),
-            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview()), LocalContext.current),
+            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview().copy(decimalPlaces = 3)), LocalContext.current),
             homePowerFlowViewModel = HomePowerFlowViewModel(
                 solar = 1.0,
-                home = 2.45,
-                grid = 2.45,
-                todaysGeneration = 1.0,
+                home = 2.454,
+                grid = 1.234,
+                todaysGeneration = 1.234,
                 earnings = EarningsViewModel.preview(),
                 inverterTemperatures = null,
                 hasBattery = true,
@@ -272,7 +272,7 @@ fun SummaryPowerFlowViewPreview() {
                 homeTotal = 1.0,
                 ct2 = 0.4,
             ),
-            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true)),
+            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true, decimalPlaces = 3)),
         )
     }
 }

@@ -16,6 +16,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportData
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class NetworkValueCleaner(private val network: Networking) : Networking {
@@ -112,8 +113,15 @@ class NetworkValueCleaner(private val network: Networking) : Networking {
 
 private fun Double.capped(): Double {
     return if (this > 0) {
-        val mask = 0x0FFFF
-        ((this * 10).toInt() and mask).toDouble() / 10.0
+        val mask = 0xFFFF00000
+        val register = (this * 10).toLong()
+        val masked = register and mask
+
+        if (masked == 0L) {
+            this
+        } else {
+            (this - (masked.toDouble() / 10.0)).rounded(3)
+        }
     } else {
         this
     }
