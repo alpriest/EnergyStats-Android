@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.statsgraph.chartStyle
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.axisLineComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
@@ -47,7 +48,7 @@ import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier) {
+fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val chartColors = viewModel.chartColorsStream.collectAsState().value
     val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
         override fun onMarkerHidden(marker: Marker) {
@@ -62,7 +63,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, modifier: Modifie
 
     if (entries.isNotEmpty()) {
         Column(modifier = modifier.fillMaxWidth()) {
-            ProvideChartStyle(chartStyle(chartColors)) {
+            ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                 Chart(
                     chart = lineChart(),
                     chartModelProducer = viewModel.producer,

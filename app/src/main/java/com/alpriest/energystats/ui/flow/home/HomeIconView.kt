@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.power
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -31,7 +32,8 @@ fun HomeIconView(viewModel: HomePowerFlowViewModel, themeStream: MutableStateFlo
         modifier = modifier
     ) {
         HouseView(
-            modifier = Modifier.height(iconHeight).width(iconHeight * 1.1f)
+            modifier = Modifier.height(iconHeight).width(iconHeight * 1.1f),
+            themeStream
         )
 
         if (showHomeTotal) {

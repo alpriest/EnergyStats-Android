@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.flow.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -12,11 +13,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun CT2Icon(modifier: Modifier) {
-    val foregroundColor = iconForegroundColor()
-    val backgroundColor = iconBackgroundColor()
+fun CT2Icon(modifier: Modifier, themeStream: MutableStateFlow<AppTheme>) {
+    val foregroundColor = iconForegroundColor(isDarkMode(themeStream))
+    val backgroundColor = iconBackgroundColor(isDarkMode(themeStream))
 
     Box(
         modifier = modifier

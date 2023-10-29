@@ -77,7 +77,8 @@ fun LoadedPowerFlowView(
                             .weight(1f)
                     ) {
                         CT2Icon(
-                            modifier = Modifier.size(width = iconHeight + 4.dp, height = iconHeight + 4.dp)
+                            modifier = Modifier.size(width = iconHeight + 4.dp, height = iconHeight + 4.dp),
+                            themeStream
                         )
 
                         PowerFlowView(

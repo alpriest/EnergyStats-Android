@@ -79,7 +79,7 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
             StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), viewModel.showingGraphStream, modifier = Modifier.padding(bottom = 24.dp))
 
             if (graphShowing) {
-                StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+                StatsGraphView(viewModel = viewModel, themeStream, modifier = Modifier.padding(bottom = 24.dp))
             }
 
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)

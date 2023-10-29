@@ -134,7 +134,7 @@ class ParametersGraphTabView(
                         }
                     }
 
-                    ParameterGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+                    ParameterGraphView(viewModel = viewModel, themeStream, modifier = Modifier.padding(bottom = 24.dp))
 
                     ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
                 } else {

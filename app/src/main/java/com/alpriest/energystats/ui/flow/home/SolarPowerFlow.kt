@@ -1,14 +1,13 @@
 package com.alpriest.energystats.ui.flow.home
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -37,6 +36,7 @@ import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
@@ -71,7 +71,7 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
             sunColor = Color.Red
         } else {
             glowing = false
-            sunColor = iconBackgroundColor()
+            sunColor = iconBackgroundColor(isDarkMode(themeStream))
             glowColor = Color.Transparent
         }
 

@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.flow.battery
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,6 +63,15 @@ fun BatteryPowerFlow(
 }
 
 @Composable
+fun isDarkMode(themeStream: MutableStateFlow<AppTheme>): Boolean {
+    return when (themeStream.collectAsState().value.colorTheme) {
+        ColorThemeMode.Light -> false
+        ColorThemeMode.Dark -> true
+        ColorThemeMode.Auto -> isSystemInDarkTheme()
+    }
+}
+
+@Composable
 fun BatteryIconView(
     viewModel: BatteryPowerViewModel,
     themeStream: MutableStateFlow<AppTheme>,
@@ -81,7 +92,8 @@ fun BatteryIconView(
         BatteryView(
             modifier = Modifier
                 .height(iconHeight)
-                .width(iconHeight * 1.25f)
+                .width(iconHeight * 1.25f),
+            isDarkMode = isDarkMode(themeStream)
         )
 
         if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {

@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -38,6 +35,7 @@ import com.alpriest.energystats.models.power
 import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -78,12 +76,12 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
         Column(
             Modifier
                 .background(
-                    colors.ApproximationBackground,
+                    ApproximationBackground(themeStream),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .border(
                     width = 1.dp,
-                    color = ApproximationHeader,
+                    color = ApproximationHeader(themeStream),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .fillMaxWidth()
@@ -110,7 +108,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                     }
 
                     selfSufficiencyCalculations?.let {
-                        CalculationBreakdownView(showingApproximations.value, it)
+                        CalculationBreakdownView(showingApproximations.value, it, themeStream)
                     }
                 }
 
@@ -145,7 +143,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                         )
                     }
 
-                    CalculationBreakdownView(showingApproximations.value, it.solarBreakdown)
+                    CalculationBreakdownView(showingApproximations.value, it.solarBreakdown, themeStream)
                 }
 
                 viewModel.financialModel?.let {
@@ -162,7 +160,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                     }
-                    CalculationBreakdownView(showingApproximations.value, it.exportBreakdown)
+                    CalculationBreakdownView(showingApproximations.value, it.exportBreakdown, themeStream)
 
                     Row(
                         Modifier.fillMaxWidth(),
@@ -177,7 +175,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                     }
-                    CalculationBreakdownView(showingApproximations.value, it.solarSavingBreakdown)
+                    CalculationBreakdownView(showingApproximations.value, it.solarSavingBreakdown, themeStream)
 
                     Row(
                         Modifier.fillMaxWidth(),
@@ -201,7 +199,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
             Modifier
                 .offset(x = 8.dp, y = (-11).dp)
                 .background(
-                    ApproximationHeader,
+                    ApproximationHeader(themeStream),
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 1.dp),
@@ -217,7 +215,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                 .offset(x = (-8).dp, y = (-11).dp)
                 .height(21.dp)
                 .background(
-                    ApproximationHeader,
+                    ApproximationHeader(themeStream),
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 1.dp)
@@ -256,10 +254,12 @@ fun StatsApproximationViewPreview() {
     }
 }
 
-val ApproximationHeader: Color
-    @Composable
-    get() = if (isSystemInDarkTheme()) DarkApproximationHeader else LightApproximationHeader
+@Composable
+fun ApproximationHeader(themeStream: MutableStateFlow<AppTheme>): Color {
+    return if (isDarkMode(themeStream)) DarkApproximationHeader else LightApproximationHeader
+}
 
-val Colors.ApproximationBackground: Color
-    @Composable
-    get() = if (isSystemInDarkTheme()) DarkApproximationBackground else LightApproximationBackground
+@Composable
+fun ApproximationBackground(themeStream: MutableStateFlow<AppTheme>): Color {
+    return if (isDarkMode(themeStream)) DarkApproximationBackground else LightApproximationBackground
+}

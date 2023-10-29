@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +17,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val systemUiController = rememberSystemUiController()
-            if (isSystemInDarkTheme()) {
+            val isDarkMode = when (appContainer.configManager.colorThemeMode) {
+                ColorThemeMode.Auto -> isSystemInDarkTheme()
+                ColorThemeMode.Dark -> true
+                ColorThemeMode.Light -> false
+            }
+            if (isDarkMode) {
                 SideEffect {
                     systemUiController.setSystemBarsColor(Color.Black, darkIcons = false)
                 }

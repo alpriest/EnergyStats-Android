@@ -18,8 +18,8 @@ import com.alpriest.energystats.ui.theme.IconColorInDarkTheme
 import com.alpriest.energystats.ui.theme.IconColorInLightTheme
 
 @Composable
-fun iconBackgroundColor(): Color {
-    return if (isSystemInDarkTheme()) {
+fun iconBackgroundColor(isDarkMode: Boolean): Color {
+    return if (isDarkMode) {
         IconColorInDarkTheme
     } else {
         IconColorInLightTheme
@@ -27,8 +27,8 @@ fun iconBackgroundColor(): Color {
 }
 
 @Composable
-fun iconForegroundColor(): Color {
-    return if (isSystemInDarkTheme()) {
+fun iconForegroundColor(isDarkMode: Boolean): Color {
+    return if (isDarkMode) {
         IconColorInLightTheme
     } else {
         IconColorInDarkTheme
@@ -36,9 +36,9 @@ fun iconForegroundColor(): Color {
 }
 
 @Composable
-fun BatteryView(modifier: Modifier = Modifier) {
-    val foregroundColor = iconForegroundColor()
-    val backgroundColor = iconBackgroundColor()
+fun BatteryView(modifier: Modifier = Modifier, isDarkMode: Boolean) {
+    val foregroundColor = iconForegroundColor(isDarkMode)
+    val backgroundColor = iconBackgroundColor(isDarkMode)
 
     Canvas(
         modifier = modifier
@@ -114,7 +114,8 @@ fun BatteryViewPreview() {
             BatteryView(
                 modifier = Modifier
                     .height(height)
-                    .width(height * 1.25f)
+                    .width(height * 1.25f),
+                isDarkMode = true
             )
         }
     }

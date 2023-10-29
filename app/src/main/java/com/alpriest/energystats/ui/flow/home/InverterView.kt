@@ -90,7 +90,8 @@ fun InverterView(
                         .width(43.dp)
                         .height(50.dp)
                         .padding(bottom = 4.dp)
-                        .background(MaterialTheme.colors.background)
+                        .background(MaterialTheme.colors.background),
+                    themeStream
                 )
             }
 
@@ -138,13 +139,14 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
             Box(contentAlignment = Alignment.TopEnd) {
                 Button(
                     onClick = { expanded = !expanded },
-                    colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.White, contentColor = colors.onSecondary),
+                    colors = ButtonDefaults.outlinedButtonColors(backgroundColor = colors.surface, contentColor = colors.onSecondary),
                     contentPadding = PaddingValues(2.dp),
                     elevation = ButtonDefaults.elevation(1.dp)
                 ) {
                     Text(
                         viewModel.deviceDisplayName,
                         fontSize = 12.sp,
+                        color = colors.onSurface
                     )
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,

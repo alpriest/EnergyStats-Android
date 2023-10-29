@@ -15,7 +15,9 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
@@ -28,11 +30,12 @@ import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
+fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val chartColors = viewModel.chartColorsStream.collectAsState().value
 
@@ -40,7 +43,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
         Text("No data")
     } else {
         Column(modifier = modifier.fillMaxWidth()) {
-            ProvideChartStyle(chartStyle(chartColors)) {
+            ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                 Chart(
                     chart = columnChart(),
                     chartModelProducer = viewModel.producer,
@@ -73,7 +76,10 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
 @Composable
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
-    StatsGraphView(StatsTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }))
+    StatsGraphView(
+        StatsTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }),
+        MutableStateFlow(AppTheme.preview())
+    )
 }
 
 class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val displayMode: StatsDisplayMode) :

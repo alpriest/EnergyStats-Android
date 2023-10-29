@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.flow.inverter
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -21,14 +22,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun InverterIconView(modifier: Modifier = Modifier) {
+fun InverterIconView(modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppTheme>) {
     val painter = rememberVectorPainter(Icons.Default.ElectricBolt)
-    val inverterBackground = iconBackgroundColor()
-    val boltTint = iconForegroundColor()
+    val inverterBackground = iconBackgroundColor(isDarkMode(themeStream))
+    val boltTint = iconForegroundColor(isDarkMode(themeStream))
 
     Canvas(
         modifier = modifier
@@ -95,7 +100,10 @@ fun InverterIconView(modifier: Modifier = Modifier) {
 @Composable fun InverterViewPreview() {
     Column {
         EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-            InverterIconView(modifier = Modifier.width(50.dp).height(65.dp))
+            InverterIconView(
+                modifier = Modifier.width(50.dp).height(65.dp),
+                MutableStateFlow(AppTheme.preview())
+            )
         }
     }
 }
