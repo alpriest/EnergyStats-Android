@@ -223,4 +223,6 @@
     <string name="export_income">Entrate da esportazione</string>
     <string name="grid_import_avoided">Importazione dalla rete evitata</string>
     <string name="total_benefit">Beneficio totale</string>
+    <string name="light">chiaro</string>
+    <string name="dark">scuro</string>
 </resources>

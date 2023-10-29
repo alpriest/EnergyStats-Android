@@ -1,12 +1,12 @@
 package com.alpriest.energystats.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 
 private val DarkColorPalette = darkColors(
     primary = TintColor,
@@ -33,7 +33,12 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun EnergyStatsTheme(darkTheme: Boolean = isSystemInDarkTheme(), useLargeDisplay: Boolean = false, content: @Composable () -> Unit) {
+fun EnergyStatsTheme(useLargeDisplay: Boolean = false, colorThemeMode: ColorThemeMode = ColorThemeMode.Auto, content: @Composable () -> Unit) {
+    val darkTheme = when (colorThemeMode) {
+        ColorThemeMode.Auto -> isSystemInDarkTheme()
+        ColorThemeMode.Light -> false
+        ColorThemeMode.Dark -> true
+    }
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

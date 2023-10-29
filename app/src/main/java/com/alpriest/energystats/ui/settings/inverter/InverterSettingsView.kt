@@ -101,7 +101,7 @@ fun DeviceVersionView(device: Device) {
 @Preview(widthDp = 300)
 @Composable
 fun InverterSettingsViewPreview() {
-    EnergyStatsTheme(darkTheme = true) {
+    EnergyStatsTheme {
         InverterSettingsView(
             FakeConfigManager(),
             NavHostController(LocalContext.current)

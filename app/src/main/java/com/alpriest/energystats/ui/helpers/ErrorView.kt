@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
@@ -75,7 +76,7 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit)
 @Preview
 @Composable
 fun ErrorPreview() {
-    EnergyStatsTheme(darkTheme = true) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ErrorView(reason = "BEGIN_OBJECT was expected but got something else instead. Will try again because something else went wrong too.", onRetry = {}, onLogout = {})
     }
 }

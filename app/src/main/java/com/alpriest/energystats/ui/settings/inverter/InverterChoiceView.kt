@@ -90,7 +90,7 @@ val Device.deviceDisplayName: String
 @Preview(showBackground = true, heightDp = 600, widthDp = 400)
 @Composable
 fun InverterChoiceViewPreview() {
-    EnergyStatsTheme(darkTheme = true) {
+    EnergyStatsTheme {
         InverterChoiceView(FakeConfigManager())
     }
 }

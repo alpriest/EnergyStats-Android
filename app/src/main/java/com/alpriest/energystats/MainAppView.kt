@@ -21,7 +21,7 @@ fun MainAppView(appContainer: AppContainer) {
     val theme = appContainer.configManager.themeStream.collectAsState()
     val loginState = appContainer.userManager.loggedInState.collectAsState()
 
-    EnergyStatsTheme(useLargeDisplay = theme.value.useLargeDisplay) {
+    EnergyStatsTheme(useLargeDisplay = theme.value.useLargeDisplay, colorThemeMode = theme.value.colorTheme) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {

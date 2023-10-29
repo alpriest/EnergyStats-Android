@@ -2,10 +2,12 @@ package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 class FakeConfigStore(
+    override var colorTheme: Int = 0,
     override var showGraphValueDescriptions: Boolean = true,
     override var shouldCombineCT2WithPVPower: Boolean = false,
     override var currencyCode: String = "GBP",

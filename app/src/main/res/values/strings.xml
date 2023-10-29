@@ -224,4 +224,6 @@
     <string name="export_income">Export income</string>
     <string name="grid_import_avoided">Grid import avoided</string>
     <string name="total_benefit">Total benefit</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
 </resources>

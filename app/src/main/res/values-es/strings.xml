@@ -222,4 +222,6 @@
     <string name="export_income">Exportar ingresos</string>
     <string name="grid_import_avoided">Importación de la red evitada</string>
     <string name="total_benefit">Beneficio total</string>
+    <string name="light">claro</string>
+    <string name="dark">oscuro</string>
 </resources>

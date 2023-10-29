@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -93,7 +94,7 @@ fun InverterIconView(modifier: Modifier = Modifier) {
 @Preview(showBackground = false, widthDp = 200, heightDp = 300)
 @Composable fun InverterViewPreview() {
     Column {
-        EnergyStatsTheme(darkTheme = false) {
+        EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
             InverterIconView(modifier = Modifier.width(50.dp).height(65.dp))
         }
     }

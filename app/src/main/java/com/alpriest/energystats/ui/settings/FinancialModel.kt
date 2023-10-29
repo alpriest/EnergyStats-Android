@@ -3,20 +3,30 @@ package com.alpriest.energystats.ui.settings
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -25,6 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.glance.appwidget.proto.LayoutProto
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -51,6 +63,7 @@ enum class FinancialModel(val value: Int) {
 }
 
 @Composable
+
 fun FinancialsSettingsView(config: ConfigManaging) {
     val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
     val financialModelState = rememberSaveable { mutableStateOf(config.financialModel) }
@@ -85,14 +98,30 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     Text(
                         stringResource(R.string.feed_in_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSecondary
                     )
-                    OutlinedTextField(value = feedInUnitPrice.value,
+
+                    Text(
+                        config.currencySymbol,
+                        color = MaterialTheme.colors.onSecondary,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+
+                    TextField(
+                        value = feedInUnitPrice.value,
                         onValueChange = {
                             feedInUnitPrice.value = it
                             config.feedInUnitPrice = it.safeToDouble()
                         },
-                        modifier = Modifier.width(100.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                        leadingIcon = { Text(config.currencySymbol, color = MaterialTheme.colors.onSecondary) })
+                        modifier = Modifier
+                            .width(90.dp)
+                            .defaultMinSize(
+                                minWidth = TextFieldDefaults.MinWidth,
+                                minHeight = 44.dp
+                            ),
+                        textStyle = LocalTextStyle.current.copy(
+                            textAlign = TextAlign.End,
+                            color = colors.onSecondary
+                        )
+                    )
                 }
 
                 Row(
@@ -105,14 +134,30 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     Text(
                         stringResource(R.string.grid_import_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSecondary
                     )
-                    OutlinedTextField(value = gridImportUnitPrice.value,
+
+                    Text(
+                        config.currencySymbol,
+                        color = MaterialTheme.colors.onSecondary,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+
+                    TextField(
+                        value = gridImportUnitPrice.value,
                         onValueChange = {
                             gridImportUnitPrice.value = it
                             config.gridImportUnitPrice = it.safeToDouble()
                         },
-                        modifier = Modifier.width(100.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                        leadingIcon = { Text(config.currencySymbol, color = MaterialTheme.colors.onSecondary) })
+                        modifier = Modifier
+                            .width(90.dp)
+                            .defaultMinSize(
+                                minWidth = TextFieldDefaults.MinWidth,
+                                minHeight = 44.dp
+                            ),
+                        textStyle = LocalTextStyle.current.copy(
+                            textAlign = TextAlign.End,
+                            color = colors.onSecondary
+                        )
+                    )
                 }
             }
         }

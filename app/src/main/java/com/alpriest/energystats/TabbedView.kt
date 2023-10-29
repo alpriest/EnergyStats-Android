@@ -38,6 +38,7 @@ import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
 import com.alpriest.energystats.ui.statsgraph.StatsTabView
 import com.alpriest.energystats.ui.statsgraph.StatsTabViewModel
@@ -177,7 +178,7 @@ fun TabbedView(
 @Preview(showBackground = true)
 @Composable
 fun HomepagePreview() {
-    EnergyStatsTheme(darkTheme = true) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         TabbedView(
             ConfigManager(
                 config = FakeConfigStore(),

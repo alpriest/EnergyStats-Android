@@ -10,6 +10,7 @@ import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
@@ -73,7 +74,8 @@ fun AppTheme.Companion.preview(
     financialModel: FinancialModel = FinancialModel.FoxESS,
     shouldCombineCT2WithPVPower: Boolean = true,
     showGraphValueDescriptions: Boolean = true,
-    parameterGroups: List<ParameterGroup> = listOf()
+    parameterGroups: List<ParameterGroup> = listOf(),
+    colorTheme: ColorThemeMode = ColorThemeMode.Auto
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -99,6 +101,7 @@ fun AppTheme.Companion.preview(
         financialModel = financialModel,
         shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower,
         showGraphValueDescriptions = showGraphValueDescriptions,
-        parameterGroups = parameterGroups
+        parameterGroups = parameterGroups,
+        colorTheme = colorTheme
     )
 }

@@ -45,8 +45,17 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         FEED_IN_UNIT_PRICE,
         GRID_IMPORT_UNIT_PRICE,
         SHOULD_COMBINE_CT2_WITH_PVPOWER,
-        SHOW_GRAPH_VALUE_DESCRIPTIONS
+        SHOW_GRAPH_VALUE_DESCRIPTIONS,
+        COLOR_THEME_MODE
     }
+
+    override var colorTheme: Int
+        get() = sharedPreferences.getInt(SharedPreferenceKey.COLOR_THEME_MODE.name, 0)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(SharedPreferenceKey.COLOR_THEME_MODE.name, value)
+            editor.apply()
+        }
 
     override var showGraphValueDescriptions: Boolean
         get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_GRAPH_VALUE_DESCRIPTIONS.name, true)

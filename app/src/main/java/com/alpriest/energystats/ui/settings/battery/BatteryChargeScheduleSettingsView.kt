@@ -179,7 +179,7 @@ class BatteryChargeScheduleSettingsView(
 @Preview(showBackground = true, widthDp = 300)
 @Composable
 fun BatteryForceChargeTimesViewPreview() {
-    EnergyStatsTheme(darkTheme = true) {
+    EnergyStatsTheme {
         BatteryChargeScheduleSettingsView(
             network = DemoNetworking(),
             configManager = FakeConfigManager(),

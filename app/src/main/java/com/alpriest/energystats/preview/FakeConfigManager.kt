@@ -7,6 +7,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
@@ -16,13 +17,14 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeConfigManager : ConfigManaging {
+    override var colorThemeMode: ColorThemeMode = ColorThemeMode.Auto
     override var showGraphValueDescriptions: Boolean = true
     override var shouldCombineCT2WithPVPower: Boolean = true
     override var currencyCode: String = "GBP"
     override var feedInUnitPrice: Double = 0.05
     override var gridImportUnitPrice: Double = 0.15
     override var currencySymbol: String = "£"
-    override var financialModel: FinancialModel = FinancialModel.FoxESS
+    override var financialModel: FinancialModel = FinancialModel.EnergyStats
     override val variables: List<RawVariable>
         get() = listOf()
     override val hasBattery: Boolean
@@ -35,7 +37,7 @@ class FakeConfigManager : ConfigManaging {
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off
     override var showBatteryEstimate: Boolean = false
     override var showBatteryTemperature: Boolean = false
-    override var showFinancialSummary: Boolean = false
+    override var showFinancialSummary: Boolean = true
     override var useLargeDisplay: Boolean = false
     override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(20.0)
     override var batteryCapacity: Int = 3000

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -160,7 +161,7 @@ fun TextEntryDialog(dialogState: MaterialDialogState, text: String, onConfirm: (
 @Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun ParameterVariableGroupEditorViewPreview() {
-    EnergyStatsTheme(darkTheme = false) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ParameterVariableGroupEditorView(
             viewModel = ParameterVariableGroupEditorViewModel(FakeConfigManager(), MutableStateFlow(previewParameterGraphVariables())),
             NavHostController(LocalContext.current)

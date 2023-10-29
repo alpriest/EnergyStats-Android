@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
@@ -42,9 +43,17 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             financialModel = FinancialModel.fromInt(config.financialModel),
             shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
             showGraphValueDescriptions = config.showGraphValueDescriptions,
-            parameterGroups = config.parameterGroups
+            parameterGroups = config.parameterGroups,
+            colorTheme = ColorThemeMode.fromInt(config.colorTheme)
         )
     )
+
+    override var colorThemeMode: ColorThemeMode
+        get() = ColorThemeMode.fromInt( config.colorTheme)
+        set(value) {
+            config.colorTheme = value.value
+            themeStream.value = themeStream.value.copy(colorTheme = colorThemeMode)
+        }
 
     override var showGraphValueDescriptions: Boolean
         get() = config.showGraphValueDescriptions

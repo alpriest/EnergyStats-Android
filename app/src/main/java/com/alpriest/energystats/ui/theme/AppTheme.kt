@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
@@ -33,7 +34,8 @@ data class AppTheme(
     val solarRangeDefinitions: SolarRangeDefinitions,
     val shouldCombineCT2WithPVPower: Boolean,
     val showGraphValueDescriptions: Boolean,
-    var parameterGroups: List<ParameterGroup>
+    var parameterGroups: List<ParameterGroup>,
+    val colorTheme: ColorThemeMode
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

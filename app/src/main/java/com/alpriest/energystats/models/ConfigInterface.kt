@@ -1,10 +1,12 @@
 package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var colorTheme: Int
     var showGraphValueDescriptions: Boolean
     var shouldCombineCT2WithPVPower: Boolean
     var currencyCode: String

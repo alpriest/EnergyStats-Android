@@ -195,7 +195,7 @@ fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTh
 @Preview(showBackground = true, widthDp = 400, heightDp = 400)
 @Composable
 fun SolarBandingSettingsPreview() {
-    EnergyStatsTheme(darkTheme = false) {
+    EnergyStatsTheme {
         SolarBandingSettingsView(
             NavHostController(LocalContext.current),
             configManager = FakeConfigManager()

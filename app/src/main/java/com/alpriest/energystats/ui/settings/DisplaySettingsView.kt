@@ -37,6 +37,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
     val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
     val showGraphValueDescriptionsState = rememberSaveable { mutableStateOf(config.showGraphValueDescriptions) }
+    val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
     val context = LocalContext.current
 
     SettingsColumnWithChild(
@@ -78,6 +79,25 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             title = stringResource(R.string.show_sunny_background),
             state = showSunnyBackgroundState,
             onUpdate = { config.showSunnyBackground = it }
+        )
+
+        SettingsSegmentedControl(
+            title = "Appearance",
+            segmentedControl = {
+                val items = listOf(
+                    ColorThemeMode.Light,
+                    ColorThemeMode.Dark,
+                    ColorThemeMode.Auto
+                )
+                SegmentedControl(
+                    items = items.map { it.title(context) },
+                    defaultSelectedItemIndex = items.indexOf(colorThemeModeState.value),
+                    color = colors.primary
+                ) {
+                    colorThemeModeState.value = items[it]
+                    config.colorThemeMode = items[it]
+                }
+            }
         )
 
         SettingsSegmentedControl(
@@ -148,7 +168,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
 @Preview(showBackground = true, heightDp = 640)
 @Composable
 fun DisplaySettingsViewPreview() {
-    EnergyStatsTheme(darkTheme = false) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         DisplaySettingsView(config = FakeConfigManager(), navController = NavHostController(LocalContext.current), modifier = Modifier.padding(horizontal = 12.dp))
     }
 }

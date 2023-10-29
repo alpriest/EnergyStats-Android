@@ -222,4 +222,6 @@
     <string name="export_income">Exporteinnahmen</string>
     <string name="grid_import_avoided">Eingesparter Netzverbrauch</string>
     <string name="total_benefit">Gesamtvorteil</string>
+    <string name="light">hell</string>
+    <string name="dark">dunkel</string>
 </resources>

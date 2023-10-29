@@ -149,7 +149,7 @@ class BatterySOCSettings(
 @Preview(showBackground = true)
 @Composable
 fun BatterySOCSettingsViewPreview() {
-    EnergyStatsTheme(darkTheme = true) {
+    EnergyStatsTheme {
         BatterySOCSettings(
             network = DemoNetworking(),
             configManager = FakeConfigManager(),

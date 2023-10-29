@@ -167,7 +167,7 @@ class WorkModeView(
 @Preview(widthDp = 400)
 @Composable
 fun WorkModeViewPreview() {
-    EnergyStatsTheme(darkTheme = false) {
+    EnergyStatsTheme {
         WorkModeView(
             DemoNetworking(),
             FakeConfigManager(),

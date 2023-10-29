@@ -181,7 +181,7 @@ fun Rectangle(
 @Preview(showBackground = true)
 @Composable
 fun DataloggerViewPreview() {
-    EnergyStatsTheme(darkTheme = false) {
+    EnergyStatsTheme {
         DataLoggerView(
             dataLogger = DataLogger(moduleSN = "ABC123DEF456", moduleType = "W2", plantName = "John Doe", version = "3.08", signal = 2, communication = 1),
         )
