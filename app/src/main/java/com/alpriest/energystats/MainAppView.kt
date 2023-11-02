@@ -40,6 +40,7 @@ fun MainAppView(appContainer: AppContainer) {
                         { appContainer.openAppInPlayStore() },
                         { appContainer.buyMeACoffee() },
                         { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) },
+                        { filename, action -> appContainer.showFileChooser(filename, action) },
                         credentialStore = appContainer.credentialStore
                     )
                 }

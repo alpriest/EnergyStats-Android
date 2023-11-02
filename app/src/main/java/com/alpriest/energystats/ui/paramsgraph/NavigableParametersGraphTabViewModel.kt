@@ -67,7 +67,8 @@ class NavigableParametersGraphTabViewModelFactory(
 class NavigableParametersGraphTabView(
     val configManager: ConfigManaging,
     val network: Networking,
-    val onWriteTempFile: (String, String) -> Uri?,
+    private val onWriteTempFile: (String, String) -> Uri?,
+    private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     val themeStream: MutableStateFlow<AppTheme>,
 ) {
     @Composable
@@ -81,7 +82,7 @@ class NavigableParametersGraphTabView(
             exitTransition = { ExitTransition.None }
         ) {
             composable(ParametersScreen.Graph.name) {
-                ParametersGraphTabView(network, configManager, onWriteTempFile, viewModel.graphVariablesStream, navController).Content(themeStream = themeStream)
+                ParametersGraphTabView(network, configManager, onWriteTempFile, viewModel.graphVariablesStream, navController, filePathChooser).Content(themeStream = themeStream)
             }
 
             composable(ParametersScreen.ParameterChooser.name) {

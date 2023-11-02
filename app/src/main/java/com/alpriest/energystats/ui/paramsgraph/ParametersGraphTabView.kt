@@ -1,9 +1,9 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,17 +39,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -79,7 +73,8 @@ class ParametersGraphTabView(
     private val configManager: ConfigManaging,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>,
-    private val navController: NavController
+    private val navController: NavController,
+    private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?
 ) {
     @Composable
     fun Content(
@@ -91,14 +86,13 @@ class ParametersGraphTabView(
         val hasData = viewModel.hasDataStream.collectAsState().value
         val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
         val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
+        val context = LocalContext.current
 
         LaunchedEffect(viewModel.displayModeStream) {
             isLoading = true
             viewModel.load()
             isLoading = false
         }
-
-        val context = LocalContext.current
 
         if (isLoading) {
             Column(
@@ -158,14 +152,7 @@ class ParametersGraphTabView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Row(modifier = Modifier.clickable {
-                        val sendIntent: Intent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_STREAM, viewModel.exportFileUri)
-                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                            type = "text/csv"
-                        }
-                        val shareIntent = Intent.createChooser(sendIntent, null)
-                        context.startActivity(shareIntent)
+                        showExportMethodSelection(context, viewModel.exportFileName, filePathChooser, viewModel)
                     }) {
                         Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
                         Text(stringResource(R.string.export_csv_data))
@@ -174,6 +161,35 @@ class ParametersGraphTabView(
             }
         }
     }
+}
+
+fun showExportMethodSelection(context: Context, filename: String, filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?, viewModel: ExportProviding) {
+    val items = arrayOf(context.getString(R.string.export_save_to_a_local_file), context.getString(R.string.export_share_or_open_with_another_app))
+
+    AlertDialog.Builder(context)
+        .setTitle(context.getString(R.string.choose_export_method))
+        .setItems(items) { dialog, which ->
+            when (which) {
+                0 -> {
+                    filePathChooser(filename) {
+                        viewModel.exportTo(context, it)
+                    }
+                }
+
+                1 -> {
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_STREAM, viewModel.exportFileUri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        type = "text/csv"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    context.startActivity(shareIntent)
+                }
+            }
+        }
+        .setNegativeButton(context.getString(R.string.cancel), null)
+        .show()
 }
 
 @Preview

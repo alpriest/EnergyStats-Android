@@ -226,4 +226,7 @@
     <string name="total_benefit">Total benefit</string>
     <string name="light">Light</string>
     <string name="dark">Dark</string>
+    <string name="export_save_to_a_local_file">Save to a local file</string>
+    <string name="export_share_or_open_with_another_app">Share or open with another app</string>
+    <string name="choose_export_method">Choose export method</string>
 </resources>

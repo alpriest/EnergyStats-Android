@@ -7,6 +7,7 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
@@ -19,7 +20,9 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
-import com.alpriest.energystats.ui.login.*
+import com.alpriest.energystats.ui.login.ConfigManager
+import com.alpriest.energystats.ui.login.UserManager
+import com.alpriest.energystats.ui.login.UserManaging
 
 class AppContainer(private val context: Context) {
     val networkStore: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore()
@@ -30,6 +33,8 @@ class AppContainer(private val context: Context) {
         )
     internal val credentialStore: CredentialStore = SharedPreferencesCredentialStore(sharedPreferences)
     private val config = SharedPreferencesConfigStore(sharedPreferences)
+    var filePathChooser: ActivityResultLauncher<String>? = null
+    var filePathChooserCallback: ((Uri) -> Unit)? = null
 
     val networking: Networking by lazy {
         NetworkValueCleaner(
@@ -74,7 +79,6 @@ class AppContainer(private val context: Context) {
     fun buyMeACoffee() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.flags = FLAG_ACTIVITY_NEW_TASK
-        val subject = "Android App"
         val data = Uri.parse("https://buymeacoffee.com/alpriest")
         intent.data = data
         startActivity(context, intent, null)
@@ -83,7 +87,12 @@ class AppContainer(private val context: Context) {
     fun writeToTempFile(baseFilename: String, text: String): Uri? {
         val file = kotlin.io.path.createTempFile(baseFilename + "_", ".csv").toFile()
         file.writeText(text)
-        return FileProvider.getUriForFile(context, "com.alpriest.energystats.ui.statsgraph.ExportFileProvider", file);
+        return FileProvider.getUriForFile(context, "com.alpriest.energystats.ui.statsgraph.ExportFileProvider", file)
+    }
+
+    fun showFileChooser(filename: String, action: (Uri) -> Unit) {
+        filePathChooserCallback = action
+        filePathChooser?.launch(filename)
     }
 }
 

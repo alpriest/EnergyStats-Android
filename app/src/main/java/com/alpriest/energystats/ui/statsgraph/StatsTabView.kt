@@ -1,6 +1,8 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import android.content.Intent
+import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,10 +30,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.startActivityForResult
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,7 +57,11 @@ sealed class StatsDisplayMode {
 }
 
 @Composable
-fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
+fun StatsTabView(
+    viewModel: StatsTabViewModel,
+    filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
+    themeStream: MutableStateFlow<AppTheme>
+) {
     val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -103,14 +111,7 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(modifier = Modifier.clickable {
-                    val sendIntent: Intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_STREAM, viewModel.exportFileUri)
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                        type = "text/csv"
-                    }
-                    val shareIntent = Intent.createChooser(sendIntent, null)
-                    context.startActivity(shareIntent)
+                    showExportMethodSelection(context, viewModel.exportFileName, filePathChooser, viewModel)
                 }) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
                     Text(stringResource(R.string.export_csv_data))
@@ -123,5 +124,9 @@ fun StatsTabView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<App
 @Preview(widthDp = 400, heightDp = 800)
 @Composable
 fun StatsGraphTabViewPreview() {
-    StatsTabView(StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null }, themeStream = MutableStateFlow(AppTheme.preview()))
+    StatsTabView(
+        StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
+        { _, _ -> },
+        MutableStateFlow(AppTheme.preview())
+    )
 }

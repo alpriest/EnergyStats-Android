@@ -1,7 +1,6 @@
 package com.alpriest.energystats
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,6 +69,7 @@ fun TabbedView(
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
     onWriteTempFile: (String, String) -> Uri?,
+    filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     credentialStore: CredentialStore
 ) {
     val state = rememberScaffoldState()
@@ -92,8 +92,8 @@ fun TabbedView(
             ) { page ->
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
-                    1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), themeStream)
-                    2 -> NavigableParametersGraphTabView(configManager, network, onWriteTempFile, themeStream).Content()
+                    1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), filePathChooser, themeStream)
+                    2 -> NavigableParametersGraphTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
                     3 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,
@@ -193,6 +193,7 @@ fun HomepagePreview() {
             {},
             {},
             { _, _ -> null },
+            { _, _ -> },
             SharedPreferencesCredentialStore(LocalContext.current.getSharedPreferences("com.alpriest.energystats", Context.MODE_PRIVATE))
         )
     }

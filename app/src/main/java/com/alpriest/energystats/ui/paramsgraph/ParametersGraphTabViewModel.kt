@@ -1,6 +1,9 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,19 +18,28 @@ import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
 
+interface ExportProviding {
+    abstract var exportFileUri: Uri?
+    abstract fun exportTo(context: Context, uri: Uri)
+}
+
 class ParametersGraphTabViewModel(
     val networking: Networking,
     val configManager: ConfigManaging,
     val onWriteTempFile: (String, String) -> Uri?,
     val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
-) : ViewModel() {
-    var exportFileUri: Uri? = null
+) : ViewModel(), ExportProviding {
+    private var exportText: String = ""
+    var exportFileName: String = ""
+    override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
@@ -160,17 +172,15 @@ class ParametersGraphTabViewModel(
             listOf(it.type.variable, it.time.toString(), it.value.toString()).joinToString(",")
         }
 
-        val exportText = (listOf(headers) + rows).joinToString(separator = "\n")
-        val exportFileName: String
-
         val date = displayMode.date
         val year = date.year
         val month = date.month.name
         val day = date.dayOfMonth
 
-        exportFileName = "energystats_${year}_${month}_$day"
-
-        exportFileUri = onWriteTempFile(exportFileName, exportText)
+        exportText = (listOf(headers) + rows).joinToString(separator = "\n")
+        val baseExportFileName = "energystats_${year}_${month}_$day"
+        exportFileUri = onWriteTempFile(baseExportFileName, exportText)
+        exportFileName = "$baseExportFileName.csv"
     }
 
     fun toggleVisibility(parameterGraphVariable: ParameterGraphVariable) {
@@ -193,6 +203,25 @@ class ParametersGraphTabViewModel(
 
     private fun storeVariables() {
         configManager.selectedParameterGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type.variable }
+    }
+
+    override fun exportTo(context: Context, uri: Uri) {
+        writeContentToUri(context, uri, exportText)
+    }
+}
+
+fun writeContentToUri(context: Context, uri: Uri, content: String) {
+    val contentResolver: ContentResolver = context.contentResolver
+    var outputStream: OutputStream? = null
+
+    try {
+        outputStream = contentResolver.openOutputStream(uri)
+        outputStream?.write(content.toByteArray())
+    } catch (e: Exception) {
+        // Handle exceptions here
+        e.printStackTrace()
+    } finally {
+        outputStream?.close()
     }
 }
 

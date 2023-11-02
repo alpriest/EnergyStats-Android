@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -19,6 +20,8 @@ import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
+import com.alpriest.energystats.ui.paramsgraph.ExportProviding
+import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -33,14 +36,16 @@ class StatsTabViewModel(
     val configManager: ConfigManaging,
     val networking: Networking,
     val onWriteTempFile: (String, String) -> Uri?
-) : ViewModel() {
+) : ViewModel(), ExportProviding {
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
     var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
-    var exportFileUri: Uri? = null
+    private var exportText: String = ""
+    var exportFileName: String = ""
+    override var exportFileUri: Uri? = null
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     var showingGraphStream = MutableStateFlow(true)
 
@@ -145,8 +150,7 @@ class StatsTabViewModel(
             listOf(it.type.networkTitle(), it.graphPoint, it.value.toString()).joinToString(",")
         }
 
-        val exportText = (listOf(headers) + rows).joinToString(separator = "\n")
-        val exportFileName: String
+        val baseExportFileName: String
 
         when (displayMode) {
             is StatsDisplayMode.Day -> {
@@ -156,23 +160,29 @@ class StatsTabViewModel(
                 val month = date.month.name
                 val day = date.dayOfMonth
 
-                exportFileName = "energystats_${year}_${month}_$day"
+                baseExportFileName = "energystats_${year}_${month}_$day"
             }
 
             is StatsDisplayMode.Month -> {
                 val dateFormatSymbols = DateFormatSymbols.getInstance()
                 val month = dateFormatSymbols.months[displayMode.month]
                 val year = displayMode.year
-                exportFileName = "energystats_${year}_$month"
+                baseExportFileName = "energystats_${year}_$month"
             }
 
             is StatsDisplayMode.Year -> {
                 val year = displayMode.year
-                exportFileName = "energystats_$year"
+                baseExportFileName = "energystats_$year"
             }
         }
 
-        exportFileUri = onWriteTempFile(exportFileName, exportText)
+        exportText = (listOf(headers) + rows).joinToString(separator = "\n")
+        exportFileUri = onWriteTempFile(baseExportFileName, exportText)
+        exportFileName = "$baseExportFileName.txt"
+    }
+
+    override fun exportTo(context: Context, uri: Uri) {
+        writeContentToUri(context, uri, exportText)
     }
 
     private suspend fun generateTotals(
