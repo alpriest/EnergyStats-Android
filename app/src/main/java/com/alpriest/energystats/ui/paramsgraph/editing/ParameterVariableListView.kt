@@ -17,9 +17,10 @@ import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 @Composable
 fun ParameterVariableListView(variables: List<ParameterGraphVariable>, onTap: (ParameterGraphVariable) -> Unit) {
     variables.forEach { variable ->
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-            .clickable { onTap(variable) }
-            .fillMaxWidth()) {
+        Row(verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { onTap(variable) }
+                .fillMaxWidth()) {
             Checkbox(
                 checked = variable.isSelected, onCheckedChange = {
                     onTap(variable)

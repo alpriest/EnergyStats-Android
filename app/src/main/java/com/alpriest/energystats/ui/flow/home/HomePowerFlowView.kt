@@ -74,7 +74,7 @@ fun AppTheme.Companion.preview(
     financialModel: FinancialModel = FinancialModel.FoxESS,
     shouldCombineCT2WithPVPower: Boolean = true,
     showGraphValueDescriptions: Boolean = true,
-    parameterGroups: List<ParameterGroup> = listOf(),
+    parameterGroups: List<ParameterGroup> = ParameterGroup.defaults,
     colorTheme: ColorThemeMode = ColorThemeMode.Auto
 ): AppTheme {
     return AppTheme(

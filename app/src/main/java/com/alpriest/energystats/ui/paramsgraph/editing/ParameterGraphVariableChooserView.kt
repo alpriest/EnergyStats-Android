@@ -1,11 +1,13 @@
 package com.alpriest.energystats.ui.paramsgraph.editing
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,10 +20,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -89,19 +93,24 @@ class ParameterGraphVariableChooserView(
                             )
                         }
 
-                        OutlinedButton(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
+                        listRow(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
+                        Divider()
+                        listRow(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
+                        Divider()
 
-                        groups.forEach {
+                        groups.forEachIndexed { index, item ->
                             Row {
-                                OutlinedButton(
-                                    onClick = { viewModel.select(it.parameterNames) }
+                                listRow(
+                                    onClick = { viewModel.select(item.parameterNames) }
                                 ) {
-                                    Text(it.title)
+                                    Text(item.title)
                                 }
                             }
-                        }
 
-                        OutlinedButton(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
+                            if (index < groups.lastIndex) {
+                                Divider()
+                            }
+                        }
                     }
 
                     Row(modifier = Modifier.padding(vertical = 8.dp)) {
@@ -145,6 +154,19 @@ class ParameterGraphVariableChooserView(
                 }
             }
         })
+    }
+}
+
+@Composable
+fun listRow(onClick: () -> Unit, content: @Composable () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 44.dp)
+            .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        content()
     }
 }
 
