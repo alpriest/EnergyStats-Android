@@ -64,6 +64,7 @@ class ParameterGraphVariableChooserView(
         val variables = viewModel.variablesState.collectAsState().value
         val uriHandler = LocalUriHandler.current
         val groups = configManager.themeStream.collectAsState().value.parameterGroups
+        val selectedGroupId = viewModel.selectedIdState.collectAsState().value
 
         ContentWithBottomButtons(navController, onSave = {
             viewModel.apply()
@@ -103,7 +104,7 @@ class ParameterGraphVariableChooserView(
                             Row {
                                 listRow(
                                     onClick = { viewModel.select(item.parameterNames) },
-                                    false
+                                    item.id == selectedGroupId
                                 ) {
                                     Text(
                                         item.title,

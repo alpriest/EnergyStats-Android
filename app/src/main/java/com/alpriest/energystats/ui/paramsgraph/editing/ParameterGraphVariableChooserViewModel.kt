@@ -59,6 +59,11 @@ class ParameterGraphVariableChooserViewModelFactory(
 
 class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: MutableStateFlow<List<ParameterGraphVariable>>): ViewModel() {
     val variablesState: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
+    val selectedIdState: MutableStateFlow<String?> = MutableStateFlow(null)
+
+    init {
+        determineSelectedGroup()
+    }
 
     fun apply() {
         variables.value = variablesState.value
@@ -77,6 +82,7 @@ class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, 
             val select = newVariables.contains(it.type.variable)
             return@map it.copy(isSelected = select, enabled = select)
         }
+        determineSelectedGroup()
     }
 
     fun toggle(updating: ParameterGraphVariable) {
@@ -87,6 +93,13 @@ class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, 
 
             return@map it
         }
+        determineSelectedGroup()
+    }
+
+    private fun determineSelectedGroup() {
+        selectedIdState.value = configManager.parameterGroups.firstOrNull { group ->
+            group.parameterNames.sorted() == variablesState.value.filter { it.isSelected }.map { it.type.variable }.sorted()
+        }?.id
     }
 
     companion object {
