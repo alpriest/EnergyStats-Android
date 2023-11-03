@@ -18,6 +18,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material3.Divider
@@ -93,17 +94,21 @@ class ParameterGraphVariableChooserView(
                             )
                         }
 
-                        listRow(onClick = { viewModel.chooseDefaultVariables() }) { Text(stringResource(R.string.defalt)) }
+                        listRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
                         Divider()
-                        listRow(onClick = { viewModel.chooseNoVariables() }) { Text(stringResource(R.string.none)) }
+                        listRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
                         Divider()
 
                         groups.forEachIndexed { index, item ->
                             Row {
                                 listRow(
-                                    onClick = { viewModel.select(item.parameterNames) }
+                                    onClick = { viewModel.select(item.parameterNames) },
+                                    false
                                 ) {
-                                    Text(item.title)
+                                    Text(
+                                        item.title,
+                                        modifier = it
+                                    )
                                 }
                             }
 
@@ -158,7 +163,7 @@ class ParameterGraphVariableChooserView(
 }
 
 @Composable
-fun listRow(onClick: () -> Unit, content: @Composable () -> Unit) {
+fun listRow(onClick: () -> Unit, isSelected: Boolean, content: @Composable (Modifier) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,7 +171,15 @@ fun listRow(onClick: () -> Unit, content: @Composable () -> Unit) {
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        content()
+        content(
+            Modifier.weight(1.0f)
+        )
+
+        if (isSelected) {
+            Icon(
+                Icons.Default.Check, contentDescription = "Selected", modifier = Modifier.weight(0.1f)
+            )
+        }
     }
 }
 
