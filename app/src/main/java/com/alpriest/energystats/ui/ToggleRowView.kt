@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.models.rounded
+import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphBounds
 import com.alpriest.energystats.ui.statsgraph.GraphVariable
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -103,7 +104,7 @@ fun <T : GraphVariable> ToggleRowView(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            it.min.toDouble().rounded(appTheme.decimalPlaces).toString(),
+                            it.min.toDouble().roundedToString(appTheme.decimalPlaces),
                             color = textColor,
                             fontSize = fontSize,
                         )
@@ -118,7 +119,7 @@ fun <T : GraphVariable> ToggleRowView(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            it.max.toDouble().rounded(appTheme.decimalPlaces).toString(),
+                            it.max.toDouble().roundedToString(appTheme.decimalPlaces),
                             color = textColor,
                             fontSize = fontSize,
                         )
@@ -132,7 +133,7 @@ fun <T : GraphVariable> ToggleRowView(
                         horizontalAlignment = Alignment.End
                     ) {
                         Text(
-                            it.now.toDouble().rounded(appTheme.decimalPlaces).toString(),
+                            it.now.toDouble().roundedToString(appTheme.decimalPlaces),
                             color = textColor,
                             fontSize = fontSize,
                         )
