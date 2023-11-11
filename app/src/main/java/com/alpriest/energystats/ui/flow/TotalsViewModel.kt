@@ -15,7 +15,7 @@ class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, b
         solar = max(0.0, batteryCharge - batteryDischarge - grid + loads + feedIn)
         solarBreakdown = CalculationBreakdown(
             formula = "max(0, batteryCharge - batteryDischarge - gridImport + home + gridExport)",
-            calculation = "max(0, $batteryCharge - $batteryDischarge - $grid + $loads + $feedIn)"
+            calculation = "max(0, ${batteryCharge.roundedToString(2)} - ${batteryDischarge.roundedToString(2)} - ${grid.roundedToString(2)} + ${loads.roundedToString(2)} + ${feedIn.roundedToString(2)}"
         )
     }
 
