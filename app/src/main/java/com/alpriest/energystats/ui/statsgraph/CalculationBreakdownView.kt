@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: CalculationBreakdown, themeStream: MutableStateFlow<AppTheme>) {
+    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
+
     AnimatedVisibility(
         visible = visible,
         enter = expandVertically(),
@@ -47,7 +50,7 @@ fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: Calculation
                 fontStyle = FontStyle.Italic
             )
             Text(
-                calculationBreakdown.calculation,
+                calculationBreakdown.calculation(decimalPlaces),
                 fontSize = 12.sp
             )
         }

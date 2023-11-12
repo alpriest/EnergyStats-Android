@@ -102,7 +102,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
         )
         exportBreakdown = CalculationBreakdown(
             formula = "gridExport * feedInUnitPrice",
-            calculation = "${totalsViewModel.feedIn.roundedToString(2)} * ${configManager.feedInUnitPrice.roundedToString(2)}"
+            calculation = { "${totalsViewModel.feedIn.roundedToString(it)} * ${configManager.feedInUnitPrice.roundedToString(it)}" }
         )
 
         solarSaving = FinanceAmount(
@@ -113,7 +113,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
         )
         solarSavingBreakdown = CalculationBreakdown(
             formula = "(solar - gridExport) * gridImportUnitPrice",
-            calculation = "(${totalsViewModel.solar.roundedToString(2)} - ${totalsViewModel.feedIn.roundedToString(2)}) * ${configManager.gridImportUnitPrice}"
+            calculation = { "(${totalsViewModel.solar.roundedToString(it)} - ${totalsViewModel.feedIn.roundedToString(it)}) * ${configManager.gridImportUnitPrice}" }
         )
 
         total = FinanceAmount(

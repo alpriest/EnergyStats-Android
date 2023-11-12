@@ -236,9 +236,9 @@ fun StatsApproximationViewPreview() {
             modifier = Modifier.padding(24.dp),
             viewModel = ApproximationsViewModel(
                 netSelfSufficiencyEstimate = "95%",
-                netSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", "def"),
+                netSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", { "def" }),
                 absoluteSelfSufficiencyEstimate = "100%",
-                absoluteSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", "def"),
+                absoluteSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", { "def" }),
                 financialModel = null,
                 homeUsage = 4.5,
                 totalsViewModel = TotalsViewModel(

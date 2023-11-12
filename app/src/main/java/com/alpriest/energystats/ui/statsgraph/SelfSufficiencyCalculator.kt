@@ -16,12 +16,18 @@ If netGeneration > 0 then result = 1
 Else if netGeneration + homeConsumption < 0 then result = 0
 Else if netGeneration + homeConsumption > 0 then result = (netGeneration + homeConsumption) / homeConsumption
 """
-        val calculation = """netGeneration = $feedIn - $grid + $batteryCharge - $batteryDischarge
+        val calculation: (Int) -> String = {
+            """netGeneration = $feedIn - $grid + $batteryCharge - $batteryDischarge
 
-If ${netGeneration.roundedToString(2)} > 0 then result = 1
-Else if ${netGeneration.roundedToString(2)} + ${homeConsumption.roundedToString(2)} < 0 then result = 0
-Else if ${netGeneration.roundedToString(2)} + ${homeConsumption.roundedToString(2)} > 0 then result = (${netGeneration.roundedToString(2)} + ${homeConsumption.roundedToString(2)}) / ${homeConsumption.roundedToString(2)}
+If ${netGeneration.roundedToString(it)} > 0 then result = 1
+Else if ${netGeneration.roundedToString(it)} + ${homeConsumption.roundedToString(it)} < 0 then result = 0
+Else if ${netGeneration.roundedToString(it)} + ${homeConsumption.roundedToString(it)} > 0 then result = (${netGeneration.roundedToString(it)} + ${homeConsumption.roundedToString(it)}) / ${
+                homeConsumption.roundedToString(
+                    it
+                )
+            }
 """
+        }
 
         var result = 0.0
         if (netGeneration > 0) {
@@ -43,14 +49,14 @@ class NetSelfSufficiencyCalculator {
     fun calculate(loads: Double, grid: Double): Pair<Double, CalculationBreakdown> {
         val formula = "1 - (min(loads, max(grid, 0.0)) / loads)"
         if (loads <= 0) {
-            return Pair(0.0, CalculationBreakdown(formula,""))
+            return Pair(0.0, CalculationBreakdown(formula, { "" }))
         }
 
         val result = 1 - (minOf(loads, maxOf(grid, 0.0)) / loads)
 
         return Pair(
             (result * 100.0).roundTo(1),
-            CalculationBreakdown(formula,"1 - (min($loads, max($grid, 0.0)) / $loads)")
+            CalculationBreakdown(formula, { "1 - (min(${loads.roundedToString(it)}, max(${grid.roundedToString(it)}, 0.0)) / ${loads.roundedToString(it)})" })
         )
     }
 }
