@@ -64,7 +64,7 @@ fun PowerFlowView(
                 colors = CardDefaults.cardColors(containerColor = lineColor)
             ) {
                 Text(
-                    text = amount.energy(theme.displayUnit, theme.decimalPlaces),
+                    text = amount.power(theme.displayUnit, theme.decimalPlaces),
                     color = powerTextColor,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,

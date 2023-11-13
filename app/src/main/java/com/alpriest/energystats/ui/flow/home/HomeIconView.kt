@@ -13,8 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.power
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -41,7 +40,7 @@ fun HomeIconView(viewModel: HomePowerFlowViewModel, themeStream: MutableStateFlo
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = viewModel.homeTotal.power(displayUnit, decimalPlaces),
+                    text = viewModel.homeTotal.energy(displayUnit, decimalPlaces),
                     fontSize = fontSize,
                     fontWeight = FontWeight.Bold
                 )

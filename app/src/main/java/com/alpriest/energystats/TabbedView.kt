@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Insights
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
 import com.alpriest.energystats.ui.statsgraph.StatsTabView
 import com.alpriest.energystats.ui.statsgraph.StatsTabViewModel
+import com.alpriest.energystats.ui.summary.SummaryView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -79,6 +81,7 @@ fun TabbedView(
         TitleItem(stringResource(R.string.power_flow_tab), Icons.Default.SwapVert, false),
         TitleItem(stringResource(R.string.stats_tab), Icons.Default.BarChart, false),
         TitleItem("Parameters", Icons.Default.Insights, false),
+        TitleItem("Summary", Icons.Default.MenuBook, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
 
@@ -94,7 +97,8 @@ fun TabbedView(
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
                     1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), filePathChooser, themeStream)
                     2 -> NavigableParametersGraphTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
-                    3 -> NavigableSettingsView(
+                    3 -> SummaryView()
+                    4 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,

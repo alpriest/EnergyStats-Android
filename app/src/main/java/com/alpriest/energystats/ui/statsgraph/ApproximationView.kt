@@ -31,7 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.power
+import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
@@ -122,7 +122,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                         Text(
-                            it.power(appTheme.displayUnit, appTheme.decimalPlaces),
+                            it.energy(appTheme.displayUnit, appTheme.decimalPlaces),
                             fontSize = fontSize
                         )
                     }
@@ -138,7 +138,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                         Text(
-                            it.solar.power(appTheme.displayUnit, appTheme.decimalPlaces),
+                            it.solar.energy(appTheme.displayUnit, appTheme.decimalPlaces),
                             fontSize = fontSize
                         )
                     }

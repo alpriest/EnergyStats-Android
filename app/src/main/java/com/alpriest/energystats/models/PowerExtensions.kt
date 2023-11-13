@@ -16,7 +16,7 @@ fun Int.Wh(decimalPlaces: Int): String {
     return dec.format(divided) + " Wh"
 }
 
-fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
+fun Double.power(displayUnit: DisplayUnit, decimalPlaces: Int): String {
     return when (displayUnit) {
         DisplayUnit.Watts -> this.w()
         DisplayUnit.Kilowatts -> this.kW(decimalPlaces)
@@ -28,7 +28,7 @@ fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
     }
 }
 
-fun Double.power(displayUnit: DisplayUnit, decimalPlaces: Int): String {
+fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
     return when (displayUnit) {
         DisplayUnit.Watts -> this.Wh(decimalPlaces)
         DisplayUnit.Kilowatts -> this.kWh(decimalPlaces)

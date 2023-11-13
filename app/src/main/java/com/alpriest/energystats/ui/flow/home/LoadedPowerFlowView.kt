@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.power
+import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -60,7 +60,7 @@ fun LoadedPowerFlowView(
         modifier = Modifier.fillMaxHeight()
     ) {
         if (theme.showTotalYield) {
-            Text(text = stringResource(id = R.string.yieldToday, homePowerFlowViewModel.todaysGeneration.power(theme.displayUnit, theme.decimalPlaces)))
+            Text(text = stringResource(id = R.string.yieldToday, homePowerFlowViewModel.todaysGeneration.energy(theme.displayUnit, theme.decimalPlaces)))
         }
 
         if (theme.showFinancialSummary) {
