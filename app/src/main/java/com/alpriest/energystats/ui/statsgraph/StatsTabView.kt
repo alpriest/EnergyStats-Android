@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -125,7 +125,7 @@ fun StatsTabView(
 @Composable
 fun StatsGraphTabViewPreview() {
     StatsTabView(
-        StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
+        StatsTabViewModel(FakeConfigManager(), DemoFoxESSNetworking()) { _, _ -> null },
         { _, _ -> },
         MutableStateFlow(AppTheme.preview())
     )

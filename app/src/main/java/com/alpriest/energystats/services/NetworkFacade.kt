@@ -3,12 +3,12 @@ package com.alpriest.energystats.services
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
-class NetworkFacade(private val network: Networking, private val isDemoUser: () -> Boolean) : Networking {
-    private val demoNetworking = DemoNetworking()
+class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUser: () -> Boolean) : FoxESSNetworking {
+    private val demoFoxESSNetworking = DemoFoxESSNetworking()
 
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return if (isDemoUser()) {
-            demoNetworking.fetchDeviceList()
+            demoFoxESSNetworking.fetchDeviceList()
         } else {
             network.fetchDeviceList()
         }
@@ -16,7 +16,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun ensureHasToken() {
         return if (isDemoUser()) {
-            demoNetworking.ensureHasToken()
+            demoFoxESSNetworking.ensureHasToken()
         } else {
             network.ensureHasToken()
         }
@@ -24,7 +24,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun verifyCredentials(username: String, password: String) {
         return if (isDemoUser()) {
-            demoNetworking.verifyCredentials(username, password)
+            demoFoxESSNetworking.verifyCredentials(username, password)
         } else {
             network.verifyCredentials(username, password)
         }
@@ -32,7 +32,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         return if (isDemoUser()) {
-            demoNetworking.fetchBattery(deviceID)
+            demoFoxESSNetworking.fetchBattery(deviceID)
         } else {
             network.fetchBattery(deviceID)
         }
@@ -40,7 +40,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
         return if (isDemoUser()) {
-            demoNetworking.fetchBatterySettings(deviceSN)
+            demoFoxESSNetworking.fetchBatterySettings(deviceSN)
         } else {
             network.fetchBatterySettings(deviceSN)
         }
@@ -48,7 +48,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse> {
         return if (isDemoUser()) {
-            demoNetworking.fetchReport(deviceID, variables, queryDate, reportType)
+            demoFoxESSNetworking.fetchReport(deviceID, variables, queryDate, reportType)
         } else {
             network.fetchReport(deviceID, variables, queryDate, reportType)
         }
@@ -56,7 +56,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
         return if (isDemoUser()) {
-            demoNetworking.fetchAddressBook(deviceID)
+            demoFoxESSNetworking.fetchAddressBook(deviceID)
         } else {
             network.fetchAddressBook(deviceID)
         }
@@ -64,7 +64,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
         return if (isDemoUser()) {
-            demoNetworking.fetchRaw(deviceID, variables, queryDate)
+            demoFoxESSNetworking.fetchRaw(deviceID, variables, queryDate)
         } else {
             network.fetchRaw(deviceID, variables, queryDate)
         }
@@ -72,7 +72,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
         return if (isDemoUser()) {
-            demoNetworking.fetchVariables(deviceID)
+            demoFoxESSNetworking.fetchVariables(deviceID)
         } else {
             network.fetchVariables(deviceID)
         }
@@ -80,7 +80,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
         return if (isDemoUser()) {
-            demoNetworking.fetchEarnings(deviceID)
+            demoFoxESSNetworking.fetchEarnings(deviceID)
         } else {
             network.fetchEarnings(deviceID)
         }
@@ -88,7 +88,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
         return if (isDemoUser()) {
-            demoNetworking.setSoc(minGridSOC, minSOC, deviceSN)
+            demoFoxESSNetworking.setSoc(minGridSOC, minSOC, deviceSN)
         } else {
             network.setSoc(minGridSOC, minSOC, deviceSN)
         }
@@ -96,7 +96,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
         return if (isDemoUser()) {
-            demoNetworking.fetchBatteryTimes(deviceSN)
+            demoFoxESSNetworking.fetchBatteryTimes(deviceSN)
         } else {
             network.fetchBatteryTimes(deviceSN)
         }
@@ -104,7 +104,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
         return if (isDemoUser()) {
-            demoNetworking.setBatteryTimes(deviceSN, times)
+            demoFoxESSNetworking.setBatteryTimes(deviceSN, times)
         } else {
             network.setBatteryTimes(deviceSN, times)
         }
@@ -112,7 +112,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
         return if (isDemoUser()) {
-            demoNetworking.fetchWorkMode(deviceID)
+            demoFoxESSNetworking.fetchWorkMode(deviceID)
         } else {
             network.fetchWorkMode(deviceID)
         }
@@ -120,7 +120,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun setWorkMode(deviceID: String, workMode: String) {
         return if (isDemoUser()) {
-            demoNetworking.setWorkMode(deviceID, workMode)
+            demoFoxESSNetworking.setWorkMode(deviceID, workMode)
         } else {
             network.setWorkMode(deviceID, workMode)
         }
@@ -128,7 +128,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
         return if (isDemoUser()) {
-            demoNetworking.fetchDataLoggers()
+            demoFoxESSNetworking.fetchDataLoggers()
         } else {
             network.fetchDataLoggers()
         }
@@ -136,7 +136,7 @@ class NetworkFacade(private val network: Networking, private val isDemoUser: () 
 
     override suspend fun fetchErrorMessages() {
         if (isDemoUser()) {
-            demoNetworking.fetchErrorMessages()
+            demoFoxESSNetworking.fetchErrorMessages()
         } else {
             network.fetchErrorMessages()
         }

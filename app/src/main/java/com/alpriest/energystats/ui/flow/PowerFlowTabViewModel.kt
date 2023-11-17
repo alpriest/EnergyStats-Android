@@ -10,7 +10,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
@@ -33,7 +33,7 @@ import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
-    private val network: Networking,
+    private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
     private val context: Context

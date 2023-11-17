@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class WorkModeViewModelFactory(
-    private val network: Networking,
+    private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
     private val context: Context
@@ -25,7 +25,7 @@ class WorkModeViewModelFactory(
 }
 
 class WorkModeViewModel(
-    val network: Networking,
+    val network: FoxESSNetworking,
     val config: ConfigManaging,
     val navController: NavController,
     val context: Context

@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -77,7 +77,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
     StatsGraphView(
-        StatsTabViewModel(FakeConfigManager(), DemoNetworking(), { _, _ -> null }),
+        StatsTabViewModel(FakeConfigManager(), DemoFoxESSNetworking(), { _, _ -> null }),
         MutableStateFlow(AppTheme.preview())
     )
 }

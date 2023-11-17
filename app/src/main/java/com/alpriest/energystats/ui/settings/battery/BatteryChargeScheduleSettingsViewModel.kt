@@ -4,14 +4,12 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -22,7 +20,7 @@ private val ChargeTimePeriod.hasTimes: Boolean
     }
 
 class BatteryChargeScheduleSettingsViewModelFactory(
-    private val network: Networking,
+    private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
     private val context: Context
 ) : ViewModelProvider.Factory {
@@ -38,7 +36,7 @@ private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
 }
 
 class BatteryChargeScheduleSettingsViewModel(
-    private val network: Networking,
+    private val network: FoxESSNetworking,
     private val config: ConfigManaging,
     private val context: Context
 ) : ViewModel() {

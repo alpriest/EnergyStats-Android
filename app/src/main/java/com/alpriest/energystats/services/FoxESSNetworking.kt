@@ -10,7 +10,7 @@ class MaintenanceModeException: Exception("Fox servers are offline. Please try l
 class MissingDataException : Exception("Missing data")
 class UnknownNetworkException(errno: Int, message: String?): Exception("$errno $message")
 
-interface Networking {
+interface FoxESSNetworking {
     suspend fun fetchDeviceList(): PagedDeviceListResponse
     suspend fun ensureHasToken()
     suspend fun verifyCredentials(username: String, password: String)

@@ -19,7 +19,7 @@ import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.ui.GraphBounds
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.ToggleRowView
@@ -79,7 +79,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
 @Preview(widthDp = 340)
 fun ParameterGraphVariableTogglesViewPreview() {
     ParameterGraphVariableTogglesView(
-        ParametersGraphTabViewModel(DemoNetworking(), FakeConfigManager(), onWriteTempFile = { _, _ -> null }, MutableStateFlow(previewParameterGraphVariables())),
+        ParametersGraphTabViewModel(DemoFoxESSNetworking(), FakeConfigManager(), onWriteTempFile = { _, _ -> null }, MutableStateFlow(previewParameterGraphVariables())),
         themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false))
     )
 }

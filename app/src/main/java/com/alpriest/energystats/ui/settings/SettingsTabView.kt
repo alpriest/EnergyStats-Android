@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -37,7 +36,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.UserManaging
@@ -85,7 +84,7 @@ fun NavigableSettingsView(
     networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
-    network: Networking,
+    network: FoxESSNetworking,
     credentialStore: CredentialStore
 ) {
     val navController = rememberNavController()

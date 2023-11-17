@@ -1,7 +1,7 @@
 package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.models.*
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String) : ConfigManaging {
+open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetworking, override var appVersion: String) : ConfigManaging {
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
         AppTheme(
             useLargeDisplay = config.useLargeDisplay,

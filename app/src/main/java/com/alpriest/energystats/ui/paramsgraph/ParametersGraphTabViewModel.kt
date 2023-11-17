@@ -3,22 +3,19 @@ package com.alpriest.energystats.ui.paramsgraph
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -32,7 +29,7 @@ interface ExportProviding {
 }
 
 class ParametersGraphTabViewModel(
-    val networking: Networking,
+    val networking: FoxESSNetworking,
     val configManager: ConfigManaging,
     val onWriteTempFile: (String, String) -> Uri?,
     val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>

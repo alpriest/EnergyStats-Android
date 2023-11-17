@@ -15,7 +15,7 @@ import com.alpriest.energystats.services.NetworkCache
 import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.services.NetworkService
 import com.alpriest.energystats.services.NetworkValueCleaner
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
@@ -36,7 +36,7 @@ class AppContainer(private val context: Context) {
     var filePathChooser: ActivityResultLauncher<String>? = null
     var filePathChooserCallback: ((Uri) -> Unit)? = null
 
-    val networking: Networking by lazy {
+    val networking: FoxESSNetworking by lazy {
         NetworkValueCleaner(
             NetworkFacade(
                 network = NetworkCache(network = NetworkService(credentialStore, networkStore)),

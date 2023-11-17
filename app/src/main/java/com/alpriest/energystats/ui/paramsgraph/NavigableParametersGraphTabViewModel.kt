@@ -12,7 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.models.RawVariable
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
@@ -66,7 +66,7 @@ class NavigableParametersGraphTabViewModelFactory(
 
 class NavigableParametersGraphTabView(
     val configManager: ConfigManaging,
-    val network: Networking,
+    val network: FoxESSNetworking,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     val themeStream: MutableStateFlow<AppTheme>,

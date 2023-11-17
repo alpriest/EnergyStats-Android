@@ -32,7 +32,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
-class DemoNetworking : Networking {
+class DemoFoxESSNetworking : FoxESSNetworking {
     override suspend fun ensureHasToken() {
         // Do nothing
     }

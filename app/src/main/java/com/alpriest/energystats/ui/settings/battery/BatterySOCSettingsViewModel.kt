@@ -4,27 +4,26 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class BatterySOCSettingsViewModelFactory(
-    private val network: Networking,
+    private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
     private val context: Context
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Networking::class.java, ConfigManaging::class.java, Context::class.java)
+        return modelClass.getConstructor(FoxESSNetworking::class.java, ConfigManaging::class.java, Context::class.java)
             .newInstance(network, configManager, context)
     }
 }
 
 class BatterySOCSettingsViewModel(
-    private val network: Networking,
+    private val network: FoxESSNetworking,
     private val config: ConfigManaging,
     private val context: Context
 ) : ViewModel() {

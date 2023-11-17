@@ -37,8 +37,8 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.DemoFoxESSNetworking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.helpers.ErrorView
@@ -50,7 +50,7 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class WorkModeView(
-    private val network: Networking,
+    private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
     private val userManager: UserManaging,
@@ -169,7 +169,7 @@ class WorkModeView(
 fun WorkModeViewPreview() {
     EnergyStatsTheme {
         WorkModeView(
-            DemoNetworking(),
+            DemoFoxESSNetworking(),
             FakeConfigManager(),
             NavHostController(LocalContext.current),
             FakeUserManager(),

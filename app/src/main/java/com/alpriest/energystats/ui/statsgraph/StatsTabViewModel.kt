@@ -14,7 +14,7 @@ import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
@@ -33,7 +33,7 @@ data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: Rep
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
-    val networking: Networking,
+    val networking: FoxESSNetworking,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding {
     var chartColorsStream = MutableStateFlow(listOf<Color>())

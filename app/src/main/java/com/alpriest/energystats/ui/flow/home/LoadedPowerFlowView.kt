@@ -29,7 +29,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.EarningsViewModel
@@ -257,7 +257,7 @@ fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme {
         LoadedPowerFlowView(
             FakeConfigManager(),
-            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview().copy(decimalPlaces = 3)), LocalContext.current),
+            PowerFlowTabViewModel(DemoFoxESSNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview().copy(decimalPlaces = 3)), LocalContext.current),
             homePowerFlowViewModel = HomePowerFlowViewModel(
                 solar = 1.0,
                 home = 2.454,

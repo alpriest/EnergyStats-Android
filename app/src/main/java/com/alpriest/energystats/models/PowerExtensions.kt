@@ -4,6 +4,7 @@ import com.alpriest.energystats.ui.settings.DisplayUnit
 import java.text.DecimalFormat
 import kotlin.math.abs
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 fun Double.asPercent(): String {
@@ -42,26 +43,50 @@ fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
 
 fun Double.Wh(decimalPlaces: Int): String {
     val divided = (this * 1000.0).rounded(decimalPlaces)
-    val dec = DecimalFormat("#,###,###")
-    return dec.format(divided) + " Wh"
+
+    val numberFormatter = DecimalFormat().apply {
+        minimumFractionDigits = decimalPlaces
+        maximumFractionDigits = 0
+        isGroupingUsed = false
+    }
+
+    return "${numberFormatter.format(divided)} Wh"
 }
 
 fun Double.kWh(decimalPlaces: Int): String {
     val divided = this.rounded(decimalPlaces)
-    val dec = DecimalFormat("#,###,##0." + "0".repeat(decimalPlaces))
-    return dec.format(divided) + " kWh"
+
+    val numberFormatter = DecimalFormat().apply {
+        minimumFractionDigits = decimalPlaces
+        maximumFractionDigits = decimalPlaces
+        isGroupingUsed = false
+    }
+
+    return "${numberFormatter.format(divided)} kWh"
 }
 
 fun Double.kW(decimalPlaces: Int): String {
     val divided = this.rounded(decimalPlaces)
-    val dec = DecimalFormat("#,###,##0." + "0".repeat(decimalPlaces))
-    return dec.format(divided) + " kW"
+
+    val numberFormatter = DecimalFormat().apply {
+        minimumFractionDigits = decimalPlaces
+        maximumFractionDigits = decimalPlaces
+        isGroupingUsed = false
+    }
+
+    return "${numberFormatter.format(divided)} kW"
 }
 
 fun Double.w(): String {
-    val divided = (this * 1000.0).roundToLong()
-    val dec = DecimalFormat("#,###")
-    return dec.format(divided) + " W"
+    val divided = (this * 1000.0).rounded(0)
+
+    val numberFormatter = DecimalFormat().apply {
+        minimumFractionDigits = 0
+        maximumFractionDigits = 0
+        isGroupingUsed = false
+    }
+
+    return "${numberFormatter.format(divided)} W"
 }
 
 fun Double.rounded(decimalPlaces: Int): Double {

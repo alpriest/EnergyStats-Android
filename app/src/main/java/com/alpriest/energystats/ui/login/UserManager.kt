@@ -2,7 +2,7 @@ package com.alpriest.energystats.ui.login
 
 import androidx.annotation.UiThread
 import com.alpriest.energystats.services.BadCredentialsException
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +34,7 @@ interface UserManaging {
 
 class UserManager(
     private var configManager: ConfigManaging,
-    private val networking: Networking,
+    private val networking: FoxESSNetworking,
     private val store: CredentialStore
 ) : UserManaging {
     private val _loggedInState = MutableStateFlow(LoginStateHolder(LoggedOut()))

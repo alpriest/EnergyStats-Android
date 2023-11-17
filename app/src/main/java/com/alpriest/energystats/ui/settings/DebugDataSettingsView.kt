@@ -23,7 +23,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.settings.debug.networkTrace.NetworkTraceDebugView
@@ -36,7 +36,7 @@ fun NavGraphBuilder.debugGraph(
     navController: NavController,
     networkStore: InMemoryLoggingNetworkStore,
     configManager: ConfigManaging,
-    network: Networking,
+    network: FoxESSNetworking,
     credentialStore: CredentialStore
 ) {
     navigation(startDestination = "debug", route = "login") {

@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
@@ -63,7 +63,7 @@ data class TitleItem(
 @Composable
 fun TabbedView(
     configManager: ConfigManaging,
-    network: Networking,
+    network: FoxESSNetworking,
     userManager: UserManaging,
     onLogout: () -> Unit,
     themeStream: MutableStateFlow<AppTheme>,
@@ -97,7 +97,7 @@ fun TabbedView(
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
                     1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), filePathChooser, themeStream)
                     2 -> NavigableParametersGraphTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
-                    3 -> SummaryView()
+                    3 -> SummaryView(configManager, network, themeStream = themeStream).Content()
                     4 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,
@@ -186,10 +186,10 @@ fun HomepagePreview() {
         TabbedView(
             ConfigManager(
                 config = FakeConfigStore(),
-                networking = DemoNetworking(),
+                networking = DemoFoxESSNetworking(),
                 appVersion = "1.19"
             ),
-            network = DemoNetworking(),
+            network = DemoFoxESSNetworking(),
             userManager = FakeUserManager(),
             {},
             themeStream = MutableStateFlow(AppTheme.preview()),

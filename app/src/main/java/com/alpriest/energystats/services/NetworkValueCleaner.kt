@@ -19,7 +19,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
-class NetworkValueCleaner(private val network: Networking) : Networking {
+class NetworkValueCleaner(private val network: FoxESSNetworking) : FoxESSNetworking {
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return network.fetchDeviceList()
     }
