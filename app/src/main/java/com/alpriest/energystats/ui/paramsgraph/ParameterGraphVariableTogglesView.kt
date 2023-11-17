@@ -2,22 +2,15 @@ package com.alpriest.energystats.ui.paramsgraph
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.kW
-import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.ui.GraphBounds
@@ -27,8 +20,6 @@ import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVari
 import com.alpriest.energystats.ui.statsgraph.title
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 @SuppressLint("DiscouragedApi")
 @Composable

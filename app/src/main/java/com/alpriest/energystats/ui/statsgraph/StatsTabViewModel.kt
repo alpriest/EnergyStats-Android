@@ -22,6 +22,7 @@ import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -280,42 +281,19 @@ class StatsTabViewModel(
 
     private fun calculateSelfSufficiencyEstimate() {
         val totals = totalsStream.value
-
         val feedIn = totals[ReportVariable.FeedIn] ?: 0.0
         val grid = totals[ReportVariable.GridConsumption] ?: 0.0
         val batteryCharge = totals[ReportVariable.ChargeEnergyToTal] ?: 0.0
         val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal] ?: 0.0
         val loads = totals[ReportVariable.Loads] ?: 0.0
 
-        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, batteryCharge, batteryDischarge)
-
-        val financialModel: EnergyStatsFinancialModel? = if (configManager.financialModel == FinancialModel.EnergyStats) {
-            EnergyStatsFinancialModel(totalsViewModel, configManager)
-        } else {
-            null
-        }
-
-        val netResult = NetSelfSufficiencyCalculator().calculate(
-            loads,
-            grid
-        )
-
-        val absoluteResult = AbsoluteSelfSufficiencyCalculator().calculate(
-            grid,
-            feedIn,
-            loads,
-            batteryCharge,
-            batteryDischarge
-        )
-
-        approximationsViewModelStream.value = ApproximationsViewModel(
-            netSelfSufficiencyEstimate = "${netResult.first}%",
-            netSelfSufficiencyEstimateCalculationBreakdown = netResult.second,
-            absoluteSelfSufficiencyEstimate = "${absoluteResult.first}%",
-            absoluteSelfSufficiencyEstimateCalculationBreakdown = absoluteResult.second,
-            financialModel = financialModel,
-            homeUsage = loads,
-            totalsViewModel = totalsViewModel
+        approximationsViewModelStream.value = ApproximationsCalculator(networking, configManager).calculateApproximations(
+            grid = grid,
+            feedIn = feedIn,
+            loads = loads,
+            batteryCharge = batteryCharge,
+            batteryDischarge = batteryDischarge,
+            earnings = null
         )
     }
 }

@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
@@ -53,6 +54,7 @@ data class ApproximationsViewModel(
     val absoluteSelfSufficiencyEstimate: String?,
     val absoluteSelfSufficiencyEstimateCalculationBreakdown: CalculationBreakdown,
     val financialModel: EnergyStatsFinancialModel?,
+    val earnings: EarningsResponse?,
     val homeUsage: Double?,
     val totalsViewModel: TotalsViewModel?
 )
@@ -240,6 +242,7 @@ fun StatsApproximationViewPreview() {
                 absoluteSelfSufficiencyEstimate = "100%",
                 absoluteSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", { "def" }),
                 financialModel = null,
+                earnings = null,
                 homeUsage = 4.5,
                 totalsViewModel = TotalsViewModel(
                     grid = 1.0,
