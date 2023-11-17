@@ -1,19 +1,14 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -115,6 +110,22 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             }
         )
 
+        SettingsCheckbox(
+            title = stringResource(R.string.show_last_update_timestamp),
+            state = showLastUpdateTimestampState,
+            onUpdate = { config.showLastUpdateTimestamp = it }
+        )
+
+        SettingsCheckbox(
+            title = stringResource(R.string.show_graph_value_descriptions),
+            state = showGraphValueDescriptionsState,
+            onUpdate = { config.showGraphValueDescriptions = it }
+        )
+    }
+
+    SettingsColumnWithChild(
+        modifier = modifier
+    ) {
         SettingsSegmentedControl(
             title = stringResource(R.string.units),
             segmentedControl = {
@@ -147,21 +158,6 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
                 }
             }
         )
-
-        SettingsCheckbox(
-            title = stringResource(R.string.show_last_update_timestamp),
-            state = showLastUpdateTimestampState,
-            onUpdate = { config.showLastUpdateTimestamp = it }
-        )
-
-        SettingsCheckbox(
-            title = stringResource(R.string.show_graph_value_descriptions),
-            state = showGraphValueDescriptionsState,
-            onUpdate = { config.showGraphValueDescriptions = it }
-        )
-
-        SettingsNavButton(stringResource(R.string.approximations)) { navController.navigate(SettingsScreen.Approximations.name) }
-        SettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
     }
 }
 

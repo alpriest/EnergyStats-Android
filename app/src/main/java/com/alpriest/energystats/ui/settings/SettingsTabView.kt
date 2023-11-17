@@ -71,7 +71,8 @@ enum class SettingsScreen {
     Inverter,
     InverterWorkMode,
     Dataloggers,
-    Approximations,
+    SelfSufficiencyEstimates,
+    FinancialModel,
     SolarBandings,
     FAQ;
 }
@@ -125,8 +126,15 @@ fun NavigableSettingsView(
         composable(SettingsScreen.Dataloggers.name) {
             DataLoggerViewContainer(network = network, configManager = config, navController = navController, context = context).Content()
         }
-        composable(SettingsScreen.Approximations.name) {
-            ApproximationsSettingsView(config)
+        composable(SettingsScreen.FinancialModel.name) {
+            SettingsPage {
+                FinancialsSettingsView(config)
+            }
+        }
+        composable(SettingsScreen.SelfSufficiencyEstimates.name) {
+            SettingsPage {
+                SelfSufficiencySettingsView(config)
+            }
         }
         composable(SettingsScreen.SolarBandings.name) {
             SolarBandingSettingsView(navController, config)
@@ -152,7 +160,7 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
             modifier = if (disclosureIcon == null) Modifier else Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-            ) {
+        ) {
             Text(
                 title,
                 color = colors.onPrimary
@@ -195,6 +203,12 @@ fun SettingsTabView(
         }
 
         DisplaySettingsView(config, navController)
+
+        SettingsColumnWithChild {
+            SettingsNavButton("Self Sufficiency Estimates") { navController.navigate(SettingsScreen.SelfSufficiencyEstimates.name) }
+            SettingsNavButton("Financial Model") { navController.navigate(SettingsScreen.FinancialModel.name) }
+            SettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
+        }
 
         RefreshFrequencySettingsView(config)
 

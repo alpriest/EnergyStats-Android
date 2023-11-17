@@ -146,9 +146,9 @@
     <string name="backup">Backup</string>
     <string name="power_station">Stazione di Energia</string>
     <string name="peak_shaving">Riduzione dei Picchi</string>
-    <string name="self_use_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\\n\\n1. Carico della casa\\n2. Carica della batteria\\n3. Esportazione</string>
-    <string name="feed_in_first_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\\n\\n1. Carico della casa\\n2. Esportazione\\n3. Carica della batteria</string>
-    <string name="backup_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\\n\\n1. Carica della batteria\\n2. Carico della casa\\n3. Esportazione</string>
+    <string name="self_use_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carico della casa\n2. Carica della batteria\n3. Esportazione</string>
+    <string name="feed_in_first_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carico della casa\n2. Esportazione\n3. Carica della batteria</string>
+    <string name="backup_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carica della batteria\n2. Carico della casa\n3. Esportazione</string>
     <string name="powerstation_mode">Questa modalità ha un comportamento sconosciuto</string>
     <string name="peak_shaving_mode">Questa modalità ha un comportamento sconosciuto</string>
     <string name="find_out_more_about_work_modes">Scopri di più sui modi di lavoro</string>
