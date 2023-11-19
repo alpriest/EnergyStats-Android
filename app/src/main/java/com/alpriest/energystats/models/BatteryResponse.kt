@@ -1,7 +1,5 @@
 package com.alpriest.energystats.models
 
-import com.google.gson.annotations.SerializedName
-
 data class BatteryResponse(
     val power: Double,
     val soc: Int,
