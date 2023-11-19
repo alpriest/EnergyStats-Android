@@ -80,7 +80,7 @@ class BatteryChargeScheduleSettingsView(
                         BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 
                         Column {
-                            SettingsTitleView(stringResource(R.string.summary))
+                            SettingsTitleView(stringResource(R.string.schedule_summary))
                             Text(
                                 chargeSummary,
                                 color = colors.onSecondary,

@@ -130,7 +130,7 @@
     <string name="period_1">Forzar periodo de carga 1</string>
     <string name="period_2">Forzar periodo de carga 2</string>
     <string name="start_time_must_be_before_the_end_time">La hora de inicio debe ser anterior a la hora de finalización.</string>
-    <string name="summary">Resumen del horario</string>
+    <string name="schedule_summary">Resumen del horario</string>
     <string name="save">Guardar</string>
     <string name="min_soc">Min. SoC</string>
     <string name="minsoc_description">El nivel mínimo de carga que la batería debe mantener.</string>

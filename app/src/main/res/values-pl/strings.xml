@@ -131,7 +131,7 @@
     <string name="period_1">Okres czasu 1</string>
     <string name="period_2">Okres czasu 2</string>
     <string name="start_time_must_be_before_the_end_time">Czas rozpoczęcia musi być wcześniejszy niż czas zakończenia</string>
-    <string name="summary">Podsumowanie harmonogramu</string>
+    <string name="schedule_summary">Podsumowanie harmonogramu</string>
     <string name="save">Zapisz</string>
     <string name="min_soc">Minimalny SoC</string>
     <string name="minsoc_description">Minimalne naładowanie baterii, które powinno być utrzymywane.</string>

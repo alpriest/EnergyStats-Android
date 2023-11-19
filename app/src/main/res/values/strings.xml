@@ -111,7 +111,7 @@
     <string name="net_self_sufficiency">Assumes any amount taken from the grid reduces your self-sufficiency.\n\nSufficiency = grid / houseUsage</string>
     <string name="approximations">Approximations</string>
     <string name="self_sufficiency">Self sufficiency</string>
-    <string name="home_usage">Home usage</string>
+        <string name="home_usage">Home usage</string>
     <string name="export_csv_data">Export graph data</string>
     <string name="output">"Output "</string>
     <string name="parameters_update_description">Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time. Tap the graph to view data at a specific time.</string>
@@ -130,7 +130,7 @@
     <string name="period_1">Time period 1</string>
     <string name="period_2">Time period 2</string>
     <string name="start_time_must_be_before_the_end_time">Start time must be before the end time</string>
-    <string name="summary">Schedule Summary</string>
+    <string name="schedule_summary">Schedule Summary</string>
     <string name="save">Save</string>
     <string name="min_soc">Min SoC</string>
     <string name="minsoc_description">The minimum charge the battery should maintain.</string>
@@ -229,4 +229,5 @@
     <string name="export_save_to_a_local_file">Save to a local file</string>
     <string name="export_share_or_open_with_another_app">Share or open with another app</string>
     <string name="choose_export_method">Choose export method</string>
+    <string name="summary">Summary</string>
 </resources>

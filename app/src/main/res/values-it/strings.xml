@@ -132,7 +132,7 @@
     <string name="period_2">Forza periodo di carica 2</string>
     <string name="start_time_must_be_before_the_end_time">L\'ora di inizio deve essere prima dell\'ora di fine</string>
     <string name="save">Salva</string>
-    <string name="summary">Sommario del programma</string>
+    <string name="schedule_summary">Sommario del programma</string>
     <string name="min_soc">Min. SoC</string>
     <string name="minsoc_description">La carica minima che la batteria deve mantenere.</string>
     <string name="min_soc_on_grid">Carica minima della batteria con alimentazione di rete</string>

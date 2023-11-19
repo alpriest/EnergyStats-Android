@@ -128,7 +128,7 @@ class SummaryTabViewModel(
             }
 
             if (monthlyTotal == 0.0 && (month < currentMonth || year < currentYear)) {
-                emptyMonth = month
+                emptyMonth = month + 1
                 break
             }
         }
