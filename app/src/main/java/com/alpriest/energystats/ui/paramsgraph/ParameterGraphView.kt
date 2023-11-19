@@ -5,25 +5,14 @@ import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
-import com.patrykandpatrick.vico.compose.axis.axisLineComponent
-import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
@@ -33,16 +22,12 @@ import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
-import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
-import com.patrykandpatrick.vico.core.chart.dimensions.HorizontalDimensions
-import com.patrykandpatrick.vico.core.chart.draw.ChartDrawContext
+import com.patrykandpatrick.vico.core.chart.scale.AutoScaleUp
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
-import com.patrykandpatrick.vico.core.component.shape.DashedShape
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.context.DrawContext
-import com.patrykandpatrick.vico.core.context.MeasureContext
 import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,7 +50,9 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
         Column(modifier = modifier.fillMaxWidth()) {
             ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                 Chart(
-                    chart = lineChart(),
+                    chart = lineChart(
+                        axisValuesOverrider = AxisValuesOverrider.fixed(0f, 287f)
+                    ),
                     chartModelProducer = viewModel.producer,
                     chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                     startAxis = rememberStartAxis(
@@ -73,7 +60,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
                         valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                     ),
                     bottomAxis = rememberBottomAxis(
-                        itemPlacer = AxisItemPlacer.Horizontal.default(23, firstLabelOffset),
+                        itemPlacer = AxisItemPlacer.Horizontal.default(24, firstLabelOffset),
                         valueFormatter = ParameterGraphFormatAxisValueFormatter(),
                         guideline = null
                     ),
