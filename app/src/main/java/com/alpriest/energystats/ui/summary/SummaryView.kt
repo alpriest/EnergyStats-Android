@@ -87,6 +87,8 @@ class SummaryView(
                     )
                 }
             }
+            
+            SolarForecastView(viewModel = SolarForecastViewModel(DemoSolarForecasting()))
         }
     }
 

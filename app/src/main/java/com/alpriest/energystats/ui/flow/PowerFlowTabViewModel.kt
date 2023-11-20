@@ -96,7 +96,8 @@ class PowerFlowTabViewModel(
                                 timerFired()
                             }
                         }
-                    }.launchIn(viewModelScope)
+                    }
+                    .launchIn(viewModelScope)
             }
         }
     }

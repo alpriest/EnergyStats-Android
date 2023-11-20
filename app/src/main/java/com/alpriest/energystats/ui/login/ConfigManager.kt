@@ -360,7 +360,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
 
             devices = mappedDevices
 
-            if (selectedDeviceID == null) {
+            if (selectedDeviceID == null || !mappedDevices.any { it.deviceID == selectedDeviceID }) {
                 selectedDeviceID = devices?.firstOrNull()?.deviceID
                 currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
             }
