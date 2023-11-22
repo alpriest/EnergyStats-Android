@@ -57,7 +57,7 @@ class FakeConfigManager : ConfigManaging {
     override var showLastUpdateTimestamp: Boolean = false
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
     override var parameterGroups: List<ParameterGroup> = ParameterGroup.defaults
-    override val solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf())
+    override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf())
 
     override var devices: List<Device>? = listOf(
         Device(

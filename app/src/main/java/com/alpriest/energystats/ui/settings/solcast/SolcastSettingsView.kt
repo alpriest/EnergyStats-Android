@@ -33,14 +33,15 @@ class SolcastSettingsView(
         viewModel: SolcastSettingsViewModel = viewModel(
             factory = SolcastSettingsViewModelFactory(
                 configManager = configManager,
-                context = context
+                context = context,
+                makeService = { Solcast() }
             )
         )
     ) {
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val text = stringResource(R.string.solcast_description)
 
-        ContentWithBottomButtons(navController, onSave = { /* TODO */ }, content = { modifier ->
+        ContentWithBottomButtons(navController, onSave = { viewModel.save() }, content = { modifier ->
             SettingsPage(modifier) {
                 SettingsColumnWithChild {
                     ClickableUrlText(

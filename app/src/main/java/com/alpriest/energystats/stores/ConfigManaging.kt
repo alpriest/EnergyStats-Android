@@ -60,5 +60,5 @@ interface ConfigManaging {
     var showGridTotals: Boolean
     var showGraphValueDescriptions: Boolean
     var colorThemeMode: ColorThemeMode
-    val solcastSettings: SolcastSettings
+    var solcastSettings: SolcastSettings
 }
