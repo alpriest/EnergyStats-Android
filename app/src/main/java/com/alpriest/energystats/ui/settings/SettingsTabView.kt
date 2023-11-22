@@ -145,7 +145,7 @@ fun NavigableSettingsView(
             FAQView()
         }
         composable(SettingsScreen.SolcastSolarPrediction.name) {
-            SolcastSettingsView(navController, config, context)
+            SolcastSettingsView(navController, config, context).Content()
         }
         debugGraph(navController, networkStore, config, network, credentialStore)
     }

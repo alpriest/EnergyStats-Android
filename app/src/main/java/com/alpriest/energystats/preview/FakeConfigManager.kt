@@ -13,6 +13,8 @@ import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
+import com.alpriest.energystats.ui.settings.solcast.SolcastSite
+import com.alpriest.energystats.ui.settings.solcast.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,7 +59,7 @@ class FakeConfigManager : ConfigManaging {
     override var showLastUpdateTimestamp: Boolean = false
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
     override var parameterGroups: List<ParameterGroup> = ParameterGroup.defaults
-    override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf())
+    override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf(SolcastSite.preview()))
 
     override var devices: List<Device>? = listOf(
         Device(

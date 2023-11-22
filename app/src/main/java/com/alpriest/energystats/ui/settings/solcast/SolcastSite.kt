@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings.solcast
 
 import com.alpriest.energystats.models.SolcastSiteResponse
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.theme.AppTheme
 import java.time.LocalDate
 
 data class SolcastSettings(
@@ -36,5 +37,22 @@ data class SolcastSite(
         acCapacity = site.capacity,
         dcCapacity = site.dcCapacity,
         installDate = site.installDate
+    )
+
+    companion object
+}
+
+fun SolcastSite.Companion.preview(name: String = "Front panels"): SolcastSite {
+    return SolcastSite(
+        name = name,
+        resourceId = "abc-123-def-456",
+        lng = -2.470923,
+        lat = 53.377811,
+        azimuth = 134,
+        tilt = 45,
+        lossFactor = 0.9,
+        acCapacity = 3.7,
+        dcCapacity = 5.6,
+        installDate = LocalDate.now()
     )
 }
