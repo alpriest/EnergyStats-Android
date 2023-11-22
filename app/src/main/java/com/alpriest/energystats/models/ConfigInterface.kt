@@ -3,6 +3,7 @@ package com.alpriest.energystats.models
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
@@ -41,5 +42,6 @@ interface ConfigInterface {
     var showInverterPlantNameOnPowerflow: Boolean
     var deviceBatteryOverrides: Map<String, String>
     var parameterGroups: List<ParameterGroup>
+    var solcastSettings: SolcastSettings
     fun clear()
 }

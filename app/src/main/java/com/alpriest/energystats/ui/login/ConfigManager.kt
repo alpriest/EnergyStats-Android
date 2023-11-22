@@ -9,6 +9,7 @@ import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
@@ -44,7 +45,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
             shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
             showGraphValueDescriptions = config.showGraphValueDescriptions,
             parameterGroups = config.parameterGroups,
-            colorTheme = ColorThemeMode.fromInt(config.colorTheme)
+            colorTheme = ColorThemeMode.fromInt(config.colorTheme),
+            solcastSettings = config.solcastSettings
         )
     )
 
@@ -407,6 +409,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             config.parameterGroups = value
             themeStream.value = themeStream.value.copy(parameterGroups = parameterGroups)
+        }
+
+    override var solcastSettings: SolcastSettings
+        get() = config.solcastSettings
+        set(value) {
+            config.solcastSettings = value
+            themeStream.value = themeStream.value.copy(solcastSettings = solcastSettings)
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

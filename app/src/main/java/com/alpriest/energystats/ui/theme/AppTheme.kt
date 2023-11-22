@@ -9,6 +9,7 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 
 data class AppTheme(
     val useLargeDisplay: Boolean,
@@ -35,7 +36,8 @@ data class AppTheme(
     val shouldCombineCT2WithPVPower: Boolean,
     val showGraphValueDescriptions: Boolean,
     var parameterGroups: List<ParameterGroup>,
-    val colorTheme: ColorThemeMode
+    val colorTheme: ColorThemeMode,
+    val solcastSettings: SolcastSettings
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

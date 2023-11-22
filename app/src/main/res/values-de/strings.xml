@@ -224,4 +224,5 @@
     <string name="total_benefit">Gesamtvorteil</string>
     <string name="light">hell</string>
     <string name="dark">dunkel</string>
+    <string name="api_key">API Key</string>
 </resources>

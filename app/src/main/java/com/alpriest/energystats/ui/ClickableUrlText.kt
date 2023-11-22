@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 
@@ -42,7 +41,7 @@ fun makeUrlAnnotatedString(text: String): AnnotatedString {
 }
 
 @Composable
-fun ClickableUrlText(text: String, style: TextStyle) {
+fun ClickableUrlText(text: String) {
     val annotatedString = makeUrlAnnotatedString(text)
     val context = LocalUriHandler.current
 
@@ -53,9 +52,6 @@ fun ClickableUrlText(text: String, style: TextStyle) {
                 .firstOrNull()?.let { annotation ->
                     context.openUri(annotation.item)
                 }
-
-        },
-        style = style
+        }
     )
-
 }

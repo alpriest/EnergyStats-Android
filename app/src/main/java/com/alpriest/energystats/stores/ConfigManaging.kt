@@ -8,6 +8,7 @@ import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,4 +60,5 @@ interface ConfigManaging {
     var showGridTotals: Boolean
     var showGraphValueDescriptions: Boolean
     var colorThemeMode: ColorThemeMode
+    val solcastSettings: SolcastSettings
 }

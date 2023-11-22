@@ -225,4 +225,5 @@
     <string name="total_benefit">Beneficio totale</string>
     <string name="light">chiaro</string>
     <string name="dark">scuro</string>
+    <string name="api_key">API Key</string>
 </resources>

@@ -14,6 +14,7 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -75,7 +76,8 @@ fun AppTheme.Companion.preview(
     shouldCombineCT2WithPVPower: Boolean = true,
     showGraphValueDescriptions: Boolean = true,
     parameterGroups: List<ParameterGroup> = ParameterGroup.defaults,
-    colorTheme: ColorThemeMode = ColorThemeMode.Auto
+    colorTheme: ColorThemeMode = ColorThemeMode.Auto,
+    solcastSettings: SolcastSettings = SolcastSettings.defaults
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -102,6 +104,7 @@ fun AppTheme.Companion.preview(
         shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower,
         showGraphValueDescriptions = showGraphValueDescriptions,
         parameterGroups = parameterGroups,
-        colorTheme = colorTheme
+        colorTheme = colorTheme,
+        solcastSettings = solcastSettings
     )
 }

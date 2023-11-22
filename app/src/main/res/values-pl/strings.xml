@@ -225,4 +225,5 @@
     <string name="total_benefit">Całkowity zysk</string>
     <string name="light">jasny</string>
     <string name="dark">ciemny</string>
+    <string name="api_key">API Key</string>
 </resources>

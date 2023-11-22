@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -46,7 +47,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         GRID_IMPORT_UNIT_PRICE,
         SHOULD_COMBINE_CT2_WITH_PVPOWER,
         SHOW_GRAPH_VALUE_DESCRIPTIONS,
-        COLOR_THEME_MODE
+        COLOR_THEME_MODE,
+        SOLCAST_SETTINGS
     }
 
     override var colorTheme: Int
@@ -349,6 +351,24 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.putInt(SharedPreferenceKey.FINANCIAL_MODEL.name, value)
             editor.apply()
         }
+
+    override var solcastSettings: SolcastSettings
+        get() {
+            var data = sharedPreferences.getString(SharedPreferenceKey.SOLCAST_SETTINGS.name, null)
+            if (data == null) {
+                data = Gson().toJson(SolcastSettings.defaults)
+                solcastSettings = SolcastSettings.defaults
+            }
+
+            return Gson().fromJson(data, object : TypeToken<SolcastSettings>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceKey.SOLCAST_SETTINGS.name, jsonString)
+            editor.apply()
+        }
+
     override fun clear() {
         val editor = sharedPreferences.edit()
         editor.clear()

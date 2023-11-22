@@ -164,7 +164,11 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
 @Preview(showBackground = true, heightDp = 640)
 @Composable
 fun DisplaySettingsViewPreview() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-        DisplaySettingsView(config = FakeConfigManager(), navController = NavHostController(LocalContext.current), modifier = Modifier.padding(horizontal = 12.dp))
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+        DisplaySettingsView(
+            config = FakeConfigManager(),
+            navController = NavHostController(LocalContext.current),
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
     }
 }

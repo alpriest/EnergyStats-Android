@@ -46,6 +46,7 @@ import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeView
+import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -74,6 +75,7 @@ enum class SettingsScreen {
     SelfSufficiencyEstimates,
     FinancialModel,
     SolarBandings,
+    SolcastSolarPrediction,
     FAQ;
 }
 
@@ -142,6 +144,9 @@ fun NavigableSettingsView(
         composable(SettingsScreen.FAQ.name) {
             FAQView()
         }
+        composable(SettingsScreen.SolcastSolarPrediction.name) {
+            SolcastSettingsView(navController, config, context)
+        }
         debugGraph(navController, networkStore, config, network, credentialStore)
     }
 }
@@ -204,10 +209,11 @@ fun SettingsTabView(
 
         DisplaySettingsView(config, navController)
 
-        SettingsColumnWithChild {
-            SettingsNavButton("Self Sufficiency Estimates") { navController.navigate(SettingsScreen.SelfSufficiencyEstimates.name) }
-            SettingsNavButton("Financial Model") { navController.navigate(SettingsScreen.FinancialModel.name) }
+        Column {
+            SettingsNavButton(stringResource(R.string.self_sufficiency_estimates)) { navController.navigate(SettingsScreen.SelfSufficiencyEstimates.name) }
+            SettingsNavButton(stringResource(R.string.financial_model)) { navController.navigate(SettingsScreen.FinancialModel.name) }
             SettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
+            SettingsNavButton("Solcast Solar Prediction") { navController.navigate(SettingsScreen.SolcastSolarPrediction.name) }
         }
 
         RefreshFrequencySettingsView(config)
