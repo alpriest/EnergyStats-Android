@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui
 
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
@@ -41,7 +42,7 @@ fun makeUrlAnnotatedString(text: String): AnnotatedString {
 }
 
 @Composable
-fun ClickableUrlText(text: String) {
+fun ClickableUrlText(text: String, modifier: Modifier = Modifier) {
     val annotatedString = makeUrlAnnotatedString(text)
     val context = LocalUriHandler.current
 
@@ -52,6 +53,7 @@ fun ClickableUrlText(text: String) {
                 .firstOrNull()?.let { annotation ->
                     context.openUri(annotation.item)
                 }
-        }
+        },
+        modifier = modifier
     )
 }
