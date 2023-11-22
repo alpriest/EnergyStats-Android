@@ -12,16 +12,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import com.alpriest.energystats.ui.ClickableUrlText
 
 @Composable
 fun SolcastSettingsView() {
     var password by remember { mutableStateOf("") }
+    val text = "Your API key can be found at https://toolkit.solcast.com.au by clicking the menu at the top right of the page."
 
     SettingsColumnWithChild {
-        Text(
-            "Solcast provide solar predictions based on your location. To sign up for free, visit https://solcast.com/free-rooftop-solar-forecasting and register for Hobbyist Access.\n" +
+        ClickableUrlText(
+            text = "Solcast provide solar predictions based on your location. To sign up for free, visit https://solcast.com/free-rooftop-solar-forecasting and register for Hobbyist Access.\n" +
                     "\n" +
-                    "Once you've signed up and have created your site(s) paste your API key below."
+                    "Once you've signed up and have created your site(s) paste your API key below.",
+            style = MaterialTheme.typography.body2
         )
 
         OutlinedTextField(
@@ -33,10 +36,9 @@ fun SolcastSettingsView() {
             singleLine = true
         )
 
-        Text(
-            text = "Your API key can be found at https://toolkit.solcast.com.au by clicking the menu at the top right of the page.",
-            style = MaterialTheme.typography.caption,
-            color = MaterialTheme.colors.onSecondary,
+        ClickableUrlText(
+            text = text,
+            style = MaterialTheme.typography.caption
         )
     }
 }
