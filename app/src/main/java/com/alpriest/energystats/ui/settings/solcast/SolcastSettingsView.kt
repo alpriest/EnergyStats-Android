@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -115,7 +116,7 @@ fun SolcastSiteView(site: SolcastSite) {
 
 @Composable
 private fun Map(site: SolcastSite) {
-    val apiKey = "AIzaSyAiDg5slbVdXIriD2NcX1AI_CxIzxANy-A"
+    val apiKey = BuildConfig.GOOGLE_MAPS_APIKEY
     val location = "${site.lat},${site.lng}"
     val zoom = 18
     val size = "300x300"
