@@ -28,12 +28,19 @@ interface ExportProviding {
     abstract fun exportTo(context: Context, uri: Uri)
 }
 
+interface ToastMessageProviding {
+    val toastMessage: MutableStateFlow<String?>
+    fun resetToastMessage() {
+        toastMessage.value = null
+    }
+}
+
 class ParametersGraphTabViewModel(
     val networking: FoxESSNetworking,
     val configManager: ConfigManaging,
     val onWriteTempFile: (String, String) -> Uri?,
     val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
-) : ViewModel(), ExportProviding {
+) : ViewModel(), ExportProviding, ToastMessageProviding {
     private var exportText: String = ""
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
@@ -47,6 +54,7 @@ class ParametersGraphTabViewModel(
     var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
+    override val toastMessage = MutableStateFlow<String?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -90,31 +98,35 @@ class ParametersGraphTabViewModel(
         val device = configManager.currentDevice.value ?: return
         val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type }.toList()
 
-        val raw = networking.fetchRaw(
-            device.deviceID,
-            variables = rawGraphVariables,
-            queryDate = queryDate
-        )
+        try {
+            val raw = networking.fetchRaw(
+                device.deviceID,
+                variables = rawGraphVariables,
+                queryDate = queryDate
+            )
 
-        val rawData: List<ParametersGraphValue> = raw.flatMap { response ->
-            val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
+            val rawData: List<ParametersGraphValue> = raw.flatMap { response ->
+                val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
 
-            response.data.mapIndexed { index, item ->
-                val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(item.time)
-                val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                response.data.mapIndexed { index, item ->
+                    val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(item.time)
+                    val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
-                return@mapIndexed ParametersGraphValue(
-                    graphPoint = index,
-                    time = localDateTime,
-                    value = item.value,
-                    type = rawVariable
-                )
+                    return@mapIndexed ParametersGraphValue(
+                        graphPoint = index,
+                        time = localDateTime,
+                        value = item.value,
+                        type = rawVariable
+                    )
+                }
             }
+
+            this.rawData = rawData
+
+            refresh()
+        } catch (ex: Exception) {
+            toastMessage.value = ex.localizedMessage
         }
-
-        this.rawData = rawData
-
-        refresh()
     }
 
     private fun refresh() {

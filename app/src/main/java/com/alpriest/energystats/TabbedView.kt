@@ -81,7 +81,7 @@ fun TabbedView(
         TitleItem(stringResource(R.string.power_flow_tab), Icons.Default.SwapVert, false),
         TitleItem(stringResource(R.string.stats_tab), Icons.Default.BarChart, false),
         TitleItem("Parameters", Icons.Default.Insights, false),
-        TitleItem("Summary", Icons.Default.MenuBook, false),
+//        TitleItem("Summary", Icons.Default.MenuBook, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
 

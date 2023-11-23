@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +33,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.flow.FinanceAmountType
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.paramsgraph.MonitorToast
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
@@ -57,6 +59,9 @@ class SummaryView(
         val approximations = viewModel.approximationsViewModelStream.collectAsState().value
         val oldestDataDate = viewModel.oldestDataDate.collectAsState().value
         var isLoading by remember { mutableStateOf(false) }
+        val context = LocalContext.current
+
+        MonitorToast(viewModel)
 
         LaunchedEffect(null) {
             isLoading = true

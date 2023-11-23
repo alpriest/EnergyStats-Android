@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.paramsgraph.MonitorToast
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
@@ -64,6 +66,8 @@ fun StatsTabView(
     val context = LocalContext.current
     val graphShowing = viewModel.showingGraphStream.collectAsState().value
     val showingApproximations = remember { mutableStateOf(false) }
+
+    MonitorToast(viewModel)
 
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true

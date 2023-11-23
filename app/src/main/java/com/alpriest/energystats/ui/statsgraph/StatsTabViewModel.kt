@@ -17,11 +17,9 @@ import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
-import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
-import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
+import com.alpriest.energystats.ui.paramsgraph.ToastMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
-import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -36,7 +34,7 @@ class StatsTabViewModel(
     val configManager: ConfigManaging,
     val networking: FoxESSNetworking,
     val onWriteTempFile: (String, String) -> Uri?
-) : ViewModel(), ExportProviding {
+) : ViewModel(), ExportProviding, ToastMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
@@ -48,6 +46,7 @@ class StatsTabViewModel(
     override var exportFileUri: Uri? = null
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     var showingGraphStream = MutableStateFlow(true)
+    override val toastMessage = MutableStateFlow<String?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -95,15 +94,22 @@ class StatsTabViewModel(
         val queryDate = makeQueryDate(displayMode)
         val reportType = makeReportType(displayMode)
         val reportVariables = graphVariables.map { it.type }
+        val reportData: List<ReportResponse>
+        val rawTotals: MutableMap<ReportVariable, Double>
 
-        val reportData = networking.fetchReport(
-            device.deviceID,
-            variables = reportVariables,
-            queryDate = queryDate,
-            reportType = reportType
-        )
+        try {
+            reportData = networking.fetchReport(
+                device.deviceID,
+                variables = reportVariables,
+                queryDate = queryDate,
+                reportType = reportType
+            )
 
-        val rawTotals = generateTotals(device.deviceID, reportData, reportType, queryDate, reportVariables)
+            rawTotals = generateTotals(device.deviceID, reportData, reportType, queryDate, reportVariables)
+        } catch (ex: Exception) {
+            toastMessage.value = ex.localizedMessage
+            return
+        }
 
         rawData = reportData.flatMap { reportResponse ->
             val reportVariable = ReportVariable.parse(reportResponse.variable)

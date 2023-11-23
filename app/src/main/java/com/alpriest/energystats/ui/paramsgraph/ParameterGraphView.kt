@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import android.graphics.RectF
+import android.widget.Toast
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,7 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -45,6 +47,13 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
     val firstHour = entries.firstOrNull()?.localDateTime?.hour ?: 0
     val firstLabelOffset = entries.indexOfFirst { it.localDateTime.hour > firstHour }
+    val context = LocalContext.current
+    val toastMessage = viewModel.toastMessage.collectAsState().value
+
+    toastMessage?.let {
+        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        viewModel.toastMessage.value = null
+    }
 
     if (entries.isNotEmpty()) {
         Column(modifier = modifier.fillMaxWidth()) {

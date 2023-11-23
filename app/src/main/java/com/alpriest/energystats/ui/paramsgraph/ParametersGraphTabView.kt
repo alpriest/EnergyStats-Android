@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -68,6 +69,17 @@ class ParametersGraphTabViewModelFactory(
     }
 }
 
+@Composable
+fun MonitorToast(viewModel: ToastMessageProviding) {
+    val context = LocalContext.current
+    val toastMessage = viewModel.toastMessage.collectAsState().value
+
+    toastMessage?.let {
+        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        viewModel.toastMessage.value = null
+    }
+}
+
 class ParametersGraphTabView(
     private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
@@ -87,6 +99,8 @@ class ParametersGraphTabView(
         val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
         val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
         val context = LocalContext.current
+
+        MonitorToast(viewModel)
 
         LaunchedEffect(viewModel.displayModeStream) {
             isLoading = true

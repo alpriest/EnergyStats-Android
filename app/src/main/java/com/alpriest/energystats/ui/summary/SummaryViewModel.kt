@@ -11,6 +11,7 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.flow.FinanceAmountType
+import com.alpriest.energystats.ui.paramsgraph.ToastMessageProviding
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,12 +31,13 @@ class SummaryTabViewModelFactory(
 
 class SummaryTabViewModel(
     private val network: FoxESSNetworking,
-    private val configManager: ConfigManaging
-) : ViewModel() {
+    private val configManager: ConfigManaging,
+) : ViewModel(), ToastMessageProviding {
     val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     val foxESSTotalStream = MutableStateFlow<FinanceAmount?>(null)
     val oldestDataDate = MutableStateFlow("")
     private val approximationsCalculator = ApproximationsCalculator(network, configManager)
+    override val toastMessage = MutableStateFlow<String?>(null)
 
     suspend fun load() {
         if (approximationsViewModelStream.value != null) {
@@ -84,8 +86,9 @@ class SummaryTabViewModel(
                 yearlyTotals.forEach { (variable, value) ->
                     totals[variable] = (totals[variable] ?: 0.0) + value
                 }
-            } catch (e: Exception) {
+            } catch (ex: Exception) {
                 hasFinished = true
+                toastMessage.value = ex.localizedMessage
             }
         }
 
