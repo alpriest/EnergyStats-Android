@@ -31,6 +31,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.ClickableUrlText
+import com.alpriest.energystats.ui.dialog.MonitorToast
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -47,14 +48,14 @@ class SolcastSettingsView(
     fun Content(
         viewModel: SolcastSettingsViewModel = viewModel(
             factory = SolcastSettingsViewModelFactory(
-                configManager = configManager,
-                context = context,
-                makeService = { Solcast() }
-            )
+                configManager = configManager
+            ) { Solcast() }
         )
     ) {
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val sites = viewModel.sitesStream.collectAsState().value
+
+        MonitorToast(viewModel)
 
         ContentWithBottomButtons(navController, onSave = { viewModel.save() }, content = { modifier ->
             SettingsPage(modifier) {
@@ -91,7 +92,9 @@ fun SolcastSiteView(site: SolcastSite) {
             site.name,
             style = TextStyle.Default.copy(fontWeight = FontWeight.Bold),
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 6.dp)
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -119,7 +122,7 @@ private fun Map(site: SolcastSite) {
     val apiKey = BuildConfig.GOOGLE_MAPS_APIKEY
     val location = "${site.lat},${site.lng}"
     val zoom = 18
-    val size = "300x300"
+    val size = "120x120"
 
     val mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=$location&zoom=$zoom&size=$size&key=$apiKey"
 

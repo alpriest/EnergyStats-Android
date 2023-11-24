@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.SolcastSiteResponse
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.theme.AppTheme
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 data class SolcastSettings(
     val apiKey: String?,
@@ -36,7 +37,7 @@ data class SolcastSite(
         lossFactor = site.lossFactor,
         acCapacity = site.capacity,
         dcCapacity = site.dcCapacity,
-        installDate = site.installDate
+        installDate = LocalDate.parse((site.installDate ?: "").split("T")[0], DateTimeFormatter.ISO_LOCAL_DATE)
     )
 
     companion object

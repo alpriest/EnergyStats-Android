@@ -1,46 +1,43 @@
 package com.alpriest.energystats.ui.settings.solcast
 
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.alpriest.energystats.R
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.paramsgraph.ToastMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SolcastSettingsViewModelFactory(
     private val configManager: ConfigManaging,
-    private val context: Context,
     private val makeService: () -> SolarForecasting
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SolcastSettingsViewModel(configManager, context, makeService) as T
+        return SolcastSettingsViewModel(configManager, makeService) as T
     }
 }
 
 class SolcastSettingsViewModel(
     private val configManager: ConfigManaging,
-    private val context: Context,
     private val makeService: () -> SolarForecasting
-) : ViewModel() {
+) : ViewModel(), ToastMessageProviding {
     val apiKeyStream = MutableStateFlow("")
     val sitesStream = MutableStateFlow<List<SolcastSite>>(listOf())
+    override val toastMessage = MutableStateFlow<String?>(null)
 
     init {
         apiKeyStream.value = configManager.solcastSettings.apiKey ?: ""
         sitesStream.value = configManager.solcastSettings.sites
     }
 
-    fun save() {
+    suspend fun save() {
         val service = makeService()
         try {
-            val sites = service.fetchSites()
-            configManager.solcastSettings = SolcastSettings(apiKeyStream.value, sites)
-            sitesStream.value = sites
-            Toast.makeText(context, "Your Solcast settings were successfully verified.", Toast.LENGTH_LONG).show()
+            val response = service.fetchSites(apiKey = apiKeyStream.value)
+            configManager.solcastSettings = SolcastSettings(apiKeyStream.value, response.sites.map { SolcastSite(site = it) })
+            sitesStream.value = configManager.solcastSettings.sites
+            toastMessage.value = "Your Solcast settings were successfully verified."
         } catch (ex: Exception) {
-            Toast.makeText(context, "Your Solcast settings were successfully verified.", Toast.LENGTH_LONG).show()
+            toastMessage.value = "Your Solcast settings failed to verify (${ex.localizedMessage}"
         }
     }
 }

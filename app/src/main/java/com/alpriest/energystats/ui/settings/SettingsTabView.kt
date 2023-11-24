@@ -213,7 +213,7 @@ fun SettingsTabView(
             SettingsNavButton(stringResource(R.string.self_sufficiency_estimates)) { navController.navigate(SettingsScreen.SelfSufficiencyEstimates.name) }
             SettingsNavButton(stringResource(R.string.financial_model)) { navController.navigate(SettingsScreen.FinancialModel.name) }
             SettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
-//            SettingsNavButton("Solcast Solar Prediction") { navController.navigate(SettingsScreen.SolcastSolarPrediction.name) }
+            SettingsNavButton("Solcast Solar Prediction") { navController.navigate(SettingsScreen.SolcastSolarPrediction.name) }
         }
 
         RefreshFrequencySettingsView(config)

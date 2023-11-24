@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,6 +44,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorToast
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,17 +66,6 @@ class ParametersGraphTabViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return ParametersGraphTabViewModel(network, configManager, onWriteTempFile, graphVariablesStream) as T
-    }
-}
-
-@Composable
-fun MonitorToast(viewModel: ToastMessageProviding) {
-    val context = LocalContext.current
-    val toastMessage = viewModel.toastMessage.collectAsState().value
-
-    toastMessage?.let {
-        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        viewModel.toastMessage.value = null
     }
 }
 

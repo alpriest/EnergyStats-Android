@@ -33,7 +33,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.flow.FinanceAmountType
 import com.alpriest.energystats.ui.flow.home.preview
-import com.alpriest.energystats.ui.paramsgraph.MonitorToast
+import com.alpriest.energystats.ui.dialog.MonitorToast
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel

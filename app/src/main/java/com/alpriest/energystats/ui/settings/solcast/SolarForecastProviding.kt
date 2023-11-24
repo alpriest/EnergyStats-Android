@@ -1,5 +1,7 @@
 package com.alpriest.energystats.ui.settings.solcast
 
+import com.alpriest.energystats.models.SolcastSiteResponseList
+
 interface SolarForecasting {
-    fun fetchSites(): List<SolcastSite>
+    suspend fun fetchSites(apiKey: String): SolcastSiteResponseList
 }

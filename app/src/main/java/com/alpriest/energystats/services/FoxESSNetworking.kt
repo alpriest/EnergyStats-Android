@@ -3,6 +3,7 @@ package com.alpriest.energystats.services
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
+class InvalidConfigurationException(message: String?): Exception(message)
 class InvalidTokenException : Exception("Invalid Token")
 class BadCredentialsException : Exception("Bad Credentials")
 class TryLaterException : Exception("Try Later")
