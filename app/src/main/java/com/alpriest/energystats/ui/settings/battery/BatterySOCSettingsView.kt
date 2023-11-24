@@ -32,6 +32,7 @@ import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
@@ -43,24 +44,26 @@ class BatterySOCSettings(
     private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
-    private val userManager: UserManaging,
-    private val context: Context
+    private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager, context))) {
+    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager))) {
         val minSOC = viewModel.minSOCStream.collectAsState().value
         val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
+        val context = LocalContext.current
+
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
-            viewModel.load()
+            viewModel.load(context)
         }
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load() }, onLogout = {userManager.logout()  })
+            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load(context) }, onLogout = {userManager.logout()  })
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save() }, { modifier ->
+                ContentWithBottomButtons(navController, onSave = { viewModel.save(context) }, { modifier ->
                     SettingsPage(modifier) {
                         Column {
                             Row(
@@ -154,8 +157,7 @@ fun BatterySOCSettingsViewPreview() {
             network = DemoFoxESSNetworking(),
             configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current),
-            userManager = FakeUserManager(),
-            context = LocalContext.current
+            userManager = FakeUserManager()
         ).Content()
     }
 }

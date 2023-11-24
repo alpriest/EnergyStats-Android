@@ -41,6 +41,7 @@ import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
@@ -53,25 +54,26 @@ class WorkModeView(
     private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
-    private val userManager: UserManaging,
-    private val context: Context
+    private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: WorkModeViewModel = viewModel(factory = WorkModeViewModelFactory(network, configManager, navController, context))) {
+    fun Content(viewModel: WorkModeViewModel = viewModel(factory = WorkModeViewModelFactory(network, configManager, navController))) {
         val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
         val selectedWorkMode = viewModel.workModeStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 
+        MonitorAlertDialog(viewModel)
+
         LaunchedEffect(null) {
-            viewModel.load()
+            viewModel.load(context)
         }
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.reason, onRetry = {viewModel.load() }, onLogout = { userManager.logout() })
+            is LoadState.Error -> ErrorView(loadState.reason, onRetry = {viewModel.load(context) }, onLogout = { userManager.logout() })
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save() }, { modifier ->
+                ContentWithBottomButtons(navController, onSave = { viewModel.save(context) }, { modifier ->
                     SettingsPage(modifier) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -172,8 +174,7 @@ fun WorkModeViewPreview() {
             DemoFoxESSNetworking(),
             FakeConfigManager(),
             NavHostController(LocalContext.current),
-            FakeUserManager(),
-            LocalContext.current
+            FakeUserManager()
         ).Content()
     }
 }

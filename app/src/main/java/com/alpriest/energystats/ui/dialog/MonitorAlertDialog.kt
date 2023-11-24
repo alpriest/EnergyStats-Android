@@ -22,7 +22,9 @@ fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding) {
     val message = viewModel.alertDialogMessage.collectAsState().value
 
     message?.let {
-        AlertDialog(message = it, onDismiss = { viewModel.alertDialogMessage.value = null })
+        AlertDialog(message = it, onDismiss = {
+            viewModel.resetDialogMessage()
+        })
     }
 }
 

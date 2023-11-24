@@ -10,30 +10,30 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class WorkModeViewModelFactory(
     private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
-    private val navController: NavController,
-    private val context: Context
+    private val navController: NavController
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return WorkModeViewModel(network, configManager, navController, context) as T
+        return WorkModeViewModel(network, configManager, navController) as T
     }
 }
 
 class WorkModeViewModel(
     val network: FoxESSNetworking,
     val config: ConfigManaging,
-    val navController: NavController,
-    val context: Context
-) : ViewModel() {
+    val navController: NavController
+) : ViewModel(), AlertDialogMessageProviding {
     var workModeStream = MutableStateFlow(WorkMode.SELF_USE)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
+    override val alertDialogMessage = MutableStateFlow<String?>(null)
 
-    suspend fun load() {
+    suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
         runCatching {
@@ -45,7 +45,7 @@ class WorkModeViewModel(
                     workModeStream.value = InverterWorkMode.from(result.values.operation_mode__work_mode).asWorkMode()
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage))
+                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -53,7 +53,7 @@ class WorkModeViewModel(
         }
     }
 
-    suspend fun save() {
+    suspend fun save(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
         runCatching {
@@ -66,7 +66,7 @@ class WorkModeViewModel(
                         workMode = workModeStream.value.asInverterWorkMode().text,
                     )
 
-                    Toast.makeText(context, context.getString(R.string.inverter_work_mode_was_saved), Toast.LENGTH_LONG).show()
+                    alertDialogMessage.value = context.getString(R.string.inverter_work_mode_was_saved)
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {

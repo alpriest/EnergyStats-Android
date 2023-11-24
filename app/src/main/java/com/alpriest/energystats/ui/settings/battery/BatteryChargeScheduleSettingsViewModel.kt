@@ -10,6 +10,7 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -21,12 +22,11 @@ private val ChargeTimePeriod.hasTimes: Boolean
 
 class BatteryChargeScheduleSettingsViewModelFactory(
     private val network: FoxESSNetworking,
-    private val configManager: ConfigManaging,
-    private val context: Context
+    private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return BatteryChargeScheduleSettingsViewModel(network, configManager, context) as T
+        return BatteryChargeScheduleSettingsViewModel(network, configManager) as T
     }
 }
 
@@ -37,15 +37,15 @@ private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
 
 class BatteryChargeScheduleSettingsViewModel(
     private val network: FoxESSNetworking,
-    private val config: ConfigManaging,
-    private val context: Context
-) : ViewModel() {
+    private val config: ConfigManaging
+) : ViewModel(), AlertDialogMessageProviding {
     val timePeriod1Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
     val timePeriod2Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val summaryStream = MutableStateFlow("")
+    override val alertDialogMessage = MutableStateFlow<String?>(null)
 
-    suspend fun load() {
+    suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
         runCatching {
@@ -66,10 +66,10 @@ class BatteryChargeScheduleSettingsViewModel(
                         )
                     }
 
-                    generateSummary(timePeriod1Stream.value, timePeriod2Stream.value)
+                    generateSummary(timePeriod1Stream.value, timePeriod2Stream.value, context)
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage))
+                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -79,19 +79,19 @@ class BatteryChargeScheduleSettingsViewModel(
         coroutineScope {
             launch {
                 timePeriod1Stream.collect {
-                    generateSummary(it, timePeriod2Stream.value)
+                    generateSummary(it, timePeriod2Stream.value, context)
                 }
             }
 
             launch {
                 timePeriod2Stream.collect {
-                    generateSummary(timePeriod1Stream.value, it)
+                    generateSummary(timePeriod1Stream.value, it, context)
                 }
             }
         }
     }
 
-    private fun generateSummary(period1: ChargeTimePeriod, period2: ChargeTimePeriod) {
+    private fun generateSummary(period1: ChargeTimePeriod, period2: ChargeTimePeriod, context: Context) {
         val resultParts = mutableListOf<String>()
 
         if (!period1.enabled && !period2.enabled) {
@@ -135,7 +135,7 @@ class BatteryChargeScheduleSettingsViewModel(
         summaryStream.value = resultParts.joinToString(" ")
     }
 
-    suspend fun save() {
+    suspend fun save(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
         runCatching {
@@ -149,7 +149,7 @@ class BatteryChargeScheduleSettingsViewModel(
                         times = times
                     )
 
-                    Toast.makeText(context, context.getString(R.string.battery_charge_schedule_was_saved), Toast.LENGTH_LONG).show()
+                    alertDialogMessage.value = context.getString(R.string.battery_charge_schedule_was_saved)
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {

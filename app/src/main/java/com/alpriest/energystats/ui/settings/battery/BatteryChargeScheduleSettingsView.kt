@@ -36,6 +36,7 @@ import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
@@ -50,31 +51,32 @@ class BatteryChargeScheduleSettingsView(
     private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
-    private val userManager: UserManaging,
-    private val context: Context
+    private val userManager: UserManaging
 ) {
     @Composable
     fun Content(
         viewModel: BatteryChargeScheduleSettingsViewModel = viewModel(
             factory = BatteryChargeScheduleSettingsViewModelFactory(
                 network = network,
-                configManager = configManager,
-                context = context
+                configManager = configManager
             )
         )
     ) {
         val chargeSummary = viewModel.summaryStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
+        val context = LocalContext.current
+
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
-            viewModel.load()
+            viewModel.load(context)
         }
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
+            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save() }, { modifier ->
+                ContentWithBottomButtons(navController, onSave = { viewModel.save(context) }, { modifier ->
                     SettingsPage(modifier) {
                         BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
                         BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
@@ -184,8 +186,7 @@ fun BatteryForceChargeTimesViewPreview() {
             network = DemoFoxESSNetworking(),
             configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current),
-            userManager = FakeUserManager(),
-            context = LocalContext.current
+            userManager = FakeUserManager()
         ).Content()
     }
 }

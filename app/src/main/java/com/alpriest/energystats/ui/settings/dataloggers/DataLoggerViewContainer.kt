@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings.dataloggers
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -33,6 +33,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.inverter.SettingsRow
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -50,25 +51,24 @@ data class DataLogger(
 class DataLoggerViewModelFactory(
     private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
-    private val navController: NavController,
-    private val context: Context
+    private val navController: NavController
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DataLoggerViewModel(network, configManager, navController, context) as T
+        return DataLoggerViewModel(network, configManager, navController) as T
     }
 }
 
 class DataLoggerViewModel(
     val network: FoxESSNetworking,
     val config: ConfigManaging,
-    val navController: NavController,
-    val context: Context
-) : ViewModel() {
+    val navController: NavController
+) : ViewModel(), AlertDialogMessageProviding {
     var itemStream: MutableStateFlow<List<DataLogger>> = MutableStateFlow(listOf())
     var activityStream = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<String?>(null)
 
-    suspend fun load() {
+    suspend fun load(context: Context) {
         activityStream.value = context.getString(R.string.loading)
 
         runCatching {
@@ -85,7 +85,7 @@ class DataLoggerViewModel(
                     )
                 }
             } catch (ex: Exception) {
-                Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                alertDialogMessage.value = ex.message
             }
         }.also {
             activityStream.value = null
@@ -100,11 +100,12 @@ class DataLoggerViewContainer(
     private val context: Context
 ) {
     @Composable
-    fun Content(viewModel: DataLoggerViewModel = viewModel(factory = DataLoggerViewModelFactory(network, configManager, navController, context))) {
+    fun Content(viewModel: DataLoggerViewModel = viewModel(factory = DataLoggerViewModelFactory(network, configManager, navController))) {
         val isActive = viewModel.activityStream.collectAsState().value
+        val context = LocalContext.current
 
         LaunchedEffect(null) {
-            viewModel.load()
+            viewModel.load(context)
         }
 
         val items = viewModel.itemStream.collectAsState()

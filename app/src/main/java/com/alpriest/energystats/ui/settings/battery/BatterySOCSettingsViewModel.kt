@@ -9,29 +9,29 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class BatterySOCSettingsViewModelFactory(
     private val network: FoxESSNetworking,
-    private val configManager: ConfigManaging,
-    private val context: Context
+    private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(FoxESSNetworking::class.java, ConfigManaging::class.java, Context::class.java)
-            .newInstance(network, configManager, context)
+        return BatterySOCSettingsViewModel(network, configManager) as T
     }
 }
 
 class BatterySOCSettingsViewModel(
     private val network: FoxESSNetworking,
-    private val config: ConfigManaging,
-    private val context: Context
-) : ViewModel() {
+    private val config: ConfigManaging
+) : ViewModel(), AlertDialogMessageProviding {
     var minSOCStream = MutableStateFlow("")
     var minSOConGridStream = MutableStateFlow("")
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
+    override val alertDialogMessage = MutableStateFlow<String?>(null)
 
-    suspend fun load() {
+    suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
         runCatching {
@@ -44,7 +44,7 @@ class BatterySOCSettingsViewModel(
                     minSOConGridStream.value = result.minGridSoc.toString()
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage))
+                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -52,7 +52,7 @@ class BatterySOCSettingsViewModel(
         }
     }
 
-    suspend fun save() {
+    suspend fun save(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
         runCatching {
@@ -66,7 +66,7 @@ class BatterySOCSettingsViewModel(
                         deviceSN = deviceSN
                     )
 
-                    Toast.makeText(context, context.getString(R.string.battery_soc_changes_were_saved), Toast.LENGTH_LONG).show()
+                    alertDialogMessage.value = context.getString(R.string.battery_soc_changes_were_saved)
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
