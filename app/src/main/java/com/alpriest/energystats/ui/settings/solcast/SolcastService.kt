@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.solcast
 import com.alpriest.energystats.models.SolcastSiteResponseList
 import com.alpriest.energystats.services.InvalidConfigurationException
 import com.alpriest.energystats.services.TryLaterException
+import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -21,6 +22,26 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class Solcast : SolarForecasting {
+    override suspend fun fetchForecast(site: SolcastSite, apiKey: String): SolcastForecastResponseList {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("api.solcast.com.au")
+            .addPathSegment("rooftop_sites")
+            .addPathSegment(site.resourceId)
+            .addPathSegment("forecasts")
+            .addQueryParameter(name = "format", value = "json")
+            .addQueryParameter(name = "API_KEY", value = apiKey)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<SolcastForecastResponseList>() {}.type
+
+        return fetch(request, type)
+    }
+
     override suspend fun fetchSites(apiKey: String): SolcastSiteResponseList {
         val url = HttpUrl.Builder()
             .scheme("https")

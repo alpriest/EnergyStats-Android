@@ -34,7 +34,6 @@ class SummaryTabViewModel(
     private val configManager: ConfigManaging,
 ) : ViewModel(), AlertDialogMessageProviding {
     val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
-    val foxESSTotalStream = MutableStateFlow<FinanceAmount?>(null)
     val oldestDataDate = MutableStateFlow("")
     private val approximationsCalculator = ApproximationsCalculator(network, configManager)
     override val alertDialogMessage = MutableStateFlow<String?>(null)
@@ -46,13 +45,6 @@ class SummaryTabViewModel(
 
         configManager.currentDevice.value?.let {
             val foxEarnings = network.fetchEarnings(deviceID = it.deviceID)
-            foxESSTotalStream.value = FinanceAmount(
-                type = FinanceAmountType.TOTAL,
-                amount = foxEarnings.cumulate.earnings,
-                currencyCode = foxEarnings.currencyCode(),
-                currencySymbol = foxEarnings.currencySymbol()
-            )
-
             val totals = fetchAllYears(it)
             approximationsViewModelStream.value = makeApproximationsViewModel(totals = totals, response = foxEarnings)
         }
@@ -70,7 +62,7 @@ class SummaryTabViewModel(
             }
 
             try {
-                val (yearlyTotals, emptyMonth) = fetchYear(year, device) // Assuming fetchYear is a suspend function
+                val (yearlyTotals, emptyMonth) = fetchYear(year, device)
 
                 emptyMonth?.let { month ->
                     val calendar = Calendar.getInstance()

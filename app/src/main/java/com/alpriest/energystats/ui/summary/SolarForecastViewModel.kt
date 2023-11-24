@@ -1,48 +1,79 @@
 package com.alpriest.energystats.ui.summary
 
-import com.google.gson.annotations.SerializedName
+import com.alpriest.energystats.models.SolcastForecastResponse
+import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 
-data class SolcastForecastResponseList(
-    val forecasts: List<SolcastForecastResponse>
+data class SolarForecastViewData(
+    val error: String?,
+    val today: List<SolcastForecastResponse>,
+    val todayTotal: Double,
+    val tomorrow: List<SolcastForecastResponse>,
+    val tomorrowTotal: Double,
+    val name: String?,
+    val resourceId: String
 )
 
-data class SolcastForecastResponse(
-    @SerializedName("pv_estimate")
-    val pvEstimate: Double,
-    @SerializedName("pv_estimate10")
-    val pvEstimate10: Double,
-    @SerializedName("pv_estimate90")
-    val pvEstimate90: Double,
-    @SerializedName("period_end")
-    val periodEnd: Date
-)
-
-interface SolarForecasting {
-    suspend fun fetchForecast(): SolcastForecastResponseList
-}
-
-class SolarForecastViewModel(private val solarForecastProvider: SolarForecasting) {
-    val producer: ChartEntryModelProducer = ChartEntryModelProducer()
-    val today = MutableStateFlow<List<SolcastForecastResponse>>(listOf())
-    val tomorrow = MutableStateFlow<List<SolcastForecastResponse>>(listOf())
+class SolarForecastViewModel(
+    private val solarForecastProvider: SolarForecasting,
+    private val themeStream: MutableStateFlow<AppTheme>
+) {
+    val hasSitesStream = MutableStateFlow<Boolean>(false)
+    val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())
 
     suspend fun load() {
-        val forecasts = solarForecastProvider.fetchForecast().forecasts
-        val today = getToday()
-        val tomorrow = getTomorrow()
+        val settings = themeStream.value.solcastSettings
 
-        this.today.value = forecasts.filter {
-            isSameDay(it.periodEnd, today)
+        if (settings.sites.isEmpty() || settings.apiKey == null) {
+            return
         }
 
-        this.tomorrow.value = forecasts.filter {
-            isSameDay(it.periodEnd, tomorrow)
+        dataStream.value = settings.sites.map {
+            val forecasts = solarForecastProvider.fetchForecast(it, settings.apiKey).forecasts
+            val today = getToday()
+            val tomorrow = getTomorrow()
+
+            val todayData = forecasts.filter { response ->
+                isSameDay(response.periodEnd, today)
+            }
+
+            val tomorrowData = forecasts.filter { response ->
+                isSameDay(response.periodEnd, tomorrow)
+            }
+
+            SolarForecastViewData(
+                error = null,
+                today = todayData,
+                todayTotal = total(todayData),
+                tomorrow = tomorrowData,
+                tomorrowTotal = total(tomorrowData),
+                name = it.name,
+                resourceId = it.resourceId
+            )
         }
+    }
+
+    fun total(forecasts: List<SolcastForecastResponse>): Double {
+        return forecasts.fold(0.0) { total, forecast ->
+            val periodHours = convertPeriodToHours(period = forecast.period)
+            total + (forecast.pvEstimate * periodHours)
+        }
+    }
+
+    private fun convertPeriodToHours(period: String): Double {
+        // Regular expression to extract the numeric value from the period string (assuming format "PT30M")
+        val regex = """(\d+)""".toRegex()
+        val matchResult = regex.find(period)
+
+        return matchResult?.let {
+            val periodMinutes = it.groupValues[1].toDoubleOrNull()
+            periodMinutes?.div(60.0) ?: 0.0  // Convert minutes to hours, defaulting to 0.0 if null
+        } ?: 0.0
     }
 
     fun isSameDay(date1: Date, date2: Date): Boolean {

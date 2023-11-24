@@ -37,6 +37,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.solcast.Solcast
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
@@ -59,7 +60,6 @@ class SummaryView(
         val approximations = viewModel.approximationsViewModelStream.collectAsState().value
         val oldestDataDate = viewModel.oldestDataDate.collectAsState().value
         var isLoading by remember { mutableStateOf(false) }
-        val context = LocalContext.current
 
         MonitorAlertDialog(viewModel)
 
@@ -93,29 +93,29 @@ class SummaryView(
                 }
             }
             
-            SolarForecastView(viewModel = SolarForecastViewModel(DemoSolarForecasting()))
+            SolarForecastView(viewModel = SolarForecastViewModel(Solcast(), themeStream))
         }
     }
 
     @Composable
     fun LoadedView(approximationsViewModel: ApproximationsViewModel, appTheme: AppTheme, oldestDataDate: String) {
-        energyRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = MaterialTheme.typography.h2)
-        energyRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = MaterialTheme.typography.h2)
+        energySummaryRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = MaterialTheme.typography.h2)
+        energySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = MaterialTheme.typography.h2)
 
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 
         when (appTheme.financialModel) {
             FinancialModel.EnergyStats -> {
                 approximationsViewModel.financialModel?.let { energyStatsModel ->
-                    moneyRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome.amount, textStyle = MaterialTheme.typography.h2)
-                    moneyRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving.amount, textStyle = MaterialTheme.typography.h2)
-                    moneyRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total.amount, textStyle = MaterialTheme.typography.h2)
+                    moneySummaryRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome.amount, textStyle = MaterialTheme.typography.h2)
+                    moneySummaryRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving.amount, textStyle = MaterialTheme.typography.h2)
+                    moneySummaryRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total.amount, textStyle = MaterialTheme.typography.h2)
                 }
             }
 
             FinancialModel.FoxESS -> {
                 approximationsViewModel.earnings?.let { earningsResponse ->
-                    moneyRow(title = stringResource(R.string.total_benefit), amount = earningsResponse.cumulate.earnings, textStyle = MaterialTheme.typography.h2)
+                    moneySummaryRow(title = stringResource(R.string.total_benefit), amount = earningsResponse.cumulate.earnings, textStyle = MaterialTheme.typography.h2)
                 }
             }
         }
@@ -129,7 +129,7 @@ class SummaryView(
     }
 
     @Composable
-    private fun energyRow(title: String, amount: Double?, textStyle: TextStyle, modifier: Modifier = Modifier) {
+    private fun energySummaryRow(title: String, amount: Double?, textStyle: TextStyle, modifier: Modifier = Modifier) {
         amount?.let {
             Row {
                 Text(
@@ -147,7 +147,7 @@ class SummaryView(
     }
 
     @Composable
-    private fun moneyRow(title: String, amount: Double, textStyle: TextStyle, modifier: Modifier = Modifier) {
+    private fun moneySummaryRow(title: String, amount: Double, textStyle: TextStyle, modifier: Modifier = Modifier) {
         Row {
             Text(
                 title,
