@@ -11,21 +11,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.alpriest.energystats.ui.paramsgraph.ToastMessageProviding
+import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 
 @Composable
-fun MonitorToast(viewModel: ToastMessageProviding) {
-    val toastMessage = viewModel.toastMessage.collectAsState().value
+fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding) {
+    val message = viewModel.alertDialogMessage.collectAsState().value
 
-    toastMessage?.let {
-        MyDialog(message = it, onDismiss = { viewModel.toastMessage.value = null })
+    message?.let {
+        AlertDialog(message = it, onDismiss = { viewModel.alertDialogMessage.value = null })
     }
 }
 
 @Composable
-fun MyDialog(message: String, onDismiss: () -> Unit) {
+private fun AlertDialog(message: String, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+
     Dialog(onDismissRequest = onDismiss) {
         Card {
             Column(
@@ -35,7 +39,7 @@ fun MyDialog(message: String, onDismiss: () -> Unit) {
                 Text(message)
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = onDismiss) {
-                    Text("Close")
+                    Text(context.getString(R.string.ok))
                 }
             }
         }

@@ -28,10 +28,10 @@ interface ExportProviding {
     abstract fun exportTo(context: Context, uri: Uri)
 }
 
-interface ToastMessageProviding {
-    val toastMessage: MutableStateFlow<String?>
-    fun resetToastMessage() {
-        toastMessage.value = null
+interface AlertDialogMessageProviding {
+    val alertDialogMessage: MutableStateFlow<String?>
+    fun resetDialogMessage() {
+        alertDialogMessage.value = null
     }
 }
 
@@ -40,7 +40,7 @@ class ParametersGraphTabViewModel(
     val configManager: ConfigManaging,
     val onWriteTempFile: (String, String) -> Uri?,
     val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
-) : ViewModel(), ExportProviding, ToastMessageProviding {
+) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     private var exportText: String = ""
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
@@ -54,7 +54,7 @@ class ParametersGraphTabViewModel(
     var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
-    override val toastMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<String?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -125,7 +125,7 @@ class ParametersGraphTabViewModel(
 
             refresh()
         } catch (ex: Exception) {
-            toastMessage.value = ex.localizedMessage
+            alertDialogMessage.value = ex.localizedMessage
         }
     }
 

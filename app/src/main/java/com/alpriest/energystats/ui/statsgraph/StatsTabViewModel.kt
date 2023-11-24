@@ -18,7 +18,7 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
-import com.alpriest.energystats.ui.paramsgraph.ToastMessageProviding
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.patrykandpatrick.vico.core.entry.ChartEntry
@@ -34,7 +34,7 @@ class StatsTabViewModel(
     val configManager: ConfigManaging,
     val networking: FoxESSNetworking,
     val onWriteTempFile: (String, String) -> Uri?
-) : ViewModel(), ExportProviding, ToastMessageProviding {
+) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
@@ -46,7 +46,7 @@ class StatsTabViewModel(
     override var exportFileUri: Uri? = null
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     var showingGraphStream = MutableStateFlow(true)
-    override val toastMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<String?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -107,7 +107,7 @@ class StatsTabViewModel(
 
             rawTotals = generateTotals(device.deviceID, reportData, reportType, queryDate, reportVariables)
         } catch (ex: Exception) {
-            toastMessage.value = ex.localizedMessage
+            alertDialogMessage.value = ex.localizedMessage
             return
         }
 

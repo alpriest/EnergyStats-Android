@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.settings.solcast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.paramsgraph.ToastMessageProviding
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SolcastSettingsViewModelFactory(
@@ -19,10 +19,10 @@ class SolcastSettingsViewModelFactory(
 class SolcastSettingsViewModel(
     private val configManager: ConfigManaging,
     private val makeService: () -> SolarForecasting
-) : ViewModel(), ToastMessageProviding {
+) : ViewModel(), AlertDialogMessageProviding {
     val apiKeyStream = MutableStateFlow("")
     val sitesStream = MutableStateFlow<List<SolcastSite>>(listOf())
-    override val toastMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<String?>(null)
 
     init {
         apiKeyStream.value = configManager.solcastSettings.apiKey ?: ""
@@ -35,9 +35,9 @@ class SolcastSettingsViewModel(
             val response = service.fetchSites(apiKey = apiKeyStream.value)
             configManager.solcastSettings = SolcastSettings(apiKeyStream.value, response.sites.map { SolcastSite(site = it) })
             sitesStream.value = configManager.solcastSettings.sites
-            toastMessage.value = "Your Solcast settings were successfully verified."
+            alertDialogMessage.value = "Your Solcast settings were successfully verified."
         } catch (ex: Exception) {
-            toastMessage.value = "Your Solcast settings failed to verify (${ex.localizedMessage}"
+            alertDialogMessage.value = "Your Solcast settings failed to verify (${ex.localizedMessage}"
         }
     }
 }

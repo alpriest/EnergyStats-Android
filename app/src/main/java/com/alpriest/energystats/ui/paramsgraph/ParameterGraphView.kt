@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -24,7 +25,6 @@ import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
-import com.patrykandpatrick.vico.core.chart.scale.AutoScaleUp
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
@@ -47,13 +47,8 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
     val firstHour = entries.firstOrNull()?.localDateTime?.hour ?: 0
     val firstLabelOffset = entries.indexOfFirst { it.localDateTime.hour > firstHour }
-    val context = LocalContext.current
-    val toastMessage = viewModel.toastMessage.collectAsState().value
 
-    toastMessage?.let {
-        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        viewModel.toastMessage.value = null
-    }
+    MonitorAlertDialog(viewModel)
 
     if (entries.isNotEmpty()) {
         Column(modifier = modifier.fillMaxWidth()) {

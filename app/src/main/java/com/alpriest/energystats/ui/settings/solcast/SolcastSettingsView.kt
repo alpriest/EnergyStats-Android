@@ -31,7 +31,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.ClickableUrlText
-import com.alpriest.energystats.ui.dialog.MonitorToast
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -55,7 +55,7 @@ class SolcastSettingsView(
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val sites = viewModel.sitesStream.collectAsState().value
 
-        MonitorToast(viewModel)
+        MonitorAlertDialog(viewModel)
 
         ContentWithBottomButtons(navController, onSave = { viewModel.save() }, content = { modifier ->
             SettingsPage(modifier) {

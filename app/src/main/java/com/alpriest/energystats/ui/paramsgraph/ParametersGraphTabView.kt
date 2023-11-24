@@ -44,7 +44,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.dialog.MonitorToast
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -89,7 +89,7 @@ class ParametersGraphTabView(
         val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
         val context = LocalContext.current
 
-        MonitorToast(viewModel)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(viewModel.displayModeStream) {
             isLoading = true
