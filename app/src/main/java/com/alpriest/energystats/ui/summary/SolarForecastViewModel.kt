@@ -1,28 +1,52 @@
 package com.alpriest.energystats.ui.summary
 
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.SolcastForecastResponse
+import com.alpriest.energystats.models.toHalfHourOfDay
+import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.paramsgraph.DateTimeFloatEntry
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico.core.entry.ChartModelProducer
+import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
+import kotlin.time.Duration.Companion.hours
 
 data class SolarForecastViewData(
     val error: String?,
-    val today: List<SolcastForecastResponse>,
+    val today: ChartEntryModelProducer,
     val todayTotal: Double,
-    val tomorrow: List<SolcastForecastResponse>,
+    val tomorrow: ChartEntryModelProducer,
     val tomorrowTotal: Double,
     val name: String?,
     val resourceId: String
 )
 
+class SolarForecastViewModelFactory(
+    private val solarForecastProvider: SolarForecasting,
+    private val themeStream: MutableStateFlow<AppTheme>
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return SolarForecastViewModel(solarForecastProvider, themeStream) as T
+    }
+}
+
 class SolarForecastViewModel(
     private val solarForecastProvider: SolarForecasting,
     private val themeStream: MutableStateFlow<AppTheme>
-) {
+) : ViewModel() {
     val hasSitesStream = MutableStateFlow<Boolean>(false)
     val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())
 
@@ -48,9 +72,21 @@ class SolarForecastViewModel(
 
             SolarForecastViewData(
                 error = null,
-                today = todayData,
+                today = ChartEntryModelProducer(todayData.map { response ->
+                    DateFloatEntry(
+                        date = response.periodEnd,
+                        x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                        y = response.pvEstimate.toFloat(),
+                    )
+                }),
                 todayTotal = total(todayData),
-                tomorrow = tomorrowData,
+                tomorrow = ChartEntryModelProducer(tomorrowData.map { response ->
+                    DateFloatEntry(
+                        date = response.periodEnd,
+                        x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                        y = response.pvEstimate.toFloat(),
+                    )
+                }),
                 tomorrowTotal = total(tomorrowData),
                 name = it.name,
                 resourceId = it.resourceId
@@ -94,3 +130,14 @@ class SolarForecastViewModel(
     }
 }
 
+class DateFloatEntry(
+    val date: Date,
+    override val x: Float,
+    override val y: Float
+) : ChartEntry {
+    override fun withY(y: Float): ChartEntry = DateFloatEntry(
+        date = date,
+        x = x,
+        y = y
+    )
+}

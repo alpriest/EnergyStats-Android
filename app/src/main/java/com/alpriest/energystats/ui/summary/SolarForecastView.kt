@@ -1,26 +1,37 @@
 package com.alpriest.energystats.ui.summary
 
+import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
+import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.Green
+import com.alpriest.energystats.ui.theme.Red
+import com.alpriest.energystats.ui.theme.TintColor
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
-import com.patrykandpatrick.vico.compose.component.shape.shader.BrushShader
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
@@ -28,54 +39,104 @@ import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.line.LineChart
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
-import com.patrykandpatrick.vico.core.entry.entriesOf
-import com.patrykandpatrick.vico.core.entry.entryModelOf
 import kotlinx.coroutines.flow.MutableStateFlow
 
-@Composable
-fun SolarForecastView(viewModel: SolarForecastViewModel) {
-    LaunchedEffect(null) {
-        viewModel.load()
+class SolarForecastView(
+    private val solarForecastProvider: SolarForecasting,
+    private val themeStream: MutableStateFlow<AppTheme>
+) {
+    @Composable
+    fun Content(
+        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, themeStream)),
+        modifier: Modifier = Modifier
+    ) {
+        val data = viewModel.dataStream.collectAsState().value
+        val predictionColor = TintColor
+        val color90 = Red.copy(alpha = 0.5f)
+        val color10 = Green.copy(alpha = 0.5f)
+
+        LaunchedEffect(null) {
+            viewModel.load()
+        }
+
+        Column(
+            modifier = modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            data.map { item ->
+                ForecastView(item)
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Rectangle(
+                    color = predictionColor,
+                    modifier = Modifier
+                        .size(width = 20.dp, height = 5.dp)
+                        .padding(end = 5.dp)
+
+                )
+                Text(
+                    "Prediction",
+                    modifier = Modifier.padding(end = 15.dp)
+                )
+
+                Rectangle(
+                    color = color90,
+                    modifier = Modifier
+                        .size(width = 20.dp, height = 5.dp)
+                        .padding(end = 5.dp)
+                )
+                Text(
+                    "90%",
+                    modifier = Modifier.padding(end = 15.dp)
+                )
+
+                Rectangle(
+                    color = color10,
+                    modifier = Modifier
+                        .size(width = 20.dp, height = 5.dp)
+                        .padding(end = 5.dp)
+
+                )
+                Text(
+                    "10%",
+                    modifier = Modifier.padding(end = 15.dp)
+                )
+            }
+        }
     }
 
-    val chartEntryModel = entryModelOf(
-        entriesOf(4f, 12f, 8f, 16f),
-        entriesOf(2f, 4f, 3f, 5f),
-        entriesOf(3f, 7f, 5f, 8f)
-    )
-    val estimateColor = Color.Yellow.copy(alpha = 0.2f)
+    @Composable
+    fun ForecastView(viewModel: SolarForecastViewData) {
+        val predictionColor = TintColor
+        val color90 = Red.copy(alpha = 0.5f)
+        val color10 = Green.copy(alpha = 0.5f)
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+//    entryModelOf(
+//        entriesOf(4f, 12f, 8f, 16f),
+//        entriesOf(2f, 4f, 3f, 5f),
+//        entriesOf(3f, 7f, 5f, 8f)
+//    )
+//
+
         ProvideChartStyle {
             Chart(
                 chart = lineChart(
                     lines = listOf(
                         LineChart.LineSpec(
-                            lineColor = estimateColor.toArgb(),
-                            lineBackgroundShader = BrushShader(
-                                Brush.linearGradient(
-                                    colors = listOf(estimateColor, estimateColor),
-                                    start = Offset(0f, 0f),
-                                    end = Offset(0f, 0f)
-                                )
-                            )
+                            lineColor = color90.toArgb()
                         ),
                         LineChart.LineSpec(
-                            lineColor = estimateColor.toArgb(),
-                            lineBackgroundShader = BrushShader(
-                                Brush.linearGradient(
-                                    colors = listOf(Color.White, Color.White),
-                                    start = Offset(0f, 0f),
-                                    end = Offset(0f, 0f)
-                                )
-                            )
+                            lineColor = color10.toArgb()
                         ),
                         LineChart.LineSpec(
-                            lineColor = Color.Blue.toArgb(),
+                            lineColor = predictionColor.toArgb(),
                         )
                     )
                 ),
-                model = chartEntryModel,
+                model = viewModel.today.getModel(),
                 chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                 startAxis = rememberStartAxis(
                     itemPlacer = AxisItemPlacer.Vertical.default(5),
@@ -87,15 +148,15 @@ fun SolarForecastView(viewModel: SolarForecastViewModel) {
                     valueFormatter = SolarGraphFormatAxisValueFormatter(),
                     guideline = null
                 ),
-//                diffAnimationSpec = SnapSpec()
+//            diffAnimationSpec = SnapSpec()
             )
         }
     }
-}
 
-class SolarGraphFormatAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
-    override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
-        return value.toInt().toString()
+    class SolarGraphFormatAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
+        override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
+            return value.toInt().toString()
+        }
     }
 }
 
@@ -104,10 +165,8 @@ class SolarGraphFormatAxisValueFormatter<Position : AxisPosition> : AxisValueFor
 fun SolarForecastViewPreview() {
     EnergyStatsTheme {
         SolarForecastView(
-            viewModel = SolarForecastViewModel(
-                solarForecastProvider = DemoSolarForecasting(),
-                themeStream = MutableStateFlow(AppTheme.preview()),
-            )
-        )
+            solarForecastProvider = DemoSolarForecasting(),
+            themeStream = MutableStateFlow(AppTheme.preview()),
+        ).Content()
     }
 }

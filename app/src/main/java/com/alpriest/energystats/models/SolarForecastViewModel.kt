@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 import com.google.gson.annotations.SerializedName
+import java.util.Calendar
 import java.util.Date
 
 data class SolcastForecastResponseList(
@@ -18,3 +19,11 @@ data class SolcastForecastResponse(
     val periodEnd: Date,
     val period: String
 )
+
+fun Date.toHalfHourOfDay(): Int {
+    val calendar = Calendar.getInstance().apply { time = this@toHalfHourOfDay }
+    val hours = calendar.get(Calendar.HOUR_OF_DAY)
+    val minutes = calendar.get(Calendar.MINUTE)
+
+    return hours * 2 + if (minutes >= 30) 1 else 0
+}

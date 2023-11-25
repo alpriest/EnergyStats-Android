@@ -50,9 +50,7 @@ class SummaryView(
 ) {
     @Composable
     fun Content(
-        viewModel: SummaryTabViewModel = viewModel(
-            factory = SummaryTabViewModelFactory(network, configManager)
-        ),
+        viewModel: SummaryTabViewModel = viewModel(factory = SummaryTabViewModelFactory(network, configManager)),
         themeStream: MutableStateFlow<AppTheme>
     ) {
         val scrollState = rememberScrollState()
@@ -92,8 +90,11 @@ class SummaryView(
                     )
                 }
             }
-            
-            SolarForecastView(viewModel = SolarForecastViewModel(Solcast(), themeStream))
+
+            SolarForecastView(
+                Solcast(),
+                themeStream,
+            ).Content(modifier = Modifier.padding(top = 44.dp))
         }
     }
 
