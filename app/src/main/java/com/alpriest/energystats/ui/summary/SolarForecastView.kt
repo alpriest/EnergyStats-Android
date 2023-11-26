@@ -39,21 +39,23 @@ import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.line.LineChart
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SolarForecastView(
     private val solarForecastProvider: SolarForecasting,
     private val themeStream: MutableStateFlow<AppTheme>
 ) {
+    private val predictionColor = TintColor
+    private val color90 = Red.copy(alpha = 0.5f)
+    private val color10 = Green.copy(alpha = 0.5f)
+
     @Composable
     fun Content(
         viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, themeStream)),
         modifier: Modifier = Modifier
     ) {
         val data = viewModel.dataStream.collectAsState().value
-        val predictionColor = TintColor
-        val color90 = Red.copy(alpha = 0.5f)
-        val color10 = Green.copy(alpha = 0.5f)
 
         LaunchedEffect(null) {
             viewModel.load()
@@ -64,7 +66,8 @@ class SolarForecastView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             data.map { item ->
-                ForecastView(item)
+                ForecastView(item.today.getModel())
+                ForecastView(item.tomorrow.getModel())
             }
 
             Row(
@@ -109,18 +112,7 @@ class SolarForecastView(
     }
 
     @Composable
-    fun ForecastView(viewModel: SolarForecastViewData) {
-        val predictionColor = TintColor
-        val color90 = Red.copy(alpha = 0.5f)
-        val color10 = Green.copy(alpha = 0.5f)
-
-//    entryModelOf(
-//        entriesOf(4f, 12f, 8f, 16f),
-//        entriesOf(2f, 4f, 3f, 5f),
-//        entriesOf(3f, 7f, 5f, 8f)
-//    )
-//
-
+    fun ForecastView(model: ChartEntryModel) {
         ProvideChartStyle {
             Chart(
                 chart = lineChart(
@@ -136,7 +128,7 @@ class SolarForecastView(
                         )
                     )
                 ),
-                model = viewModel.today.getModel(),
+                model = model,
                 chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                 startAxis = rememberStartAxis(
                     itemPlacer = AxisItemPlacer.Vertical.default(5),

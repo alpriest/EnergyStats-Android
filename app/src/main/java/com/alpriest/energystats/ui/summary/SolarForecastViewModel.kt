@@ -1,27 +1,17 @@
 package com.alpriest.energystats.ui.summary
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.alpriest.energystats.models.RawVariable
-import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.toHalfHourOfDay
-import com.alpriest.energystats.services.FoxESSNetworking
-import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.paramsgraph.DateTimeFloatEntry
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.ChartModelProducer
-import com.patrykandpatrick.vico.core.entry.FloatEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
-import kotlin.time.Duration.Companion.hours
 
 data class SolarForecastViewData(
     val error: String?,
@@ -72,26 +62,38 @@ class SolarForecastViewModel(
 
             SolarForecastViewData(
                 error = null,
-                today = ChartEntryModelProducer(todayData.map { response ->
-                    DateFloatEntry(
-                        date = response.periodEnd,
-                        x = response.periodEnd.toHalfHourOfDay().toFloat(),
-                        y = response.pvEstimate.toFloat(),
-                    )
-                }),
+                today = ChartEntryModelProducer(asGraphData(todayData)),
                 todayTotal = total(todayData),
-                tomorrow = ChartEntryModelProducer(tomorrowData.map { response ->
-                    DateFloatEntry(
-                        date = response.periodEnd,
-                        x = response.periodEnd.toHalfHourOfDay().toFloat(),
-                        y = response.pvEstimate.toFloat(),
-                    )
-                }),
+                tomorrow = ChartEntryModelProducer(asGraphData(tomorrowData)),
                 tomorrowTotal = total(tomorrowData),
                 name = it.name,
                 resourceId = it.resourceId
             )
         }
+    }
+
+    private fun asGraphData(data: List<SolcastForecastResponse>): List<List<DateFloatEntry>> {
+        return listOf(data.map { response ->
+            DateFloatEntry(
+                date = response.periodEnd,
+                x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                y = response.pvEstimate90.toFloat(),
+            )
+        },
+            data.map { response ->
+                DateFloatEntry(
+                    date = response.periodEnd,
+                    x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                    y = response.pvEstimate10.toFloat(),
+                )
+            },
+            data.map { response -> DateFloatEntry(
+                date = response.periodEnd,
+                x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                y = response.pvEstimate.toFloat(),
+            )
+            }
+        )
     }
 
     fun total(forecasts: List<SolcastForecastResponse>): Double {
