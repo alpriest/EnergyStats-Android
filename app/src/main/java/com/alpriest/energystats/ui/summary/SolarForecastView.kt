@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.summary
 
-import androidx.compose.animation.core.SnapSpec
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,11 +13,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.alpriest.energystats.services.FoxESSNetworking
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
@@ -44,7 +45,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class SolarForecastView(
     private val solarForecastProvider: SolarForecasting,
-    private val themeStream: MutableStateFlow<AppTheme>
+    val themeStream: MutableStateFlow<AppTheme>
 ) {
     private val predictionColor = TintColor
     private val color90 = Red.copy(alpha = 0.5f)
@@ -52,7 +53,7 @@ class SolarForecastView(
 
     @Composable
     fun Content(
-        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, themeStream)),
+        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, this.themeStream)),
         modifier: Modifier = Modifier
     ) {
         val data = viewModel.dataStream.collectAsState().value
@@ -65,9 +66,11 @@ class SolarForecastView(
             modifier = modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            data.map { item ->
-                ForecastView(item.today.getModel())
-                ForecastView(item.tomorrow.getModel())
+            Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
+                data.map { site ->
+                    ForecastView(site.today.getModel(), site.todayTotal, site.name, "Forecast today", site.error, site.resourceId, themeStream)
+                    ForecastView(site.tomorrow.getModel(), site.todayTotal, site.name, "Forecast tomorrow", site.error, site.resourceId, themeStream)
+                }
             }
 
             Row(
@@ -112,36 +115,54 @@ class SolarForecastView(
     }
 
     @Composable
-    fun ForecastView(model: ChartEntryModel) {
-        ProvideChartStyle {
-            Chart(
-                chart = lineChart(
-                    lines = listOf(
-                        LineChart.LineSpec(
-                            lineColor = color90.toArgb()
-                        ),
-                        LineChart.LineSpec(
-                            lineColor = color10.toArgb()
-                        ),
-                        LineChart.LineSpec(
-                            lineColor = predictionColor.toArgb(),
-                        )
+    fun ForecastView(model: ChartEntryModel, todayTotal: Double, name: String?, title: String, error: String?, resourceId: String, themeStream: MutableStateFlow<AppTheme>) {
+        val theme = themeStream.collectAsState().value
+
+        Column {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                name?.let {
+                    Text(
+                        it,
+                        fontWeight = FontWeight.Bold
                     )
-                ),
-                model = model,
-                chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                startAxis = rememberStartAxis(
-                    itemPlacer = AxisItemPlacer.Vertical.default(5),
-                    valueFormatter = DecimalFormatAxisValueFormatter("0.0")
-                ),
-                bottomAxis = rememberBottomAxis(
-                    itemPlacer = AxisItemPlacer.Horizontal.default(2),
-                    label = axisLabelComponent(horizontalPadding = 2.dp),
-                    valueFormatter = SolarGraphFormatAxisValueFormatter(),
-                    guideline = null
-                ),
-//            diffAnimationSpec = SnapSpec()
-            )
+                }
+
+                Text(title)
+
+                Text(todayTotal.energy(theme.displayUnit, theme.decimalPlaces))
+            }
+
+            ProvideChartStyle {
+                Chart(
+                    chart = lineChart(
+                        lines = listOf(
+                            LineChart.LineSpec(
+                                lineColor = color90.toArgb()
+                            ),
+                            LineChart.LineSpec(
+                                lineColor = color10.toArgb()
+                            ),
+                            LineChart.LineSpec(
+                                lineColor = predictionColor.toArgb(),
+                            )
+                        )
+                    ),
+                    model = model,
+                    chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                    startAxis = rememberStartAxis(
+                        itemPlacer = AxisItemPlacer.Vertical.default(5),
+                        valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                    ),
+                    bottomAxis = rememberBottomAxis(
+                        itemPlacer = AxisItemPlacer.Horizontal.default(2),
+                        label = axisLabelComponent(horizontalPadding = 2.dp),
+                        valueFormatter = SolarGraphFormatAxisValueFormatter(),
+                        guideline = null
+                    )
+                )
+            }
         }
     }
 
