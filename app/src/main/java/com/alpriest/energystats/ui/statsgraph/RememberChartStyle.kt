@@ -31,7 +31,7 @@ internal fun chartStyle(chartColors: List<Color>, themeStream: MutableStateFlow<
             axisLineColor = Color(defaultColors.axisLineColor),
             axisLabelTextAlign = Paint.Align.RIGHT,
             axisLabelTypeface = Typeface.DEFAULT,
-            axisLabelTextSize = 8.sp
+            axisLabelTextSize = 10.sp
         ),
         ChartStyle.ColumnChart(
             chartColors.map { color ->

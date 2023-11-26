@@ -20,15 +20,18 @@ import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
+import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
@@ -39,7 +42,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val chartColors = viewModel.chartColorsStream.collectAsState().value
 
-    if (viewModel.producer.getModel().entries.isEmpty()) {
+    if (viewModel.producer.getModel()?.entries?.isEmpty() == true) {
         Text("No data")
     } else {
         Column(modifier = modifier.fillMaxWidth()) {
@@ -48,16 +51,17 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                     chart = columnChart(),
                     chartModelProducer = viewModel.producer,
                     chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                    startAxis = rememberStartAxis(
+                    endAxis = rememberEndAxis(
                         itemPlacer = AxisItemPlacer.Vertical.default(5),
                         valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                     ),
                     bottomAxis = rememberBottomAxis(
-                        itemPlacer = AxisItemPlacer.Horizontal.default(2),
-                        label = axisLabelComponent(horizontalPadding = 2.dp),
-                        valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode)
+                        itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
+                        valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
+                        guideline = null
                     ),
-                    diffAnimationSpec = SnapSpec()
+                    diffAnimationSpec = SnapSpec(),
+                    horizontalLayout = HorizontalLayout.fullWidth()
                 )
             }
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
@@ -87,7 +91,7 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
 
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
         return when (displayMode) {
-            is Day -> value.toInt().toString()
+            is Day -> String.format("%d:00", value.toInt())
             is StatsDisplayMode.Month -> value.toInt().toString()
             is StatsDisplayMode.Year -> {
                 val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())

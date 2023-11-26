@@ -7,7 +7,6 @@ import com.alpriest.energystats.models.toHalfHourOfDay
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntry
-import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.ZoneId
@@ -15,9 +14,9 @@ import java.util.Date
 
 data class SolarForecastViewData(
     val error: String?,
-    val today: ChartEntryModelProducer,
+    val today: List<List<DateFloatEntry>>,
     val todayTotal: Double,
-    val tomorrow: ChartEntryModelProducer,
+    val tomorrow: List<List<DateFloatEntry>>,
     val tomorrowTotal: Double,
     val name: String?,
     val resourceId: String
@@ -62,9 +61,9 @@ class SolarForecastViewModel(
 
             SolarForecastViewData(
                 error = null,
-                today = ChartEntryModelProducer(asGraphData(todayData)),
+                today = asGraphData(todayData),
                 todayTotal = total(todayData),
-                tomorrow = ChartEntryModelProducer(asGraphData(tomorrowData)),
+                tomorrow = asGraphData(tomorrowData),
                 tomorrowTotal = total(tomorrowData),
                 name = it.name,
                 resourceId = it.resourceId
@@ -114,7 +113,7 @@ class SolarForecastViewModel(
         } ?: 0.0
     }
 
-    fun isSameDay(date1: Date, date2: Date): Boolean {
+    private fun isSameDay(date1: Date, date2: Date): Boolean {
         val localDate1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val localDate2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 

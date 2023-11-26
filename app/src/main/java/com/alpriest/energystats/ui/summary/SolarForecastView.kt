@@ -13,7 +13,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,6 +21,7 @@ import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
+import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Green
@@ -29,8 +29,9 @@ import com.alpriest.energystats.ui.theme.Red
 import com.alpriest.energystats.ui.theme.TintColor
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
+import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
@@ -38,9 +39,12 @@ import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.line.LineChart
+import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SolarForecastView(
@@ -68,8 +72,8 @@ class SolarForecastView(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                 data.map { site ->
-                    ForecastView(site.today.getModel(), site.todayTotal, site.name, "Forecast today", site.error, site.resourceId, themeStream)
-                    ForecastView(site.tomorrow.getModel(), site.todayTotal, site.name, "Forecast tomorrow", site.error, site.resourceId, themeStream)
+                    ForecastView(site.today, site.todayTotal, site.name, "Forecast today", site.error, site.resourceId, themeStream)
+                    ForecastView(site.tomorrow, site.todayTotal, site.name, "Forecast tomorrow", site.error, site.resourceId, themeStream)
                 }
             }
 
@@ -81,7 +85,6 @@ class SolarForecastView(
                     modifier = Modifier
                         .size(width = 20.dp, height = 5.dp)
                         .padding(end = 5.dp)
-
                 )
                 Text(
                     "Prediction",
@@ -104,7 +107,6 @@ class SolarForecastView(
                     modifier = Modifier
                         .size(width = 20.dp, height = 5.dp)
                         .padding(end = 5.dp)
-
                 )
                 Text(
                     "10%",
@@ -115,8 +117,9 @@ class SolarForecastView(
     }
 
     @Composable
-    fun ForecastView(model: ChartEntryModel, todayTotal: Double, name: String?, title: String, error: String?, resourceId: String, themeStream: MutableStateFlow<AppTheme>) {
+    fun ForecastView(model: List<List<DateFloatEntry>>, todayTotal: Double, name: String?, title: String, error: String?, resourceId: String, themeStream: MutableStateFlow<AppTheme>) {
         val theme = themeStream.collectAsState().value
+        val chartColors = listOf(color90, color10, predictionColor)
 
         Column {
             Row(
@@ -134,33 +137,24 @@ class SolarForecastView(
                 Text(todayTotal.energy(theme.displayUnit, theme.decimalPlaces))
             }
 
-            ProvideChartStyle {
+            ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                 Chart(
                     chart = lineChart(
-                        lines = listOf(
-                            LineChart.LineSpec(
-                                lineColor = color90.toArgb()
-                            ),
-                            LineChart.LineSpec(
-                                lineColor = color10.toArgb()
-                            ),
-                            LineChart.LineSpec(
-                                lineColor = predictionColor.toArgb(),
-                            )
-                        )
+                        axisValuesOverrider = AxisValuesOverrider.fixed(0f, 48f)
                     ),
-                    model = model,
+                    chartModelProducer = ChartEntryModelProducer(model),
                     chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                    startAxis = rememberStartAxis(
+                    endAxis = rememberEndAxis(
                         itemPlacer = AxisItemPlacer.Vertical.default(5),
-                        valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                        valueFormatter = DecimalFormatAxisValueFormatter("0.${"0".repeat(theme.decimalPlaces)} kW")
                     ),
                     bottomAxis = rememberBottomAxis(
-                        itemPlacer = AxisItemPlacer.Horizontal.default(2),
+                        itemPlacer = AxisItemPlacer.Horizontal.default(6, addExtremeLabelPadding = true),
                         label = axisLabelComponent(horizontalPadding = 2.dp),
                         valueFormatter = SolarGraphFormatAxisValueFormatter(),
-                        guideline = null
-                    )
+                        guideline = null,
+                    ),
+                    horizontalLayout = HorizontalLayout.fullWidth()
                 )
             }
         }
@@ -168,7 +162,7 @@ class SolarForecastView(
 
     class SolarGraphFormatAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
         override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
-            return value.toInt().toString()
+            return String.format("%d:%02d", (value.toInt() / 2), 0)
         }
     }
 }

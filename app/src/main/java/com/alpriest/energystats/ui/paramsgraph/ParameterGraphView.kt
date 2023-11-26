@@ -15,8 +15,10 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
+import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.component.lineComponent
@@ -25,6 +27,7 @@ import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
@@ -45,8 +48,6 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
         }
     }
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
-    val firstHour = entries.firstOrNull()?.localDateTime?.hour ?: 0
-    val firstLabelOffset = entries.indexOfFirst { it.localDateTime.hour > firstHour }
 
     MonitorAlertDialog(viewModel)
 
@@ -59,12 +60,12 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
                     ),
                     chartModelProducer = viewModel.producer,
                     chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                    startAxis = rememberStartAxis(
+                    endAxis = rememberEndAxis(
                         itemPlacer = AxisItemPlacer.Vertical.default(5),
                         valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                     ),
                     bottomAxis = rememberBottomAxis(
-                        itemPlacer = AxisItemPlacer.Horizontal.default(24, firstLabelOffset),
+                        itemPlacer = AxisItemPlacer.Horizontal.default(36, addExtremeLabelPadding = true),
                         valueFormatter = ParameterGraphFormatAxisValueFormatter(),
                         guideline = null
                     ),
@@ -75,7 +76,8 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
                         )
                     ),
                     diffAnimationSpec = SnapSpec(),
-                    markerVisibilityChangeListener = markerVisibilityChangeListener
+                    markerVisibilityChangeListener = markerVisibilityChangeListener,
+                    horizontalLayout = HorizontalLayout.fullWidth()
                 )
             }
         }
