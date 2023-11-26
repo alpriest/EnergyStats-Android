@@ -48,6 +48,14 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
         }
     }
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
+    val xAxisValuesOverrider = viewModel.xAxisValuesOverriderStream.collectAsState().value
+
+    val foo = viewModel.displayModeStream.collectAsState().value
+    val placer = when (foo.hours) {
+        6 ->  AxisItemPlacer.Horizontal.default(addExtremeLabelPadding = true)
+        12 ->  AxisItemPlacer.Horizontal.default(addExtremeLabelPadding = true)
+        else ->  AxisItemPlacer.Horizontal.default(36, addExtremeLabelPadding = true)
+    }
 
     MonitorAlertDialog(viewModel)
 
@@ -56,7 +64,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
             ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                 Chart(
                     chart = lineChart(
-                        axisValuesOverrider = AxisValuesOverrider.fixed(0f, 287f)
+                        axisValuesOverrider = xAxisValuesOverrider
                     ),
                     chartModelProducer = viewModel.producer,
                     chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
@@ -65,7 +73,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
                         valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                     ),
                     bottomAxis = rememberBottomAxis(
-                        itemPlacer = AxisItemPlacer.Horizontal.default(36, addExtremeLabelPadding = true),
+                        itemPlacer = placer,
                         valueFormatter = ParameterGraphFormatAxisValueFormatter(),
                         guideline = null
                     ),

@@ -12,6 +12,7 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +25,8 @@ import java.time.ZoneId
 import java.util.Locale
 
 interface ExportProviding {
-    abstract var exportFileUri: Uri?
-    abstract fun exportTo(context: Context, uri: Uri)
+    var exportFileUri: Uri?
+    fun exportTo(context: Context, uri: Uri)
 }
 
 interface AlertDialogMessageProviding {
@@ -55,6 +56,8 @@ class ParametersGraphTabViewModel(
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
     override val alertDialogMessage = MutableStateFlow<String?>(null)
+    var xAxisValuesOverriderStream = MutableStateFlow(AxisValuesOverrider.fixed())
+    val xAxisValuesSpacingStream = MutableStateFlow(36)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -157,6 +160,16 @@ class ParametersGraphTabViewModel(
             val min = entryList.minBy { it.y }.y
 
             ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
+        }
+
+        xAxisValuesOverriderStream.value = AxisValuesOverrider.fixed(
+            if (hours == 24) 0f else null,
+            if (hours == 24) 274f else null
+        )
+        xAxisValuesSpacingStream.value = when (hours) {
+            6 -> 6
+            12 -> 24
+            else -> 36
         }
 
         chartColorsStream.value = grouped
