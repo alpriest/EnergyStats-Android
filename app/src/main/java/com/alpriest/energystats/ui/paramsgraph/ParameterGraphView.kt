@@ -1,8 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import android.graphics.RectF
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +8,6 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.statsgraph.chartStyle
@@ -18,14 +15,12 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.axis.axisGuidelineComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.component.lineComponent
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
-import com.patrykandpatrick.vico.core.axis.Axis
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
@@ -36,7 +31,6 @@ import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.context.DrawContext
-import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,13 +47,13 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
     }
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
 
-    val foo = viewModel.displayModeStream.collectAsState().value
+    val displayMode = viewModel.displayModeStream.collectAsState().value
     val formatter = ParameterGraphFormatAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
 
     MonitorAlertDialog(viewModel)
 
     if (entries.isNotEmpty()) {
-        when (foo.hours) {
+        when (displayMode.hours) {
             24 ->
                 Column(modifier = modifier.fillMaxWidth()) {
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {

@@ -89,12 +89,12 @@ class SummaryView(
                         oldestDataDate = oldestDataDate
                     )
                 }
-            }
 
-            SolarForecastView(
-                Solcast(),
-                themeStream,
-            ).Content(modifier = Modifier.padding(top = 44.dp))
+                SolarForecastView(
+                    Solcast(),
+                    themeStream,
+                ).Content(modifier = Modifier.padding(top = 44.dp))
+            }
         }
     }
 

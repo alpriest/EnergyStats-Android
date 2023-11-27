@@ -49,10 +49,10 @@ class ParametersGraphTabViewModel(
     val hasDataStream = MutableStateFlow(false)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
-    val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 6))
+    val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     var rawData: List<ParametersGraphValue> = listOf()
     var queryDate = QueryDate()
-    var hours: Int = 6
+    var hours: Int = 24
     var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
