@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import android.graphics.RectF
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.patrykandpatrick.vico.compose.axis.axisGuidelineComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
@@ -23,6 +25,7 @@ import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.component.lineComponent
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
+import com.patrykandpatrick.vico.core.axis.Axis
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
@@ -33,6 +36,7 @@ import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.context.DrawContext
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,55 +52,112 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
         }
     }
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
-    val xAxisValuesOverrider = viewModel.xAxisValuesOverriderStream.collectAsState().value
 
     val foo = viewModel.displayModeStream.collectAsState().value
-    val placer = when (foo.hours) {
-        6 ->  AxisItemPlacer.Horizontal.default(addExtremeLabelPadding = true)
-        12 ->  AxisItemPlacer.Horizontal.default(addExtremeLabelPadding = true)
-        else ->  AxisItemPlacer.Horizontal.default(36, addExtremeLabelPadding = true)
-    }
+    val formatter = ParameterGraphFormatAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
 
     MonitorAlertDialog(viewModel)
 
     if (entries.isNotEmpty()) {
-        Column(modifier = modifier.fillMaxWidth()) {
-            ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                Chart(
-                    chart = lineChart(
-                        axisValuesOverrider = xAxisValuesOverrider
-                    ),
-                    chartModelProducer = viewModel.producer,
-                    chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                    endAxis = rememberEndAxis(
-                        itemPlacer = AxisItemPlacer.Vertical.default(5),
-                        valueFormatter = DecimalFormatAxisValueFormatter("0.0")
-                    ),
-                    bottomAxis = rememberBottomAxis(
-                        itemPlacer = placer,
-                        valueFormatter = ParameterGraphFormatAxisValueFormatter(),
-                        guideline = null
-                    ),
-                    marker = NonDisplayingMarker(
-                        viewModel.valuesAtTimeStream, lineComponent(
-                            color = colors.onSurface,
-                            thickness = 1.dp
+        when (foo.hours) {
+            24 ->
+                Column(modifier = modifier.fillMaxWidth()) {
+                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+                        Chart(
+                            chart = lineChart(
+                                axisValuesOverrider = AxisValuesOverrider.fixed(0f, 288f)
+                            ),
+                            chartModelProducer = viewModel.producer,
+                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                            endAxis = rememberEndAxis(
+                                itemPlacer = AxisItemPlacer.Vertical.default(5),
+                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                            ),
+                            bottomAxis = rememberBottomAxis(
+                                itemPlacer = AxisItemPlacer.Horizontal.default(36, addExtremeLabelPadding = true),
+                                valueFormatter = formatter,
+                                tick = null,
+                                guideline = axisGuidelineComponent()
+                            ),
+                            marker = NonDisplayingMarker(
+                                viewModel.valuesAtTimeStream, lineComponent(
+                                    color = colors.onSurface,
+                                    thickness = 1.dp
+                                )
+                            ),
+                            diffAnimationSpec = SnapSpec(),
+                            markerVisibilityChangeListener = markerVisibilityChangeListener,
+                            horizontalLayout = HorizontalLayout.fullWidth()
                         )
-                    ),
-                    diffAnimationSpec = SnapSpec(),
-                    markerVisibilityChangeListener = markerVisibilityChangeListener,
-                    horizontalLayout = HorizontalLayout.fullWidth()
-                )
-            }
+                    }
+                }
+            6 ->
+                Column(modifier = modifier.fillMaxWidth()) {
+                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+                        Chart(
+                            chart = lineChart(),
+                            chartModelProducer = viewModel.producer,
+                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                            endAxis = rememberEndAxis(
+                                itemPlacer = AxisItemPlacer.Vertical.default(5),
+                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                            ),
+                            bottomAxis = rememberBottomAxis(
+                                itemPlacer = AxisItemPlacer.Horizontal.default(9, addExtremeLabelPadding = true),
+                                valueFormatter = ParameterGraphFormatAxisValueFormatter(),
+                                tick = null,
+                                guideline = axisGuidelineComponent()
+                            ),
+                            marker = NonDisplayingMarker(
+                                viewModel.valuesAtTimeStream, lineComponent(
+                                    color = colors.onSurface,
+                                    thickness = 1.dp
+                                )
+                            ),
+                            diffAnimationSpec = SnapSpec(),
+                            markerVisibilityChangeListener = markerVisibilityChangeListener,
+                            horizontalLayout = HorizontalLayout.fullWidth()
+                        )
+                    }
+                }
+            else ->
+                Column(modifier = modifier.fillMaxWidth()) {
+                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+                        Chart(
+                            chart = lineChart(),
+                            chartModelProducer = viewModel.producer,
+                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                            endAxis = rememberEndAxis(
+                                itemPlacer = AxisItemPlacer.Vertical.default(5),
+                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                            ),
+                            bottomAxis = rememberBottomAxis(
+                                itemPlacer = AxisItemPlacer.Horizontal.default(spacing = 18, addExtremeLabelPadding = true),
+                                valueFormatter = ParameterGraphFormatAxisValueFormatter(),
+                                tick = null,
+                                guideline = axisGuidelineComponent()
+                            ),
+                            marker = NonDisplayingMarker(
+                                viewModel.valuesAtTimeStream, lineComponent(
+                                    color = colors.onSurface,
+                                    thickness = 1.dp
+                                )
+                            ),
+                            diffAnimationSpec = SnapSpec(),
+                            markerVisibilityChangeListener = markerVisibilityChangeListener,
+                            horizontalLayout = HorizontalLayout.fullWidth()
+                        )
+                    }
+                }
         }
     }
 }
 
-class ParameterGraphFormatAxisValueFormatter<Position : AxisPosition>() :
+class ParameterGraphFormatAxisValueFormatter<Position : AxisPosition> :
     AxisValueFormatter<Position> {
 
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
-        return (chartValues.chartEntryModel.entries.first().getOrNull(value.toInt()) as? DateTimeFloatEntry)
+        return (chartValues.chartEntryModel.entries.first().firstOrNull { it.x == value } as? DateTimeFloatEntry)
             ?.localDateTime
             ?.run {
                 String.format("%d:%02d", hour, minute)
