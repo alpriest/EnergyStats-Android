@@ -12,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,15 +39,13 @@ import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
-import com.patrykandpatrick.vico.core.chart.line.LineChart
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
-import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SolarForecastView(
-    private val solarForecastProvider: SolarForecasting,
+    private val solarForecastProvider: () -> SolarForecasting,
     val themeStream: MutableStateFlow<AppTheme>
 ) {
     private val predictionColor = TintColor
@@ -172,7 +169,7 @@ class SolarForecastView(
 fun SolarForecastViewPreview() {
     EnergyStatsTheme {
         SolarForecastView(
-            solarForecastProvider = DemoSolarForecasting(),
+            solarForecastProvider = { DemoSolarForecasting() },
             themeStream = MutableStateFlow(AppTheme.preview()),
         ).Content()
     }

@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.settings.solcast
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +34,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -42,14 +42,15 @@ import java.time.format.DateTimeFormatter
 class SolcastSettingsView(
     private val navController: NavController,
     private val configManager: ConfigManaging,
-    private val context: Context
+    private val solarForecastingProvider: () -> SolarForecasting
 ) {
     @Composable
     fun Content(
         viewModel: SolcastSettingsViewModel = viewModel(
             factory = SolcastSettingsViewModelFactory(
-                configManager = configManager
-            ) { Solcast() }
+                configManager = configManager,
+                solarForecastingProvider = solarForecastingProvider
+            )
         )
     ) {
         val apiKey = viewModel.apiKeyStream.collectAsState().value
@@ -167,13 +168,11 @@ private fun Row(title: String, value: String) {
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun SolcastSettingsViewPreview() {
-    val context = LocalContext.current
-
     EnergyStatsTheme {
         SolcastSettingsView(
             navController = NavHostController(LocalContext.current),
             FakeConfigManager(),
-            context = context
+            { DemoSolarForecasting() }
         ).Content()
     }
 }

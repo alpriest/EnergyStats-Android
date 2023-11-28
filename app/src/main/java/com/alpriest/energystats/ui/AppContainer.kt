@@ -23,8 +23,15 @@ import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManager
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
+import com.alpriest.energystats.ui.settings.solcast.Solcast
+import com.alpriest.energystats.ui.settings.solcast.SolcastCache
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 
 class AppContainer(private val context: Context) {
+    val solarForecastingProvider: () -> SolarForecasting = {
+        if (config.isDemoUser) { DemoSolarForecasting() } else { SolcastCache(Solcast(), context) }
+    }
     val networkStore: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore()
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences(

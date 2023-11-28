@@ -46,6 +46,7 @@ import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeView
+import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -88,7 +89,8 @@ fun NavigableSettingsView(
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
     network: FoxESSNetworking,
-    credentialStore: CredentialStore
+    credentialStore: CredentialStore,
+    solarForecastingProvider: () -> SolarForecasting
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -145,7 +147,7 @@ fun NavigableSettingsView(
             FAQView()
         }
         composable(SettingsScreen.SolcastSolarPrediction.name) {
-            SolcastSettingsView(navController, config, context).Content()
+            SolcastSettingsView(navController, config, solarForecastingProvider).Content()
         }
         debugGraph(navController, networkStore, config, network, credentialStore)
     }

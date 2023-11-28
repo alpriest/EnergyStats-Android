@@ -1,9 +1,12 @@
 package com.alpriest.energystats.ui.summary
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.toHalfHourOfDay
+import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntry
@@ -23,7 +26,7 @@ data class SolarForecastViewData(
 )
 
 class SolarForecastViewModelFactory(
-    private val solarForecastProvider: SolarForecasting,
+    private val solarForecastProvider: () -> SolarForecasting,
     private val themeStream: MutableStateFlow<AppTheme>
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -33,21 +36,25 @@ class SolarForecastViewModelFactory(
 }
 
 class SolarForecastViewModel(
-    private val solarForecastProvider: SolarForecasting,
+    private val solarForecastProvider: () -> SolarForecasting,
     private val themeStream: MutableStateFlow<AppTheme>
 ) : ViewModel() {
-    val hasSitesStream = MutableStateFlow<Boolean>(false)
     val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())
+    private var loadState: LoadState = LoadState.Inactive
 
     suspend fun load() {
+        if (loadState != LoadState.Inactive) { return }
         val settings = themeStream.value.solcastSettings
-
         if (settings.sites.isEmpty() || settings.apiKey == null) {
             return
         }
 
+        Log.d("AWP", "loading")
+
+        loadState = LoadState.Active("Loading...")
+
         dataStream.value = settings.sites.map {
-            val forecasts = solarForecastProvider.fetchForecast(it, settings.apiKey).forecasts
+            val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey).forecasts
             val today = getToday()
             val tomorrow = getTomorrow()
 
@@ -69,6 +76,8 @@ class SolarForecastViewModel(
                 resourceId = it.resourceId
             )
         }
+
+        loadState = LoadState.Inactive
     }
 
     private fun asGraphData(data: List<SolcastForecastResponse>): List<List<DateFloatEntry>> {

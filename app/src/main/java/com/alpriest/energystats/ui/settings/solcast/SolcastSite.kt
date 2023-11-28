@@ -37,7 +37,11 @@ data class SolcastSite(
         lossFactor = site.lossFactor,
         acCapacity = site.capacity,
         dcCapacity = site.dcCapacity,
-        installDate = LocalDate.parse((site.installDate ?: "").split("T")[0], DateTimeFormatter.ISO_LOCAL_DATE)
+        installDate = if (site.installDate != null) {
+            LocalDate.parse(site.installDate.split("T")[0], DateTimeFormatter.ISO_LOCAL_DATE)
+        } else {
+            null
+        }
     )
 
     companion object

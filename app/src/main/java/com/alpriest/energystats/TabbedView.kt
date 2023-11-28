@@ -40,8 +40,10 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
+import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.statsgraph.StatsTabView
 import com.alpriest.energystats.ui.statsgraph.StatsTabViewModel
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.summary.SummaryView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
@@ -72,7 +74,8 @@ fun TabbedView(
     onBuyMeCoffee: () -> Unit,
     onWriteTempFile: (String, String) -> Uri?,
     filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
-    credentialStore: CredentialStore
+    credentialStore: CredentialStore,
+    solarForecastingProvider: () -> SolarForecasting
 ) {
     val state = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -97,7 +100,7 @@ fun TabbedView(
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
                     1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), filePathChooser, themeStream)
                     2 -> NavigableParametersGraphTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
-                    3 -> SummaryView(configManager, network).Content(themeStream = themeStream)
+                    3 -> SummaryView(configManager, network, solarForecastingProvider).Content(themeStream = themeStream)
                     4 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,
@@ -106,7 +109,8 @@ fun TabbedView(
                         networkStore = networkStore,
                         onRateApp = onRateApp,
                         onBuyMeCoffee = onBuyMeCoffee,
-                        credentialStore = credentialStore
+                        credentialStore = credentialStore,
+                        solarForecastingProvider = solarForecastingProvider
                     )
                 }
             }
@@ -198,7 +202,8 @@ fun HomepagePreview() {
             {},
             { _, _ -> null },
             { _, _ -> },
-            SharedPreferencesCredentialStore(LocalContext.current.getSharedPreferences("com.alpriest.energystats", Context.MODE_PRIVATE))
+            SharedPreferencesCredentialStore(LocalContext.current.getSharedPreferences("com.alpriest.energystats", Context.MODE_PRIVATE)),
+            { DemoSolarForecasting() }
         )
     }
 }
