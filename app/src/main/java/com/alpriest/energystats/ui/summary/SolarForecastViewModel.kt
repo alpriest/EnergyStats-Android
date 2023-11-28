@@ -72,13 +72,14 @@ class SolarForecastViewModel(
     }
 
     private fun asGraphData(data: List<SolcastForecastResponse>): List<List<DateFloatEntry>> {
-        return listOf(data.map { response ->
-            DateFloatEntry(
-                date = response.periodEnd,
-                x = response.periodEnd.toHalfHourOfDay().toFloat(),
-                y = response.pvEstimate90.toFloat(),
-            )
-        },
+        return listOf(
+            data.map { response ->
+                DateFloatEntry(
+                    date = response.periodEnd,
+                    x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                    y = response.pvEstimate90.toFloat(),
+                )
+            },
             data.map { response ->
                 DateFloatEntry(
                     date = response.periodEnd,
@@ -86,11 +87,12 @@ class SolarForecastViewModel(
                     y = response.pvEstimate10.toFloat(),
                 )
             },
-            data.map { response -> DateFloatEntry(
-                date = response.periodEnd,
-                x = response.periodEnd.toHalfHourOfDay().toFloat(),
-                y = response.pvEstimate.toFloat(),
-            )
+            data.map { response ->
+                DateFloatEntry(
+                    date = response.periodEnd,
+                    x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                    y = response.pvEstimate.toFloat(),
+                )
             }
         )
     }

@@ -73,7 +73,7 @@ class SolarForecastView(
             Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                 data.map { site ->
                     ForecastView(site.today, site.todayTotal, site.name, "Forecast today", site.error, site.resourceId, themeStream)
-                    ForecastView(site.tomorrow, site.todayTotal, site.name, "Forecast tomorrow", site.error, site.resourceId, themeStream)
+                    ForecastView(site.tomorrow, site.tomorrowTotal, site.name, "Forecast tomorrow", site.error, site.resourceId, themeStream)
                 }
             }
 
