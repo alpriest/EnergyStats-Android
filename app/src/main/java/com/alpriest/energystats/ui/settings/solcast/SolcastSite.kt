@@ -37,10 +37,8 @@ data class SolcastSite(
         lossFactor = site.lossFactor,
         acCapacity = site.capacity,
         dcCapacity = site.dcCapacity,
-        installDate = if (site.installDate != null) {
-            LocalDate.parse(site.installDate.split("T")[0], DateTimeFormatter.ISO_LOCAL_DATE)
-        } else {
-            null
+        installDate = site.installDate?.let {
+            LocalDate.parse(it.split("T")[0], DateTimeFormatter.ISO_LOCAL_DATE)
         }
     )
 
