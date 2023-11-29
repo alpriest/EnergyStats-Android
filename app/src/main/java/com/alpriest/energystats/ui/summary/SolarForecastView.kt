@@ -6,16 +6,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
@@ -69,13 +73,14 @@ class SolarForecastView(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                 data.map { site ->
-                    ForecastView(site.today, site.todayTotal, site.name, "Forecast today", site.error, site.resourceId, themeStream)
-                    ForecastView(site.tomorrow, site.tomorrowTotal, site.name, "Forecast tomorrow", site.error, site.resourceId, themeStream)
+                    ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), site.error, site.resourceId, themeStream)
+                    ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), site.error, site.resourceId, themeStream)
                 }
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(top = 44.dp)
             ) {
                 Rectangle(
                     color = predictionColor,
@@ -84,8 +89,9 @@ class SolarForecastView(
                         .padding(end = 5.dp)
                 )
                 Text(
-                    "Prediction",
-                    modifier = Modifier.padding(end = 15.dp)
+                    stringResource(R.string.prediction),
+                    modifier = Modifier.padding(end = 15.dp),
+                    style = TextStyle(color = colors.onSecondary)
                 )
 
                 Rectangle(
@@ -95,8 +101,9 @@ class SolarForecastView(
                         .padding(end = 5.dp)
                 )
                 Text(
-                    "90%",
-                    modifier = Modifier.padding(end = 15.dp)
+                    stringResource(R.string.high_estimate),
+                    modifier = Modifier.padding(end = 15.dp),
+                    style = TextStyle(color = colors.onSecondary)
                 )
 
                 Rectangle(
@@ -106,15 +113,24 @@ class SolarForecastView(
                         .padding(end = 5.dp)
                 )
                 Text(
-                    "10%",
-                    modifier = Modifier.padding(end = 15.dp)
+                    stringResource(R.string.low_estimate),
+                    modifier = Modifier.padding(end = 15.dp),
+                    style = TextStyle(color = colors.onSecondary)
                 )
             }
         }
     }
 
     @Composable
-    fun ForecastView(model: List<List<DateFloatEntry>>, todayTotal: Double, name: String?, title: String, error: String?, resourceId: String, themeStream: MutableStateFlow<AppTheme>) {
+    fun ForecastView(
+        model: List<List<DateFloatEntry>>,
+        todayTotal: Double,
+        name: String?,
+        title: String,
+        error: String?,
+        resourceId: String,
+        themeStream: MutableStateFlow<AppTheme>
+    ) {
         val theme = themeStream.collectAsState().value
         val chartColors = listOf(color90, color10, predictionColor)
 
@@ -125,13 +141,20 @@ class SolarForecastView(
                 name?.let {
                     Text(
                         it,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        style = TextStyle(color = colors.onSecondary)
                     )
                 }
 
-                Text(title)
+                Text(
+                    title,
+                    style = TextStyle(color = colors.onSecondary)
+                )
 
-                Text(todayTotal.energy(theme.displayUnit, theme.decimalPlaces))
+                Text(
+                    todayTotal.energy(theme.displayUnit, theme.decimalPlaces),
+                    style = TextStyle(color = colors.onSecondary)
+                )
             }
 
             ProvideChartStyle(chartStyle(chartColors, themeStream)) {

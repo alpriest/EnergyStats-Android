@@ -233,4 +233,16 @@
     <string name="financial_model">Financial Model</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">Solcast provide solar predictions based on your location. To sign up for free, visit https://solcast.com/free-rooftop-solar-forecasting and register for Hobbyist Access.\n\nOnce you\'ve signed up and have created your site(s) paste your API key below. Your API key can be found at https://toolkit.solcast.com.au by clicking the menu at the top right of the page.</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="ac_capacity_inverters">AC Capacity (inverters)</string>
+    <string name="dc_capacity_modules">DC Capacity (modules)</string>
+    <string name="azimuth">Azimuth</string>
+    <string name="install_date">Install Date</string>
+    <string name="tilt">Tilt</string>
+    <string name="prediction">Prediction</string>
+    <string name="high_estimate">High estimate</string>
+    <string name="low_estimate">Low estimate</string>
+    <string name="forecast_today">Forecast today</string>
+    <string name="forecast_tomorrow">Forecast tomorrow</string>
 </resources>

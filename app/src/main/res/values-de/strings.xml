@@ -224,5 +224,23 @@
     <string name="total_benefit">Gesamtvorteil</string>
     <string name="light">hell</string>
     <string name="dark">dunkel</string>
+    <string name="export_save_to_a_local_file">In einer lokalen Datei speichern</string>
+    <string name="export_share_or_open_with_another_app">Mit einer anderen App teilen oder öffnen</string>
+    <string name="choose_export_method">Exportmethode wählen</string>
+    <string name="summary">Zusammenfassung</string>
+    <string name="financial_model">Finanzmodell</string>
     <string name="api_key">API Key</string>
+    <string name="solcast_how_to_find_keys">"Solcast bietet Solarprognosen basierend auf Ihrem Standort an. Um sich kostenlos anzumelden, besuchen Sie https://solcast.com/free-rooftop-solar-forecasting und registrieren Sie sich für den Hobby-Zugang.  Sobald Sie sich angemeldet und Ihre Website(s) erstellt haben, fügen Sie Ihren API-Schlüssel unten ein. Ihren API-Schlüssel finden Sie unter https://toolkit.solcast.com.au, indem Sie oben rechts auf der Seite auf das Menü klicken. "</string>
+    <string name="latitude">Breitengrad</string>
+    <string name="longitude">Längengrad</string>
+    <string name="ac_capacity_inverters">AC-Kapazität (Wechselrichter)</string>
+    <string name="dc_capacity_modules">DC-Kapazität (Module)</string>
+    <string name="azimuth">Azimut</string>
+    <string name="tilt">Neigung</string>
+    <string name="install_date">Installationsdatum</string>
+    <string name="prediction">Prognose</string>
+    <string name="high_estimate">Hohe Schätzung</string>
+    <string name="low_estimate">Niedrige Schätzung</string>
+    <string name="forecast_today">Vorhersage für heute</string>
+    <string name="forecast_tomorrow">Vorhersage für morgen</string>
 </resources>

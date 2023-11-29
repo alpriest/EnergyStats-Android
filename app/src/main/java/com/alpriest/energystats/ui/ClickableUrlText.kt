@@ -7,10 +7,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.IconColorInLightTheme
+import com.alpriest.energystats.ui.theme.WebLinkColorInDarkTheme
+import com.alpriest.energystats.ui.theme.WebLinkColorInLightTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
-fun makeUrlAnnotatedString(text: String): AnnotatedString {
+fun makeUrlAnnotatedString(text: String, linkColor: Color): AnnotatedString {
     val clickableText = "https://toolkit.solcast.com.au"
     val urlPattern = "(https?:\\/\\/[^ ]+)".toRegex()
 
@@ -30,7 +37,7 @@ fun makeUrlAnnotatedString(text: String): AnnotatedString {
                     end = end
                 )
                 addStyle(
-                    SpanStyle().copy(color = Color.Blue, textDecoration = TextDecoration.Underline),
+                    SpanStyle().copy(color = linkColor, textDecoration = TextDecoration.Underline),
                     start = start,
                     end = end
                 )
@@ -42,8 +49,8 @@ fun makeUrlAnnotatedString(text: String): AnnotatedString {
 }
 
 @Composable
-fun ClickableUrlText(text: String, modifier: Modifier = Modifier) {
-    val annotatedString = makeUrlAnnotatedString(text)
+fun ClickableUrlText(text: String, modifier: Modifier = Modifier, textStyle: TextStyle, themeStream: MutableStateFlow<AppTheme>) {
+    val annotatedString = makeUrlAnnotatedString(text, linkColor = webLinkColor(isDarkMode(themeStream)))
     val context = LocalUriHandler.current
 
     ClickableText(
@@ -54,6 +61,16 @@ fun ClickableUrlText(text: String, modifier: Modifier = Modifier) {
                     context.openUri(annotation.item)
                 }
         },
+        style = textStyle,
         modifier = modifier
     )
+}
+
+@Composable
+fun webLinkColor(isDarkMode: Boolean): Color {
+    return if (isDarkMode) {
+        WebLinkColorInDarkTheme
+    } else {
+        WebLinkColorInLightTheme
+    }
 }

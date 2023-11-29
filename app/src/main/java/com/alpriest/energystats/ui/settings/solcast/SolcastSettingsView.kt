@@ -31,6 +31,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.ClickableUrlText
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -64,7 +65,9 @@ class SolcastSettingsView(
                     SettingsColumnWithChild {
                         ClickableUrlText(
                             text = stringResource(R.string.solcast_how_to_find_keys),
-                            modifier = Modifier.padding(bottom = 8.dp)
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            textStyle = TextStyle(colors.onSecondary),
+                            themeStream = configManager.themeStream
                         )
 
                         OutlinedTextField(
@@ -73,7 +76,8 @@ class SolcastSettingsView(
                             onValueChange = { viewModel.apiKeyStream.value = it },
                             label = { Text(stringResource(R.string.api_key)) },
                             visualTransformation = PasswordVisualTransformation(),
-                            singleLine = true
+                            singleLine = true,
+                            textStyle = TextStyle(colors.onSecondary),
                         )
                     }
                 }
@@ -91,7 +95,7 @@ fun SolcastSiteView(site: SolcastSite) {
     SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
         Text(
             site.name,
-            style = TextStyle.Default.copy(fontWeight = FontWeight.Bold),
+            style = TextStyle.Default.copy(fontWeight = FontWeight.Bold, color = colors.onSecondary),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -102,16 +106,16 @@ fun SolcastSiteView(site: SolcastSite) {
             Map(site)
 
             Column {
-                Row(title = "Latitude", value = site.lat)
-                Row(title = "Longitude", value = site.lng)
-                Row(title = "AC Capacity (inverters)", value = "${site.acCapacity} kW")
+                Row(title = stringResource(R.string.latitude), value = site.lat)
+                Row(title = stringResource(R.string.longitude), value = site.lng)
+                Row(title = stringResource(R.string.ac_capacity_inverters), value = "${site.acCapacity} kW")
                 site.dcCapacity?.let {
-                    Row(title = "DC Capacity (modules)", value = "$it kW")
+                    Row(title = stringResource(R.string.dc_capacity_modules), value = "$it kW")
                 }
-                Row(title = "Azimuth", value = site.azimuth)
-                Row(title = "Tilt", value = site.tilt)
+                Row(title = stringResource(R.string.azimuth), value = site.azimuth)
+                Row(title = stringResource(R.string.tilt), value = site.tilt)
                 site.installDate?.let {
-                    Row(title = "Install Date", value = it.monthYear())
+                    Row(title = stringResource(R.string.install_date), value = it.monthYear())
                 }
             }
         }
@@ -160,7 +164,8 @@ private fun Row(title: String, value: String) {
         )
         Text(
             value,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            color = colors.onSecondary
         )
     }
 }
@@ -168,7 +173,7 @@ private fun Row(title: String, value: String) {
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun SolcastSettingsViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         SolcastSettingsView(
             navController = NavHostController(LocalContext.current),
             FakeConfigManager(),

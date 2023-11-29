@@ -23,3 +23,5 @@ val DarkApproximationHeader = Color(0xFF2A7185)
 val DarkApproximationBackground = Color.Black
 val IconColorInDarkTheme = Color(0xFFFFFFFF)
 val IconColorInLightTheme = Color(0xFF000000)
+val WebLinkColorInDarkTheme = Color(0xFFAAAAFF)
+val WebLinkColorInLightTheme = TintColor
