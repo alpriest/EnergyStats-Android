@@ -40,18 +40,16 @@ class SolarForecastViewModel(
     private val themeStream: MutableStateFlow<AppTheme>
 ) : ViewModel() {
     val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())
-    private var loadState: LoadState = LoadState.Inactive
+    var loadStateStream= MutableStateFlow<LoadState>(LoadState.Inactive)
 
     suspend fun load() {
-        if (loadState != LoadState.Inactive) { return }
+        if (loadStateStream.value != LoadState.Inactive) { return }
         val settings = themeStream.value.solcastSettings
         if (settings.sites.isEmpty() || settings.apiKey == null) {
             return
         }
 
-        Log.d("AWP", "loading")
-
-        loadState = LoadState.Active("Loading...")
+        loadStateStream.value = LoadState.Active("Loading...")
 
         dataStream.value = settings.sites.map {
             val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey).forecasts
@@ -77,7 +75,7 @@ class SolarForecastViewModel(
             )
         }
 
-        loadState = LoadState.Inactive
+        loadStateStream.value = LoadState.Inactive
     }
 
     private fun asGraphData(data: List<SolcastForecastResponse>): List<List<DateFloatEntry>> {

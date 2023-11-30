@@ -17,7 +17,7 @@ data class SolcastSiteResponse(
     val azimuth: Int,
     val tilt: Int,
     @SerializedName("loss_factor")
-    val lossFactor: Double,
+    val lossFactor: Double?,
     @SerializedName("dc_capacity")
     val dcCapacity: Double?,
     @SerializedName("install_date")

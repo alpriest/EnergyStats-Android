@@ -21,7 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
+import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.statsgraph.chartStyle
@@ -62,61 +65,68 @@ class SolarForecastView(
         modifier: Modifier = Modifier
     ) {
         val data = viewModel.dataStream.collectAsState().value
+        val loadState: LoadState = viewModel.loadStateStream.collectAsState().value
 
         LaunchedEffect(null) {
             viewModel.load()
         }
 
-        Column(
-            modifier = modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
-                data.map { site ->
-                    ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), site.error, site.resourceId, themeStream)
-                    ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), site.error, site.resourceId, themeStream)
+        when (loadState) {
+            is LoadState.Active -> LoadingView(loadState.value)
+            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load() }, onLogout = {/* TODO */})
+            is LoadState.Inactive -> {
+                Column(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
+                        data.map { site ->
+                            ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), site.error, site.resourceId, themeStream)
+                            ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), site.error, site.resourceId, themeStream)
+                        }
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 44.dp)
+                    ) {
+                        Rectangle(
+                            color = predictionColor,
+                            modifier = Modifier
+                                .size(width = 20.dp, height = 5.dp)
+                                .padding(end = 5.dp)
+                        )
+                        Text(
+                            stringResource(R.string.prediction),
+                            modifier = Modifier.padding(end = 15.dp),
+                            style = TextStyle(color = colors.onSecondary)
+                        )
+
+                        Rectangle(
+                            color = color90,
+                            modifier = Modifier
+                                .size(width = 20.dp, height = 5.dp)
+                                .padding(end = 5.dp)
+                        )
+                        Text(
+                            stringResource(R.string.high_estimate),
+                            modifier = Modifier.padding(end = 15.dp),
+                            style = TextStyle(color = colors.onSecondary)
+                        )
+
+                        Rectangle(
+                            color = color10,
+                            modifier = Modifier
+                                .size(width = 20.dp, height = 5.dp)
+                                .padding(end = 5.dp)
+                        )
+                        Text(
+                            stringResource(R.string.low_estimate),
+                            modifier = Modifier.padding(end = 15.dp),
+                            style = TextStyle(color = colors.onSecondary)
+                        )
+                    }
                 }
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 44.dp)
-            ) {
-                Rectangle(
-                    color = predictionColor,
-                    modifier = Modifier
-                        .size(width = 20.dp, height = 5.dp)
-                        .padding(end = 5.dp)
-                )
-                Text(
-                    stringResource(R.string.prediction),
-                    modifier = Modifier.padding(end = 15.dp),
-                    style = TextStyle(color = colors.onSecondary)
-                )
-
-                Rectangle(
-                    color = color90,
-                    modifier = Modifier
-                        .size(width = 20.dp, height = 5.dp)
-                        .padding(end = 5.dp)
-                )
-                Text(
-                    stringResource(R.string.high_estimate),
-                    modifier = Modifier.padding(end = 15.dp),
-                    style = TextStyle(color = colors.onSecondary)
-                )
-
-                Rectangle(
-                    color = color10,
-                    modifier = Modifier
-                        .size(width = 20.dp, height = 5.dp)
-                        .padding(end = 5.dp)
-                )
-                Text(
-                    stringResource(R.string.low_estimate),
-                    modifier = Modifier.padding(end = 15.dp),
-                    style = TextStyle(color = colors.onSecondary)
-                )
             }
         }
     }

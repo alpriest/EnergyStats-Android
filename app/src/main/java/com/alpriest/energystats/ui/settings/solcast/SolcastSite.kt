@@ -22,7 +22,7 @@ data class SolcastSite(
     val lat: Double,
     val azimuth: Int,
     val tilt: Int,
-    val lossFactor: Double,
+    val lossFactor: Double?,
     val acCapacity: Double,
     val dcCapacity: Double?,
     val installDate: LocalDate?
