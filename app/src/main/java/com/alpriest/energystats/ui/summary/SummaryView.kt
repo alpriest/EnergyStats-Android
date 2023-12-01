@@ -108,15 +108,15 @@ class SummaryView(
         when (appTheme.financialModel) {
             FinancialModel.EnergyStats -> {
                 approximationsViewModel.financialModel?.let { energyStatsModel ->
-                    moneySummaryRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome.amount, textStyle = MaterialTheme.typography.h2)
-                    moneySummaryRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving.amount, textStyle = MaterialTheme.typography.h2)
-                    moneySummaryRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total.amount, textStyle = MaterialTheme.typography.h2)
+                    moneySummaryRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome, textStyle = MaterialTheme.typography.h2)
+                    moneySummaryRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving, textStyle = MaterialTheme.typography.h2)
+                    moneySummaryRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total, textStyle = MaterialTheme.typography.h2)
                 }
             }
 
             FinancialModel.FoxESS -> {
                 approximationsViewModel.earnings?.let { earningsResponse ->
-                    moneySummaryRow(title = stringResource(R.string.total_benefit), amount = earningsResponse.cumulate.earnings, textStyle = MaterialTheme.typography.h2)
+                    moneySummaryRow(title = stringResource(R.string.total_benefit), amount = FinanceAmount(type = FinanceAmountType.TOTAL, earningsResponse.cumulate.earnings, earningsResponse.currencyCode(), earningsResponse.currencySymbol()), textStyle = MaterialTheme.typography.h2)
                 }
             }
         }
@@ -148,7 +148,7 @@ class SummaryView(
     }
 
     @Composable
-    private fun moneySummaryRow(title: String, amount: Double, textStyle: TextStyle, modifier: Modifier = Modifier) {
+    private fun moneySummaryRow(title: String, amount: FinanceAmount, textStyle: TextStyle, modifier: Modifier = Modifier) {
         Row {
             Text(
                 title,
@@ -156,7 +156,7 @@ class SummaryView(
                 style = textStyle
             )
             Text(
-                FinanceAmount(type = FinanceAmountType.TOTAL, amount = amount, currencyCode = "GBP", currencySymbol = "£").formattedAmount(),
+                amount.formattedAmount(),
                 modifier = modifier,
                 style = textStyle
             )
