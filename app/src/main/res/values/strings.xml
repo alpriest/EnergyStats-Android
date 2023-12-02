@@ -138,8 +138,8 @@
     <string name="minsocgrid_description">The minimum charge the battery should maintain when grid power is present.</string>
     <string name="minsoc_detail">For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.</string>
     <string name="minsoc_notsure_footnote">If you\'re not sure then set both values the same.</string>
-    <string name="both_battery_freeze_periods">Your batteries will not charge or discharge between %1s and %2s. Any house load will come from the grid between these times. Reset time periods to disable this.</string>
-    <string name="one_battery_freeze_period">Your batteries will not charge or discharge between %1s. Any house load will come from the grid between these times. Reset the time period to disable this.</string>
+    <string name="both_battery_freeze_periods">Your batteries will not charge or discharge between %1s and %2s. Solar power will be diverted to charging the battery. Any house load will come from the grid between these times. Reset time periods to disable this.</string>
+    <string name="one_battery_freeze_period">Your batteries will not charge or discharge between %1s. Solar power will be diverted to charging the battery. Any house load will come from the grid between these times. Reset the time period to disable this.</string>
     <string name="self_use">Self Use</string>
     <string name="feed_in_first">Feed In First</string>
     <string name="backup">Backup</string>
@@ -250,5 +250,5 @@
     <string name="data_ceiling">Data ceiling</string>
     <string name="data_ceiling_none_description">Values will be shown unmodified from the data feed. You may see abnormally large numbers in your usage where the data gets corrupted.</string>
     <string name="data_ceiling_mild_description">Values above 1,048,575 will be clipped. E.g. a value of 201,539,769 would be shown as 3461.8. Use this if you\'re seeing abnormally large numbers on your graphs.</string>
-    <string name="data_ceiling_enhanced_description">Values above 65,535 will be clipped. E.g. a value of 45,899.7 would be shown as 24.5. Use this if you\'re seeing abnormally large numbers on your graphs.</string>
+    <string name="data_ceiling_enhanced_description">Values above 104,857 will be clipped. E.g. a value of 45,899.7 would be shown as 24.5. Use this if you\'re seeing abnormally large numbers on your graphs.</string>
 </resources>

@@ -139,8 +139,8 @@
     <string name="minsocgrid_description">La carica minima che la batteria deve mantenere quando è presente l\'alimentazione di rete.</string>
     <string name="minsoc_detail">In gran parte, questa impostazione determina quando le batterie smetteranno di essere utilizzate. Impostare questo valore più alto rispetto a Min SoC riserverà l\'energia della batteria per un\'interruzione dell\'alimentazione di rete. Ad esempio, se si imposta Min SoC al 10% e Min SoC on Grid al 20%, l\'inverter smetterà di fornire energia dalle batterie al 20% e il carico dell\'abitazione sarà alimentato dalla rete. In caso di interruzione dell\'alimentazione di rete, le batterie potrebbero essere utilizzate (tramite un interruttore EPS) per fornire energia di emergenza fino a quando la carica della batteria scende al 10%.</string>
     <string name="minsoc_notsure_footnote">Se non sei sicuro, imposta entrambi i valori allo stesso livello.</string>
-    <string name="both_battery_freeze_periods">Le tue batterie non si caricheranno né si scaricheranno tra %1s e %2s. Ogni carico dell\'abitazione verrà fornito dalla rete in questi orari. Reimposta i periodi di tempo per disabilitare questa funzione.</string>
-    <string name="one_battery_freeze_period">Le tue batterie non si caricheranno né si scaricheranno tra %1s. Ogni carico dell\'abitazione verrà fornito dalla rete in questi orari. Reimposta il periodo di tempo per disabilitare questa funzione.</string>
+    <string name="both_battery_freeze_periods">Le tue batterie non si caricheranno né scaricheranno tra %1s e %2s. L\'energia solare verrà deviata per caricare la batteria. Qualsiasi carico domestico verrà dalla rete in questi orari. Reimposta i periodi di tempo per disabilitare questa funzione.</string>
+    <string name="one_battery_freeze_period">Le tue batterie non si caricheranno né scaricheranno tra %1s. L\'energia solare verrà deviata per caricare la batteria. Qualsiasi carico domestico verrà dalla rete in questi orari. Reimposta il periodo di tempo per disabilitare questa funzione.</string>
     <string name="self_use">Autoconsumo</string>
     <string name="feed_in_first">Alimentazione in Primo Luogo</string>
     <string name="backup">Backup</string>
@@ -249,5 +249,5 @@
     <string name="data_ceiling">Limite di Dati</string>
     <string name="data_ceiling_none_description">I valori saranno mostrati senza modifiche dal feed di dati. Potresti vedere numeri anormalmente grandi nel tuo utilizzo dove i dati vengono corrotti</string>
     <string name="data_ceiling_mild_description">"I valori superiori a 1,048,575 saranno tagliati. Ad esempio, un valore di 201,539,769 sarà mostrato come 3461.8 "</string>
-    <string name="data_ceiling_enhanced_description">I valori superiori a 1,048,575 verranno tagliati. Ad esempio, un valore di 201,539,769 verrà mostrato come 3461.8. Usa questo se stai vedendo numeri anormalmente grandi sui tuoi grafici.</string>
+    <string name="data_ceiling_enhanced_description">I valori superiori a 104,857 verranno tagliati. Ad esempio, un valore di 45,899.7 verrà mostrato come 24.5. Usa questo se stai vedendo numeri anormalmente grandi sui tuoi grafici</string>
 </resources>

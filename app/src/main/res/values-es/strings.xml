@@ -138,8 +138,8 @@
     <string name="minsocgrid_description">El nivel mínimo de carga que la batería debe mantener cuando hay suministro de red.</string>
     <string name="minsoc_detail">En su mayor parte, esta es la configuración que determina cuándo las baterías dejarán de ser utilizadas. Configurar este valor más alto que Min SoC reservará energía de la batería para un corte en el suministro de red. Por ejemplo, si estableces Min SoC en 10% y Min SoC en red en 20%, el inversor dejará de suministrar energía de las baterías al 20% y la carga de la casa será suministrada por la red. Si hay un corte de red, las baterías podrían ser utilizadas (a través de un interruptor EPS) para suministrar energía de emergencia hasta que la carga de la batería caiga al 10%.</string>
     <string name="minsoc_notsure_footnote">Si no estás seguro, entonces configura ambos valores iguales.</string>
-    <string name="both_battery_freeze_periods">Sus baterías no se cargarán ni se descargaran entre %1s y %2s. Cualquier consumo de la casa vendrá de la red eléctrica durante estos periodos. Restablezca los periodos de tiempo para desactivar esta función.</string>
-    <string name="one_battery_freeze_period">Su batería no se cargará ni se descargará entre %1s. Cualquier consumo de la casa vendrá de la red eléctrica durante este periodo. Restablezca el periodo de tiempo para desactivar esta función.</string>
+    <string name="both_battery_freeze_periods">Sus baterías no se cargarán ni descargarán entre %1s y %2s. La energía solar se desviará para cargar la batería. Cualquier carga de la casa provendrá de la red entre estos tiempos. Restablezca los períodos de tiempo para desactivar esto.</string>
+    <string name="one_battery_freeze_period">Sus baterías no se cargarán ni descargarán entre %1s. La energía solar se desviará para cargar la batería. Cualquier carga de la casa provendrá de la red entre estos tiempos. Restablezca el período de tiempo para desactivar esto.</string>
     <string name="self_use">Autoconsumo</string>
     <string name="feed_in_first">Inyección Prioritaria</string>
     <string name="backup">Respaldo</string>
@@ -248,5 +248,5 @@
     <string name="data_ceiling">Límite de Datos</string>
     <string name="data_ceiling_none_description">Los valores se mostrarán sin modificar desde la fuente de datos. Puede ver números anormalmente grandes en su uso donde los datos se corrompan.</string>
     <string name="data_ceiling_mild_description">Los valores superiores a 1,048,575 serán recortados. Por ejemplo, un valor de 201,539,769 se mostrará como 3461.8. Utilice esto si observa números anormalmente grandes en sus gráficos.</string>
-    <string name="data_ceiling_enhanced_description">"Los valores por encima de 65,535 serán recortados. Por ejemplo, un valor de 458,997 se mostrará como 245 "</string>
+    <string name="data_ceiling_enhanced_description">Los valores superiores a 104,857 serán recortados. Por ejemplo, un valor de 45,899.7 se mostrará como 24.5. Utilice esto si observa números anormalmente grandes en sus gráficos</string>
 </resources>

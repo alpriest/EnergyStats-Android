@@ -138,8 +138,8 @@
     <string name="minsocgrid_description">Der minimale Ladestand, den die Batterie aufrechterhalten sollte, wenn Netzstrom vorhanden ist.</string>
     <string name="minsoc_detail">Im Wesentlichen ist dies die Einstellung, die bestimmt, wann die Batterien nicht mehr verwendet werden. Wenn Sie diese Einstellung höher als Min SoC setzen, wird die Batterieleistung für einen Netzwerkausfall reserviert. Wenn Sie zum Beispiel Min SoC auf 10% und Min SoC am Netz auf 20% setzen, wird der Wechselrichter die Stromversorgung aus den Batterien bei 20% stoppen, und die Haushaltslast wird vom Netz versorgt. Bei einem Netzwerkausfall könnten die Batterien (über einen EPS-Schalter) verwendet werden, um Notstrom zu liefern, bis die Batterieladung auf 10% sinkt.</string>
     <string name="minsoc_notsure_footnote">Wenn Sie sich nicht sicher sind, dann setzen Sie beide Werte gleich.</string>
-    <string name="both_battery_freeze_periods">Ihre Batterien werden zwischen %1s und %2s weder aufgeladen noch entladen. Jeglicher Hausverbrauch wird in dieser Zeit von der Netzversorgung gedeckt. Zur Deaktivierung setzen Sie die Zeitperioden zurück.</string>
-    <string name="one_battery_freeze_period">Ihre Batterien werden zwischen %1s weder aufgeladen noch entladen. Jeglicher Hausverbrauch wird in dieser Zeit von der Netzversorgung gedeckt. Zur Deaktivierung setzen Sie die Zeitperiode zurück.</string>
+    <string name="both_battery_freeze_periods">Ihre Batterien werden sich zwischen %1s und %2s nicht aufladen oder entladen. Die Solarenergie wird zum Aufladen der Batterie umgeleitet. Jede Hauslast wird in dieser Zeit vom Netz kommen. Setzen Sie die Zeitperioden zurück, um dies zu deaktivieren.</string>
+    <string name="one_battery_freeze_period">Ihre Batterien werden sich zwischen %1s nicht aufladen oder entladen. Die Solarenergie wird zum Aufladen der Batterie umgeleitet. Jede Hauslast wird in dieser Zeit vom Netz kommen. Setzen Sie den Zeitraum zurück, um dies zu deaktivieren.</string>
     <string name="self_use">Eigenverbrauch</string>
     <string name="feed_in_first">Einspeisung zuerst</string>
     <string name="backup">Backup</string>
@@ -248,5 +248,5 @@
     <string name="data_ceiling">Datenobergrenze</string>
     <string name="data_ceiling_none_description">Die Werte werden unverändert aus dem Datenfeed angezeigt. Sie können abnorm große Zahlen in Ihrer Nutzung sehen, wo die Daten beschädigt werden.</string>
     <string name="data_ceiling_mild_description">Werte über 1.048.575 werden gekürzt. Z.B. würde ein Wert von 201.539.769 als 3461.8 angezeigt werden. Verwenden Sie dies, wenn Sie abnormal große Zahlen auf Ihren Grafiken sehen.</string>
-    <string name="data_ceiling_enhanced_description">Werte über 65.535 werden abgeschnitten. Z.B. wird ein Wert von 458.997 als 245 angezeigt</string>
+    <string name="data_ceiling_enhanced_description">Werte über 104.857 werden gekürzt. Z.B. würde ein Wert von 45.899,7 als 24,5 angezeigt werden. Verwenden Sie dies, wenn Sie abnormal große Zahlen auf Ihren Grafiken sehen.</string>
 </resources>

@@ -139,8 +139,8 @@
     <string name="minsocgrid_description">Minimalne naładowanie baterii, które powinno być utrzymywane, gdy dostępna jest energia sieciowa.</string>
     <string name="minsoc_detail">Przeważnie ustawienie to określa, kiedy baterie przestaną być używane. Ustawienie tego wyżej niż Minimalne SoC zarezerwuje moc baterii na awarię sieci. Na przykład, jeśli ustawisz Minimalne SoC na 10% i Minimalne SoC z podłączoną siecią na 20%, przetwornica przestanie dostarczać moc z baterii przy 20%, a obciążenie domu będzie zasilane z sieci. W przypadku awarii sieci, baterie mogą być używane (za pośrednictwem przełącznika EPS) do dostarczania energii awaryjnej, dopóki naładowanie baterii nie spadnie do 10%.</string>
     <string name="minsoc_notsure_footnote">Jeśli nie jesteś pewien, ustaw obie wartości takie same.</string>
-    <string name="both_battery_freeze_periods">Twoje baterie nie będą się ładować ani rozładowywać między %1s i %2s. Wszystkie obciążenia domu będą pochodzić z sieci w tym czasie. Aby wyłączyć tę funkcję, zresetuj okresy czasu.</string>
-    <string name="one_battery_freeze_period">Twoje baterie nie będą się ładować ani rozładowywać między %1s. Wszystkie obciążenia domu będą pochodzić z sieci w tym czasie. Aby wyłączyć tę funkcję, zresetuj okres czasu.</string>
+    <string name="both_battery_freeze_periods">Twoje baterie nie będą się ładować ani rozładowywać między %1s a %2s. Energia słoneczna zostanie przekierowana do ładowania baterii. Wszelkie obciążenia domowe będą pochodzić z sieci w tych godzinach. Zresetuj okresy czasu, aby to wyłączyć.</string>
+    <string name="one_battery_freeze_period">Twoje baterie nie będą się ładować ani rozładowywać między %1s. Energia słoneczna zostanie przekierowana do ładowania baterii. Wszelkie obciążenia domowe będą pochodzić z sieci w tych godzinach. Zresetuj okres czasu, aby to wyłączyć.</string>
     <string name="self_use">Samozużycie</string>
     <string name="feed_in_first">Wprowadź najpierw</string>
     <string name="backup">Zapasowy</string>
@@ -249,5 +249,5 @@
     <string name="data_ceiling">Limit Danych</string>
     <string name="data_ceiling_none_description">Wartości będą wyświetlane bez modyfikacji z kanału danych. Możesz zobaczyć nienormalnie duże liczby w swoim użyciu, gdzie dane zostają uszkodzone.</string>
     <string name="data_ceiling_mild_description">Wartości powyżej 1 048 575 będą obcinane. Na przykład wartość 201 539 769 zostanie pokazana jako 3461.8. Użyj tego, jeśli zauważysz nienormalnie duże liczby na swoich wykresach.</string>
-    <string name="data_ceiling_enhanced_description">Wartości powyżej 65,535 będą przycięte. Np. wartość 458,997 zostanie wyświetlona jako 245</string>
+    <string name="data_ceiling_enhanced_description">I valori superiori a 104,857 verranno tagliati. Ad esempio, un valore di 45,899.7 verrà mostrato come 24.5. Usa questo se stai vedendo numeri anormalmente grandi sui tuoi grafici.</string>
 </resources>
