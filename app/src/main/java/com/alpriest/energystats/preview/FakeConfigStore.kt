@@ -3,6 +3,7 @@ package com.alpriest.energystats.preview
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -43,7 +44,8 @@ class FakeConfigStore(
     override var parameterGroups: List<ParameterGroup> = listOf(),
     override var financialModel: Int = 1,
     override var currencySymbol: String = "£",
-    override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf())
+    override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf()),
+    override var dataCeiling: Int = DataCeiling.Mild.value
 
 ) : ConfigInterface {
     override fun clear() {}

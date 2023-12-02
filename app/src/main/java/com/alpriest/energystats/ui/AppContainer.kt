@@ -23,10 +23,17 @@ import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManager
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.DataCeiling
+import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.Solcast
 import com.alpriest.energystats.ui.settings.solcast.SolcastCache
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class AppContainer(private val context: Context) {
     val solarForecastingProvider: () -> SolarForecasting = {
@@ -42,13 +49,45 @@ class AppContainer(private val context: Context) {
     private val config = SharedPreferencesConfigStore(sharedPreferences)
     var filePathChooser: ActivityResultLauncher<String>? = null
     var filePathChooserCallback: ((Uri) -> Unit)? = null
+    val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
+        AppTheme(
+            useLargeDisplay = config.useLargeDisplay,
+            useColouredLines = config.useColouredFlowLines,
+            showBatteryTemperature = config.showBatteryTemperature,
+            decimalPlaces = config.decimalPlaces,
+            showSunnyBackground = config.showSunnyBackground,
+            showBatteryEstimate = config.showBatteryEstimate,
+            showUsableBatteryOnly = config.showUsableBatteryOnly,
+            showTotalYield = config.showTotalYield,
+            selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
+            showFinancialSummary = config.showFinancialSummary,
+            displayUnit = DisplayUnit.fromInt(config.displayUnit),
+            showInverterTemperatures = config.showInverterTemperatures,
+            showInverterIcon = config.showInverterIcon,
+            showHomeTotal = config.showHomeTotal,
+            shouldInvertCT2 = config.shouldInvertCT2,
+            showGridTotals = config.showGridTotals,
+            showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
+            showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow,
+            showLastUpdateTimestamp = config.showLastUpdateTimestamp,
+            solarRangeDefinitions = config.solarRangeDefinitions,
+            financialModel = FinancialModel.fromInt(config.financialModel),
+            shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
+            showGraphValueDescriptions = config.showGraphValueDescriptions,
+            parameterGroups = config.parameterGroups,
+            colorTheme = ColorThemeMode.fromInt(config.colorTheme),
+            solcastSettings = config.solcastSettings,
+            dataCeiling = DataCeiling.fromInt(config.dataCeiling)
+        )
+    )
 
     val networking: FoxESSNetworking by lazy {
         NetworkValueCleaner(
             NetworkFacade(
                 network = NetworkCache(network = NetworkService(credentialStore, networkStore)),
                 isDemoUser = { config.isDemoUser }
-            )
+            ),
+            themeStream
         )
     }
 
@@ -56,7 +95,8 @@ class AppContainer(private val context: Context) {
         ConfigManager(
             config = config,
             networking = networking,
-            appVersion = getAppVersionName(context)
+            appVersion = getAppVersionName(context),
+            themeStream
         )
     }
 

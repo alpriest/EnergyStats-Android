@@ -5,6 +5,7 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
@@ -18,37 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetworking, override var appVersion: String) : ConfigManaging {
-    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
-        AppTheme(
-            useLargeDisplay = config.useLargeDisplay,
-            useColouredLines = config.useColouredFlowLines,
-            showBatteryTemperature = config.showBatteryTemperature,
-            decimalPlaces = config.decimalPlaces,
-            showSunnyBackground = config.showSunnyBackground,
-            showBatteryEstimate = config.showBatteryEstimate,
-            showUsableBatteryOnly = config.showUsableBatteryOnly,
-            showTotalYield = config.showTotalYield,
-            selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
-            showFinancialSummary = config.showFinancialSummary,
-            displayUnit = DisplayUnit.fromInt(config.displayUnit),
-            showInverterTemperatures = config.showInverterTemperatures,
-            showInverterIcon = config.showInverterIcon,
-            showHomeTotal = config.showHomeTotal,
-            shouldInvertCT2 = config.shouldInvertCT2,
-            showGridTotals = config.showGridTotals,
-            showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
-            showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow,
-            showLastUpdateTimestamp = config.showLastUpdateTimestamp,
-            solarRangeDefinitions = config.solarRangeDefinitions,
-            financialModel = FinancialModel.fromInt(config.financialModel),
-            shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
-            showGraphValueDescriptions = config.showGraphValueDescriptions,
-            parameterGroups = config.parameterGroups,
-            colorTheme = ColorThemeMode.fromInt(config.colorTheme),
-            solcastSettings = config.solcastSettings
-        )
-    )
+open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetworking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) : ConfigManaging {
 
     override var colorThemeMode: ColorThemeMode
         get() = ColorThemeMode.fromInt( config.colorTheme)
@@ -416,6 +387,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             config.solcastSettings = value
             themeStream.value = themeStream.value.copy(solcastSettings = solcastSettings)
+        }
+
+    override var dataCeiling: DataCeiling
+        get() = DataCeiling.fromInt(config.dataCeiling)
+        set(value) {
+            config.dataCeiling = value.value
+            themeStream.value = themeStream.value.copy(dataCeiling = dataCeiling)
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

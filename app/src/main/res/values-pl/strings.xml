@@ -244,4 +244,10 @@
     <string name="low_estimate">Niskie oszacowanie</string>
     <string name="forecast_today">Prognoza na dziś</string>
     <string name="forecast_tomorrow">Prognoza na jutro</string>
+    <string name="mild">Łagodny</string>
+    <string name="enhanced">Wzmocniony</string>
+    <string name="data_ceiling">Limit Danych</string>
+    <string name="data_ceiling_none_description">Wartości będą wyświetlane bez modyfikacji z kanału danych. Możesz zobaczyć nienormalnie duże liczby w swoim użyciu, gdzie dane zostają uszkodzone.</string>
+    <string name="data_ceiling_mild_description">Wartości powyżej 1 048 575 będą obcinane. Na przykład wartość 201 539 769 zostanie pokazana jako 3461.8. Użyj tego, jeśli zauważysz nienormalnie duże liczby na swoich wykresach.</string>
+    <string name="data_ceiling_enhanced_description">Wartości powyżej 65,535 będą przycięte. Np. wartość 458,997 zostanie wyświetlona jako 245</string>
 </resources>

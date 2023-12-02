@@ -3,6 +3,7 @@ package com.alpriest.energystats.stores
 import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -48,7 +49,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOULD_COMBINE_CT2_WITH_PVPOWER,
         SHOW_GRAPH_VALUE_DESCRIPTIONS,
         COLOR_THEME_MODE,
-        SOLCAST_SETTINGS
+        SOLCAST_SETTINGS,
+        DATA_CEILING
     }
 
     override var colorTheme: Int
@@ -366,6 +368,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             val editor = sharedPreferences.edit()
             val jsonString = Gson().toJson(value)
             editor.putString(SharedPreferenceKey.SOLCAST_SETTINGS.name, jsonString)
+            editor.apply()
+        }
+
+    override var dataCeiling: Int
+        get() = sharedPreferences.getInt(SharedPreferenceKey.DATA_CEILING.name, DataCeiling.Mild.value)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(SharedPreferenceKey.DATA_CEILING.name, value)
             editor.apply()
         }
 

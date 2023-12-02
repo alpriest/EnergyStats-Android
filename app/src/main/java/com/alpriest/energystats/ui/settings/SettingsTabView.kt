@@ -209,7 +209,7 @@ fun SettingsTabView(
             SettingsNavButton("Dataloggers") { navController.navigate(SettingsScreen.Dataloggers.name) }
         }
 
-        DisplaySettingsView(config, navController)
+        DisplaySettingsView(config)
 
         Column {
             SettingsNavButton(stringResource(R.string.self_sufficiency_estimates)) { navController.navigate(SettingsScreen.SelfSufficiencyEstimates.name) }

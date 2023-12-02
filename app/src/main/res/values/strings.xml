@@ -245,4 +245,10 @@
     <string name="low_estimate">Low estimate</string>
     <string name="forecast_today">Forecast today</string>
     <string name="forecast_tomorrow">Forecast tomorrow</string>
+    <string name="mild">Mild</string>
+    <string name="enhanced">Enhanced</string>
+    <string name="data_ceiling">Data ceiling</string>
+    <string name="data_ceiling_none_description">Values will be shown unmodified from the data feed. You may see abnormally large numbers in your usage where the data gets corrupted.</string>
+    <string name="data_ceiling_mild_description">Values above 1,048,575 will be clipped. E.g. a value of 201,539,769 would be shown as 3461.8. Use this if you\'re seeing abnormally large numbers on your graphs.</string>
+    <string name="data_ceiling_enhanced_description">Values above 65,535 will be clipped. E.g. a value of 45,899.7 would be shown as 24.5. Use this if you\'re seeing abnormally large numbers on your graphs.</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
@@ -37,7 +38,8 @@ data class AppTheme(
     val showGraphValueDescriptions: Boolean,
     var parameterGroups: List<ParameterGroup>,
     val colorTheme: ColorThemeMode,
-    val solcastSettings: SolcastSettings
+    val solcastSettings: SolcastSettings,
+    val dataCeiling: DataCeiling
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

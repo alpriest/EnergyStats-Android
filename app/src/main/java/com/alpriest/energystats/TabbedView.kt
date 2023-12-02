@@ -186,17 +186,19 @@ fun TabbedView(
 @Preview(showBackground = true)
 @Composable
 fun HomepagePreview() {
+    val themeStream = MutableStateFlow(AppTheme.preview())
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         TabbedView(
             ConfigManager(
                 config = FakeConfigStore(),
                 networking = DemoFoxESSNetworking(),
-                appVersion = "1.19"
+                appVersion = "1.19",
+                themeStream = themeStream
             ),
             network = DemoFoxESSNetworking(),
             userManager = FakeUserManager(),
             {},
-            themeStream = MutableStateFlow(AppTheme.preview()),
+            themeStream = themeStream,
             networkStore = InMemoryLoggingNetworkStore(),
             {},
             {},

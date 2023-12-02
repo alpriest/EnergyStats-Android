@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -11,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.w
@@ -21,11 +21,11 @@ import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController, modifier: Modifier = Modifier) {
+fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
     val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
-    val decimalPlacesState = rememberSaveable { mutableStateOf(config.decimalPlaces) }
+    val decimalPlacesState = rememberSaveable { mutableIntStateOf(config.decimalPlaces) }
     val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
     val displayUnitState = rememberSaveable { mutableStateOf(config.displayUnit) }
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
@@ -33,6 +33,7 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
     val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
     val showGraphValueDescriptionsState = rememberSaveable { mutableStateOf(config.showGraphValueDescriptions) }
     val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
+    val dataCeilingState = rememberSaveable { mutableStateOf(config.dataCeiling) }
     val context = LocalContext.current
 
     SettingsColumnWithChild(
@@ -159,16 +160,43 @@ fun DisplaySettingsView(config: ConfigManaging, navController: NavHostController
             }
         )
     }
+
+    SettingsColumnWithChild(
+        modifier = modifier
+    ) {
+        SettingsSegmentedControl(
+            title = stringResource(R.string.data_ceiling),
+            segmentedControl = {
+                val items = listOf(DataCeiling.None, DataCeiling.Mild, DataCeiling.Enhanced)
+                SegmentedControl(
+                    items = items.map { it.title(context) },
+                    defaultSelectedItemIndex = items.indexOf(dataCeilingState.value),
+                    color = colors.primary
+                ) {
+                    dataCeilingState.value = items[it]
+                    config.dataCeiling = items[it]
+                }
+            },
+            footer = buildAnnotatedString {
+                when (dataCeilingState.value) {
+                    DataCeiling.None -> append(stringResource(R.string.data_ceiling_none_description))
+                    DataCeiling.Mild -> append(stringResource(R.string.data_ceiling_mild_description))
+                    DataCeiling.Enhanced -> append(stringResource(R.string.data_ceiling_enhanced_description))
+                }
+            }
+        )
+    }
 }
 
-@Preview(showBackground = true, heightDp = 640)
+@Preview(showBackground = true, heightDp = 940)
 @Composable
 fun DisplaySettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        DisplaySettingsView(
-            config = FakeConfigManager(),
-            navController = NavHostController(LocalContext.current),
-            modifier = Modifier.padding(horizontal = 12.dp)
-        )
+        SettingsPage {
+            DisplaySettingsView(
+                config = FakeConfigManager(),
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
@@ -60,6 +61,7 @@ class FakeConfigManager : ConfigManaging {
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
     override var parameterGroups: List<ParameterGroup> = ParameterGroup.defaults
     override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf(SolcastSite.preview()))
+    override var dataCeiling: DataCeiling = DataCeiling.Mild
 
     override var devices: List<Device>? = listOf(
         Device(

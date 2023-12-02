@@ -243,4 +243,10 @@
     <string name="low_estimate">Niedrige Schätzung</string>
     <string name="forecast_today">Vorhersage für heute</string>
     <string name="forecast_tomorrow">Vorhersage für morgen</string>
+    <string name="mild">Mild</string>
+    <string name="enhanced">Verbessert</string>
+    <string name="data_ceiling">Datenobergrenze</string>
+    <string name="data_ceiling_none_description">Die Werte werden unverändert aus dem Datenfeed angezeigt. Sie können abnorm große Zahlen in Ihrer Nutzung sehen, wo die Daten beschädigt werden.</string>
+    <string name="data_ceiling_mild_description">Werte über 1.048.575 werden gekürzt. Z.B. würde ein Wert von 201.539.769 als 3461.8 angezeigt werden. Verwenden Sie dies, wenn Sie abnormal große Zahlen auf Ihren Grafiken sehen.</string>
+    <string name="data_ceiling_enhanced_description">Werte über 65.535 werden abgeschnitten. Z.B. wird ein Wert von 458.997 als 245 angezeigt</string>
 </resources>

@@ -59,7 +59,7 @@ fun Double.kWh(decimalPlaces: Int): String {
     val numberFormatter = DecimalFormat().apply {
         minimumFractionDigits = decimalPlaces
         maximumFractionDigits = decimalPlaces
-        isGroupingUsed = false
+        isGroupingUsed = true
     }
 
     return "${numberFormatter.format(divided)} kWh"

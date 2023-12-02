@@ -17,9 +17,12 @@ import com.alpriest.energystats.models.ReportData
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
+import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.statsgraph.ReportType
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
-class NetworkValueCleaner(private val network: FoxESSNetworking) : FoxESSNetworking {
+class NetworkValueCleaner(private val network: FoxESSNetworking, private val themeStream: MutableStateFlow<AppTheme>) : FoxESSNetworking {
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return network.fetchDeviceList()
     }
@@ -48,7 +51,7 @@ class NetworkValueCleaner(private val network: FoxESSNetworking) : FoxESSNetwork
                 data = original.data.map { originalData ->
                     RawData(
                         time = originalData.time,
-                        value = originalData.value.capped()
+                        value = originalData.value.capped(themeStream.value.dataCeiling)
                     )
                 }.toTypedArray()
             )
@@ -63,7 +66,7 @@ class NetworkValueCleaner(private val network: FoxESSNetworking) : FoxESSNetwork
                 data = original.data.map { originalData ->
                     ReportData(
                         index = originalData.index,
-                        value = originalData.value.capped()
+                        value = originalData.value.capped(themeStream.value.dataCeiling)
                     )
                 }.toTypedArray()
             )
@@ -109,20 +112,24 @@ class NetworkValueCleaner(private val network: FoxESSNetworking) : FoxESSNetwork
     override suspend fun fetchErrorMessages() {
         network.fetchErrorMessages()
     }
-}
 
-private fun Double.capped(): Double {
-    return if (this > 0) {
-        val mask = 0xFFFF00000
-        val register = (this * 10).toLong()
-        val masked = register and mask
+    private fun Double.capped(dataCeiling: DataCeiling): Double {
+        return if (this > 0) {
+            val mask = when (dataCeiling) {
+                DataCeiling.None -> 0x0
+                DataCeiling.Mild -> 0xFFF00000
+                DataCeiling.Enhanced -> 0xFFFF0000
+            }
+            val register = (this * 10).toLong()
+            val masked = register and mask
 
-        if (masked == 0L) {
-            this
+            if (masked == 0L) {
+                this
+            } else {
+                (this - (masked.toDouble() / 10.0)).rounded(3)
+            }
         } else {
-            (this - (masked.toDouble() / 10.0)).rounded(3)
+            this
         }
-    } else {
-        this
     }
 }

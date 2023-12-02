@@ -243,4 +243,10 @@
     <string name="low_estimate">Estimación baja</string>
     <string name="forecast_today">Pronóstico para hoy</string>
     <string name="forecast_tomorrow">Pronóstico para mañana</string>
+    <string name="mild">Leve</string>
+    <string name="enhanced">Mejorado</string>
+    <string name="data_ceiling">Límite de Datos</string>
+    <string name="data_ceiling_none_description">Los valores se mostrarán sin modificar desde la fuente de datos. Puede ver números anormalmente grandes en su uso donde los datos se corrompan.</string>
+    <string name="data_ceiling_mild_description">Los valores superiores a 1,048,575 serán recortados. Por ejemplo, un valor de 201,539,769 se mostrará como 3461.8. Utilice esto si observa números anormalmente grandes en sus gráficos.</string>
+    <string name="data_ceiling_enhanced_description">"Los valores por encima de 65,535 serán recortados. Por ejemplo, un valor de 458,997 se mostrará como 245 "</string>
 </resources>

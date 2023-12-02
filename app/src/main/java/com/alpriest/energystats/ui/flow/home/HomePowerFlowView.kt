@@ -11,6 +11,7 @@ import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
@@ -77,7 +78,8 @@ fun AppTheme.Companion.preview(
     showGraphValueDescriptions: Boolean = true,
     parameterGroups: List<ParameterGroup> = ParameterGroup.defaults,
     colorTheme: ColorThemeMode = ColorThemeMode.Auto,
-    solcastSettings: SolcastSettings = SolcastSettings.defaults
+    solcastSettings: SolcastSettings = SolcastSettings.defaults,
+    dataCeiling: DataCeiling = DataCeiling.Mild
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -90,6 +92,7 @@ fun AppTheme.Companion.preview(
         showTotalYield = showTotalYield,
         selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
         showFinancialSummary = showFinancialSummary,
+        financialModel = financialModel,
         displayUnit = displayUnit,
         showInverterTemperatures = showInverterTemperatures,
         showInverterIcon = showInverterIcon,
@@ -100,11 +103,11 @@ fun AppTheme.Companion.preview(
         showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow,
         showLastUpdateTimestamp = showLastUpdateTimestamp,
         solarRangeDefinitions = solarRangeDefinitions,
-        financialModel = financialModel,
         shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower,
         showGraphValueDescriptions = showGraphValueDescriptions,
         parameterGroups = parameterGroups,
         colorTheme = colorTheme,
-        solcastSettings = solcastSettings
+        solcastSettings = solcastSettings,
+        dataCeiling = dataCeiling
     )
 }
