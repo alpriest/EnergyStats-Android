@@ -93,7 +93,7 @@
     <string name="rawvariable_ambienttemperation">Temperature inside the inverter, also known as Inner Temperature, in degrees C</string>
     <string name="rawvariable_invtemperation">Temperature of the vanes on the back of the inverter, in degrees C</string>
     <string name="rawvariable_battemperature">Temperature of the BMS, also known as BMS temperature, in degrees C</string>
-    <string name="rawvariable_batcurrent">The DC current flowing from the battery, measured by the BMS, in volts (V)</string>
+    <string name="rawvariable_batcurrent">The DC current flowing from the battery, measured by the BMS, in amps (A)</string>
     <string name="rawvariable_batvolt">The DC battery voltage, measured by the BMS, in volts (V)</string>
     <string name="rawvariable_invbatvolt">The DC battery voltage, measured by the inverter, in volts (V)</string>
     <string name="rawvariable_invbatcurrent">The DC current flowing from the battery, measured by inverter, in amps (A)</string>
