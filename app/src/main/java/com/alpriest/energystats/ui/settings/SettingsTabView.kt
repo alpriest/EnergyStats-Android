@@ -46,6 +46,7 @@ import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeView
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -72,6 +73,7 @@ enum class SettingsScreen {
     BatteryChargeTimes,
     Inverter,
     InverterWorkMode,
+    InverterSchedule,
     Dataloggers,
     SelfSufficiencyEstimates,
     FinancialModel,
@@ -126,6 +128,9 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.InverterWorkMode.name) {
             WorkModeView(configManager = config, network = network, navController = navController, userManager = userManager).Content()
+        }
+        composable(SettingsScreen.InverterSchedule.name) {
+            ScheduleSummaryView(configManager = config, network = network, navController = navController, userManager = userManager).Content()
         }
         composable(SettingsScreen.Dataloggers.name) {
             DataLoggerViewContainer(network = network, configManager = config, navController = navController, context = context).Content()
