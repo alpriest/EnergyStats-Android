@@ -18,6 +18,11 @@ import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleListResponse
+import com.alpriest.energystats.models.SchedulePollcy
+import com.alpriest.energystats.models.ScheduleTemplateSummaryResponse
+import com.alpriest.energystats.models.SchedulerFlagResponse
+import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.SoftwareVersion
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.models.VariablesResponse
@@ -39,6 +44,20 @@ class DemoFoxESSNetworking : FoxESSNetworking {
 
     override suspend fun verifyCredentials(username: String, password: String) {
         // Assume valid
+    }
+
+    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
+        return ScheduleListResponse(
+            data = listOf(
+                ScheduleTemplateSummaryResponse(templateName = "Winter charging", enable = false, templateID = "123"),
+                ScheduleTemplateSummaryResponse(templateName = "", enable = true, templateID = "")
+            ),
+            enable = true,
+            pollcy = listOf(
+                SchedulePollcy(startH = 15, startM = 0, endH = 17, endM = 0, fdpwr = 0, workMode = "ForceCharge", fdsoc = 100, minsocongrid = 100),
+                SchedulePollcy(startH = 17, startM = 0, endH = 18, endM = 30, fdpwr = 3500, workMode = "ForceDischarge", fdsoc = 20, minsocongrid = 20)
+            )
+        )
     }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
@@ -180,4 +199,18 @@ class DemoFoxESSNetworking : FoxESSNetworking {
     }
 
     override suspend fun fetchErrorMessages() {}
+
+    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
+        return SchedulerFlagResponse(enable = true, support = true)
+    }
+
+    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
+        return listOf(
+            SchedulerModeResponse(color = "#80F6BD16", name = "Back Up", key = "Backup"),
+            SchedulerModeResponse(color = "#805B8FF9", name = "Feed-in Priority", key = "Feedin"),
+            SchedulerModeResponse(color = "#80BBE9FB", name = "Force Charge", key = "ForceCharge"),
+            SchedulerModeResponse(color = "#8065789B", name = "Force Discharge", key = "ForceDischarge"),
+            SchedulerModeResponse(color = "#8061DDAA", name = "Self-Use", key = "SelfUse")
+        )
+    }
 }

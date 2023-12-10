@@ -23,6 +23,9 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportRequest
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleListResponse
+import com.alpriest.energystats.models.SchedulerFlagResponse
+import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
@@ -41,6 +44,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
 import java.lang.reflect.Type
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -70,6 +75,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val original = chain.request()
+                val languageCode = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
+                val timezone = TimeZone.getDefault().id
 
                 val requestBuilder = original.newBuilder()
                     .header("token", credentials.getToken() ?: "")
@@ -81,6 +88,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
                     )
                     .header("Accept-Language", "en-US;q=0.9,en;q=0.8,de;q=0.7,nl;q=0.6")
                     .header("Content-Type", "application/json")
+                    .header("lang", languageCode)
+                    .header("timezone", timezone)
 
                 chain.proceed(requestBuilder.build())
             }
@@ -118,6 +127,31 @@ class NetworkService(private val credentials: CredentialStore, private val store
         response.item.result?.messages?.let {
             this.errorMessages = it[it.keys.first()] ?: mutableMapOf()
         }
+    }
+
+    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("generic/v0/device/scheduler/get/flag")
+            .addQueryParameter("deviceSN", deviceSN)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<SchedulerFlagResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<SchedulerFlagResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
+        TODO("Not yet implemented")
     }
 
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {

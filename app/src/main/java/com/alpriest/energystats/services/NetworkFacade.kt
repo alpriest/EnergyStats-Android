@@ -141,4 +141,28 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
             network.fetchErrorMessages()
         }
     }
+
+    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.fetchSchedulerFlag(deviceSN)
+        } else {
+            network.fetchSchedulerFlag(deviceSN)
+        }
+    }
+
+    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.fetchScheduleModes(deviceID)
+        } else {
+            network.fetchScheduleModes(deviceID)
+        }
+    }
+
+    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.fetchCurrentSchedule(deviceSN)
+        } else {
+            network.fetchCurrentSchedule(deviceSN)
+        }
+    }
 }

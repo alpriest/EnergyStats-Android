@@ -109,3 +109,14 @@ private fun Time.Companion.current(): Time {
     val now = LocalDateTime.now()
     return Time(now.hour, now.minute)
 }
+
+data class ScheduleTemplateSummary(
+    val id: String,
+    val name: String,
+    val enabled: Boolean
+)
+
+data class ScheduleTemplate(
+    val id: String,
+    val phases: List<SchedulePhase>
+)

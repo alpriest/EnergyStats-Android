@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.inverter
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -35,9 +36,10 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
         InverterChoiceView(configManager)
 
         currentDevice.value?.let {
-            SettingsNavButton(stringResource(R.string.configure_work_mode)) { navController.navigate(SettingsScreen.InverterWorkMode.name) }
-
-            SettingsNavButton("Manage schedules") { navController.navigate(SettingsScreen.InverterSchedule.name) }
+            Column {
+                SettingsNavButton(stringResource(R.string.configure_work_mode)) { navController.navigate(SettingsScreen.InverterWorkMode.name) }
+                SettingsNavButton("Manage schedules") { navController.navigate(SettingsScreen.InverterSchedule.name) }
+            }
 
             SettingsColumnWithChild {
                 SettingsCheckbox(

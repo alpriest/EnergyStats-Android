@@ -3,13 +3,13 @@ package com.alpriest.energystats.services
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
-class InvalidConfigurationException(message: String?): Exception(message)
+class InvalidConfigurationException(message: String?) : Exception(message)
 class InvalidTokenException : Exception("Invalid Token")
 class BadCredentialsException : Exception("Bad Credentials")
 class TryLaterException : Exception("Try Later")
-class MaintenanceModeException: Exception("Fox servers are offline. Please try later.")
+class MaintenanceModeException : Exception("Fox servers are offline. Please try later.")
 class MissingDataException : Exception("Missing data")
-class UnknownNetworkException(errno: Int, message: String?): Exception("$errno $message")
+class UnknownNetworkException(errno: Int, message: String?) : Exception("$errno $message")
 
 interface FoxESSNetworking {
     suspend fun fetchDeviceList(): PagedDeviceListResponse
@@ -29,6 +29,10 @@ interface FoxESSNetworking {
     suspend fun setWorkMode(deviceID: String, workMode: String)
     suspend fun fetchDataLoggers(): PagedDataLoggerListResponse
     suspend fun fetchErrorMessages()
+
+    suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse
+    suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse>
+    suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

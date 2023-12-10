@@ -14,6 +14,9 @@ import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleListResponse
+import com.alpriest.energystats.models.SchedulerFlagResponse
+import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import java.lang.Math.abs
 
@@ -133,6 +136,18 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 
     override suspend fun fetchErrorMessages() {
         network.fetchErrorMessages()
+    }
+
+    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
+        return network.fetchSchedulerFlag(deviceSN)
+    }
+
+    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
+        return network.fetchScheduleModes(deviceID)
+    }
+
+    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
+        return network.fetchCurrentSchedule(deviceSN)
     }
 
     fun makeKey(base: String, vararg arguments: String): String {
