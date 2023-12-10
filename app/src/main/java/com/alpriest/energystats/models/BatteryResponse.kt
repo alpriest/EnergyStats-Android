@@ -60,6 +60,10 @@ data class Time(
             return Time(0, 0)
         }
     }
+
+    fun formatted(): String {
+        return "${"%02d".format(hour)}:${"%02d".format(minute)}"
+    }
 }
 
 data class DeviceSettingsGetResponse(

@@ -1,8 +1,11 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.SchedulePollcy
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.ui.theme.PowerFlowNegative
+import com.alpriest.energystats.ui.theme.PowerFlowPositive
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -25,7 +28,8 @@ data class SchedulePhase(
     val mode: SchedulerModeResponse,
     val forceDischargePower: Int,
     val forceDischargeSOC: Int,
-    val batterySOC: Int
+    val batterySOC: Int,
+    val color: Color
 ) {
     companion object {
         fun create(
@@ -35,7 +39,8 @@ data class SchedulePhase(
             mode: SchedulerModeResponse?,
             forceDischargePower: Int,
             forceDischargeSOC: Int,
-            batterySOC: Int
+            batterySOC: Int,
+            color: Color
         ): SchedulePhase? {
             mode ?: return null
 
@@ -46,11 +51,13 @@ data class SchedulePhase(
                 mode,
                 forceDischargePower,
                 forceDischargeSOC,
-                batterySOC
+                batterySOC,
+                color
             )
         }
 
         fun createWithDefaults(mode: SchedulerModeResponse): SchedulePhase {
+            val color: Color = Color.scheduleColor(mode.key)
             return SchedulePhase(
                 UUID.randomUUID().toString(),
                 Time.current(),
@@ -58,7 +65,8 @@ data class SchedulePhase(
                 mode,
                 0,
                 10,
-                10
+                10,
+                color = color
             )
         }
     }
@@ -84,6 +92,16 @@ data class SchedulePhase(
             forceDischargeSOC,
             batterySOC
         )
+    }
+}
+
+fun Color.Companion.scheduleColor(mode: String): Color {
+    return when (mode) {
+        "FeedIn" -> PowerFlowPositive
+        "ForceCharge" -> PowerFlowNegative
+        "ForceDischarge" -> PowerFlowPositive
+        "SelfUse" -> LightGray
+        else -> Color.Black
     }
 }
 
