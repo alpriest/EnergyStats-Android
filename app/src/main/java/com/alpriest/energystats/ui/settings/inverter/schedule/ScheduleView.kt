@@ -1,9 +1,12 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -11,7 +14,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 @Composable
 fun ScheduleView(schedule: Schedule) {
     Column {
-        TimePeriodBarView(schedule.phases)
+        TimePeriodBarView(schedule.phases, modifier = Modifier.padding(bottom = 8.dp))
 
         Column {
             schedule.phases.forEach {

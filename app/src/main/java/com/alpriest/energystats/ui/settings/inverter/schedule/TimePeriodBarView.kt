@@ -24,12 +24,13 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Orange
 
 @Composable
-fun TimePeriodBarView(phases: List<SchedulePhase>) {
+fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier) {
     val height = 20.dp
 
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.Start,
+        modifier = modifier
     ) {
         Box(
             modifier = Modifier

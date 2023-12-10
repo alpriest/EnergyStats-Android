@@ -42,14 +42,16 @@ class ScheduleSummaryView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
-            is LoadState.Inactive ->
-                SettingsPage {
-                    SettingsColumnWithChild {
-                        schedule?.let {
-                            ScheduleView(it)
-                        }
-                    }
-                }
+            is LoadState.Inactive -> schedule?.let { Loaded(it) }
+        }
+    }
+
+    @Composable
+    fun Loaded(schedule: Schedule) {
+        SettingsPage {
+            SettingsColumnWithChild {
+                ScheduleView(schedule)
+            }
         }
     }
 }
