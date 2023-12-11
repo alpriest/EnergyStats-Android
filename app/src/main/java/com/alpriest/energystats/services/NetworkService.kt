@@ -26,6 +26,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
+import com.alpriest.energystats.models.SchedulerModesResponse
 import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
@@ -147,11 +148,37 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
-        TODO("Not yet implemented")
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("generic/v0/device/scheduler/modes/get")
+            .addQueryParameter("deviceID", deviceID)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<SchedulerModesResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<SchedulerModesResponse>> = fetch(request, type)
+        return response.item.result?.modes ?: throw MissingDataException()
     }
 
     override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-        TODO("Not yet implemented")
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host("www.foxesscloud.com")
+            .addPathSegments("generic/v0/device/scheduler/list")
+            .addQueryParameter("deviceSN", deviceSN)
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<ScheduleListResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<ScheduleListResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
