@@ -251,4 +251,7 @@
     <string name="data_ceiling_none_description">Values will be shown unmodified from the data feed. You may see abnormally large numbers in your usage where the data gets corrupted.</string>
     <string name="data_ceiling_mild_description">Values above 1,048,575 will be clipped. E.g. a value of 201,539,769 would be shown as 3461.8. Use this if you\'re seeing abnormally large numbers on your graphs.</string>
     <string name="data_ceiling_enhanced_description">Values above 104,857 will be clipped. E.g. a value of 45,899.7 would be shown as 24.5. Use this if you\'re seeing abnormally large numbers on your graphs.</string>
+    <string name="solar_forecasts">Solar Forecasts</string>
+    <string name="solar_forecasts_not_configured">Visit the settings tab to configure Solcast</string>
+    <string name="remove_key">Remove key</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -73,12 +74,20 @@ class SolarForecastView(
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load() }, onLogout = {/* TODO */})
+            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load() }, onLogout = {/* TODO */ })
             is LoadState.Inactive -> {
                 Column(
                     modifier = modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Text(
+                        stringResource(R.string.solar_forecasts),
+                        style = MaterialTheme.typography.h2,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.onSecondary,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
                     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                         data.map { site ->
                             ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), site.error, site.resourceId, themeStream)
@@ -86,45 +95,53 @@ class SolarForecastView(
                         }
                     }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(top = 44.dp)
-                    ) {
-                        Rectangle(
-                            color = predictionColor,
-                            modifier = Modifier
-                                .size(width = 20.dp, height = 5.dp)
-                                .padding(end = 5.dp)
-                        )
+                    if (data.isEmpty()) {
                         Text(
-                            stringResource(R.string.prediction),
-                            modifier = Modifier.padding(end = 15.dp),
-                            style = TextStyle(color = colors.onSecondary)
+                            stringResource(R.string.solar_forecasts_not_configured),
+                            modifier = Modifier.fillMaxWidth(),
+                            color = colors.onSecondary
                         )
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(top = 44.dp)
+                        ) {
+                            Rectangle(
+                                color = predictionColor,
+                                modifier = Modifier
+                                    .size(width = 20.dp, height = 5.dp)
+                                    .padding(end = 5.dp)
+                            )
+                            Text(
+                                stringResource(R.string.prediction),
+                                modifier = Modifier.padding(end = 15.dp),
+                                style = TextStyle(color = colors.onSecondary)
+                            )
 
-                        Rectangle(
-                            color = color90,
-                            modifier = Modifier
-                                .size(width = 20.dp, height = 5.dp)
-                                .padding(end = 5.dp)
-                        )
-                        Text(
-                            stringResource(R.string.high_estimate),
-                            modifier = Modifier.padding(end = 15.dp),
-                            style = TextStyle(color = colors.onSecondary)
-                        )
+                            Rectangle(
+                                color = color90,
+                                modifier = Modifier
+                                    .size(width = 20.dp, height = 5.dp)
+                                    .padding(end = 5.dp)
+                            )
+                            Text(
+                                stringResource(R.string.high_estimate),
+                                modifier = Modifier.padding(end = 15.dp),
+                                style = TextStyle(color = colors.onSecondary)
+                            )
 
-                        Rectangle(
-                            color = color10,
-                            modifier = Modifier
-                                .size(width = 20.dp, height = 5.dp)
-                                .padding(end = 5.dp)
-                        )
-                        Text(
-                            stringResource(R.string.low_estimate),
-                            modifier = Modifier.padding(end = 15.dp),
-                            style = TextStyle(color = colors.onSecondary)
-                        )
+                            Rectangle(
+                                color = color10,
+                                modifier = Modifier
+                                    .size(width = 20.dp, height = 5.dp)
+                                    .padding(end = 5.dp)
+                            )
+                            Text(
+                                stringResource(R.string.low_estimate),
+                                modifier = Modifier.padding(end = 15.dp),
+                                style = TextStyle(color = colors.onSecondary)
+                            )
+                        }
                     }
                 }
             }

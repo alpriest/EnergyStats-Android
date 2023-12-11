@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -34,6 +35,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -61,29 +63,34 @@ class SolcastSettingsView(
 
         ContentWithBottomButtons(navController, onSave = { viewModel.save() }, content = { modifier ->
             SettingsPage(modifier) {
-                Column {
-                    SettingsColumnWithChild {
-                        ClickableUrlText(
-                            text = stringResource(R.string.solcast_how_to_find_keys),
-                            modifier = Modifier.padding(bottom = 8.dp),
-                            textStyle = TextStyle(colors.onSecondary),
-                            themeStream = configManager.themeStream
-                        )
+                SettingsColumnWithChild {
+                    ClickableUrlText(
+                        text = stringResource(R.string.solcast_how_to_find_keys),
+                        modifier = Modifier.padding(bottom = 8.dp),
+                        textStyle = TextStyle(colors.onSecondary),
+                        themeStream = configManager.themeStream
+                    )
 
-                        OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = apiKey,
-                            onValueChange = { viewModel.apiKeyStream.value = it },
-                            label = { Text(stringResource(R.string.api_key)) },
-                            visualTransformation = PasswordVisualTransformation(),
-                            singleLine = true,
-                            textStyle = TextStyle(colors.onSecondary),
-                        )
-                    }
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = apiKey,
+                        onValueChange = { viewModel.apiKeyStream.value = it },
+                        label = { Text(stringResource(R.string.api_key)) },
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true,
+                        textStyle = TextStyle(colors.onSecondary),
+                    )
                 }
 
                 sites.forEach {
                     SolcastSiteView(it)
+                }
+
+                SettingsNavButton(
+                    stringResource(R.string.remove_key),
+                    disclosureIcon = null
+                ) {
+                    viewModel.removeKey()
                 }
             }
         })

@@ -250,4 +250,7 @@
     <string name="data_ceiling_none_description">Wartości będą wyświetlane bez modyfikacji z kanału danych. Możesz zobaczyć nienormalnie duże liczby w swoim użyciu, gdzie dane zostają uszkodzone.</string>
     <string name="data_ceiling_mild_description">Wartości powyżej 1 048 575 będą obcinane. Na przykład wartość 201 539 769 zostanie pokazana jako 3461.8. Użyj tego, jeśli zauważysz nienormalnie duże liczby na swoich wykresach.</string>
     <string name="data_ceiling_enhanced_description">I valori superiori a 104,857 verranno tagliati. Ad esempio, un valore di 45,899.7 verrà mostrato come 24.5. Usa questo se stai vedendo numeri anormalmente grandi sui tuoi grafici.</string>
+    <string name="solar_forecasts">Prognozy Solarne</string>
+    <string name="solar_forecasts_not_configured">Odwiedź zakładkę ustawień, aby skonfigurować Solcast</string>
+    <string name="remove_key">Usuń klucz</string>
 </resources>

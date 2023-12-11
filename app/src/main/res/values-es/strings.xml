@@ -249,4 +249,7 @@
     <string name="data_ceiling_none_description">Los valores se mostrarán sin modificar desde la fuente de datos. Puede ver números anormalmente grandes en su uso donde los datos se corrompan.</string>
     <string name="data_ceiling_mild_description">Los valores superiores a 1,048,575 serán recortados. Por ejemplo, un valor de 201,539,769 se mostrará como 3461.8. Utilice esto si observa números anormalmente grandes en sus gráficos.</string>
     <string name="data_ceiling_enhanced_description">Los valores superiores a 104,857 serán recortados. Por ejemplo, un valor de 45,899.7 se mostrará como 24.5. Utilice esto si observa números anormalmente grandes en sus gráficos</string>
+    <string name="solar_forecasts">Pronósticos Solares</string>
+    <string name="solar_forecasts_not_configured">Visita la pestaña de configuración para configurar Solcast</string>
+    <string name="remove_key">Quitar la llave</string>
 </resources>
