@@ -15,6 +15,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.InverterWorkMode
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -27,18 +28,6 @@ class ScheduleSummaryViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return ScheduleSummaryViewModel(network, configManager, navController) as T
     }
-}
-
-private fun ScheduleTemplateSummaryResponse.toScheduleTemplate(): ScheduleTemplateSummary? {
-    if (templateID.isEmpty()) {
-        return null
-    }
-
-    return ScheduleTemplateSummary(
-        templateID,
-        templateName,
-        enable
-    )
 }
 
 class ScheduleSummaryViewModel(
@@ -108,6 +97,13 @@ class ScheduleSummaryViewModel(
             }
         }
     }
+
+    fun createSchedule() {
+        val schedule = scheduleStream.value ?: return
+
+        EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = false))
+        navController.navigate(SettingsScreen.ScheduleEditor.name)
+    }
 }
 
 private fun SchedulePollcy.toSchedulePhase(modes: List<SchedulerModeResponse>): SchedulePhase? {
@@ -121,3 +117,16 @@ private fun SchedulePollcy.toSchedulePhase(modes: List<SchedulerModeResponse>): 
         color = Color.scheduleColor(workMode)
     )
 }
+
+private fun ScheduleTemplateSummaryResponse.toScheduleTemplate(): ScheduleTemplateSummary? {
+    if (templateID.isEmpty()) {
+        return null
+    }
+
+    return ScheduleTemplateSummary(
+        templateID,
+        templateName,
+        enable
+    )
+}
+

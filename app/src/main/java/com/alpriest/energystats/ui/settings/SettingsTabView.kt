@@ -79,7 +79,8 @@ enum class SettingsScreen {
     FinancialModel,
     SolarBandings,
     SolcastSolarPrediction,
-    FAQ;
+    FAQ,
+    ScheduleEditor
 }
 
 @Composable

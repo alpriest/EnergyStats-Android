@@ -1,10 +1,15 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -18,7 +23,9 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleSummaryView(
@@ -42,15 +49,33 @@ class ScheduleSummaryView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> schedule?.let { Loaded(it) }
+            is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel) }
         }
     }
 
     @Composable
-    fun Loaded(schedule: Schedule) {
+    fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel) {
         SettingsPage {
             SettingsColumnWithChild {
-                ScheduleView(schedule)
+                if (schedule.phases.isEmpty()) {
+                    NoScheduleView(viewModel)
+                } else {
+                    ScheduleView(schedule)
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun NoScheduleView(viewModel: ScheduleSummaryViewModel) {
+        Column {
+            Text(
+                "You don't have a schedule defined.",
+                modifier = Modifier.padding(vertical = 44.dp)
+            )
+
+            SettingsNavButton("Create a schedule") {
+                viewModel.createSchedule()
             }
         }
     }
