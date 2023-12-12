@@ -32,7 +32,9 @@ import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
+import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,7 +50,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
         Column(modifier = modifier.fillMaxWidth()) {
             ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                 Chart(
-                    chart = columnChart(),
+                    chart = columnChart(axisValuesOverrider = ZeroValuesAxisOverrider()),
                     chartModelProducer = viewModel.producer,
                     chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                     endAxis = rememberEndAxis(
@@ -101,4 +103,8 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
             }
         }
     }
+}
+
+class ZeroValuesAxisOverrider : AxisValuesOverrider<ChartEntryModel> {
+    override fun getMaxY(model: ChartEntryModel) = if (model.maxY != 0f) model.maxY else 1f
 }
