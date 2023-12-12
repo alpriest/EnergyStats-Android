@@ -41,6 +41,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
 import java.lang.reflect.Type
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -70,6 +72,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val original = chain.request()
+                val languageCode = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
+                val timezone = TimeZone.getDefault().id
 
                 val requestBuilder = original.newBuilder()
                     .header("token", credentials.getToken() ?: "")
@@ -81,6 +85,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
                     )
                     .header("Accept-Language", "en-US;q=0.9,en;q=0.8,de;q=0.7,nl;q=0.6")
                     .header("Content-Type", "application/json")
+                    .header("lang", languageCode)
+                    .header("timezone", timezone)
 
                 chain.proceed(requestBuilder.build())
             }
