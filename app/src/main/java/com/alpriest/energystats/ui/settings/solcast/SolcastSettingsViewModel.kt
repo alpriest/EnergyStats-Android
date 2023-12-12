@@ -40,4 +40,10 @@ class SolcastSettingsViewModel(
             alertDialogMessage.value = "Your Solcast settings failed to verify (${ex.localizedMessage}"
         }
     }
+
+    fun removeKey() {
+        configManager.solcastSettings = SolcastSettings.defaults
+        apiKeyStream.value = ""
+        sitesStream.value = listOf()
+    }
 }

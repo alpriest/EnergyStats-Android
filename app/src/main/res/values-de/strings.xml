@@ -249,4 +249,7 @@
     <string name="data_ceiling_none_description">Die Werte werden unverändert aus dem Datenfeed angezeigt. Sie können abnorm große Zahlen in Ihrer Nutzung sehen, wo die Daten beschädigt werden.</string>
     <string name="data_ceiling_mild_description">Werte über 1.048.575 werden gekürzt. Z.B. würde ein Wert von 201.539.769 als 3461.8 angezeigt werden. Verwenden Sie dies, wenn Sie abnormal große Zahlen auf Ihren Grafiken sehen.</string>
     <string name="data_ceiling_enhanced_description">Werte über 104.857 werden gekürzt. Z.B. würde ein Wert von 45.899,7 als 24,5 angezeigt werden. Verwenden Sie dies, wenn Sie abnormal große Zahlen auf Ihren Grafiken sehen.</string>
+    <string name="solar_forecasts">Solarprognosen</string>
+    <string name="solar_forecasts_not_configured">Besuchen Sie die Einstellungen, um Solcast zu konfigurieren</string>
+    <string name="remove_key">Schlüssel entfernen</string>
 </resources>
