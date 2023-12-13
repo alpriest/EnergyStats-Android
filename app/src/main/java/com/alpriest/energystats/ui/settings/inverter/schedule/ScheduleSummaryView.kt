@@ -63,7 +63,7 @@ class ScheduleSummaryView(
                 NoScheduleView(viewModel)
             } else {
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    androidx.compose.material.Text(
+                    Text(
                         text = "Current schedule",
                         style = MaterialTheme.typography.h4,
                         color = MaterialTheme.colors.onSecondary,
@@ -73,6 +73,10 @@ class ScheduleSummaryView(
 
                 SettingsColumnWithChild {
                     ScheduleView(schedule)
+    
+                    SettingsNavButton("Edit") {
+                        viewModel.editSchedule()
+                    }
                 }
             }
         }

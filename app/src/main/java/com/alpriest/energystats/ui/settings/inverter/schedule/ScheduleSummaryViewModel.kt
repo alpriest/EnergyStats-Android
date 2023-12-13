@@ -104,6 +104,13 @@ class ScheduleSummaryViewModel(
         EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = false))
         navController.navigate(SettingsScreen.ScheduleEditor.name)
     }
+
+    fun editSchedule() {
+        val schedule = scheduleStream.value ?: return
+
+        EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = true))
+        navController.navigate(SettingsScreen.ScheduleEditor.name)
+    }
 }
 
 private fun SchedulePollcy.toSchedulePhase(modes: List<SchedulerModeResponse>): SchedulePhase? {
