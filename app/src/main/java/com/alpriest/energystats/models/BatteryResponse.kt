@@ -54,7 +54,7 @@ data class ChargeTime(
 data class Time(
     val hour: Int,
     val minute: Int
-) {
+) : Comparable<Time> {
     companion object {
         fun zero(): Time {
             return Time(0, 0)
@@ -63,6 +63,14 @@ data class Time(
 
     fun formatted(): String {
         return "${"%02d".format(hour)}:${"%02d".format(minute)}"
+    }
+
+    override fun compareTo(other: Time): Int {
+        return toMinutes().compareTo(other.toMinutes())
+    }
+
+    private fun toMinutes(): Int {
+        return hour * 60 + minute
     }
 }
 

@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier) {
+fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifier) {
     val extra = when (phase.mode.key) {
         "ForceDischarge" -> " down to ${phase.forceDischargeSOC}% at ${phase.forceDischargePower}W"
         "ForceCharge" -> " up to ${phase.batterySOC}%"

@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
@@ -13,7 +15,7 @@ import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-data class EditScheduleData(val schedule: Schedule, val allowDeletion: Boolean)
+data class EditScheduleData(val schedule: Schedule, val allowDeletion: Boolean, val modes: List<SchedulerModeResponse>)
 
 class EditScheduleStore {
     private val stack = SafeStack<EditScheduleData>()
@@ -51,6 +53,7 @@ class EditScheduleViewModel(
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val scheduleStream = MutableStateFlow<Schedule?>(null)
     val allowDeletionStream = MutableStateFlow(false)
+    private var modes: List<SchedulerModeResponse> = listOf()
 
     fun load(context: Context) {
         if (uiState.value.state != LoadState.Inactive) {
@@ -61,6 +64,7 @@ class EditScheduleViewModel(
 
         scheduleStream.value = data.schedule
         allowDeletionStream.value = data.allowDeletion
+        modes = data.modes
     }
 
     fun saveSchedule(context: Context) {
@@ -70,7 +74,9 @@ class EditScheduleViewModel(
     }
 
     fun addTimePeriod() {
+        val schedule = scheduleStream.value ?: return
 
+        scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(schedule, modes = modes, device = config.currentDevice.value)
     }
 
     fun autoFillScheduleGaps() {
@@ -95,4 +101,21 @@ class SafeStack<T> {
 
     val size: Int
         get() = items.size
+}
+
+class SchedulePhaseHelper {
+    companion object {
+        fun addNewTimePeriod(schedule: Schedule, modes: List<SchedulerModeResponse>, device: Device?): Schedule {
+            val mode = modes.firstOrNull() ?: return schedule
+            val newPhase = SchedulePhase.create(mode = mode, device = device)
+            val sortedPhases = schedule.phases + newPhase
+            sortedPhases.sortedBy { it.start }
+
+            return Schedule(
+                name = schedule.name,
+                phases = sortedPhases,
+                templateID = schedule.templateID
+            )
+        }
+    }
 }

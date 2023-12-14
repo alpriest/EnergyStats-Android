@@ -16,7 +16,6 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
-import com.alpriest.energystats.ui.settings.inverter.InverterWorkMode
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ScheduleSummaryViewModelFactory(
@@ -55,7 +54,6 @@ class ScheduleSummaryViewModel(
                         modesStream.value = network.fetchScheduleModes(deviceID)
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } else {
-                        // TODO alert
                         uiState.value = UiLoadState(LoadState.Inactive)
                     }
                 } catch (ex: Exception) {
@@ -101,14 +99,14 @@ class ScheduleSummaryViewModel(
     fun createSchedule() {
         val schedule = scheduleStream.value ?: return
 
-        EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = false))
+        EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = false, modesStream.value))
         navController.navigate(SettingsScreen.ScheduleEditor.name)
     }
 
     fun editSchedule() {
         val schedule = scheduleStream.value ?: return
 
-        EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = true))
+        EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = true, modes = modesStream.value))
         navController.navigate(SettingsScreen.ScheduleEditor.name)
     }
 }

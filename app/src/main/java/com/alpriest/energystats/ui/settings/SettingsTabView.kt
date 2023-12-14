@@ -46,6 +46,7 @@ import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeView
+import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
@@ -156,6 +157,9 @@ fun NavigableSettingsView(
             SolcastSettingsView(navController, config, solarForecastingProvider).Content()
         }
         debugGraph(navController, networkStore, config, network, credentialStore)
+        composable(SettingsScreen.ScheduleEditor.name) {
+            EditScheduleView(config, network, navController, userManager).Content()
+        }
     }
 }
 

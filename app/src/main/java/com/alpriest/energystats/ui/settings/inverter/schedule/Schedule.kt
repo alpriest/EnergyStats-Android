@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.SchedulePollcy
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
@@ -56,8 +57,10 @@ data class SchedulePhase(
             )
         }
 
-        fun createWithDefaults(mode: SchedulerModeResponse): SchedulePhase {
+        fun create(mode: SchedulerModeResponse, device: Device?): SchedulePhase {
             val color: Color = Color.scheduleColor(mode.key)
+            val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
+
             return SchedulePhase(
                 UUID.randomUUID().toString(),
                 Time.current(),
@@ -65,7 +68,7 @@ data class SchedulePhase(
                 mode,
                 0,
                 10,
-                10,
+                minSOC,
                 color = color
             )
         }
