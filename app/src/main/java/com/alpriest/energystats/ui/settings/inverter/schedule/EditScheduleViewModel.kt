@@ -11,9 +11,7 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.Stack
 
 data class EditScheduleData(val schedule: Schedule, val allowDeletion: Boolean)
 
@@ -34,20 +32,20 @@ class EditScheduleStore {
 }
 
 class EditScheduleViewModelFactory(
-    private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
-    private val navHostController: NavHostController
+    private val network: FoxESSNetworking,
+    private val navController: NavHostController
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return EditScheduleViewModel(network, configManager, navHostController) as T
+        return EditScheduleViewModel(configManager, network, navController) as T
     }
 }
 
 class EditScheduleViewModel(
-    val network: FoxESSNetworking,
     val config: ConfigManaging,
-    val navHostController: NavHostController
+    val network: FoxESSNetworking,
+    val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
     override val alertDialogMessage = MutableStateFlow<String?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
@@ -67,16 +65,16 @@ class EditScheduleViewModel(
 
     fun saveSchedule(context: Context) {
         viewModelScope.launch {
-            navHostController.popBackStack()
+            navController.popBackStack()
         }
     }
 
     fun addTimePeriod() {
-        TODO("Not yet implemented")
+
     }
 
     fun autoFillScheduleGaps() {
-        TODO("Not yet implemented")
+
     }
 }
 
