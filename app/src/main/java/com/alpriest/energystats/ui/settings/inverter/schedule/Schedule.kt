@@ -32,6 +32,16 @@ data class SchedulePhase(
     val batterySOC: Int,
     val color: Color
 ) {
+    constructor(
+        start: Time,
+        end: Time,
+        mode: SchedulerModeResponse,
+        forceDischargePower: Int,
+        forceDischargeSOC: Int,
+        batterySOC: Int,
+        color: Color
+    ): this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargePower, batterySOC, color)
+
     companion object {
         fun create(
             id: String? = null,
