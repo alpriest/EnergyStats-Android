@@ -99,15 +99,15 @@ class ScheduleSummaryViewModel(
     fun createSchedule() {
         val schedule = scheduleStream.value ?: return
 
-        EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = false, modesStream.value))
-        navController.navigate(SettingsScreen.ScheduleEditor.name)
+        EditScheduleStore.shared.data = EditScheduleData(schedule, phaseId = null, allowDeletion = false, modesStream.value)
+        navController.navigate(ScheduleScreen.EditSchedule.name)
     }
 
     fun editSchedule() {
         val schedule = scheduleStream.value ?: return
 
-        EditScheduleStore.shared.push(EditScheduleData(schedule, allowDeletion = true, modes = modesStream.value))
-        navController.navigate(SettingsScreen.ScheduleEditor.name)
+        EditScheduleStore.shared.data = EditScheduleData(schedule, phaseId = null, allowDeletion = true, modes = modesStream.value)
+        navController.navigate(ScheduleScreen.EditSchedule.name)
     }
 }
 

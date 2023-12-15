@@ -56,7 +56,7 @@ fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel) {
     val allowDeletion = viewModel.allowDeletionStream.collectAsState().value
 
     SettingsPage {
-        ScheduleDetailView(schedule)
+        ScheduleDetailView(viewModel.navController, schedule)
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Button(onClick = { viewModel.addTimePeriod() }) {

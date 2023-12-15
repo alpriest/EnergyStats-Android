@@ -1,15 +1,17 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 
 @Composable
-fun ScheduleDetailView(schedule: Schedule) {
+fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
     SettingsColumnWithChild {
         if (schedule.name.isNotEmpty()) {
             Text(schedule.name)
@@ -23,9 +25,16 @@ fun ScheduleDetailView(schedule: Schedule) {
     }
 
     SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
-        // TODO: NavigationLink to SchedulePhaseEditView for each item
         schedule.phases.forEach {
-            SchedulePhaseListItemView(it, modifier = Modifier.fillMaxWidth())
+            SchedulePhaseListItemView(it,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        EditScheduleStore.shared.data?.phaseId = it.id
+                        navController.navigate(ScheduleScreen.EditPhase.name)
+                    }
+            )
         }
     }
 }
+
