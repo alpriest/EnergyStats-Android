@@ -51,36 +51,6 @@ data class ChargeTime(
     val endTime: Time
 )
 
-data class Time(
-    val hour: Int,
-    val minute: Int
-) : Comparable<Time> {
-    constructor(totalMinutes: Int): this(totalMinutes / 60, totalMinutes % 60)
-
-    companion object {
-        fun zero(): Time {
-            return Time(0, 0)
-        }
-    }
-
-    fun formatted(): String {
-        return "${"%02d".format(hour)}:${"%02d".format(minute)}"
-    }
-
-    override fun compareTo(other: Time): Int {
-        return toMinutes().compareTo(other.toMinutes())
-    }
-
-    private fun toMinutes(): Int {
-        return hour * 60 + minute
-    }
-
-    fun adding(minutes: Int): Time {
-        val newMinutes = toMinutes() + minutes
-        return Time(newMinutes)
-    }
-}
-
 data class DeviceSettingsGetResponse(
     val protocol: String,
     val values: DeviceSettingsValues

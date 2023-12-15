@@ -119,7 +119,7 @@ class BatteryChargeScheduleSettingsView(
                 TimePeriodView(
                     timePeriod.start,
                     stringResource(R.string.start),
-                    textStyle = TextStyle(color = textColor.value)
+                    labelStyle = TextStyle(color = textColor.value)
                 ) { hour, minute ->
                     timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
                 }
@@ -129,7 +129,7 @@ class BatteryChargeScheduleSettingsView(
                 TimePeriodView(
                     timePeriod.end,
                     stringResource(R.string.end),
-                    textStyle = TextStyle(color = textColor.value)
+                    labelStyle = TextStyle(color = textColor.value)
                 ) { hour, minute ->
                     timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
                 }
@@ -144,37 +144,37 @@ class BatteryChargeScheduleSettingsView(
             )
         }
     }
+}
 
-    @Composable
-    fun TimePeriodView(time: Time, title: String, textStyle: TextStyle, onChange: (Int, Int) -> Unit) {
-        val dialog = TimePickerDialog(
-            LocalContext.current, { _, mHour: Int, mMinute: Int ->
-                onChange(mHour, mMinute)
-            },
-            time.hour,
-            time.minute,
-            true
+@Composable
+fun TimePeriodView(time: Time, title: String, labelStyle: TextStyle, textStyle: TextStyle = TextStyle.Default, modifier: Modifier = Modifier, onChange: (Int, Int) -> Unit) {
+    val dialog = TimePickerDialog(
+        LocalContext.current, { _, mHour: Int, mMinute: Int ->
+            onChange(mHour, mMinute)
+        },
+        time.hour,
+        time.minute,
+        true
+    )
+
+    Row(
+        verticalAlignment = CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Text(
+            title,
+            style = labelStyle,
+            color = colors.onSecondary,
         )
 
-        Row(
-            verticalAlignment = CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                title,
-                style = textStyle,
-                color = colors.onSecondary,
-            )
-
-            Text(
-                "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}",
-                style = textStyle,
-                color = colors.onSecondary,
-                modifier = Modifier.clickable {
-                    dialog.show()
-                })
-        }
+        Text(
+            "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}",
+            style = textStyle,
+            color = colors.onSecondary,
+            modifier = Modifier.clickable {
+                dialog.show()
+            })
     }
 }
 
