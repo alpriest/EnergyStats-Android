@@ -81,5 +81,33 @@ class SchedulePhaseHelper {
                 color = Color.scheduleColor(mode.key)
             )
         }
+
+        fun update(phase: SchedulePhase, schedule: Schedule): Schedule {
+            return Schedule(
+                name = schedule.name,
+                phases = schedule.phases.map {
+                    if (it.id == phase.id) {
+                        phase
+                    } else {
+                        it
+                    }
+                },
+                templateID = schedule.templateID
+            )
+        }
+
+        fun delete(phaseID: String, schedule: Schedule): Schedule {
+            return Schedule(
+                name = schedule.name,
+                phases = schedule.phases.mapNotNull {
+                    if (it.id == phaseID) {
+                        null
+                    } else {
+                        it
+                    }
+                },
+                templateID = schedule.templateID
+            )
+        }
     }
 }

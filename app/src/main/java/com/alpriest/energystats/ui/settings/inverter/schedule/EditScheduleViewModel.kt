@@ -14,16 +14,12 @@ import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-data class EditScheduleData(
-    var schedule: Schedule,
-    var phaseId: String?,
-    val allowDeletion: Boolean,
-    val modes: List<SchedulerModeResponse>
-)
-
-class EditScheduleStore {
-    var data: EditScheduleData? = null
-
+class EditScheduleStore(
+    var schedule: Schedule? = null,
+    var phaseId: String? = null,
+    val allowDeletion: Boolean = false,
+    val modes: List<SchedulerModeResponse> = listOf()
+) {
     companion object {
         val shared: EditScheduleStore = EditScheduleStore()
     }

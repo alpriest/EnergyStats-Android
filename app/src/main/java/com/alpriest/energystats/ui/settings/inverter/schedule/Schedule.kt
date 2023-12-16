@@ -82,6 +82,18 @@ data class SchedulePhase(
                 color = color
             )
         }
+
+        fun preview(): SchedulePhase {
+            return create(
+                start = Time(hour = 19, minute = 30),
+                end = Time(hour = 23, minute = 30),
+                mode = SchedulerModeResponse(color = "#ff0000", name = "Self Use", key = "SelfUse"),
+                forceDischargePower = 0,
+                forceDischargeSOC = 20,
+                batterySOC = 20,
+                color = Color.scheduleColor("SelfUse")
+            )!!
+        }
     }
 
     val startPoint: Float
