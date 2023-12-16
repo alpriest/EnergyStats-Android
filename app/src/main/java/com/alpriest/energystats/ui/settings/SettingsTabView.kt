@@ -51,20 +51,6 @@ import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
-@Composable
-fun SettingsColumnWithChild(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    Column(
-        modifier = modifier
-            .background(colors.surface)
-            .padding(10.dp)
-    ) {
-        content()
-    }
-}
-
 enum class SettingsScreen {
     Settings,
     Debug,

@@ -36,7 +36,57 @@ import com.alpriest.energystats.R
 import kotlinx.coroutines.launch
 
 @Composable
-fun ContentWithBottomButtons(navController: NavController, onSave: suspend () -> Unit, content: @Composable BoxScope.(modifier: Modifier) -> Unit, modifier: Modifier = Modifier, footer: @Composable ColumnScope.() -> Unit = {}) {
+fun SettingsColumnWithChild(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    SettingsColumnWithChildAndFooter(modifier = modifier, content = content, footer = null, error = null)
+}
+
+@Composable
+fun SettingsColumnWithChildAndFooter(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+    footer: String?,
+    error: String?
+) {
+    Column(
+        modifier = modifier
+            .background(colors.surface)
+            .padding(10.dp)
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+            content()
+
+            footer?.let {
+                Text(
+                    it,
+                    style = MaterialTheme.typography.caption,
+                    color = colors.onSecondary,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+
+            error?.let {
+                Text(
+                    it,
+                    style = MaterialTheme.typography.caption,
+                    color = colors.error,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ContentWithBottomButtons(
+    navController: NavController,
+    onSave: suspend () -> Unit,
+    content: @Composable BoxScope.(modifier: Modifier) -> Unit,
+    modifier: Modifier = Modifier,
+    footer: @Composable ColumnScope.() -> Unit = {}
+) {
     Box(
         modifier = modifier
             .fillMaxSize()

@@ -40,7 +40,7 @@ data class SchedulePhase(
         forceDischargeSOC: Int,
         batterySOC: Int,
         color: Color
-    ): this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargePower, batterySOC, color)
+    ): this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargeSOC, batterySOC, color)
 
     companion object {
         fun create(
