@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,9 +41,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsColumnWithChild(
     modifier: Modifier = Modifier,
+    padding: PaddingValues = PaddingValues(10.dp),
     content: @Composable () -> Unit
 ) {
-    SettingsColumnWithChildAndFooter(modifier = modifier, content = content, footer = null, error = null)
+    SettingsColumnWithChildAndFooter(modifier = modifier, content = content, footer = null, error = null, padding = padding)
 }
 
 @Composable
@@ -50,12 +52,13 @@ fun SettingsColumnWithChildAndFooter(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
     footer: String?,
-    error: String?
+    error: String?,
+    padding: PaddingValues = PaddingValues(10.dp)
 ) {
     Column(
         modifier = modifier
             .background(colors.surface)
-            .padding(10.dp)
+            .padding(padding)
     ) {
         Column(modifier = Modifier.padding(horizontal = 12.dp)) {
             content()

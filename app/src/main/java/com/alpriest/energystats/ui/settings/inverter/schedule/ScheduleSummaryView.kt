@@ -1,15 +1,23 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,20 +69,25 @@ class ScheduleSummaryView(
             if (schedule.phases.isEmpty()) {
                 NoScheduleView(viewModel)
             } else {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "Current schedule",
-                        style = MaterialTheme.typography.h4,
-                        color = MaterialTheme.colors.onSecondary,
-                        modifier = Modifier.weight(1.0f)
-                    )
-                }
+                Text(
+                    text = "Current schedule",
+                    style = MaterialTheme.typography.h4,
+                    color = MaterialTheme.colors.onSecondary,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-                SettingsColumnWithChild {
-                    ScheduleView(schedule)
-    
-                    SettingsNavButton("Edit") {
-                        viewModel.editSchedule()
+                SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
+                    OutlinedButton(
+                        onClick = { viewModel.editSchedule() },
+                        border = null,
+                        contentPadding = PaddingValues()
+                    ) {
+                        ScheduleView(schedule, modifier = Modifier.weight(1.0f))
+
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = "Edit"
+                        )
                     }
                 }
             }
@@ -96,7 +109,7 @@ class ScheduleSummaryView(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun ScheduleSummaryViewPreview() {
     EnergyStatsTheme {
@@ -105,6 +118,9 @@ fun ScheduleSummaryViewPreview() {
             network = DemoFoxESSNetworking(),
             navController = NavHostController(LocalContext.current),
             userManager = FakeUserManager()
-        ).Content()
+        ).Loaded(
+            Schedule.preview(),
+            ScheduleSummaryViewModel(DemoFoxESSNetworking(), FakeConfigManager(), NavHostController(LocalContext.current))
+        )
     }
 }

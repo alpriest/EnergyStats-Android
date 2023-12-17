@@ -12,8 +12,8 @@ import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun ScheduleView(schedule: Schedule) {
-    Column {
+fun ScheduleView(schedule: Schedule, modifier: Modifier = Modifier) {
+    Column(modifier) {
         TimePeriodBarView(schedule.phases, modifier = Modifier.padding(bottom = 8.dp))
 
         Column {
