@@ -40,6 +40,7 @@ import com.alpriest.energystats.ui.settings.battery.TimePeriodView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 
 data class EditPhaseErrorData(
@@ -48,7 +49,8 @@ data class EditPhaseErrorData(
 )
 
 @Composable
-fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory())) {
+fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController))) {
+    val context = LocalContext.current
 
     ContentWithBottomButtons(navController, onSave = { viewModel.save() }, { modifier ->
         SettingsPage(modifier) {
@@ -64,7 +66,7 @@ fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewMode
                 Text("Delete phase")
             }
         }
-    })
+    }, labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply)))
 }
 
 @Composable

@@ -4,20 +4,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-class EditPhaseViewModelFactory : ViewModelProvider.Factory {
+class EditPhaseViewModelFactory(val navController: NavHostController) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return EditPhaseViewModel() as T
+        return EditPhaseViewModel(navController) as T
     }
 }
 
-class EditPhaseViewModel : ViewModel() {
+class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
     val modes = listOf(
         SchedulerModeResponse(color = "#00ff00", name = "Force charge", key = "ForceCharge"),
         SchedulerModeResponse(color = "#ff0000", name = "Force discharge", key = "ForceDischarge"),
@@ -119,6 +120,7 @@ class EditPhaseViewModel : ViewModel() {
         if (phase != null) {
             val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
             EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.update(phase, schedule)
+            navController.popBackStack()
         }
     }
 }

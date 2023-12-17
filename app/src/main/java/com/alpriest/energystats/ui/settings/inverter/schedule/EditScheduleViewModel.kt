@@ -42,31 +42,26 @@ class EditScheduleViewModel(
     val network: FoxESSNetworking,
     val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
+    val scheduleStream = EditScheduleStore.shared.scheduleStream
     override val alertDialogMessage = MutableStateFlow<String?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    val scheduleStream = MutableStateFlow<Schedule?>(null)
     val allowDeletionStream = MutableStateFlow(false)
     private var modes: List<SchedulerModeResponse> = listOf()
-    var shouldPopNavOnDismissal = false
+    private var shouldPopNavOnDismissal = false
 
-    fun load(context: Context) {
+    fun load() {
         if (uiState.value.state != LoadState.Inactive) {
             return
         }
 
-        viewModelScope.launch {
-            EditScheduleStore.shared.scheduleStream.collect {
-                scheduleStream.value = it
-                allowDeletionStream.value = EditScheduleStore.shared.allowDeletion
-                modes = EditScheduleStore.shared.modes
-            }
-        }
+        allowDeletionStream.value = EditScheduleStore.shared.allowDeletion
+        modes = EditScheduleStore.shared.modes
     }
 
     suspend fun saveSchedule(context: Context) {
-        val schedule = scheduleStream.value ?: return
+        val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
         val deviceSN = config.currentDevice.value?.deviceSN ?: return
-        if (schedule.isValid()) {
+        if (!schedule.isValid()) {
             alertDialogMessage.value = "overlapping_time_periods"
             return
         }
@@ -86,15 +81,15 @@ class EditScheduleViewModel(
     }
 
     fun addTimePeriod() {
-        val schedule = scheduleStream.value ?: return
-        scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(schedule, modes = modes, device = config.currentDevice.value)
+        val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
+        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(schedule, modes = modes, device = config.currentDevice.value)
     }
 
     fun autoFillScheduleGaps() {
-        val schedule = scheduleStream.value ?: return
+        val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
         val mode = modes.firstOrNull() ?: return
 
-        scheduleStream.value = SchedulePhaseHelper.appendPhasesInGaps(schedule, mode = mode, device = config.currentDevice.value)
+        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.appendPhasesInGaps(schedule, mode = mode, device = config.currentDevice.value)
     }
 
     fun delete(context: Context) {
