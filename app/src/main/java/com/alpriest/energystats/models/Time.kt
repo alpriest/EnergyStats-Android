@@ -27,7 +27,7 @@ data class Time(
         return toMinutes().compareTo(other.toMinutes())
     }
 
-    private fun toMinutes(): Int {
+    fun toMinutes(): Int {
         return hour * 60 + minute
     }
 

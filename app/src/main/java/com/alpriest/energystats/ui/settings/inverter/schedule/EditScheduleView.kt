@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
@@ -21,7 +22,10 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.ButtonLabels
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class EditScheduleView(
@@ -45,37 +49,42 @@ class EditScheduleView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel) }
+            is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel, navController) }
         }
     }
 }
 
 @Composable
-fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel) {
+fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController) {
     val context = LocalContext.current
     val allowDeletion = viewModel.allowDeletionStream.collectAsState().value
 
-    SettingsPage {
-        ScheduleDetailView(viewModel.navController, schedule)
+    ContentWithBottomButtons(
+        navController = navController,
+        onSave = { viewModel.saveSchedule(context) },
+        {
+            SettingsPage {
+                SettingsTitleView("Edit Schedule")
+                ScheduleDetailView(viewModel.navController, schedule)
 
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Button(onClick = { viewModel.addTimePeriod() }) {
-                Text("Add time period")
-            }
-            Button(onClick = { viewModel.autoFillScheduleGaps() }) {
-                Text("Autofill gaps")
-            }
-            Button(onClick = { viewModel.saveSchedule(context) }) {
-                Text("Activate schedule")
-            }
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Button(onClick = { viewModel.addTimePeriod() }) {
+                        Text("Add time period")
+                    }
+                    Button(onClick = { viewModel.autoFillScheduleGaps() }) {
+                        Text("Autofill gaps")
+                    }
 
-            if (allowDeletion) {
-                Button(onClick = { /* TODO */ }) {
-                    Text("Delete schedule")
+                    if (allowDeletion) {
+                        Button(onClick = { viewModel.delete(context) }) {
+                            Text("Delete schedule")
+                        }
+                    }
                 }
             }
-        }
-    }
+        },
+        labels = ButtonLabels(context.getString(R.string.cancel), "Activate")
+    )
 }
 
 @Preview(showBackground = true, widthDp = 400, heightDp = 600)
@@ -88,8 +97,8 @@ fun EditScheduleViewPreview() {
                 FakeConfigManager(),
                 DemoFoxESSNetworking(),
                 NavHostController(LocalContext.current)
-            )
+            ),
+            navController = NavHostController(LocalContext.current)
         )
     }
 }
-

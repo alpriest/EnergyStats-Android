@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUser: () -> Boolean) : FoxESSNetworking {
@@ -163,6 +164,22 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
             demoFoxESSNetworking.fetchCurrentSchedule(deviceSN)
         } else {
             network.fetchCurrentSchedule(deviceSN)
+        }
+    }
+
+    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+        if (isDemoUser()) {
+            demoFoxESSNetworking.saveSchedule(deviceSN, schedule)
+        } else {
+            network.saveSchedule(deviceSN, schedule)
+        }
+    }
+
+    override suspend fun deleteSchedule(deviceSN: String) {
+        if (isDemoUser()) {
+            demoFoxESSNetworking.deleteSchedule(deviceSN)
+        } else {
+            network.deleteSchedule(deviceSN)
         }
     }
 }

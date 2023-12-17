@@ -27,9 +27,7 @@ class NavigableScheduleSummaryView(
 
         NavHost(
             navController = navController,
-            startDestination = ScheduleScreen.Summary.name,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
+            startDestination = ScheduleScreen.Summary.name
         ) {
             composable(ScheduleScreen.Summary.name) {
                 ScheduleSummaryView(configManager, network, navController, userManager).Content()

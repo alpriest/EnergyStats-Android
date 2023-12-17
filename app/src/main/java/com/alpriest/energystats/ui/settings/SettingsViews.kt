@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
@@ -85,7 +87,8 @@ fun ContentWithBottomButtons(
     onSave: suspend () -> Unit,
     content: @Composable BoxScope.(modifier: Modifier) -> Unit,
     modifier: Modifier = Modifier,
-    footer: @Composable ColumnScope.() -> Unit = {}
+    footer: @Composable ColumnScope.() -> Unit = {},
+    labels: ButtonLabels = ButtonLabels.Defaults(LocalContext.current)
 ) {
     Box(
         modifier = modifier
@@ -104,15 +107,27 @@ fun ContentWithBottomButtons(
                         .fillMaxWidth()
                         .height(1.dp)
                 )
-                CancelSaveButtonView(
+                BottomButtonPairView(
                     navController,
                     onSave = onSave,
                     modifier = modifier
                         .background(colors.surface)
                         .padding(12.dp),
-                    footer = footer
+                    footer = footer,
+                    labels = labels
                 )
             }
+        }
+    }
+}
+
+data class ButtonLabels(val left: String, val right: String) {
+    companion object {
+        fun Defaults(context: Context): ButtonLabels {
+            return ButtonLabels(
+                context.getString(R.string.cancel),
+                context.getString(R.string.save)
+            )
         }
     }
 }
@@ -157,7 +172,13 @@ fun SettingsButtonList(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Unit, modifier: Modifier = Modifier, footer: @Composable ColumnScope.() -> Unit = {}) {
+fun BottomButtonPairView(
+    navController: NavController,
+    onSave: suspend () -> Unit,
+    modifier: Modifier = Modifier,
+    footer: @Composable() (ColumnScope.() -> Unit) = {},
+    labels: ButtonLabels
+) {
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -166,7 +187,7 @@ fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Uni
     ) {
         Row(modifier = modifier) {
             SettingsNavButton(
-                stringResource(R.string.cancel),
+                labels.left,
                 modifier = Modifier.weight(1.0f),
                 disclosureIcon = null
             ) {
@@ -176,7 +197,8 @@ fun CancelSaveButtonView(navController: NavController, onSave: suspend () -> Uni
             Spacer(modifier = Modifier.width(12.dp))
 
             SettingsNavButton(
-                stringResource(R.string.save), modifier = Modifier.weight(1.0f),
+                labels.right,
+                modifier = Modifier.weight(1.0f),
                 disclosureIcon = null
             ) {
                 coroutineScope.launch {

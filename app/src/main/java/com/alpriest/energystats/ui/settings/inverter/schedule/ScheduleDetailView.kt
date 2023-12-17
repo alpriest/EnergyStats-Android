@@ -55,22 +55,6 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
 
                 Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Edit")
             }
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier.clickable {
-//                    EditScheduleStore.shared.phaseId = it.id
-//                    navController.navigate(ScheduleScreen.EditPhase.name)
-//                }
-//            ) {
-//                SchedulePhaseListItemView(
-//                    it,
-//                    modifier = Modifier
-//                )
-//
-//                Spacer(modifier = Modifier.weight(0.1f))
-//
-//                Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Edit")
-//            }
 
             if (schedule.phases.last() != it) {
                 Divider()

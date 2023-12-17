@@ -27,6 +27,7 @@ import com.alpriest.energystats.models.SoftwareVersion
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -44,6 +45,14 @@ class DemoFoxESSNetworking : FoxESSNetworking {
 
     override suspend fun verifyCredentials(username: String, password: String) {
         // Assume valid
+    }
+
+    override suspend fun deleteSchedule(deviceSN: String) {
+        // Do nothing
+    }
+
+    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+        // Do nothing
     }
 
     override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {

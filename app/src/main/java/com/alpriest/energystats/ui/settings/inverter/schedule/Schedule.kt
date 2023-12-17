@@ -15,6 +15,27 @@ data class Schedule(
     val phases: List<SchedulePhase>,
     val templateID: String? = null
 ) {
+    fun isValid(): Boolean {
+        for ((index, phase) in phases.withIndex()) {
+            val phaseStart = phase.start.toMinutes()
+            val phaseEnd = phase.end.toMinutes()
+
+            // Check for overlap with other phases
+            for (otherPhase in phases.subList(index + 1, phases.size)) {
+                val otherStart = otherPhase.start.toMinutes()
+                val otherEnd = otherPhase.end.toMinutes()
+
+                // Check if the time periods overlap
+                // Updated to ensure periods must start/end on different minutes
+                if (phaseStart <= otherEnd && otherStart < phaseEnd) {
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
     companion object {
         fun create(name: String? = null, phases: List<SchedulePhase>, templateID: String? = null): Schedule {
             return Schedule(name ?: "Schedule", phases, templateID)

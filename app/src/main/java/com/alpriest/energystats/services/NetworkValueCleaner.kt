@@ -21,6 +21,7 @@ import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.settings.DataCeiling
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -126,6 +127,14 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 
     override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
         return network.fetchCurrentSchedule(deviceSN)
+    }
+
+    override suspend fun deleteSchedule(deviceSN: String) {
+        return network.deleteSchedule(deviceSN)
+    }
+
+    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+        return network.saveSchedule(deviceSN, schedule)
     }
 
     private fun Double.capped(dataCeiling: DataCeiling): Double {

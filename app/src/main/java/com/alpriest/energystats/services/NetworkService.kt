@@ -31,6 +31,7 @@ import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.stores.CredentialStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -113,15 +114,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     private var errorMessages = mutableMapOf<String, String>()
 
     override suspend fun fetchErrorMessages() {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/errors/message")
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.getErrorMessages()).build()
 
         val type = object : TypeToken<NetworkResponse<ErrorMessagesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<ErrorMessagesResponse>> = fetch(request, type)
@@ -130,17 +123,28 @@ class NetworkService(private val credentials: CredentialStore, private val store
         }
     }
 
-    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("generic/v0/device/scheduler/get/flag")
-            .addQueryParameter("deviceSN", deviceSN)
-            .build()
+    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+        val body = Gson().toJson("SDFSF")
+            .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
-            .url(url)
+            .url(URLs.saveSchedule())
+            .method("POST", body)
             .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
+    }
+
+    override suspend fun deleteSchedule(deviceSN: String) {
+        val request = Request.Builder().url(URLs.getDeleteSchedule(deviceSN)).build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
+    }
+
+    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
+        val request = Request.Builder().url(URLs.getSchedulerFlag(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<SchedulerFlagResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<SchedulerFlagResponse>> = fetch(request, type)
@@ -148,16 +152,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("generic/v0/device/scheduler/modes/get")
-            .addQueryParameter("deviceID", deviceID)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.schedulerModes(deviceID)).build()
 
         val type = object : TypeToken<NetworkResponse<SchedulerModesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<SchedulerModesResponse>> = fetch(request, type)
@@ -165,16 +160,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("generic/v0/device/scheduler/list")
-            .addQueryParameter("deviceSN", deviceSN)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.getCurrentSchedule(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<ScheduleListResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<ScheduleListResponse>> = fetch(request, type)
@@ -187,7 +173,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val request = Request.Builder()
             .post(body)
-            .url("https://www.foxesscloud.com/c/v0/device/list")
+            .url(URLs.deviceList())
             .build()
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
@@ -211,16 +197,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/battery/soc/get")
-            .addQueryParameter("sn", deviceSN)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.socGet(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<BatterySettingsResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatterySettingsResponse>> = fetch(request, type)
@@ -237,10 +214,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val body = Gson().toJson(ReportRequest(deviceID, variables, queryDate, reportType))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
-        val request = Request.Builder()
-            .post(body)
-            .url("https://www.foxesscloud.com/c/v0/device/history/report")
-            .build()
+        val request = Request.Builder().post(body).url(URLs.report()).build()
 
         val type = object : TypeToken<NetworkReportResponse>() {}.type
         val response: NetworkTuple<NetworkReportResponse> = fetch(request, type)
@@ -249,16 +223,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/addressbook")
-            .addQueryParameter("deviceID", deviceID)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.addressBook(deviceID)).build()
 
         val type = object : TypeToken<NetworkResponse<AddressBookResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<AddressBookResponse>> = fetch(request, type)
@@ -270,10 +235,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val body = Gson().toJson(RawRequest(deviceID, variables, queryDate))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
-        val request = Request.Builder()
-            .post(body)
-            .url("https://www.foxesscloud.com/c/v0/device/history/raw")
-            .build()
+        val request = Request.Builder().post(body).url(URLs.raw()).build()
 
         val type = object : TypeToken<NetworkRawResponse>() {}.type
         val response: NetworkTuple<NetworkRawResponse> = fetch(request, type)
@@ -282,16 +244,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/battery/info")
-            .addQueryParameter("id", deviceID)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.battery(deviceID)).build()
 
         val type = object : TypeToken<NetworkResponse<BatteryResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatteryResponse>> = fetch(request, type)
@@ -300,16 +253,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/earnings")
-            .addQueryParameter("deviceID", deviceID)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.earnings(deviceID)).build()
 
         val type = object : TypeToken<NetworkResponse<EarningsResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<EarningsResponse>> = fetch(request, type)
@@ -318,16 +262,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v1/device/variables")
-            .addQueryParameter("deviceID", deviceID)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.variables(deviceID)).build()
 
         val type = object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<VariablesResponse>> = fetch(request, type)
@@ -336,35 +271,17 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/battery/soc/set")
-            .build()
-
         val body = Gson().toJson(SetSOCRequest(minGridSoc = minGridSOC, minSoc = minSOC, sn = deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
-        val request = Request.Builder()
-            .url(url)
-            .post(body)
-            .build()
+        val request = Request.Builder().url(URLs.socSet()).post(body).build()
 
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)
     }
 
     override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/battery/time/get")
-            .addQueryParameter("sn", deviceSN)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.batteryTimes(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
@@ -373,37 +290,17 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/battery/time/set")
-            .build()
-
         val body = Gson().toJson(SetBatteryTimesRequest(sn = deviceSN, times = times))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
-        val request = Request.Builder()
-            .url(url)
-            .post(body)
-            .build()
+        val request = Request.Builder().url(URLs.batteryTimeSet()).post(body).build()
 
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)
     }
 
     override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/setting/get")
-            .addQueryParameter("id", deviceID)
-            .addQueryParameter("hasVersionHead", "1")
-            .addQueryParameter("key", "operation_mode__work_mode")
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(URLs.deviceSettings(deviceID)).build()
 
         val type = object : TypeToken<NetworkResponse<DeviceSettingsGetResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<DeviceSettingsGetResponse>> = fetch(request, type)
@@ -412,17 +309,11 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun setWorkMode(deviceID: String, workMode: String) {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/device/setting/set")
-            .build()
-
         val body = Gson().toJson(DeviceSettingsSetRequest(id = deviceID, key = "operation_mode__work_mode", values = DeviceSettingsValues(workMode)))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
-            .url(url)
+            .url(URLs.deviceSettingsSet())
             .post(body)
             .build()
 
@@ -431,19 +322,10 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host("www.foxesscloud.com")
-            .addPathSegments("c/v0/module/list")
-            .build()
-
         val body = Gson().toJson(DataLoggerListRequest())
             .toRequestBody("application/json".toMediaTypeOrNull())
 
-        val request = Request.Builder()
-            .url(url)
-            .post(body)
-            .build()
+        val request = Request.Builder().url(URLs.moduleList()).post(body).build()
 
         val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetch(request, type)
@@ -464,10 +346,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val body = Gson().toJson(AuthRequest(user = usernameToUse, password = hashedPasswordToUse))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
-        val request = Request.Builder()
-            .url("https://www.foxesscloud.com/c/v0/user/login")
-            .post(body)
-            .build()
+        val request = Request.Builder().url(URLs.login()).post(body).build()
 
         val type = object : TypeToken<NetworkResponse<AuthResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<AuthResponse>> = fetch(request, type)
