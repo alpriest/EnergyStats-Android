@@ -1,13 +1,11 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
@@ -27,7 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,13 +32,13 @@ import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatteryChargeScheduleSettingsView
+import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView

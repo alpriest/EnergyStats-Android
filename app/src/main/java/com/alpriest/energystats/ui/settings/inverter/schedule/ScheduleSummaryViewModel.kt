@@ -155,7 +155,7 @@ private fun SchedulePollcy.toSchedulePhase(modes: List<SchedulerModeResponse>): 
     )
 }
 
-private fun ScheduleTemplateSummaryResponse.toScheduleTemplate(): ScheduleTemplateSummary? {
+internal fun ScheduleTemplateSummaryResponse.toScheduleTemplate(): ScheduleTemplateSummary? {
     if (templateID.isEmpty()) {
         return null
     }

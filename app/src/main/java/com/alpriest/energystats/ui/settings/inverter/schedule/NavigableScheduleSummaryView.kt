@@ -47,7 +47,7 @@ class NavigableScheduleSummaryView(
             }
 
             composable(ScheduleScreen.TemplateList.name) {
-                ScheduleTemplateListView()
+                ScheduleTemplateListView(configManager, network, navController, userManager).Content()
             }
         }
     }

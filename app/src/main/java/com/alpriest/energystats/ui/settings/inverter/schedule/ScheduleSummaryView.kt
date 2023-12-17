@@ -1,28 +1,23 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -125,10 +120,10 @@ class ScheduleSummaryView(
                             Divider()
                         }
                     }
+                }
 
-                    Button(onClick = { navController.navigate(ScheduleScreen.TemplateList.name) }) {
-                        Text("Manage templates", color = colors.onPrimary)
-                    }
+                Button(onClick = { navController.navigate(ScheduleScreen.TemplateList.name) }) {
+                    Text("Manage templates", color = colors.onPrimary)
                 }
             }
         }
