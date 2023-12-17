@@ -129,7 +129,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
-            .url(URLs.saveSchedule())
+            .url(URLs.enableSchedule())
             .method("POST", body)
             .build()
 

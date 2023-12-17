@@ -122,8 +122,8 @@ object URLs {
             .build()
     }
 
-    fun saveSchedule(): HttpUrl {
-        return "https://www.foxesscloud.com/generic/v0/device/scheduler/save"
+    fun enableSchedule(): HttpUrl {
+        return "https://www.foxesscloud.com/generic/v0/device/scheduler/enable"
             .toHttpUrl()
     }
 
