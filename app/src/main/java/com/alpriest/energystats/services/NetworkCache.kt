@@ -33,7 +33,7 @@ data class CachedItem(val item: Any) {
 
 class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
     private var cache: MutableMap<String, CachedItem> = mutableMapOf()
-    private val shortCacheDurationInSeconds = 3
+    private val shortCacheDurationInSeconds = 5
 
     override suspend fun fetchDeviceList(): PagedDeviceListResponse {
         return network.fetchDeviceList()
