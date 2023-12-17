@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class EditScheduleStore(
-    var schedule: Schedule? = null,
+    var scheduleStream: MutableStateFlow<Schedule?> = MutableStateFlow(null),
     var phaseId: String? = null,
-    val allowDeletion: Boolean = false,
-    val modes: List<SchedulerModeResponse> = listOf()
+    var allowDeletion: Boolean = false,
+    var modes: List<SchedulerModeResponse> = listOf()
 ) {
     companion object {
         val shared: EditScheduleStore = EditScheduleStore()
@@ -52,11 +52,13 @@ class EditScheduleViewModel(
             return
         }
 
-        val data = EditScheduleStore.shared.data ?: return
-
-        scheduleStream.value = data.schedule
-        allowDeletionStream.value = data.allowDeletion
-        modes = data.modes
+        viewModelScope.launch {
+            EditScheduleStore.shared.scheduleStream.collect {
+                scheduleStream.value = it
+                allowDeletionStream.value = EditScheduleStore.shared.allowDeletion
+                modes = EditScheduleStore.shared.modes
+            }
+        }
     }
 
     fun saveSchedule(context: Context) {

@@ -30,53 +30,49 @@ class EditPhaseViewModel : ViewModel() {
     val forceDischargeSOCStream = MutableStateFlow("0")
     val minSOCStream = MutableStateFlow("0")
     val errorStream = MutableStateFlow(EditPhaseErrorData(minSOCError = null, fdSOCError = null))
-    var originalPhase: SchedulePhase? = null
+    var originalPhaseId: String? = null
 
     init {
         viewModelScope.launch {
-            combine(
-                startTimeStream,
-                endTimeStream,
-                workModeStream,
-                forceDischargePowerStream,
-                forceDischargeSOCStream,
-                minSOCStream
-            ) {
-                onChange()
-            }
+            startTimeStream.collect { validate() }
         }
 
-        EditScheduleStore.shared.schedule?.let { schedule ->
-            originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
-        }
-    }
-
-    private fun onChange() {
-        val originalPhaseId = originalPhase?.id ?: return
-
-        val phase = SchedulePhase.create(
-            id = originalPhaseId,
-            start = startTimeStream.value,
-            end = endTimeStream.value,
-            mode = workModeStream.value,
-            forceDischargePower = forceDischargePowerStream.value.toIntOrNull() ?: 0,
-            forceDischargeSOC = forceDischargeSOCStream.value.toIntOrNull() ?: 0,
-            batterySOC = minSOCStream.value.toIntOrNull() ?: 0,
-            color = Color.scheduleColor(workModeStream.value.key)
-        )
-
-        if (phase != null) {
-            val schedule = EditScheduleStore.shared.schedule ?: return
-            EditScheduleStore.shared.schedule = SchedulePhaseHelper.update(phase, schedule)
+        viewModelScope.launch {
+            endTimeStream.collect { validate() }
         }
 
-        validate()
+        viewModelScope.launch {
+            workModeStream.collect { validate() }
+        }
+
+        viewModelScope.launch {
+            forceDischargePowerStream.collect { validate() }
+        }
+
+        viewModelScope.launch {
+            forceDischargeSOCStream.collect { validate() }
+        }
+
+        viewModelScope.launch {
+            minSOCStream.collect { validate() }
+        }
+
+        EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
+            val originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
+            originalPhaseId = originalPhase.id
+            startTimeStream.value = originalPhase.start
+            endTimeStream.value = originalPhase.end
+            workModeStream.value = originalPhase.mode
+            forceDischargePowerStream.value = originalPhase.forceDischargePower.toString()
+            forceDischargeSOCStream.value = originalPhase.forceDischargeSOC.toString()
+            minSOCStream.value = originalPhase.batterySOC.toString()
+        }
     }
 
     fun deletePhase() {
-        val schedule = EditScheduleStore.shared.schedule ?: return
-        val originalPhaseID = originalPhase?.id ?: return
-        EditScheduleStore.shared.schedule = SchedulePhaseHelper.delete(originalPhaseID, schedule)
+        val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
+        val originalPhaseID = originalPhaseId ?: return
+        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.delete(originalPhaseID, schedule)
     }
 
     private fun validate() {
@@ -104,5 +100,25 @@ class EditPhaseViewModel : ViewModel() {
         }
 
         errorStream.value = EditPhaseErrorData(minSOCError, fdSOCError)
+    }
+
+    fun save() {
+        val originalPhaseId = originalPhaseId ?: return
+
+        val phase = SchedulePhase.create(
+            id = originalPhaseId,
+            start = startTimeStream.value,
+            end = endTimeStream.value,
+            mode = workModeStream.value,
+            forceDischargePower = forceDischargePowerStream.value.toIntOrNull() ?: 0,
+            forceDischargeSOC = forceDischargeSOCStream.value.toIntOrNull() ?: 0,
+            batterySOC = minSOCStream.value.toIntOrNull() ?: 0,
+            color = Color.scheduleColor(workModeStream.value.key)
+        )
+
+        if (phase != null) {
+            val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
+            EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.update(phase, schedule)
+        }
     }
 }

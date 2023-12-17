@@ -45,7 +45,7 @@ class NavigableScheduleSummaryView(
             }
 
             composable(ScheduleScreen.EditPhase.name) {
-                EditPhaseView()
+                EditPhaseView(navController)
             }
         }
     }

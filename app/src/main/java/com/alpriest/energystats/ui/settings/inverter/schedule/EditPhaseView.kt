@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -38,36 +39,20 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 
 data class EditPhaseErrorData(
     val minSOCError: String?,
     val fdSOCError: String?
 )
 
-class EditPhaseView {
-    @Composable
-    fun Content(viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory())) {
-        val startTime = viewModel.startTimeStream.collectAsState().value
-        val endTime = viewModel.endTimeStream.collectAsState().value
+@Composable
+fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory())) {
 
-        SettingsPage {
-            SettingsColumnWithChild {
-                TimePeriodView(
-                    startTime, "Start time", labelStyle = TextStyle.Default,
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.surface)
-                        .padding(vertical = 14.dp)
-                ) { hour, minute -> viewModel.startTimeStream.value = Time(hour, minute) }
-
-                TimePeriodView(
-                    endTime, "End time", labelStyle = TextStyle.Default,
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.surface)
-                        .padding(vertical = 14.dp)
-                ) { hour, minute -> viewModel.endTimeStream.value = Time(hour, minute) }
-
-                WorkModeView(viewModel)
-            }
+    ContentWithBottomButtons(navController, onSave = { viewModel.save() }, { modifier ->
+        SettingsPage(modifier) {
+            TimeAndWorkModeView(viewModel)
 
             MinSOCView(viewModel)
 
@@ -79,155 +64,179 @@ class EditPhaseView {
                 Text("Delete phase")
             }
         }
+    })
+}
+
+@Composable
+fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
+    val startTime = viewModel.startTimeStream.collectAsState().value
+    val endTime = viewModel.endTimeStream.collectAsState().value
+
+    SettingsColumnWithChild {
+        TimePeriodView(
+            startTime, "Start time", labelStyle = TextStyle.Default,
+            modifier = Modifier
+                .background(MaterialTheme.colors.surface)
+                .padding(vertical = 14.dp)
+        ) { hour, minute -> viewModel.startTimeStream.value = Time(hour, minute) }
+
+        TimePeriodView(
+            endTime, "End time", labelStyle = TextStyle.Default,
+            modifier = Modifier
+                .background(MaterialTheme.colors.surface)
+                .padding(vertical = 14.dp)
+        ) { hour, minute -> viewModel.endTimeStream.value = Time(hour, minute) }
+
+        WorkModeView(viewModel)
     }
+}
 
-    @Composable
-    fun MinSOCView(viewModel: EditPhaseViewModel) {
-        val workMode = viewModel.workModeStream.collectAsState().value
-        val minSOC = viewModel.minSOCStream.collectAsState().value
-        val footerText = when (workMode.key) {
-            "ForceDischarge" -> "The minimum battery state of charge. This must be at most the Force Discharge SOC value."
-            else -> null
-        }
-        val errorText = null
-
-        SettingsColumnWithChildAndFooter(
-            content = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.surface)
-                        .padding(vertical = 4.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.min_soc),
-                        Modifier.weight(1.0f),
-                        color = MaterialTheme.colors.onSecondary
-                    )
-                    OutlinedTextField(
-                        value = minSOC,
-                        onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
-                        modifier = Modifier.width(100.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                        trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
-                    )
-                }
-            },
-            footer = footerText,
-            error = errorText
-        )
+@Composable
+fun MinSOCView(viewModel: EditPhaseViewModel) {
+    val workMode = viewModel.workModeStream.collectAsState().value
+    val minSOC = viewModel.minSOCStream.collectAsState().value
+    val footerText = when (workMode.key) {
+        "ForceDischarge" -> "The minimum battery state of charge. This must be at most the Force Discharge SOC value."
+        else -> null
     }
+    val errorText = null
 
-    @Composable
-    fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
-        val workMode = viewModel.workModeStream.collectAsState().value
-        val fdSOC = viewModel.forceDischargeSOCStream.collectAsState().value
-        val footerText = when (workMode.key) {
-            "ForceDischarge" -> "When the battery reaches this level, discharging will stop. If you wanted to save some battery power for later, perhaps set it to 50%."
-            else -> null
-        }
-        val errorText = null
+    SettingsColumnWithChildAndFooter(
+        content = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .background(MaterialTheme.colors.surface)
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(
+                    stringResource(R.string.min_soc),
+                    Modifier.weight(1.0f),
+                    color = MaterialTheme.colors.onSecondary
+                )
+                OutlinedTextField(
+                    value = minSOC,
+                    onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
+                    modifier = Modifier.width(100.dp),
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
+                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
+                )
+            }
+        },
+        footer = footerText,
+        error = errorText
+    )
+}
 
-        SettingsColumnWithChildAndFooter(
-            content = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.surface)
-                        .padding(vertical = 4.dp)
-                ) {
-                    Text(
-                        "Force Discharge SoC",
-                        Modifier.weight(1.0f),
-                        color = MaterialTheme.colors.onSecondary
-                    )
-                    OutlinedTextField(
-                        value = fdSOC,
-                        onValueChange = { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } },
-                        modifier = Modifier.width(100.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                        trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
-                    )
-                }
-            },
-            footer = footerText,
-            error = errorText
-        )
+@Composable
+fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
+    val workMode = viewModel.workModeStream.collectAsState().value
+    val fdSOC = viewModel.forceDischargeSOCStream.collectAsState().value
+    val footerText = when (workMode.key) {
+        "ForceDischarge" -> "When the battery reaches this level, discharging will stop. If you wanted to save some battery power for later, perhaps set it to 50%."
+        else -> null
     }
+    val errorText = null
 
-    @Composable
-    fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
-        val workMode = viewModel.workModeStream.collectAsState().value
-        val fdPower = viewModel.forceDischargePowerStream.collectAsState().value
-        val footerText = when (workMode.key) {
-            "ForceDischarge" -> "The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported."
-            else -> null
-        }
-        val errorText = null
+    SettingsColumnWithChildAndFooter(
+        content = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .background(MaterialTheme.colors.surface)
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(
+                    "Force Discharge SoC",
+                    Modifier.weight(1.0f),
+                    color = MaterialTheme.colors.onSecondary
+                )
+                OutlinedTextField(
+                    value = fdSOC,
+                    onValueChange = { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } },
+                    modifier = Modifier.width(100.dp),
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
+                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
+                )
+            }
+        },
+        footer = footerText,
+        error = errorText
+    )
+}
 
-        SettingsColumnWithChildAndFooter(
-            content = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.surface)
-                        .padding(vertical = 4.dp)
-                ) {
-                    Text(
-                        "Force Discharge SoC",
-                        Modifier.weight(1.0f),
-                        color = MaterialTheme.colors.onSecondary
-                    )
-                    OutlinedTextField(
-                        value = fdPower,
-                        onValueChange = { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } },
-                        modifier = Modifier.width(100.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                        trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
-                    )
-                }
-            },
-            footer = footerText,
-            error = errorText
-        )
+@Composable
+fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
+    val workMode = viewModel.workModeStream.collectAsState().value
+    val fdPower = viewModel.forceDischargePowerStream.collectAsState().value
+    val footerText = when (workMode.key) {
+        "ForceDischarge" -> "The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported."
+        else -> null
     }
+    val errorText = null
 
-    @Composable
-    fun WorkModeView(viewModel: EditPhaseViewModel) {
-        var expanded by remember { mutableStateOf(false) }
-        val workMode = viewModel.workModeStream.collectAsState().value
+    SettingsColumnWithChildAndFooter(
+        content = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .background(MaterialTheme.colors.surface)
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(
+                    "Force Discharge SoC",
+                    Modifier.weight(1.0f),
+                    color = MaterialTheme.colors.onSecondary
+                )
+                OutlinedTextField(
+                    value = fdPower,
+                    onValueChange = { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } },
+                    modifier = Modifier.width(100.dp),
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
+                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
+                )
+            }
+        },
+        footer = footerText,
+        error = errorText
+    )
+}
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Work mode")
+@Composable
+fun WorkModeView(viewModel: EditPhaseViewModel) {
+    var expanded by remember { mutableStateOf(false) }
+    val workMode = viewModel.workModeStream.collectAsState().value
 
-            Box(contentAlignment = Alignment.TopEnd) {
-                Button(onClick = { expanded = !expanded }) {
-                    Text(
-                        workMode.name,
-                        color = MaterialTheme.colors.onPrimary
-                    )
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = null,
-                        tint = MaterialTheme.colors.onPrimary
-                    )
-                }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text("Work mode")
 
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    viewModel.modes.forEach { it ->
-                        DropdownMenuItem(onClick = {
-                            expanded = false
-                            viewModel.workModeStream.value = it
-                        }) {
-                            Text(it.name)
-                        }
+        Box(contentAlignment = Alignment.TopEnd) {
+            Button(onClick = { expanded = !expanded }) {
+                Text(
+                    workMode.name,
+                    color = MaterialTheme.colors.onPrimary
+                )
+                Icon(
+                    imageVector = Icons.Filled.ArrowDropDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                viewModel.modes.forEach { it ->
+                    DropdownMenuItem(onClick = {
+                        expanded = false
+                        viewModel.workModeStream.value = it
+                    }) {
+                        Text(it.name)
                     }
                 }
             }
@@ -239,10 +248,7 @@ class EditPhaseView {
 @Composable
 fun EditPhaseViewPreview() {
     EnergyStatsTheme {
-        EditPhaseView(originalPhase = SchedulePhase.preview(),
-            onDelete = {},
-            onChange = { }
-        ).Content()
+        EditPhaseView(NavHostController(LocalContext.current))
     }
 }
 
