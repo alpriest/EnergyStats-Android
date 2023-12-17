@@ -117,6 +117,10 @@ class ScheduleSummaryViewModel(
 
         navController.navigate(ScheduleScreen.EditSchedule.name)
     }
+
+    fun activate(scheduleTemplateSummary: ScheduleTemplateSummary) {
+        TODO("Not yet implemented")
+    }
 }
 
 private fun SchedulePollcy.toSchedulePhase(modes: List<SchedulerModeResponse>): SchedulePhase? {

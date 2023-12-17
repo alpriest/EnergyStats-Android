@@ -36,7 +36,6 @@ class EditScheduleView(
 ) {
     @Composable
     fun Content(viewModel: EditScheduleViewModel = viewModel(factory = EditScheduleViewModelFactory(configManager, network, navController))) {
-        val context = LocalContext.current
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 
