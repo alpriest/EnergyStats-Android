@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.SchedulePollcy
@@ -17,6 +18,7 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class ScheduleSummaryViewModelFactory(
     private val network: FoxESSNetworking,
@@ -90,8 +92,6 @@ class ScheduleSummaryViewModel(
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
-            } ?: {
-                uiState.value = UiLoadState(LoadState.Inactive)
             }
         }
     }
@@ -118,8 +118,28 @@ class ScheduleSummaryViewModel(
         navController.navigate(ScheduleScreen.EditSchedule.name)
     }
 
-    fun activate(scheduleTemplateSummary: ScheduleTemplateSummary) {
-        TODO("Not yet implemented")
+    fun activate(scheduleTemplate: ScheduleTemplateSummary, context: Context) {
+        if (uiState.value.state != LoadState.Inactive) {
+            return
+        }
+
+        viewModelScope.launch {
+            runCatching {
+                config.currentDevice.value?.let { device ->
+                    val deviceSN = device.deviceSN
+
+                    uiState.value = UiLoadState(LoadState.Active("Activating..."))
+
+                    try {
+                        network.enableScheduleTemplate(deviceSN, scheduleTemplate.id)
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                        load(context)
+                    } catch (ex: Exception) {
+                        uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    }
+                }
+            }
+        }
     }
 }
 

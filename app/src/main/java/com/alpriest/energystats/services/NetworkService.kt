@@ -23,6 +23,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportRequest
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleEnableRequest
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.ScheduleSaveRequest
 import com.alpriest.energystats.models.SchedulerFlagResponse
@@ -126,6 +127,19 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
     override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
         val body = Gson().toJson(ScheduleSaveRequest(schedule.phases.map { it.toPollcy() }, templateID = null, deviceSN = deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .url(URLs.enableSchedule())
+            .method("POST", body)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
+    }
+
+    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
+        val body = Gson().toJson(ScheduleEnableRequest(templateID = templateID, deviceSN = deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()

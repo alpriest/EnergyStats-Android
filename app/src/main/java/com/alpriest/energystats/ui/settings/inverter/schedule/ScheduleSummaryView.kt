@@ -74,6 +74,7 @@ class ScheduleSummaryView(
     @Composable
     fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel) {
         val templates = viewModel.templateStream.collectAsState().value
+        val context = LocalContext.current
 
         SettingsPage {
             if (schedule.phases.isEmpty()) {
@@ -116,7 +117,7 @@ class ScheduleSummaryView(
                             Spacer(modifier = Modifier.weight(0.1f))
 
                             ActivateButton {
-                                viewModel.activate(it)
+                                viewModel.activate(it, context)
                             }
                         }
 
@@ -125,7 +126,7 @@ class ScheduleSummaryView(
                         }
                     }
 
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = { navController.navigate(ScheduleScreen.TemplateList.name) }) {
                         Text("Manage templates", color = colors.onPrimary)
                     }
                 }

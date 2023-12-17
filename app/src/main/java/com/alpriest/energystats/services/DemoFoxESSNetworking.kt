@@ -47,6 +47,10 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         // Assume valid
     }
 
+    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
+        // Do nothing
+    }
+
     override suspend fun deleteSchedule(deviceSN: String) {
         // Do nothing
     }

@@ -159,6 +159,10 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
         network.deleteSchedule(deviceSN)
     }
 
+    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
+        network.enableScheduleTemplate(deviceSN, templateID)
+    }
+
     private fun makeKey(base: String, vararg arguments: String): String {
         return listOf(base, *arguments).joinToString(separator = "_")
     }
