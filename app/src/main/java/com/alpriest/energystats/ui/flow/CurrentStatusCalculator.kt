@@ -12,8 +12,7 @@ import java.time.ZoneId
 import java.util.Locale
 
 class CurrentStatusCalculator(device: Device, raws: List<RawResponse>, shouldInvertCT2: Boolean, shouldCombineCT2WithPVPower: Boolean) {
-    private val ACtoDCconversion = 0.92
-    val currentCT2: Double = (if (shouldInvertCT2) 0 - raws.currentValue("meterPower2") else raws.currentValue("meterPower2")) / ACtoDCconversion
+    val currentCT2: Double = (if (shouldInvertCT2) 0 - raws.currentValue("meterPower2") else raws.currentValue("meterPower2"))
     val currentSolarPower: Double = calculateSolarPower(device, raws, shouldCombineCT2WithPVPower)
     val currentHomeConsumption: Double = raws.currentValue("loadsPower")
     val currentGrid: Double = raws.currentValue("feedInPower") - raws.currentValue("gridConsumptionPower")

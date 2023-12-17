@@ -24,6 +24,7 @@ import com.alpriest.energystats.models.ReportRequest
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
+import com.alpriest.energystats.models.ScheduleSaveRequest
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.SchedulerModesResponse
@@ -124,7 +125,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
-        val body = Gson().toJson("SDFSF")
+        val body = Gson().toJson(ScheduleSaveRequest(schedule.phases.map { it.toPollcy() }, templateID = null, deviceSN = deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
