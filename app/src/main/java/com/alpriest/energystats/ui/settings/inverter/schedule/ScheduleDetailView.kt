@@ -31,29 +31,31 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
         Text("You have no time periods defined. Add a time period to define how you'd like your inverter to behave during specific hours.")
     }
 
-    SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
-        schedule.phases.forEach {
-            OutlinedButton(
-                onClick = {
-                    EditScheduleStore.shared.phaseId = it.id
-                    navController.navigate(SettingsScreen.EditPhase.name)
+    if (schedule.phases.isNotEmpty()) {
+        SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
+            schedule.phases.forEach {
+                OutlinedButton(
+                    onClick = {
+                        EditScheduleStore.shared.phaseId = it.id
+                        navController.navigate(SettingsScreen.EditPhase.name)
 
-                },
-                border = null,
-                contentPadding = PaddingValues()
-            ) {
-                SchedulePhaseListItemView(
-                    it,
-                    modifier = Modifier
-                )
+                    },
+                    border = null,
+                    contentPadding = PaddingValues()
+                ) {
+                    SchedulePhaseListItemView(
+                        it,
+                        modifier = Modifier
+                    )
 
-                Spacer(modifier = Modifier.weight(0.1f))
+                    Spacer(modifier = Modifier.weight(0.1f))
 
-                Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Edit")
-            }
+                    Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Edit")
+                }
 
-            if (schedule.phases.last() != it) {
-                Divider()
+                if (schedule.phases.last() != it) {
+                    Divider()
+                }
             }
         }
     }

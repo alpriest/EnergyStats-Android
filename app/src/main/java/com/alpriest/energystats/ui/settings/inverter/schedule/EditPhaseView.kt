@@ -101,7 +101,7 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
         "ForceDischarge" -> "The minimum battery state of charge. This must be at most the Force Discharge SOC value."
         else -> null
     }
-    val errorText = null
+    val errorText = viewModel.errorStream.collectAsState().value
 
     SettingsColumnWithChildAndFooter(
         content = {
@@ -126,7 +126,7 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
             }
         },
         footer = footerText,
-        error = errorText
+        error = errorText.minSOCError
     )
 }
 
@@ -138,7 +138,7 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
         "ForceDischarge" -> "When the battery reaches this level, discharging will stop. If you wanted to save some battery power for later, perhaps set it to 50%."
         else -> null
     }
-    val errorText = null
+    val errorText = viewModel.errorStream.collectAsState().value
 
     SettingsColumnWithChildAndFooter(
         content = {
@@ -163,7 +163,7 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
             }
         },
         footer = footerText,
-        error = errorText
+        error = errorText.fdSOCError
     )
 }
 
@@ -175,7 +175,6 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
         "ForceDischarge" -> "The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported."
         else -> null
     }
-    val errorText = null
 
     SettingsColumnWithChildAndFooter(
         content = {
@@ -200,7 +199,7 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
             }
         },
         footer = footerText,
-        error = errorText
+        error = null
     )
 }
 

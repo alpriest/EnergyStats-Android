@@ -80,7 +80,7 @@ class ScheduleSummaryView(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            if (!schedule.phases.isEmpty()) {
+            if (schedule.phases.isEmpty()) {
                 NoScheduleView(viewModel)
             } else {
                 SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {

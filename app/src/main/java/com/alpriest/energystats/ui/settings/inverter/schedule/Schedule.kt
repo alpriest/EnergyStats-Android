@@ -30,6 +30,10 @@ data class Schedule(
                 if (phaseStart <= otherEnd && otherStart < phaseEnd) {
                     return false
                 }
+
+                if (!phase.isValid()) {
+                    return false
+                }
             }
         }
 
@@ -138,6 +142,10 @@ data class SchedulePhase(
             forceDischargeSOC,
             batterySOC
         )
+    }
+
+    fun isValid(): Boolean {
+        return batterySOC <= forceDischargeSOC
     }
 }
 

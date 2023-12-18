@@ -19,21 +19,30 @@ class EditPhaseViewModelFactory(val navController: NavHostController) : ViewMode
 }
 
 class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
-    val modes = listOf(
-        SchedulerModeResponse(color = "#00ff00", name = "Force charge", key = "ForceCharge"),
-        SchedulerModeResponse(color = "#ff0000", name = "Force discharge", key = "ForceDischarge"),
-        SchedulerModeResponse(color = "#ff0000", name = "Self Use", key = "SelfUse"),
-    )
+    val modes: List<SchedulerModeResponse> = EditScheduleStore.shared.modes
     val startTimeStream = MutableStateFlow(Time.now())
     val endTimeStream = MutableStateFlow(Time.now())
-    val workModeStream = MutableStateFlow(modes.first())
+    val workModeStream: MutableStateFlow<SchedulerModeResponse>
     val forceDischargePowerStream = MutableStateFlow("0")
     val forceDischargeSOCStream = MutableStateFlow("0")
     val minSOCStream = MutableStateFlow("0")
     val errorStream = MutableStateFlow(EditPhaseErrorData(minSOCError = null, fdSOCError = null))
-    var originalPhaseId: String? = null
+    private var originalPhaseId: String? = null
 
     init {
+        workModeStream = MutableStateFlow(modes.first())
+
+        EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
+            val originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
+            originalPhaseId = originalPhase.id
+            startTimeStream.value = originalPhase.start
+            endTimeStream.value = originalPhase.end
+            workModeStream.value = originalPhase.mode
+            forceDischargePowerStream.value = originalPhase.forceDischargePower.toString()
+            forceDischargeSOCStream.value = originalPhase.forceDischargeSOC.toString()
+            minSOCStream.value = originalPhase.batterySOC.toString()
+        }
+
         viewModelScope.launch {
             startTimeStream.collect { validate() }
         }
@@ -56,17 +65,6 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
 
         viewModelScope.launch {
             minSOCStream.collect { validate() }
-        }
-
-        EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
-            val originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
-            originalPhaseId = originalPhase.id
-            startTimeStream.value = originalPhase.start
-            endTimeStream.value = originalPhase.end
-            workModeStream.value = originalPhase.mode
-            forceDischargePowerStream.value = originalPhase.forceDischargePower.toString()
-            forceDischargeSOCStream.value = originalPhase.forceDischargeSOC.toString()
-            minSOCStream.value = originalPhase.batterySOC.toString()
         }
     }
 
@@ -117,8 +115,10 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
             color = Color.scheduleColor(workModeStream.value.key)
         )
 
-        if (phase != null) {
-            val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
+        validate()
+
+        val schedule = EditScheduleStore.shared.scheduleStream.value
+        if (phase != null && schedule != null && schedule.isValid()) {
             EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.update(phase, schedule)
             navController.popBackStack()
         }
