@@ -42,6 +42,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
             }
 
             SettingsColumnWithChild {
+                SettingsTitleView("Display Options")
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_temperatures),
                     state = showInverterTemperaturesState,

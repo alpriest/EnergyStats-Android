@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
@@ -16,10 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 
 @Composable
-fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
+fun ScheduleDetailView(title: String, navController: NavHostController, schedule: Schedule) {
     SettingsColumnWithChild {
+        SettingsTitleView(title)
+        Spacer(modifier = Modifier.height(16.dp))
+
         if (schedule.name.isNotEmpty()) {
             Text(schedule.name)
         }

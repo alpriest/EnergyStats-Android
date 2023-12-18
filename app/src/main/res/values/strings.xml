@@ -28,8 +28,8 @@
     <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Deducts the Min SOC amount from the battery charge level and percentage. Due to inaccuracies in the way battery levels are measured this may result in occasionally showing a negative amount remaining.</string>
     <string name="show_sunny_background">Show sunny background</string>
     <string name="refresh_frequency">Refresh frequency</string>
-    <string name="_1_min">1 min</string>
-    <string name="_5_mins">5 mins</string>
+    <string name="_1_min">1m</string>
+    <string name="_5_mins">5m</string>
     <string name="auto">Auto</string>
     <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">FoxESS Cloud data is updated every 5 minutes. Auto attempts to synchronise fetches just after the data feed uploads to minimise server load.</string>
     <string name="decimal_places">Decimal places</string>
@@ -143,13 +143,9 @@
     <string name="self_use">Self Use</string>
     <string name="feed_in_first">Feed In First</string>
     <string name="backup">Backup</string>
-    <string name="power_station">Power Station</string>
-    <string name="peak_shaving">Peak Shaving</string>
     <string name="self_use_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Battery Charging\n3. Export</string>
     <string name="feed_in_first_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Export\n3. Battery Charging</string>
     <string name="backup_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. Battery Charging\n2. House Load\n3. Export</string>
-    <string name="powerstation_mode">This mode has unknown behaviour</string>
-    <string name="peak_shaving_mode">This mode has unknown behaviour</string>
     <string name="find_out_more_about_work_modes">Find out more about work modes</string>
     <string name="inverter">Inverter</string>
     <string name="configure_work_mode">Configure Work Mode</string>

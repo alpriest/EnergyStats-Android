@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -40,6 +41,7 @@ import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleSummaryView(
@@ -73,17 +75,13 @@ class ScheduleSummaryView(
         val context = LocalContext.current
 
         SettingsPage {
-            Text(
-                text = "Active schedule",
-                style = MaterialTheme.typography.h4,
-                color = colors.onSecondary,
-                modifier = Modifier.fillMaxWidth()
-            )
+            SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
+                SettingsTitleView("Active schedule")
+                Spacer(modifier = Modifier.height(16.dp))
 
-            if (schedule.phases.isEmpty()) {
-                NoScheduleView(viewModel)
-            } else {
-                SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
+                if (schedule.phases.isEmpty()) {
+                    NoScheduleView(viewModel)
+                } else {
                     OutlinedButton(
                         onClick = { viewModel.editSchedule() },
                         border = null,
@@ -99,27 +97,26 @@ class ScheduleSummaryView(
                 }
             }
 
-            Text(
-                text = "Templates",
-                style = MaterialTheme.typography.h4,
-                color = colors.onSecondary,
-                modifier = Modifier.fillMaxWidth()
-            )
-
             SettingsColumnWithChild {
-                templates.forEach {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(it.name)
+                SettingsTitleView("Templates")
 
-                        Spacer(modifier = Modifier.weight(0.1f))
+                if (schedule.phases.isEmpty()) {
+                    Text("You have no templates")
+                } else {
+                    templates.forEach {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(it.name)
 
-                        ActivateButton {
-                            viewModel.activate(it, context)
+                            Spacer(modifier = Modifier.weight(0.1f))
+
+                            ActivateButton {
+                                viewModel.activate(it, context)
+                            }
                         }
-                    }
 
-                    if (templates.last() != it) {
-                        Divider()
+                        if (templates.last() != it) {
+                            Divider()
+                        }
                     }
                 }
             }

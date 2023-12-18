@@ -18,6 +18,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
@@ -53,8 +54,7 @@ class EditTemplateView(
         val context = LocalContext.current
 
         SettingsPage {
-            SettingsTitleView("Edit template")
-            ScheduleDetailView(viewModel.navController, schedule)
+            ScheduleDetailView("Edit template", viewModel.navController, schedule)
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Button(onClick = { viewModel.addTimePeriod() }) {

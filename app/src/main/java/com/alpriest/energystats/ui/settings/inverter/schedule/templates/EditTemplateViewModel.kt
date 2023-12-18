@@ -95,7 +95,7 @@ class EditTemplateViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                     shouldPopNavOnDismissal = true
-                    alertDialogMessage.value = context.getString(R.string.inverter_charge_schedule_deleted)
+                    alertDialogMessage.value = "Your template was deleted"
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
@@ -127,7 +127,7 @@ class EditTemplateViewModel(
 
                         uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
-                        alertDialogMessage.value = "Template updated"
+                        alertDialogMessage.value = "Your template was saved"
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                     }
@@ -153,7 +153,7 @@ class EditTemplateViewModel(
 
                         uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
-                        alertDialogMessage.value = context.getString(R.string.inverter_charge_schedule_deleted)
+                        alertDialogMessage.value = "Your template was activated"
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                     }

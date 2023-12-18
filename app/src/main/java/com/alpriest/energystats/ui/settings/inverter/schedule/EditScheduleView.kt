@@ -1,7 +1,9 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
@@ -24,6 +27,7 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -63,8 +67,7 @@ fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: 
         onSave = { viewModel.saveSchedule(context) },
         { modifier ->
             SettingsPage(modifier) {
-                SettingsTitleView("Edit Schedule")
-                ScheduleDetailView(viewModel.navController, schedule)
+                ScheduleDetailView("Edit Schedule", viewModel.navController, schedule)
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Button(onClick = { viewModel.addTimePeriod() }) {

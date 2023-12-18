@@ -42,10 +42,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.ErrorTextView
 
 data class EditPhaseErrorData(
     val minSOCError: String?,
-    val fdSOCError: String?
+    val fdSOCError: String?,
+    val timeError: String?
 )
 
 @Composable
@@ -63,7 +65,7 @@ fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewMode
             ForceDischargePowerView(viewModel)
 
             Button(onClick = { viewModel.deletePhase() }) {
-                Text("Delete phase")
+                Text("Delete time period")
             }
         }
     }, labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply)))
@@ -73,6 +75,7 @@ fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewMode
 fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
     val startTime = viewModel.startTimeStream.collectAsState().value
     val endTime = viewModel.endTimeStream.collectAsState().value
+    val errorText = viewModel.errorStream.collectAsState().value
 
     SettingsColumnWithChild {
         TimePeriodView(
@@ -88,6 +91,8 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
                 .background(MaterialTheme.colors.surface)
                 .padding(vertical = 14.dp)
         ) { hour, minute -> viewModel.endTimeStream.value = Time(hour, minute) }
+
+        ErrorTextView(errorText.timeError)
 
         WorkModeView(viewModel)
     }

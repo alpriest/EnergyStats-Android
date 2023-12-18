@@ -77,7 +77,7 @@ fun SettingsTabView(
     val uriHandler = LocalUriHandler.current
 
     SettingsPage {
-        Column {
+        SettingsButtonList {
             SettingsNavButton(stringResource(R.string.inverter)) { navController.navigate(SettingsScreen.Inverter.name) }
 
             currentDevice.value?.let {
@@ -90,6 +90,7 @@ fun SettingsTabView(
         }
 
         DisplaySettingsView(config)
+        RefreshFrequencySettingsView(config)
 
         Column {
             SettingsNavButton(stringResource(R.string.self_sufficiency_estimates)) { navController.navigate(SettingsScreen.SelfSufficiencyEstimates.name) }
@@ -97,8 +98,6 @@ fun SettingsTabView(
             SettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
             SettingsNavButton("Solcast Solar Prediction") { navController.navigate(SettingsScreen.SolcastSolarPrediction.name) }
         }
-
-        RefreshFrequencySettingsView(config)
 
         Column {
             SettingsNavButton(

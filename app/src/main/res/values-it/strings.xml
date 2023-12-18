@@ -29,8 +29,8 @@
     <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Deduca l\'importo Min SOC dal livello e percentuale di carica della batteria. A causa delle inaccuracie nella misurazione dei livelli della batteria, potrebbe risultare occasionalmente un importo residuo negativo.</string>
     <string name="show_sunny_background">Mostra sfondo soleggiato</string>
     <string name="refresh_frequency">Frequenza di aggiornamento</string>
-    <string name="_1_min">1 min</string>
-    <string name="_5_mins">5 min</string>
+    <string name="_1_min">1m</string>
+    <string name="_5_mins">5m</string>
     <string name="auto">Automatico</string>
     <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">I dati di FoxESS Cloud vengono aggiornati ogni 5 minuti. L\'opzione Automatico tenta di sincronizzare i recuperi subito dopo il caricamento del feed dati per ridurre al minimo il carico del server.</string>
     <string name="decimal_places">Cifre decimali</string>
@@ -144,13 +144,9 @@
     <string name="self_use">Autoconsumo</string>
     <string name="feed_in_first">Alimentazione in Primo Luogo</string>
     <string name="backup">Backup</string>
-    <string name="power_station">Stazione di Energia</string>
-    <string name="peak_shaving">Riduzione dei Picchi</string>
     <string name="self_use_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carico della casa\n2. Carica della batteria\n3. Esportazione</string>
     <string name="feed_in_first_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carico della casa\n2. Esportazione\n3. Carica della batteria</string>
     <string name="backup_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carica della batteria\n2. Carico della casa\n3. Esportazione</string>
-    <string name="powerstation_mode">Questa modalità ha un comportamento sconosciuto</string>
-    <string name="peak_shaving_mode">Questa modalità ha un comportamento sconosciuto</string>
     <string name="find_out_more_about_work_modes">Scopri di più sui modi di lavoro</string>
     <string name="inverter">Inverter</string>
     <string name="configure_work_mode">Configura modalità di lavoro</string>

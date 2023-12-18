@@ -28,29 +28,28 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
     val refreshFrequency = rememberSaveable { mutableStateOf(RefreshFrequency.Auto) }
 
     SettingsColumnWithChild {
-        SettingsTitleView(stringResource(R.string.refresh_frequency))
+        SettingsSegmentedControl(
+            title = "Refresh frequency",
+            segmentedControl = {
+                val items = RefreshFrequency.values()
 
-        SettingsSegmentedControl(title = null, segmentedControl = {
-            val items = RefreshFrequency.values()
+                val itemTitles = listOf(
+                    stringResource(R.string._1_min),
+                    stringResource(R.string._5_mins),
+                    stringResource(R.string.auto)
+                )
 
-            val itemTitles = listOf(
-                stringResource(R.string._1_min),
-                stringResource(R.string._5_mins),
-                stringResource(R.string.auto)
-            )
-
-            SegmentedControl(
-                items = itemTitles,
-                defaultSelectedItemIndex = items.indexOf(refreshFrequency.value),
-                useFixedWidth = true,
-                color = colors.primary
-            ) {
-                refreshFrequency.value = items[it]
-                config.refreshFrequency = items[it]
-            }
-        }, footer = buildAnnotatedString {
-            append(stringResource(R.string.foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load))
-        })
+                SegmentedControl(
+                    items = itemTitles,
+                    defaultSelectedItemIndex = items.indexOf(refreshFrequency.value),
+                    color = colors.primary
+                ) {
+                    refreshFrequency.value = items[it]
+                    config.refreshFrequency = items[it]
+                }
+            }, footer = buildAnnotatedString {
+                append(stringResource(R.string.foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load))
+            })
     }
 }
 

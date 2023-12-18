@@ -29,6 +29,7 @@ import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -159,6 +160,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumnWithChild {
+            SettingsTitleView("Display Options")
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_full_empty_estimate),
                 state = showBatteryEstimateState,

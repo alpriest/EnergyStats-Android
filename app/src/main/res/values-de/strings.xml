@@ -29,8 +29,8 @@
     <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">\'Zeige nur die verwendbare Batteriekapazität\' leitet den minimalen SOC vom Batterieladezustand und -prozentsatz ab. Aufgrund von Ungenauigkeiten in der Art und Weise, wie der Batterieladezustand gemessen wird, kann dies manchmal zur Anzeige von einer negativen verbleibenden Restladung führen.</string>
     <string name="show_sunny_background">Zeige den Sonnenschein-Hintergrund</string>
     <string name="refresh_frequency">Aktualisierungshäufigkeit</string>
-    <string name="_1_min">1 min</string>
-    <string name="_5_mins">5 mins</string>
+    <string name="_1_min">1m</string>
+    <string name="_5_mins">5m</string>
     <string name="auto">Auto</string>
     <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">FoxESS Cloud-Daten werden alle 5 Minuten aktualisiert. \'Auto\' versucht, die Datenabfragen direkt nach dem Upload von Ihrem Wechselrichter zu synchronisieren, um die Server-Last zu minimieren.</string>
     <string name="decimal_places">Dezimalstellen</string>
@@ -143,13 +143,9 @@
     <string name="self_use">Eigenverbrauch</string>
     <string name="feed_in_first">Einspeisung zuerst</string>
     <string name="backup">Backup</string>
-    <string name="power_station">Stromstation</string>
-    <string name="peak_shaving">Lastspitzenabdeckung</string>
     <string name="self_use_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Hauslast\n2. Batterieladung\n3. Einspeisung</string>
     <string name="feed_in_first_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Hauslast\n2. Einspeisung\n3. Batterieladung</string>
     <string name="backup_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Batterieladung\n2. Hauslast\n3. Einspeisung</string>
-    <string name="powerstation_mode">In diesem Modus ist das Verhalten unbekannt</string>
-    <string name="peak_shaving_mode">In diesem Modus ist das Verhalten unbekannt</string>
     <string name="find_out_more_about_work_modes">Erfahren Sie mehr über Arbeitsmodi</string>
     <string name="inverter">Wechselrichter</string>
     <string name="configure_work_mode">Arbeitsmodus konfigurieren</string>

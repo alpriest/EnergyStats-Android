@@ -98,8 +98,8 @@ data class SchedulePhase(
 
             return SchedulePhase(
                 UUID.randomUUID().toString(),
-                Time.current(),
-                Time.current(),
+                Time.now(),
+                Time.now().adding(1),
                 mode,
                 0,
                 minSOC,
@@ -145,7 +145,7 @@ data class SchedulePhase(
     }
 
     fun isValid(): Boolean {
-        return batterySOC <= forceDischargeSOC
+        return batterySOC <= forceDischargeSOC && end > start
     }
 }
 
@@ -157,11 +157,6 @@ fun Color.Companion.scheduleColor(mode: String): Color {
         "SelfUse" -> LightGray
         else -> Color.Black
     }
-}
-
-private fun Time.Companion.current(): Time {
-    val now = LocalDateTime.now()
-    return Time(now.hour, now.minute)
 }
 
 data class ScheduleTemplateSummary(

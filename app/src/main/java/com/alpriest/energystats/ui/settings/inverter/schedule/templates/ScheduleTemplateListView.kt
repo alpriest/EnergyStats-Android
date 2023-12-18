@@ -42,6 +42,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplateSummary
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -85,14 +86,9 @@ class ScheduleTemplateListView(
     @Composable
     fun Loaded(templates: List<ScheduleTemplateSummary>, viewModel: ScheduleTemplateListViewModel) {
         SettingsPage {
-            Text(
-                text = "Templates",
-                style = MaterialTheme.typography.h4,
-                color = MaterialTheme.colors.onSecondary,
-                modifier = Modifier.fillMaxWidth()
-            )
-
             SettingsColumnWithChild {
+                SettingsTitleView("Templates")
+
                 templates.forEach {
                     OutlinedButton(
                         onClick = {
@@ -134,14 +130,9 @@ class ScheduleTemplateListView(
             }
         }
 
-        Text(
-            text = "New template",
-            style = MaterialTheme.typography.h4,
-            color = MaterialTheme.colors.onSecondary,
-            modifier = Modifier.fillMaxWidth()
-        )
-
         SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
+            SettingsTitleView("New template")
+
             OutlinedTextField(
                 value = newTemplateName,
                 onValueChange = { newTemplateName = it },

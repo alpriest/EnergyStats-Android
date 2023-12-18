@@ -188,12 +188,6 @@ enum class WorkMode {
     },
     BACKUP {
         override fun asInverterWorkMode(): InverterWorkMode = InverterWorkMode.BACKUP
-    },
-    POWER_STATION {
-        override fun asInverterWorkMode(): InverterWorkMode = InverterWorkMode.POWER_STATION
-    },
-    PEAK_SHAVING {
-        override fun asInverterWorkMode(): InverterWorkMode = InverterWorkMode.PEAK_SHAVING
     };
 
     abstract fun asInverterWorkMode(): InverterWorkMode
@@ -203,8 +197,6 @@ enum class WorkMode {
             SELF_USE -> context.getString(R.string.self_use)
             FEED_IN_FIRST -> context.getString(R.string.feed_in_first)
             BACKUP -> context.getString(R.string.backup)
-            POWER_STATION -> context.getString(R.string.power_station)
-            PEAK_SHAVING -> context.getString(R.string.peak_shaving)
         }
     }
 
@@ -213,8 +205,6 @@ enum class WorkMode {
             SELF_USE -> context.getString(R.string.self_use_mode)
             FEED_IN_FIRST -> context.getString(R.string.feed_in_first_mode)
             BACKUP -> context.getString(R.string.backup_mode)
-            POWER_STATION -> context.getString(R.string.powerstation_mode)
-            PEAK_SHAVING -> context.getString(R.string.peak_shaving_mode)
         }
     }
 }
@@ -222,9 +212,7 @@ enum class WorkMode {
 enum class InverterWorkMode(val text: String) {
     SELF_USE("SelfUse"),
     FEED_IN_FIRST("Feedin"),
-    BACKUP("Backup"),
-    POWER_STATION("PowerStation"),
-    PEAK_SHAVING("PeakShaving");
+    BACKUP("Backup");
 
     companion object {
         fun from(value: String): InverterWorkMode {
@@ -237,8 +225,6 @@ enum class InverterWorkMode(val text: String) {
             SELF_USE -> WorkMode.SELF_USE
             FEED_IN_FIRST -> WorkMode.FEED_IN_FIRST
             BACKUP -> WorkMode.BACKUP
-            POWER_STATION -> WorkMode.POWER_STATION
-            PEAK_SHAVING -> WorkMode.PEAK_SHAVING
         }
     }
 }

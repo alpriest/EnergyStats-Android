@@ -33,6 +33,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
@@ -72,15 +74,20 @@ fun SettingsColumnWithChildAndFooter(
                 )
             }
 
-            error?.let {
-                Text(
-                    it,
-                    style = MaterialTheme.typography.caption,
-                    color = colors.error,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-            }
+            ErrorTextView(error)
         }
+    }
+}
+
+@Composable
+fun ErrorTextView(text: String?) {
+    text?.let {
+        Text(
+            it,
+            style = MaterialTheme.typography.caption,
+            color = colors.error,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
     }
 }
 
@@ -167,9 +174,7 @@ fun SettingsPage(modifier: Modifier = Modifier, content: @Composable () -> Unit)
 
 @Composable
 fun SettingsButtonList(content: @Composable () -> Unit) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
+    Column {
         content()
     }
 }
@@ -229,7 +234,8 @@ fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onUpdate: (Boo
             Text(
                 title,
                 color = colors.onSecondary,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                style = TextStyle.Default.copy(fontWeight = FontWeight.SemiBold)
             )
 
             Checkbox(
@@ -238,7 +244,7 @@ fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onUpdate: (Boo
                     state.value = it
                     onUpdate(it)
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
             )
         }
 
@@ -263,7 +269,8 @@ fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composabl
                 Text(
                     it,
                     color = colors.onSecondary,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    style = TextStyle.Default.copy(fontWeight = FontWeight.Bold)
                 )
             }
 

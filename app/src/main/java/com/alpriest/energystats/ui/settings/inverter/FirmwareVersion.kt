@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.inverter
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme.colors
@@ -22,7 +23,7 @@ import com.alpriest.energystats.ui.settings.SettingsTitleView
 
 @Composable
 fun SettingsRow(title: String, value: String?) {
-    SettingsRow(title = title) {
+    SettingsRow(title) {
         Text(value ?: "(unknown)", color = colors.onSecondary)
     }
 }
@@ -35,11 +36,13 @@ fun SettingsRow(title: String, content: @Composable () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
+            .defaultMinSize(minHeight = 30.dp)
     ) {
-        Text(title,
+        Text(
+            title,
             color = colors.onSecondary,
-            style = TextStyle.Default.copy(fontWeight = FontWeight.Medium),
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier.padding(end = 8.dp),
+            style = TextStyle.Default.copy(fontWeight = FontWeight.Bold)
         )
         content()
     }
