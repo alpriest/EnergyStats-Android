@@ -126,7 +126,7 @@ class ScheduleSummaryViewModel(
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
 
-                    uiState.value = UiLoadState(LoadState.Active("Activating..."))
+                    uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
 
                     try {
                         network.enableScheduleTemplate(deviceSN, scheduleTemplate.id)

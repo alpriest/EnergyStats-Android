@@ -18,6 +18,7 @@ import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +55,10 @@ data class EditPhaseErrorData(
 fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController))) {
     val context = LocalContext.current
 
+    LaunchedEffect(null) {
+        viewModel.load(context)
+    }
+
     ContentWithBottomButtons(navController, onSave = { viewModel.save() }, { modifier ->
         SettingsPage(modifier) {
             TimeAndWorkModeView(viewModel)
@@ -65,7 +70,7 @@ fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewMode
             ForceDischargePowerView(viewModel)
 
             Button(onClick = { viewModel.deletePhase() }) {
-                Text("Delete time period")
+                Text(stringResource(R.string.delete_time_period))
             }
         }
     }, labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply)))
@@ -79,14 +84,14 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
 
     SettingsColumnWithChild {
         TimePeriodView(
-            startTime, "Start time", labelStyle = TextStyle.Default,
+            startTime, stringResource(R.string.start_time), labelStyle = TextStyle.Default,
             modifier = Modifier
                 .background(MaterialTheme.colors.surface)
                 .padding(vertical = 14.dp)
         ) { hour, minute -> viewModel.startTimeStream.value = Time(hour, minute) }
 
         TimePeriodView(
-            endTime, "End time", labelStyle = TextStyle.Default,
+            endTime, stringResource(R.string.end_time), labelStyle = TextStyle.Default,
             modifier = Modifier
                 .background(MaterialTheme.colors.surface)
                 .padding(vertical = 14.dp)
@@ -103,7 +108,7 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
     val workMode = viewModel.workModeStream.collectAsState().value
     val minSOC = viewModel.minSOCStream.collectAsState().value
     val footerText = when (workMode.key) {
-        "ForceDischarge" -> "The minimum battery state of charge. This must be at most the Force Discharge SOC value."
+        "ForceDischarge" -> stringResource(R.string.force_discharge_timeperiod_minsoc_description)
         else -> null
     }
     val errorText = viewModel.errorStream.collectAsState().value
@@ -140,7 +145,7 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
     val workMode = viewModel.workModeStream.collectAsState().value
     val fdSOC = viewModel.forceDischargeSOCStream.collectAsState().value
     val footerText = when (workMode.key) {
-        "ForceDischarge" -> "When the battery reaches this level, discharging will stop. If you wanted to save some battery power for later, perhaps set it to 50%."
+        "ForceDischarge" -> stringResource(R.string.force_discharge_timeperiod_fdsoc_description)
         else -> null
     }
     val errorText = viewModel.errorStream.collectAsState().value
@@ -154,7 +159,7 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
                     .padding(vertical = 4.dp)
             ) {
                 Text(
-                    "Force Discharge SoC",
+                    stringResource(R.string.force_discharge_soc),
                     Modifier.weight(1.0f),
                     color = MaterialTheme.colors.onSecondary
                 )
@@ -177,7 +182,7 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
     val workMode = viewModel.workModeStream.collectAsState().value
     val fdPower = viewModel.forceDischargePowerStream.collectAsState().value
     val footerText = when (workMode.key) {
-        "ForceDischarge" -> "The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported."
+        "ForceDischarge" -> stringResource(R.string.force_discharge_timeperiod_power_description)
         else -> null
     }
 
@@ -190,7 +195,7 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
                     .padding(vertical = 4.dp)
             ) {
                 Text(
-                    "Force Discharge SoC",
+                    stringResource(R.string.force_discharge_power),
                     Modifier.weight(1.0f),
                     color = MaterialTheme.colors.onSecondary
                 )
@@ -218,7 +223,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text("Work mode")
+        Text(stringResource(R.string.work_mode))
 
         Box(contentAlignment = Alignment.TopEnd) {
             Button(onClick = { expanded = !expanded }) {

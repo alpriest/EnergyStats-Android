@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -67,25 +68,25 @@ fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: 
         onSave = { viewModel.saveSchedule(context) },
         { modifier ->
             SettingsPage(modifier) {
-                ScheduleDetailView("Edit Schedule", viewModel.navController, schedule)
+                ScheduleDetailView(stringResource(R.string.edit_schedule), viewModel.navController, schedule)
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Button(onClick = { viewModel.addTimePeriod() }) {
-                        Text("Add time period")
+                        Text(stringResource(R.string.add_time_period))
                     }
                     Button(onClick = { viewModel.autoFillScheduleGaps() }) {
-                        Text("Autofill gaps")
+                        Text(stringResource(R.string.autofill_gaps))
                     }
 
                     if (allowDeletion) {
                         Button(onClick = { viewModel.delete(context) }) {
-                            Text("Delete schedule")
+                            Text(stringResource(R.string.delete_schedule))
                         }
                     }
                 }
             }
         },
-        labels = ButtonLabels(context.getString(R.string.cancel), "Activate")
+        labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.activate))
     )
 }
 

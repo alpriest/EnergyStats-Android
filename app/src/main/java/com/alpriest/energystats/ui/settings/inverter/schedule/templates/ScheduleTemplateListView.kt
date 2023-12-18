@@ -87,7 +87,7 @@ class ScheduleTemplateListView(
     fun Loaded(templates: List<ScheduleTemplateSummary>, viewModel: ScheduleTemplateListViewModel) {
         SettingsPage {
             SettingsColumnWithChild {
-                SettingsTitleView("Templates")
+                SettingsTitleView(stringResource(R.string.templates))
 
                 templates.forEach {
                     OutlinedButton(
@@ -131,22 +131,22 @@ class ScheduleTemplateListView(
         }
 
         SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
-            SettingsTitleView("New template")
+            SettingsTitleView(stringResource(R.string.new_template))
 
             OutlinedTextField(
                 value = newTemplateName,
                 onValueChange = { newTemplateName = it },
-                label = { Text("Name") }
+                label = { Text(stringResource(R.string.name)) }
             )
             OutlinedTextField(
                 value = newTemplateDescription,
                 onValueChange = { newTemplateDescription = it },
-                label = { Text("Description") }
+                label = { Text(stringResource(R.string.description)) }
             )
 
             Button(onClick = { triggerCreateFunction = true }) {
                 Text(
-                    "Create new template",
+                    stringResource(R.string.create_new_template),
                     color = MaterialTheme.colors.onPrimary
                 )
             }

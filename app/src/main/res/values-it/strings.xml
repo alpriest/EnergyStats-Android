@@ -251,4 +251,11 @@
     <string name="remove_key">Rimuovere la chiave</string>
     <string name="inverter_charge_schedule_settings_saved">Le impostazioni del programma del tuo inverter sono state salvate. Si prega di essere consapevoli che le impostazioni del programma avranno la priorità su qualsiasi programma di carica della batteria, min SOC e modalità di lavoro dell\'inverter che avevi precedentemente configurato.</string>
     <string name="inverter_charge_schedule_deleted">Il tuo programma è stato eliminato</string>
+    <string name="active_schedule">Programma attivo</string>
+    <string name="templates">Modelli</string>
+    <string name="manage_templates">Gestire modelli</string>
+    <string name="activate">Attivare</string>
+    <string name="create_a_schedule">Crea un programma</string>
+    <string name="activating">Attivando</string>
+    <string name="no_schedule_time_periods">Non hai periodi di tempo definiti. Aggiungi un periodo di tempo per definire come desideri che il tuo inverter si comporti durante ore specifiche.</string>
 </resources>

@@ -52,7 +52,7 @@ class EditScheduleViewModel(
         }
 
         runCatching {
-            uiState.value = UiLoadState(LoadState.Active("Activating..."))
+            uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
             try {
                 network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
 
@@ -83,13 +83,13 @@ class EditScheduleViewModel(
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
 
-                    uiState.value = UiLoadState(LoadState.Active("Deleting..."))
+                    uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.deleting)))
 
                     try {
                         network.deleteSchedule(deviceSN)
 
                         shouldPopNavOnDismissal = true
-                        alertDialogMessage.value = "Your schedule was deleted"
+                        alertDialogMessage.value = context.getString(R.string.your_schedule_was_deleted)
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))

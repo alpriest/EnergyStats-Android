@@ -22,10 +22,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
@@ -76,7 +78,7 @@ class ScheduleSummaryView(
 
         SettingsPage {
             SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
-                SettingsTitleView("Active schedule")
+                SettingsTitleView(stringResource(R.string.active_schedule))
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (schedule.phases.isEmpty()) {
@@ -98,10 +100,10 @@ class ScheduleSummaryView(
             }
 
             SettingsColumnWithChild {
-                SettingsTitleView("Templates")
+                SettingsTitleView(stringResource(R.string.templates))
 
                 if (schedule.phases.isEmpty()) {
-                    Text("You have no templates")
+                    Text(stringResource(R.string.you_have_no_templates))
                 } else {
                     templates.forEach {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -122,7 +124,7 @@ class ScheduleSummaryView(
             }
 
             Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
-                Text("Manage templates", color = colors.onPrimary)
+                Text(stringResource(R.string.manage_templates), color = colors.onPrimary)
             }
         }
     }
@@ -131,7 +133,7 @@ class ScheduleSummaryView(
     fun ActivateButton(onClick: () -> Unit) {
         Button(onClick = onClick) {
             Text(
-                "Activate",
+                stringResource(R.string.activate),
                 color = colors.onPrimary
             )
         }
@@ -140,7 +142,7 @@ class ScheduleSummaryView(
     @Composable
     fun NoScheduleView(viewModel: ScheduleSummaryViewModel) {
         Column {
-            SettingsNavButton("Create a schedule") {
+            SettingsNavButton(stringResource(R.string.create_a_schedule)) {
                 viewModel.createSchedule()
             }
         }

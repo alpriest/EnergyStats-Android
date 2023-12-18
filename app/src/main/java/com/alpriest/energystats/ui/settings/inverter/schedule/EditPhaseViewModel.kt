@@ -1,10 +1,12 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +24,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
     val modes: List<SchedulerModeResponse> = EditScheduleStore.shared.modes
     val startTimeStream = MutableStateFlow(Time.now())
     val endTimeStream = MutableStateFlow(Time.now())
-    val workModeStream: MutableStateFlow<SchedulerModeResponse>
+    val workModeStream: MutableStateFlow<SchedulerModeResponse> = MutableStateFlow(modes.first())
     val forceDischargePowerStream = MutableStateFlow("0")
     val forceDischargeSOCStream = MutableStateFlow("0")
     val minSOCStream = MutableStateFlow("0")
@@ -30,8 +32,6 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
     private var originalPhaseId: String? = null
 
     init {
-        workModeStream = MutableStateFlow(modes.first())
-
         EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
             val originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
             originalPhaseId = originalPhase.id
@@ -42,29 +42,31 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
             forceDischargeSOCStream.value = originalPhase.forceDischargeSOC.toString()
             minSOCStream.value = originalPhase.batterySOC.toString()
         }
+    }
 
+    fun load(context: Context) {
         viewModelScope.launch {
-            startTimeStream.collect { validate() }
+            startTimeStream.collect { validate(context) }
         }
 
         viewModelScope.launch {
-            endTimeStream.collect { validate() }
+            endTimeStream.collect { validate(context) }
         }
 
         viewModelScope.launch {
-            workModeStream.collect { validate() }
+            workModeStream.collect { validate(context) }
         }
 
         viewModelScope.launch {
-            forceDischargePowerStream.collect { validate() }
+            forceDischargePowerStream.collect { validate(context) }
         }
 
         viewModelScope.launch {
-            forceDischargeSOCStream.collect { validate() }
+            forceDischargeSOCStream.collect { validate(context) }
         }
 
         viewModelScope.launch {
-            minSOCStream.collect { validate() }
+            minSOCStream.collect { validate(context) }
         }
     }
 
@@ -75,39 +77,39 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
         navController.popBackStack()
     }
 
-    private fun validate() {
+    private fun validate(context: Context) {
         var minSOCError: String? = null
         var fdSOCError: String? = null
         var timeError: String? = null
 
         minSOCStream.value.toIntOrNull()?.let {
             if (it < 10 || it > 100) {
-                minSOCError = "Please enter a number between 10 and 100"
+                minSOCError = context.getString(R.string.please_enter_a_number_between_10_and_100)
             }
         }
 
         forceDischargeSOCStream.value.toIntOrNull()?.let {
             if (it < 10 || it > 100) {
-                fdSOCError = "Please enter a number between 10 and 100"
+                fdSOCError = context.getString(R.string.please_enter_a_number_between_10_and_100)
             }
         }
 
         minSOCStream.value.toIntOrNull()?.let { soc ->
             forceDischargeSOCStream.value.toIntOrNull()?.let { fdSOC ->
                 if (soc > fdSOC) {
-                    minSOCError = "Min SoC must be less than or equal to Force Discharge SoC"
+                    minSOCError = context.getString(R.string.min_soc_must_be_less_than_or_equal_to_force_discharge_soc)
                 }
             }
         }
 
         if (startTimeStream.value >= endTimeStream.value) {
-            timeError = "End time must be after start time"
+            timeError = context.getString(R.string.end_time_must_be_after_start_time)
         }
 
         errorStream.value = EditPhaseErrorData(minSOCError, fdSOCError, timeError)
     }
 
-    fun save() {
+    fun save(context: Context) {
         val originalPhaseId = originalPhaseId ?: return
 
         val phase = SchedulePhase.create(
@@ -121,7 +123,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
             color = Color.scheduleColor(workModeStream.value.key)
         )
 
-        validate()
+        validate(context)
 
         val schedule = EditScheduleStore.shared.scheduleStream.value
         if (phase != null && schedule != null && schedule.isValid()) {

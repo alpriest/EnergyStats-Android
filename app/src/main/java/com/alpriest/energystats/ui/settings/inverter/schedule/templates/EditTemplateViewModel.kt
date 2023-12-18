@@ -88,14 +88,14 @@ class EditTemplateViewModel(
     fun delete(context: Context) {
         viewModelScope.launch {
             runCatching {
-                uiState.value = UiLoadState(LoadState.Active("Deleting..."))
+                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.deleting)))
 
                 try {
                     network.deleteScheduleTemplate(templateID)
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                     shouldPopNavOnDismissal = true
-                    alertDialogMessage.value = "Your template was deleted"
+                    alertDialogMessage.value = context.getString(R.string.your_template_was_deleted)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
@@ -120,14 +120,14 @@ class EditTemplateViewModel(
             runCatching {
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
-                    uiState.value = UiLoadState(LoadState.Active("Saving..."))
+                    uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
                     try {
                         network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
 
                         uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
-                        alertDialogMessage.value = "Your template was saved"
+                        alertDialogMessage.value = context.getString(R.string.your_template_was_saved)
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                     }
@@ -145,15 +145,15 @@ class EditTemplateViewModel(
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
                     try {
-                        uiState.value = UiLoadState(LoadState.Active("Saving..."))
+                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
                         network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
 
-                        uiState.value = UiLoadState(LoadState.Active("Activating..."))
+                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
                         network.enableScheduleTemplate(deviceSN, templateID)
 
                         uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
-                        alertDialogMessage.value = "Your template was activated"
+                        alertDialogMessage.value = context.getString(R.string.your_template_was_activated)
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                     }

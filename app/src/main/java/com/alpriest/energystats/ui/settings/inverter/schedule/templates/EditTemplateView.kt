@@ -9,8 +9,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
@@ -54,27 +56,27 @@ class EditTemplateView(
         val context = LocalContext.current
 
         SettingsPage {
-            ScheduleDetailView("Edit template", viewModel.navController, schedule)
+            ScheduleDetailView(stringResource(R.string.edit_template), viewModel.navController, schedule)
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Button(onClick = { viewModel.addTimePeriod() }) {
-                    Text("Add time period")
+                    Text(stringResource(R.string.add_time_period))
                 }
 
                 Button(onClick = { viewModel.autoFillScheduleGaps() }) {
-                    Text("Autofill gaps")
+                    Text(stringResource(R.string.autofill_gaps))
                 }
 
                 Button(onClick = { viewModel.saveTemplate(context) }) {
-                    Text("Save template")
+                    Text(stringResource(R.string.save_template))
                 }
 
                 Button(onClick = { viewModel.activate(context) }) {
-                    Text("Activate template")
+                    Text(stringResource(R.string.activate_template))
                 }
 
                 Button(onClick = { viewModel.delete(context) }) {
-                    Text("Delete template")
+                    Text(stringResource(R.string.delete_template))
                 }
             }
         }

@@ -13,8 +13,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -36,7 +38,7 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
     }
 
     if (schedule.phases.isEmpty()) {
-        Text("You have no time periods defined. Add a time period to define how you'd like your inverter to behave during specific hours.")
+        Text(stringResource(R.string.no_schedule_time_periods))
     }
 
     if (schedule.phases.isNotEmpty()) {
