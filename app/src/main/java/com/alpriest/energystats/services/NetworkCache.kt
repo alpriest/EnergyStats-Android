@@ -15,10 +15,12 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
+import com.alpriest.energystats.models.ScheduleTemplateListResponse
 import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import java.lang.Math.abs
 
@@ -174,6 +176,14 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 
     override suspend fun createScheduleTemplate(name: String, description: String) {
         network.createScheduleTemplate(name, description)
+    }
+
+    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
+        return network.fetchScheduleTemplates()
+    }
+
+    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
+        network.saveScheduleTemplate(deviceSN, scheduleTemplate)
     }
 
     private fun makeKey(base: String, vararg arguments: String): String {

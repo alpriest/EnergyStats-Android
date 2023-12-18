@@ -130,7 +130,7 @@ class ScheduleTemplateListView(
         LaunchedEffect(triggerCreateFunction) {
             if (triggerCreateFunction) {
                 viewModel.createTemplate(newTemplateName, newTemplateDescription, context)
-                triggerCreateFunction = false // Reset the trigger
+                triggerCreateFunction = false
             }
         }
 
@@ -145,7 +145,7 @@ class ScheduleTemplateListView(
             OutlinedTextField(
                 value = newTemplateName,
                 onValueChange = { newTemplateName = it },
-                label = { androidx.compose.material.Text(stringResource(R.string.username)) }
+                label = { Text("Name") }
             )
             OutlinedTextField(
                 value = newTemplateDescription,

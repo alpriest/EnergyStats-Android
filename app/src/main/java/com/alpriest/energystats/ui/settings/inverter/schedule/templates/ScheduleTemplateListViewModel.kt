@@ -35,8 +35,8 @@ class ScheduleTemplateListViewModel(
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {
-                    val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-                    templateStream.value = scheduleResponse.data.mapNotNull { it.toScheduleTemplate() }
+                    val templatesResponse = network.fetchScheduleTemplates()
+                    templateStream.value = templatesResponse.data.mapNotNull { it.toScheduleTemplate() }
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {

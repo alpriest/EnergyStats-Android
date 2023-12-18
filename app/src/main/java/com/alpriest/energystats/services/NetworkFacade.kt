@@ -2,6 +2,7 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUser: () -> Boolean) : FoxESSNetworking {
@@ -212,6 +213,22 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
             demoFoxESSNetworking.createScheduleTemplate(name, description)
         } else {
             network.createScheduleTemplate(name, description)
+        }
+    }
+
+    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.fetchScheduleTemplates()
+        } else {
+            network.fetchScheduleTemplates()
+        }
+    }
+
+    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
+        if (isDemoUser()) {
+            demoFoxESSNetworking.saveScheduleTemplate(deviceSN, scheduleTemplate)
+        } else {
+            network.saveScheduleTemplate(deviceSN, scheduleTemplate)
         }
     }
 }

@@ -163,6 +163,14 @@ object URLs {
     fun createScheduleTemplate(): HttpUrl {
         return "https://www.foxesscloud.com/generic/v0/device/scheduler/create".toHttpUrl()
     }
+
+    fun fetchScheduleTemplates(): HttpUrl {
+        return "https://www.foxesscloud.com/generic/v0/device/scheduler/edit/list?templateType=2".toHttpUrl()
+    }
+
+    fun saveScheduleTemplate(): HttpUrl {
+        return "https://www.foxesscloud.com/generic/v0/device/scheduler/save".toHttpUrl()
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

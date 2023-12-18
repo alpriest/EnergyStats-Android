@@ -27,6 +27,7 @@ import com.alpriest.energystats.models.ScheduleEnableRequest
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.ScheduleSaveRequest
 import com.alpriest.energystats.models.ScheduleTemplateCreateRequest
+import com.alpriest.energystats.models.ScheduleTemplateListResponse
 import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
@@ -36,6 +37,7 @@ import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -125,6 +127,32 @@ class NetworkService(private val credentials: CredentialStore, private val store
         response.item.result?.messages?.let {
             this.errorMessages = it[it.keys.first()] ?: mutableMapOf()
         }
+    }
+
+    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
+        val body = Gson().toJson(
+            ScheduleSaveRequest(
+                pollcy = scheduleTemplate.phases.map { it.toPollcy() },
+                templateID = scheduleTemplate.id,
+                deviceSN
+            )
+        ).toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .url(URLs.saveScheduleTemplate())
+            .method("POST", body)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
+    }
+
+    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
+        val request = Request.Builder().url(URLs.fetchScheduleTemplates()).build()
+
+        val type = object : TypeToken<NetworkResponse<ScheduleTemplateListResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<ScheduleTemplateListResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun createScheduleTemplate(name: String, description: String) {

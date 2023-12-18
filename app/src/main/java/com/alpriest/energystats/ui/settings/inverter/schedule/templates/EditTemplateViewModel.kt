@@ -15,6 +15,7 @@ import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.toSchedulePhase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -73,12 +74,12 @@ class EditTemplateViewModel(
     }
 
     fun addTimePeriod() {
-        val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
+        val schedule = scheduleStream.value ?: return
         EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(schedule, modes = modes, device = config.currentDevice.value)
     }
 
     fun autoFillScheduleGaps() {
-        val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
+        val schedule = scheduleStream.value ?: return
         val mode = modes.firstOrNull() ?: return
 
         EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.appendPhasesInGaps(schedule, mode = mode, device = config.currentDevice.value)
@@ -94,7 +95,7 @@ class EditTemplateViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                     shouldPopNavOnDismissal = true
-                    alertDialogMessage.value = context.getString(R.string.battery_charge_schedule_was_saved)
+                    alertDialogMessage.value = context.getString(R.string.inverter_charge_schedule_deleted)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
@@ -109,5 +110,55 @@ class EditTemplateViewModel(
             navController.popBackStack()
         }
         shouldPopNavOnDismissal = false
+    }
+
+    fun saveTemplate(context: Context) {
+        val schedule = scheduleStream.value ?: return
+        if (templateID == "") return
+
+        viewModelScope.launch {
+            runCatching {
+                config.currentDevice.value?.let { device ->
+                    val deviceSN = device.deviceSN
+                    uiState.value = UiLoadState(LoadState.Active("Saving..."))
+
+                    try {
+                        network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
+
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                        shouldPopNavOnDismissal = true
+                        alertDialogMessage.value = "Template updated"
+                    } catch (ex: Exception) {
+                        uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    }
+                }
+            }
+        }
+    }
+
+    fun activate(context: Context) {
+        val schedule = scheduleStream.value ?: return
+        if (templateID == "") return
+
+        viewModelScope.launch {
+            runCatching {
+                config.currentDevice.value?.let { device ->
+                    val deviceSN = device.deviceSN
+                    try {
+                        uiState.value = UiLoadState(LoadState.Active("Saving..."))
+                        network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
+
+                        uiState.value = UiLoadState(LoadState.Active("Activating..."))
+                        network.enableScheduleTemplate(deviceSN, templateID)
+
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                        shouldPopNavOnDismissal = true
+                        alertDialogMessage.value = context.getString(R.string.inverter_charge_schedule_deleted)
+                    } catch (ex: Exception) {
+                        uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    }
+                }
+            }
+        }
     }
 }

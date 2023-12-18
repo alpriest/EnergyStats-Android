@@ -38,7 +38,7 @@ class ScheduleSummaryViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     val scheduleStream = MutableStateFlow<Schedule?>(null)
     val supportedStream = MutableStateFlow(false)
-    val modesStream = MutableStateFlow<List<SchedulerModeResponse>>(listOf())
+    private var modes = EditScheduleStore.shared.modes
     val templateStream = MutableStateFlow<List<ScheduleTemplateSummary>>(listOf())
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<String?>(null)
@@ -53,7 +53,8 @@ class ScheduleSummaryViewModel(
                 try {
                     supportedStream.value = network.fetchSchedulerFlag(deviceSN).support
                     if (supportedStream.value) {
-                        modesStream.value = network.fetchScheduleModes(deviceID)
+                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
+                        modes = EditScheduleStore.shared.modes
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } else {
                         uiState.value = UiLoadState(LoadState.Inactive)
@@ -72,14 +73,13 @@ class ScheduleSummaryViewModel(
             return
         }
 
-        if (modesStream.value.isEmpty()) {
+        if (modes.isEmpty()) {
             preload(context)
         }
 
         runCatching {
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
-                val modes = modesStream.value
 
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
@@ -102,7 +102,6 @@ class ScheduleSummaryViewModel(
         EditScheduleStore.shared.scheduleStream.value = schedule
         EditScheduleStore.shared.phaseId = null
         EditScheduleStore.shared.allowDeletion = false
-        EditScheduleStore.shared.modes = modesStream.value
 
         navController.navigate(SettingsScreen.EditSchedule.name)
     }
@@ -113,7 +112,6 @@ class ScheduleSummaryViewModel(
         EditScheduleStore.shared.scheduleStream.value = schedule
         EditScheduleStore.shared.phaseId = null
         EditScheduleStore.shared.allowDeletion = true
-        EditScheduleStore.shared.modes = modesStream.value
 
         navController.navigate(SettingsScreen.EditSchedule.name)
     }

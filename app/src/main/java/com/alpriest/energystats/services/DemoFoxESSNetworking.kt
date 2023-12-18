@@ -20,6 +20,7 @@ import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.SchedulePollcy
+import com.alpriest.energystats.models.ScheduleTemplateListResponse
 import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.ScheduleTemplateSummaryResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
@@ -29,6 +30,7 @@ import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -61,6 +63,10 @@ class DemoFoxESSNetworking : FoxESSNetworking {
     }
 
     override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+        // Do nothing
+    }
+
+    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
         // Do nothing
     }
 
@@ -245,5 +251,15 @@ class DemoFoxESSNetworking : FoxESSNetworking {
     }
 
     override suspend fun deleteScheduleTemplate(templateID: String) {
+    }
+
+    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
+        return ScheduleTemplateListResponse(
+            data = listOf(
+                ScheduleTemplateSummaryResponse(templateName = "Winter charging", enable = false, templateID = "1"),
+                ScheduleTemplateSummaryResponse(templateName = "Summer charging", enable = false, templateID = "2"),
+                ScheduleTemplateSummaryResponse(templateName = "Saving session", enable = false, templateID = "3")
+            )
+        )
     }
 }

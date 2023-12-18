@@ -17,12 +17,14 @@ import com.alpriest.energystats.models.ReportData
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
+import com.alpriest.energystats.models.ScheduleTemplateListResponse
 import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -152,6 +154,14 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 
     override suspend fun createScheduleTemplate(name: String, description: String) {
         network.createScheduleTemplate(name, description)
+    }
+
+    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
+        return network.fetchScheduleTemplates()
+    }
+
+    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
+        network.saveScheduleTemplate(deviceSN, scheduleTemplate)
     }
 
     private fun Double.capped(dataCeiling: DataCeiling): Double {

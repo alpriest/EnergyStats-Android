@@ -2,6 +2,7 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class InvalidConfigurationException(message: String?) : Exception(message)
@@ -40,6 +41,8 @@ interface FoxESSNetworking {
     suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse
     suspend fun deleteScheduleTemplate(templateID: String)
     suspend fun createScheduleTemplate(name: String, description: String)
+    suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse
+    suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface
