@@ -98,7 +98,7 @@ fun ContentWithBottomButtons(
             .fillMaxSize()
             .background(colors.background)
     ) {
-        content(Modifier.padding(bottom = 94.dp))
+        content(Modifier.padding(bottom = 90.dp))
 
         Box(
             contentAlignment = Alignment.BottomCenter,

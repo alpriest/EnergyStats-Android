@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsScreen
 
 @Composable
 fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
@@ -35,7 +36,7 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
             OutlinedButton(
                 onClick = {
                     EditScheduleStore.shared.phaseId = it.id
-                    navController.navigate(ScheduleScreen.EditPhase.name)
+                    navController.navigate(SettingsScreen.EditPhase.name)
 
                 },
                 border = null,

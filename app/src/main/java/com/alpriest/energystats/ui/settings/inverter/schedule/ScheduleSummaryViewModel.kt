@@ -104,7 +104,7 @@ class ScheduleSummaryViewModel(
         EditScheduleStore.shared.allowDeletion = false
         EditScheduleStore.shared.modes = modesStream.value
 
-        navController.navigate(ScheduleScreen.EditSchedule.name)
+        navController.navigate(SettingsScreen.EditSchedule.name)
     }
 
     fun editSchedule() {
@@ -115,7 +115,7 @@ class ScheduleSummaryViewModel(
         EditScheduleStore.shared.allowDeletion = true
         EditScheduleStore.shared.modes = modesStream.value
 
-        navController.navigate(ScheduleScreen.EditSchedule.name)
+        navController.navigate(SettingsScreen.EditSchedule.name)
     }
 
     fun activate(scheduleTemplate: ScheduleTemplateSummary, context: Context) {

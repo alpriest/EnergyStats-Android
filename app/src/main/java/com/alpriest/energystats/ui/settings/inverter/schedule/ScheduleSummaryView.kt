@@ -39,6 +39,7 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleSummaryView(
@@ -72,16 +73,16 @@ class ScheduleSummaryView(
         val context = LocalContext.current
 
         SettingsPage {
-            if (schedule.phases.isEmpty()) {
+            Text(
+                text = "Active schedule",
+                style = MaterialTheme.typography.h4,
+                color = colors.onSecondary,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            if (!schedule.phases.isEmpty()) {
                 NoScheduleView(viewModel)
             } else {
-                Text(
-                    text = "Current schedule",
-                    style = MaterialTheme.typography.h4,
-                    color = colors.onSecondary,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
                 SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
                     OutlinedButton(
                         onClick = { viewModel.editSchedule() },
@@ -96,35 +97,35 @@ class ScheduleSummaryView(
                         )
                     }
                 }
+            }
 
-                Text(
-                    text = "Templates",
-                    style = MaterialTheme.typography.h4,
-                    color = colors.onSecondary,
-                    modifier = Modifier.fillMaxWidth()
-                )
+            Text(
+                text = "Templates",
+                style = MaterialTheme.typography.h4,
+                color = colors.onSecondary,
+                modifier = Modifier.fillMaxWidth()
+            )
 
-                SettingsColumnWithChild {
-                    templates.forEach {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(it.name)
+            SettingsColumnWithChild {
+                templates.forEach {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(it.name)
 
-                            Spacer(modifier = Modifier.weight(0.1f))
+                        Spacer(modifier = Modifier.weight(0.1f))
 
-                            ActivateButton {
-                                viewModel.activate(it, context)
-                            }
-                        }
-
-                        if (templates.last() != it) {
-                            Divider()
+                        ActivateButton {
+                            viewModel.activate(it, context)
                         }
                     }
-                }
 
-                Button(onClick = { navController.navigate(ScheduleScreen.TemplateList.name) }) {
-                    Text("Manage templates", color = colors.onPrimary)
+                    if (templates.last() != it) {
+                        Divider()
+                    }
                 }
+            }
+
+            Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
+                Text("Manage templates", color = colors.onPrimary)
             }
         }
     }
@@ -142,11 +143,6 @@ class ScheduleSummaryView(
     @Composable
     fun NoScheduleView(viewModel: ScheduleSummaryViewModel) {
         Column {
-            Text(
-                "You don't have a schedule defined.",
-                modifier = Modifier.padding(vertical = 44.dp)
-            )
-
             SettingsNavButton("Create a schedule") {
                 viewModel.createSchedule()
             }

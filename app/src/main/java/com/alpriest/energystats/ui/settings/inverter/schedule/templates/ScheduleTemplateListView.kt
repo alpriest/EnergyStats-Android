@@ -32,8 +32,8 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleScreen
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplateSummary
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -89,7 +89,7 @@ class ScheduleTemplateListView(
                         onClick = {
                             EditScheduleStore.shared.reset()
                             EditScheduleStore.shared.templateID = it.id
-                            navController.navigate(ScheduleScreen.EditTemplate.name)
+                            navController.navigate(SettingsScreen.EditTemplate.name)
                         },
                         border = null,
                         contentPadding = PaddingValues()

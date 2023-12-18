@@ -26,120 +26,12 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.FoxESSNetworking
-import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.settings.battery.BatteryChargeScheduleSettingsView
-import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
-import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
-import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
-import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
-import com.alpriest.energystats.ui.settings.inverter.WorkModeView
-import com.alpriest.energystats.ui.settings.inverter.schedule.NavigableScheduleSummaryView
-import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
-import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-
-enum class SettingsScreen {
-    Settings,
-    Debug,
-    Battery,
-    BatterySOC,
-    BatteryChargeTimes,
-    Inverter,
-    InverterWorkMode,
-    InverterSchedule,
-    Dataloggers,
-    SelfSufficiencyEstimates,
-    FinancialModel,
-    SolarBandings,
-    SolcastSolarPrediction,
-    FAQ
-}
-
-@Composable
-fun NavigableSettingsView(
-    config: ConfigManaging,
-    userManager: UserManaging,
-    onLogout: () -> Unit,
-    networkStore: InMemoryLoggingNetworkStore,
-    onRateApp: () -> Unit,
-    onBuyMeCoffee: () -> Unit,
-    network: FoxESSNetworking,
-    credentialStore: CredentialStore,
-    solarForecastingProvider: () -> SolarForecasting
-) {
-    val navController = rememberNavController()
-    val context = LocalContext.current
-
-    NavHost(
-        navController = navController,
-        startDestination = SettingsScreen.Settings.name
-    ) {
-        composable(SettingsScreen.Settings.name) {
-            SettingsTabView(
-                navController,
-                config = config,
-                userManager = userManager,
-                onLogout = onLogout,
-                onRateApp = onRateApp,
-                onBuyMeCoffee = onBuyMeCoffee
-            )
-        }
-        composable(SettingsScreen.Battery.name) {
-            BatterySettingsView(
-                navController = navController,
-                config = config
-            )
-        }
-        composable(SettingsScreen.BatterySOC.name) {
-            BatterySOCSettings(configManager = config, network = network, navController = navController, userManager = userManager).Content()
-        }
-        composable(SettingsScreen.BatteryChargeTimes.name) {
-            BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, userManager = userManager).Content()
-        }
-        composable(SettingsScreen.Inverter.name) {
-            InverterSettingsView(configManager = config, navController = navController)
-        }
-        composable(SettingsScreen.InverterWorkMode.name) {
-            WorkModeView(configManager = config, network = network, navController = navController, userManager = userManager).Content()
-        }
-        composable(SettingsScreen.InverterSchedule.name) {
-            NavigableScheduleSummaryView(config, network, userManager).Content()
-        }
-        composable(SettingsScreen.Dataloggers.name) {
-            DataLoggerViewContainer(network = network, configManager = config, navController = navController, context = context).Content()
-        }
-        composable(SettingsScreen.FinancialModel.name) {
-            SettingsPage {
-                FinancialsSettingsView(config)
-            }
-        }
-        composable(SettingsScreen.SelfSufficiencyEstimates.name) {
-            SettingsPage {
-                SelfSufficiencySettingsView(config)
-            }
-        }
-        composable(SettingsScreen.SolarBandings.name) {
-            SolarBandingSettingsView(navController, config)
-        }
-        composable(SettingsScreen.FAQ.name) {
-            FAQView()
-        }
-        composable(SettingsScreen.SolcastSolarPrediction.name) {
-            SolcastSettingsView(navController, config, solarForecastingProvider).Content()
-        }
-        debugGraph(navController, networkStore, config, network, credentialStore)
-    }
-}
 
 @Composable
 fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIcon: (() -> ImageVector)? = { Icons.Default.ChevronRight }, onClick: () -> Unit) {
