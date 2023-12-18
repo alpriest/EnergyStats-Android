@@ -248,4 +248,6 @@
     <string name="solar_forecasts">Solarprognosen</string>
     <string name="solar_forecasts_not_configured">Besuchen Sie die Einstellungen, um Solcast zu konfigurieren</string>
     <string name="remove_key">Schlüssel entfernen</string>
+    <string name="inverter_charge_schedule_settings_saved">Ihre Wechselrichter-Zeitplaneinstellungen wurden gespeichert. Bitte beachten Sie, dass Ihre Zeitplaneinstellungen Vorrang vor jedem Batterieladeplan, Mindest-SoC und zuvor konfiguriertem Wechselrichter-Arbeitsmodus haben werden.</string>
+    <string name="inverter_charge_schedule_deleted">Ihr Zeitplan wurde gelöscht</string>
 </resources>

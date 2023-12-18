@@ -249,4 +249,6 @@
     <string name="solar_forecasts">Prognozy Solarne</string>
     <string name="solar_forecasts_not_configured">Odwiedź zakładkę ustawień, aby skonfigurować Solcast</string>
     <string name="remove_key">Usuń klucz</string>
+    <string name="inverter_charge_schedule_settings_saved">Ustawienia harmonogramu Twojego falownika zostały zapisane. Należy pamiętać, że ustawienia harmonogramu będą miały priorytet nad wszelkimi wcześniej skonfigurowanymi harmonogramami ładowania baterii, min SOC i trybem pracy falownika.</string>
+    <string name="inverter_charge_schedule_deleted">Twój harmonogram został usunięty</string>
 </resources>
