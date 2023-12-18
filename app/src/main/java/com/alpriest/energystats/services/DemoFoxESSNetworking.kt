@@ -20,6 +20,7 @@ import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.SchedulePollcy
+import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.ScheduleTemplateSummaryResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
@@ -225,5 +226,20 @@ class DemoFoxESSNetworking : FoxESSNetworking {
             SchedulerModeResponse(color = "#8065789B", name = "Force Discharge", key = "ForceDischarge"),
             SchedulerModeResponse(color = "#8061DDAA", name = "Self-Use", key = "SelfUse")
         )
+    }
+
+    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
+        return ScheduleTemplateResponse(
+            templateName = "Template-1",
+            enable = false,
+            pollcy = listOf(
+                SchedulePollcy(startH = 15, startM = 0, endH = 17, endM = 0, fdpwr = 0, workMode = "ForceCharge", fdsoc = 100, minsocongrid = 100),
+                SchedulePollcy(startH = 17, startM = 0, endH = 18, endM = 30, fdpwr = 3500, workMode = "ForceDischarge", fdsoc = 20, minsocongrid = 20)
+            ),
+            content = "Description of template 1"
+        )
+    }
+
+    override suspend fun deleteScheduleTemplate(templateID: String) {
     }
 }

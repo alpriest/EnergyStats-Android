@@ -26,6 +26,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleEnableRequest
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.ScheduleSaveRequest
+import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.SchedulerModesResponse
@@ -125,6 +126,14 @@ class NetworkService(private val credentials: CredentialStore, private val store
         }
     }
 
+    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
+        val request = Request.Builder().url(URLs.getSchedule(deviceSN, templateID)).build()
+
+        val type = object : TypeToken<NetworkResponse<ScheduleTemplateResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<ScheduleTemplateResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
     override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
         val body = Gson().toJson(ScheduleSaveRequest(schedule.phases.map { it.toPollcy() }, templateID = null, deviceSN = deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
@@ -133,6 +142,13 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .url(URLs.enableSchedule())
             .method("POST", body)
             .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
+    }
+
+    override suspend fun deleteScheduleTemplate(templateID: String) {
+        val request = Request.Builder().url(URLs.deleteScheduleTemplate(templateID)).build()
 
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)

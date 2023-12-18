@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.settings.inverter.schedule
+package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -12,21 +12,25 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
+import com.alpriest.energystats.ui.settings.inverter.schedule.toSchedulePhase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class EditScheduleViewModelFactory(
+class EditTemplateViewModelFactory(
     private val configManager: ConfigManaging,
     private val network: FoxESSNetworking,
     private val navController: NavHostController
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return EditScheduleViewModel(configManager, network, navController) as T
+        return EditTemplateViewModel(configManager, network, navController) as T
     }
 }
 
-class EditScheduleViewModel(
+class EditTemplateViewModel(
     val config: ConfigManaging,
     val network: FoxESSNetworking,
     val navController: NavHostController
@@ -34,33 +38,36 @@ class EditScheduleViewModel(
     val scheduleStream = EditScheduleStore.shared.scheduleStream
     override val alertDialogMessage = MutableStateFlow<String?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    val allowDeletionStream = MutableStateFlow(false)
     private var modes: List<SchedulerModeResponse> = listOf()
+    private var templateID: String = ""
     private var shouldPopNavOnDismissal = false
 
-    fun load() {
-        allowDeletionStream.value = EditScheduleStore.shared.allowDeletion
+    suspend fun load(context: Context) {
         modes = EditScheduleStore.shared.modes
-    }
+        templateID = EditScheduleStore.shared.templateID ?: return
 
-    suspend fun saveSchedule(context: Context) {
-        val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
-        val deviceSN = config.currentDevice.value?.deviceSN ?: return
-        if (!schedule.isValid()) {
-            alertDialogMessage.value = "overlapping_time_periods"
+        if (uiState.value.state != LoadState.Inactive) {
             return
         }
 
         runCatching {
-            uiState.value = UiLoadState(LoadState.Active("Activating..."))
-            try {
-                network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
+            config.currentDevice.value?.let { device ->
+                val deviceSN = device.deviceSN
 
-                shouldPopNavOnDismissal = true
-                uiState.value = UiLoadState(LoadState.Inactive)
-                alertDialogMessage.value = context.getString(R.string.inverter_charge_schedule_settings_saved)
-            } catch (ex: Exception) {
-                uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+
+                try {
+                    val template = network.fetchScheduleTemplate(deviceSN, templateID)
+                    scheduleStream.value = Schedule(
+                        name = template.templateName,
+                        phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
+                        templateID = templateID
+                    )
+
+                    uiState.value = UiLoadState(LoadState.Inactive)
+                } catch (ex: Exception) {
+                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                }
             }
         }
     }
@@ -80,22 +87,16 @@ class EditScheduleViewModel(
     fun delete(context: Context) {
         viewModelScope.launch {
             runCatching {
-                config.currentDevice.value?.let { device ->
-                    val deviceSN = device.deviceSN
+                uiState.value = UiLoadState(LoadState.Active("Deleting..."))
 
-                    uiState.value = UiLoadState(LoadState.Active("Deleting..."))
+                try {
+                    network.deleteScheduleTemplate(templateID)
 
-                    try {
-                        network.deleteSchedule(deviceSN)
-
-                        uiState.value = UiLoadState(LoadState.Inactive)
-                        shouldPopNavOnDismissal = true
-                        alertDialogMessage.value = "Your schedule was deleted"
-                    } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
-                    }
-                } ?: {
                     uiState.value = UiLoadState(LoadState.Inactive)
+                    shouldPopNavOnDismissal = true
+                    alertDialogMessage.value = context.getString(R.string.battery_charge_schedule_was_saved)
+                } catch (ex: Exception) {
+                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
             }
         }

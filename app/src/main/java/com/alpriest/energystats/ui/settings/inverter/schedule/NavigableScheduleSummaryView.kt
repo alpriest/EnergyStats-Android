@@ -7,13 +7,15 @@ import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.EditTemplateView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.ScheduleTemplateListView
 
 enum class ScheduleScreen {
     Summary,
     EditSchedule,
     EditPhase,
-    TemplateList;
+    TemplateList,
+    EditTemplate;
 }
 
 class NavigableScheduleSummaryView(
@@ -48,6 +50,10 @@ class NavigableScheduleSummaryView(
 
             composable(ScheduleScreen.TemplateList.name) {
                 ScheduleTemplateListView(configManager, network, navController, userManager).Content()
+            }
+
+            composable(ScheduleScreen.EditTemplate.name) {
+                EditTemplateView(configManager, network, navController, userManager).Content()
             }
         }
     }

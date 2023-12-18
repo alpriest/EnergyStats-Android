@@ -15,6 +15,7 @@ import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
+import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
@@ -161,6 +162,14 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 
     override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
         network.enableScheduleTemplate(deviceSN, templateID)
+    }
+
+    override suspend fun deleteScheduleTemplate(templateID: String) {
+        network.deleteScheduleTemplate(templateID)
+    }
+
+    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
+        return network.fetchScheduleTemplate(deviceSN, templateID)
     }
 
     private fun makeKey(base: String, vararg arguments: String): String {

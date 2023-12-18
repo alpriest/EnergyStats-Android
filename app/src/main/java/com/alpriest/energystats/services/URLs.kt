@@ -122,6 +122,23 @@ object URLs {
             .build()
     }
 
+    fun getSchedule(deviceSN: String, templateID: String): HttpUrl {
+        return "https://www.foxesscloud.com/generic/v0/device/scheduler/detail"
+            .toHttpUrl()
+            .newBuilder()
+            .addDeviceSN(deviceSN)
+            .addQueryParameter("templateID", templateID)
+            .build()
+    }
+
+    fun deleteScheduleTemplate(templateID: String): HttpUrl {
+        return "https://www.foxesscloud.com/generic/v0/device/scheduler/delete"
+            .toHttpUrl()
+            .newBuilder()
+            .addQueryParameter("templateID", templateID)
+            .build()
+    }
+
     fun enableSchedule(): HttpUrl {
         return "https://www.foxesscloud.com/generic/v0/device/scheduler/enable"
             .toHttpUrl()

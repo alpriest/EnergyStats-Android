@@ -190,4 +190,20 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
             network.enableScheduleTemplate(deviceSN, templateID)
         }
     }
+
+    override suspend fun deleteScheduleTemplate(templateID: String) {
+        if (isDemoUser()) {
+            demoFoxESSNetworking.deleteScheduleTemplate(templateID)
+        } else {
+            network.deleteScheduleTemplate(templateID)
+        }
+    }
+
+    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.fetchScheduleTemplate(deviceSN, templateID)
+        } else {
+            network.fetchScheduleTemplate(deviceSN, templateID)
+        }
+    }
 }

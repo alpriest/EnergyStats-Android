@@ -143,7 +143,7 @@ class ScheduleSummaryViewModel(
     }
 }
 
-private fun SchedulePollcy.toSchedulePhase(modes: List<SchedulerModeResponse>): SchedulePhase? {
+internal fun SchedulePollcy.toSchedulePhase(modes: List<SchedulerModeResponse>): SchedulePhase? {
     return SchedulePhase.create(
         start = Time(hour = startH, minute = startM),
         end = Time(hour = endH, minute = endM),

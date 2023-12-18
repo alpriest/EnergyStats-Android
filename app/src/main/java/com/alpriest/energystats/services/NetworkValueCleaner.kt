@@ -17,6 +17,7 @@ import com.alpriest.energystats.models.ReportData
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
+import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.rounded
@@ -139,6 +140,14 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 
     override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
         network.enableScheduleTemplate(deviceSN, templateID)
+    }
+
+    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
+        return network.fetchScheduleTemplate(deviceSN, templateID)
+    }
+
+    override suspend fun deleteScheduleTemplate(templateID: String) {
+        network.deleteScheduleTemplate(templateID)
     }
 
     private fun Double.capped(dataCeiling: DataCeiling): Double {
