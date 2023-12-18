@@ -59,7 +59,7 @@ fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewMode
         viewModel.load(context)
     }
 
-    ContentWithBottomButtons(navController, onSave = { viewModel.save() }, { modifier ->
+    ContentWithBottomButtons(navController, onSave = { viewModel.save(context) }, { modifier ->
         SettingsPage(modifier) {
             TimeAndWorkModeView(viewModel)
 
