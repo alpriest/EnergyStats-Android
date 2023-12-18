@@ -57,8 +57,8 @@ class EditScheduleViewModel(
                 network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
 
                 shouldPopNavOnDismissal = true
-                uiState.value = UiLoadState(LoadState.Inactive)
                 alertDialogMessage.value = context.getString(R.string.inverter_charge_schedule_settings_saved)
+                uiState.value = UiLoadState(LoadState.Inactive)
             } catch (ex: Exception) {
                 uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
             }
@@ -88,9 +88,9 @@ class EditScheduleViewModel(
                     try {
                         network.deleteSchedule(deviceSN)
 
-                        uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
                         alertDialogMessage.value = "Your schedule was deleted"
+                        uiState.value = UiLoadState(LoadState.Inactive)
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                     }

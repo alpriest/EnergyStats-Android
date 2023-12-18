@@ -102,7 +102,7 @@ data class SchedulePhase(
                 Time.current(),
                 mode,
                 0,
-                10,
+                minSOC,
                 minSOC,
                 color = color
             )

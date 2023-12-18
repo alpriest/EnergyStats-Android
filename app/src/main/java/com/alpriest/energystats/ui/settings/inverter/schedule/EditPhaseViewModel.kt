@@ -72,6 +72,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
         val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
         val originalPhaseID = originalPhaseId ?: return
         EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.delete(originalPhaseID, schedule)
+        navController.popBackStack()
     }
 
     private fun validate() {
