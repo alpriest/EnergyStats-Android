@@ -26,7 +26,10 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
         Spacer(modifier = Modifier.height(16.dp))
 
         if (schedule.name.isNotEmpty()) {
-            Text(schedule.name)
+            Text(
+                schedule.name,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
         }
 
         TimePeriodBarView(schedule.phases, modifier = Modifier.padding(bottom = 8.dp))
