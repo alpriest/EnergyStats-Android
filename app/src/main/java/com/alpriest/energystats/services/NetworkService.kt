@@ -26,6 +26,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleEnableRequest
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.ScheduleSaveRequest
+import com.alpriest.energystats.models.ScheduleTemplateCreateRequest
 import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
@@ -124,6 +125,19 @@ class NetworkService(private val credentials: CredentialStore, private val store
         response.item.result?.messages?.let {
             this.errorMessages = it[it.keys.first()] ?: mutableMapOf()
         }
+    }
+
+    override suspend fun createScheduleTemplate(name: String, description: String) {
+        val body = Gson().toJson(ScheduleTemplateCreateRequest(templateName = name, content = description))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .url(URLs.createScheduleTemplate())
+            .method("POST", body)
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
     }
 
     override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {

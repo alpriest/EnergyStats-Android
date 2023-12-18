@@ -150,6 +150,10 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         network.deleteScheduleTemplate(templateID)
     }
 
+    override suspend fun createScheduleTemplate(name: String, description: String) {
+        network.createScheduleTemplate(name, description)
+    }
+
     private fun Double.capped(dataCeiling: DataCeiling): Double {
         return if (this > 0) {
             val mask = when (dataCeiling) {

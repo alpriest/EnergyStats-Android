@@ -39,6 +39,7 @@ interface FoxESSNetworking {
     suspend fun enableScheduleTemplate(deviceSN: String, templateID: String)
     suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse
     suspend fun deleteScheduleTemplate(templateID: String)
+    suspend fun createScheduleTemplate(name: String, description: String)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

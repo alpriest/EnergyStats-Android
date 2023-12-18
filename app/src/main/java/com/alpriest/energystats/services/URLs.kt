@@ -159,6 +159,10 @@ object URLs {
             .addDeviceSN(deviceSN)
             .build()
     }
+
+    fun createScheduleTemplate(): HttpUrl {
+        return "https://www.foxesscloud.com/generic/v0/device/scheduler/create".toHttpUrl()
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.FoxESSNetworking
@@ -41,6 +42,24 @@ class ScheduleTemplateListViewModel(
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
                 }
+            }
+        }
+    }
+
+    suspend fun createTemplate(templateName: String, templateDescription: String, context: Context) {
+        if (uiState.value.state != LoadState.Inactive) {
+            return
+        }
+
+        runCatching {
+            uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+
+            try {
+                network.createScheduleTemplate(templateName, templateDescription)
+
+                uiState.value = UiLoadState(LoadState.Inactive)
+            } catch (ex: Exception) {
+                uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
             }
         }
     }

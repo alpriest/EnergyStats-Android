@@ -206,4 +206,12 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
             network.fetchScheduleTemplate(deviceSN, templateID)
         }
     }
+
+    override suspend fun createScheduleTemplate(name: String, description: String) {
+        if (isDemoUser()) {
+            demoFoxESSNetworking.createScheduleTemplate(name, description)
+        } else {
+            network.createScheduleTemplate(name, description)
+        }
+    }
 }
