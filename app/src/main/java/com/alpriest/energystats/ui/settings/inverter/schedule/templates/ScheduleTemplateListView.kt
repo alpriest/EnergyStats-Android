@@ -7,8 +7,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextField
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Divider
@@ -45,6 +44,7 @@ import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplateSummary
+import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleTemplateListViewModelFactory(
@@ -134,12 +134,12 @@ class ScheduleTemplateListView(
             OutlinedTextField(
                 value = newTemplateName,
                 onValueChange = { newTemplateName = it },
-                label = { Text(stringResource(R.string.name)) }
+                label = { Text(stringResource(R.string.name), color = DimmedTextColor) }
             )
             OutlinedTextField(
                 value = newTemplateDescription,
                 onValueChange = { newTemplateDescription = it },
-                label = { Text(stringResource(R.string.description)) }
+                label = { Text(stringResource(R.string.description), color = DimmedTextColor) }
             )
 
             Button(onClick = { triggerCreateFunction = true }) {

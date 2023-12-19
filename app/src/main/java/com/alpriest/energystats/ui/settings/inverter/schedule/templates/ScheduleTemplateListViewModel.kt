@@ -35,8 +35,6 @@ class ScheduleTemplateListViewModel(
 
         runCatching {
             config.currentDevice.value?.let { device ->
-                val deviceSN = device.deviceSN
-
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {
@@ -56,16 +54,15 @@ class ScheduleTemplateListViewModel(
             return
         }
 
-        runCatching {
-            uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
-            try {
-                network.createScheduleTemplate(templateName, templateDescription)
+        try {
+            network.createScheduleTemplate(templateName, templateDescription)
+            uiState.value = UiLoadState(LoadState.Inactive)
 
-                uiState.value = UiLoadState(LoadState.Inactive)
-            } catch (ex: Exception) {
-                uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
-            }
+            load(context)
+        } catch (ex: Exception) {
+            uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
         }
     }
 
