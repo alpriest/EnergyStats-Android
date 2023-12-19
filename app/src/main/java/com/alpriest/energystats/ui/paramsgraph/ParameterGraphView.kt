@@ -31,12 +31,19 @@ import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.context.DrawContext
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+fun ParameterGraphView(
+    unit: String,
+    producer: ChartEntryModelProducer,
+    viewModel: ParametersGraphTabViewModel,
+    themeStream: MutableStateFlow<AppTheme>,
+    modifier: Modifier = Modifier
+) {
     val chartColors = viewModel.chartColorsStream.collectAsState().value
     val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
         override fun onMarkerHidden(marker: Marker) {
@@ -61,11 +68,11 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
                             chart = lineChart(
                                 axisValuesOverrider = AxisValuesOverrider.fixed(0f, 288f)
                             ),
-                            chartModelProducer = viewModel.producer,
+                            chartModelProducer = producer,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                                valueFormatter = DecimalFormatAxisValueFormatter("0.0 $unit")
                             ),
                             bottomAxis = rememberBottomAxis(
                                 itemPlacer = AxisItemPlacer.Horizontal.default(36, addExtremeLabelPadding = true),
@@ -90,7 +97,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                         Chart(
                             chart = lineChart(),
-                            chartModelProducer = viewModel.producer,
+                            chartModelProducer = producer,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
@@ -119,7 +126,7 @@ fun ParameterGraphView(viewModel: ParametersGraphTabViewModel, themeStream: Muta
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                         Chart(
                             chart = lineChart(),
-                            chartModelProducer = viewModel.producer,
+                            chartModelProducer = producer,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),

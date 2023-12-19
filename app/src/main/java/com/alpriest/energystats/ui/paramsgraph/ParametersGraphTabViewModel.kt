@@ -16,6 +16,7 @@ import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider.Companion.fixed
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico.core.entry.ChartModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.OutputStream
@@ -48,7 +49,7 @@ class ParametersGraphTabViewModel(
     override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
     var chartColorsStream = MutableStateFlow(listOf<Color>())
-    val producer: ChartEntryModelProducer = ChartEntryModelProducer()
+    val producers: MutableStateFlow<Map<String, ChartEntryModelProducer>> = MutableStateFlow(mapOf())
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     var rawData: List<ParametersGraphValue> = listOf()
     var queryDate = QueryDate()
@@ -151,8 +152,8 @@ class ParametersGraphTabViewModel(
                         x = it.graphPoint.toFloat(),
                         y = it.value.toFloat()
                     )
-                }.toList()
-            }.toList()
+                }
+            }
 
         boundsStream.value = entries.map { entryList ->
             val max = entryList.maxBy { it.y }.y
@@ -170,7 +171,31 @@ class ParametersGraphTabViewModel(
         } else {
             hasDataStream.value = true
             entriesStream.value = entries
-            producer.setEntries(entries)
+
+            producers.value = grouped
+                .map { group ->
+                    return@map Pair(group.key.unit, group.value)
+                }
+                .groupBy { it.first }
+                .map { Pair(it.key, it.value.map { it.second }) }
+                .toMap()
+                .map {
+                    Pair(
+                        it.key,
+                        ChartEntryModelProducer(
+                            it.value.map { group ->
+                                group.map { graphValue ->
+                                    return@map DateTimeFloatEntry(
+                                        type = graphValue.type,
+                                        localDateTime = graphValue.time,
+                                        x = graphValue.graphPoint.toFloat(),
+                                        y = graphValue.value.toFloat()
+                                    )
+                                }
+                            })
+                    )
+                }
+                .toMap()
         }
 
         prepareExport(rawData, displayModeStream.value)

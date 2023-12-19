@@ -88,6 +88,7 @@ class ParametersGraphTabView(
         val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
         val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
         val context = LocalContext.current
+        val producers = viewModel.producers.collectAsState()
 
         MonitorAlertDialog(viewModel)
 
@@ -131,7 +132,15 @@ class ParametersGraphTabView(
                         }
                     }
 
-                    ParameterGraphView(viewModel = viewModel, themeStream, modifier = Modifier.padding(bottom = 24.dp))
+                    producers.value.forEach {
+                        ParameterGraphView(
+                            it.key,
+                            it.value,
+                            viewModel = viewModel,
+                            themeStream,
+                            modifier = Modifier.padding(bottom = 24.dp)
+                        )
+                    }
 
                     ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
                 } else {
