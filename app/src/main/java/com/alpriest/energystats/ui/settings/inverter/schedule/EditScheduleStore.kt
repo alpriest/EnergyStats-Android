@@ -7,14 +7,12 @@ class EditScheduleStore(
     var scheduleStream: MutableStateFlow<Schedule?> = MutableStateFlow(null),
     var phaseId: String? = null,
     var allowDeletion: Boolean = false,
-    var modes: List<SchedulerModeResponse> = listOf(),
-    var templateID: String? = null
+    var modes: List<SchedulerModeResponse> = listOf()
 ) {
     fun reset() {
         scheduleStream.value = null
         phaseId = null
         allowDeletion = false
-        templateID = null
     }
 
     companion object {

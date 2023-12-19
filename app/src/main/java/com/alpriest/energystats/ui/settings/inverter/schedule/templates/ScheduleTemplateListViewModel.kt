@@ -10,9 +10,14 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplateSummary
+import com.alpriest.energystats.ui.settings.inverter.schedule.toSchedulePhase
 import com.alpriest.energystats.ui.settings.inverter.schedule.toScheduleTemplate
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class ScheduleTemplateListViewModel(
     private val config: ConfigManaging,
@@ -60,6 +65,36 @@ class ScheduleTemplateListViewModel(
                 uiState.value = UiLoadState(LoadState.Inactive)
             } catch (ex: Exception) {
                 uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+            }
+        }
+    }
+
+    fun edit(templateSummary: ScheduleTemplateSummary, context: Context) {
+        if (uiState.value.state != LoadState.Inactive) {
+            return
+        }
+
+        viewModelScope.launch {
+            config.currentDevice.value?.let { device ->
+                val deviceSN = device.deviceSN
+
+                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+
+                try {
+                    val template = network.fetchScheduleTemplate(deviceSN, templateSummary.id)
+                    val modes = EditScheduleStore.shared.modes
+
+                    EditScheduleStore.shared.scheduleStream.value = Schedule(
+                        name = template.templateName,
+                        phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
+                        templateID = templateSummary.id
+                    )
+                    navController.navigate(SettingsScreen.EditTemplate.name)
+
+                    uiState.value = UiLoadState(LoadState.Inactive)
+                } catch (ex: Exception) {
+                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                }
             }
         }
     }

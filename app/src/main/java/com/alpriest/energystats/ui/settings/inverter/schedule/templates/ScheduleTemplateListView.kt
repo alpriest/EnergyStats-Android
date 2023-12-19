@@ -85,17 +85,15 @@ class ScheduleTemplateListView(
 
     @Composable
     fun Loaded(templates: List<ScheduleTemplateSummary>, viewModel: ScheduleTemplateListViewModel) {
+        val context = LocalContext.current
+
         SettingsPage {
             SettingsColumnWithChild {
                 SettingsTitleView(stringResource(R.string.templates))
 
                 templates.forEach {
                     OutlinedButton(
-                        onClick = {
-                            EditScheduleStore.shared.reset()
-                            EditScheduleStore.shared.templateID = it.id
-                            navController.navigate(SettingsScreen.EditTemplate.name)
-                        },
+                        onClick = { viewModel.edit(it, context) },
                         border = null,
                         contentPadding = PaddingValues()
                     ) {

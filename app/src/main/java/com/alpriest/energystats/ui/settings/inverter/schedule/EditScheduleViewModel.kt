@@ -58,6 +58,7 @@ class EditScheduleViewModel(
 
                 shouldPopNavOnDismissal = true
                 alertDialogMessage.value = context.getString(R.string.inverter_charge_schedule_settings_saved)
+                EditScheduleStore.shared.reset()
                 uiState.value = UiLoadState(LoadState.Inactive)
             } catch (ex: Exception) {
                 uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
@@ -90,6 +91,7 @@ class EditScheduleViewModel(
 
                         shouldPopNavOnDismissal = true
                         alertDialogMessage.value = context.getString(R.string.your_schedule_was_deleted)
+                        EditScheduleStore.shared.reset()
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))

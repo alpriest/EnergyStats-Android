@@ -20,9 +20,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
 
@@ -41,12 +39,12 @@ class EditTemplateView(
         MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
-            viewModel.load(context)
+            viewModel.load()
         }
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
+            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
             is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel, navController) }
         }
     }

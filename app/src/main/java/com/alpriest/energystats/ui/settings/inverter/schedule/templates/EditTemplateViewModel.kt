@@ -13,10 +13,8 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
-import com.alpriest.energystats.ui.settings.inverter.schedule.toSchedulePhase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -43,34 +41,9 @@ class EditTemplateViewModel(
     private var templateID: String = ""
     private var shouldPopNavOnDismissal = false
 
-    suspend fun load(context: Context) {
+    fun load() {
         modes = EditScheduleStore.shared.modes
-        templateID = EditScheduleStore.shared.templateID ?: return
-
-        if (uiState.value.state != LoadState.Inactive) {
-            return
-        }
-
-        runCatching {
-            config.currentDevice.value?.let { device ->
-                val deviceSN = device.deviceSN
-
-                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
-
-                try {
-                    val template = network.fetchScheduleTemplate(deviceSN, templateID)
-                    scheduleStream.value = Schedule(
-                        name = template.templateName,
-                        phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
-                        templateID = templateID
-                    )
-
-                    uiState.value = UiLoadState(LoadState.Inactive)
-                } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
-                }
-            }
-        }
+        templateID = EditScheduleStore.shared.scheduleStream.value?.templateID ?: return
     }
 
     fun addTimePeriod() {
@@ -95,6 +68,7 @@ class EditTemplateViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                     shouldPopNavOnDismissal = true
+                    EditScheduleStore.shared.reset()
                     alertDialogMessage.value = context.getString(R.string.your_template_was_deleted)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
@@ -127,6 +101,7 @@ class EditTemplateViewModel(
 
                         uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
+                        EditScheduleStore.shared.reset()
                         alertDialogMessage.value = context.getString(R.string.your_template_was_saved)
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
@@ -153,6 +128,7 @@ class EditTemplateViewModel(
 
                         uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
+                        EditScheduleStore.shared.reset()
                         alertDialogMessage.value = context.getString(R.string.your_template_was_activated)
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
