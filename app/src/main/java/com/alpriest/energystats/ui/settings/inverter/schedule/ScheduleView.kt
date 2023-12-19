@@ -63,6 +63,7 @@ internal fun Schedule.Companion.preview(): Schedule {
                 batterySOC = 20,
                 color = Color.scheduleColor("SelfUse")
             )
-        )
+        ),
+        description = null
     )
 }

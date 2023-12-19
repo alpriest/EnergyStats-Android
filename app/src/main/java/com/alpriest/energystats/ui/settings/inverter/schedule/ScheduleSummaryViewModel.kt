@@ -86,7 +86,7 @@ class ScheduleSummaryViewModel(
                 try {
                     val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
                     templateStream.value = scheduleResponse.data.mapNotNull { it.toScheduleTemplate() }
-                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.pollcy.mapNotNull { it.toSchedulePhase(modes) })
+                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.pollcy.mapNotNull { it.toSchedulePhase(modes) }, description = null)
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {

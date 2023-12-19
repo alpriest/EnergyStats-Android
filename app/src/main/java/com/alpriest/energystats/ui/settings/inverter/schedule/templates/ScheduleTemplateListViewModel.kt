@@ -84,7 +84,8 @@ class ScheduleTemplateListViewModel(
                     EditScheduleStore.shared.scheduleStream.value = Schedule(
                         name = template.templateName,
                         phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
-                        templateID = templateSummary.id
+                        templateID = templateSummary.id,
+                        description = template.content
                     )
                     navController.navigate(SettingsScreen.EditTemplate.name)
 

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,10 +29,12 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
         Spacer(modifier = Modifier.height(16.dp))
 
         if (schedule.name.isNotEmpty()) {
-            Text(
-                schedule.name,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+            Column(modifier = Modifier.padding(bottom = 16.dp)) {
+                Text(schedule.name)
+                schedule.description?.let {
+                    Text(it)
+                }
+            }
         }
 
         TimePeriodBarView(schedule.phases, modifier = Modifier.padding(bottom = 8.dp))

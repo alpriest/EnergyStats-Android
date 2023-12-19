@@ -13,7 +13,8 @@ import java.util.UUID
 data class Schedule(
     val name: String,
     val phases: List<SchedulePhase>,
-    val templateID: String? = null
+    val templateID: String? = null,
+    val description: String?
 ) {
     fun isValid(): Boolean {
         for ((index, phase) in phases.withIndex()) {
@@ -42,7 +43,7 @@ data class Schedule(
 
     companion object {
         fun create(name: String? = null, phases: List<SchedulePhase>, templateID: String? = null): Schedule {
-            return Schedule(name ?: "Schedule", phases, templateID)
+            return Schedule(name ?: "Schedule", phases, templateID, description = null)
         }
     }
 }
