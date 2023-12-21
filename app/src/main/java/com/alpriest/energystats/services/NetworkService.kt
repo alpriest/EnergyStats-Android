@@ -35,6 +35,7 @@ import com.alpriest.energystats.models.SchedulerModesResponse
 import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
+import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
@@ -65,16 +66,10 @@ interface NetworkResponseInterface {
 
 class NetworkService(private val credentials: CredentialStore, private val store: InMemoryLoggingNetworkStore, interceptor: Interceptor? = null) : FoxESSNetworking {
     private val okHttpClient by lazy {
-        val userAgents = arrayOf(
-            "Mozilla/5.0 (Linux; Android 12; SM-S906N Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/80.0.3987.119 Mobile Safari/537.36",
-            "Mozilla/5.0 (Linux; Android 10; SM-G996U Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Mobile Safari/537.36",
-            "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1",
-            "Mozilla/5.0 (Linux; Android 7.0; SM-T827R4 Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.116 Safari/537.36",
-            "Mozilla/5.0 (Linux; Android 5.1; AFTS Build/LMY47O) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/41.99900.2250.0242 Safari/537.36",
-            "AppleTV11,1/11.1",
-            "Mozilla/5.0 (iPhone14,3; U; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/19A346 Safari/602.1",
-            "Mozilla/5.0 (iPhone13,2; U; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/15E148 Safari/602.1"
-        )
+        fun makeSignature(encodedPath: String, token: String, languageCode: String, timestamp: Long): String {
+            val clientId = ""
+            return (listOf(encodedPath, token, languageCode, timestamp.toString()).joinToString("\\r\\n").md5() ?: "") + "." + clientId
+        }
 
         val builder = OkHttpClient()
             .newBuilder()
@@ -85,10 +80,12 @@ class NetworkService(private val credentials: CredentialStore, private val store
                 val original = chain.request()
                 val languageCode = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
                 val timezone = TimeZone.getDefault().id
+                val token = credentials.getToken() ?: ""
+                val timestamp = System.currentTimeMillis()
+                val signature = makeSignature(original.url.encodedPath, token, languageCode, timestamp)
 
                 val requestBuilder = original.newBuilder()
-                    .header("token", credentials.getToken() ?: "")
-                    .header("User-Agent", userAgents.random())
+                    .header("token", token)
                     .header("Accept", "application/json, text/plain, */*")
                     .header(
                         "Referrer",
@@ -98,6 +95,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
                     .header("Content-Type", "application/json")
                     .header("lang", languageCode)
                     .header("timezone", timezone)
+                    .header("timestamp", timestamp.toString())
+                    .header("signature", signature)
 
                 chain.proceed(requestBuilder.build())
             }
@@ -125,7 +124,6 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val type = object : TypeToken<NetworkResponse<ErrorMessagesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<ErrorMessagesResponse>> = fetch(request, type)
         response.item.result?.messages?.let {
-            this.errorMessages = it[it.keys.first()] ?: mutableMapOf()
         }
     }
 
