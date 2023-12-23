@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
@@ -30,9 +31,9 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
 
         if (schedule.name.isNotEmpty()) {
             Column(modifier = Modifier.padding(bottom = 16.dp)) {
-                Text(schedule.name)
+                Text(schedule.name, color = colors.onSecondary)
                 schedule.description?.let {
-                    Text(it)
+                    Text(it,color = colors.onSecondary)
                 }
             }
         }
@@ -41,7 +42,10 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
     }
 
     if (schedule.phases.isEmpty()) {
-        Text(stringResource(R.string.no_schedule_time_periods))
+        Text(
+            stringResource(R.string.no_schedule_time_periods),
+            color = colors.onSecondary
+        )
     }
 
     if (schedule.phases.isNotEmpty()) {

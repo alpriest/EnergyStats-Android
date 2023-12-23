@@ -6,9 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -98,50 +100,46 @@ class BatteryChargeScheduleSettingsView(
         val timePeriod = timePeriodStream.collectAsState().value
         val textColor = remember { mutableStateOf(Color.Black) }
 
-        Column {
+        SettingsColumnWithChild {
             SettingsTitleView(periodTitle)
 
-            SettingsColumnWithChild {
-                Row(
-                    verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        stringResource(R.string.enable_charge_from_grid),
-                        color = colors.onSecondary,
-                    )
-                    Switch(checked = timePeriod.enabled, onCheckedChange = {
-                        timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)
-                    })
-                }
-
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-                TimePeriodView(
-                    timePeriod.start,
-                    stringResource(R.string.start),
-                    labelStyle = TextStyle(color = textColor.value)
-                ) { hour, minute ->
-                    timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
-                }
-
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-                TimePeriodView(
-                    timePeriod.end,
-                    stringResource(R.string.end),
-                    labelStyle = TextStyle(color = textColor.value)
-                ) { hour, minute ->
-                    timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
-                }
+            Row(
+                verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    stringResource(R.string.enable_charge_from_grid),
+                    color = colors.onSecondary,
+                )
+                Switch(checked = timePeriod.enabled, onCheckedChange = {
+                    timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)
+                })
             }
 
-            Text(
-                "Reset times",
-                modifier = Modifier.clickable {
-                    timePeriodStream.value = ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false)
-                },
-                color = colors.primary,
-            )
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+            TimePeriodView(
+                timePeriod.start,
+                stringResource(R.string.start),
+                labelStyle = TextStyle(color = textColor.value)
+            ) { hour, minute ->
+                timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
+            }
+
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+            TimePeriodView(
+                timePeriod.end,
+                stringResource(R.string.end),
+                labelStyle = TextStyle(color = textColor.value)
+            ) { hour, minute ->
+                timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
+            }
+
+            OutlinedButton(
+                onClick = { timePeriodStream.value = ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false) },
+            ) {
+                Text(stringResource(R.string.reset_times))
+            }
         }
     }
 }
@@ -178,7 +176,7 @@ fun TimePeriodView(time: Time, title: String, labelStyle: TextStyle, textStyle: 
     }
 }
 
-@Preview(showBackground = true, widthDp = 300)
+@Preview(showBackground = true, widthDp = 400)
 @Composable
 fun BatteryForceChargeTimesViewPreview() {
     EnergyStatsTheme {

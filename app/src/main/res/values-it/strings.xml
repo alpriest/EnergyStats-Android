@@ -288,4 +288,5 @@
     <string name="edit_schedule">Modifica programma</string>
     <string name="delete_schedule">Elimina programma</string>
     <string name="your_schedule_was_deleted">Il tuo programma è stato eliminato</string>
+    <string name="reset_times">Resetta gli orari</string>
 </resources>

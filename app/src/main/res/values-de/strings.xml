@@ -287,4 +287,5 @@
     <string name="edit_schedule">Zeitplan bearbeiten</string>
     <string name="delete_schedule">Zeitplan löschen</string>
     <string name="your_schedule_was_deleted">Ihr Zeitplan wurde gelöscht</string>
+    <string name="reset_times">Reset-Zeiten</string>
 </resources>

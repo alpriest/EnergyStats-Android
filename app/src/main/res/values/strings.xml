@@ -107,8 +107,8 @@
     <string name="loads">"Loads "</string>
     <string name="self_sufficiency_estimates">Self sufficiency estimates</string>
     <string name="reportvariable_loads">Power used by the house</string>
-    <string name="absolute_self_sufficiency">Assumes if your net consumption is positive then you are self-sufficient.\n\nSufficiency = (export - import + batCharge - batDischarge) / houseUsage</string>
-    <string name="net_self_sufficiency">Assumes any amount taken from the grid reduces your self-sufficiency.\n\nSufficiency = grid / houseUsage</string>
+    <string name="net_self_sufficiency">Assumes if your net consumption is positive then you are self-sufficient.\n\nSufficiency = (export - import + batCharge - batDischarge) / houseUsage</string>
+    <string name="absolute_self_sufficiency">Assumes any amount taken from the grid reduces your self-sufficiency.\n\nSufficiency = grid / houseUsage</string>
     <string name="approximations">Approximations</string>
     <string name="self_sufficiency">Self sufficiency</string>
         <string name="home_usage">Home usage</string>
@@ -289,4 +289,5 @@
     <string name="edit_schedule">Edit Schedule</string>
     <string name="delete_schedule">Delete schedule</string>
     <string name="your_schedule_was_deleted">Your schedule was deleted</string>
+    <string name="reset_times">Reset times</string>
 </resources>

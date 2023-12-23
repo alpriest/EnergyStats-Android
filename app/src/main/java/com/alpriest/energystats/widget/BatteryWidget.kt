@@ -169,17 +169,6 @@ fun gauge(percentage: Float): ImageBitmap {
         progressPaint
     )
 
-//    val angleInDegrees = (percentage * 260.0) + 50.0
-//    val radius = (rect.height / 2)
-//    val x = -(radius * sin(Math.toRadians(angleInDegrees))).toFloat() + (rect.width / 2)
-//    val y = (radius * cos(Math.toRadians(angleInDegrees))).toFloat() + (rect.height / 2)
-//
-//    canvas.drawCircle(
-//        paint = trackPaint,
-//        radius = strokeWidth / 3.0f,
-//        center = Offset(x, y)
-//    )
-
     return bitmap
 }
 
@@ -266,49 +255,3 @@ fun drawBattery(): ImageBitmap {
 
     return bitmap
 }
-
-
-//
-//@Composable
-//fun ComposeCircularProgressBar(
-//    modifier: Modifier = Modifier,
-//    percentage: Float,
-//    fillColor: Color,
-//    backgroundColor: Color,
-//    strokeWidth: Dp
-//) {
-//    Canvas(
-//        modifier = modifier
-//            .padding(10.dp)
-//    ) {
-//        // Background Line
-//        drawArc(
-//            color = backgroundColor,
-//            140f,
-//            260f,
-//            false,
-//            style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round),
-//            size = Size(size.width, size.height)
-//        )
-//
-//        drawArc(
-//            color = fillColor,
-//            140f,
-//            percentage * 260f,
-//            false,
-//            style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round),
-//            size = Size(size.width, size.height)
-//        )
-//
-//        val angleInDegrees = (percentage * 260.0) + 50.0
-//        val radius = (size.height / 2)
-//        val x = -(radius * sin(Math.toRadians(angleInDegrees))).toFloat() + (size.width / 2)
-//        val y = (radius * cos(Math.toRadians(angleInDegrees))).toFloat() + (size.height / 2)
-//
-//        drawCircle(
-//            color = Color.White,
-//            radius = strokeWidth.toPx() / 3.0f,
-//            center = Offset(x, y)
-//        )
-//    }
-//}

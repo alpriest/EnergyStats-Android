@@ -103,7 +103,10 @@ class ScheduleSummaryView(
                 SettingsTitleView(stringResource(R.string.templates))
 
                 if (schedule.phases.isEmpty()) {
-                    Text(stringResource(R.string.you_have_no_templates))
+                    Text(
+                        stringResource(R.string.you_have_no_templates),
+                        color = colors.onSecondary
+                    )
                 } else {
                     templates.forEach {
                         Row(verticalAlignment = Alignment.CenterVertically) {

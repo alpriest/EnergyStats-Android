@@ -287,4 +287,5 @@
     <string name="edit_schedule">Editar horario</string>
     <string name="delete_schedule">Eliminar horario</string>
     <string name="your_schedule_was_deleted">Tu horario fue eliminado</string>
+    <string name="reset_times">Horarios de reinicio</string>
 </resources>

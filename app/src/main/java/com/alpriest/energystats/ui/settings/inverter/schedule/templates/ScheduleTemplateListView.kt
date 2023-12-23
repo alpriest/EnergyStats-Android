@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material.icons.Icons
@@ -97,7 +98,10 @@ class ScheduleTemplateListView(
                         border = null,
                         contentPadding = PaddingValues()
                     ) {
-                        Text(it.name)
+                        Text(
+                            it.name,
+                            color = colors.onSecondary
+                        )
 
                         Spacer(modifier = Modifier.weight(0.1f))
 
