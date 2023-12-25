@@ -21,7 +21,7 @@ fun Double.power(displayUnit: DisplayUnit, decimalPlaces: Int): String {
     return when (displayUnit) {
         DisplayUnit.Watts -> this.w()
         DisplayUnit.Kilowatts -> this.kW(decimalPlaces)
-        DisplayUnit.Adaptive -> return if (this < 1) {
+        DisplayUnit.Adaptive -> return if (abs(this) < 1) {
             this.w()
         } else {
             this.kW(decimalPlaces)
@@ -33,7 +33,7 @@ fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
     return when (displayUnit) {
         DisplayUnit.Watts -> this.Wh(decimalPlaces)
         DisplayUnit.Kilowatts -> this.kWh(decimalPlaces)
-        DisplayUnit.Adaptive -> return if (this < 1) {
+        DisplayUnit.Adaptive -> return if (abs(this) < 1) {
             this.Wh(decimalPlaces)
         } else {
             this.kWh(decimalPlaces)
