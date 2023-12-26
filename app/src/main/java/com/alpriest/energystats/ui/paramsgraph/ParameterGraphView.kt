@@ -55,7 +55,7 @@ fun ParameterGraphView(
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
 
     val displayMode = viewModel.displayModeStream.collectAsState().value
-    val formatter = ParameterGraphFormatAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
+    val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
 
     MonitorAlertDialog(viewModel)
 
@@ -72,7 +72,7 @@ fun ParameterGraphView(
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = DecimalFormatAxisValueFormatter("0.0 $unit")
+                                valueFormatter = ParameterGraphEndAxisValueFormatter()
                             ),
                             bottomAxis = rememberBottomAxis(
                                 itemPlacer = AxisItemPlacer.Horizontal.default(36, addExtremeLabelPadding = true),
@@ -101,11 +101,11 @@ fun ParameterGraphView(
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                                valueFormatter = ParameterGraphEndAxisValueFormatter()
                             ),
                             bottomAxis = rememberBottomAxis(
                                 itemPlacer = AxisItemPlacer.Horizontal.default(9, addExtremeLabelPadding = true),
-                                valueFormatter = ParameterGraphFormatAxisValueFormatter(),
+                                valueFormatter = ParameterGraphBottomAxisValueFormatter(),
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
@@ -130,11 +130,11 @@ fun ParameterGraphView(
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                                valueFormatter = ParameterGraphEndAxisValueFormatter()
                             ),
                             bottomAxis = rememberBottomAxis(
                                 itemPlacer = AxisItemPlacer.Horizontal.default(spacing = 18, addExtremeLabelPadding = true),
-                                valueFormatter = ParameterGraphFormatAxisValueFormatter(),
+                                valueFormatter = ParameterGraphBottomAxisValueFormatter(),
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
@@ -154,14 +154,26 @@ fun ParameterGraphView(
     }
 }
 
-class ParameterGraphFormatAxisValueFormatter<Position : AxisPosition> :
-    AxisValueFormatter<Position> {
-
+class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
         return (chartValues.chartEntryModel.entries.first().firstOrNull { it.x == value } as? DateTimeFloatEntry)
             ?.localDateTime
             ?.run {
                 String.format("%d:%02d", hour, minute)
+            }
+            .orEmpty()
+    }
+}
+
+class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
+    override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
+        return (chartValues.chartEntryModel.entries.first().firstOrNull { it.x == value } as? DateTimeFloatEntry)
+            ?.run {
+                if (this.type.unit == "%") {
+                    String.format("%d %s", value.toInt(), type.unit)
+                } else {
+                    String.format("%.02f %s", value, type.unit)
+                }
             }
             .orEmpty()
     }
