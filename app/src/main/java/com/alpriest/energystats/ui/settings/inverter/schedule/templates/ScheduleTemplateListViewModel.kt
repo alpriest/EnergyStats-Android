@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -24,7 +25,7 @@ class ScheduleTemplateListViewModel(
     private val network: FoxESSNetworking,
     private val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val templateStream = MutableStateFlow<List<ScheduleTemplateSummary>>(listOf())
 
@@ -43,7 +44,7 @@ class ScheduleTemplateListViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
             }
         }
@@ -62,7 +63,7 @@ class ScheduleTemplateListViewModel(
 
             load(context)
         } catch (ex: Exception) {
-            uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+            uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
         }
     }
 
@@ -91,7 +92,7 @@ class ScheduleTemplateListViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
             }
         }

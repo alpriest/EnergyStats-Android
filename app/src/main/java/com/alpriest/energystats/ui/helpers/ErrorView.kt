@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.helpers
 
+import android.net.http.NetworkException
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -24,12 +24,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.services.MissingDataException
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun ErrorView(reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
+fun ErrorView(ex: Exception, reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
@@ -76,6 +77,11 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit)
 @Composable
 fun ErrorPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-        ErrorView(reason = "BEGIN_OBJECT was expected but got something else instead. Will try again because something else went wrong too.", onRetry = {}, onLogout = {})
+        ErrorView(
+            ex = MissingDataException(),
+            reason = "BEGIN_OBJECT was expected but got something else instead. Will try again because something else went wrong too.",
+            onRetry = {},
+            onLogout = {}
+        )
     }
 }

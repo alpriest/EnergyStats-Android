@@ -15,16 +15,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.R
+import com.alpriest.energystats.services.InvalidConfigurationException
+import com.alpriest.energystats.services.MissingDataException
+import com.alpriest.energystats.services.UnacceptableException
+import com.alpriest.energystats.ui.helpers.UnsupportedErrorView
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+
+data class MonitorAlertDialogData(
+    val ex: Exception?,
+    val message: String?
+)
 
 @Composable
 fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding) {
     val message = viewModel.alertDialogMessage.collectAsState().value
 
     message?.let {
-        AlertDialog(message = it, onDismiss = {
-            viewModel.resetDialogMessage()
-        })
+        if (it.ex is UnacceptableException) {
+            UnsupportedErrorView(onDismiss = {
+                viewModel.resetDialogMessage()
+            })
+        } else {
+            AlertDialog(message = it.message ?: "Unknown error", onDismiss = {
+                viewModel.resetDialogMessage()
+            })
+        }
     }
 }
 
@@ -33,7 +48,7 @@ private fun AlertDialog(message: String, onDismiss: () -> Unit) {
     val context = LocalContext.current
 
     Dialog(onDismissRequest = onDismiss) {
-        Card {
+        Card(modifier = Modifier.padding(vertical = 24.dp)) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally

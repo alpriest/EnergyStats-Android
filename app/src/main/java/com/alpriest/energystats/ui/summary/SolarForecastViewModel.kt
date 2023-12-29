@@ -80,7 +80,7 @@ class SolarForecastViewModel(
             }
             loadStateStream.value = LoadState.Inactive
         } catch (ex: TryLaterException) {
-            loadStateStream.value = LoadState.Error(context.getString(R.string.could_not_load_forecast_you_have_exceeded_your_free_daily_limit))
+            loadStateStream.value = LoadState.Error(ex, context.getString(R.string.could_not_load_forecast_you_have_exceeded_your_free_daily_limit))
         }
     }
 

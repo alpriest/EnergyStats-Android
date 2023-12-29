@@ -13,6 +13,7 @@ import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -41,7 +42,7 @@ class ScheduleSummaryViewModel(
     private var modes = EditScheduleStore.shared.modes
     val templateStream = MutableStateFlow<List<ScheduleTemplateSummary>>(listOf())
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     private suspend fun preload(context: Context) {
         runCatching {
@@ -60,7 +61,7 @@ class ScheduleSummaryViewModel(
                         uiState.value = UiLoadState(LoadState.Inactive)
                     }
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -90,7 +91,7 @@ class ScheduleSummaryViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
             }
         }
@@ -133,7 +134,7 @@ class ScheduleSummaryViewModel(
                         uiState.value = UiLoadState(LoadState.Inactive)
                         load(context)
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                     }
                 }
             }

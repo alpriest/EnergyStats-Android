@@ -33,6 +33,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.inverter.SettingsRow
@@ -66,7 +67,7 @@ class DataLoggerViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     var itemStream: MutableStateFlow<List<DataLogger>> = MutableStateFlow(listOf())
     var activityStream = MutableStateFlow<String?>(null)
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     suspend fun load(context: Context) {
         activityStream.value = context.getString(R.string.loading)
@@ -85,7 +86,7 @@ class DataLoggerViewModel(
                     )
                 }
             } catch (ex: Exception) {
-                alertDialogMessage.value = ex.message
+                alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             }
         }.also {
             activityStream.value = null

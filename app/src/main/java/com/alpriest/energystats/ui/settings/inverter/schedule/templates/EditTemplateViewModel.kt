@@ -9,6 +9,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -35,7 +36,7 @@ class EditTemplateViewModel(
     val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
     val scheduleStream = EditScheduleStore.shared.scheduleStream
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     private var modes: List<SchedulerModeResponse> = listOf()
     private var templateID: String = ""
@@ -69,9 +70,9 @@ class EditTemplateViewModel(
                     uiState.value = UiLoadState(LoadState.Inactive)
                     shouldPopNavOnDismissal = true
                     EditScheduleStore.shared.reset()
-                    alertDialogMessage.value = context.getString(R.string.your_template_was_deleted)
+                    alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_deleted))
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
             }
         }
@@ -102,9 +103,9 @@ class EditTemplateViewModel(
                         uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
                         EditScheduleStore.shared.reset()
-                        alertDialogMessage.value = context.getString(R.string.your_template_was_saved)
+                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_saved))
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                     }
                 }
             }
@@ -129,9 +130,9 @@ class EditTemplateViewModel(
                         uiState.value = UiLoadState(LoadState.Inactive)
                         shouldPopNavOnDismissal = true
                         EditScheduleStore.shared.reset()
-                        alertDialogMessage.value = context.getString(R.string.your_template_was_activated)
+                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_activated))
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                     }
                 }
             }

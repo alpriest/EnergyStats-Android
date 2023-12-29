@@ -207,7 +207,7 @@ class PowerFlowTabViewModel(
             }
         } catch (ex: Exception) {
             stopTimer()
-            uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Error(ex.localizedMessage ?: "Error unknown"))
+            uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Error(ex, ex.localizedMessage ?: "Error unknown"))
             updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
         }
     }

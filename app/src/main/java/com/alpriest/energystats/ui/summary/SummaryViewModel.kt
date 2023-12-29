@@ -9,6 +9,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.flow.FinanceAmountType
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -36,7 +37,7 @@ class SummaryTabViewModel(
     val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     val oldestDataDate = MutableStateFlow("")
     private val approximationsCalculator = ApproximationsCalculator(network, configManager)
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     suspend fun load() {
         if (approximationsViewModelStream.value != null) {
@@ -80,7 +81,7 @@ class SummaryTabViewModel(
                 }
             } catch (ex: Exception) {
                 hasFinished = true
-                alertDialogMessage.value = ex.localizedMessage
+                alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             }
         }
 

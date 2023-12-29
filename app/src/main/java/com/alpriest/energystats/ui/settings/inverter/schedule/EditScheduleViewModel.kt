@@ -9,6 +9,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -32,7 +33,7 @@ class EditScheduleViewModel(
     val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
     val scheduleStream = EditScheduleStore.shared.scheduleStream
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val allowDeletionStream = MutableStateFlow(false)
     private var modes: List<SchedulerModeResponse> = listOf()
@@ -47,7 +48,7 @@ class EditScheduleViewModel(
         val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
         val deviceSN = config.currentDevice.value?.deviceSN ?: return
         if (!schedule.isValid()) {
-            alertDialogMessage.value = "overlapping_time_periods"
+            alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_periods_overlap))
             return
         }
 
@@ -57,11 +58,11 @@ class EditScheduleViewModel(
                 network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
 
                 shouldPopNavOnDismissal = true
-                alertDialogMessage.value = context.getString(R.string.inverter_charge_schedule_settings_saved)
+                alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.inverter_charge_schedule_settings_saved))
                 EditScheduleStore.shared.reset()
                 uiState.value = UiLoadState(LoadState.Inactive)
             } catch (ex: Exception) {
-                uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
             }
         }
     }
@@ -90,11 +91,11 @@ class EditScheduleViewModel(
                         network.deleteSchedule(deviceSN)
 
                         shouldPopNavOnDismissal = true
-                        alertDialogMessage.value = context.getString(R.string.your_schedule_was_deleted)
+                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_schedule_was_deleted))
                         EditScheduleStore.shared.reset()
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                     }
                 } ?: {
                     uiState.value = UiLoadState(LoadState.Inactive)

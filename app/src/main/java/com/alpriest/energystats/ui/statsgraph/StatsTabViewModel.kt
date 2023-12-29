@@ -16,6 +16,7 @@ import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -46,7 +47,7 @@ class StatsTabViewModel(
     override var exportFileUri: Uri? = null
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     var showingGraphStream = MutableStateFlow(true)
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -107,7 +108,7 @@ class StatsTabViewModel(
 
             rawTotals = generateTotals(device.deviceID, reportData, reportType, queryDate, reportVariables)
         } catch (ex: Exception) {
-            alertDialogMessage.value = ex.localizedMessage
+            alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             return
         }
 

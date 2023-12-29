@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.solcast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -22,7 +23,7 @@ class SolcastSettingsViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     val apiKeyStream = MutableStateFlow("")
     val sitesStream = MutableStateFlow<List<SolcastSite>>(listOf())
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     init {
         apiKeyStream.value = configManager.solcastSettings.apiKey ?: ""
@@ -35,9 +36,9 @@ class SolcastSettingsViewModel(
             val response = service.fetchSites(apiKey = apiKeyStream.value)
             configManager.solcastSettings = SolcastSettings(apiKeyStream.value, response.sites.map { SolcastSite(site = it) })
             sitesStream.value = configManager.solcastSettings.sites
-            alertDialogMessage.value = "Your Solcast settings were successfully verified."
+            alertDialogMessage.value = MonitorAlertDialogData(null, "Your Solcast settings were successfully verified.")
         } catch (ex: Exception) {
-            alertDialogMessage.value = "Your Solcast settings failed to verify (${ex.localizedMessage}"
+            alertDialogMessage.value = MonitorAlertDialogData(ex, "Your Solcast settings failed to verify (${ex.localizedMessage}")
         }
     }
 

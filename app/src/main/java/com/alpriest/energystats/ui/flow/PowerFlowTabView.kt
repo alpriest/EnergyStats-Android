@@ -115,6 +115,7 @@ class PowerFlowTabView(
                 is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
                 is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, (uiState.state as PowerFlowLoadState.Loaded).viewModel, themeStream)
                 is PowerFlowLoadState.Error -> ErrorView(
+                    (uiState.state as PowerFlowLoadState.Error).ex,
                     (uiState.state as PowerFlowLoadState.Error).reason,
                     onRetry = { coroutineScope.launch { viewModel.timerFired() } },
                     onLogout = { userManager.logout() }
@@ -182,7 +183,7 @@ data class UiPowerFlowLoadState(
 )
 
 sealed class PowerFlowLoadState {
-    data class Error(val reason: String) : PowerFlowLoadState()
+    data class Error(val ex: Exception, val reason: String) : PowerFlowLoadState()
     data class Active(val value: String) : PowerFlowLoadState()
     data class Loaded(val viewModel: HomePowerFlowViewModel) : PowerFlowLoadState()
 }
@@ -193,6 +194,6 @@ data class UiLoadState(
 
 sealed class LoadState {
     object Inactive : LoadState()
-    data class Error(val reason: String) : LoadState()
+    data class Error(val ex: Exception, val reason: String) : LoadState()
     data class Active(val value: String) : LoadState()
 }

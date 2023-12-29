@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import androidx.compose.material3.contentColorFor
 import com.alpriest.energystats.models.AddressBookResponse
 import com.alpriest.energystats.models.AuthRequest
 import com.alpriest.energystats.models.AuthResponse
@@ -429,6 +430,11 @@ class NetworkService(private val credentials: CredentialStore, private val store
                     }
 
                     override fun onResponse(call: Call, response: Response) {
+                        if (response.code == 406) {
+                            continuation.resumeWithException(UnacceptableException())
+                            return
+                        }
+
                         try {
                             val text = response.body?.string()
                             val body: T = Gson().fromJson(text, type)

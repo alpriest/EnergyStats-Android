@@ -8,6 +8,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -43,7 +44,7 @@ class BatteryChargeScheduleSettingsViewModel(
     val timePeriod2Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val summaryStream = MutableStateFlow("")
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
@@ -69,7 +70,7 @@ class BatteryChargeScheduleSettingsViewModel(
                     generateSummary(timePeriod1Stream.value, timePeriod2Stream.value, context)
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -149,11 +150,11 @@ class BatteryChargeScheduleSettingsViewModel(
                         times = times
                     )
 
-                    alertDialogMessage.value = context.getString(R.string.battery_charge_schedule_was_saved)
+                    alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_charge_schedule_was_saved))
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error("Something went wrong fetching data from FoxESS cloud."))
+                    uiState.value = UiLoadState(LoadState.Error(ex,"Something went wrong fetching data from FoxESS cloud."))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)

@@ -10,6 +10,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
@@ -32,7 +33,7 @@ interface ExportProviding {
 }
 
 interface AlertDialogMessageProviding {
-    val alertDialogMessage: MutableStateFlow<String?>
+    val alertDialogMessage: MutableStateFlow<MonitorAlertDialogData?>
     fun resetDialogMessage() {
         alertDialogMessage.value = null
     }
@@ -57,7 +58,7 @@ class ParametersGraphTabViewModel(
     var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -128,7 +129,7 @@ class ParametersGraphTabViewModel(
 
             refresh()
         } catch (ex: Exception) {
-            alertDialogMessage.value = ex.localizedMessage
+            alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
         }
     }
 

@@ -10,6 +10,7 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.login.LoggedIn
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -21,7 +22,7 @@ class PreHomeViewModel(
     private val configManager: ConfigManaging,
     private val userManager: UserManaging
 ) : ViewModel(), AlertDialogMessageProviding {
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     internal fun loadData(context: Context) {
         viewModelScope.launch {
@@ -33,7 +34,7 @@ class PreHomeViewModel(
                     configManager.refreshFirmwareVersions()
                 }
             } catch (ex: Exception) {
-                alertDialogMessage.value = ex.localizedMessage
+                alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             }
         }
     }

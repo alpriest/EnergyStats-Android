@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -31,7 +32,7 @@ class WorkModeViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     var workModeStream = MutableStateFlow(WorkMode.SELF_USE)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    override val alertDialogMessage = MutableStateFlow<String?>(null)
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
@@ -45,7 +46,7 @@ class WorkModeViewModel(
                     workModeStream.value = InverterWorkMode.from(result.values.operation_mode__work_mode).asWorkMode()
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -66,11 +67,11 @@ class WorkModeViewModel(
                         workMode = workModeStream.value.asInverterWorkMode().text,
                     )
 
-                    alertDialogMessage.value = context.getString(R.string.inverter_work_mode_was_saved)
+                    alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.inverter_work_mode_was_saved))
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(context.getString(R.string.something_went_wrong_fetching_data_from_foxess_cloud)))
+                    uiState.value = UiLoadState(LoadState.Error(ex, context.getString(R.string.something_went_wrong_fetching_data_from_foxess_cloud)))
                 }
             } ?: run {
                 uiState.value = UiLoadState(LoadState.Inactive)

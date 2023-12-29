@@ -12,6 +12,7 @@ class TryLaterException : Exception("Try Later")
 class MaintenanceModeException : Exception("Fox servers are offline. Please try later.")
 class MissingDataException : Exception("Missing data")
 class UnknownNetworkException(errno: Int, message: String?) : Exception("$errno $message")
+class UnacceptableException: Exception("Unacceptable")
 
 interface FoxESSNetworking {
     suspend fun fetchDeviceList(): PagedDeviceListResponse
