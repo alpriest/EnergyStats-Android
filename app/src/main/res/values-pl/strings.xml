@@ -289,4 +289,5 @@
     <string name="delete_schedule">Usuń harmonogram</string>
     <string name="your_schedule_was_deleted">Twój harmonogram został usunięty</string>
     <string name="reset_times">Czasy resetowania</string>
+    <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Nie można załadować prognozy - Przekroczyłeś darmowy dzienny limit</string>
 </resources>

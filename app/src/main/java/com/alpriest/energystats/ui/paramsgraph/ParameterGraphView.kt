@@ -24,7 +24,6 @@ import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
-import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
@@ -38,7 +37,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun ParameterGraphView(
-    unit: String,
     producer: ChartEntryModelProducer,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
@@ -167,7 +165,7 @@ class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValu
 
 class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
-        return (chartValues.chartEntryModel.entries.first().firstOrNull { it.x == value } as? DateTimeFloatEntry)
+        return (chartValues.chartEntryModel.entries.first().firstOrNull() as? DateTimeFloatEntry)
             ?.run {
                 if (this.type.unit == "%") {
                     String.format("%d %s", value.toInt(), type.unit)
@@ -180,8 +178,8 @@ class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFo
 }
 
 class NonDisplayingMarker<T>(
-    var valuesAtTimeStream: MutableStateFlow<List<T>> = MutableStateFlow(listOf()),
-    val guideline: LineComponent?
+    private var valuesAtTimeStream: MutableStateFlow<List<T>> = MutableStateFlow(listOf()),
+    private val guideline: LineComponent?
 ) : Marker {
     override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
         drawGuideline(context, bounds, markedEntries)

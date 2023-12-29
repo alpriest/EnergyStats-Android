@@ -288,4 +288,5 @@
     <string name="delete_schedule">Zeitplan löschen</string>
     <string name="your_schedule_was_deleted">Ihr Zeitplan wurde gelöscht</string>
     <string name="reset_times">Reset-Zeiten</string>
+    <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Vorhersage konnte nicht geladen werden - Sie haben Ihr kostenloses Tageslimit überschritten</string>
 </resources>

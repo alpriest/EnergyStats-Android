@@ -1,10 +1,13 @@
 package com.alpriest.energystats.ui.summary
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.toHalfHourOfDay
+import com.alpriest.energystats.services.TryLaterException
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
@@ -42,7 +45,7 @@ class SolarForecastViewModel(
     val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())
     var loadStateStream= MutableStateFlow<LoadState>(LoadState.Inactive)
 
-    suspend fun load() {
+    suspend fun load(context: Context) {
         if (loadStateStream.value != LoadState.Inactive) { return }
         val settings = themeStream.value.solcastSettings
         if (settings.sites.isEmpty() || settings.apiKey == null) {
@@ -51,31 +54,34 @@ class SolarForecastViewModel(
 
         loadStateStream.value = LoadState.Active("Loading...")
 
-        dataStream.value = settings.sites.map {
-            val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey).forecasts
-            val today = getToday()
-            val tomorrow = getTomorrow()
+        try {
+            dataStream.value = settings.sites.map {
+                val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey).forecasts
+                val today = getToday()
+                val tomorrow = getTomorrow()
 
-            val todayData = forecasts.filter { response ->
-                isSameDay(response.periodEnd, today)
+                val todayData = forecasts.filter { response ->
+                    isSameDay(response.periodEnd, today)
+                }
+
+                val tomorrowData = forecasts.filter { response ->
+                    isSameDay(response.periodEnd, tomorrow)
+                }
+
+                SolarForecastViewData(
+                    error = null,
+                    today = asGraphData(todayData),
+                    todayTotal = total(todayData),
+                    tomorrow = asGraphData(tomorrowData),
+                    tomorrowTotal = total(tomorrowData),
+                    name = it.name,
+                    resourceId = it.resourceId
+                )
             }
-
-            val tomorrowData = forecasts.filter { response ->
-                isSameDay(response.periodEnd, tomorrow)
-            }
-
-            SolarForecastViewData(
-                error = null,
-                today = asGraphData(todayData),
-                todayTotal = total(todayData),
-                tomorrow = asGraphData(tomorrowData),
-                tomorrowTotal = total(tomorrowData),
-                name = it.name,
-                resourceId = it.resourceId
-            )
+            loadStateStream.value = LoadState.Inactive
+        } catch (ex: TryLaterException) {
+            loadStateStream.value = LoadState.Error(context.getString(R.string.could_not_load_forecast_you_have_exceeded_your_free_daily_limit))
         }
-
-        loadStateStream.value = LoadState.Inactive
     }
 
     private fun asGraphData(data: List<SolcastForecastResponse>): List<List<DateFloatEntry>> {

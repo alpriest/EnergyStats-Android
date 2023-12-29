@@ -32,7 +32,8 @@ class SolcastCache(
     }
 
     private suspend fun fetchAndStore(site: SolcastSite, apiKey: String, previous: SolcastForecastResponseList? = null): SolcastForecastResponseList {
-        val latest = service.fetchForecast(site, apiKey).forecasts.toMutableList()
+        val response = service.fetchForecast(site, apiKey)
+        val latest = response.forecasts.toMutableList()
         val previousForecasts = previous?.forecasts ?: listOf()
         val todayStart = LocalDate.now().atStartOfDay()
 

@@ -290,4 +290,5 @@
     <string name="delete_schedule">Delete schedule</string>
     <string name="your_schedule_was_deleted">Your schedule was deleted</string>
     <string name="reset_times">Reset times</string>
+    <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Could not load forecast - You have exceeded your free daily limit</string>
 </resources>

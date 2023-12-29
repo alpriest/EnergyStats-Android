@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -67,17 +68,36 @@ class SolarForecastView(
     ) {
         val data = viewModel.dataStream.collectAsState().value
         val loadState: LoadState = viewModel.loadStateStream.collectAsState().value
+        val context = LocalContext.current
 
         LaunchedEffect(null) {
-            viewModel.load()
+            viewModel.load(context)
         }
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.reason, onRetry = { viewModel.load() }, onLogout = {/* TODO */ })
+            is LoadState.Error -> {
+                Column(
+                    modifier = Modifier.padding(top = 22.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.solar_forecasts),
+                        style = MaterialTheme.typography.h2,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.onSecondary,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Text(
+                        loadState.reason,
+                        color = colors.onSecondary
+                    )
+                }
+            }
+
             is LoadState.Inactive -> {
                 Column(
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = modifier.fillMaxWidth().padding(top = 22.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -90,8 +110,8 @@ class SolarForecastView(
 
                     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                         data.map { site ->
-                            ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), site.error, site.resourceId, themeStream)
-                            ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), site.error, site.resourceId, themeStream)
+                            ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), site.error, themeStream)
+                            ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), site.error, themeStream)
                         }
                     }
 
@@ -155,7 +175,6 @@ class SolarForecastView(
         name: String?,
         title: String,
         error: String?,
-        resourceId: String,
         themeStream: MutableStateFlow<AppTheme>
     ) {
         val theme = themeStream.collectAsState().value

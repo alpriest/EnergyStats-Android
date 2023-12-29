@@ -134,7 +134,6 @@ class ParametersGraphTabView(
 
                     producers.value.forEach {
                         ParameterGraphView(
-                            it.key,
                             it.value,
                             viewModel = viewModel,
                             themeStream,
@@ -180,7 +179,7 @@ fun showExportMethodSelection(context: Context, filename: String, filePathChoose
 
     AlertDialog.Builder(context)
         .setTitle(context.getString(R.string.choose_export_method))
-        .setItems(items) { dialog, which ->
+        .setItems(items) { _, which ->
             when (which) {
                 0 -> {
                     filePathChooser(filename) {

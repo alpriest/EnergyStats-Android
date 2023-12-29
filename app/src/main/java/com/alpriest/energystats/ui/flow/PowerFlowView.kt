@@ -56,7 +56,7 @@ fun PowerFlowView(
     }
 
     Box(contentAlignment = Alignment.Center, modifier = modifier) {
-        Line(amount, lineColor, Modifier, powerTextColor, theme, orientation, isFlowing)
+        Line(amount, lineColor, Modifier, theme, orientation, isFlowing)
 
         if (isFlowing) {
             Card(

@@ -104,7 +104,7 @@ class SummaryTabViewModel(
 
         val totals = mutableMapOf<ReportVariable, Double>()
         reports.forEach { reportResponse ->
-            val reportVariable = ReportVariable.parse(reportResponse.variable) ?: return@forEach
+            val reportVariable = ReportVariable.parse(reportResponse.variable)
 
             totals[reportVariable] = reportResponse.data.sumOf { kotlin.math.abs(it.value) }
         }

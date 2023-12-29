@@ -288,4 +288,5 @@
     <string name="delete_schedule">Eliminar horario</string>
     <string name="your_schedule_was_deleted">Tu horario fue eliminado</string>
     <string name="reset_times">Horarios de reinicio</string>
+    <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">No se pudo cargar el pronóstico - Ha superado su límite diario gratuito</string>
 </resources>

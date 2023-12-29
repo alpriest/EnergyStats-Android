@@ -24,7 +24,7 @@ import kotlin.math.abs
 import kotlin.math.max
 
 @Composable
-fun Line(amount: Double, color: Color, modifier: Modifier, powerTextColor: Color, theme: AppTheme, orientation: LineOrientation, isFlowing: Boolean) {
+fun Line(amount: Double, color: Color, modifier: Modifier, theme: AppTheme, orientation: LineOrientation, isFlowing: Boolean) {
     val phaseAnimation = rememberInfiniteTransition()
     val strokeWidth: Float = theme.strokeWidth()
     val initialValue = if (amount > 0) {
@@ -92,7 +92,6 @@ fun LinePreview() {
             amount = 2.0,
             color = Color.Red,
             modifier = Modifier,
-            powerTextColor = Color.White,
             theme = AppTheme.preview(),
             orientation = LineOrientation.HORIZONTAL,
             isFlowing = true
@@ -101,7 +100,6 @@ fun LinePreview() {
             amount = 2.0,
             color = Color.Red,
             modifier = Modifier,
-            powerTextColor = Color.White,
             theme = AppTheme.preview(),
             orientation = LineOrientation.VERTICAL,
             isFlowing = true

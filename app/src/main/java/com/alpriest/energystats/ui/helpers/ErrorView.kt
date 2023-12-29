@@ -33,7 +33,6 @@ fun ErrorView(reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit)
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
-    val context = LocalContext.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.flow
 
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -12,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +48,7 @@ fun EarningsView(themeStream: MutableStateFlow<AppTheme>, viewModel: EarningsVie
     val theme by themeStream.collectAsState()
 
     Row {
-        viewModel.amounts(theme.financialModel, context).forEach {
+        viewModel.amounts(theme.financialModel).forEach {
             SubLabelledView(
                 value = it.formattedAmount(),
                 label = it.title(context),
@@ -130,7 +128,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
 }
 
 class EarningsViewModel(val response: EarningsResponse, val energyStatsFinancialModel: EnergyStatsFinancialModel) {
-    fun amounts(model: FinancialModel, context: Context): List<FinanceAmount> {
+    fun amounts(model: FinancialModel): List<FinanceAmount> {
         return when (model) {
             FinancialModel.FoxESS ->
                 listOf(

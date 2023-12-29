@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.solcast
 
+import android.accounts.NetworkErrorException
 import com.alpriest.energystats.models.SolcastSiteResponseList
 import com.alpriest.energystats.services.InvalidConfigurationException
 import com.alpriest.energystats.services.TryLaterException
@@ -38,7 +39,6 @@ class Solcast : SolarForecasting {
             .build()
 
         val type = object : TypeToken<SolcastForecastResponseList>() {}.type
-
         return fetch(request, type)
     }
 

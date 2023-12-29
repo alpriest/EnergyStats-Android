@@ -289,4 +289,5 @@
     <string name="delete_schedule">Elimina programma</string>
     <string name="your_schedule_was_deleted">Il tuo programma è stato eliminato</string>
     <string name="reset_times">Resetta gli orari</string>
+    <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Impossibile caricare le previsioni - Hai superato il limite giornaliero gratuito</string>
 </resources>
