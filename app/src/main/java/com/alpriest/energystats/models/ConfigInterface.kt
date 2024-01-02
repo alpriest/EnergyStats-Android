@@ -1,9 +1,6 @@
 package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
-import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
@@ -31,7 +28,6 @@ interface ConfigInterface {
     var useLargeDisplay: Boolean
     var isDemoUser: Boolean
     var decimalPlaces: Int
-    var showTotalYield: Boolean
     var showFinancialSummary: Boolean
     var displayUnit: Int
     var showInverterTemperatures: Boolean
@@ -45,5 +41,6 @@ interface ConfigInterface {
     var deviceBatteryOverrides: Map<String, String>
     var parameterGroups: List<ParameterGroup>
     var solcastSettings: SolcastSettings
+    var totalYieldModel: Int
     fun clear()
 }

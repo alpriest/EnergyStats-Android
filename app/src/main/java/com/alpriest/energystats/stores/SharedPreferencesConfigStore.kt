@@ -25,7 +25,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         DECIMAL_PLACES,
         SHOW_BATTERY_ESTIMATE,
         SHOW_USABLE_BATTERY_ONLY,
-        SHOW_TOTAL_YIELD,
         SELF_SUFFICIENCY_ESTIMATE_MODE,
         SHOW_ESTIMATED_EARNINGS,
         DISPLAY_UNIT,
@@ -50,7 +49,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_GRAPH_VALUE_DESCRIPTIONS,
         COLOR_THEME_MODE,
         SOLCAST_SETTINGS,
-        DATA_CEILING
+        DATA_CEILING,
+        TOTAL_YIELD_MODEL
     }
 
     override var colorTheme: Int
@@ -122,14 +122,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOW_HOME_TOTAL.name, value)
-            editor.apply()
-        }
-
-    override var showTotalYield: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_TOTAL_YIELD.name, true)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceKey.SHOW_TOTAL_YIELD.name, value)
             editor.apply()
         }
 
@@ -378,6 +370,15 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.putInt(SharedPreferenceKey.DATA_CEILING.name, value)
             editor.apply()
         }
+
+    override var totalYieldModel: Int
+        get() = sharedPreferences.getInt(SharedPreferenceKey.TOTAL_YIELD_MODEL.name, 0)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(SharedPreferenceKey.TOTAL_YIELD_MODEL.name, value)
+            editor.apply()
+        }
+
 
     override fun clear() {
         val editor = sharedPreferences.edit()

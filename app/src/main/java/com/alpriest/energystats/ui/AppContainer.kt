@@ -28,6 +28,7 @@ import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.Solcast
 import com.alpriest.energystats.ui.settings.solcast.SolcastCache
@@ -58,7 +59,6 @@ class AppContainer(private val context: Context) {
             showSunnyBackground = config.showSunnyBackground,
             showBatteryEstimate = config.showBatteryEstimate,
             showUsableBatteryOnly = config.showUsableBatteryOnly,
-            showTotalYield = config.showTotalYield,
             selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
             showFinancialSummary = config.showFinancialSummary,
             displayUnit = DisplayUnit.fromInt(config.displayUnit),
@@ -77,7 +77,8 @@ class AppContainer(private val context: Context) {
             parameterGroups = config.parameterGroups,
             colorTheme = ColorThemeMode.fromInt(config.colorTheme),
             solcastSettings = config.solcastSettings,
-            dataCeiling = DataCeiling.fromInt(config.dataCeiling)
+            dataCeiling = DataCeiling.fromInt(config.dataCeiling),
+            totalYieldModel = TotalYieldModel.fromInt(config.totalYieldModel)
         )
     )
 

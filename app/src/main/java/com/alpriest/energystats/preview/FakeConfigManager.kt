@@ -13,6 +13,7 @@ import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
 import com.alpriest.energystats.ui.settings.solcast.preview
@@ -36,7 +37,6 @@ class FakeConfigManager : ConfigManaging {
     override var showUsableBatteryOnly: Boolean = false
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.preview())
     override var decimalPlaces: Int = 3
-    override var showTotalYield: Boolean = true
     override var showSunnyBackground: Boolean = true
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off
     override var showBatteryEstimate: Boolean = false
@@ -62,6 +62,7 @@ class FakeConfigManager : ConfigManaging {
     override var parameterGroups: List<ParameterGroup> = ParameterGroup.defaults
     override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf(SolcastSite.preview()))
     override var dataCeiling: DataCeiling = DataCeiling.Mild
+    override var totalYieldModel: TotalYieldModel = TotalYieldModel.Off
 
     override var devices: List<Device>? = listOf(
         Device(

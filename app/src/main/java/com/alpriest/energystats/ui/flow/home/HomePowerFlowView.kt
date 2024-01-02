@@ -15,6 +15,7 @@ import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -60,7 +61,6 @@ fun AppTheme.Companion.preview(
     showSunnyBackground: Boolean = true,
     decimalPlaces: Int = 2,
     showUsableBatteryOnly: Boolean = false,
-    showTotalYield: Boolean = true,
     selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
     showFinancialSummary: Boolean = true,
     displayUnit: DisplayUnit = DisplayUnit.Kilowatts,
@@ -79,7 +79,8 @@ fun AppTheme.Companion.preview(
     parameterGroups: List<ParameterGroup> = ParameterGroup.defaults,
     colorTheme: ColorThemeMode = ColorThemeMode.Auto,
     solcastSettings: SolcastSettings = SolcastSettings.defaults,
-    dataCeiling: DataCeiling = DataCeiling.Mild
+    dataCeiling: DataCeiling = DataCeiling.Mild,
+    totalYieldModel: TotalYieldModel = TotalYieldModel.EnergyStats
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -89,7 +90,6 @@ fun AppTheme.Companion.preview(
         decimalPlaces = decimalPlaces,
         showSunnyBackground = showSunnyBackground,
         showUsableBatteryOnly = showUsableBatteryOnly,
-        showTotalYield = showTotalYield,
         selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
         showFinancialSummary = showFinancialSummary,
         financialModel = financialModel,
@@ -108,6 +108,7 @@ fun AppTheme.Companion.preview(
         parameterGroups = parameterGroups,
         colorTheme = colorTheme,
         solcastSettings = solcastSettings,
-        dataCeiling = dataCeiling
+        dataCeiling = dataCeiling,
+        totalYieldModel = totalYieldModel
     )
 }

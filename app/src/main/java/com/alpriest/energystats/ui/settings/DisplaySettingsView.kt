@@ -26,7 +26,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
     val decimalPlacesState = rememberSaveable { mutableIntStateOf(config.decimalPlaces) }
-    val showTotalYieldState = rememberSaveable { mutableStateOf(config.showTotalYield) }
+    val totalYieldModelState = rememberSaveable { mutableStateOf(config.totalYieldModel) }
     val displayUnitState = rememberSaveable { mutableStateOf(config.displayUnit) }
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
@@ -51,12 +51,6 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             title = stringResource(R.string.show_coloured_flow_lines),
             state = colouredFlowLinesState,
             onUpdate = { config.useColouredFlowLines = it }
-        )
-
-        SettingsCheckbox(
-            title = stringResource(R.string.show_total_yield),
-            state = showTotalYieldState,
-            onUpdate = { config.showTotalYield = it }
         )
 
         SettingsCheckbox(
@@ -121,6 +115,43 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             title = stringResource(R.string.show_graph_value_descriptions),
             state = showGraphValueDescriptionsState,
             onUpdate = { config.showGraphValueDescriptions = it }
+        )
+    }
+
+    SettingsColumnWithChild(
+        modifier = modifier
+    ) {
+        SettingsSegmentedControl(
+            title = stringResource(R.string.yield),
+            segmentedControl = {
+                val items = listOf(
+                    TotalYieldModel.Off,
+                    TotalYieldModel.EnergyStats,
+                    TotalYieldModel.FoxESS
+                )
+                SegmentedControl(
+                    items = items.map { it.title(context) },
+                    defaultSelectedItemIndex = items.indexOf(totalYieldModelState.value),
+                    color = colors.primary
+                ) {
+                    totalYieldModelState.value = items[it]
+                    config.totalYieldModel = items[it]
+                }
+            },
+            footer = buildAnnotatedString {
+                when (displayUnitState.value) {
+                    DisplayUnit.Kilowatts -> append(
+                        stringResource(
+                            R.string.display_unit_kilowatts_description,
+                            3.456.kW(decimalPlacesState.value),
+                            0.123.kW(decimalPlacesState.value)
+                        )
+                    )
+
+                    DisplayUnit.Watts -> append(stringResource(R.string.display_unit_watts_description, 3.456.w(), 0.123.w()))
+                    DisplayUnit.Adaptive -> append(stringResource(R.string.display_unit_adaptive_description, 3.456.kW(decimalPlacesState.value), 0.123.w()))
+                }
+            }
         )
     }
 

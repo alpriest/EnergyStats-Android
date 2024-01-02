@@ -179,7 +179,7 @@ fun SolarPowerFlowViewPreview() {
                     .width(100.dp)
                     .height(100.dp),
                 iconHeight = 40.dp,
-                themeStream = MutableStateFlow(AppTheme.preview().copy(showTotalYield = false, showFinancialSummary = false))
+                themeStream = MutableStateFlow(AppTheme.preview().copy(showFinancialSummary = false))
             )
 
             Slider(

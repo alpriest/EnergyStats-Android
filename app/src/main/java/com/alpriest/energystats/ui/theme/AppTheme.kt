@@ -10,6 +10,7 @@ import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 
 data class AppTheme(
@@ -20,7 +21,6 @@ data class AppTheme(
     val decimalPlaces: Int,
     val showSunnyBackground: Boolean,
     val showUsableBatteryOnly: Boolean,
-    val showTotalYield: Boolean,
     val selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode,
     val showFinancialSummary: Boolean,
     val financialModel: FinancialModel,
@@ -39,7 +39,8 @@ data class AppTheme(
     var parameterGroups: List<ParameterGroup>,
     val colorTheme: ColorThemeMode,
     val solcastSettings: SolcastSettings,
-    val dataCeiling: DataCeiling
+    val dataCeiling: DataCeiling,
+    val totalYieldModel: TotalYieldModel
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

@@ -2,9 +2,8 @@ package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
-import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
@@ -26,7 +25,6 @@ class FakeConfigStore(
     override var decimalPlaces: Int = 2,
     override var showBatteryEstimate: Boolean = true,
     override var showUsableBatteryOnly: Boolean = false,
-    override var showTotalYield: Boolean = true,
     override var selfSufficiencyEstimateMode: Int = 0,
     override var showFinancialSummary: Boolean = false,
     override var displayUnit: Int = 0,
@@ -45,7 +43,8 @@ class FakeConfigStore(
     override var financialModel: Int = 1,
     override var currencySymbol: String = "£",
     override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf()),
-    override var dataCeiling: Int = DataCeiling.Mild.value
+    override var dataCeiling: Int = DataCeiling.Mild.value,
+    override var totalYieldModel: Int = TotalYieldModel.EnergyStats.value
 
 ) : ConfigInterface {
     override fun clear() {}

@@ -10,6 +10,7 @@ import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -85,13 +86,6 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             config.selfSufficiencyEstimateMode = value.value
             themeStream.value = themeStream.value.copy(selfSufficiencyEstimateMode = selfSufficiencyEstimateMode)
-        }
-
-    override var showTotalYield: Boolean
-        get() = config.showTotalYield
-        set(value) {
-            config.showTotalYield = value
-            themeStream.value = themeStream.value.copy(showTotalYield = showTotalYield)
         }
 
     override var showFinancialSummary: Boolean
@@ -248,6 +242,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             config.solarRangeDefinitions = value
             themeStream.value = themeStream.value.copy(solarRangeDefinitions = solarRangeDefinitions)
+        }
+
+    override var totalYieldModel: TotalYieldModel
+        get() = TotalYieldModel.fromInt(config.totalYieldModel)
+        set(value) {
+            config.totalYieldModel = value.value
+            themeStream.value = themeStream.value.copy(totalYieldModel = totalYieldModel)
         }
 
     final override var devices: List<Device>?

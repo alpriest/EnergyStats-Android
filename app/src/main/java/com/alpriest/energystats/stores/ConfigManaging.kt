@@ -9,6 +9,7 @@ import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -37,7 +38,6 @@ interface ConfigManaging {
     val hasBattery: Boolean
     var showUsableBatteryOnly: Boolean
     var decimalPlaces: Int
-    var showTotalYield: Boolean
     var showFinancialSummary: Boolean
     var showSunnyBackground: Boolean
     var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode
@@ -63,4 +63,5 @@ interface ConfigManaging {
     var colorThemeMode: ColorThemeMode
     var solcastSettings: SolcastSettings
     var dataCeiling: DataCeiling
+    var totalYieldModel: TotalYieldModel
 }

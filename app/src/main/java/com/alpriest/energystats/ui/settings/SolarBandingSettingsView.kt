@@ -189,7 +189,6 @@ fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTh
                 threshold2 = threshold2.toDouble(),
                 threshold3 = threshold3.toDouble()
             ),
-            showTotalYield = false,
             showFinancialSummary = false
         )
 }

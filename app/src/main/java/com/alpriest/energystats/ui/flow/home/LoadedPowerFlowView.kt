@@ -41,6 +41,7 @@ import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +60,7 @@ fun LoadedPowerFlowView(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
     ) {
-        if (theme.showTotalYield) {
+        if (theme.totalYieldModel != TotalYieldModel.Off) {
             Text(text = stringResource(id = R.string.yieldToday, homePowerFlowViewModel.todaysGeneration.energy(theme.displayUnit, theme.decimalPlaces)))
         }
 
