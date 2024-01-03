@@ -293,27 +293,31 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         }
 
     override suspend fun fetchDevices() {
-        val deviceList = networking.fetchDeviceList()
+        var method = "device list"
 
         try {
+            val deviceList = networking.fetchDeviceList()
             val mappedDevices = ArrayList<Device>()
             deviceList.devices.asFlow().map {
+                method = "device variables"
                 val variables = networking.fetchVariables(it.deviceID)
+                method = "device firmware versions"
                 val firmware = fetchFirmwareVersions(it.deviceID)
-                var deviceBattery: Battery?
 
-                if (it.hasBattery) {
+                val deviceBattery: Battery? = if (it.hasBattery) {
+                    method = "device attached battery"
                     val battery = networking.fetchBattery(it.deviceID)
+                    method = "device attached battery settings"
                     val batterySettings = networking.fetchBatterySettings(it.deviceSN)
                     try {
                         val batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
                         val minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
-                        deviceBattery = Battery(batteryCapacity, minSOC)
+                        Battery(batteryCapacity, minSOC)
                     } catch (_: Exception) {
-                        deviceBattery = null
+                        null
                     }
                 } else {
-                    deviceBattery = null
+                    null
                 }
 
                 mappedDevices.add(
@@ -341,7 +345,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         } catch (ex: Exception) {
-            throw CouldNotFetchDeviceList(ex)
+            throw DataFetchFailure(method, ex)
         }
     }
 
@@ -409,5 +413,5 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
     }
 }
 
-class CouldNotFetchDeviceList(ex: Exception) : Exception("Could not fetch device list (#${ex.localizedMessage})")
+class DataFetchFailure(method: String, ex: Exception) : Exception("Could not fetch $method (#${ex.localizedMessage})")
 class NoDeviceFoundException : Exception("No device found")

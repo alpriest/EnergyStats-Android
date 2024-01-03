@@ -34,6 +34,7 @@ import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.preview
@@ -156,7 +157,7 @@ fun PowerFlowTabViewPreview() {
         solar = 1.0,
         home = 2.45,
         grid = 2.45,
-        todaysGeneration = 5.4,
+        todaysGeneration = GenerationViewModel(raws = listOf(), 5.4),
         earnings = EarningsViewModel.preview(),
         inverterTemperatures = null,
         hasBattery = true,

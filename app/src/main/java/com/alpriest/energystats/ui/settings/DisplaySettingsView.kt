@@ -139,17 +139,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 }
             },
             footer = buildAnnotatedString {
-                when (displayUnitState.value) {
-                    DisplayUnit.Kilowatts -> append(
-                        stringResource(
-                            R.string.display_unit_kilowatts_description,
-                            3.456.kW(decimalPlacesState.value),
-                            0.123.kW(decimalPlacesState.value)
-                        )
-                    )
-
-                    DisplayUnit.Watts -> append(stringResource(R.string.display_unit_watts_description, 3.456.w(), 0.123.w()))
-                    DisplayUnit.Adaptive -> append(stringResource(R.string.display_unit_adaptive_description, 3.456.kW(decimalPlacesState.value), 0.123.w()))
+                when (totalYieldModelState.value) {
+                    TotalYieldModel.Off -> null
+                    TotalYieldModel.EnergyStats -> append(stringResource(R.string.energystats_total_yield_description))
+                    TotalYieldModel.FoxESS -> append(stringResource(R.string.foxess_total_yield_description))
                 }
             }
         )

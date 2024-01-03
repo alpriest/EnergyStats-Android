@@ -61,7 +61,7 @@ fun LoadedPowerFlowView(
         modifier = Modifier.fillMaxHeight()
     ) {
         if (theme.totalYieldModel != TotalYieldModel.Off) {
-            Text(text = stringResource(id = R.string.yieldToday, homePowerFlowViewModel.todaysGeneration.energy(theme.displayUnit, theme.decimalPlaces)))
+            Text(text = stringResource(id = R.string.yieldToday, homePowerFlowViewModel.todaysGeneration.todayGeneration(theme.totalYieldModel).energy(theme.displayUnit, theme.decimalPlaces)))
         }
 
         if (theme.showFinancialSummary) {
@@ -263,7 +263,7 @@ fun SummaryPowerFlowViewPreview() {
                 solar = 1.0,
                 home = 2.454,
                 grid = 1.234,
-                todaysGeneration = 1.234,
+                todaysGeneration = GenerationViewModel(raws = listOf(), 1.234),
                 earnings = EarningsViewModel.preview(),
                 inverterTemperatures = null,
                 hasBattery = true,

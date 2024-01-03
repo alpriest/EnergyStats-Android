@@ -290,4 +290,8 @@
     <string name="your_schedule_was_deleted">Twój harmonogram został usunięty</string>
     <string name="reset_times">Czasy resetowania</string>
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Nie można załadować prognozy - Przekroczyłeś darmowy dzienny limit</string>
+    <string name="pv_only">Tylko PV</string>
+    <string name="yield">Wydajność</string>
+    <string name="energystats_total_yield_description">Obliczona jako przybliżenie sumy Riemanna całkowania pvPower. Będzie to dość dokładne, ale tylko na dzisiaj.</string>
+    <string name="foxess_total_yield_description">Wykorzystuje wartość dostarczoną przez FoxESS, która zawiera moc wyjściową baterii i energii słonecznej.</string>
 </resources>

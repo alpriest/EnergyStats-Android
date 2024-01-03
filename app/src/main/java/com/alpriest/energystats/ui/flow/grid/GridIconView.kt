@@ -23,6 +23,7 @@ import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.EarningsViewModel
+import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -102,7 +103,7 @@ fun GridIconViewPreview() {
         solar = 1.0,
         home = 2.45,
         grid = 2.45,
-        todaysGeneration = 5.4,
+        todaysGeneration = GenerationViewModel(raws = listOf(), 5.4),
         earnings = EarningsViewModel.preview(),
         inverterTemperatures = null,
         hasBattery = true,

@@ -289,4 +289,8 @@
     <string name="your_schedule_was_deleted">Ihr Zeitplan wurde gelöscht</string>
     <string name="reset_times">Reset-Zeiten</string>
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Vorhersage konnte nicht geladen werden - Sie haben Ihr kostenloses Tageslimit überschritten</string>
+    <string name="pv_only">Nur PV</string>
+    <string name="yield">Ertrag</string>
+    <string name="energystats_total_yield_description">Berechnet als eine Riemann-Summen-Approximation der Integration von pvPower. Dies wird für heute recht genau sein.</string>
+    <string name="foxess_total_yield_description">Verwendet den von FoxESS gelieferten Wert, der die Batterieausgabe und Solarleistung enthält.</string>
 </resources>

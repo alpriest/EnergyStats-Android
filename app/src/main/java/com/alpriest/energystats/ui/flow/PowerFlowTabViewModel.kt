@@ -12,6 +12,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
@@ -189,7 +190,7 @@ class PowerFlowTabViewModel(
                     solar = currentViewModel.currentSolarPower,
                     home = currentViewModel.currentHomeConsumption,
                     grid = currentViewModel.currentGrid,
-                    todaysGeneration = earnings.today.generation,
+                    todaysGeneration = GenerationViewModel(raws, earnings.today.generation),
                     earnings = EarningsViewModel(earnings, EnergyStatsFinancialModel(totals, configManager)),
                     inverterTemperatures = currentViewModel.inverterTemperatures,
                     hasBattery = battery.hasBattery,
