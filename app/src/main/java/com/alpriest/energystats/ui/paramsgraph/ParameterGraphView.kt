@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.statsgraph.chartStyle
@@ -38,11 +39,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ParameterGraphView(
     producer: ChartEntryModelProducer,
+    chartColors: List<Color>,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     modifier: Modifier = Modifier
 ) {
-    val chartColors = viewModel.chartColorsStream.collectAsState().value
     val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
         override fun onMarkerHidden(marker: Marker) {
             super.onMarkerHidden(marker)

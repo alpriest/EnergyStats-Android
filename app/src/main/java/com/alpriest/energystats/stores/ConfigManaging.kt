@@ -6,7 +6,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -64,4 +64,5 @@ interface ConfigManaging {
     var solcastSettings: SolcastSettings
     var dataCeiling: DataCeiling
     var totalYieldModel: TotalYieldModel
+    var showFinancialSummaryOnFlowPage: Boolean
 }

@@ -21,7 +21,7 @@ import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.CalculationBreakdown
-import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 

@@ -42,5 +42,7 @@ interface ConfigInterface {
     var parameterGroups: List<ParameterGroup>
     var solcastSettings: SolcastSettings
     var totalYieldModel: Int
+    var showFinancialSummaryOnFlowPage: Boolean
+
     fun clear()
 }

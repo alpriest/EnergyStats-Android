@@ -49,7 +49,7 @@ class ParametersGraphTabViewModel(
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
-    var chartColorsStream = MutableStateFlow(listOf<Color>())
+    var chartColorsStream: MutableStateFlow<Map<String, List<Color>>> = MutableStateFlow(mapOf())
     val producers: MutableStateFlow<Map<String, ChartEntryModelProducer>> = MutableStateFlow(mapOf())
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     var rawData: List<ParametersGraphValue> = listOf()
@@ -163,9 +163,9 @@ class ParametersGraphTabViewModel(
             ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
         }
 
-        chartColorsStream.value = grouped
-            .map { it.key.colour() }
-
+//        chartColorsStream.value = grouped
+//            .map { it.key.colour() }
+//
         if (entries.isEmpty()) {
             hasDataStream.value = false
             entriesStream.value = listOf()
@@ -197,6 +197,18 @@ class ParametersGraphTabViewModel(
                     )
                 }
                 .toMap()
+
+            val foo = grouped
+                .map { group ->
+                    return@map Pair(group.key.unit, group.value)
+                }
+
+            val foo2 = foo.groupBy { it.first }
+            val foo3 = foo2.map { Pair(it.key, it.value.map { it.second.first() }) }
+            val foo4 = foo3.map { Pair(it.first, it.second.map { it.type.colour() } ) }
+                .toMap()
+
+            chartColorsStream.value = foo4
         }
 
         prepareExport(rawData, displayModeStream.value)

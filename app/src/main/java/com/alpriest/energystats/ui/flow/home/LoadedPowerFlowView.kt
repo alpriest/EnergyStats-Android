@@ -64,7 +64,7 @@ fun LoadedPowerFlowView(
             Text(text = stringResource(id = R.string.yieldToday, homePowerFlowViewModel.todaysGeneration.todayGeneration(theme.totalYieldModel).energy(theme.displayUnit, theme.decimalPlaces)))
         }
 
-        if (theme.showFinancialSummary) {
+        if (theme.showFinancialSummaryOnFlowPage) {
             EarningsView(themeStream, homePowerFlowViewModel.earnings)
         }
 

@@ -44,7 +44,8 @@ class FakeConfigStore(
     override var currencySymbol: String = "£",
     override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf()),
     override var dataCeiling: Int = DataCeiling.Mild.value,
-    override var totalYieldModel: Int = TotalYieldModel.EnergyStats.value
+    override var totalYieldModel: Int = TotalYieldModel.EnergyStats.value,
+    override var showFinancialSummaryOnFlowPage: Boolean = false
 
 ) : ConfigInterface {
     override fun clear() {}

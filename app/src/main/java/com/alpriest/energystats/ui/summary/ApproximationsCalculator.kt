@@ -5,7 +5,7 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
-import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.statsgraph.AbsoluteSelfSufficiencyCalculator
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.NetSelfSufficiencyCalculator

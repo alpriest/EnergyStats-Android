@@ -7,7 +7,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -399,6 +399,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             config.dataCeiling = value.value
             themeStream.value = themeStream.value.copy(dataCeiling = dataCeiling)
+        }
+
+    override var showFinancialSummaryOnFlowPage: Boolean
+        get() = config.showFinancialSummaryOnFlowPage
+        set(value) {
+            config.showFinancialSummaryOnFlowPage = value
+            themeStream.value = themeStream.value.copy(showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage)
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

@@ -295,4 +295,5 @@
     <string name="yield">Yield</string>
     <string name="energystats_total_yield_description">Calculated as a Riemann sum approximation integration of pvPower. This will be reasonably accurate but is only calculated for today.</string>
     <string name="foxess_total_yield_description">Uses the FoxESS supplied value which contains battery and solar output.</string>
+    <string name="show_on_flow_page">Show on flow page</string>
 </resources>

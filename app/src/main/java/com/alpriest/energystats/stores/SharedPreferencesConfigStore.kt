@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.ui.settings.FinancialModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
@@ -50,7 +49,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         COLOR_THEME_MODE,
         SOLCAST_SETTINGS,
         DATA_CEILING,
-        TOTAL_YIELD_MODEL
+        TOTAL_YIELD_MODEL,
+        SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW
     }
 
     override var colorTheme: Int
@@ -379,6 +379,13 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
+    override var showFinancialSummaryOnFlowPage: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW.name, value)
+            editor.apply()
+        }
 
     override fun clear() {
         val editor = sharedPreferences.edit()

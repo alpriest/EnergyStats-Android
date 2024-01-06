@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.settings
+package com.alpriest.energystats.ui.settings.financial
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -28,11 +28,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.SegmentedControl
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.settings.SettingsCheckbox
+import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.Locale
@@ -53,24 +60,30 @@ enum class FinancialModel(val value: Int) {
 }
 
 @Composable
-
 fun FinancialsSettingsView(config: ConfigManaging) {
-    val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
-    val financialModelState = rememberSaveable { mutableStateOf(config.financialModel) }
     val context = LocalContext.current
+    val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
+    val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(config.showFinancialSummaryOnFlowPage) }
+    val financialModelState = rememberSaveable { mutableStateOf(config.financialModel) }
     val feedInUnitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
 
     SettingsColumnWithChild {
         SettingsCheckbox(title = stringResource(R.string.show_financial_summary), state = showFinancialSummaryState, onUpdate = {
             config.showFinancialSummary = it
+
+            if (!it) config.showFinancialSummaryOnFlowPage = false
         })
 
         if (showFinancialSummaryState.value) {
+            SettingsCheckbox(title = stringResource(R.string.show_on_flow_page), state = showFinancialSummaryOnFlowPageState, onUpdate = {
+                config.showFinancialSummaryOnFlowPage = it
+            })
+
             SettingsSegmentedControl(segmentedControl = {
                 val items = listOf(FinancialModel.EnergyStats, FinancialModel.FoxESS)
                 SegmentedControl(
-                    items = items.map { it.title(context) }, defaultSelectedItemIndex = items.indexOf(financialModelState.value), color = MaterialTheme.colors.primary
+                    items = items.map { it.title(context) }, defaultSelectedItemIndex = items.indexOf(financialModelState.value), color = colors.primary
                 ) {
                     financialModelState.value = items[it]
                     config.financialModel = items[it]
@@ -82,16 +95,16 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
-                        .background(MaterialTheme.colors.surface)
+                        .background(colors.surface)
                         .padding(vertical = 4.dp)
                 ) {
                     Text(
-                        stringResource(R.string.feed_in_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSecondary
+                        stringResource(R.string.feed_in_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = colors.onSecondary
                     )
 
                     Text(
                         config.currencySymbol,
-                        color = MaterialTheme.colors.onSecondary,
+                        color = colors.onSecondary,
                         modifier = Modifier.padding(end = 8.dp)
                     )
 
@@ -118,16 +131,16 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
-                        .background(MaterialTheme.colors.surface)
+                        .background(colors.surface)
                         .padding(vertical = 4.dp)
                 ) {
                     Text(
-                        stringResource(R.string.grid_import_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = MaterialTheme.colors.onSecondary
+                        stringResource(R.string.grid_import_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = colors.onSecondary
                     )
 
                     Text(
                         config.currencySymbol,
-                        color = MaterialTheme.colors.onSecondary,
+                        color = colors.onSecondary,
                         modifier = Modifier.padding(end = 8.dp)
                     )
 

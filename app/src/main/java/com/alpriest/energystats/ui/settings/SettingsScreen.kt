@@ -14,6 +14,7 @@ import com.alpriest.energystats.ui.settings.battery.BatteryChargeScheduleSetting
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
+import com.alpriest.energystats.ui.settings.financial.FinancialsSettingsView
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditPhaseView

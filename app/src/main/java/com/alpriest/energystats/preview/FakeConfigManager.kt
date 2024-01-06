@@ -10,7 +10,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -63,6 +63,7 @@ class FakeConfigManager : ConfigManaging {
     override var solcastSettings: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf(SolcastSite.preview()))
     override var dataCeiling: DataCeiling = DataCeiling.Mild
     override var totalYieldModel: TotalYieldModel = TotalYieldModel.Off
+    override var showFinancialSummaryOnFlowPage: Boolean = false
 
     override var devices: List<Device>? = listOf(
         Device(

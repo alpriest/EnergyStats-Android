@@ -13,7 +13,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
@@ -80,7 +80,8 @@ fun AppTheme.Companion.preview(
     colorTheme: ColorThemeMode = ColorThemeMode.Auto,
     solcastSettings: SolcastSettings = SolcastSettings.defaults,
     dataCeiling: DataCeiling = DataCeiling.Mild,
-    totalYieldModel: TotalYieldModel = TotalYieldModel.EnergyStats
+    totalYieldModel: TotalYieldModel = TotalYieldModel.EnergyStats,
+    showFinancialSummaryOnFlowPage: Boolean = true
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -109,6 +110,7 @@ fun AppTheme.Companion.preview(
         colorTheme = colorTheme,
         solcastSettings = solcastSettings,
         dataCeiling = dataCeiling,
-        totalYieldModel = totalYieldModel
+        totalYieldModel = totalYieldModel,
+        showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage
     )
 }

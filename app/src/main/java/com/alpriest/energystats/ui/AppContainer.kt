@@ -26,7 +26,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.FinancialModel
+import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
@@ -78,7 +78,8 @@ class AppContainer(private val context: Context) {
             colorTheme = ColorThemeMode.fromInt(config.colorTheme),
             solcastSettings = config.solcastSettings,
             dataCeiling = DataCeiling.fromInt(config.dataCeiling),
-            totalYieldModel = TotalYieldModel.fromInt(config.totalYieldModel)
+            totalYieldModel = TotalYieldModel.fromInt(config.totalYieldModel),
+            showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage
         )
     )
 
