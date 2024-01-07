@@ -65,7 +65,12 @@ fun LoadedPowerFlowView(
         modifier = Modifier.fillMaxHeight()
     ) {
         if (theme.totalYieldModel != TotalYieldModel.Off) {
-            Text(text = stringResource(id = R.string.yieldToday, homePowerFlowViewModel.todaysGeneration.todayGeneration(theme.totalYieldModel).energy(theme.displayUnit, theme.decimalPlaces)))
+            Text(
+                text = stringResource(
+                    id = R.string.yieldToday,
+                    homePowerFlowViewModel.todaysGeneration.todayGeneration(theme.totalYieldModel).energy(theme.displayUnit, theme.decimalPlaces)
+                )
+            )
         }
 
         if (theme.showFinancialSummaryOnFlowPage) {
@@ -172,21 +177,14 @@ fun LoadedPowerFlowView(
 
         Row {
             homePowerFlowViewModel.batteryViewModel?.let { model ->
-                Box(modifier = Modifier.weight(2f).padding(top = 4.dp),) {
-                    BatteryIconView(
-                        viewModel = model,
-                        themeStream = themeStream,
-                        iconHeight = iconHeight
-                    )
-
-                    if (hasBatteryError) {
-                        Icon(
-                            Icons.Rounded.Error,
-                            tint = Color.Red,
-                            contentDescription = "",
-                        )
-                    }
-                }
+                BatteryIconView(
+                    viewModel = model,
+                    themeStream = themeStream,
+                    iconHeight = iconHeight,
+                    modifier = Modifier
+                        .weight(2f)
+                        .padding(top = 4.dp)
+                )
 
                 Spacer(
                     modifier = Modifier.weight(1f)

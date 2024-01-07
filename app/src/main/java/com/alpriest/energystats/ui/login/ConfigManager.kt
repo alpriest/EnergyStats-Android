@@ -298,23 +298,25 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         try {
             val deviceList = networking.fetchDeviceList()
             val mappedDevices = ArrayList<Device>()
-            deviceList.devices.asFlow().map {
+            deviceList.devices.asFlow().map {networkDevice ->
                 method = "device variables"
-                val variables = networking.fetchVariables(it.deviceID)
+                val variables = networking.fetchVariables(networkDevice.deviceID)
                 method = "device firmware versions"
-                val firmware = fetchFirmwareVersions(it.deviceID)
+                val firmware = fetchFirmwareVersions(networkDevice.deviceID)
 
-                val deviceBattery: Battery? = if (it.hasBattery) {
+                val deviceBattery: Battery? = if (networkDevice.hasBattery) {
                     try {
                         method = "device attached battery"
-                        val battery = networking.fetchBattery(it.deviceID)
+                        val battery = networking.fetchBattery(networkDevice.deviceID)
                         method = "device attached battery settings"
-                        val batterySettings = networking.fetchBatterySettings(it.deviceSN)
+                        val batterySettings = networking.fetchBatterySettings(networkDevice.deviceSN)
                         val batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
                         val minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
                         Battery(batteryCapacity, minSOC, false)
                     } catch (_: Exception) {
-                        Battery(null, null, true)
+                        devices?.firstOrNull { it.deviceID == networkDevice.deviceID }?.let {
+                            Battery(it.battery?.capacity, it.battery?.minSOC, true)
+                        }
                     }
                 } else {
                     null
@@ -322,16 +324,16 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
 
                 mappedDevices.add(
                     Device(
-                        plantName = it.plantName,
-                        deviceID = it.deviceID,
-                        deviceSN = it.deviceSN,
-                        hasPV = it.hasPV,
-                        hasBattery = it.hasBattery,
+                        plantName = networkDevice.plantName,
+                        deviceID = networkDevice.deviceID,
+                        deviceSN = networkDevice.deviceSN,
+                        hasPV = networkDevice.hasPV,
+                        hasBattery = networkDevice.hasBattery,
                         battery = deviceBattery,
-                        deviceType = it.deviceType,
+                        deviceType = networkDevice.deviceType,
                         firmware = firmware,
                         variables = variables,
-                        moduleSN = it.moduleSN
+                        moduleSN = networkDevice.moduleSN
                     )
                 )
             }.collect()
