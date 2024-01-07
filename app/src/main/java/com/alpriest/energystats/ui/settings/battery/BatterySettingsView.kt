@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.battery
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -8,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -41,8 +43,16 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
     val minSOC = config.minSOC.collectAsState()
+    val hasError = config.currentDevice.collectAsState().value?.battery?.hasError ?: false
 
     SettingsPage {
+        if (hasError) {
+            SettingsColumnWithChild(modifier = Modifier.border(width = 2.dp, color = Color.Red)) {
+                SettingsTitleView(stringResource(R.string.error))
+                Text(stringResource(R.string.battery_errors_description_1))
+            }
+        }
+
         SettingsButtonList {
             SettingsNavButton(stringResource(R.string.minimum_charge_levels)) {
                 navController.navigate(SettingsScreen.BatterySOC.name)

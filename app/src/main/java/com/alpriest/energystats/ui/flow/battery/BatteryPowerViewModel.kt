@@ -9,7 +9,7 @@ class BatteryPowerViewModel(
     val chargePowerkWH: Double,
     val temperature: Double,
     val residual: Int,
-    val error: Error?
+    val hasError: Boolean
 ) : ViewModel() {
     private val calculator: BatteryCapacityCalculator
 
@@ -39,10 +39,5 @@ class BatteryPowerViewModel(
     val hasBattery: Boolean
         get() {
             return configManager.hasBattery
-        }
-
-    val hasError: Boolean
-        get() {
-            return error != null
         }
 }

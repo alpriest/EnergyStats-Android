@@ -48,5 +48,6 @@ data class Device(
 
 data class Battery(
     val capacity: String?,
-    val minSOC: String?
+    val minSOC: String?,
+    val hasError: Boolean
 )

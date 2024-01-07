@@ -57,6 +57,7 @@ class ScheduleSummaryView(
         val context = LocalContext.current
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
+        val supportedError = viewModel.supportedErrorStream.collectAsState().value
 
         MonitorAlertDialog(viewModel)
 
@@ -67,7 +68,18 @@ class ScheduleSummaryView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel) }
+            is LoadState.Inactive -> {
+                if (supportedError == null) {
+                    schedule?.let { Loaded(it, viewModel) }
+                } else {
+                    SettingsPage {
+                        SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
+                            SettingsTitleView("Unsupported")
+                            Text(supportedError)
+                        }
+                    }
+                }
+            }
         }
     }
 

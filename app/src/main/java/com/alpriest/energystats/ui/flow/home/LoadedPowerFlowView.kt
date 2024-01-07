@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Error
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -55,6 +58,7 @@ fun LoadedPowerFlowView(
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val theme by themeStream.collectAsState()
+    val hasBatteryError = homePowerFlowViewModel.batteryViewModel?.hasError ?: false
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,14 +172,21 @@ fun LoadedPowerFlowView(
 
         Row {
             homePowerFlowViewModel.batteryViewModel?.let { model ->
-                BatteryIconView(
-                    viewModel = model,
-                    themeStream = themeStream,
-                    modifier = Modifier
-                        .weight(2f)
-                        .padding(top = 4.dp),
-                    iconHeight = iconHeight
-                )
+                Box(modifier = Modifier.weight(2f).padding(top = 4.dp),) {
+                    BatteryIconView(
+                        viewModel = model,
+                        themeStream = themeStream,
+                        iconHeight = iconHeight
+                    )
+
+                    if (hasBatteryError) {
+                        Icon(
+                            Icons.Rounded.Error,
+                            tint = Color.Red,
+                            contentDescription = "",
+                        )
+                    }
+                }
 
                 Spacer(
                     modifier = Modifier.weight(1f)

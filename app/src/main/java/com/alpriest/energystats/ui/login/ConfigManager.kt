@@ -124,7 +124,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
                 val override = config.deviceBatteryOverrides[it.deviceID]
                 return (override ?: it.battery?.capacity ?: "0").toDouble().toInt()
             } ?: run {
-                2600
+                10000
             }
         }
         set(value) {
@@ -305,16 +305,16 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
                 val firmware = fetchFirmwareVersions(it.deviceID)
 
                 val deviceBattery: Battery? = if (it.hasBattery) {
-                    method = "device attached battery"
-                    val battery = networking.fetchBattery(it.deviceID)
-                    method = "device attached battery settings"
-                    val batterySettings = networking.fetchBatterySettings(it.deviceSN)
                     try {
+                        method = "device attached battery"
+                        val battery = networking.fetchBattery(it.deviceID)
+                        method = "device attached battery settings"
+                        val batterySettings = networking.fetchBatterySettings(it.deviceSN)
                         val batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
                         val minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
-                        Battery(batteryCapacity, minSOC)
+                        Battery(batteryCapacity, minSOC, false)
                     } catch (_: Exception) {
-                        null
+                        Battery(null, null, true)
                     }
                 } else {
                     null

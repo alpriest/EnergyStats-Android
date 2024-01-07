@@ -30,7 +30,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun ErrorView(ex: Exception, reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
+fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current

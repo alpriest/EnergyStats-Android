@@ -294,4 +294,7 @@
     <string name="yield">Rendimento</string>
     <string name="energystats_total_yield_description">Calculado como una aproximación de la suma de Riemann de la integración de pvPower. Esto será razonablemente preciso, pero solo para hoy.</string>
     <string name="foxess_total_yield_description">Utilizza il valore fornito da FoxESS, che include l\'uscita della batteria e l\'uscita solare.</string>
+    <string name="show_on_flow_page">Mostra sulla pagina del flusso</string>
+    <string name="error">Errore</string>
+    <string name="battery_errors_description_1">Abbiamo riscontrato un errore nel recuperare le tue impostazioni della batteria da Fox Cloud, che potrebbe essere dovuto a un problema temporaneo con i server di Fox. Di conseguenza, alcune funzionalità relative alla batteria potrebbero non funzionare come previsto.\n\nNon preoccuparti, una volta che riavvii l\'app, proveremo a recuperare di nuovo le tue impostazioni. Grazie per la tua pazienza.</string>
 </resources>

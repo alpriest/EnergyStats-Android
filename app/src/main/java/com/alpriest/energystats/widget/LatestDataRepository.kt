@@ -29,7 +29,7 @@ class LatestDataRepository private constructor() {
             val battery = appContainer.networking.fetchBattery(device.deviceID)
             val minSOC = device.battery?.minSOC?.toDouble() ?: 0.0
             val calculator = BatteryCapacityCalculator(appContainer.configManager.batteryCapacity, minSOC)
-            val viewModel = BatteryViewModel(battery)
+            val viewModel = BatteryViewModel(battery, false)
             calculator.batteryPercentageRemaining(viewModel.chargePower, viewModel.chargeLevel)?.let {
                 chargeDescription = duration(context, it)
             }

@@ -195,6 +195,6 @@ data class UiLoadState(
 
 sealed class LoadState {
     object Inactive : LoadState()
-    data class Error(val ex: Exception, val reason: String) : LoadState()
+    data class Error(val ex: Exception?, val reason: String) : LoadState()
     data class Active(val value: String) : LoadState()
 }

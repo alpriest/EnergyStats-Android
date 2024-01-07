@@ -296,4 +296,6 @@
     <string name="energystats_total_yield_description">Calculated as a Riemann sum approximation integration of pvPower. This will be reasonably accurate but is only calculated for today.</string>
     <string name="foxess_total_yield_description">Uses the FoxESS supplied value which contains battery and solar output.</string>
     <string name="show_on_flow_page">Show on flow page</string>
+    <string name="error">Error</string>
+    <string name="battery_errors_description_1">We encountered an error while fetching your battery settings from Fox Cloud, which might be due to a temporary issue with the Fox servers. As a result, some battery-related features might not work as expected.\n\nDon\'t worry, though – once you restart the app, we\'ll try to retrieve your settings again. Thanks for your patience.</string>
 </resources>
