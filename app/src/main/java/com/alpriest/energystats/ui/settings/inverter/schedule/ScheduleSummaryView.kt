@@ -114,7 +114,7 @@ class ScheduleSummaryView(
             SettingsColumnWithChild {
                 SettingsTitleView(stringResource(R.string.templates))
 
-                if (schedule.phases.isEmpty()) {
+                if (templates.isEmpty()) {
                     Text(
                         stringResource(R.string.you_have_no_templates),
                         color = colors.onSecondary
@@ -122,7 +122,10 @@ class ScheduleSummaryView(
                 } else {
                     templates.forEach {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(it.name)
+                            Text(
+                                it.name,
+                                color = colors.onSecondary
+                            )
 
                             Spacer(modifier = Modifier.weight(0.1f))
 
