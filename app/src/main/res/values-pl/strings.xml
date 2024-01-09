@@ -297,4 +297,5 @@
     <string name="show_on_flow_page">Pokaż na stronie przepływu</string>
     <string name="error">Błąd</string>
     <string name="battery_errors_description_1">Napotkaliśmy błąd podczas pobierania ustawień baterii z Fox Cloud, co może być spowodowane tymczasowym problemem z serwerami Fox. W rezultacie niektóre funkcje związane z baterią mogą nie działać zgodnie z oczekiwaniami.\n\nNie martw się, po ponownym uruchomieniu aplikacji spróbujemy ponownie pobrać Twoje ustawienia. Dziękujemy za cierpliwość.</string>
+    <string name="separate_parameter_graphs_by_unit">Oddziel wykresy parametrów według jednostki</string>
 </resources>

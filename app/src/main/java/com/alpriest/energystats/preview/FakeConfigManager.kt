@@ -64,6 +64,7 @@ class FakeConfigManager : ConfigManaging {
     override var dataCeiling: DataCeiling = DataCeiling.Mild
     override var totalYieldModel: TotalYieldModel = TotalYieldModel.Off
     override var showFinancialSummaryOnFlowPage: Boolean = false
+    override var separateParameterGraphsByUnit: Boolean = true
 
     override var devices: List<Device>? = listOf(
         Device(

@@ -79,7 +79,8 @@ class AppContainer(private val context: Context) {
             solcastSettings = config.solcastSettings,
             dataCeiling = DataCeiling.fromInt(config.dataCeiling),
             totalYieldModel = TotalYieldModel.fromInt(config.totalYieldModel),
-            showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage
+            showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage,
+            separateParameterGraphsByUnit = config.separateParameterGraphsByUnit
         )
     )
 

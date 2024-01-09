@@ -32,6 +32,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
     val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
     val showGraphValueDescriptionsState = rememberSaveable { mutableStateOf(config.showGraphValueDescriptions) }
+    val separateParameterGraphsByUnitState = rememberSaveable { mutableStateOf(config.separateParameterGraphsByUnit) }
     val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
     val dataCeilingState = rememberSaveable { mutableStateOf(config.dataCeiling) }
     val context = LocalContext.current
@@ -115,6 +116,12 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             title = stringResource(R.string.show_graph_value_descriptions),
             state = showGraphValueDescriptionsState,
             onUpdate = { config.showGraphValueDescriptions = it }
+        )
+
+        SettingsCheckbox(
+            title = stringResource(R.string.separate_parameter_graphs_by_unit),
+            state = separateParameterGraphsByUnitState,
+            onUpdate = { config.separateParameterGraphsByUnit = it }
         )
     }
 

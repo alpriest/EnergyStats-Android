@@ -65,4 +65,5 @@ interface ConfigManaging {
     var dataCeiling: DataCeiling
     var totalYieldModel: TotalYieldModel
     var showFinancialSummaryOnFlowPage: Boolean
+    var separateParameterGraphsByUnit: Boolean
 }

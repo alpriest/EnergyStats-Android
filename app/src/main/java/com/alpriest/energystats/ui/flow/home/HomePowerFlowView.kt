@@ -81,7 +81,8 @@ fun AppTheme.Companion.preview(
     solcastSettings: SolcastSettings = SolcastSettings.defaults,
     dataCeiling: DataCeiling = DataCeiling.Mild,
     totalYieldModel: TotalYieldModel = TotalYieldModel.EnergyStats,
-    showFinancialSummaryOnFlowPage: Boolean = true
+    showFinancialSummaryOnFlowPage: Boolean = true,
+    separateParameterGraphsByUnit: Boolean = true
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -111,6 +112,7 @@ fun AppTheme.Companion.preview(
         solcastSettings = solcastSettings,
         dataCeiling = dataCeiling,
         totalYieldModel = totalYieldModel,
-        showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage
+        showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage,
+        separateParameterGraphsByUnit = separateParameterGraphsByUnit
     )
 }

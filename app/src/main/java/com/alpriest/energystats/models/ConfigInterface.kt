@@ -5,6 +5,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var separateParameterGraphsByUnit: Boolean
     var dataCeiling: Int
     var colorTheme: Int
     var showGraphValueDescriptions: Boolean

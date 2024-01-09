@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import android.graphics.RectF
+import android.icu.text.Transliterator.Position
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
+import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
@@ -42,7 +44,8 @@ fun ParameterGraphView(
     chartColors: List<Color>,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showYAxisUnit: Boolean
 ) {
     val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
         override fun onMarkerHidden(marker: Marker) {
@@ -55,6 +58,7 @@ fun ParameterGraphView(
 
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
+    val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>() else DecimalFormatAxisValueFormatter("0.0")
 
     MonitorAlertDialog(viewModel)
 
@@ -71,7 +75,7 @@ fun ParameterGraphView(
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = ParameterGraphEndAxisValueFormatter()
+                                valueFormatter = endAxisFormatter
                             ),
                             bottomAxis = rememberBottomAxis(
                                 itemPlacer = AxisItemPlacer.Horizontal.default(36, addExtremeLabelPadding = true),
@@ -100,7 +104,7 @@ fun ParameterGraphView(
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = ParameterGraphEndAxisValueFormatter()
+                                valueFormatter = endAxisFormatter
                             ),
                             bottomAxis = rememberBottomAxis(
                                 itemPlacer = AxisItemPlacer.Horizontal.default(9, addExtremeLabelPadding = true),
@@ -129,7 +133,7 @@ fun ParameterGraphView(
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = ParameterGraphEndAxisValueFormatter()
+                                valueFormatter = endAxisFormatter
                             ),
                             bottomAxis = rememberBottomAxis(
                                 itemPlacer = AxisItemPlacer.Horizontal.default(spacing = 18, addExtremeLabelPadding = true),

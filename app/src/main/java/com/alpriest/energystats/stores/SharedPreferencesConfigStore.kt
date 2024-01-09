@@ -50,7 +50,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SOLCAST_SETTINGS,
         DATA_CEILING,
         TOTAL_YIELD_MODEL,
-        SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW
+        SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW,
+        SEPARATE_PARAMETER_GRAPHS_BY_UNIT
     }
 
     override var colorTheme: Int
@@ -384,6 +385,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW.name, value)
+            editor.apply()
+        }
+
+    override var separateParameterGraphsByUnit: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SEPARATE_PARAMETER_GRAPHS_BY_UNIT.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceKey.SEPARATE_PARAMETER_GRAPHS_BY_UNIT.name, value)
             editor.apply()
         }
 

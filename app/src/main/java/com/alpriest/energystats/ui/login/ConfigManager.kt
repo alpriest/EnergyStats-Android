@@ -20,10 +20,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetworking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) : ConfigManaging {
+open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetworking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
+    ConfigManaging {
 
     override var colorThemeMode: ColorThemeMode
-        get() = ColorThemeMode.fromInt( config.colorTheme)
+        get() = ColorThemeMode.fromInt(config.colorTheme)
         set(value) {
             config.colorTheme = value.value
             themeStream.value = themeStream.value.copy(colorTheme = colorThemeMode)
@@ -298,7 +299,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         try {
             val deviceList = networking.fetchDeviceList()
             val mappedDevices = ArrayList<Device>()
-            deviceList.devices.asFlow().map {networkDevice ->
+            deviceList.devices.asFlow().map { networkDevice ->
                 method = "device variables"
                 val variables = networking.fetchVariables(networkDevice.deviceID)
                 method = "device firmware versions"
@@ -408,6 +409,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             config.showFinancialSummaryOnFlowPage = value
             themeStream.value = themeStream.value.copy(showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage)
+        }
+
+    override var separateParameterGraphsByUnit: Boolean
+        get() = config.separateParameterGraphsByUnit
+        set(value) {
+            config.separateParameterGraphsByUnit = value
+            themeStream.value = themeStream.value.copy(separateParameterGraphsByUnit = separateParameterGraphsByUnit)
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

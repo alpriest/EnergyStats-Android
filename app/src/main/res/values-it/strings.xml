@@ -297,4 +297,5 @@
     <string name="show_on_flow_page">Mostra sulla pagina del flusso</string>
     <string name="error">Errore</string>
     <string name="battery_errors_description_1">Abbiamo riscontrato un errore nel recuperare le tue impostazioni della batteria da Fox Cloud, che potrebbe essere dovuto a un problema temporaneo con i server di Fox. Di conseguenza, alcune funzionalità relative alla batteria potrebbero non funzionare come previsto.\n\nNon preoccuparti, una volta che riavvii l\'app, proveremo a recuperare di nuovo le tue impostazioni. Grazie per la tua pazienza.</string>
+    <string name="separate_parameter_graphs_by_unit">Separa i grafici dei parametri per unità</string>
 </resources>

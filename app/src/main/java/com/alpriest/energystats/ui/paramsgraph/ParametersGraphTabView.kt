@@ -47,6 +47,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -133,16 +134,32 @@ class ParametersGraphTabView(
                         }
                     }
 
-                    producers.value.forEach { (unit, producer) ->
-                        allChartColors[unit]?.let {
-                            ParameterGraphView(
-                                producer,
-                                chartColors = it,
-                                viewModel = viewModel,
-                                themeStream,
-                                modifier = Modifier.padding(bottom = 24.dp)
-                            )
+                    if (configManager.separateParameterGraphsByUnit) {
+                        producers.value.forEach { (unit, producer) ->
+                            allChartColors[unit]?.let {
+                                ParameterGraphView(
+                                    producer,
+                                    chartColors = it,
+                                    viewModel = viewModel,
+                                    themeStream,
+                                    modifier = Modifier.padding(bottom = 24.dp),
+                                    showYAxisUnit = true
+                                )
+                            }
                         }
+                    } else {
+                        val chartColors = allChartColors.values.flatten()
+                        val allEntries = producers.value.values.flatMap { it.getModel()?.entries ?: listOf() }
+                        val producer = ChartEntryModelProducer(allEntries)
+
+                        ParameterGraphView(
+                            producer,
+                            chartColors = chartColors,
+                            viewModel = viewModel,
+                            themeStream,
+                            modifier = Modifier.padding(bottom = 24.dp),
+                            showYAxisUnit = false
+                        )
                     }
 
                     ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)

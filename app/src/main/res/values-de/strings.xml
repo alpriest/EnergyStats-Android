@@ -296,4 +296,5 @@
     <string name="show_on_flow_page">Auf Flussseite anzeigen</string>
     <string name="error">Fehler</string>
     <string name="battery_errors_description_1">Wir sind auf einen Fehler beim Abrufen Ihrer Batterieeinstellungen von Fox Cloud gestoßen, was auf ein vorübergehendes Problem mit den Fox-Servern zurückzuführen sein könnte. Infolgedessen funktionieren einige batteriebezogene Funktionen möglicherweise nicht wie erwartet.\n\nKeine Sorge, wenn Sie die App neu starten, werden wir versuchen, Ihre Einstellungen erneut abzurufen. Vielen Dank für Ihre Geduld.</string>
+    <string name="separate_parameter_graphs_by_unit">Trenne Parameterdiagramme nach Einheit</string>
 </resources>

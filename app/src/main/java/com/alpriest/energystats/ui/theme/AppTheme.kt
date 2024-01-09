@@ -41,7 +41,8 @@ data class AppTheme(
     val solcastSettings: SolcastSettings,
     val dataCeiling: DataCeiling,
     val totalYieldModel: TotalYieldModel,
-    val showFinancialSummaryOnFlowPage: Boolean
+    val showFinancialSummaryOnFlowPage: Boolean,
+    val separateParameterGraphsByUnit: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

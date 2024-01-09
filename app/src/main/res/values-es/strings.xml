@@ -296,4 +296,5 @@
     <string name="show_on_flow_page">Mostrar en la página de flujo</string>
     <string name="error">Error</string>
     <string name="battery_errors_description_1">Hemos encontrado un error al obtener tus configuraciones de batería de Fox Cloud, lo que podría deberse a un problema temporal con los servidores de Fox. Como resultado, algunas funciones relacionadas con la batería podrían no funcionar como se espera.\n\nNo te preocupes, una vez que reinicies la aplicación, intentaremos recuperar tus configuraciones nuevamente. Gracias por tu paciencia.</string>
+    <string name="separate_parameter_graphs_by_unit">Separa los gráficos de parámetros por unidad</string>
 </resources>
