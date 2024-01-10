@@ -9,7 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.LoadingView
-import com.alpriest.energystats.ui.login.CredentialsView
+import com.alpriest.energystats.ui.login.APIKeyLoginView
+import com.alpriest.energystats.ui.login.LoginView
 import com.alpriest.energystats.ui.login.LoggedIn
 import com.alpriest.energystats.ui.login.LoggedOut
 import com.alpriest.energystats.ui.login.LoggingIn
@@ -47,7 +48,7 @@ fun MainAppView(appContainer: AppContainer) {
                 }
 
                 is LoggedOut ->
-                    CredentialsView(
+                    LoginView(
                         errorMessage = loginStateValue.loadState.reason,
                         onLogin = { username, password ->
                             coroutineScope.launch {

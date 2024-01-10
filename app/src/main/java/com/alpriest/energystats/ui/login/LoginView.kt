@@ -21,11 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
-fun CredentialsView(
+fun LoginView(
     errorMessage: String?,
     onLogin: (String, String) -> Unit,
     onDemoLogin: () -> Unit
@@ -119,12 +117,11 @@ fun CredentialsView(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun CredentialsViewPreview() {
+fun LoginViewPreview() {
     EnergyStatsTheme {
-        CredentialsView(
+        LoginView(
             errorMessage = "You got something wrong",
             onLogin = { _, _ -> },
             onDemoLogin = {}

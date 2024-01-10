@@ -18,21 +18,26 @@ import com.alpriest.energystats.ui.theme.WebLinkColorInLightTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 fun makeUrlAnnotatedString(text: String, linkColor: Color): AnnotatedString {
-    val clickableText = "https://toolkit.solcast.com.au"
-    val urlPattern = "(https?:\\/\\/[^ ]+)".toRegex()
+    val urlPattern = "(https?:\\/\\/[^ ]+)|(\\S+@\\S+)".toRegex()
+    val emailPattern = "(\\S+@\\S+)".toRegex()
 
     val annotatedString = buildAnnotatedString {
         append(text)
 
         urlPattern.findAll(text).forEach { matchResult ->
-            val url = matchResult.value
+            val url: String
+            if (emailPattern.matches(matchResult.value)) {
+                url = "mailto:$matchResult.value"
+            } else {
+                url = matchResult.value
+            }
             val start = matchResult.range.first
             val end = matchResult.range.last + 1
 
             if (start >= 0) {
                 addStringAnnotation(
                     tag = "URL",
-                    annotation = clickableText,
+                    annotation = url,
                     start = start,
                     end = end
                 )
