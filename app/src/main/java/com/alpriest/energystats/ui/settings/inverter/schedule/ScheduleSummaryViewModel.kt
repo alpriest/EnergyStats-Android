@@ -53,20 +53,20 @@ class ScheduleSummaryViewModel(
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {
+
                     val supported = network.fetchSchedulerFlag(deviceSN).support
 
                     if (!supported) {
-                        supportedErrorStream.value = String.format("Schedules are not supported on your %1s.", device.deviceDisplayName)
+                        supportedErrorStream.value = String.format(
+                            context.getString(R.string.unsupported_firmware),
+                            device.deviceDisplayName,
+                            device.firmware?.manager ?: ""
+                        )
                         uiState.value = UiLoadState(LoadState.Inactive)
-                    } else { // device.firmware?.manager
-                        if (hasManagerGreaterThan(current = device.firmware?.manager, required = "1.70")) {
-                            EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
-                            modes = EditScheduleStore.shared.modes
-                            uiState.value = UiLoadState(LoadState.Inactive)
-                        } else {
-                            supportedErrorStream.value = String.format("You have manager firmware version %1s, you need version %2s or greater for scheduling.", device.firmware?.manager ?: "", "1.70")
-                            uiState.value = UiLoadState(LoadState.Inactive)
-                        }
+                    } else {
+                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
+                        modes = EditScheduleStore.shared.modes
+                        uiState.value = UiLoadState(LoadState.Inactive)
                     }
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
@@ -85,7 +85,7 @@ class ScheduleSummaryViewModel(
         if (modes.isEmpty()) {
             preload(context)
 
-            if (uiState.value.state != LoadState.Inactive) {
+            if (supportedErrorStream.value != null) {
                 return
             }
         }
@@ -151,27 +151,6 @@ class ScheduleSummaryViewModel(
                 }
             }
         }
-    }
-
-    private fun hasManagerGreaterThan(current: String?, required: String): Boolean {
-        if (current == null) { return false }
-
-        val components1 = current.split(".").mapNotNull { it.toIntOrNull() }
-        val components2 = required.split(".").mapNotNull { it.toIntOrNull() }
-
-        val maxLength = maxOf(components1.size, components2.size)
-
-        for (i in 0 until maxLength) {
-            val v1 = components1.getOrElse(i) { 0 }
-            val v2 = components2.getOrElse(i) { 0 }
-
-            when {
-                v1 > v2 -> return true
-                v1 < v2 -> return false
-            }
-        }
-
-        return true
     }
 }
 

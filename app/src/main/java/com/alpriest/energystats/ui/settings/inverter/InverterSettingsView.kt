@@ -38,11 +38,11 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
         currentDevice.value?.let {
             Column {
                 SettingsNavButton(stringResource(R.string.configure_work_mode)) { navController.navigate(SettingsScreen.InverterWorkMode.name) }
-                SettingsNavButton("Manage schedules") { navController.navigate(SettingsScreen.InverterSchedule.name) }
+                SettingsNavButton(stringResource(R.string.manage_schedules)) { navController.navigate(SettingsScreen.InverterSchedule.name) }
             }
 
             SettingsColumnWithChild {
-                SettingsTitleView("Display Options")
+                SettingsTitleView(stringResource(R.string.display_options))
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_temperatures),
                     state = showInverterTemperaturesState,

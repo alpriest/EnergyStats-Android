@@ -297,4 +297,8 @@
     <string name="error">Error</string>
     <string name="battery_errors_description_1">Hemos encontrado un error al obtener tus configuraciones de batería de Fox Cloud, lo que podría deberse a un problema temporal con los servidores de Fox. Como resultado, algunas funciones relacionadas con la batería podrían no funcionar como se espera.\n\nNo te preocupes, una vez que reinicies la aplicación, intentaremos recuperar tus configuraciones nuevamente. Gracias por tu paciencia.</string>
     <string name="separate_parameter_graphs_by_unit">Separa los gráficos de parámetros por unidad</string>
+    <string name="unsupported_firmware">Los horarios no son compatibles con tu %1s con la versión de firmware que tienes %2s.</string>
+    <string name="manage_schedules">Gestionar horarios</string>
+    <string name="display_options">Opciones de visualización</string>
+    <string name="unsupported">No soportado</string>
 </resources>

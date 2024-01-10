@@ -74,8 +74,11 @@ class ScheduleSummaryView(
                 } else {
                     SettingsPage {
                         SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
-                            SettingsTitleView("Unsupported")
-                            Text(supportedError)
+                            SettingsTitleView(stringResource(R.string.unsupported))
+                            Text(
+                                supportedError,
+                                color = colors.onSecondary
+                            )
                         }
                     }
                 }

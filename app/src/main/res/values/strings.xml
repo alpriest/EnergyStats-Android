@@ -299,4 +299,8 @@
     <string name="error">Error</string>
     <string name="battery_errors_description_1">We encountered an error while fetching your battery settings from Fox Cloud, which might be due to a temporary issue with the Fox servers. As a result, some battery-related features might not work as expected.\n\nDon\'t worry, though – once you restart the app, we\'ll try to retrieve your settings again. Thanks for your patience.</string>
     <string name="separate_parameter_graphs_by_unit">Separate parameter graphs by unit</string>
+    <string name="unsupported_firmware">Schedules are not supported on your %1s with the firmware version you have %2s.</string>
+    <string name="manage_schedules">Manage schedules</string>
+    <string name="display_options">Display Options</string>
+    <string name="unsupported">Unsupported</string>
 </resources>

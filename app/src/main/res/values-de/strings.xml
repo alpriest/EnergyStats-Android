@@ -297,4 +297,8 @@
     <string name="error">Fehler</string>
     <string name="battery_errors_description_1">Wir sind auf einen Fehler beim Abrufen Ihrer Batterieeinstellungen von Fox Cloud gestoßen, was auf ein vorübergehendes Problem mit den Fox-Servern zurückzuführen sein könnte. Infolgedessen funktionieren einige batteriebezogene Funktionen möglicherweise nicht wie erwartet.\n\nKeine Sorge, wenn Sie die App neu starten, werden wir versuchen, Ihre Einstellungen erneut abzurufen. Vielen Dank für Ihre Geduld.</string>
     <string name="separate_parameter_graphs_by_unit">Trenne Parameterdiagramme nach Einheit</string>
+    <string name="unsupported_firmware">Zeitpläne werden auf deinem %1s mit der Firmware-Version, die du hast %2s, nicht unterstützt.</string>
+    <string name="manage_schedules">Zeitpläne verwalten</string>
+    <string name="display_options">Anzeigeoptionen</string>
+    <string name="unsupported">Nicht unterstützt</string>
 </resources>
