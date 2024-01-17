@@ -43,14 +43,19 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.ClickableUrlText
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.makeUrlAnnotatedString
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.webLinkColor
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun APIKeyLoginView(
     errorMessage: String?,
-    configManager: ConfigManaging
+    themeStream: MutableStateFlow<AppTheme>,
+    onLogin: (String) -> Unit,
+    onDemoLogin: () -> Unit
 ) {
     var apiKey by rememberSaveable { mutableStateOf("") }
     var showApiKey by remember { mutableStateOf(false) }
@@ -112,7 +117,7 @@ fun APIKeyLoginView(
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                onClick = {/* TODO */ }
+                onClick = { onDemoLogin() }
             ) {
                 Text(
                     stringResource(R.string.try_demo),
@@ -123,7 +128,7 @@ fun APIKeyLoginView(
             Spacer(modifier = Modifier.width(24.dp))
 
             Button(onClick = {
-                // TODO
+                onLogin(apiKey)
             }) {
                 Text(
                     stringResource(R.string.log_me_in),
@@ -146,7 +151,7 @@ fun APIKeyLoginView(
             ClickableUrlText(
                 text = "1. Login at https://www.foxesscloud.com/",
                 textStyle = TextStyle(MaterialTheme.colors.onSecondary),
-                themeStream = configManager.themeStream
+                themeStream = themeStream
             )
             Text("2. Click the person icon top-right")
             Text("3. Click the User Profile menu option")
@@ -158,7 +163,7 @@ fun APIKeyLoginView(
                 text = "This change to API key was required by FoxESS in January 2024. The FoxESS site does not function well on mobile devices. Please do not contact Energy Stats with issues about the FoxESS website, only FoxESS will be able to assist you in any issues with their site. service.uk@fox-ess.com",
                 modifier = Modifier.padding(top = 12.dp),
                 textStyle = TextStyle(MaterialTheme.colors.onSecondary),
-                themeStream = configManager.themeStream
+                themeStream = themeStream
             )
         }
     }
@@ -168,6 +173,7 @@ fun APIKeyLoginView(
 @Composable
 fun APIKeyLoginViewPreview() {
     EnergyStatsTheme {
-        APIKeyLoginView(errorMessage = null, configManager = FakeConfigManager())
+        APIKeyLoginView(errorMessage = null, themeStream = MutableStateFlow(AppTheme.preview()),
+            onDemoLogin = {}, onLogin = {})
     }
 }

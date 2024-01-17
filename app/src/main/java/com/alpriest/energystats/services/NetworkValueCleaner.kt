@@ -34,14 +34,6 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         return network.fetchDeviceList()
     }
 
-    override suspend fun ensureHasToken() {
-        network.ensureHasToken()
-    }
-
-    override suspend fun verifyCredentials(username: String, password: String) {
-        network.verifyCredentials(username, password)
-    }
-
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         return network.fetchBattery(deviceID)
     }

@@ -1,9 +1,6 @@
 package com.alpriest.energystats.services
 
-import androidx.compose.material3.contentColorFor
 import com.alpriest.energystats.models.AddressBookResponse
-import com.alpriest.energystats.models.AuthRequest
-import com.alpriest.energystats.models.AuthResponse
 import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
@@ -45,7 +42,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -80,12 +76,12 @@ class NetworkService(private val credentials: CredentialStore, private val store
                 val original = chain.request()
                 val languageCode = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
                 val timezone = TimeZone.getDefault().id
-                val token = credentials.getToken() ?: ""
+                val token = credentials.getApiKey() ?: ""
                 val timestamp = System.currentTimeMillis()
                 val signature = makeSignature(original.url.encodedPath, token, timestamp)
 
                 val requestBuilder = original.newBuilder()
-                    .header("token", credentials.getToken() ?: "")
+                    .header("token", credentials.getApiKey() ?: "")
                     .header("User-Agent", "EnergyStats")
                     .header("Accept", "application/json, text/plain, */*")
                     .header(
@@ -108,14 +104,6 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         builder.build()
     }
-
-    private var token: String?
-        get() {
-            return credentials.getToken()
-        }
-        set(value) {
-            credentials.setToken(value)
-        }
 
     private var errorMessages = mutableMapOf<String, String>()
 
@@ -256,20 +244,6 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun verifyCredentials(username: String, password: String) {
-        token = fetchLoginToken(username, password)
-    }
-
-    override suspend fun ensureHasToken() {
-        try {
-            if (token == null) {
-                token = fetchLoginToken()
-            }
-        } catch (e: Exception) {
-            println(e)
-        }
-    }
-
     override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
         val request = Request.Builder().url(URLs.socGet(deviceSN)).build()
 
@@ -407,67 +381,36 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result ?: throw MissingDataException()
     }
 
-    private suspend fun fetchLoginToken(
-        username: String? = null,
-        hashedPassword: String? = null
-    ): String {
-        val usernameToUse: String =
-            (username ?: credentials.getUsername()) ?: throw BadCredentialsException()
-        val hashedPasswordToUse: String =
-            (hashedPassword ?: credentials.getHashedPassword())
-                ?: throw BadCredentialsException()
-
-        val body = Gson().toJson(AuthRequest(user = usernameToUse, password = hashedPasswordToUse))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder().url(URLs.login()).post(body).build()
-
-        val type = object : TypeToken<NetworkResponse<AuthResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<AuthResponse>> = fetch(request, type)
-        return response.item.result?.token ?: throw MissingDataException()
-    }
-
     private suspend fun <T : NetworkResponseInterface> fetch(
         request: Request,
-        type: Type,
-        retry: Boolean = true
+        type: Type
     ): NetworkTuple<T> {
-        try {
-            return suspendCoroutine { continuation ->
-                okHttpClient.newCall(request).enqueue(object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        continuation.resumeWithException(e)
+        return suspendCoroutine { continuation ->
+            okHttpClient.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    continuation.resumeWithException(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.code == 406) {
+                        continuation.resumeWithException(UnacceptableException())
+                        return
                     }
 
-                    override fun onResponse(call: Call, response: Response) {
-                        if (response.code == 406) {
-                            continuation.resumeWithException(UnacceptableException())
-                            return
-                        }
+                    try {
+                        val text = response.body?.string()
+                        val body: T = Gson().fromJson(text, type)
+                        val result: Result<T> = check(body)
 
-                        try {
-                            val text = response.body?.string()
-                            val body: T = Gson().fromJson(text, type)
-                            val result: Result<T> = check(body)
-
-                            result.fold(
-                                onSuccess = { continuation.resume(NetworkTuple(it, text)) },
-                                onFailure = { continuation.resumeWithException(it) }
-                            )
-                        } catch (ex: Exception) {
-                            continuation.resumeWithException(ex)
-                        }
+                        result.fold(
+                            onSuccess = { continuation.resume(NetworkTuple(it, text)) },
+                            onFailure = { continuation.resumeWithException(it) }
+                        )
+                    } catch (ex: Exception) {
+                        continuation.resumeWithException(ex)
                     }
-                })
-            }
-        } catch (ex: InvalidTokenException) {
-            if (retry) {
-                token = null
-                token = fetchLoginToken()
-                return fetch(request, type, retry = false)
-            } else {
-                throw ex
-            }
+                }
+            })
         }
     }
 

@@ -26,7 +26,6 @@ import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.home.preview
-import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.statsgraph.chartStyle
@@ -110,8 +109,8 @@ class SolarForecastView(
 
                     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                         data.map { site ->
-                            ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), site.error, themeStream)
-                            ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), site.error, themeStream)
+                            ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), themeStream)
+                            ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), themeStream)
                         }
                     }
 
@@ -174,7 +173,6 @@ class SolarForecastView(
         todayTotal: Double,
         name: String?,
         title: String,
-        error: String?,
         themeStream: MutableStateFlow<AppTheme>
     ) {
         val theme = themeStream.collectAsState().value

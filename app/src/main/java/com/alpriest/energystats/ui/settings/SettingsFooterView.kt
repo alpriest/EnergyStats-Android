@@ -86,14 +86,6 @@ fun SettingsFooterView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                userManager.getUsername()?.let {
-                    Text(
-                        modifier = Modifier.padding(bottom = 24.dp),
-                        text = stringResource(R.string.you_are_logged_in_as, it),
-                        color = colors.onSecondary,
-                    )
-                }
-
                 SettingsNavButton(
                     title = stringResource(R.string.logout),
                     disclosureIcon = null,

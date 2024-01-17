@@ -16,22 +16,6 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-    override suspend fun ensureHasToken() {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.ensureHasToken()
-        } else {
-            network.ensureHasToken()
-        }
-    }
-
-    override suspend fun verifyCredentials(username: String, password: String) {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.verifyCredentials(username, password)
-        } else {
-            network.verifyCredentials(username, password)
-        }
-    }
-
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         return if (isDemoUser()) {
             demoFoxESSNetworking.fetchBattery(deviceID)

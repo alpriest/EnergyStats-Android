@@ -10,14 +10,10 @@ class FakeUserManager : UserManaging {
     override val loggedInState: StateFlow<LoginStateHolder>
         get() = MutableStateFlow(LoginStateHolder(LoggedIn))
 
-    override suspend fun login(username: String, password: String) {
+    override suspend fun login(apiKey: String) {
     }
 
     override fun logout() {
-    }
-
-    override fun getUsername(): String {
-        return "Bob"
     }
 
     override suspend fun loginDemo() {

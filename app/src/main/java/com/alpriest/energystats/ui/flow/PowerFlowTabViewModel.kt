@@ -135,7 +135,6 @@ class PowerFlowTabViewModel(
                 if (uiState.value.state is PowerFlowLoadState.Error) {
                     uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
                 }
-                network.ensureHasToken()
 
                 val earnings = network.fetchEarnings(deviceID = currentDevice.deviceID)
                 configManager.currencyCode = earnings.currencyCode()

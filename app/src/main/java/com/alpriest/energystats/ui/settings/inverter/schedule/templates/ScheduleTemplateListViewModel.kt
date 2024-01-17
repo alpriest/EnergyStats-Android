@@ -35,7 +35,7 @@ class ScheduleTemplateListViewModel(
         }
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            config.currentDevice.value?.let { _ ->
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {

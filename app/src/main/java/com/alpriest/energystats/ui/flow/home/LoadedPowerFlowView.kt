@@ -58,7 +58,6 @@ fun LoadedPowerFlowView(
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val theme by themeStream.collectAsState()
-    val hasBatteryError = homePowerFlowViewModel.batteryViewModel?.hasError ?: false
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

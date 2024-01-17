@@ -42,14 +42,6 @@ import java.util.Locale
 
 
 class DemoFoxESSNetworking : FoxESSNetworking {
-    override suspend fun ensureHasToken() {
-        // Do nothing
-    }
-
-    override suspend fun verifyCredentials(username: String, password: String) {
-        // Assume valid
-    }
-
     override suspend fun createScheduleTemplate(name: String, description: String) {
         // Do nothing
     }

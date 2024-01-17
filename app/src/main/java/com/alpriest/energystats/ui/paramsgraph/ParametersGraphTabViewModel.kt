@@ -163,9 +163,6 @@ class ParametersGraphTabViewModel(
             ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
         }
 
-//        chartColorsStream.value = grouped
-//            .map { it.key.colour() }
-//
         if (entries.isEmpty()) {
             hasDataStream.value = false
             entriesStream.value = listOf()

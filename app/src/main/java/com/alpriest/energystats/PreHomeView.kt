@@ -1,7 +1,5 @@
 package com.alpriest.energystats
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
@@ -24,7 +22,7 @@ class PreHomeViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
-    internal fun loadData(context: Context) {
+    internal fun loadData() {
         viewModelScope.launch {
             try {
                 network.fetchErrorMessages()
@@ -47,7 +45,7 @@ fun PreHomeView(appContainer: AppContainer, viewModel: PreHomeViewModel) {
     MonitorAlertDialog(viewModel)
 
     LaunchedEffect(null) {
-        viewModel.loadData(context)
+        viewModel.loadData()
     }
 
     MainAppView(appContainer)

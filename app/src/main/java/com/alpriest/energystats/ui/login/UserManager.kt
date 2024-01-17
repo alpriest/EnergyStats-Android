@@ -23,12 +23,10 @@ interface UserManaging {
 
     @UiThread
     suspend fun login(
-        username: String,
-        password: String
+        apiKey: String
     )
 
     fun logout()
-    fun getUsername(): String?
     suspend fun loginDemo()
 }
 
@@ -48,16 +46,15 @@ class UserManager(
 
     override suspend fun loginDemo() {
         configManager.isDemoUser = true
-        store.store("demo", "user")
+        store.store("demo")
         configManager.fetchDevices()
         _loggedInState.value = LoginStateHolder(LoggedIn)
     }
 
     override suspend fun login(
-        username: String,
-        password: String
+        apiKey: String
     ) {
-        if (username.isBlank() || password.isBlank()) {
+        if (apiKey.isBlank()) {
             return
         }
 
@@ -65,9 +62,7 @@ class UserManager(
         var currentAction = "fetch login Token"
 
         try {
-            val hashedPassword = Encryption.md5(password)
-            networking.verifyCredentials(username, hashedPassword)
-            store.store(username, hashedPassword)
+            store.store(apiKey)
             currentAction = "fetch devices"
             configManager.fetchDevices()
             _loggedInState.value = LoginStateHolder(LoggedIn)
@@ -84,10 +79,6 @@ class UserManager(
         store.logout()
         configManager.logout()
         _loggedInState.value = LoginStateHolder(LoggedOut())
-    }
-
-    override fun getUsername(): String? {
-        return store.getUsername()
     }
 }
 

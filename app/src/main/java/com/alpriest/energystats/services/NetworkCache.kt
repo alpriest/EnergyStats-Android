@@ -42,14 +42,6 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
         return network.fetchDeviceList()
     }
 
-    override suspend fun ensureHasToken() {
-        network.ensureHasToken()
-    }
-
-    override suspend fun verifyCredentials(username: String, password: String) {
-        network.verifyCredentials(username, password)
-    }
-
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         val key = makeKey("fetchBattery", deviceID)
 
