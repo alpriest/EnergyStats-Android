@@ -1,23 +1,26 @@
 package com.alpriest.energystats.ui.flow
 
 import com.alpriest.energystats.models.OpenQueryResponse
-import com.alpriest.energystats.models.RawData
-import com.alpriest.energystats.models.RawResponse
+import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
+import com.alpriest.energystats.ui.flow.home.dateFormat
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Locale
 
 class RealQueryResponseMapper {
-    fun mapCurrentValues(real: OpenQueryResponse): CurrentValues {
+    fun mapCurrentValues(response: OpenQueryResponse): CurrentValues {
         return CurrentValues(
-            pvPower = 0.0,
-            feedinPower= 0.0,
-            gridConsumptionPower = 0.0,
-            loadsPower = 0.0,
-            ambientTemperation = 0.0,
-            invTemperation = 0.0,
-            meterPower2 = 0.0,
+            pvPower = response.datas.currentValue(forKey = "pvPower"),
+            feedinPower = response.datas.currentValue(forKey = "feedinPower"),
+            gridConsumptionPower = response.datas.currentValue(forKey = "gridConsumptionPower"),
+            loadsPower = response.datas.currentValue(forKey = "loadsPower"),
+            ambientTemperation = response.datas.currentValue(forKey = "ambientTemperation"),
+            invTemperation = response.datas.currentValue(forKey = "invTemperation"),
+            meterPower2 = response.datas.currentValue(forKey = "meterPower2"),
             hasPV = true, // TODO,
-            lastUpdate = LocalDateTime.now()
+            lastUpdate = response.time
         )
     }
 }
@@ -26,9 +29,14 @@ class CurrentStatusCalculator(status: CurrentValues, shouldInvertCT2: Boolean, s
     val currentGrid: Double = status.feedinPower - status.gridConsumptionPower
     val currentHomeConsumption: Double = status.loadsPower
     val currentTemperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
-    val lastUpdate: LocalDateTime = status.lastUpdate
+    val lastUpdate: LocalDateTime = convertToTime(item = status.lastUpdate)
     val currentCT2: Double = if (shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
     val currentSolarPower: Double = calculateSolarPower(status.hasPV, status, shouldCombineCT2WithPVPower)
+
+    private fun convertToTime(item: String): LocalDateTime {
+        val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(item)
+        return simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+    }
 
     private fun calculateSolarPower(hasPV: Boolean, status: CurrentValues, shouldCombineCT2WithPVPower: Boolean): Double {
         return if (hasPV) {
@@ -48,14 +56,13 @@ data class CurrentValues(
     val invTemperation: Double,
     val meterPower2: Double,
     val hasPV: Boolean,
-    val lastUpdate: LocalDateTime,
+    val lastUpdate: String,
 )
 
-private fun List<RawResponse>.currentValue(forKey: String): Double {
-    val item = currentData(forKey)
-    return item?.value ?: 0.0
+private fun List<OpenQueryResponseData>.currentValue(forKey: String): Double {
+    return currentData(forKey)?.value ?: 0.0
 }
 
-private fun List<RawResponse>.currentData(forKey: String): RawData? {
-    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }?.data?.lastOrNull()
+private fun List<OpenQueryResponseData>.currentData(forKey: String): OpenQueryResponseData? {
+    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }
 }
