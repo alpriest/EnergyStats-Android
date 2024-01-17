@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
@@ -157,7 +158,7 @@ fun PowerFlowTabViewPreview() {
         solar = 1.0,
         home = 2.45,
         grid = 2.45,
-        todaysGeneration = GenerationViewModel(raws = listOf(), 5.4),
+        todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf())),
         earnings = EarningsViewModel.preview(),
         inverterTemperatures = null,
         hasBattery = true,

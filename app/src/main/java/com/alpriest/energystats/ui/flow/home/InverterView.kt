@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,13 +46,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class InverterViewModel(
     private val configManager: ConfigManaging,
-    val temperatures: InverterTemperaturesViewModel?
+    val temperatures: InverterTemperatures?
 ) {
-    val deviceType: String?
-        get() = configManager.currentDevice.value?.deviceType
-
-    val devicePlantName: String?
-        get() = configManager.currentDevice.value?.plantName
+    val deviceStationName: String?
+        get() = configManager.currentDevice.value?.stationName
 
     val deviceDisplayName: String
         get() = configManager.currentDevice.value?.deviceDisplayName ?: "Re-login to update"
@@ -169,14 +165,8 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
                 }
             }
         } else {
-            if (appTheme.showInverterTypeNameOnPowerflow) {
-                OptionalView(viewModel.deviceType) {
-                    Text(it)
-                }
-            }
-
             if (appTheme.showInverterPlantNameOnPowerflow) {
-                OptionalView(viewModel.devicePlantName) {
+                OptionalView(viewModel.deviceStationName) {
                     Text(it)
                 }
             }
@@ -188,19 +178,8 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
 private fun inverterLandscapeTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
     val appTheme = themeStream.collectAsState().value
 
-    if (appTheme.showInverterTypeNameOnPowerflow) {
-        OptionalView(inverterTemperaturesViewModel.deviceType) {
-            Text(
-                modifier = Modifier
-                    .background(MaterialTheme.colors.background)
-                    .padding(4.dp),
-                text = it
-            )
-        }
-    }
-
     if (appTheme.showInverterPlantNameOnPowerflow) {
-        OptionalView(inverterTemperaturesViewModel.devicePlantName) {
+        OptionalView(inverterTemperaturesViewModel.deviceStationName) {
             Text(
                 modifier = Modifier
                     .background(MaterialTheme.colors.background)
@@ -212,13 +191,13 @@ private fun inverterLandscapeTitles(themeStream: MutableStateFlow<AppTheme>, inv
 }
 
 @Composable
-private fun InverterTemperatures(viewModel: InverterTemperaturesViewModel) {
+private fun InverterTemperatures(viewModel: InverterTemperatures) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(end = 4.dp)
     ) {
         Text(
-            viewModel.temperatures.ambient.asTemperature(),
+            viewModel.ambient.asTemperature(),
             fontSize = 12.sp
         )
         Text(
@@ -229,7 +208,7 @@ private fun InverterTemperatures(viewModel: InverterTemperaturesViewModel) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            viewModel.temperatures.inverter.asTemperature(),
+            viewModel.inverter.asTemperature(),
             fontSize = 12.sp
         )
         Text(

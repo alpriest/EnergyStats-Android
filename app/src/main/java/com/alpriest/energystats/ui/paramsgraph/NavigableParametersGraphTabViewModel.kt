@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
@@ -30,8 +31,8 @@ class NavigableParametersGraphTabViewModel(val configManager: ConfigManaging) : 
             configManager.currentDevice
                 .collect { it ->
                     it?.let { device ->
-                        graphVariablesStream.value = device.variables.mapNotNull { rawVariable: RawVariable ->
-                            val variable = configManager.variables.firstOrNull { it.variable == rawVariable.variable }
+                        graphVariablesStream.value = configManager.variables.mapNotNull { variable: Variable ->
+                            val variable = configManager.variables.firstOrNull { it.variable == variable.variable }
 
                             if (variable != null) {
                                 return@mapNotNull ParameterGraphVariable(

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.rounded
@@ -30,6 +29,8 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Calendar
 import java.util.Currency
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
@@ -184,14 +185,22 @@ class PowerFlowTabViewModel(
 //                    val battery = network.fetchBattery(deviceID = currentDevice.deviceSN)
 //                    BatteryViewModel(battery, hasError = currentDevice.battery?.hasError ?: false)
 //                } else {
-                    val battery = BatteryViewModel.noBattery()
+                val battery = BatteryViewModel.noBattery()
 //                }
+
+                val start = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond()
+                val history = network.openapi_fetchHistory(
+                    deviceSN = currentDevice.deviceSN,
+                    variables = listOf("pvPower", "meterPower2"),
+                    start = start,
+                    end = start.and(86400)
+                )
 
                 val summary = HomePowerFlowViewModel(
                     solar = currentViewModel.currentSolarPower,
                     home = currentViewModel.currentHomeConsumption,
                     grid = currentViewModel.currentGrid,
-                    todaysGeneration = GenerationViewModel(raws, earnings.today.generation),
+                    todaysGeneration = GenerationViewModel(history),
                     earnings = EarningsViewModel(earnings, EnergyStatsFinancialModel(totals, configManager)),
                     inverterTemperatures = currentViewModel.currentTemperatures,
                     hasBattery = battery.hasBattery,

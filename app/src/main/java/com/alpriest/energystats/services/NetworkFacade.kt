@@ -16,6 +16,22 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
+    override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_fetchHistory(deviceSN, variables, start, end)
+        } else {
+            return network.openapi_fetchHistory(deviceSN, variables, start, end)
+        }
+    }
+
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_fetchRealData(deviceSN, variables)
+        } else {
+            network.openapi_fetchRealData(deviceSN, variables)
+        }
+    }
+
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         return if (isDemoUser()) {
             demoFoxESSNetworking.fetchBattery(deviceID)

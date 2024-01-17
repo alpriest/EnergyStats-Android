@@ -13,6 +13,8 @@ import com.alpriest.energystats.models.DeviceSettingsSetRequest
 import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.ErrorMessagesResponse
+import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -33,6 +35,7 @@ import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.SchedulerModesResponse
 import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
@@ -255,6 +258,14 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
             return devices
         } ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
+        TODO("Not yet implemented")
     }
 
     suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {

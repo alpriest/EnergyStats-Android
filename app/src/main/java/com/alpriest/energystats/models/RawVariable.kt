@@ -5,14 +5,8 @@ import androidx.compose.ui.graphics.Color
 class Variable(
     val name: String,
     val variable: String,
-    val unit: String
-)
+    val unit: String) {
 
-class RawVariable(
-    val name: String,
-    val variable: String,
-    val unit: String
-) {
     fun colour(): Color {
         return when (this.variable) {
             "generationPower" -> Color(244, 184, 96)
@@ -31,7 +25,7 @@ class RawVariable(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as RawVariable
+        other as Variable
 
         return variable == other.variable
     }

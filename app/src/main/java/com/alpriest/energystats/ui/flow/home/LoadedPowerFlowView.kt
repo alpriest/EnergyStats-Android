@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
@@ -67,7 +68,7 @@ fun LoadedPowerFlowView(
             Text(
                 text = stringResource(
                     id = R.string.yieldToday,
-                    homePowerFlowViewModel.todaysGeneration.todayGeneration(theme.totalYieldModel).energy(theme.displayUnit, theme.decimalPlaces)
+                    homePowerFlowViewModel.todaysGeneration.todayGeneration().energy(theme.displayUnit, theme.decimalPlaces)
                 )
             )
         }
@@ -271,7 +272,7 @@ fun SummaryPowerFlowViewPreview() {
                 solar = 1.0,
                 home = 2.454,
                 grid = 1.234,
-                todaysGeneration = GenerationViewModel(raws = listOf(), 1.234),
+                todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf())),
                 earnings = EarningsViewModel.preview(),
                 inverterTemperatures = null,
                 hasBattery = true,

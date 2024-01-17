@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.EarningsViewModel
@@ -103,7 +104,7 @@ fun GridIconViewPreview() {
         solar = 1.0,
         home = 2.45,
         grid = 2.45,
-        todaysGeneration = GenerationViewModel(raws = listOf(), 5.4),
+        todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf())),
         earnings = EarningsViewModel.preview(),
         inverterTemperatures = null,
         hasBattery = true,

@@ -8,6 +8,8 @@ import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -20,6 +22,7 @@ import com.alpriest.energystats.models.ScheduleTemplateListResponse
 import com.alpriest.energystats.models.ScheduleTemplateResponse
 import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -41,6 +44,14 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
         return network.openapi_fetchDeviceList()
+    }
+
+    override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
+        return network.openapi_fetchHistory(deviceSN, variables, start, end)
+    }
+
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
+        return network.openapi_fetchRealData(deviceSN, variables)
     }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {

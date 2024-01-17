@@ -1,12 +1,13 @@
 package com.alpriest.energystats.ui.flow
 
+import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import java.time.LocalDateTime
 
 class RealQueryResponseMapper {
-    fun mapCurrentValues(): CurrentValues {
+    fun mapCurrentValues(real: OpenQueryResponse): CurrentValues {
         return CurrentValues(
             pvPower = 0.0,
             feedinPower= 0.0,

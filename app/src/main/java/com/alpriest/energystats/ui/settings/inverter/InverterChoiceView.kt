@@ -82,9 +82,7 @@ fun InverterChoiceView(
 
 val Device.deviceDisplayName: String
     get() {
-        return deviceType?.let {
-            "$it ($plantName)"
-        } ?: "$deviceID Re-login to update"
+        return "$stationName ($stationID)"
     }
 
 @Preview(showBackground = true, heightDp = 600, widthDp = 400)

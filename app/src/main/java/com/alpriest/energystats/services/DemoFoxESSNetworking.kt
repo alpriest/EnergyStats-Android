@@ -11,6 +11,8 @@ import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -28,6 +30,7 @@ import com.alpriest.energystats.models.SchedulerFlagResponse
 import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.SoftwareVersion
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
@@ -37,8 +40,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 
@@ -161,6 +166,21 @@ class DemoFoxESSNetworking : FoxESSNetworking {
                 slaveVersion = "4",
                 status = 1
             )
+        )
+    }
+
+    override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
+        return OpenHistoryResponse(
+            deviceSN = "",
+            datas = listOf()
+        )
+    }
+
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
+        return OpenQueryResponse(
+            time = LocalDateTime.now().toString(),
+            deviceSN = "",
+            datas = listOf()
         )
     }
 
