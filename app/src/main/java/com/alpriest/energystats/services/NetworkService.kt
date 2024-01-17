@@ -13,8 +13,11 @@ import com.alpriest.energystats.models.DeviceSettingsSetRequest
 import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.ErrorMessagesResponse
+import com.alpriest.energystats.models.OpenApiVariable
+import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -33,7 +36,6 @@ import com.alpriest.energystats.models.SchedulerModesResponse
 import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
@@ -265,6 +267,10 @@ class NetworkService(private val credentials: CredentialStore, private val store
         TODO("Not yet implemented")
     }
 
+    override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
+        TODO("Not yet implemented")
+    }
+
     suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
         val request = Request.Builder().url(URLs.deviceDetail(deviceSN)).build()
 
@@ -282,22 +288,22 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchReport(
-        deviceID: String,
-        variables: List<ReportVariable>,
-        queryDate: QueryDate,
-        reportType: ReportType
-    ): ArrayList<ReportResponse> {
-        val body = Gson().toJson(ReportRequest(deviceID, variables, queryDate, reportType))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder().post(body).url(URLs.report()).build()
-
-        val type = object : TypeToken<NetworkReportResponse>() {}.type
-        val response: NetworkTuple<NetworkReportResponse> = fetch(request, type)
-        store.reportResponseStream.value = NetworkOperation(description = "fetchReport", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
+//    override suspend fun fetchReport(
+//        deviceID: String,
+//        variables: List<ReportVariable>,
+//        queryDate: QueryDate,
+//        reportType: ReportType
+//    ): ArrayList<ReportResponse> {
+//        val body = Gson().toJson(ReportRequest(deviceID, variables, queryDate, reportType))
+//            .toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder().post(body).url(URLs.report()).build()
+//
+//        val type = object : TypeToken<NetworkReportResponse>() {}.type
+//        val response: NetworkTuple<NetworkReportResponse> = fetch(request, type)
+//        store.reportResponseStream.value = NetworkOperation(description = "fetchReport", value = response.item, raw = response.text, request)
+//        return response.item.result ?: throw MissingDataException()
+//    }
 
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
         val request = Request.Builder().url(URLs.addressBook(deviceID)).build()
@@ -338,13 +344,13 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
-        val request = Request.Builder().url(URLs.variables(deviceID)).build()
+    override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
+        val request = Request.Builder().url(URLs.variables()).build()
 
-        val type = object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<VariablesResponse>> = fetch(request, type)
+        val type = object : TypeToken<NetworkResponse<OpenApiVariableArray>>() {}.type
+        val response: NetworkTuple<NetworkResponse<OpenApiVariableArray>> = fetch(request, type)
         store.variablesResponseStream.value = NetworkOperation(description = "fetchVariables", value = response.item, raw = response.text, request)
-        return response.item.result?.variables ?: throw MissingDataException()
+        return response.item.result?.array ?: throw MissingDataException()
     }
 
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {

@@ -7,17 +7,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
-import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider.Companion.fixed
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.ChartModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.OutputStream
@@ -100,16 +97,20 @@ class ParametersGraphTabViewModel(
 
     suspend fun load() {
         val device = configManager.currentDevice.value ?: return
-        val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type }.toList()
+        val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type.variable }.toList()
 
         try {
-            val raw = networking.fetchRaw(
-                device.deviceID,
+            val start = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond()
+            val end = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond() + 86400
+
+            val historyResponse = networking.openapi_fetchHistory(
+                device.deviceSN,
                 variables = rawGraphVariables,
-                queryDate = queryDate
+                start = start,
+                end = end
             )
 
-            val rawData: List<ParametersGraphValue> = raw.flatMap { response ->
+            val rawData: List<ParametersGraphValue> = historyResponse.datas.flatMap { response ->
                 val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
 
                 response.data.mapIndexed { index, item ->
@@ -275,7 +276,7 @@ class DateTimeFloatEntry(
     val localDateTime: LocalDateTime,
     override val x: Float,
     override val y: Float,
-    val type: RawVariable,
+    val type: Variable,
 ) : ChartEntry {
     override fun withY(y: Float): ChartEntry = DateTimeFloatEntry(
         localDateTime = localDateTime,

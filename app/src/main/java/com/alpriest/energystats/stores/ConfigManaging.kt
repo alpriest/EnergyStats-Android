@@ -1,7 +1,6 @@
 package com.alpriest.energystats.stores
 
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode

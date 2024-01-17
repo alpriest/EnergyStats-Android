@@ -8,15 +8,12 @@ import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawData
-import com.alpriest.energystats.models.RawResponse
-import com.alpriest.energystats.models.RawVariable
-import com.alpriest.energystats.models.ReportData
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.ScheduleTemplateListResponse
@@ -53,42 +50,16 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         return network.fetchBatterySettings(deviceSN)
     }
 
-    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
-        val rawList = network.fetchRaw(deviceID, variables, queryDate)
-        return ArrayList(rawList.map { original ->
-            RawResponse(
-                variable = original.variable,
-                data = original.data.map { originalData ->
-                    RawData(
-                        time = originalData.time,
-                        value = originalData.value.capped(themeStream.value.dataCeiling)
-                    )
-                }.toTypedArray()
-            )
-        })
-    }
-
-    override suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse> {
-        val reportList = network.fetchReport(deviceID = deviceID, variables = variables, queryDate = queryDate, reportType = reportType)
-        return ArrayList(reportList.map { original ->
-            ReportResponse(
-                variable = original.variable,
-                data = original.data.map { originalData ->
-                    ReportData(
-                        index = originalData.index,
-                        value = originalData.value.capped(themeStream.value.dataCeiling)
-                    )
-                }.toTypedArray()
-            )
-        })
-    }
-
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
         return network.fetchAddressBook(deviceID)
     }
 
-    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
-        return network.openapi_fetchVariables(deviceID)
+    override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
+        return network.openapi_fetchVariables()
+    }
+
+    override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
+        return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
     }
 
     override suspend fun fetchEarnings(deviceID: String): EarningsResponse {

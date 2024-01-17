@@ -24,6 +24,21 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
+    override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_fetchVariables()
+        } else {
+            return network.openapi_fetchVariables()
+        }
+    }
+
+    override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+        } else {
+            return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+        }    }
+
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
         return if (isDemoUser()) {
             demoFoxESSNetworking.openapi_fetchRealData(deviceSN, variables)
@@ -48,35 +63,11 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-    override suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse> {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.fetchReport(deviceID, variables, queryDate, reportType)
-        } else {
-            network.fetchReport(deviceID, variables, queryDate, reportType)
-        }
-    }
-
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
         return if (isDemoUser()) {
             demoFoxESSNetworking.fetchAddressBook(deviceID)
         } else {
             network.fetchAddressBook(deviceID)
-        }
-    }
-
-    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.fetchRaw(deviceID, variables, queryDate)
-        } else {
-            network.fetchRaw(deviceID, variables, queryDate)
-        }
-    }
-
-    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchVariables(deviceID)
-        } else {
-            network.openapi_fetchVariables(deviceID)
         }
     }
 

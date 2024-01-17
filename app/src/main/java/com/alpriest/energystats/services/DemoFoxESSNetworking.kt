@@ -11,14 +11,15 @@ import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.OpenApiVariable
+import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
-import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
@@ -31,7 +32,6 @@ import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.SoftwareVersion
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.models.VariablesResponse
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
@@ -43,7 +43,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 
 
@@ -93,51 +92,12 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         return BatterySettingsResponse(20, minSoc = 30)
     }
 
-    override suspend fun fetchReport(
-        deviceID: String,
-        variables: List<ReportVariable>,
-        queryDate: QueryDate,
-        reportType: ReportType
-    ): ArrayList<ReportResponse> {
-        val filename = when (reportType) {
-            ReportType.day -> "res/raw/report_day.json"
-            ReportType.month -> "res/raw/report_month.json"
-            ReportType.year -> "res/raw/report_year.json"
-        }
-        val fileContent = this::class.java.classLoader?.getResource(filename)?.readText()
-
-        val data: NetworkReportResponse = Gson().fromJson(fileContent, object : TypeToken<NetworkReportResponse>() {}.type)
-
-        return data.result ?: ArrayList()
-    }
-
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        if (deviceID == "f3000_deviceid") {
-            return AddressBookResponse(softVersion = SoftwareVersion(master = "1.54", slave = "1.09", manager = "1.49"))
+        return if (deviceID == "f3000_deviceid") {
+            AddressBookResponse(softVersion = SoftwareVersion(master = "1.54", slave = "1.09", manager = "1.49"))
         } else {
-            return AddressBookResponse(softVersion = SoftwareVersion(master = "2.54", slave = "1.09", manager = "1.56"))
+            AddressBookResponse(softVersion = SoftwareVersion(master = "2.54", slave = "1.09", manager = "1.56"))
         }
-    }
-
-    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
-        val result = rawData(deviceID)
-        val formatter = DateTimeFormatter.ofPattern(dateFormat)
-        val now = LocalDate.now()
-
-        return ArrayList(result.map { response ->
-            RawResponse(
-                variable = response.variable,
-                data = response.data.map {
-                    val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it.time)
-                    val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-                        .withYear(now.year)
-                        .withMonth(now.monthValue)
-                        .withDayOfMonth(now.dayOfMonth)
-
-                    RawData(time = localDateTime.format(formatter), value = it.value)
-                }.toTypedArray()
-            )
-        }.toList())
     }
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
@@ -176,6 +136,10 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         )
     }
 
+    override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
+        return listOf()
+    }
+
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
         return OpenQueryResponse(
             time = LocalDateTime.now().toString(),
@@ -184,20 +148,12 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         )
     }
 
-    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
+    override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
         val fileContent = this::class.java.classLoader?.getResource("res/raw/variables.json")?.readText()
 
-        val data: NetworkResponse<VariablesResponse> = Gson().fromJson(fileContent, object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type)
+        val data: NetworkResponse<OpenApiVariableArray> = Gson().fromJson(fileContent, object : TypeToken<NetworkResponse<OpenApiVariableArray>>() {}.type)
 
-        return data.result?.variables ?: listOf()
-    }
-
-    private fun rawData(deviceID: String): List<RawResponse> {
-        val fileContent = this::class.java.classLoader?.getResource("res/raw/raw_$deviceID.json")?.readText()
-
-        val data: NetworkRawResponse = Gson().fromJson(fileContent, object : TypeToken<NetworkRawResponse>() {}.type)
-
-        return data.result?.toList() ?: listOf()
+        return data.result?.array ?: listOf()
     }
 
     override suspend fun fetchEarnings(deviceID: String): EarningsResponse {

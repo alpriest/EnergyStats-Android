@@ -165,7 +165,7 @@ class PowerFlowTabViewModel(
 //                    reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
 //                }
 
-                val report = network.fetchReport(
+                val report = network.openapi_fetchReport(
                     currentDevice.deviceSN,
                     reportVariables,
                     QueryDate(),

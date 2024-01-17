@@ -8,8 +8,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.services.NetworkService
@@ -31,7 +31,7 @@ fun NetworkTraceDebugView(configManager: ConfigManaging, credentialStore: Creden
     val context = LocalContext.current
     val cacheDirectory = File(context.cacheDir, "responses")
 
-    fun variable(variableName: String): RawVariable? {
+    fun variable(variableName: String): Variable? {
         return configManager.variables.firstOrNull { it.variable.lowercase() == variableName.lowercase() }
     }
 

@@ -46,6 +46,7 @@ interface FoxESSNetworking {
     suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse
     suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse
     suspend fun openapi_fetchVariables(): List<OpenApiVariable>
+    suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse>
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

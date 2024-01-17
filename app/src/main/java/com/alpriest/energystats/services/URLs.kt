@@ -51,11 +51,10 @@ object URLs {
             .toHttpUrl()
     }
 
-    fun variables(deviceID: String): HttpUrl {
+    fun variables(): HttpUrl {
         return "https://www.foxesscloud.com/c/v1/device/variables"
             .toHttpUrl()
             .newBuilder()
-            .addDeviceID(deviceID)
             .build()
     }
 

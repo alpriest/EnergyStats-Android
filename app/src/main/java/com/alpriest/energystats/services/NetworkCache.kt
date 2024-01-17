@@ -8,13 +8,12 @@ import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawResponse
-import com.alpriest.energystats.models.RawVariable
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.ScheduleTemplateListResponse
@@ -26,7 +25,6 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import java.lang.Math.abs
-
 import java.util.Date
 
 data class CachedItem(val item: Any) {
@@ -47,6 +45,14 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
         return network.openapi_fetchHistory(deviceSN, variables, start, end)
+    }
+
+    override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
+        return network.openapi_fetchVariables()
+    }
+
+    override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
+        return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
@@ -79,14 +85,6 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
         }
     }
 
-    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
-        return network.fetchRaw(deviceID, variables, queryDate)
-    }
-
-    override suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse> {
-        return network.fetchReport(deviceID, variables, queryDate, reportType)
-    }
-
     override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
         val key = makeKey("fetchAddressBook", deviceID)
 
@@ -98,10 +96,6 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
             cache[key] = CachedItem(fresh)
             fresh
         }
-    }
-
-    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
-        return network.openapi_fetchVariables(deviceID)
     }
 
     override suspend fun fetchEarnings(deviceID: String): EarningsResponse {

@@ -1,5 +1,7 @@
 package com.alpriest.energystats.ui.flow
 
+import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.OpenReportResponseData
 import com.alpriest.energystats.models.ReportData
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
@@ -19,7 +21,7 @@ class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, b
         )
     }
 
-    constructor(reports: List<ReportResponse>) :
+    constructor(reports: List<OpenReportResponse>) :
             this(
                 grid = reports.todayValue(forKey = ReportVariable.GridConsumption.networkTitle()),
                 feedIn = reports.todayValue(forKey = ReportVariable.FeedIn.networkTitle()),
@@ -30,12 +32,12 @@ class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, b
     }
 }
 
-private fun List<ReportResponse>.todayValue(forKey: String): Double {
+private fun List<OpenReportResponse>.todayValue(forKey: String): Double {
     val item = currentData(forKey)
     return item?.value ?: 0.0
 }
 
-private fun List<ReportResponse>.currentData(forKey: String): ReportData? {
+private fun List<OpenReportResponse>.currentData(forKey: String): OpenReportResponseData? {
     val todaysDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }?.data?.firstOrNull { it.index == todaysDate }
+    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }?.values?.firstOrNull { it.index == todaysDate }
 }

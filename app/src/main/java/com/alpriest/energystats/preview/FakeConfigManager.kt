@@ -3,7 +3,6 @@ package com.alpriest.energystats.preview
 import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.preview

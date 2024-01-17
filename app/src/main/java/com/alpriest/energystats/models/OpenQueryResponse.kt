@@ -35,3 +35,14 @@ data class UnitData(
     val time: String,
     val value: Double
 )
+
+data class OpenReportResponse(
+    val variable: String,
+    val unit: String,
+    val values: List<OpenReportResponseData>
+)
+
+data class OpenReportResponseData(
+    val index : Int,
+    val value : Double
+)

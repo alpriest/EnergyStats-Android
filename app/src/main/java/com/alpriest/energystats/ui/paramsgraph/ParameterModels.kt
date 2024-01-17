@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.ui.graphics.Color
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.statsgraph.GraphVariable
 import java.time.LocalDate
