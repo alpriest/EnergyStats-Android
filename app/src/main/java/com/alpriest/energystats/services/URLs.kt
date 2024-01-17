@@ -106,6 +106,14 @@ object URLs {
             .toHttpUrl()
     }
 
+    fun deviceDetail(deviceSN: String): HttpUrl {
+        return "https://www.foxesscloud.com/c/v0/device/list"
+            .toHttpUrl()
+            .newBuilder()
+            .addQueryParameter("sn", deviceSN)
+            .build()
+    }
+
     fun getSchedulerFlag(deviceSN: String): HttpUrl {
         return "https://www.foxesscloud.com/generic/v0/device/scheduler/get/flag"
             .toHttpUrl()

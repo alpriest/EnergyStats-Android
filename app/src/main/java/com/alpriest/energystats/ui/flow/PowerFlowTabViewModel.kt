@@ -9,6 +9,7 @@ import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -136,11 +137,11 @@ class PowerFlowTabViewModel(
                     uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
                 }
 
-                val earnings = network.fetchEarnings(deviceID = currentDevice.deviceID)
+                val earnings = network.fetchEarnings(deviceID = currentDevice.deviceSN)
                 configManager.currencyCode = earnings.currencyCode()
                 configManager.currencySymbol = earnings.currencySymbol()
 
-                var variables: List<RawVariable> = listOfNotNull(
+                var variables: List<Variable> = listOfNotNull(
                     variable("feedInPower"),
                     variable("gridConsumptionPower"),
                     variable("generationPower"),
@@ -158,33 +159,33 @@ class PowerFlowTabViewModel(
                     )
                 }
 
-                val raws = network.fetchRaw(
-                    deviceID = currentDevice.deviceID,
-                    variables,
-                    QueryDate()
-                )
-
                 var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption)
-                if (currentDevice.hasBattery) {
-                    reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
-                }
+//                if (currentDevice.hasBattery) {
+//                    reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
+//                }
 
                 val report = network.fetchReport(
-                    currentDevice.deviceID,
+                    currentDevice.deviceSN,
                     reportVariables,
                     QueryDate(),
                     ReportType.month
                 )
 
-                val currentViewModel = CurrentStatusCalculator(currentDevice, raws, configManager.shouldInvertCT2, configManager.shouldCombineCT2WithPVPower)
+                val real = network.openapi_fetchRealData(
+                    deviceSN = currentDevice.deviceSN,
+                    variables
+                )
+
+                val currentValues = RealQueryResponseMapper().mapCurrentValues(real)
+                val currentViewModel = CurrentStatusCalculator(currentValues, configManager.shouldInvertCT2, configManager.shouldCombineCT2WithPVPower)
                 val totals = TotalsViewModel(report)
 
-                val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
-                    val battery = network.fetchBattery(deviceID = currentDevice.deviceID)
-                    BatteryViewModel(battery, hasError = currentDevice.battery?.hasError ?: false)
-                } else {
-                    BatteryViewModel.noBattery()
-                }
+//                val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
+//                    val battery = network.fetchBattery(deviceID = currentDevice.deviceSN)
+//                    BatteryViewModel(battery, hasError = currentDevice.battery?.hasError ?: false)
+//                } else {
+                    val battery = BatteryViewModel.noBattery()
+//                }
 
                 val summary = HomePowerFlowViewModel(
                     solar = currentViewModel.currentSolarPower,
@@ -192,7 +193,7 @@ class PowerFlowTabViewModel(
                     grid = currentViewModel.currentGrid,
                     todaysGeneration = GenerationViewModel(raws, earnings.today.generation),
                     earnings = EarningsViewModel(earnings, EnergyStatsFinancialModel(totals, configManager)),
-                    inverterTemperatures = currentViewModel.inverterTemperatures,
+                    inverterTemperatures = currentViewModel.currentTemperatures,
                     hasBattery = battery.hasBattery,
                     battery = battery,
                     configManager = configManager,
@@ -214,7 +215,7 @@ class PowerFlowTabViewModel(
         }
     }
 
-    private fun variable(variableName: String): RawVariable? {
+    private fun variable(variableName: String): Variable? {
         return configManager.variables.firstOrNull { it.variable.lowercase() == variableName.lowercase() }
     }
 

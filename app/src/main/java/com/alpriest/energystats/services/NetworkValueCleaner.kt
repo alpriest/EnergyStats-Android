@@ -5,6 +5,7 @@ import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
@@ -30,8 +31,8 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class NetworkValueCleaner(private val network: FoxESSNetworking, private val themeStream: MutableStateFlow<AppTheme>) : FoxESSNetworking {
-    override suspend fun fetchDeviceList(): PagedDeviceListResponse {
-        return network.fetchDeviceList()
+    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
+        return network.openapi_fetchDeviceList()
     }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {

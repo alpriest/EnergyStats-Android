@@ -8,11 +8,11 @@ import com.alpriest.energystats.ui.statsgraph.ReportType
 class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUser: () -> Boolean) : FoxESSNetworking {
     private val demoFoxESSNetworking = DemoFoxESSNetworking()
 
-    override suspend fun fetchDeviceList(): PagedDeviceListResponse {
+    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.fetchDeviceList()
+            demoFoxESSNetworking.openapi_fetchDeviceList()
         } else {
-            network.fetchDeviceList()
+            network.openapi_fetchDeviceList()
         }
     }
 

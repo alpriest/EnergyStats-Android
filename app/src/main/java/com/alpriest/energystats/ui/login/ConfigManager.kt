@@ -122,7 +122,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
     override var batteryCapacity: Int
         get() {
             return currentDevice.value?.let {
-                val override = config.deviceBatteryOverrides[it.deviceID]
+                val override = config.deviceBatteryOverrides[it.deviceSN]
                 return (override ?: it.battery?.capacity ?: "0").toDouble().toInt()
             } ?: run {
                 10000
@@ -131,7 +131,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             currentDevice.value?.let {
                 val map = config.deviceBatteryOverrides.toMutableMap()
-                map[it.deviceID] = value.toString()
+                map[it.deviceSN] = value.toString()
                 config.deviceBatteryOverrides = map
             }
 
@@ -267,25 +267,25 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
                 config.devices = null
             }
 
-            currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
+            currentDevice.value = devices?.firstOrNull { it.deviceSN == selectedDeviceSN }
         }
 
     final override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(null)
 
-    override var selectedDeviceID: String?
-        get() = config.selectedDeviceID
+    override var selectedDeviceSN: String?
+        get() = config.selectedDeviceSN
         set(value) {
-            config.selectedDeviceID = value
+            config.selectedDeviceSN = value
         }
 
     override fun select(device: Device) {
-        selectedDeviceID = device.deviceID
-        currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
+        selectedDeviceSN = device.deviceSN
+        currentDevice.value = devices?.firstOrNull { it.deviceSN == selectedDeviceSN }
     }
 
-    override val variables: List<RawVariable>
+    override val variables: List<Variable>
         get() {
-            return currentDevice.value?.variables ?: listOf()
+            return config.variables
         }
 
     override val hasBattery: Boolean
@@ -297,43 +297,39 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         var method = "device list"
 
         try {
-            val deviceList = networking.fetchDeviceList()
+            val deviceList = networking.openapi_fetchDeviceList()
             val mappedDevices = ArrayList<Device>()
-            deviceList.devices.asFlow().map { networkDevice ->
-                method = "device variables"
-                val variables = networking.fetchVariables(networkDevice.deviceID)
-                method = "device firmware versions"
-                val firmware = fetchFirmwareVersions(networkDevice.deviceID)
+            deviceList.asFlow().map { networkDevice ->
+//                method = "device variables"
+//                val variables = networking.fetchVariables(networkDevice.deviceID)
+//                method = "device firmware versions"
+//                val firmware = fetchFirmwareVersions(networkDevice.deviceID)
 
-                val deviceBattery: Battery? = if (networkDevice.hasBattery) {
-                    try {
-                        method = "device attached battery"
-                        val battery = networking.fetchBattery(networkDevice.deviceID)
-                        method = "device attached battery settings"
-                        val batterySettings = networking.fetchBatterySettings(networkDevice.deviceSN)
-                        val batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
-                        val minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
-                        Battery(batteryCapacity, minSOC, false)
-                    } catch (_: Exception) {
-                        devices?.firstOrNull { it.deviceID == networkDevice.deviceID }?.let {
-                            Battery(it.battery?.capacity, it.battery?.minSOC, true)
-                        }
-                    }
-                } else {
-                    null
-                }
+//                val deviceBattery: Battery? = if (networkDevice.hasBattery) {
+//                    try {
+//                        method = "device attached battery"
+//                        val battery = networking.fetchBattery(networkDevice.deviceID)
+//                        method = "device attached battery settings"
+//                        val batterySettings = networking.fetchBatterySettings(networkDevice.deviceSN)
+//                        val batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
+//                        val minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
+//                        Battery(batteryCapacity, minSOC, false)
+//                    } catch (_: Exception) {
+//                        devices?.firstOrNull { it.deviceID == networkDevice.deviceID }?.let {
+//                            Battery(it.battery?.capacity, it.battery?.minSOC, true)
+//                        }
+//                    }
+//                } else {
+//                    null
+//                }
 
                 mappedDevices.add(
                     Device(
-                        plantName = networkDevice.plantName,
-                        deviceID = networkDevice.deviceID,
                         deviceSN = networkDevice.deviceSN,
-                        hasPV = networkDevice.hasPV,
-                        hasBattery = networkDevice.hasBattery,
-                        battery = deviceBattery,
-                        deviceType = networkDevice.deviceType,
-                        firmware = firmware,
-                        variables = variables,
+                        stationName = networkDevice.stationName,
+                        stationID = networkDevice.stationID,
+                        battery = null,
+                        firmware = DeviceFirmwareVersion(manager = networkDevice.managerVersion, master = networkDevice.masterVersion, slave = networkDevice.slaveVersion),
                         moduleSN = networkDevice.moduleSN
                     )
                 )
@@ -341,40 +337,15 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
 
             devices = mappedDevices
 
-            if (selectedDeviceID == null || !mappedDevices.any { it.deviceID == selectedDeviceID }) {
-                selectedDeviceID = devices?.firstOrNull()?.deviceID
-                currentDevice.value = devices?.firstOrNull { it.deviceID == selectedDeviceID }
+            if (selectedDeviceSN == null || !mappedDevices.any { it.deviceSN == selectedDeviceSN }) {
+                selectedDeviceSN = devices?.firstOrNull()?.deviceSN
+                currentDevice.value = devices?.firstOrNull { it.deviceSN == selectedDeviceSN }
             }
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         } catch (ex: Exception) {
             throw DataFetchFailure(method, ex)
         }
-    }
-
-    override suspend fun refreshFirmwareVersions() {
-        try {
-            devices = devices?.map {
-                val firmware = fetchFirmwareVersions(it.deviceID)
-                if (it.firmware != firmware) {
-                    return@map it.copy(firmware = firmware)
-                } else {
-                    return@map it
-                }
-            }
-        } catch (ex: Exception) {
-            // Ignore
-        }
-    }
-
-    private suspend fun fetchFirmwareVersions(deviceID: String): DeviceFirmwareVersion {
-        val firmware = networking.fetchAddressBook(deviceID)
-
-        return DeviceFirmwareVersion(
-            master = firmware.softVersion.master,
-            slave = firmware.softVersion.slave,
-            manager = firmware.softVersion.manager
-        )
     }
 
     override var selectedParameterGraphVariables: List<String>
@@ -421,7 +392,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     init {
-        currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceID == selectedDeviceID })
+        currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })
         coroutineScope.launch {
             currentDevice.collect {
                 minSOC.value = it?.battery?.minSOC?.toDouble()

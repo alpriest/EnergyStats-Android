@@ -5,6 +5,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var variables: List<Variable>
     var separateParameterGraphsByUnit: Boolean
     var dataCeiling: Int
     var colorTheme: Int
@@ -21,7 +22,7 @@ interface ConfigInterface {
     var showUsableBatteryOnly: Boolean
     var showBatteryEstimate: Boolean
     var showSunnyBackground: Boolean
-    var selectedDeviceID: String?
+    var selectedDeviceSN: String?
     var devices: String?
     var refreshFrequency: Int
     var showBatteryTemperature: Boolean

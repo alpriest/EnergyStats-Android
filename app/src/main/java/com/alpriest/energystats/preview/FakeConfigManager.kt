@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
@@ -30,7 +31,7 @@ class FakeConfigManager : ConfigManaging {
     override var gridImportUnitPrice: Double = 0.15
     override var currencySymbol: String = "£"
     override var financialModel: FinancialModel = FinancialModel.EnergyStats
-    override val variables: List<RawVariable>
+    override val variables: List<Variable>
         get() = listOf()
     override val hasBattery: Boolean
         get() = true
@@ -68,53 +69,38 @@ class FakeConfigManager : ConfigManaging {
 
     override var devices: List<Device>? = listOf(
         Device(
-            plantName = "plant 1",
-            deviceID = "f3000_deviceid",
             deviceSN = "123123",
+            stationName = "my station",
+            stationID = "station1",
             battery = Battery("1200", "20", false),
-            hasPV = true,
-            hasBattery = true,
-            deviceType = "F3000",
             firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
-            variables = listOf(),
             moduleSN = "module123"
         ),
         Device(
-            plantName = "plant 2",
-            deviceID = "f3-5_deviceid",
             deviceSN = "123123",
+            stationName = "my station",
+            stationID = "station2",
             battery = Battery("1200", "20", false),
-            hasPV = true,
-            hasBattery = true,
-            deviceType = "f3-5",
             firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
-            variables = listOf(),
             moduleSN = "module123"
         )
     )
     override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(
         Device(
-            plantName = "plant 1",
-            deviceID = "f3000_deviceid",
             deviceSN = "123123",
+            stationName = "my station",
+            stationID = "station1",
             battery = Battery("1200", "20", false),
-            hasPV = true,
-            hasBattery = true,
-            deviceType = "F3000",
             firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
-            variables = listOf(),
             moduleSN = "module123"
         )
     )
-    override val selectedDeviceID: String? = "f3000_deviceid"
+    override val selectedDeviceSN: String? = "f3000_deviceid"
 
     override fun logout() {
     }
 
     override suspend fun fetchDevices() {
-    }
-
-    override suspend fun refreshFirmwareVersions() {
     }
 
     override fun select(device: Device) {

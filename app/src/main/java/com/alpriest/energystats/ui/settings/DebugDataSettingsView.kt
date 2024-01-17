@@ -45,7 +45,7 @@ fun NavGraphBuilder.debugGraph(
         composable("report") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
         composable("battery") {
             ResponseDebugView(networkStore, mapper = { networkStore.batteryResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceID?.let {
+                configManager.currentDevice.value?.deviceSN?.let {
                     network.fetchBattery(it)
                 }
             })
@@ -66,12 +66,12 @@ fun NavGraphBuilder.debugGraph(
         }
         composable("deviceList") {
             ResponseDebugView(networkStore, mapper = { networkStore.deviceListResponseStream }, fetcher = {
-                network.fetchDeviceList()
+                network.openapi_fetchDeviceList()
             })
         }
         composable("addressBook") {
             ResponseDebugView(networkStore, mapper = { networkStore.addressBookResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceID?.let {
+                configManager.currentDevice.value?.deviceSN?.let {
                     network.fetchAddressBook(it)
                 }
             })
@@ -81,7 +81,7 @@ fun NavGraphBuilder.debugGraph(
         }
         composable("earnings") {
             ResponseDebugView(networkStore, mapper = { networkStore.earningsResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceID?.let {
+                configManager.currentDevice.value?.deviceSN?.let {
                     network.fetchEarnings(it)
                 }
             })

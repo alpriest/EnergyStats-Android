@@ -1,6 +1,7 @@
 package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -19,7 +20,7 @@ class FakeConfigStore(
     override var useColouredFlowLines: Boolean = true,
     override var showBatteryTemperature: Boolean = true,
     override var refreshFrequency: Int = 0,
-    override var selectedDeviceID: String? = null,
+    override var selectedDeviceSN: String? = null,
     override var devices: String? = "[{\"deviceID\":\"03274209-486c-4ea3-9c28-159f25ee84cb\",\"deviceSN\":\"66BH3720228D004\",\"moduleSN\":\"669W2EFF22FA815\",\"plantName\":\"Alistair Priest\",\"deviceType\":\"H1-3.7-E\",\"country\":\"United Kingdom\",\"countryCode\":\"\",\"feedinDate\":\"2022-02-22 21:46:27 GMT+0000\",\"status\":1,\"power\":3.241,\"generationToday\":8,\"generationTotal\":3723.1,\"productType\":\"H\",\"flowType\":2,\"hasBattery\":true,\"hasPV\":true,\"dataLatestUploadDate\":\"2023-08-04 14:43:36 BST+0100\",\"hasWifiMeter\":false,\"inParallel\":0,\"wifiMeterID\":\"\",\"wifiMeterSN\":\"\",\"atFlag\":false}]",
     override var showSunnyBackground: Boolean = true,
     override var decimalPlaces: Int = 2,
@@ -46,7 +47,8 @@ class FakeConfigStore(
     override var dataCeiling: Int = DataCeiling.Mild.value,
     override var totalYieldModel: Int = TotalYieldModel.EnergyStats.value,
     override var showFinancialSummaryOnFlowPage: Boolean = false,
-    override var separateParameterGraphsByUnit: Boolean = true
+    override var separateParameterGraphsByUnit: Boolean = true,
+    override var variables: List<Variable> = listOf()
 
 ) : ConfigInterface {
     override fun clear() {}

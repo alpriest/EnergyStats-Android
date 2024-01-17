@@ -29,7 +29,6 @@ class PreHomeViewModel(
 
                 if (userManager.loggedInState.value.loadState == LoggedIn) {
                     configManager.fetchDevices()
-                    configManager.refreshFirmwareVersions()
                 }
             } catch (ex: Exception) {
                 alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)

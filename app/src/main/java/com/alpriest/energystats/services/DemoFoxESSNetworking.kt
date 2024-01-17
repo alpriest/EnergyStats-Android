@@ -5,11 +5,12 @@ import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceFunction
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.models.EarningsResponse
-import com.alpriest.energystats.models.NetworkDevice
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -134,12 +135,31 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         }.toList())
     }
 
-    override suspend fun fetchDeviceList(): PagedDeviceListResponse {
-        return PagedDeviceListResponse(
-            currentPage = 1, pageSize = 1, total = 1,
-            devices = arrayListOf(
-                NetworkDevice(plantName = "plant 1", deviceID = "h1_deviceid", deviceSN = "998877", hasBattery = true, hasPV = true, deviceType = "H1-3.7-E", moduleSN = "ab"),
-                NetworkDevice(plantName = "plant 2", deviceID = "f3000_deviceid", deviceSN = "123123", hasBattery = false, hasPV = true, deviceType = "F3000", moduleSN = "12")
+    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
+        return arrayListOf(
+            DeviceDetailResponse(
+                deviceSN = "998877",
+                moduleSN = "mod111",
+                stationID = "st123",
+                stationName = "h1_deviceid",
+                function = DeviceFunction(scheduler = true),
+                hardwareVersion = "1",
+                managerVersion = "2",
+                masterVersion = "3",
+                slaveVersion = "4",
+                status = 1
+            ),
+            DeviceDetailResponse(
+                deviceSN = "123123",
+                moduleSN = "mod222",
+                stationID = "st999",
+                stationName = "f3000_deviceid",
+                function = DeviceFunction(scheduler = true),
+                hardwareVersion = "1",
+                managerVersion = "2",
+                masterVersion = "3",
+                slaveVersion = "4",
+                status = 1
             )
         )
     }

@@ -2,6 +2,7 @@ package com.alpriest.energystats.stores
 
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -18,7 +19,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 interface ConfigManaging {
     fun logout()
     suspend fun fetchDevices()
-    suspend fun refreshFirmwareVersions()
     fun select(device: Device)
     val themeStream: MutableStateFlow<AppTheme>
 
@@ -34,7 +34,7 @@ interface ConfigManaging {
     var showInverterTypeNameOnPowerflow: Boolean
     var showInverterPlantNameOnPowerflow: Boolean
     var shouldInvertCT2: Boolean
-    val variables: List<RawVariable>
+    val variables: List<Variable>
     val hasBattery: Boolean
     var showUsableBatteryOnly: Boolean
     var decimalPlaces: Int
@@ -52,7 +52,7 @@ interface ConfigManaging {
     var refreshFrequency: RefreshFrequency
     var devices: List<Device>?
     var currentDevice: MutableStateFlow<Device?>
-    val selectedDeviceID: String?
+    val selectedDeviceSN: String?
     var appVersion: String
     var showInverterTemperatures: Boolean
     var selectedParameterGraphVariables: List<String>

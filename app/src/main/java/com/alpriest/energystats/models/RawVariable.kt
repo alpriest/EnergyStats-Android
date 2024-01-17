@@ -2,6 +2,12 @@ package com.alpriest.energystats.models
 
 import androidx.compose.ui.graphics.Color
 
+class Variable(
+    val name: String,
+    val variable: String,
+    val unit: String
+)
+
 class RawVariable(
     val name: String,
     val variable: String,

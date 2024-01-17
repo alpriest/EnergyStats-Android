@@ -13,19 +13,13 @@ data class InverterTemperatures(
     val inverter: Double
 )
 
-data class InverterTemperaturesViewModel(
-    val temperatures: InverterTemperatures,
-    val name: String,
-    val plantName: String?
-)
-
 class HomePowerFlowViewModel(
     val solar: Double,
     val home: Double,
     val grid: Double,
     val todaysGeneration: GenerationViewModel,
     val earnings: EarningsViewModel,
-    val inverterTemperatures: InverterTemperaturesViewModel?,
+    val inverterTemperatures: InverterTemperatures?,
     val hasBattery: Boolean,
     val battery: BatteryViewModel,
     val configManager: ConfigManaging,

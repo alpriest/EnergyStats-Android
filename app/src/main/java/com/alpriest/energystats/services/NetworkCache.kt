@@ -5,6 +5,7 @@ import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
@@ -38,8 +39,8 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
     private var cache: MutableMap<String, CachedItem> = mutableMapOf()
     private val shortCacheDurationInSeconds = 5
 
-    override suspend fun fetchDeviceList(): PagedDeviceListResponse {
-        return network.fetchDeviceList()
+    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
+        return network.openapi_fetchDeviceList()
     }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {

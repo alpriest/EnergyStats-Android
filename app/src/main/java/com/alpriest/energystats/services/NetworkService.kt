@@ -6,6 +6,7 @@ import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerListRequest
+import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsSetRequest
@@ -229,7 +230,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchDeviceList(): PagedDeviceListResponse {
+    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
         val body = Gson().toJson(DeviceListRequest())
             .toRequestBody("application/json".toMediaTypeOrNull())
 
@@ -239,8 +240,28 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .build()
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
-        store.deviceListResponseStream.value = NetworkOperation(description = "fetchDeviceList", value = response.item, raw = response.text, request)
+        val deviceListResult: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
+        deviceListResult.item.result?.let { deviceSummaryList ->
+            val devices = deviceSummaryList.data.map {
+                openapi_fetchDevice(it.deviceSN)
+            }
+
+            store.deviceListResponseStream.value = NetworkOperation(
+                description = "fetchDeviceList",
+                value = deviceListResult.item,
+                raw = deviceListResult.text,
+                request
+            )
+
+            return devices
+        } ?: throw MissingDataException()
+    }
+
+    suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
+        val request = Request.Builder().url(URLs.deviceDetail(deviceSN)).build()
+
+        val type = object : TypeToken<NetworkResponse<DeviceDetailResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<DeviceDetailResponse>> = fetch(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 

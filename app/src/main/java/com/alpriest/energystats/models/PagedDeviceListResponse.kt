@@ -4,17 +4,31 @@ data class PagedDeviceListResponse(
     val currentPage: Int,
     val pageSize: Int,
     val total: Int,
-    val devices: List<NetworkDevice>
+    val data: List<DeviceSummaryResponse>
 )
 
-class NetworkDevice(
-    val plantName: String,
-    val deviceID: String,
+class DeviceSummaryResponse(
     val deviceSN: String,
-    val hasBattery: Boolean,
-    val hasPV: Boolean,
-    val deviceType: String,
-    val moduleSN: String
+    val moduleSN: String,
+    val plantID: String,
+    val status: Int
+)
+
+class DeviceDetailResponse(
+    val deviceSN: String,
+    val moduleSN: String,
+    val stationID: String,
+    val stationName: String,
+    val managerVersion: String,
+    val masterVersion: String,
+    val slaveVersion: String,
+    val hardwareVersion: String,
+    val status: Int,
+    val function: DeviceFunction
+)
+
+data class DeviceFunction(
+    val scheduler: Boolean
 )
 
 data class DeviceListRequest(
@@ -34,15 +48,11 @@ data class DeviceListQueryDate(
 )
 
 data class Device(
-    val plantName: String,
-    val deviceID: String,
     val deviceSN: String,
-    val hasPV: Boolean,
-    val hasBattery: Boolean,
+    val stationName: String,
+    val stationID: String,
     val battery: Battery?,
-    val deviceType: String?,
     val firmware: DeviceFirmwareVersion?,
-    val variables: List<RawVariable>,
     val moduleSN: String
 )
 

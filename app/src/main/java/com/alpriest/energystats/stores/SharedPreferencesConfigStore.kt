@@ -2,6 +2,7 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
@@ -18,7 +19,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         USE_COLOURED_FLOW_LINES,
         SHOW_BATTERY_TEMPERATURE,
         REFRESH_FREQUENCY,
-        SELECTED_DEVICE_ID,
+        SELECTED_DEVICE_SN,
         DEVICES,
         SHOW_SUNNY_BACKGROUND,
         DECIMAL_PLACES,
@@ -51,7 +52,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         DATA_CEILING,
         TOTAL_YIELD_MODEL,
         SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW,
-        SEPARATE_PARAMETER_GRAPHS_BY_UNIT
+        SEPARATE_PARAMETER_GRAPHS_BY_UNIT,
+        VARIABLES
     }
 
     override var colorTheme: Int
@@ -174,11 +176,11 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var selectedDeviceID: String?
-        get() = sharedPreferences.getString(SharedPreferenceKey.SELECTED_DEVICE_ID.name, null)
+    override var selectedDeviceSN: String?
+        get() = sharedPreferences.getString(SharedPreferenceKey.SELECTED_DEVICE_SN.name, null)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putString(SharedPreferenceKey.SELECTED_DEVICE_ID.name, value)
+            editor.putString(SharedPreferenceKey.SELECTED_DEVICE_SN.name, value)
             editor.apply()
         }
 
@@ -393,6 +395,22 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceKey.SEPARATE_PARAMETER_GRAPHS_BY_UNIT.name, value)
+            editor.apply()
+        }
+
+    override var variables: List<Variable>
+        get() {
+            val data = sharedPreferences.getString(SharedPreferenceKey.VARIABLES.name, null)
+            if (data == null) {
+                variables = listOf()
+            }
+
+            return Gson().fromJson(data, object : TypeToken<List<Variable>>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceKey.VARIABLES.name, jsonString)
             editor.apply()
         }
 
