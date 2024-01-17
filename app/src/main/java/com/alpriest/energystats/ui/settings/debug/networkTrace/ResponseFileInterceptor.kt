@@ -49,10 +49,10 @@ fun NetworkTraceDebugView(configManager: ConfigManaging, credentialStore: Creden
                 variable("pvPower"),
                 variable("meterPower2")
             )
-            network.fetchRaw(it.deviceID, rawVariables, QueryDate())
-            network.fetchReport(it.deviceID, listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption), QueryDate(), ReportType.month)
-            if (it.battery != null || it.hasBattery) {
-                network.fetchBattery(deviceID = it.deviceID)
+            network.openapi_fetchRealData(it.deviceSN, rawVariables)
+            network.openapi_fetchReport(it.deviceSN, listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption), QueryDate(), ReportType.month)
+            if (it.battery != null) {
+                network.fetchBattery(it.deviceSN)
             }
         }
     }

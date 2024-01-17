@@ -48,7 +48,6 @@ class ScheduleSummaryViewModel(
     private suspend fun preload(context: Context) {
         runCatching {
             config.currentDevice.value?.let { device ->
-                val deviceID = device.deviceID
                 val deviceSN = device.deviceSN
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
@@ -64,7 +63,8 @@ class ScheduleSummaryViewModel(
                         )
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } else {
-                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
+                        // TODO
+//                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
                         modes = EditScheduleStore.shared.modes
                         uiState.value = UiLoadState(LoadState.Inactive)
                     }

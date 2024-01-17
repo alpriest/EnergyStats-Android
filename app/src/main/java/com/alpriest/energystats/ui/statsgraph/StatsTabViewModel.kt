@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
@@ -75,8 +75,8 @@ class StatsTabViewModel(
             ReportVariable.Generation,
             ReportVariable.FeedIn,
             ReportVariable.GridConsumption,
-            if (device.hasBattery) ReportVariable.ChargeEnergyToTal else null,
-            if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
+            if (configManager.hasBattery) ReportVariable.ChargeEnergyToTal else null,
+            if (configManager.hasBattery) ReportVariable.DischargeEnergyToTal else null,
             ReportVariable.Loads
         ).mapNotNull { it }.map {
             StatsGraphVariable(it, true)
@@ -95,18 +95,18 @@ class StatsTabViewModel(
         val queryDate = makeQueryDate(displayMode)
         val reportType = makeReportType(displayMode)
         val reportVariables = graphVariables.map { it.type }
-        val reportData: List<ReportResponse>
+        val reportData: List<OpenReportResponse>
         val rawTotals: MutableMap<ReportVariable, Double>
 
         try {
-            reportData = networking.fetchReport(
-                device.deviceID,
+            reportData = networking.openapi_fetchReport(
+                device.deviceSN,
                 variables = reportVariables,
                 queryDate = queryDate,
                 reportType = reportType
             )
 
-            rawTotals = generateTotals(device.deviceID, reportData, reportType, queryDate, reportVariables)
+            rawTotals = generateTotals(device.deviceSN, reportData, reportType, queryDate, reportVariables)
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             return
@@ -115,7 +115,7 @@ class StatsTabViewModel(
         rawData = reportData.flatMap { reportResponse ->
             val reportVariable = ReportVariable.parse(reportResponse.variable)
 
-            return@flatMap reportResponse.data.map { dataPoint ->
+            return@flatMap reportResponse.values.map { dataPoint ->
                 val graphPoint: Int = when (displayMode) {
                     is StatsDisplayMode.Day -> {
                         dataPoint.index - 1
@@ -193,8 +193,8 @@ class StatsTabViewModel(
     }
 
     private suspend fun generateTotals(
-        deviceID: String,
-        reportData: ArrayList<ReportResponse>,
+        deviceSN: String,
+        reportData: List<OpenReportResponse>,
         reportType: ReportType,
         queryDate: QueryDate,
         reportVariables: List<ReportVariable>
@@ -202,16 +202,16 @@ class StatsTabViewModel(
         val totals = mutableMapOf<ReportVariable, Double>()
 
         if (reportType == ReportType.day) {
-            val reports = networking.fetchReport(deviceID, reportVariables, queryDate, ReportType.month)
+            val reports = networking.openapi_fetchReport(deviceSN, reportVariables, queryDate, ReportType.month)
             reports.forEach { response ->
                 ReportVariable.parse(response.variable).let {
-                    totals[it] = response.data.first { it.index == queryDate.day }.value
+                    totals[it] = response.values.first { it.index == queryDate.day }.value
                 }
             }
         } else {
             reportData.forEach { response ->
                 ReportVariable.parse(response.variable).let {
-                    totals[it] = response.data.sumOf { kotlin.math.abs(it.value) }
+                    totals[it] = response.values.sumOf { kotlin.math.abs(it.value) }
                 }
             }
         }

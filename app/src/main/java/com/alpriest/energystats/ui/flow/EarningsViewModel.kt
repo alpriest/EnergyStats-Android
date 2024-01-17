@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.models.EarningsResponse
+import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -154,7 +155,7 @@ class EarningsViewModel(val response: EarningsResponse, val energyStatsFinancial
                     currency = "GBP(£)"
                 ),
                 energyStatsFinancialModel = EnergyStatsFinancialModel(
-                    totalsViewModel = TotalsViewModel(listOf(ReportResponse("raw", arrayOf()))),
+                    totalsViewModel = TotalsViewModel(listOf(OpenReportResponse("raw", unit = "kW", listOf()))),
                     configManager = FakeConfigManager()
                 )
             )

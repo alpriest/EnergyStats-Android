@@ -133,8 +133,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             segmentedControl = {
                 val items = listOf(
                     TotalYieldModel.Off,
-                    TotalYieldModel.EnergyStats,
-                    TotalYieldModel.FoxESS
+                    TotalYieldModel.EnergyStats
                 )
                 SegmentedControl(
                     items = items.map { it.title(context) },
@@ -149,7 +148,6 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                 when (totalYieldModelState.value) {
                     TotalYieldModel.Off -> null
                     TotalYieldModel.EnergyStats -> append(stringResource(R.string.energystats_total_yield_description))
-                    TotalYieldModel.FoxESS -> append(stringResource(R.string.foxess_total_yield_description))
                 }
             }
         )

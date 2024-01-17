@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.RawVariable
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
@@ -198,28 +198,28 @@ fun ParameterGraphVariableChooserViewPreview() {
 
 fun previewParameterGraphVariables(): List<ParameterGraphVariable> {
     return listOf(
-        RawVariable("PV1Volt", "pv1Volt", "V"),
-        RawVariable("PV1Current", "pv1Current", "A"),
-        RawVariable("PV1Power", "pv1Power", "kW"),
-        RawVariable("PVPower", "pvPower", "kW"),
-        RawVariable("PV2Volt", "pv2Volt", "V"),
-        RawVariable("PV2Current", "pv2Current", "A"),
-        RawVariable("aPV1Current", "pv1Current", "A"),
-        RawVariable("aPV1Power", "pv1Power", "kW"),
-        RawVariable("aPVPower", "pvPower", "kW"),
-        RawVariable("aPV2Volt", "pv2Volt", "V"),
-        RawVariable("aPV2Current", "pv2Current", "A"),
-        RawVariable("bPV1Current", "pv1Current", "A"),
-        RawVariable("bPV1Power", "pv1Power", "kW"),
-        RawVariable("bPVPower", "pvPower", "kW"),
-        RawVariable("bPV2Volt", "pv2Volt", "V"),
-        RawVariable("cPV2Current", "pv2Current", "A"),
-        RawVariable("cPV1Current", "pv1Current", "A"),
-        RawVariable("cPV1Power", "pv1Power", "kW"),
-        RawVariable("cPVPower", "pvPower", "kW"),
-        RawVariable("cPV2Volt", "pv2Volt", "V"),
-        RawVariable("dPV2Current", "pv2Current", "A"),
-        RawVariable("dPV2Power", "pv2Power", "kW")
+        Variable("PV1Volt", "pv1Volt", "V"),
+        Variable("PV1Current", "pv1Current", "A"),
+        Variable("PV1Power", "pv1Power", "kW"),
+        Variable("PVPower", "pvPower", "kW"),
+        Variable("PV2Volt", "pv2Volt", "V"),
+        Variable("PV2Current", "pv2Current", "A"),
+        Variable("aPV1Current", "pv1Current", "A"),
+        Variable("aPV1Power", "pv1Power", "kW"),
+        Variable("aPVPower", "pvPower", "kW"),
+        Variable("aPV2Volt", "pv2Volt", "V"),
+        Variable("aPV2Current", "pv2Current", "A"),
+        Variable("bPV1Current", "pv1Current", "A"),
+        Variable("bPV1Power", "pv1Power", "kW"),
+        Variable("bPVPower", "pvPower", "kW"),
+        Variable("bPV2Volt", "pv2Volt", "V"),
+        Variable("cPV2Current", "pv2Current", "A"),
+        Variable("cPV1Current", "pv1Current", "A"),
+        Variable("cPV1Power", "pv1Power", "kW"),
+        Variable("cPVPower", "pvPower", "kW"),
+        Variable("cPV2Volt", "pv2Volt", "V"),
+        Variable("dPV2Current", "pv2Current", "A"),
+        Variable("dPV2Power", "pv2Power", "kW")
     ).map { variable ->
         ParameterGraphVariable(variable, isSelected = listOf(true, false).random(), enabled = true)
     }

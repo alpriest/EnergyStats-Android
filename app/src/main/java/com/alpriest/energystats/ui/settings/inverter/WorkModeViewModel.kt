@@ -39,10 +39,10 @@ class WorkModeViewModel(
 
         runCatching {
             config.currentDevice.value?.let { device ->
-                val deviceID = device.deviceID
+                val deviceSN = device.deviceSN
 
                 try {
-                    val result = network.fetchWorkMode(deviceID)
+                    val result = network.fetchWorkMode(deviceSN) // TODO
                     workModeStream.value = InverterWorkMode.from(result.values.operation_mode__work_mode).asWorkMode()
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
@@ -59,11 +59,11 @@ class WorkModeViewModel(
 
         runCatching {
             config.currentDevice.value?.let { device ->
-                val deviceID = device.deviceID
+                val deviceSN = device.deviceSN
 
                 try {
                     network.setWorkMode(
-                        deviceID = deviceID,
+                        deviceID = deviceSN, // TODO
                         workMode = workModeStream.value.asInverterWorkMode().text,
                     )
 

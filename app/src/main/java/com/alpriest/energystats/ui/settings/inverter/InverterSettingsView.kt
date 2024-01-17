@@ -93,13 +93,12 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 @Composable
 fun DeviceVersionView(device: Device) {
     SettingsColumnWithChild {
-        SettingsRow("Plant Name", device.plantName)
-        SettingsRow("Device Type", device.deviceType)
-        SettingsRow("Device ID", device.deviceID)
+        SettingsRow("Station Name", device.stationName)
         SettingsRow("Device Serial No.", device.deviceSN)
         SettingsRow("Module Serial No", device.moduleSN)
-        SettingsRow("Has Battery", if (device.hasBattery) "true" else "false")
-        SettingsRow("Has Solar", if (device.hasPV) "true" else "false")
+        // TODO
+//        SettingsRow("Has Battery", if (device.hasBattery) "true" else "false")
+//        SettingsRow("Has Solar", if (device.hasPV) "true" else "false")
     }
 }
 
