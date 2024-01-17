@@ -105,19 +105,11 @@ class SummaryView(
 
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 
-        when (appTheme.financialModel) {
-            FinancialModel.EnergyStats -> {
-                approximationsViewModel.financialModel?.let { energyStatsModel ->
-                    moneySummaryRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome, textStyle = MaterialTheme.typography.h2)
-                    moneySummaryRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving, textStyle = MaterialTheme.typography.h2)
-                    moneySummaryRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total, textStyle = MaterialTheme.typography.h2)
-                }
-            }
-
-            FinancialModel.FoxESS -> {
-                approximationsViewModel.earnings?.let { earningsResponse ->
-                    moneySummaryRow(title = stringResource(R.string.total_benefit), amount = FinanceAmount(type = FinanceAmountType.TOTAL, earningsResponse.cumulate.earnings, earningsResponse.currencyCode(), earningsResponse.currencySymbol()), textStyle = MaterialTheme.typography.h2)
-                }
+        if (appTheme.financialModel == FinancialModel.EnergyStats) {
+            approximationsViewModel.financialModel?.let { energyStatsModel ->
+                moneySummaryRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome, textStyle = MaterialTheme.typography.h2)
+                moneySummaryRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving, textStyle = MaterialTheme.typography.h2)
+                moneySummaryRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total, textStyle = MaterialTheme.typography.h2)
             }
         }
 

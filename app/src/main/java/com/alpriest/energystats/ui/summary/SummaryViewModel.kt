@@ -45,9 +45,8 @@ class SummaryTabViewModel(
         }
 
         configManager.currentDevice.value?.let {
-            val foxEarnings = network.fetchEarnings(deviceID = it.deviceID)
             val totals = fetchAllYears(it)
-            approximationsViewModelStream.value = makeApproximationsViewModel(totals = totals, response = foxEarnings)
+            approximationsViewModelStream.value = makeApproximationsViewModel(totals = totals)
         }
     }
 
@@ -97,7 +96,7 @@ class SummaryTabViewModel(
             ReportVariable.GridConsumption,
             ReportVariable.Loads
         )
-        val reports = network.fetchReport(deviceID = device.deviceID,
+        val reports = network.openapi_fetchReport(deviceSN = device.deviceSN,
             variables = reportVariables,
             queryDate = QueryDate(year, null, null),
             reportType = ReportType.year
@@ -107,7 +106,7 @@ class SummaryTabViewModel(
         reports.forEach { reportResponse ->
             val reportVariable = ReportVariable.parse(reportResponse.variable)
 
-            totals[reportVariable] = reportResponse.data.sumOf { kotlin.math.abs(it.value) }
+            totals[reportVariable] = reportResponse.values.sumOf { kotlin.math.abs(it.value) }
         }
 
         val calendar = Calendar.getInstance()
@@ -118,7 +117,7 @@ class SummaryTabViewModel(
             var monthlyTotal = 0.0
 
             reportVariables.forEach { variable ->
-                reports.firstOrNull { it.variable == variable.networkTitle() }?.data?.firstOrNull { it.index == month }?.value?.let {
+                reports.firstOrNull { it.variable == variable.networkTitle() }?.values?.firstOrNull { it.index == month }?.value?.let {
                     monthlyTotal += it
                 }
             }
@@ -133,8 +132,7 @@ class SummaryTabViewModel(
     }
 
     private fun makeApproximationsViewModel(
-        totals: Map<ReportVariable, Double>,
-        response: EarningsResponse
+        totals: Map<ReportVariable, Double>
     ): ApproximationsViewModel? {
         val grid = totals[ReportVariable.GridConsumption]
         val feedIn = totals[ReportVariable.FeedIn]
@@ -150,7 +148,6 @@ class SummaryTabViewModel(
             feedIn = feedIn,
             loads = loads,
             batteryCharge = batteryCharge,
-            batteryDischarge = batteryDischarge,
-            earnings = response)
+            batteryDischarge = batteryDischarge)
     }
 }

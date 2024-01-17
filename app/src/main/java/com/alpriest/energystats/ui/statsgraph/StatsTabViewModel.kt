@@ -300,7 +300,6 @@ class StatsTabViewModel(
             loads = loads,
             batteryCharge = batteryCharge,
             batteryDischarge = batteryDischarge,
-            earnings = null
         )
     }
 }

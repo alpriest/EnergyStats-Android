@@ -54,7 +54,6 @@ data class ApproximationsViewModel(
     val absoluteSelfSufficiencyEstimate: String?,
     val absoluteSelfSufficiencyEstimateCalculationBreakdown: CalculationBreakdown,
     val financialModel: EnergyStatsFinancialModel?,
-    val earnings: EarningsResponse?,
     val homeUsage: Double?,
     val totalsViewModel: TotalsViewModel?
 )
@@ -242,7 +241,6 @@ fun StatsApproximationViewPreview() {
                 absoluteSelfSufficiencyEstimate = "100%",
                 absoluteSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", { "def" }),
                 financialModel = null,
-                earnings = null,
                 homeUsage = 4.5,
                 totalsViewModel = TotalsViewModel(
                     grid = 1.0,

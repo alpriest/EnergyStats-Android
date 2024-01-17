@@ -19,8 +19,7 @@ class ApproximationsCalculator(
         feedIn: Double,
         loads: Double,
         batteryCharge: Double,
-        batteryDischarge: Double,
-        earnings: EarningsResponse?
+        batteryDischarge: Double
     ): ApproximationsViewModel {
         val totalsViewModel = TotalsViewModel(grid, feedIn, loads, batteryCharge, batteryDischarge)
 
@@ -49,7 +48,6 @@ class ApproximationsCalculator(
             absoluteSelfSufficiencyEstimate = "${absoluteResult.first}%",
             absoluteSelfSufficiencyEstimateCalculationBreakdown = absoluteResult.second,
             financialModel = financialModel,
-            earnings = earnings,
             homeUsage = loads,
             totalsViewModel = totalsViewModel
         )
