@@ -17,10 +17,9 @@ class UnacceptableException: Exception("Unacceptable")
 interface FoxESSNetworking {
     suspend fun fetchBattery(deviceID: String): BatteryResponse
     suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse
-    suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse>
-    suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse>
+//    suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse>
+//    suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse>
     suspend fun fetchAddressBook(deviceID: String): AddressBookResponse
-    suspend fun fetchVariables(deviceID: String): List<RawVariable>
     suspend fun fetchEarnings(deviceID: String): EarningsResponse
     suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
     suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
@@ -46,6 +45,7 @@ interface FoxESSNetworking {
     suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse>
     suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse
     suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse
+    suspend fun openapi_fetchVariables(): List<OpenApiVariable>
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

@@ -184,7 +184,7 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         )
     }
 
-    override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
+    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
         val fileContent = this::class.java.classLoader?.getResource("res/raw/variables.json")?.readText()
 
         val data: NetworkResponse<VariablesResponse> = Gson().fromJson(fileContent, object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type)

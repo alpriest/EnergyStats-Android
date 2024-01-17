@@ -18,9 +18,6 @@ import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawRequest
-import com.alpriest.energystats.models.RawResponse
-import com.alpriest.energystats.models.RawVariable
 import com.alpriest.energystats.models.ReportRequest
 import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
@@ -311,17 +308,17 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
-        val body = Gson().toJson(RawRequest(deviceID, variables, queryDate))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder().post(body).url(URLs.raw()).build()
-
-        val type = object : TypeToken<NetworkRawResponse>() {}.type
-        val response: NetworkTuple<NetworkRawResponse> = fetch(request, type)
-        store.rawResponseStream.value = NetworkOperation(description = "fetchRaw", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
+//    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
+//        val body = Gson().toJson(RawRequest(deviceID, variables, queryDate))
+//            .toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder().post(body).url(URLs.raw()).build()
+//
+//        val type = object : TypeToken<NetworkRawResponse>() {}.type
+//        val response: NetworkTuple<NetworkRawResponse> = fetch(request, type)
+//        store.rawResponseStream.value = NetworkOperation(description = "fetchRaw", value = response.item, raw = response.text, request)
+//        return response.item.result ?: throw MissingDataException()
+//    }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         val request = Request.Builder().url(URLs.battery(deviceID)).build()
@@ -341,7 +338,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
+    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
         val request = Request.Builder().url(URLs.variables(deviceID)).build()
 
         val type = object : TypeToken<NetworkResponse<VariablesResponse>>() {}.type

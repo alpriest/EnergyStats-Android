@@ -72,11 +72,11 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-    override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
+    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.fetchVariables(deviceID)
+            demoFoxESSNetworking.openapi_fetchVariables(deviceID)
         } else {
-            network.fetchVariables(deviceID)
+            network.openapi_fetchVariables(deviceID)
         }
     }
 

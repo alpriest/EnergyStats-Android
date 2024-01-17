@@ -11,7 +11,6 @@ import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
-import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.RawData
 import com.alpriest.energystats.models.RawResponse
@@ -88,8 +87,8 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         return network.fetchAddressBook(deviceID)
     }
 
-    override suspend fun fetchVariables(deviceID: String): List<RawVariable> {
-        return network.fetchVariables(deviceID)
+    override suspend fun openapi_fetchVariables(deviceID: String): List<RawVariable> {
+        return network.openapi_fetchVariables(deviceID)
     }
 
     override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
