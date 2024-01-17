@@ -36,6 +36,7 @@ import com.alpriest.energystats.models.SchedulerModesResponse
 import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetSOCRequest
 import com.alpriest.energystats.models.VariablesResponse
+import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
@@ -65,6 +66,10 @@ interface NetworkResponseInterface {
 }
 
 class NetworkService(private val credentials: CredentialStore, private val store: InMemoryLoggingNetworkStore, interceptor: Interceptor? = null) : FoxESSNetworking {
+    private fun makeSignature(encodedPath: String, token: String, timestamp: Long): String {
+        return listOf(encodedPath, token, timestamp.toString()).joinToString("\\r\\n").md5() ?: ""
+    }
+
     private val okHttpClient by lazy {
         val builder = OkHttpClient()
             .newBuilder()
@@ -75,6 +80,9 @@ class NetworkService(private val credentials: CredentialStore, private val store
                 val original = chain.request()
                 val languageCode = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
                 val timezone = TimeZone.getDefault().id
+                val token = credentials.getToken() ?: ""
+                val timestamp = System.currentTimeMillis()
+                val signature = makeSignature(original.url.encodedPath, token, timestamp)
 
                 val requestBuilder = original.newBuilder()
                     .header("token", credentials.getToken() ?: "")
@@ -88,6 +96,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
                     .header("Content-Type", "application/json")
                     .header("lang", languageCode)
                     .header("timezone", timezone)
+                    .header("timestamp", timestamp.toString())
+                    .header("signature", signature)
 
                 chain.proceed(requestBuilder.build())
             }
