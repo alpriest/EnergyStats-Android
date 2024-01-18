@@ -73,14 +73,6 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         network.setBatteryTimes(deviceSN, times)
     }
 
-    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
-        return network.fetchWorkMode(deviceID)
-    }
-
-    override suspend fun setWorkMode(deviceID: String, workMode: String) {
-        network.setWorkMode(deviceID, workMode)
-    }
-
     override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
         return network.fetchDataLoggers()
     }

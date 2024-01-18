@@ -37,7 +37,6 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 
         currentDevice.value?.let {
             Column {
-                SettingsNavButton(stringResource(R.string.configure_work_mode)) { navController.navigate(SettingsScreen.InverterWorkMode.name) }
                 SettingsNavButton(stringResource(R.string.manage_schedules)) { navController.navigate(SettingsScreen.InverterSchedule.name) }
             }
 

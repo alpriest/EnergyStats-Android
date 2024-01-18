@@ -10,7 +10,11 @@ data class PagedDeviceListResponse(
 class DeviceSummaryResponse(
     val deviceSN: String,
     val moduleSN: String,
-    val plantID: String,
+    val stationID: String,
+    val productType: String,
+    val deviceType: String,
+    val hasBattery: Boolean,
+    val hasPV: Boolean,
     val status: Int
 )
 
@@ -24,7 +28,11 @@ class DeviceDetailResponse(
     val slaveVersion: String,
     val hardwareVersion: String,
     val status: Int,
-    val function: DeviceFunction
+    val function: DeviceFunction,
+    val productType: String,
+    val deviceType: String,
+    val hasBattery: Boolean,
+    val hasPV: Boolean
 )
 
 data class DeviceFunction(

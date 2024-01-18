@@ -102,7 +102,11 @@ class DemoFoxESSNetworking : FoxESSNetworking {
                 managerVersion = "2",
                 masterVersion = "3",
                 slaveVersion = "4",
-                status = 1
+                status = 1,
+                deviceType = "h1",
+                hasBattery = true,
+                hasPV = true,
+                productType = "produ1"
             ),
             DeviceDetailResponse(
                 deviceSN = "123123",
@@ -114,7 +118,11 @@ class DemoFoxESSNetworking : FoxESSNetworking {
                 managerVersion = "2",
                 masterVersion = "3",
                 slaveVersion = "4",
-                status = 1
+                status = 1,
+                deviceType = "f3000",
+                hasBattery = true,
+                hasPV = true,
+                productType = "produ2"
             )
         )
     }
@@ -160,13 +168,6 @@ class DemoFoxESSNetworking : FoxESSNetworking {
     }
 
     override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-    }
-
-    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
-        return DeviceSettingsGetResponse(protocol = "H11300", values = DeviceSettingsValues("SelfUse"))
-    }
-
-    override suspend fun setWorkMode(deviceID: String, workMode: String) {
     }
 
     override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {

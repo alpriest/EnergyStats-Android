@@ -16,7 +16,6 @@ import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.financial.FinancialsSettingsView
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
-import com.alpriest.energystats.ui.settings.inverter.WorkModeView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditPhaseView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
@@ -32,7 +31,6 @@ enum class SettingsScreen {
     BatterySOC,
     BatteryChargeTimes,
     Inverter,
-    InverterWorkMode,
     InverterSchedule,
     Dataloggers,
     SelfSufficiencyEstimates,
@@ -90,9 +88,6 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.Inverter.name) {
             InverterSettingsView(configManager = config, navController = navController)
-        }
-        composable(SettingsScreen.InverterWorkMode.name) {
-            WorkModeView(configManager = config, network = network, navController = navController, userManager = userManager).Content()
         }
         composable(SettingsScreen.InverterSchedule.name) {
             ScheduleSummaryView(config, network, navController, userManager).Content()

@@ -8,13 +8,11 @@ import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerListRequest
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceListRequest
-import com.alpriest.energystats.models.DeviceSettingsGetResponse
-import com.alpriest.energystats.models.DeviceSettingsSetRequest
-import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.ErrorMessagesResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenQueryRequest
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
@@ -257,7 +255,18 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
-        TODO("Not yet implemented")
+        val body = Gson().toJson(OpenQueryRequest(deviceSN, variables.map { it.variable }))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.getOpenRealData())
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<OpenQueryResponse>>() {}.type
+        val result: NetworkTuple<NetworkResponse<OpenQueryResponse>> = fetch(request, type)
+
+        return result.item.result ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
@@ -365,28 +374,6 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder().url(URLs.batteryTimeSet()).post(body).build()
-
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
-
-    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
-        val request = Request.Builder().url(URLs.deviceSettings(deviceID)).build()
-
-        val type = object : TypeToken<NetworkResponse<DeviceSettingsGetResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<DeviceSettingsGetResponse>> = fetch(request, type)
-        store.deviceSettingsGetResponse.value = NetworkOperation(description = "deviceSettingsGetResponse", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun setWorkMode(deviceID: String, workMode: String) {
-        val body = Gson().toJson(DeviceSettingsSetRequest(id = deviceID, key = "operation_mode__work_mode", values = DeviceSettingsValues(workMode)))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder()
-            .url(URLs.deviceSettingsSet())
-            .post(body)
-            .build()
 
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)

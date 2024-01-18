@@ -95,22 +95,6 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-    override suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.fetchWorkMode(deviceID)
-        } else {
-            network.fetchWorkMode(deviceID)
-        }
-    }
-
-    override suspend fun setWorkMode(deviceID: String, workMode: String) {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.setWorkMode(deviceID, workMode)
-        } else {
-            network.setWorkMode(deviceID, workMode)
-        }
-    }
-
     override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
         return if (isDemoUser()) {
             demoFoxESSNetworking.fetchDataLoggers()

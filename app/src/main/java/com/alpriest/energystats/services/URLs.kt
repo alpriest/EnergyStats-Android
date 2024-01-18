@@ -87,8 +87,8 @@ object URLs {
             .build()
     }
 
-    fun deviceList(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/list"
+    fun getOpenRealData(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/real/query"
             .toHttpUrl()
     }
 
@@ -131,6 +131,11 @@ object URLs {
             .newBuilder()
             .addQueryParameter("templateID", templateID)
             .build()
+    }
+
+    fun deviceList(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/list"
+            .toHttpUrl()
     }
 
     fun enableSchedule(): HttpUrl {

@@ -1,5 +1,10 @@
 package com.alpriest.energystats.models
 
+data class OpenQueryRequest(
+    val deviceSN: String,
+    val variables: List<String>
+)
+
 data class OpenQueryResponse(
     val time: String,
     val deviceSN: String,

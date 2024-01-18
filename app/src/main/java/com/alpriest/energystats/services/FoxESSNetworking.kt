@@ -17,14 +17,10 @@ class UnacceptableException: Exception("Unacceptable")
 interface FoxESSNetworking {
     suspend fun fetchBattery(deviceID: String): BatteryResponse
     suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse
-//    suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse>
-//    suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse>
     suspend fun fetchAddressBook(deviceID: String): AddressBookResponse
     suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
     suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
     suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)
-    suspend fun fetchWorkMode(deviceID: String): DeviceSettingsGetResponse
-    suspend fun setWorkMode(deviceID: String, workMode: String)
     suspend fun fetchDataLoggers(): PagedDataLoggerListResponse
     suspend fun fetchErrorMessages()
 
