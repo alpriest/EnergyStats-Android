@@ -58,14 +58,6 @@ object URLs {
             .build()
     }
 
-    fun earnings(deviceID: String): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/earnings"
-            .toHttpUrl()
-            .newBuilder()
-            .addDeviceID(deviceID)
-            .build()
-    }
-
     fun battery(deviceID: String): HttpUrl {
         return "https://www.foxesscloud.com/c/v0/device/battery/info"
             .toHttpUrl()
@@ -87,11 +79,6 @@ object URLs {
             .build()
     }
 
-    fun report(): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/history/report"
-            .toHttpUrl()
-    }
-
     fun socGet(deviceSN: String): HttpUrl {
         return "https://www.foxesscloud.com/c/v0/device/battery/soc/get"
             .toHttpUrl()
@@ -101,12 +88,12 @@ object URLs {
     }
 
     fun deviceList(): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/list"
+        return "https://www.foxesscloud.com/op/v0/device/list"
             .toHttpUrl()
     }
 
     fun deviceDetail(deviceSN: String): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/list"
+        return "https://www.foxesscloud.com/op/v0/device/detail"
             .toHttpUrl()
             .newBuilder()
             .addQueryParameter("sn", deviceSN)
