@@ -11,7 +11,6 @@ import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsSetRequest
 import com.alpriest.energystats.models.DeviceSettingsValues
-import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.ErrorMessagesResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
@@ -21,8 +20,6 @@ import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.ReportRequest
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleEnableRequest
 import com.alpriest.energystats.models.ScheduleListResponse
@@ -332,15 +329,6 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val type = object : TypeToken<NetworkResponse<BatteryResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatteryResponse>> = fetch(request, type)
         store.batteryResponseStream.value = NetworkOperation(description = "fetchBattery", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
-        val request = Request.Builder().url(URLs.earnings(deviceID)).build()
-
-        val type = object : TypeToken<NetworkResponse<EarningsResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<EarningsResponse>> = fetch(request, type)
-        store.earningsResponseStream.value = NetworkOperation(description = "fetchEarnings", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 

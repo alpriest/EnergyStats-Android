@@ -7,22 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Earning
-import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.OpenReportResponse
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.CalculationBreakdown
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -46,10 +40,9 @@ fun SubLabelledView(value: String, label: String, alignment: Alignment.Horizonta
 @Composable
 fun EarningsView(themeStream: MutableStateFlow<AppTheme>, viewModel: EarningsViewModel) {
     val context = LocalContext.current
-    val theme by themeStream.collectAsState()
 
     Row {
-        viewModel.amounts(theme.financialModel).forEach {
+        viewModel.amounts().forEach {
             SubLabelledView(
                 value = it.formattedAmount(),
                 label = it.title(context),
@@ -128,32 +121,14 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
     }
 }
 
-class EarningsViewModel(val response: EarningsResponse, val energyStatsFinancialModel: EnergyStatsFinancialModel) {
-    fun amounts(model: FinancialModel): List<FinanceAmount> {
-        return when (model) {
-            FinancialModel.FoxESS ->
-                listOf(
-                    FinanceAmount(FinanceAmountType.TODAY, response.today.earnings, response.currencyCode(), response.currencySymbol()),
-                    FinanceAmount(FinanceAmountType.MONTH, response.month.earnings, response.currencyCode(), response.currencySymbol()),
-                    FinanceAmount(FinanceAmountType.YEAR, response.year.earnings, response.currencyCode(), response.currencySymbol()),
-                    FinanceAmount(FinanceAmountType.TOTAL, response.cumulate.earnings, response.currencyCode(), response.currencySymbol())
-                )
-
-            FinancialModel.EnergyStats ->
-                energyStatsFinancialModel.amounts()
-        }
+class EarningsViewModel(val energyStatsFinancialModel: EnergyStatsFinancialModel) {
+    fun amounts(): List<FinanceAmount> {
+        return energyStatsFinancialModel.amounts()
     }
 
     companion object {
         fun preview(): EarningsViewModel {
             return EarningsViewModel(
-                response = EarningsResponse(
-                    today = Earning(1.0, 1.0),
-                    month = Earning(5.0, 5.0),
-                    year = Earning(50.0, 50.0),
-                    cumulate = Earning(500.0, 500.0),
-                    currency = "GBP(£)"
-                ),
                 energyStatsFinancialModel = EnergyStatsFinancialModel(
                     totalsViewModel = TotalsViewModel(listOf(OpenReportResponse("raw", unit = "kW", listOf()))),
                     configManager = FakeConfigManager()

@@ -138,9 +138,9 @@ class PowerFlowTabViewModel(
                     uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
                 }
 
-                val earnings = network.fetchEarnings(deviceID = currentDevice.deviceSN)
-                configManager.currencyCode = earnings.currencyCode()
-                configManager.currencySymbol = earnings.currencySymbol()
+                // TODO
+//                configManager.currencyCode = earnings.currencyCode()
+//                configManager.currencySymbol = earnings.currencySymbol()
 
                 var variables: List<Variable> = listOfNotNull(
                     variable("feedInPower"),
@@ -201,7 +201,7 @@ class PowerFlowTabViewModel(
                     home = currentViewModel.currentHomeConsumption,
                     grid = currentViewModel.currentGrid,
                     todaysGeneration = GenerationViewModel(history),
-                    earnings = EarningsViewModel(earnings, EnergyStatsFinancialModel(totals, configManager)),
+                    earnings = EarningsViewModel(EnergyStatsFinancialModel(totals, configManager)),
                     inverterTemperatures = currentViewModel.currentTemperatures,
                     hasBattery = battery.hasBattery,
                     battery = battery,

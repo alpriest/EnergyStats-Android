@@ -3,15 +3,12 @@ package com.alpriest.energystats.ui.summary
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.flow.FinanceAmount
-import com.alpriest.energystats.ui.flow.FinanceAmountType
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -36,7 +33,7 @@ class SummaryTabViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     val oldestDataDate = MutableStateFlow("")
-    private val approximationsCalculator = ApproximationsCalculator(network, configManager)
+    private val approximationsCalculator = ApproximationsCalculator(configManager)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     suspend fun load() {

@@ -294,7 +294,7 @@ class StatsTabViewModel(
         val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal] ?: 0.0
         val loads = totals[ReportVariable.Loads] ?: 0.0
 
-        approximationsViewModelStream.value = ApproximationsCalculator(networking, configManager).calculateApproximations(
+        approximationsViewModelStream.value = ApproximationsCalculator(configManager).calculateApproximations(
             grid = grid,
             feedIn = feedIn,
             loads = loads,

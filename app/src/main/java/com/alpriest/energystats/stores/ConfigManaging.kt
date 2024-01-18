@@ -6,7 +6,6 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -26,7 +25,6 @@ interface ConfigManaging {
     var gridImportUnitPrice: Double
     var feedInUnitPrice: Double
     var currencySymbol: String
-    var financialModel: FinancialModel
     var parameterGroups: List<ParameterGroup>
     var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean

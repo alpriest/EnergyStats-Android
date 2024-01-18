@@ -71,14 +71,6 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-    override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.fetchEarnings(deviceID)
-        } else {
-            network.fetchEarnings(deviceID)
-        }
-    }
-
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
         return if (isDemoUser()) {
             demoFoxESSNetworking.setSoc(minGridSOC, minSOC, deviceSN)

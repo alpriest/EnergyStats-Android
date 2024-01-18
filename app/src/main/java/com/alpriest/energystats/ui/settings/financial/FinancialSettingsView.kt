@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.settings.financial
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -28,43 +26,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.SegmentedControl
-import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.Locale
 
-enum class FinancialModel(val value: Int) {
-    EnergyStats(0), FoxESS(1);
-
-    fun title(context: Context): String {
-        return when (this) {
-            EnergyStats -> context.getString(R.string.energy_stats)
-            FoxESS -> context.getString(R.string.foxess)
-        }
-    }
-
-    companion object {
-        fun fromInt(value: Int) = values().first { it.value == value }
-    }
-}
-
 @Composable
 fun FinancialsSettingsView(config: ConfigManaging) {
-    val context = LocalContext.current
     val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
     val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(config.showFinancialSummaryOnFlowPage) }
-    val financialModelState = rememberSaveable { mutableStateOf(config.financialModel) }
     val feedInUnitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
 
@@ -80,116 +55,96 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                 config.showFinancialSummaryOnFlowPage = it
             })
 
-            SettingsSegmentedControl(segmentedControl = {
-                val items = listOf(FinancialModel.EnergyStats, FinancialModel.FoxESS)
-                SegmentedControl(
-                    items = items.map { it.title(context) }, defaultSelectedItemIndex = items.indexOf(financialModelState.value), color = colors.primary
-                ) {
-                    financialModelState.value = items[it]
-                    config.financialModel = items[it]
-                }
-            })
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .background(colors.surface)
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(
+                    stringResource(R.string.feed_in_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = colors.onSecondary
+                )
 
-            if (financialModelState.value == FinancialModel.EnergyStats) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                Text(
+                    config.currencySymbol,
+                    color = colors.onSecondary,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+
+                TextField(
+                    value = feedInUnitPrice.value,
+                    onValueChange = {
+                        feedInUnitPrice.value = it
+                        config.feedInUnitPrice = it.safeToDouble()
+                    },
                     modifier = Modifier
-                        .background(colors.surface)
-                        .padding(vertical = 4.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.feed_in_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = colors.onSecondary
+                        .width(90.dp)
+                        .defaultMinSize(
+                            minWidth = TextFieldDefaults.MinWidth,
+                            minHeight = 44.dp
+                        ),
+                    textStyle = LocalTextStyle.current.copy(
+                        textAlign = TextAlign.End,
+                        color = colors.onSecondary
                     )
+                )
+            }
 
-                    Text(
-                        config.currencySymbol,
-                        color = colors.onSecondary,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .background(colors.surface)
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(
+                    stringResource(R.string.grid_import_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = colors.onSecondary
+                )
 
-                    TextField(
-                        value = feedInUnitPrice.value,
-                        onValueChange = {
-                            feedInUnitPrice.value = it
-                            config.feedInUnitPrice = it.safeToDouble()
-                        },
-                        modifier = Modifier
-                            .width(90.dp)
-                            .defaultMinSize(
-                                minWidth = TextFieldDefaults.MinWidth,
-                                minHeight = 44.dp
-                            ),
-                        textStyle = LocalTextStyle.current.copy(
-                            textAlign = TextAlign.End,
-                            color = colors.onSecondary
-                        )
-                    )
-                }
+                Text(
+                    config.currencySymbol,
+                    color = colors.onSecondary,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                TextField(
+                    value = gridImportUnitPrice.value,
+                    onValueChange = {
+                        gridImportUnitPrice.value = it
+                        config.gridImportUnitPrice = it.safeToDouble()
+                    },
                     modifier = Modifier
-                        .background(colors.surface)
-                        .padding(vertical = 4.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.grid_import_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = colors.onSecondary
+                        .width(90.dp)
+                        .defaultMinSize(
+                            minWidth = TextFieldDefaults.MinWidth,
+                            minHeight = 44.dp
+                        ),
+                    textStyle = LocalTextStyle.current.copy(
+                        textAlign = TextAlign.End,
+                        color = colors.onSecondary
                     )
-
-                    Text(
-                        config.currencySymbol,
-                        color = colors.onSecondary,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-
-                    TextField(
-                        value = gridImportUnitPrice.value,
-                        onValueChange = {
-                            gridImportUnitPrice.value = it
-                            config.gridImportUnitPrice = it.safeToDouble()
-                        },
-                        modifier = Modifier
-                            .width(90.dp)
-                            .defaultMinSize(
-                                minWidth = TextFieldDefaults.MinWidth,
-                                minHeight = 44.dp
-                            ),
-                        textStyle = LocalTextStyle.current.copy(
-                            textAlign = TextAlign.End,
-                            color = colors.onSecondary
-                        )
-                    )
-                }
+                )
             }
         }
     }
 
     if (showFinancialSummaryState.value) {
-        when (financialModelState.value) {
-            FinancialModel.EnergyStats -> {
-                Text(stringResource(R.string.energy_stats_earnings_calculation_description))
+        Text(stringResource(R.string.energy_stats_earnings_calculation_description))
 
-                CalculationDescription(
-                    stringResource(R.string.exported_income_short_title), stringResource(R.string.exported_income_description), stringResource(R.string.exported_income_formula)
-                )
+        CalculationDescription(
+            stringResource(R.string.exported_income_short_title), stringResource(R.string.exported_income_description), stringResource(R.string.exported_income_formula)
+        )
 
-                CalculationDescription(
-                    stringResource(R.string.grid_import_avoided_short_title), stringResource(R.string.grid_import_description), stringResource(R.string.grid_import_formula)
-                )
+        CalculationDescription(
+            stringResource(R.string.grid_import_avoided_short_title), stringResource(R.string.grid_import_description), stringResource(R.string.grid_import_formula)
+        )
 
-                CalculationDescription(
-                    stringResource(R.string.total),
-                    stringResource(R.string.total_formula_description),
-                    "${stringResource(R.string.exported_income_short_title)} + ${stringResource(R.string.grid_import_avoided_short_title)}"
-                )
-            }
-
-            FinancialModel.FoxESS -> {
-                Text(stringResource(R.string.foxess_earnings_calculation_description))
-            }
-        }
+        CalculationDescription(
+            stringResource(R.string.total),
+            stringResource(R.string.total_formula_description),
+            "${stringResource(R.string.exported_income_short_title)} + ${stringResource(R.string.grid_import_avoided_short_title)}"
+        )
     }
 }
 

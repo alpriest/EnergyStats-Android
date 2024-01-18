@@ -8,7 +8,6 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
@@ -23,7 +22,6 @@ data class AppTheme(
     val showUsableBatteryOnly: Boolean,
     val selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode,
     val showFinancialSummary: Boolean,
-    val financialModel: FinancialModel,
     val displayUnit: DisplayUnit,
     val showInverterTemperatures: Boolean,
     val showInverterIcon: Boolean,

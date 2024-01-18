@@ -29,13 +29,11 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.FinanceAmount
-import com.alpriest.energystats.ui.flow.FinanceAmountType
-import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.flow.FinanceAmount
+import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -105,12 +103,10 @@ class SummaryView(
 
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 
-        if (appTheme.financialModel == FinancialModel.EnergyStats) {
-            approximationsViewModel.financialModel?.let { energyStatsModel ->
-                moneySummaryRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome, textStyle = MaterialTheme.typography.h2)
-                moneySummaryRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving, textStyle = MaterialTheme.typography.h2)
-                moneySummaryRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total, textStyle = MaterialTheme.typography.h2)
-            }
+        approximationsViewModel.financialModel?.let { energyStatsModel ->
+            moneySummaryRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome, textStyle = MaterialTheme.typography.h2)
+            moneySummaryRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving, textStyle = MaterialTheme.typography.h2)
+            moneySummaryRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total, textStyle = MaterialTheme.typography.h2)
         }
 
         Text(

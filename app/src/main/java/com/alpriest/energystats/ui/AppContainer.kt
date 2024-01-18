@@ -26,7 +26,6 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
@@ -71,7 +70,6 @@ class AppContainer(private val context: Context) {
             showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow,
             showLastUpdateTimestamp = config.showLastUpdateTimestamp,
             solarRangeDefinitions = config.solarRangeDefinitions,
-            financialModel = FinancialModel.fromInt(config.financialModel),
             shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
             showGraphValueDescriptions = config.showGraphValueDescriptions,
             parameterGroups = config.parameterGroups,

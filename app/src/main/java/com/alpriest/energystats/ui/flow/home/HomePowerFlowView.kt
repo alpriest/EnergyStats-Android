@@ -13,7 +13,6 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
@@ -73,7 +72,6 @@ fun AppTheme.Companion.preview(
     showInverterPlantNameOnPowerflow: Boolean = false,
     showLastUpdateTimestamp: Boolean = false,
     solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,
-    financialModel: FinancialModel = FinancialModel.FoxESS,
     shouldCombineCT2WithPVPower: Boolean = true,
     showGraphValueDescriptions: Boolean = true,
     parameterGroups: List<ParameterGroup> = ParameterGroup.defaults,
@@ -94,7 +92,6 @@ fun AppTheme.Companion.preview(
         showUsableBatteryOnly = showUsableBatteryOnly,
         selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
         showFinancialSummary = showFinancialSummary,
-        financialModel = financialModel,
         displayUnit = displayUnit,
         showInverterTemperatures = showInverterTemperatures,
         showInverterIcon = showInverterIcon,

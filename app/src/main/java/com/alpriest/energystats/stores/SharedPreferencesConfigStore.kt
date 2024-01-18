@@ -341,14 +341,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var financialModel: Int
-        get() = sharedPreferences.getInt(SharedPreferenceKey.FINANCIAL_MODEL.name, 0)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putInt(SharedPreferenceKey.FINANCIAL_MODEL.name, value)
-            editor.apply()
-        }
-
     override var solcastSettings: SolcastSettings
         get() {
             var data = sharedPreferences.getString(SharedPreferenceKey.SOLCAST_SETTINGS.name, null)

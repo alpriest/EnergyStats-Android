@@ -20,7 +20,6 @@ interface FoxESSNetworking {
 //    suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse>
 //    suspend fun fetchReport(deviceID: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): ArrayList<ReportResponse>
     suspend fun fetchAddressBook(deviceID: String): AddressBookResponse
-    suspend fun fetchEarnings(deviceID: String): EarningsResponse
     suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
     suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
     suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)

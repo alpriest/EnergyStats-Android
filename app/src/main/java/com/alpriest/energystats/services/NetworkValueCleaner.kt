@@ -7,7 +7,6 @@ import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
-import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
@@ -60,10 +59,6 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
         return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
-    }
-
-    override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
-        return network.fetchEarnings(deviceID)
     }
 
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {

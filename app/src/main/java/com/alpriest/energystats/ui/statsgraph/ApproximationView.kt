@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel

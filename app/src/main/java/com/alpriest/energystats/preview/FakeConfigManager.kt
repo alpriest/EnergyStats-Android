@@ -10,7 +10,6 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -29,7 +28,6 @@ class FakeConfigManager : ConfigManaging {
     override var feedInUnitPrice: Double = 0.05
     override var gridImportUnitPrice: Double = 0.15
     override var currencySymbol: String = "£"
-    override var financialModel: FinancialModel = FinancialModel.EnergyStats
     override val variables: List<Variable>
         get() = listOf()
     override val hasBattery: Boolean

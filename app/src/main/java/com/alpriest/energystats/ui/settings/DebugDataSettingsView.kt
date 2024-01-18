@@ -79,13 +79,6 @@ fun NavGraphBuilder.debugGraph(
         composable("deviceSettings") {
             ResponseDebugView(networkStore, mapper = { networkStore.deviceSettingsGetResponse }, fetcher = null)
         }
-        composable("earnings") {
-            ResponseDebugView(networkStore, mapper = { networkStore.earningsResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceSN?.let {
-                    network.fetchEarnings(it)
-                }
-            })
-        }
         composable("dataLoggers") {
             ResponseDebugView(networkStore, mapper = { networkStore.dataLoggerListResponse }, fetcher = {
                 network.fetchDataLoggers()

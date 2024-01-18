@@ -15,7 +15,6 @@ interface ConfigInterface {
     var gridImportUnitPrice: Double
     var feedInUnitPrice: Double
     var currencySymbol: String
-    var financialModel: Int
     var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean
     var selfSufficiencyEstimateMode: Int

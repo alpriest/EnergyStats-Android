@@ -1,17 +1,13 @@
 package com.alpriest.energystats.ui.summary
 
-import com.alpriest.energystats.models.EarningsResponse
-import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.statsgraph.AbsoluteSelfSufficiencyCalculator
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.NetSelfSufficiencyCalculator
 
 class ApproximationsCalculator(
-    private val network: FoxESSNetworking,
     private val configManager: ConfigManaging
 ) {
     fun calculateApproximations(
@@ -23,11 +19,7 @@ class ApproximationsCalculator(
     ): ApproximationsViewModel {
         val totalsViewModel = TotalsViewModel(grid, feedIn, loads, batteryCharge, batteryDischarge)
 
-        val financialModel: EnergyStatsFinancialModel? = if (configManager.financialModel == FinancialModel.EnergyStats) {
-            EnergyStatsFinancialModel(totalsViewModel, configManager)
-        } else {
-            null
-        }
+        val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager)
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
             loads,

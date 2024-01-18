@@ -7,7 +7,6 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.financial.FinancialModel
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -94,13 +93,6 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             config.showFinancialSummary = value
             themeStream.value = themeStream.value.copy(showFinancialSummary = showFinancialSummary)
-        }
-
-    override var financialModel: FinancialModel
-        get() = FinancialModel.fromInt(config.financialModel)
-        set(value) {
-            config.financialModel = value.value
-            themeStream.value = themeStream.value.copy(financialModel = financialModel)
         }
 
     override var showBatteryEstimate: Boolean

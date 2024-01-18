@@ -10,7 +10,6 @@ import com.alpriest.energystats.models.DeviceFunction
 import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.DeviceSettingsValues
 import com.alpriest.energystats.models.Earning
-import com.alpriest.energystats.models.EarningsResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -18,9 +17,6 @@ import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.RawData
-import com.alpriest.energystats.models.RawResponse
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleListResponse
 import com.alpriest.energystats.models.SchedulePollcy
@@ -32,18 +28,12 @@ import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.SoftwareVersion
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 
 class DemoFoxESSNetworking : FoxESSNetworking {
@@ -154,28 +144,6 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         val data: NetworkResponse<OpenApiVariableArray> = Gson().fromJson(fileContent, object : TypeToken<NetworkResponse<OpenApiVariableArray>>() {}.type)
 
         return data.result?.array ?: listOf()
-    }
-
-    override suspend fun fetchEarnings(deviceID: String): EarningsResponse {
-        return EarningsResponse(
-            today = Earning(
-                generation = 11.5,
-                earnings = 54.2
-            ),
-            currency = "GBP (£)",
-            month = Earning(
-                generation = 31.5,
-                earnings = 154.2
-            ),
-            year = Earning(
-                generation = 81.5,
-                earnings = 254.2
-            ),
-            cumulate = Earning(
-                generation = 121.5,
-                earnings = 354.2
-            ),
-        )
     }
 
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
