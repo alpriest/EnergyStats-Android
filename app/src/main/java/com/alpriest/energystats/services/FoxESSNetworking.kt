@@ -17,7 +17,6 @@ class UnacceptableException: Exception("Unacceptable")
 interface FoxESSNetworking {
     suspend fun fetchBattery(deviceID: String): BatteryResponse
     suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse
-    suspend fun fetchAddressBook(deviceID: String): AddressBookResponse
     suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
     suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
     suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)

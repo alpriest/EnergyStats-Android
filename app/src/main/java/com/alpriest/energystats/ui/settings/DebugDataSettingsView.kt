@@ -69,13 +69,6 @@ fun NavGraphBuilder.debugGraph(
                 network.openapi_fetchDeviceList()
             })
         }
-        composable("addressBook") {
-            ResponseDebugView(networkStore, mapper = { networkStore.addressBookResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceSN?.let {
-                    network.fetchAddressBook(it)
-                }
-            })
-        }
         composable("deviceSettings") {
             ResponseDebugView(networkStore, mapper = { networkStore.deviceSettingsGetResponse }, fetcher = null)
         }

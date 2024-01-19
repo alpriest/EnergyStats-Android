@@ -311,15 +311,6 @@ class NetworkService(private val credentials: CredentialStore, private val store
 //        return response.item.result ?: throw MissingDataException()
 //    }
 
-    override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        val request = Request.Builder().url(URLs.addressBook(deviceID)).build()
-
-        val type = object : TypeToken<NetworkResponse<AddressBookResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<AddressBookResponse>> = fetch(request, type)
-        store.addressBookResponseStream.value = NetworkOperation(description = "fetchAddressBook", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
-
 //    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
 //        val body = Gson().toJson(RawRequest(deviceID, variables, queryDate))
 //            .toRequestBody("application/json".toMediaTypeOrNull())

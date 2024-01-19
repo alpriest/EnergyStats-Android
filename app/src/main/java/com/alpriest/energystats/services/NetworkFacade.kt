@@ -63,14 +63,6 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-    override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        return if (isDemoUser()) {
-            demoFoxESSNetworking.fetchAddressBook(deviceID)
-        } else {
-            network.fetchAddressBook(deviceID)
-        }
-    }
-
     override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
         return if (isDemoUser()) {
             demoFoxESSNetworking.setSoc(minGridSOC, minSOC, deviceSN)

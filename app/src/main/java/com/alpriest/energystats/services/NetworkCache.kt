@@ -6,7 +6,6 @@ import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceDetailResponse
-import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
@@ -79,19 +78,6 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
             cached.item
         } else {
             val fresh = network.fetchBatterySettings(deviceSN)
-            cache[key] = CachedItem(fresh)
-            fresh
-        }
-    }
-
-    override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        val key = makeKey("fetchAddressBook", deviceID)
-
-        val cached = cache[key]
-        return if (cached != null && cached.item is AddressBookResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
-            cached.item
-        } else {
-            val fresh = network.fetchAddressBook(deviceID)
             cache[key] = CachedItem(fresh)
             fresh
         }

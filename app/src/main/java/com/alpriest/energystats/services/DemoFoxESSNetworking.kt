@@ -7,9 +7,6 @@ import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceFunction
-import com.alpriest.energystats.models.DeviceSettingsGetResponse
-import com.alpriest.energystats.models.DeviceSettingsValues
-import com.alpriest.energystats.models.Earning
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -80,14 +77,6 @@ class DemoFoxESSNetworking : FoxESSNetworking {
 
     override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
         return BatterySettingsResponse(20, minSoc = 30)
-    }
-
-    override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        return if (deviceID == "f3000_deviceid") {
-            AddressBookResponse(softVersion = SoftwareVersion(master = "1.54", slave = "1.09", manager = "1.49"))
-        } else {
-            AddressBookResponse(softVersion = SoftwareVersion(master = "2.54", slave = "1.09", manager = "1.56"))
-        }
     }
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {

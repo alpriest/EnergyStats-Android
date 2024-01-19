@@ -6,7 +6,6 @@ import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceDetailResponse
-import com.alpriest.energystats.models.DeviceSettingsGetResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
@@ -47,10 +46,6 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 
     override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
         return network.fetchBatterySettings(deviceSN)
-    }
-
-    override suspend fun fetchAddressBook(deviceID: String): AddressBookResponse {
-        return network.fetchAddressBook(deviceID)
     }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
