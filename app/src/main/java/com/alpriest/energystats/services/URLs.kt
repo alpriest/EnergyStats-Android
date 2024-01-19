@@ -71,14 +71,6 @@ object URLs {
             .toHttpUrl()
     }
 
-    fun addressBook(deviceID: String): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/addressbook"
-            .toHttpUrl()
-            .newBuilder()
-            .addDeviceID(deviceID)
-            .build()
-    }
-
     fun socGet(deviceSN: String): HttpUrl {
         return "https://www.foxesscloud.com/c/v0/device/battery/soc/get"
             .toHttpUrl()
@@ -89,6 +81,11 @@ object URLs {
 
     fun getOpenRealData(): HttpUrl {
         return "https://www.foxesscloud.com/op/v0/device/real/query"
+            .toHttpUrl()
+    }
+
+    fun getOpenHistoryData(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/history/query"
             .toHttpUrl()
     }
 

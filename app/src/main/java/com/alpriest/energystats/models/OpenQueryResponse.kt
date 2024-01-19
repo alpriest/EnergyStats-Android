@@ -19,9 +19,9 @@ data class OpenQueryResponseData(
 
 data class OpenHistoryRequest(
     val sn: String,
-    val variable: List<Variable>,
-    val begin: Double,
-    val end: Double
+    val variable: List<String>,
+    val begin: Long,
+    val end: Long
 )
 
 data class OpenHistoryResponse(

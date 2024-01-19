@@ -1,6 +1,5 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.AddressBookResponse
 import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
@@ -11,6 +10,7 @@ import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.ErrorMessagesResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
+import com.alpriest.energystats.models.OpenHistoryRequest
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryRequest
 import com.alpriest.energystats.models.OpenQueryResponse
@@ -80,12 +80,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
                 val requestBuilder = original.newBuilder()
                     .header("token", credentials.getApiKey() ?: "")
-                    .header("User-Agent", "EnergyStats")
+                    .header("User-Agent", "Energy-Stats")
                     .header("Accept", "application/json, text/plain, */*")
-                    .header(
-                        "Referrer",
-                        "https://www.foxesscloud.com/"
-                    )
                     .header("Accept-Language", "en-US;q=0.9,en;q=0.8,de;q=0.7,nl;q=0.6")
                     .header("Content-Type", "application/json")
                     .header("lang", languageCode)
@@ -263,14 +259,29 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .url(URLs.getOpenRealData())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<OpenQueryResponse>>() {}.type
-        val result: NetworkTuple<NetworkResponse<OpenQueryResponse>> = fetch(request, type)
+        val type = object : TypeToken<NetworkResponse<List<OpenQueryResponse>>>() {}.type
+        val result: NetworkTuple<NetworkResponse<List<OpenQueryResponse>>> = fetch(request, type)
 
-        return result.item.result ?: throw MissingDataException()
+        return result.item.result?.let { list ->
+            list.firstOrNull { it.deviceSN == deviceSN }
+        } ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        TODO("Not yet implemented")
+        val body = Gson().toJson(OpenHistoryRequest(deviceSN, variables, start, end))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.getOpenHistoryData())
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<List<OpenHistoryResponse>>>() {}.type
+        val result: NetworkTuple<NetworkResponse<List<OpenHistoryResponse>>> = fetch(request, type)
+
+        return result.item.result?.let { list ->
+            list.firstOrNull { it.deviceSN == deviceSN }
+        } ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
@@ -293,35 +304,6 @@ class NetworkService(private val credentials: CredentialStore, private val store
         store.batterySettingsResponseStream.value = NetworkOperation(description = "fetchBatterySettings", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
-
-//    override suspend fun fetchReport(
-//        deviceID: String,
-//        variables: List<ReportVariable>,
-//        queryDate: QueryDate,
-//        reportType: ReportType
-//    ): ArrayList<ReportResponse> {
-//        val body = Gson().toJson(ReportRequest(deviceID, variables, queryDate, reportType))
-//            .toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder().post(body).url(URLs.report()).build()
-//
-//        val type = object : TypeToken<NetworkReportResponse>() {}.type
-//        val response: NetworkTuple<NetworkReportResponse> = fetch(request, type)
-//        store.reportResponseStream.value = NetworkOperation(description = "fetchReport", value = response.item, raw = response.text, request)
-//        return response.item.result ?: throw MissingDataException()
-//    }
-
-//    override suspend fun fetchRaw(deviceID: String, variables: List<RawVariable>, queryDate: QueryDate): ArrayList<RawResponse> {
-//        val body = Gson().toJson(RawRequest(deviceID, variables, queryDate))
-//            .toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder().post(body).url(URLs.raw()).build()
-//
-//        val type = object : TypeToken<NetworkRawResponse>() {}.type
-//        val response: NetworkTuple<NetworkRawResponse> = fetch(request, type)
-//        store.rawResponseStream.value = NetworkOperation(description = "fetchRaw", value = response.item, raw = response.text, request)
-//        return response.item.result ?: throw MissingDataException()
-//    }
 
     override suspend fun fetchBattery(deviceID: String): BatteryResponse {
         val request = Request.Builder().url(URLs.battery(deviceID)).build()
