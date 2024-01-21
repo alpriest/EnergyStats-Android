@@ -17,7 +17,7 @@ data class OpenApiVariable(
 
 class OpenApiVariableDeserializer : JsonDeserializer<OpenApiVariableArray> {
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): OpenApiVariableArray {
-        val resultArray = json.getAsJsonArray()
+        val resultArray = json.asJsonArray
 
         val openApiVariables = resultArray.mapNotNull { resultElement ->
             resultElement.asJsonObject.entrySet().firstOrNull()?.let { entry ->

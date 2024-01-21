@@ -1,27 +1,13 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.AddressBookResponse
-import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySOCResponse
-import com.alpriest.energystats.models.BatterySettingsResponse
-import com.alpriest.energystats.models.BatteryTimesResponse
-import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
-import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.ScheduleListResponse
-import com.alpriest.energystats.models.ScheduleTemplateListResponse
-import com.alpriest.energystats.models.ScheduleTemplateResponse
-import com.alpriest.energystats.models.SchedulerFlagResponse
-import com.alpriest.energystats.models.SchedulerModeResponse
-import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import java.lang.Math.abs
 import java.util.Date

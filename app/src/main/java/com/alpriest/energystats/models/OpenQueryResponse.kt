@@ -1,5 +1,7 @@
 package com.alpriest.energystats.models
 
+import com.alpriest.energystats.ui.statsgraph.ReportType
+
 data class OpenQueryRequest(
     val deviceSN: String,
     val variables: List<String>
@@ -48,11 +50,20 @@ data class OpenReportResponse(
 )
 
 data class OpenReportResponseData(
-    val index : Int,
-    val value : Double
+    val index: Int,
+    val value: Double
 )
 
 data class BatterySOCResponse(
     val minSocOnGrid: Int,
     val minSoc: Int
+)
+
+data class OpenReportRequest(
+    val sn: String,
+    val variables: List<String>,
+    val dimension: ReportType,
+    val year: Int,
+    val month: Int?,
+    val day: Int?
 )

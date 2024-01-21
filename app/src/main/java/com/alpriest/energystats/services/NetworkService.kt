@@ -11,6 +11,7 @@ import com.alpriest.energystats.models.OpenHistoryRequest
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryRequest
 import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenReportRequest
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
@@ -268,7 +269,18 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        TODO("Not yet implemented")
+        val body = Gson().toJson(OpenReportRequest(deviceSN, variables.map { it.networkTitle() }, reportType, queryDate.year, queryDate.month, queryDate.day))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.getOpenReportData())
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type
+        val result: NetworkTuple<NetworkResponse<List<OpenReportResponse>>> = fetch(request, type)
+
+        return result.item.result ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {

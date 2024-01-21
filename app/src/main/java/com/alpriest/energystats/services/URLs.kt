@@ -160,6 +160,11 @@ object URLs {
             .addQueryParameter("sn", deviceSN)
             .build()
     }
+
+    fun getOpenReportData(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/report/query"
+            .toHttpUrl()
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {
