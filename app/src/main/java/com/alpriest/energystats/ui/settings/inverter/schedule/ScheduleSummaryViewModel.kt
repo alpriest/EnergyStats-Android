@@ -53,21 +53,22 @@ class ScheduleSummaryViewModel(
 
                 try {
 
-                    val supported = network.fetchSchedulerFlag(deviceSN).support
+                    // TODO
+//                    val supported = network.fetchSchedulerFlag(deviceSN).support
 
-                    if (!supported) {
-                        supportedErrorStream.value = String.format(
-                            context.getString(R.string.unsupported_firmware),
-                            device.deviceDisplayName,
-                            device.firmware?.manager ?: ""
-                        )
-                        uiState.value = UiLoadState(LoadState.Inactive)
-                    } else {
-                        // TODO
-//                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
-                        modes = EditScheduleStore.shared.modes
-                        uiState.value = UiLoadState(LoadState.Inactive)
-                    }
+//                    if (!supported) {
+//                        supportedErrorStream.value = String.format(
+//                            context.getString(R.string.unsupported_firmware),
+//                            device.deviceDisplayName,
+//                            device.firmware?.manager ?: ""
+//                        )
+//                        uiState.value = UiLoadState(LoadState.Inactive)
+//                    } else {
+//                        // TODO
+////                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
+//                        modes = EditScheduleStore.shared.modes
+//                        uiState.value = UiLoadState(LoadState.Inactive)
+//                    }
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
@@ -96,15 +97,16 @@ class ScheduleSummaryViewModel(
 
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
-                try {
-                    val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-                    templateStream.value = scheduleResponse.data.mapNotNull { it.toScheduleTemplate() }
-                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.pollcy.mapNotNull { it.toSchedulePhase(modes) }, description = null)
-
-                    uiState.value = UiLoadState(LoadState.Inactive)
-                } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-                }
+                // TODO
+//                try {
+//                    val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
+//                    templateStream.value = scheduleResponse.data.mapNotNull { it.toScheduleTemplate() }
+//                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.pollcy.mapNotNull { it.toSchedulePhase(modes) }, description = null)
+//
+//                    uiState.value = UiLoadState(LoadState.Inactive)
+//                } catch (ex: Exception) {
+//                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+//                }
             }
         }
     }
@@ -141,13 +143,14 @@ class ScheduleSummaryViewModel(
 
                     uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
 
-                    try {
-                        network.enableScheduleTemplate(deviceSN, scheduleTemplate.id)
-                        uiState.value = UiLoadState(LoadState.Inactive)
-                        load(context)
-                    } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-                    }
+                    // TODO
+//                    try {
+//                        network.enableScheduleTemplate(deviceSN, scheduleTemplate.id)
+//                        uiState.value = UiLoadState(LoadState.Inactive)
+//                        load(context)
+//                    } catch (ex: Exception) {
+//                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+//                    }
                 }
             }
         }

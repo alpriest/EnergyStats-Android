@@ -4,10 +4,10 @@ data class PagedDeviceListResponse(
     val currentPage: Int,
     val pageSize: Int,
     val total: Int,
-    val data: List<DeviceSummaryResponse>
+    val data: List<PagedDeviceListResponseDevice>
 )
 
-class DeviceSummaryResponse(
+class PagedDeviceListResponseDevice(
     val deviceSN: String,
     val moduleSN: String,
     val stationID: String,
@@ -57,8 +57,11 @@ data class DeviceListQueryDate(
 
 data class Device(
     val deviceSN: String,
+    val hasPV: Boolean,
     val stationName: String,
     val stationID: String,
+    val hasBattery: Boolean,
+    val deviceType: String,
     val battery: Battery?,
     val firmware: DeviceFirmwareVersion?,
     val moduleSN: String

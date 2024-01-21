@@ -71,7 +71,10 @@ class FakeConfigManager : ConfigManaging {
             stationID = "station1",
             battery = Battery("1200", "20", false),
             firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
-            moduleSN = "module123"
+            moduleSN = "module123",
+            hasPV = true,
+            hasBattery = true,
+            deviceType = "F1-3000"
         ),
         Device(
             deviceSN = "123123",
@@ -79,7 +82,10 @@ class FakeConfigManager : ConfigManaging {
             stationID = "station2",
             battery = Battery("1200", "20", false),
             firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
-            moduleSN = "module123"
+            moduleSN = "module123",
+            hasPV = true,
+            hasBattery = true,
+            deviceType = "H1-5A"
         )
     )
     override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(
@@ -89,7 +95,10 @@ class FakeConfigManager : ConfigManaging {
             stationID = "station1",
             battery = Battery("1200", "20", false),
             firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
-            moduleSN = "module123"
+            moduleSN = "module123",
+            hasPV = true,
+            hasBattery = true,
+            deviceType = "F1-3000"
         )
     )
     override val selectedDeviceSN: String? = "f3000_deviceid"

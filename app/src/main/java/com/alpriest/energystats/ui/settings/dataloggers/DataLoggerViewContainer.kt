@@ -74,17 +74,18 @@ class DataLoggerViewModel(
 
         runCatching {
             try {
-                val result = network.fetchDataLoggers()
-                itemStream.value = result.data.map {
-                    DataLogger(
-                        moduleSN = it.moduleSN,
-                        moduleType = it.moduleType,
-                        plantName = it.plantName,
-                        version = it.version,
-                        signal = it.signal,
-                        communication = it.communication
-                    )
-                }
+                // TODO
+//                val result = network.fetchDataLoggers()
+//                itemStream.value = result.data.map {
+//                    DataLogger(
+//                        moduleSN = it.moduleSN,
+//                        moduleType = it.moduleType,
+//                        plantName = it.plantName,
+//                        version = it.version,
+//                        signal = it.signal,
+//                        communication = it.communication
+//                    )
+//                }
             } catch (ex: Exception) {
                 alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             }

@@ -1,10 +1,6 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.BatteryResponse
-import com.alpriest.energystats.models.BatterySettingsResponse
-import com.alpriest.energystats.models.BatteryTimesResponse
-import com.alpriest.energystats.models.ChargeTime
-import com.alpriest.energystats.models.DataLoggerListRequest
+import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.ErrorMessagesResponse
@@ -15,26 +11,11 @@ import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryRequest
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
-import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.ScheduleEnableRequest
-import com.alpriest.energystats.models.ScheduleListResponse
-import com.alpriest.energystats.models.ScheduleSaveRequest
-import com.alpriest.energystats.models.ScheduleTemplateCreateRequest
-import com.alpriest.energystats.models.ScheduleTemplateListResponse
-import com.alpriest.energystats.models.ScheduleTemplateResponse
-import com.alpriest.energystats.models.SchedulerFlagResponse
-import com.alpriest.energystats.models.SchedulerModeResponse
-import com.alpriest.energystats.models.SchedulerModesResponse
-import com.alpriest.energystats.models.SetBatteryTimesRequest
-import com.alpriest.energystats.models.SetSOCRequest
-import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -112,116 +93,116 @@ class NetworkService(private val credentials: CredentialStore, private val store
         }
     }
 
-    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
-        val body = Gson().toJson(
-            ScheduleSaveRequest(
-                pollcy = scheduleTemplate.phases.map { it.toPollcy() },
-                templateID = scheduleTemplate.id,
-                deviceSN
-            )
-        ).toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder()
-            .url(URLs.saveScheduleTemplate())
-            .method("POST", body)
-            .build()
-
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
-
-    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
-        val request = Request.Builder().url(URLs.fetchScheduleTemplates()).build()
-
-        val type = object : TypeToken<NetworkResponse<ScheduleTemplateListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ScheduleTemplateListResponse>> = fetch(request, type)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun createScheduleTemplate(name: String, description: String) {
-        val body = Gson().toJson(ScheduleTemplateCreateRequest(templateName = name, content = description))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder()
-            .url(URLs.createScheduleTemplate())
-            .method("POST", body)
-            .build()
-
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
-
-    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
-        val request = Request.Builder().url(URLs.getSchedule(deviceSN, templateID)).build()
-
-        val type = object : TypeToken<NetworkResponse<ScheduleTemplateResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ScheduleTemplateResponse>> = fetch(request, type)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
-        val body = Gson().toJson(ScheduleSaveRequest(schedule.phases.map { it.toPollcy() }, templateID = null, deviceSN = deviceSN))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder()
-            .url(URLs.enableSchedule())
-            .method("POST", body)
-            .build()
-
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
-
-    override suspend fun deleteScheduleTemplate(templateID: String) {
-        val request = Request.Builder().url(URLs.deleteScheduleTemplate(templateID)).build()
-
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
-
-    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
-        val body = Gson().toJson(ScheduleEnableRequest(templateID = templateID, deviceSN = deviceSN))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder()
-            .url(URLs.enableSchedule())
-            .method("POST", body)
-            .build()
-
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
-
-    override suspend fun deleteSchedule(deviceSN: String) {
-        val request = Request.Builder().url(URLs.getDeleteSchedule(deviceSN)).build()
-
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
-
-    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
-        val request = Request.Builder().url(URLs.getSchedulerFlag(deviceSN)).build()
-
-        val type = object : TypeToken<NetworkResponse<SchedulerFlagResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<SchedulerFlagResponse>> = fetch(request, type)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
-        val request = Request.Builder().url(URLs.schedulerModes(deviceID)).build()
-
-        val type = object : TypeToken<NetworkResponse<SchedulerModesResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<SchedulerModesResponse>> = fetch(request, type)
-        return response.item.result?.modes ?: throw MissingDataException()
-    }
-
-    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-        val request = Request.Builder().url(URLs.getCurrentSchedule(deviceSN)).build()
-
-        val type = object : TypeToken<NetworkResponse<ScheduleListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ScheduleListResponse>> = fetch(request, type)
-        return response.item.result ?: throw MissingDataException()
-    }
+//    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
+//        val body = Gson().toJson(
+//            ScheduleSaveRequest(
+//                pollcy = scheduleTemplate.phases.map { it.toPollcy() },
+//                templateID = scheduleTemplate.id,
+//                deviceSN
+//            )
+//        ).toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder()
+//            .url(URLs.saveScheduleTemplate())
+//            .method("POST", body)
+//            .build()
+//
+//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+//        fetch<NetworkResponse<String>>(request, type)
+//    }
+//
+//    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
+//        val request = Request.Builder().url(URLs.fetchScheduleTemplates()).build()
+//
+//        val type = object : TypeToken<NetworkResponse<ScheduleTemplateListResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<ScheduleTemplateListResponse>> = fetch(request, type)
+//        return response.item.result ?: throw MissingDataException()
+//    }
+//
+//    override suspend fun createScheduleTemplate(name: String, description: String) {
+//        val body = Gson().toJson(ScheduleTemplateCreateRequest(templateName = name, content = description))
+//            .toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder()
+//            .url(URLs.createScheduleTemplate())
+//            .method("POST", body)
+//            .build()
+//
+//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+//        fetch<NetworkResponse<String>>(request, type)
+//    }
+//
+//    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
+//        val request = Request.Builder().url(URLs.getSchedule(deviceSN, templateID)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<ScheduleTemplateResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<ScheduleTemplateResponse>> = fetch(request, type)
+//        return response.item.result ?: throw MissingDataException()
+//    }
+//
+//    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+//        val body = Gson().toJson(ScheduleSaveRequest(schedule.phases.map { it.toPollcy() }, templateID = null, deviceSN = deviceSN))
+//            .toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder()
+//            .url(URLs.enableSchedule())
+//            .method("POST", body)
+//            .build()
+//
+//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+//        fetch<NetworkResponse<String>>(request, type)
+//    }
+//
+//    override suspend fun deleteScheduleTemplate(templateID: String) {
+//        val request = Request.Builder().url(URLs.deleteScheduleTemplate(templateID)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+//        fetch<NetworkResponse<String>>(request, type)
+//    }
+//
+//    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
+//        val body = Gson().toJson(ScheduleEnableRequest(templateID = templateID, deviceSN = deviceSN))
+//            .toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder()
+//            .url(URLs.enableSchedule())
+//            .method("POST", body)
+//            .build()
+//
+//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+//        fetch<NetworkResponse<String>>(request, type)
+//    }
+//
+//    override suspend fun deleteSchedule(deviceSN: String) {
+//        val request = Request.Builder().url(URLs.getDeleteSchedule(deviceSN)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+//        fetch<NetworkResponse<String>>(request, type)
+//    }
+//
+//    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
+//        val request = Request.Builder().url(URLs.getSchedulerFlag(deviceSN)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<SchedulerFlagResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<SchedulerFlagResponse>> = fetch(request, type)
+//        return response.item.result ?: throw MissingDataException()
+//    }
+//
+//    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
+//        val request = Request.Builder().url(URLs.schedulerModes(deviceID)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<SchedulerModesResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<SchedulerModesResponse>> = fetch(request, type)
+//        return response.item.result?.modes ?: throw MissingDataException()
+//    }
+//
+//    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
+//        val request = Request.Builder().url(URLs.getCurrentSchedule(deviceSN)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<ScheduleListResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<ScheduleListResponse>> = fetch(request, type)
+//        return response.item.result ?: throw MissingDataException()
+//    }
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
         val body = Gson().toJson(DeviceListRequest())
@@ -229,14 +210,14 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val request = Request.Builder()
             .post(body)
-            .url(URLs.deviceList())
+            .url(URLs.getOpenDeviceList())
             .build()
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
         val deviceListResult: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
         deviceListResult.item.result?.let { deviceSummaryList ->
             val devices = deviceSummaryList.data.map {
-                openapi_fetchDevice(it.deviceSN)
+                openapi_getDeviceDetail(it.deviceSN)
             }
 
             store.deviceListResponseStream.value = NetworkOperation(
@@ -250,8 +231,8 @@ class NetworkService(private val credentials: CredentialStore, private val store
         } ?: throw MissingDataException()
     }
 
-    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
-        val body = Gson().toJson(OpenQueryRequest(deviceSN, variables.map { it.variable }))
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
+        val body = Gson().toJson(OpenQueryRequest(deviceSN, variables))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -288,31 +269,39 @@ class NetworkService(private val credentials: CredentialStore, private val store
         TODO("Not yet implemented")
     }
 
-    suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
-        val request = Request.Builder().url(URLs.deviceDetail(deviceSN)).build()
+    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
+        val request = Request.Builder().url(URLs.getOpenBatterySOC(deviceSN)).build()
+
+        val type = object : TypeToken<NetworkResponse<BatterySOCResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<BatterySOCResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
+    suspend fun openapi_getDeviceDetail(deviceSN: String): DeviceDetailResponse {
+        val request = Request.Builder().url(URLs.getOpenDeviceDetail(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<DeviceDetailResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<DeviceDetailResponse>> = fetch(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-        val request = Request.Builder().url(URLs.socGet(deviceSN)).build()
-
-        val type = object : TypeToken<NetworkResponse<BatterySettingsResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatterySettingsResponse>> = fetch(request, type)
-        store.batterySettingsResponseStream.value = NetworkOperation(description = "fetchBatterySettings", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-        val request = Request.Builder().url(URLs.battery(deviceID)).build()
-
-        val type = object : TypeToken<NetworkResponse<BatteryResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatteryResponse>> = fetch(request, type)
-        store.batteryResponseStream.value = NetworkOperation(description = "fetchBattery", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
+//    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
+//        val request = Request.Builder().url(URLs.socGet(deviceSN)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<BatterySettingsResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<BatterySettingsResponse>> = fetch(request, type)
+//        store.batterySettingsResponseStream.value = NetworkOperation(description = "fetchBatterySettings", value = response.item, raw = response.text, request)
+//        return response.item.result ?: throw MissingDataException()
+//    }
+//
+//    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
+//        val request = Request.Builder().url(URLs.battery(deviceID)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<BatteryResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<BatteryResponse>> = fetch(request, type)
+//        store.batteryResponseStream.value = NetworkOperation(description = "fetchBattery", value = response.item, raw = response.text, request)
+//        return response.item.result ?: throw MissingDataException()
+//    }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
         val request = Request.Builder().url(URLs.variables()).build()
@@ -323,46 +312,46 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result?.array ?: throw MissingDataException()
     }
 
-    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
-        val body = Gson().toJson(SetSOCRequest(minGridSoc = minGridSOC, minSoc = minSOC, sn = deviceSN))
-            .toRequestBody("application/json".toMediaTypeOrNull())
+//    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
+//        val body = Gson().toJson(SetSOCRequest(minGridSoc = minGridSOC, minSoc = minSOC, sn = deviceSN))
+//            .toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder().url(URLs.socSet()).post(body).build()
+//
+//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+//        fetch<NetworkResponse<String>>(request, type)
+//    }
 
-        val request = Request.Builder().url(URLs.socSet()).post(body).build()
+//    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
+//        val request = Request.Builder().url(URLs.batteryTimes(deviceSN)).build()
+//
+//        val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
+//        store.batteryTimesResponseStream.value = NetworkOperation(description = "batteryTimesResponse", value = response.item, raw = response.text, request)
+//        return response.item.result ?: throw MissingDataException()
+//    }
 
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
+//    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+//        val body = Gson().toJson(SetBatteryTimesRequest(sn = deviceSN, times = times))
+//            .toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder().url(URLs.batteryTimeSet()).post(body).build()
+//
+//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+//        fetch<NetworkResponse<String>>(request, type)
+//    }
 
-    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-        val request = Request.Builder().url(URLs.batteryTimes(deviceSN)).build()
-
-        val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
-        store.batteryTimesResponseStream.value = NetworkOperation(description = "batteryTimesResponse", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-        val body = Gson().toJson(SetBatteryTimesRequest(sn = deviceSN, times = times))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder().url(URLs.batteryTimeSet()).post(body).build()
-
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
-    }
-
-    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-        val body = Gson().toJson(DataLoggerListRequest())
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder().url(URLs.moduleList()).post(body).build()
-
-        val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetch(request, type)
-        store.dataLoggerListResponse.value = NetworkOperation(description = "DataLoggerListResponse", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
-    }
+//    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
+//        val body = Gson().toJson(DataLoggerListRequest())
+//            .toRequestBody("application/json".toMediaTypeOrNull())
+//
+//        val request = Request.Builder().url(URLs.moduleList()).post(body).build()
+//
+//        val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
+//        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetch(request, type)
+//        store.dataLoggerListResponse.value = NetworkOperation(description = "DataLoggerListResponse", value = response.item, raw = response.text, request)
+//        return response.item.result ?: throw MissingDataException()
+//    }
 
     private suspend fun <T : NetworkResponseInterface> fetch(
         request: Request,

@@ -64,16 +64,17 @@ class EditTemplateViewModel(
             runCatching {
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.deleting)))
 
-                try {
-                    network.deleteScheduleTemplate(templateID)
-
-                    uiState.value = UiLoadState(LoadState.Inactive)
-                    shouldPopNavOnDismissal = true
-                    EditScheduleStore.shared.reset()
-                    alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_deleted))
-                } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-                }
+                // TODO
+//                try {
+//                    network.deleteScheduleTemplate(templateID)
+//
+//                    uiState.value = UiLoadState(LoadState.Inactive)
+//                    shouldPopNavOnDismissal = true
+//                    EditScheduleStore.shared.reset()
+//                    alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_deleted))
+//                } catch (ex: Exception) {
+//                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+//                }
             }
         }
     }
@@ -97,16 +98,17 @@ class EditTemplateViewModel(
                     val deviceSN = device.deviceSN
                     uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
-                    try {
-                        network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
-
-                        uiState.value = UiLoadState(LoadState.Inactive)
-                        shouldPopNavOnDismissal = true
-                        EditScheduleStore.shared.reset()
-                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_saved))
-                    } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-                    }
+                    // TODO
+//                    try {
+//                        network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
+//
+//                        uiState.value = UiLoadState(LoadState.Inactive)
+//                        shouldPopNavOnDismissal = true
+//                        EditScheduleStore.shared.reset()
+//                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_saved))
+//                    } catch (ex: Exception) {
+//                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+//                    }
                 }
             }
         }
@@ -120,20 +122,22 @@ class EditTemplateViewModel(
             runCatching {
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
-                    try {
-                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
-                        network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
 
-                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
-                        network.enableScheduleTemplate(deviceSN, templateID)
-
-                        uiState.value = UiLoadState(LoadState.Inactive)
-                        shouldPopNavOnDismissal = true
-                        EditScheduleStore.shared.reset()
-                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_activated))
-                    } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-                    }
+                    // TODO
+//                    try {
+//                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+//                        network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
+//
+//                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
+//                        network.enableScheduleTemplate(deviceSN, templateID)
+//
+//                        uiState.value = UiLoadState(LoadState.Inactive)
+//                        shouldPopNavOnDismissal = true
+//                        EditScheduleStore.shared.reset()
+//                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_activated))
+//                    } catch (ex: Exception) {
+//                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+//                    }
                 }
             }
         }

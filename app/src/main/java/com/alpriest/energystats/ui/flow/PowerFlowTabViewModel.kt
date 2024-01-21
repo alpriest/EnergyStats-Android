@@ -142,28 +142,21 @@ class PowerFlowTabViewModel(
 //                configManager.currencyCode = earnings.currencyCode()
 //                configManager.currencySymbol = earnings.currencySymbol()
 
-                var variables: List<Variable> = listOfNotNull(
-                    variable("feedInPower"),
-                    variable("gridConsumptionPower"),
-                    variable("generationPower"),
-                    variable("loadsPower"),
-                    variable("pvPower"),
-                    variable("meterPower2")
+                val variables: List<String> = listOf(
+                    "feedInPower",
+                    "gridConsumptionPower",
+                    "generationPower",
+                    "loadsPower",
+                    "pvPower",
+                    "meterPower2",
+                    "ambientTemperation",
+                    "invTemperation"
                 )
 
-                if (configManager.showInverterTemperatures) {
-                    variables = variables.plus(
-                        listOfNotNull(
-                            variable("ambientTemperation"),
-                            variable("invTemperation")
-                        )
-                    )
-                }
-
                 var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption)
-//                if (currentDevice.hasBattery) {
-//                    reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
-//                }
+                if (currentDevice.hasBattery) {
+                    reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
+                }
 
                 val report = network.openapi_fetchReport(
                     currentDevice.deviceSN,

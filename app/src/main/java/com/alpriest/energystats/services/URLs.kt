@@ -18,21 +18,6 @@ object URLs {
         return "https://www.foxesscloud.com/c/v0/module/list".toHttpUrl()
     }
 
-    fun deviceSettingsSet(): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/setting/set"
-            .toHttpUrl()
-    }
-
-    fun deviceSettings(deviceID: String): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/setting/get"
-            .toHttpUrl()
-            .newBuilder()
-            .addQueryParameter("id", deviceID)
-            .addQueryParameter("hasVersionHead", "1")
-            .addQueryParameter("key", "operation_mode__work_mode")
-            .build()
-    }
-
     fun batteryTimeSet(): HttpUrl {
         return "https://www.foxesscloud.com/c/v0/device/battery/time/set"
             .toHttpUrl()
@@ -89,14 +74,6 @@ object URLs {
             .toHttpUrl()
     }
 
-    fun deviceDetail(deviceSN: String): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/detail"
-            .toHttpUrl()
-            .newBuilder()
-            .addQueryParameter("sn", deviceSN)
-            .build()
-    }
-
     fun getSchedulerFlag(deviceSN: String): HttpUrl {
         return "https://www.foxesscloud.com/generic/v0/device/scheduler/get/flag"
             .toHttpUrl()
@@ -130,11 +107,6 @@ object URLs {
             .build()
     }
 
-    fun deviceList(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/list"
-            .toHttpUrl()
-    }
-
     fun enableSchedule(): HttpUrl {
         return "https://www.foxesscloud.com/generic/v0/device/scheduler/enable"
             .toHttpUrl()
@@ -166,6 +138,27 @@ object URLs {
 
     fun saveScheduleTemplate(): HttpUrl {
         return "https://www.foxesscloud.com/generic/v0/device/scheduler/save".toHttpUrl()
+    }
+
+    fun getOpenDeviceList(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/list"
+            .toHttpUrl()
+    }
+
+    fun getOpenDeviceDetail(deviceSN: String): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/detail"
+            .toHttpUrl()
+            .newBuilder()
+            .addQueryParameter("sn", deviceSN)
+            .build()
+    }
+
+    fun getOpenBatterySOC(deviceSN: String): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/battery/soc/get"
+            .toHttpUrl()
+            .newBuilder()
+            .addQueryParameter("sn", deviceSN)
+            .build()
     }
 }
 

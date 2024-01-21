@@ -55,7 +55,8 @@ class EditScheduleViewModel(
         runCatching {
             uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
             try {
-                network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
+                // TODO
+//                network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
 
                 shouldPopNavOnDismissal = true
                 alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.inverter_charge_schedule_settings_saved))
@@ -88,7 +89,8 @@ class EditScheduleViewModel(
                     uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.deleting)))
 
                     try {
-                        network.deleteSchedule(deviceSN)
+                        // TODO
+//                        network.deleteSchedule(deviceSN)
 
                         shouldPopNavOnDismissal = true
                         alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_schedule_was_deleted))

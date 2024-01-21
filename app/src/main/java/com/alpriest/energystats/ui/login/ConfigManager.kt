@@ -286,43 +286,45 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         }
 
     override suspend fun fetchDevices() {
-        var method = "device list"
-
         try {
             val deviceList = networking.openapi_fetchDeviceList()
+            config.variables = networking.openapi_fetchVariables().mapNotNull { variable ->
+                variable.unit?.let {
+                    Variable(
+                        name = variable.name,
+                        variable = variable.variable,
+                        unit = it
+                    )
+                }
+            }
             val mappedDevices = ArrayList<Device>()
             deviceList.asFlow().map { networkDevice ->
-//                method = "device variables"
-//                val variables = networking.fetchVariables(networkDevice.deviceID)
-//                method = "device firmware versions"
-//                val firmware = fetchFirmwareVersions(networkDevice.deviceID)
+                val deviceBattery: Battery? = if (networkDevice.hasBattery) {
+                    try {
+                        val batteryVariables = networking.openapi_fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC"))
+                        val batterySettings = networking.openapi_fetchBatterySettings(networkDevice.deviceSN)
 
-//                val deviceBattery: Battery? = if (networkDevice.hasBattery) {
-//                    try {
-//                        method = "device attached battery"
-//                        val battery = networking.fetchBattery(networkDevice.deviceID)
-//                        method = "device attached battery settings"
-//                        val batterySettings = networking.fetchBatterySettings(networkDevice.deviceSN)
-//                        val batteryCapacity = (battery.residual / (battery.soc.toDouble() / 100.0)).toString()
-//                        val minSOC = (batterySettings.minGridSoc.toDouble() / 100.0).toString()
-//                        Battery(batteryCapacity, minSOC, false)
-//                    } catch (_: Exception) {
-//                        devices?.firstOrNull { it.deviceID == networkDevice.deviceID }?.let {
-//                            Battery(it.battery?.capacity, it.battery?.minSOC, true)
-//                        }
-//                    }
-//                } else {
-//                    null
-//                }
+                        BatteryResponseMapper.map(batteryVariables, batterySettings)
+                    } catch (_: Exception) {
+                        devices?.firstOrNull { it.deviceSN == networkDevice.deviceSN }?.let {
+                            Battery(it.battery?.capacity, it.battery?.minSOC, true)
+                        }
+                    }
+                } else {
+                    null
+                }
 
                 mappedDevices.add(
                     Device(
                         deviceSN = networkDevice.deviceSN,
                         stationName = networkDevice.stationName,
                         stationID = networkDevice.stationID,
-                        battery = null,
+                        battery = deviceBattery,
                         firmware = DeviceFirmwareVersion(manager = networkDevice.managerVersion, master = networkDevice.masterVersion, slave = networkDevice.slaveVersion),
-                        moduleSN = networkDevice.moduleSN
+                        moduleSN = networkDevice.moduleSN,
+                        hasPV = networkDevice.hasPV,
+                        hasBattery = networkDevice.hasBattery,
+                        deviceType = networkDevice.deviceType
                     )
                 )
             }.collect()
@@ -336,7 +338,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         } catch (ex: Exception) {
-            throw DataFetchFailure(method, ex)
+            throw DataFetchFailure("Failed to load Device or Battery Settings", ex)
         }
     }
 

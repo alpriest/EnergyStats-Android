@@ -2,6 +2,7 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.AddressBookResponse
 import com.alpriest.energystats.models.BatteryResponse
+import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.BatterySettingsResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
@@ -32,7 +33,7 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         return network.openapi_fetchDeviceList()
     }
 
-    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<Variable>): OpenQueryResponse {
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
         return network.openapi_fetchRealData(deviceSN, variables)
     }
 
@@ -40,13 +41,13 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         return network.openapi_fetchHistory(deviceSN, variables, start, end)
     }
 
-    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-        return network.fetchBattery(deviceID)
-    }
-
-    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-        return network.fetchBatterySettings(deviceSN)
-    }
+//    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
+//        return network.fetchBattery(deviceID)
+//    }
+//
+//    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
+//        return network.fetchBatterySettings(deviceSN)
+//    }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
         return network.openapi_fetchVariables()
@@ -56,69 +57,73 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
     }
 
-    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
-        network.setSoc(minGridSOC, minSOC, deviceSN)
+    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
+        return network.openapi_fetchBatterySettings(deviceSN)
     }
 
-    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-        return network.fetchBatteryTimes(deviceSN)
-    }
+//    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
+//        network.setSoc(minGridSOC, minSOC, deviceSN)
+//    }
+//
+//    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
+//        return network.fetchBatteryTimes(deviceSN)
+//    }
 
-    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-        network.setBatteryTimes(deviceSN, times)
-    }
-
-    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-        return network.fetchDataLoggers()
-    }
+//    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+//        network.setBatteryTimes(deviceSN, times)
+//    }
+//
+//    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
+//        return network.fetchDataLoggers()
+//    }
 
     override suspend fun fetchErrorMessages() {
         network.fetchErrorMessages()
     }
 
-    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
-        return network.fetchSchedulerFlag(deviceSN)
-    }
-
-    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
-        return network.fetchScheduleModes(deviceID)
-    }
-
-    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-        return network.fetchCurrentSchedule(deviceSN)
-    }
-
-    override suspend fun deleteSchedule(deviceSN: String) {
-        return network.deleteSchedule(deviceSN)
-    }
-
-    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
-        return network.saveSchedule(deviceSN, schedule)
-    }
-
-    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
-        network.enableScheduleTemplate(deviceSN, templateID)
-    }
-
-    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
-        return network.fetchScheduleTemplate(deviceSN, templateID)
-    }
-
-    override suspend fun deleteScheduleTemplate(templateID: String) {
-        network.deleteScheduleTemplate(templateID)
-    }
-
-    override suspend fun createScheduleTemplate(name: String, description: String) {
-        network.createScheduleTemplate(name, description)
-    }
-
-    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
-        return network.fetchScheduleTemplates()
-    }
-
-    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
-        network.saveScheduleTemplate(deviceSN, scheduleTemplate)
-    }
+//    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
+//        return network.fetchSchedulerFlag(deviceSN)
+//    }
+//
+//    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
+//        return network.fetchScheduleModes(deviceID)
+//    }
+//
+//    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
+//        return network.fetchCurrentSchedule(deviceSN)
+//    }
+//
+//    override suspend fun deleteSchedule(deviceSN: String) {
+//        return network.deleteSchedule(deviceSN)
+//    }
+//
+//    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+//        return network.saveSchedule(deviceSN, schedule)
+//    }
+//
+//    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
+//        network.enableScheduleTemplate(deviceSN, templateID)
+//    }
+//
+//    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
+//        return network.fetchScheduleTemplate(deviceSN, templateID)
+//    }
+//
+//    override suspend fun deleteScheduleTemplate(templateID: String) {
+//        network.deleteScheduleTemplate(templateID)
+//    }
+//
+//    override suspend fun createScheduleTemplate(name: String, description: String) {
+//        network.createScheduleTemplate(name, description)
+//    }
+//
+//    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
+//        return network.fetchScheduleTemplates()
+//    }
+//
+//    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
+//        network.saveScheduleTemplate(deviceSN, scheduleTemplate)
+//    }
 
     private fun Double.capped(dataCeiling: DataCeiling): Double {
         return if (this > 0) {

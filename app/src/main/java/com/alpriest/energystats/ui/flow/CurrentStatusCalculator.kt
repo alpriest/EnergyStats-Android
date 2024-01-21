@@ -59,10 +59,10 @@ data class CurrentValues(
     val lastUpdate: String,
 )
 
-private fun List<OpenQueryResponseData>.currentValue(forKey: String): Double {
+fun List<OpenQueryResponseData>.currentValue(forKey: String): Double {
     return currentData(forKey)?.value ?: 0.0
 }
 
-private fun List<OpenQueryResponseData>.currentData(forKey: String): OpenQueryResponseData? {
+fun List<OpenQueryResponseData>.currentData(forKey: String): OpenQueryResponseData? {
     return firstOrNull { it.variable.lowercase() == forKey.lowercase() }
 }

@@ -42,18 +42,19 @@ fun NetworkTraceDebugView(configManager: ConfigManaging, credentialStore: Creden
 
         configManager.currentDevice.value?.let {
             val rawVariables = listOfNotNull(
-                variable("feedInPower"),
-                variable("gridConsumptionPower"),
-                variable("generationPower"),
-                variable("loadsPower"),
-                variable("pvPower"),
-                variable("meterPower2")
+                "feedInPower",
+                "gridConsumptionPower",
+                "generationPower",
+                "loadsPower",
+                "pvPower",
+                "meterPower2"
             )
             network.openapi_fetchRealData(it.deviceSN, rawVariables)
             network.openapi_fetchReport(it.deviceSN, listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption), QueryDate(), ReportType.month)
-            if (it.battery != null) {
-                network.fetchBattery(it.deviceSN)
-            }
+            // TODO
+//            if (it.battery != null) {
+//                network.fetchBattery(it.deviceSN)
+//            }
         }
     }
 

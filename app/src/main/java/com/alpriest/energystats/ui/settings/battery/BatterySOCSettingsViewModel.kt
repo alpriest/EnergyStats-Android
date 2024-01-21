@@ -40,10 +40,11 @@ class BatterySOCSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    val result = network.fetchBatterySettings(deviceSN)
-                    minSOCStream.value = result.minSoc.toString()
-                    minSOConGridStream.value = result.minGridSoc.toString()
-                    uiState.value = UiLoadState(LoadState.Inactive)
+                    // TODO
+//                    val result = network.fetchBatterySettings(deviceSN)
+//                    minSOCStream.value = result.minSoc.toString()
+//                    minSOConGridStream.value = result.minGridSoc.toString()
+//                    uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
@@ -61,11 +62,12 @@ class BatterySOCSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    network.setSoc(
-                        minSOC = minSOCStream.value.toInt(),
-                        minGridSOC = minSOConGridStream.value.toInt(),
-                        deviceSN = deviceSN
-                    )
+                    // TODO
+//                    network.setSoc(
+//                        minSOC = minSOCStream.value.toInt(),
+//                        minGridSOC = minSOConGridStream.value.toInt(),
+//                        deviceSN = deviceSN
+//                    )
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_soc_changes_were_saved))
 

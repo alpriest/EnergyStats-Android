@@ -43,27 +43,27 @@ fun NavGraphBuilder.debugGraph(
         composable("debug") { DebugDataSettingsView(navController) }
         composable("raw") { ResponseDebugView(networkStore, mapper = { networkStore.rawResponseStream }, fetcher = null) }
         composable("report") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
-        composable("battery") {
-            ResponseDebugView(networkStore, mapper = { networkStore.batteryResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceSN?.let {
-                    network.fetchBattery(it)
-                }
-            })
-        }
-        composable("batterySettings") {
-            ResponseDebugView(networkStore, mapper = { networkStore.batterySettingsResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceSN?.let {
-                    network.fetchBatterySettings(it)
-                }
-            })
-        }
-        composable("batteryTimes") {
-            ResponseDebugView(networkStore, mapper = { networkStore.batteryTimesResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceSN?.let {
-                    network.fetchBatteryTimes(it)
-                }
-            })
-        }
+//        composable("battery") {
+//            ResponseDebugView(networkStore, mapper = { networkStore.batteryResponseStream }, fetcher = {
+//                configManager.currentDevice.value?.deviceSN?.let {
+//                    network.fetchBattery(it)
+//                }
+//            })
+//        }
+//        composable("batterySettings") {
+//            ResponseDebugView(networkStore, mapper = { networkStore.batterySettingsResponseStream }, fetcher = {
+//                configManager.currentDevice.value?.deviceSN?.let {
+//                    network.fetchBatterySettings(it)
+//                }
+//            })
+//        }
+//        composable("batteryTimes") {
+//            ResponseDebugView(networkStore, mapper = { networkStore.batteryTimesResponseStream }, fetcher = {
+//                configManager.currentDevice.value?.deviceSN?.let {
+//                    network.fetchBatteryTimes(it)
+//                }
+//            })
+//        }
         composable("deviceList") {
             ResponseDebugView(networkStore, mapper = { networkStore.deviceListResponseStream }, fetcher = {
                 network.openapi_fetchDeviceList()
@@ -72,11 +72,11 @@ fun NavGraphBuilder.debugGraph(
         composable("deviceSettings") {
             ResponseDebugView(networkStore, mapper = { networkStore.deviceSettingsGetResponse }, fetcher = null)
         }
-        composable("dataLoggers") {
-            ResponseDebugView(networkStore, mapper = { networkStore.dataLoggerListResponse }, fetcher = {
-                network.fetchDataLoggers()
-            })
-        }
+//        composable("dataLoggers") {
+//            ResponseDebugView(networkStore, mapper = { networkStore.dataLoggerListResponse }, fetcher = {
+//                network.fetchDataLoggers()
+//            })
+//        }
         composable("networkTrace") {
             NetworkTraceDebugView(configManager, credentialStore)
         }

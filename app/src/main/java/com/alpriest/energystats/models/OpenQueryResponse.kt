@@ -51,3 +51,8 @@ data class OpenReportResponseData(
     val index : Int,
     val value : Double
 )
+
+data class BatterySOCResponse(
+    val minSocOnGrid: Int,
+    val minSoc: Int
+)

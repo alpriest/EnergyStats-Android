@@ -38,14 +38,15 @@ class ScheduleTemplateListViewModel(
             config.currentDevice.value?.let { _ ->
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
-                try {
-                    val templatesResponse = network.fetchScheduleTemplates()
-                    templateStream.value = templatesResponse.data.mapNotNull { it.toScheduleTemplate() }
-
-                    uiState.value = UiLoadState(LoadState.Inactive)
-                } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-                }
+                // TODO
+//                try {
+//                    val templatesResponse = network.fetchScheduleTemplates()
+//                    templateStream.value = templatesResponse.data.mapNotNull { it.toScheduleTemplate() }
+//
+//                    uiState.value = UiLoadState(LoadState.Inactive)
+//                } catch (ex: Exception) {
+//                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+//                }
             }
         }
     }
@@ -57,14 +58,15 @@ class ScheduleTemplateListViewModel(
 
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
 
-        try {
-            network.createScheduleTemplate(templateName, templateDescription)
-            uiState.value = UiLoadState(LoadState.Inactive)
-
-            load(context)
-        } catch (ex: Exception) {
-            uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-        }
+        // TODO
+//        try {
+//            network.createScheduleTemplate(templateName, templateDescription)
+//            uiState.value = UiLoadState(LoadState.Inactive)
+//
+//            load(context)
+//        } catch (ex: Exception) {
+//            uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+//        }
     }
 
     fun edit(templateSummary: ScheduleTemplateSummary, context: Context) {
@@ -79,15 +81,16 @@ class ScheduleTemplateListViewModel(
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {
-                    val template = network.fetchScheduleTemplate(deviceSN, templateSummary.id)
+                    // TODO
+//                    val template = network.fetchScheduleTemplate(deviceSN, templateSummary.id)
                     val modes = EditScheduleStore.shared.modes
 
-                    EditScheduleStore.shared.scheduleStream.value = Schedule(
-                        name = template.templateName,
-                        phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
-                        templateID = templateSummary.id,
-                        description = template.content
-                    )
+//                    EditScheduleStore.shared.scheduleStream.value = Schedule(
+//                        name = template.templateName,
+//                        phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
+//                        templateID = templateSummary.id,
+//                        description = template.content
+//                    )
                     navController.navigate(SettingsScreen.EditTemplate.name)
 
                     uiState.value = UiLoadState(LoadState.Inactive)

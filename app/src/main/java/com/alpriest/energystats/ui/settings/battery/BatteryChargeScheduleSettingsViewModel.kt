@@ -54,18 +54,19 @@ class BatteryChargeScheduleSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    val result = network.fetchBatteryTimes(deviceSN)
-                    result.times.getOrNull(0)?.let {
-                        timePeriod1Stream.value = ChargeTimePeriod(
-                            start = it.startTime, end = it.endTime, enabled = it.enableGrid
-                        )
-                    }
-
-                    result.times.getOrNull(1)?.let {
-                        timePeriod2Stream.value = ChargeTimePeriod(
-                            start = it.startTime, end = it.endTime, enabled = it.enableGrid
-                        )
-                    }
+                    // TODO: This
+//                    val result = network.fetchBatteryTimes(deviceSN)
+//                    result.times.getOrNull(0)?.let {
+//                        timePeriod1Stream.value = ChargeTimePeriod(
+//                            start = it.startTime, end = it.endTime, enabled = it.enableGrid
+//                        )
+//                    }
+//
+//                    result.times.getOrNull(1)?.let {
+//                        timePeriod2Stream.value = ChargeTimePeriod(
+//                            start = it.startTime, end = it.endTime, enabled = it.enableGrid
+//                        )
+//                    }
 
                     generateSummary(timePeriod1Stream.value, timePeriod2Stream.value, context)
                     uiState.value = UiLoadState(LoadState.Inactive)
@@ -145,10 +146,11 @@ class BatteryChargeScheduleSettingsViewModel(
                 val times = listOf(timePeriod1Stream.value, timePeriod2Stream.value).map { it.asChargeTime() }
 
                 try {
-                    network.setBatteryTimes(
-                        deviceSN = deviceSN,
-                        times = times
-                    )
+                    // TODO
+//                    network.setBatteryTimes(
+//                        deviceSN = deviceSN,
+//                        times = times
+//                    )
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_charge_schedule_was_saved))
 
