@@ -31,10 +31,6 @@ fun NetworkTraceDebugView(configManager: ConfigManaging, credentialStore: Creden
     val context = LocalContext.current
     val cacheDirectory = File(context.cacheDir, "responses")
 
-    fun variable(variableName: String): Variable? {
-        return configManager.variables.firstOrNull { it.variable.lowercase() == variableName.lowercase() }
-    }
-
     suspend fun downloadFiles() {
         val network = NetworkFacade(
             NetworkService(credentialStore, interceptor = ResponseFileInterceptor(cacheDirectory), store = InMemoryLoggingNetworkStore())

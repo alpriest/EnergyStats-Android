@@ -57,7 +57,7 @@ fun APIKeyLoginView(
     onLogin: (String) -> Unit,
     onDemoLogin: () -> Unit
 ) {
-    var apiKey by rememberSaveable { mutableStateOf("") }
+    var apiKey by rememberSaveable { mutableStateOf("8fdb4d01-09df-48fc-bde2-cb4787364785") }
     var showApiKey by remember { mutableStateOf(false) }
 
     Column(

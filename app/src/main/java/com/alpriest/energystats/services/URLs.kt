@@ -36,8 +36,8 @@ object URLs {
             .toHttpUrl()
     }
 
-    fun variables(): HttpUrl {
-        return "https://www.foxesscloud.com/c/v1/device/variables"
+    fun getOpenVariables(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/variable/get"
             .toHttpUrl()
             .newBuilder()
             .build()

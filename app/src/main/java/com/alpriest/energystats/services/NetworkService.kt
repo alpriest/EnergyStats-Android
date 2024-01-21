@@ -6,6 +6,7 @@ import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.ErrorMessagesResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
+import com.alpriest.energystats.models.OpenApiVariableDeserializer
 import com.alpriest.energystats.models.OpenHistoryRequest
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryRequest
@@ -18,6 +19,7 @@ import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import okhttp3.Call
 import okhttp3.Callback
@@ -304,7 +306,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 //    }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
-        val request = Request.Builder().url(URLs.variables()).build()
+        val request = Request.Builder().url(URLs.getOpenVariables()).build()
 
         val type = object : TypeToken<NetworkResponse<OpenApiVariableArray>>() {}.type
         val response: NetworkTuple<NetworkResponse<OpenApiVariableArray>> = fetch(request, type)
@@ -371,7 +373,10 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
                     try {
                         val text = response.body?.string()
-                        val body: T = Gson().fromJson(text, type)
+                        val builder = GsonBuilder()
+                            .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
+                            .create()
+                        val body: T = builder.fromJson(text, type)
                         val result: Result<T> = check(body)
 
                         result.fold(
