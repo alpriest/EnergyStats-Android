@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
 import android.content.Context
-import androidx.compose.foundation.isSystemInDarkTheme
 import com.alpriest.energystats.R
 
 enum class ColorThemeMode(val value: Int) {

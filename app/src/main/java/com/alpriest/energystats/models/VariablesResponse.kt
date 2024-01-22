@@ -50,3 +50,10 @@ class OpenReportResponseDeserializer : JsonDeserializer<OpenReportResponse> {
         return OpenReportResponse(variable, unit, values)
     }
 }
+
+class DataLoggerStatusDeserializer : JsonDeserializer<DataLoggerStatus> {
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DataLoggerStatus {
+        val value = json.asInt
+        return DataLoggerStatus.values().firstOrNull { it.value == value } ?: DataLoggerStatus.UNKNOWN
+    }
+}

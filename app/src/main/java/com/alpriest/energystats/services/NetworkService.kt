@@ -3,6 +3,8 @@ package com.alpriest.energystats.services
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.DataLoggerListRequest
 import com.alpriest.energystats.models.DataLoggerResponse
+import com.alpriest.energystats.models.DataLoggerStatus
+import com.alpriest.energystats.models.DataLoggerStatusDeserializer
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.ErrorMessagesResponse
@@ -391,6 +393,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
                         val builder = GsonBuilder()
                             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
                             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
+                            .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
                             .create()
                         val body: T = builder.fromJson(text, type)
                         val result: Result<T> = check(body)
