@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
@@ -42,11 +43,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 data class DataLogger(
     val moduleSN: String,
-    val moduleType: String,
-    val plantName: String,
-    val version: String,
+    val stationID: String,
     val signal: Int,
-    val communication: Int
+    val status: DataLoggerStatus
 )
 
 class DataLoggerViewModelFactory(
@@ -74,18 +73,15 @@ class DataLoggerViewModel(
 
         runCatching {
             try {
-                // TODO
-//                val result = network.fetchDataLoggers()
-//                itemStream.value = result.data.map {
-//                    DataLogger(
-//                        moduleSN = it.moduleSN,
-//                        moduleType = it.moduleType,
-//                        plantName = it.plantName,
-//                        version = it.version,
-//                        signal = it.signal,
-//                        communication = it.communication
-//                    )
-//                }
+                val result = network.openapi_fetchDataLoggers()
+                itemStream.value = result.map {
+                    DataLogger(
+                        moduleSN = it.moduleSN,
+                        stationID = it.stationID,
+                        signal = it.signal,
+                        status = it.status
+                    )
+                }
             } catch (ex: Exception) {
                 alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             }
@@ -128,12 +124,10 @@ class DataLoggerViewContainer(
 fun DataLoggerView(dataLogger: DataLogger) {
     SettingsColumnWithChild {
         SettingsRow("Module SN", dataLogger.moduleSN)
-        SettingsRow("Module Type", dataLogger.moduleType)
-        SettingsRow("Plant Name", dataLogger.plantName)
-        SettingsRow("Version", dataLogger.version)
+        SettingsRow("Station ID", dataLogger.stationID)
         SettingsRow("Signal") { SignalStrengthView(dataLogger.signal) }
         SettingsRow("Status") {
-            if (dataLogger.communication == 1) {
+            if (dataLogger.status == DataLoggerStatus.ONLINE) {
                 Icon(imageVector = Icons.Default.CheckCircle, tint = Color.Green, contentDescription = "Connected")
             } else {
                 Icon(imageVector = Icons.Default.Cancel, tint = Color.Red, contentDescription = "Disconnected")
@@ -177,7 +171,7 @@ fun Rectangle(
 fun DataloggerViewPreview() {
     EnergyStatsTheme {
         DataLoggerView(
-            dataLogger = DataLogger(moduleSN = "ABC123DEF456", moduleType = "W2", plantName = "John Doe", version = "3.08", signal = 2, communication = 1),
+            dataLogger = DataLogger(moduleSN = "ABC123DEF456", stationID = "W2", signal = 2, status = DataLoggerStatus.ONLINE),
         )
     }
 }

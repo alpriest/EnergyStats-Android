@@ -14,8 +14,9 @@ object URLs {
             .toHttpUrl()
     }
 
-    fun moduleList(): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/module/list".toHttpUrl()
+    fun getOpenModuleList(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/module/list"
+            .toHttpUrl()
     }
 
     fun batteryTimeSet(): HttpUrl {

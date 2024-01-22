@@ -1,6 +1,8 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.BatterySOCResponse
+import com.alpriest.energystats.models.DataLoggerListRequest
+import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.ErrorMessagesResponse
@@ -253,7 +255,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-         val body = Gson().toJson(OpenHistoryRequest(deviceSN, variables, start, end))
+        val body = Gson().toJson(OpenHistoryRequest(deviceSN, variables, start, end))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -356,17 +358,17 @@ class NetworkService(private val credentials: CredentialStore, private val store
 //        fetch<NetworkResponse<String>>(request, type)
 //    }
 
-//    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-//        val body = Gson().toJson(DataLoggerListRequest())
-//            .toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder().url(URLs.moduleList()).post(body).build()
-//
-//        val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetch(request, type)
-//        store.dataLoggerListResponse.value = NetworkOperation(description = "DataLoggerListResponse", value = response.item, raw = response.text, request)
-//        return response.item.result ?: throw MissingDataException()
-//    }
+    override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
+        val body = Gson().toJson(DataLoggerListRequest())
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder().url(URLs.getOpenModuleList()).post(body).build()
+
+        val type = object : TypeToken<NetworkResponse<List<DataLoggerResponse>>>() {}.type
+        val response: NetworkTuple<NetworkResponse<List<DataLoggerResponse>>> = fetch(request, type)
+        store.dataLoggerListResponse.value = NetworkOperation(description = "DataLoggerResponse", value = response.item, raw = response.text, request)
+        return response.item.result ?: throw MissingDataException()
+    }
 
     private suspend fun <T : NetworkResponseInterface> fetch(
         request: Request,

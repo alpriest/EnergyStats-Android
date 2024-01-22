@@ -1,11 +1,8 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.AddressBookResponse
-import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySOCResponse
-import com.alpriest.energystats.models.BatterySettingsResponse
-import com.alpriest.energystats.models.BatteryTimesResponse
-import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DataLoggerResponse
+import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceFunction
 import com.alpriest.energystats.models.OpenApiVariable
@@ -14,26 +11,11 @@ import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenReportResponse
-import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.ScheduleListResponse
-import com.alpriest.energystats.models.SchedulePollcy
-import com.alpriest.energystats.models.ScheduleTemplateListResponse
-import com.alpriest.energystats.models.ScheduleTemplateResponse
-import com.alpriest.energystats.models.ScheduleTemplateSummaryResponse
-import com.alpriest.energystats.models.SchedulerFlagResponse
-import com.alpriest.energystats.models.SchedulerModeResponse
-import com.alpriest.energystats.models.SoftwareVersion
-import com.alpriest.energystats.models.Time
-import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.time.LocalDateTime
-
 
 class DemoFoxESSNetworking : FoxESSNetworking {
 //    override suspend fun createScheduleTemplate(name: String, description: String) {
@@ -119,7 +101,8 @@ class DemoFoxESSNetworking : FoxESSNetworking {
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
-        return OpenQueryResponse(time = "now",
+        return OpenQueryResponse(
+            time = "now",
             deviceSN = deviceSN,
             datas = listOf(
                 OpenQueryResponseData(unit = "kW", variable = "feedinPower", value = 0.0),
@@ -157,7 +140,7 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         return data.result?.array ?: listOf()
     }
 
-//    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
+    //    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
 //    }
 //
 //    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
@@ -173,14 +156,12 @@ class DemoFoxESSNetworking : FoxESSNetworking {
 //    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
 //    }
 //
-//    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-//        return PagedDataLoggerListResponse(
-//            1, 10, 1, listOf(
-//                PagedDataLoggerListResponse.DataLogger(moduleSN = "ABC123DEF456", moduleType = "W2", plantName = "John Doe", version = "3.08", signal = 3, communication = 1),
-//                PagedDataLoggerListResponse.DataLogger(moduleSN = "123DEF456ABC", moduleType = "W2", plantName = "Jane Doe", version = "3.08", signal = 1, communication = 0)
-//            )
-//        )
-//    }
+    override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
+        return listOf(
+            DataLoggerResponse(moduleSN = "ABC123DEF456", stationID = "W21", signal = 3, status = DataLoggerStatus.ONLINE),
+            DataLoggerResponse(moduleSN = "123DEF456ABC", stationID = "W22", signal = 1, status = DataLoggerStatus.OFFLINE)
+        )
+    }
 
     override suspend fun fetchErrorMessages() {}
 

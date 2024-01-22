@@ -15,12 +15,10 @@ class UnknownNetworkException(errno: Int, message: String?) : Exception("$errno 
 class UnacceptableException: Exception("Unacceptable")
 
 interface FoxESSNetworking {
-//    suspend fun fetchBattery(deviceID: String): BatteryResponse
 //    suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse
 //    suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
 //    suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
 //    suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)
-//    suspend fun fetchDataLoggers(): PagedDataLoggerListResponse
     suspend fun fetchErrorMessages()
 
 //    suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse
@@ -42,6 +40,7 @@ interface FoxESSNetworking {
     suspend fun openapi_fetchVariables(): List<OpenApiVariable>
     suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse>
     suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse
+    suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse>
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

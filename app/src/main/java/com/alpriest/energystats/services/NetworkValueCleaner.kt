@@ -1,29 +1,16 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.AddressBookResponse
-import com.alpriest.energystats.models.BatteryResponse
 import com.alpriest.energystats.models.BatterySOCResponse
-import com.alpriest.energystats.models.BatterySettingsResponse
-import com.alpriest.energystats.models.BatteryTimesResponse
-import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
-import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.ScheduleListResponse
-import com.alpriest.energystats.models.ScheduleTemplateListResponse
-import com.alpriest.energystats.models.ScheduleTemplateResponse
-import com.alpriest.energystats.models.SchedulerFlagResponse
-import com.alpriest.energystats.models.SchedulerModeResponse
-import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,14 +27,6 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
         return network.openapi_fetchHistory(deviceSN, variables, start, end)
     }
-
-//    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-//        return network.fetchBattery(deviceID)
-//    }
-//
-//    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-//        return network.fetchBatterySettings(deviceSN)
-//    }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
         return network.openapi_fetchVariables()
@@ -73,9 +52,9 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 //        network.setBatteryTimes(deviceSN, times)
 //    }
 //
-//    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-//        return network.fetchDataLoggers()
-//    }
+    override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
+        return network.openapi_fetchDataLoggers()
+    }
 
     override suspend fun fetchErrorMessages() {
         network.fetchErrorMessages()

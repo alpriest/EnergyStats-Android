@@ -1,19 +1,16 @@
 package com.alpriest.energystats.models
 
-data class PagedDataLoggerListResponse(
-    val currentPage: Int,
-    val pageSize: Int,
-    val total: Int,
-    val data: List<DataLogger>
-) {
-    data class DataLogger(
-        val moduleSN: String,
-        val moduleType: String,
-        val plantName: String,
-        val version: String,
-        val signal: Int,
-        val communication: Int
-    )
+data class DataLoggerResponse(
+    val moduleSN: String,
+    val stationID: String,
+    val status: DataLoggerStatus,
+    val signal: Int
+)
+
+enum class DataLoggerStatus(val value: Int) {
+    UNKNOWN(0),
+    ONLINE(1),
+    OFFLINE(2)
 }
 
 data class DataLoggerListRequest(

@@ -88,7 +88,7 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
 //        }
 //    }
 
-//    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+    //    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
 //        return if (isDemoUser()) {
 //            demoFoxESSNetworking.setBatteryTimes(deviceSN, times)
 //        } else {
@@ -96,13 +96,13 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
 //        }
 //    }
 //
-//    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchDataLoggers()
-//        } else {
-//            network.fetchDataLoggers()
-//        }
-//    }
+    override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_fetchDataLoggers()
+        } else {
+            network.openapi_fetchDataLoggers()
+        }
+    }
 
     override suspend fun fetchErrorMessages() {
         if (isDemoUser()) {

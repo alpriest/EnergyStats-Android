@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.BatterySOCResponse
+import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -75,7 +76,7 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 //        }
 //    }
 
-//    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
+    //    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
 //        network.setSoc(minGridSOC, minSOC, deviceSN)
 //    }
 //
@@ -87,9 +88,9 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 //        network.setBatteryTimes(deviceSN, times)
 //    }
 //
-//    override suspend fun fetchDataLoggers(): PagedDataLoggerListResponse {
-//        return network.fetchDataLoggers()
-//    }
+    override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
+        return network.openapi_fetchDataLoggers()
+    }
 
     override suspend fun fetchErrorMessages() {
         network.fetchErrorMessages()
