@@ -8,13 +8,13 @@ data class BatteryViewModel(
     var residual: Int = 0,
     var hasError: Boolean = false
 ) {
-    constructor(battery: BatteryResponse, hasError: Boolean) : this(
+    constructor(power: Double, soc: Int, residual: Double, temperature: Double): this(
         hasBattery = true,
-        chargeLevel = battery.soc / 100.0,
-        chargePower = 0 - battery.power,
-        temperature = battery.temperature,
-        residual = battery.residual.toInt(),
-        hasError = hasError
+        chargeLevel = soc / 100.0,
+        chargePower = 0 - power,
+        temperature = temperature,
+        residual = residual.toInt(),
+        hasError = false
     )
 
     companion object {

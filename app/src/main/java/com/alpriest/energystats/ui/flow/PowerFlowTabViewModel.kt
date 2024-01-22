@@ -174,12 +174,16 @@ class PowerFlowTabViewModel(
                 val currentViewModel = CurrentStatusCalculator(currentValues, configManager.shouldInvertCT2, configManager.shouldCombineCT2WithPVPower)
                 val totals = TotalsViewModel(report)
 
-//                val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
-//                    val battery = network.fetchBattery(deviceID = currentDevice.deviceSN)
-//                    BatteryViewModel(battery, hasError = currentDevice.battery?.hasError ?: false)
-//                } else {
-                val battery = BatteryViewModel.noBattery()
-//                }
+                val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
+                    BatteryViewModel(
+                        power = real.datas.currentValue("batChargePower") - (0 - real.datas.currentValue("batDischargePower")),
+                        soc = real.datas.currentValue("SoC").toInt(),
+                        residual = real.datas.currentValue("ResidualEnergy") * 10.0,
+                        temperature = real.datas.currentValue("batTemperature")
+                    )
+                } else {
+                    BatteryViewModel.noBattery()
+                }
 
                 val start = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond()
                 val history = network.openapi_fetchHistory(
