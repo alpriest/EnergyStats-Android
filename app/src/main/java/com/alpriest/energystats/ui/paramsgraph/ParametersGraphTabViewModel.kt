@@ -101,7 +101,7 @@ class ParametersGraphTabViewModel(
 
         try {
             val start = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond()
-            val end = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond() + 86400
+            val end = start + 86400
 
             val historyResponse = networking.openapi_fetchHistory(
                 device.deviceSN,

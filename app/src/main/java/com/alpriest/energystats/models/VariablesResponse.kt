@@ -25,12 +25,28 @@ class OpenApiVariableDeserializer : JsonDeserializer<OpenApiVariableArray> {
                 val details = entry.value.asJsonObject
                 val unit = details.get("unit")?.asString
                 val nameTranslations = details.getAsJsonObject("name")
-                val name = nameTranslations.entrySet().firstOrNull { it.key == "en"} ?.value?.asString ?: ""
+                val name = nameTranslations.entrySet().firstOrNull { it.key == "en" }?.value?.asString ?: ""
 
                 OpenApiVariable(name = name, variable = variableName, unit = unit)
             }
         }
 
         return OpenApiVariableArray(array = openApiVariables)
+    }
+}
+
+class OpenReportResponseDeserializer : JsonDeserializer<OpenReportResponse> {
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): OpenReportResponse {
+        val resultObject = json.asJsonObject
+        val resultArray = resultObject.get("values").asJsonArray
+
+        val values = resultArray.mapIndexedNotNull { index, entry ->
+            OpenReportResponseData(index + 1, entry.asDouble)
+        }
+
+        val variable = resultObject.get("variable").asString
+        val unit = resultObject.get("unit").asString
+
+        return OpenReportResponse(variable, unit, values)
     }
 }

@@ -13,6 +13,7 @@ import com.alpriest.energystats.models.OpenQueryRequest
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenReportRequest
 import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
@@ -252,7 +253,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        val body = Gson().toJson(OpenHistoryRequest(deviceSN, variables, start, end))
+         val body = Gson().toJson(OpenHistoryRequest(deviceSN, variables, start, end))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -387,6 +388,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
                         val text = response.body?.string()
                         val builder = GsonBuilder()
                             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
+                            .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
                             .create()
                         val body: T = builder.fromJson(text, type)
                         val result: Result<T> = check(body)

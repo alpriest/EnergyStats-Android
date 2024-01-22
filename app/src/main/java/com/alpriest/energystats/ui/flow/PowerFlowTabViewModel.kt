@@ -186,7 +186,7 @@ class PowerFlowTabViewModel(
                     deviceSN = currentDevice.deviceSN,
                     variables = listOf("pvPower", "meterPower2"),
                     start = start,
-                    end = start.and(86400)
+                    end = start + 86400
                 )
 
                 val summary = HomePowerFlowViewModel(
