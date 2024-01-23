@@ -1,8 +1,6 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUser: () -> Boolean) : FoxESSNetworking {
@@ -40,11 +38,19 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
+    override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchBatterySettings(deviceSN)
+            demoFoxESSNetworking.openapi_fetchBatterySOC(deviceSN)
         } else {
-            return network.openapi_fetchBatterySettings(deviceSN)
+            return network.openapi_fetchBatterySOC(deviceSN)
+        }
+    }
+
+    override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
+        } else {
+            return network.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
         }
     }
 

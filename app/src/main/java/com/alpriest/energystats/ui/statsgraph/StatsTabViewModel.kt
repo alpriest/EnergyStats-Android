@@ -75,8 +75,8 @@ class StatsTabViewModel(
             ReportVariable.Generation,
             ReportVariable.FeedIn,
             ReportVariable.GridConsumption,
-            if (configManager.hasBattery) ReportVariable.ChargeEnergyToTal else null,
-            if (configManager.hasBattery) ReportVariable.DischargeEnergyToTal else null,
+            if (device.hasBattery) ReportVariable.ChargeEnergyToTal else null,
+            if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
             ReportVariable.Loads
         ).mapNotNull { it }.map {
             StatsGraphVariable(it, true)
@@ -94,9 +94,13 @@ class StatsTabViewModel(
 
         val queryDate = makeQueryDate(displayMode)
         val reportType = makeReportType(displayMode)
-        val reportVariables = graphVariables.map { it.type }
+        var reportVariables = graphVariables.map { it.type }
         val reportData: List<OpenReportResponse>
         val rawTotals: MutableMap<ReportVariable, Double>
+
+        if (device.hasBattery) {
+            reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
+        }
 
         try {
             reportData = networking.openapi_fetchReport(

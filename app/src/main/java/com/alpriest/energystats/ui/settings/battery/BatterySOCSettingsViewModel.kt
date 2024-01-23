@@ -1,11 +1,14 @@
 package com.alpriest.energystats.ui.settings.battery
 
+import android.accounts.NetworkErrorException
 import android.content.Context
+import android.net.http.NetworkException
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.ProhibitedActionException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -40,11 +43,10 @@ class BatterySOCSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    // TODO
-//                    val result = network.fetchBatterySettings(deviceSN)
-//                    minSOCStream.value = result.minSoc.toString()
-//                    minSOConGridStream.value = result.minGridSoc.toString()
-//                    uiState.value = UiLoadState(LoadState.Inactive)
+                    val result = network.openapi_fetchBatterySOC(deviceSN)
+                    minSOCStream.value = result.minSoc.toString()
+                    minSOConGridStream.value = result.minSocOnGrid.toString()
+                    uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
@@ -62,15 +64,17 @@ class BatterySOCSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    // TODO
-//                    network.setSoc(
-//                        minSOC = minSOCStream.value.toInt(),
-//                        minGridSOC = minSOConGridStream.value.toInt(),
-//                        deviceSN = deviceSN
-//                    )
+                    network.openapi_setBatterySoc(
+                        deviceSN = deviceSN,
+                        minSOCOnGrid = minSOConGridStream.value.toInt(),
+                        minSOC = minSOCStream.value.toInt()
+                    )
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_soc_changes_were_saved))
 
+                    uiState.value = UiLoadState(LoadState.Inactive)
+                } catch (ex: ProhibitedActionException) {
+                    alertDialogMessage.value = MonitorAlertDialogData(ex, "Cannot save settings because you have an active schedule. You need to delete your schedule and try again.")
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud."))

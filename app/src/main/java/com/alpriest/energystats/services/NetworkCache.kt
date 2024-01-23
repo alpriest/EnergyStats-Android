@@ -46,8 +46,12 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
         return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
     }
 
-    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
-        return network.openapi_fetchBatterySettings(deviceSN)
+    override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
+        return network.openapi_fetchBatterySOC(deviceSN)
+    }
+
+    override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
+        network.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
     }
 
 //    override suspend fun fetchBattery(deviceID: String): BatteryResponse {

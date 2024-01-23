@@ -213,7 +213,7 @@ fun DataSettingsViewPreview() {
             composable("raw") { ResponseDebugView(networkStore, { networkStore.rawResponseStream }, null) }
             composable("report") { ResponseDebugView(networkStore, { networkStore.reportResponseStream }, null) }
             composable("battery") { ResponseDebugView(networkStore, { networkStore.batteryResponseStream }, null) }
-            composable("batterySettings") { ResponseDebugView(networkStore, { networkStore.batterySettingsResponseStream }, null) }
+            composable("batterySettings") { ResponseDebugView(networkStore, { networkStore.batterySOCResponseStream }, null) }
             composable("deviceList") { ResponseDebugView(networkStore, { networkStore.deviceListResponseStream }, null) }
             composable("addressBook") { ResponseDebugView(networkStore, { networkStore.addressBookResponseStream }, null) }
         }

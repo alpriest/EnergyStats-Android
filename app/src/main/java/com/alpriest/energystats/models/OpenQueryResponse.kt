@@ -59,6 +59,12 @@ data class BatterySOCResponse(
     val minSoc: Int
 )
 
+data class SetBatterySOCRequest(
+    val minSocOnGrid: Int,
+    val minSoc: Int,
+    val sn: String
+)
+
 data class OpenReportRequest(
     val sn: String,
     val variables: List<String>,

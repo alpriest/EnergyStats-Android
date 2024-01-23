@@ -128,8 +128,12 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         return listOf()
     }
 
-    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
-        TODO("Not yet implemented")
+    override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
+        return BatterySOCResponse(minSoc = 20, minSocOnGrid = 20)
+    }
+
+    override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
+
     }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {

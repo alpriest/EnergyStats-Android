@@ -44,14 +44,6 @@ object URLs {
             .build()
     }
 
-    fun battery(deviceID: String): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/battery/info"
-            .toHttpUrl()
-            .newBuilder()
-            .addQueryParameter("id", deviceID)
-            .build()
-    }
-
     fun raw(): HttpUrl {
         return "https://www.foxesscloud.com/c/v0/device/history/raw"
             .toHttpUrl()
@@ -164,6 +156,11 @@ object URLs {
 
     fun getOpenReportData(): HttpUrl {
         return "https://www.foxesscloud.com/op/v0/device/report/query"
+            .toHttpUrl()
+    }
+
+    fun setOpenBatterySOC(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/battery/soc/set"
             .toHttpUrl()
     }
 }

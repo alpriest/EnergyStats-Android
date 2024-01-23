@@ -21,6 +21,7 @@ import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.SetBatterySOCRequest
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -288,7 +289,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return result.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
+    override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
         val request = Request.Builder().url(URLs.getOpenBatterySOC(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<BatterySOCResponse>>() {}.type
@@ -296,31 +297,26 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result ?: throw MissingDataException()
     }
 
-    suspend fun openapi_getDeviceDetail(deviceSN: String): DeviceDetailResponse {
+    override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
+        val body = Gson().toJson(SetBatterySOCRequest(minSocOnGrid = minSOCOnGrid, minSoc = minSOC, sn = deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.setOpenBatterySOC())
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
+    }
+
+    private suspend fun openapi_getDeviceDetail(deviceSN: String): DeviceDetailResponse {
         val request = Request.Builder().url(URLs.getOpenDeviceDetail(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<DeviceDetailResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<DeviceDetailResponse>> = fetch(request, type)
         return response.item.result ?: throw MissingDataException()
     }
-
-//    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-//        val request = Request.Builder().url(URLs.socGet(deviceSN)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<BatterySettingsResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<BatterySettingsResponse>> = fetch(request, type)
-//        store.batterySettingsResponseStream.value = NetworkOperation(description = "fetchBatterySettings", value = response.item, raw = response.text, request)
-//        return response.item.result ?: throw MissingDataException()
-//    }
-//
-//    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-//        val request = Request.Builder().url(URLs.battery(deviceID)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<BatteryResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<BatteryResponse>> = fetch(request, type)
-//        store.batteryResponseStream.value = NetworkOperation(description = "fetchBattery", value = response.item, raw = response.text, request)
-//        return response.item.result ?: throw MissingDataException()
-//    }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
         val request = Request.Builder().url(URLs.getOpenVariables()).build()
@@ -426,6 +422,10 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
             30000 -> {
                 return Result.failure(MaintenanceModeException())
+            }
+
+            44096 -> {
+                return Result.failure(ProhibitedActionException())
             }
         }
 

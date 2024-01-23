@@ -6,8 +6,8 @@ interface RawDataStoring {
     val rawStream: MutableStateFlow<List<RawResponse>?>
     fun store(raw: List<RawResponse>)
 
-    var batterySettingsStream: MutableStateFlow<BatterySettingsResponse?>
-    fun store(batterySettings: BatterySettingsResponse)
+    var batterySettingsStream: MutableStateFlow<BatterySOCResponse?>
+    fun store(batterySettings: BatterySOCResponse)
 
     var batteryStream: MutableStateFlow<BatteryResponse?>
     fun store(battery: BatteryResponse)

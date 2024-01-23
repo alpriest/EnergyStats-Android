@@ -1,8 +1,6 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class InvalidConfigurationException(message: String?) : Exception(message)
@@ -13,9 +11,9 @@ class MaintenanceModeException : Exception("Fox servers are offline. Please try 
 class MissingDataException : Exception("Missing data")
 class UnknownNetworkException(errno: Int, message: String?) : Exception("$errno $message")
 class UnacceptableException: Exception("Unacceptable")
+class ProhibitedActionException: Exception("Schedules")
 
 interface FoxESSNetworking {
-//    suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse
 //    suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
 //    suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
 //    suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)
@@ -39,7 +37,8 @@ interface FoxESSNetworking {
     suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse
     suspend fun openapi_fetchVariables(): List<OpenApiVariable>
     suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse>
-    suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse
+    suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse
+    suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int)
     suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse>
 }
 

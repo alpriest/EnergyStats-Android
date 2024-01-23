@@ -7,16 +7,6 @@ data class BatteryResponse(
     val temperature: Double
 )
 
-data class BatterySettingsResponse(
-    val minGridSoc: Int,
-    val minSoc: Int
-)
-
-data class Earning(
-    val generation: Double,
-    val earnings: Double
-)
-
 data class BatteryTimesResponse(
     val sn: String,
     val times: List<ChargeTime>
@@ -37,10 +27,3 @@ data class DeviceSettingsGetResponse(
 data class DeviceSettingsValues(
     val operation_mode__work_mode: String
 )
-
-data class DeviceSettingsSetRequest(
-    val id: String,
-    val key: String,
-    val values: DeviceSettingsValues
-)
-
