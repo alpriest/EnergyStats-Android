@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 import java.util.Calendar
+import java.util.TimeZone
 
 data class RawRequest(
     val deviceID: String,
@@ -40,13 +41,28 @@ data class RawRequest(
 data class QueryDate(val year: Int, val month: Int?, val day: Int?) {
     companion object {
         operator fun invoke(): QueryDate {
+            val calendar = Calendar.getInstance()
             return QueryDate(
-                year = Calendar.getInstance().get(Calendar.YEAR),
-                month = Calendar.getInstance().get(Calendar.MONTH) + 1,
-                day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+                year = calendar.get(Calendar.YEAR),
+                month = calendar.get(Calendar.MONTH) + 1,
+                day = calendar.get(Calendar.DAY_OF_MONTH)
             )
         }
     }
+}
+
+fun QueryDate.toUtcMillis(): Long {
+    val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+        set(Calendar.YEAR, year)
+        // Adjust month to 0-based index used by Calendar
+        set(Calendar.MONTH, (month ?: 1) - 1)
+        set(Calendar.DAY_OF_MONTH, day ?: 1)
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }
+    return calendar.timeInMillis
 }
 
 data class RawResponse(

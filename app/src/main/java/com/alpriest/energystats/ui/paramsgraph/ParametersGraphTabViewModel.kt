@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -100,8 +101,8 @@ class ParametersGraphTabViewModel(
         val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type.variable }.toList()
 
         try {
-            val start = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond()
-            val end = start + 86400
+            val start = queryDate.toUtcMillis()
+            val end = start + (86400 * 1000)
 
             val historyResponse = networking.openapi_fetchHistory(
                 device.deviceSN,

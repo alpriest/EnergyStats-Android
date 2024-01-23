@@ -10,6 +10,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.rounded
+import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
@@ -185,12 +186,12 @@ class PowerFlowTabViewModel(
                     BatteryViewModel.noBattery()
                 }
 
-                val start = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond()
+                val start = QueryDate().toUtcMillis()
                 val history = network.openapi_fetchHistory(
                     deviceSN = currentDevice.deviceSN,
                     variables = listOf("pvPower", "meterPower2"),
                     start = start,
-                    end = start + 86400
+                    end = start + (86400 * 1000)
                 )
 
                 val summary = HomePowerFlowViewModel(
