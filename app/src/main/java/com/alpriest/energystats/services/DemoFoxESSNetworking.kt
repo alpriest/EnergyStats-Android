@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.BatterySOCResponse
+import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.models.DeviceDetailResponse
@@ -13,56 +14,12 @@ import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class DemoFoxESSNetworking : FoxESSNetworking {
-//    override suspend fun createScheduleTemplate(name: String, description: String) {
-//        // Do nothing
-//    }
-//
-//    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
-//        // Do nothing
-//    }
-//
-//    override suspend fun deleteSchedule(deviceSN: String) {
-//        // Do nothing
-//    }
-//
-//    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
-//        // Do nothing
-//    }
-//
-//    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
-//        // Do nothing
-//    }
-
-//    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-//        return ScheduleListResponse(
-//            data = listOf(
-//                ScheduleTemplateSummaryResponse(templateName = "Winter charging", enable = false, templateID = "123"),
-//                ScheduleTemplateSummaryResponse(templateName = "", enable = true, templateID = "")
-//            ),
-//            enable = true,
-//            pollcy = listOf(
-//                SchedulePollcy(startH = 15, startM = 0, endH = 17, endM = 0, fdpwr = 0, workMode = "ForceCharge", fdsoc = 100, minsocongrid = 100),
-//                SchedulePollcy(startH = 17, startM = 0, endH = 18, endM = 30, fdpwr = 3500, workMode = "ForceDischarge", fdsoc = 20, minsocongrid = 20)
-//            )
-//        )
-//    }
-//
-//    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-//        return when (deviceID) {
-//            "f3000-deviceid" -> BatteryResponse(power = 0.28, soc = 76, residual = 7550.0, temperature = 17.3)
-//            else -> BatteryResponse(power = 0.78, soc = 46, residual = 17510.0, temperature = 19.3)
-//        }
-//    }
-//
-//    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-//        return BatterySettingsResponse(20, minSoc = 30)
-//    }
-
     override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
         return arrayListOf(
             DeviceDetailResponse(
@@ -144,22 +101,6 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         return data.result?.array ?: listOf()
     }
 
-    //    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
-//    }
-//
-//    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-//        return BatteryTimesResponse(
-//            sn = deviceSN,
-//            times = listOf(
-//                ChargeTime(enableGrid = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0)),
-//                ChargeTime(enableGrid = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0)),
-//            )
-//        )
-//    }
-//
-//    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-//    }
-//
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
         return listOf(
             DataLoggerResponse(moduleSN = "ABC123DEF456", stationID = "W21", signal = 3, status = DataLoggerStatus.ONLINE),
@@ -167,7 +108,48 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         )
     }
 
+    override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
+        return listOf(
+            ChargeTime(enable = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0)),
+            ChargeTime(enable = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0))
+        )
+    }
+
     override suspend fun fetchErrorMessages() {}
+
+//    override suspend fun createScheduleTemplate(name: String, description: String) {
+//        // Do nothing
+//    }
+//
+//    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
+//        // Do nothing
+//    }
+//
+//    override suspend fun deleteSchedule(deviceSN: String) {
+//        // Do nothing
+//    }
+//
+//    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+//        // Do nothing
+//    }
+//
+//    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
+//        // Do nothing
+//    }
+
+//    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
+//        return ScheduleListResponse(
+//            data = listOf(
+//                ScheduleTemplateSummaryResponse(templateName = "Winter charging", enable = false, templateID = "123"),
+//                ScheduleTemplateSummaryResponse(templateName = "", enable = true, templateID = "")
+//            ),
+//            enable = true,
+//            pollcy = listOf(
+//                SchedulePollcy(startH = 15, startM = 0, endH = 17, endM = 0, fdpwr = 0, workMode = "ForceCharge", fdsoc = 100, minsocongrid = 100),
+//                SchedulePollcy(startH = 17, startM = 0, endH = 18, endM = 30, fdpwr = 3500, workMode = "ForceDischarge", fdsoc = 20, minsocongrid = 20)
+//            )
+//        )
+//    }
 
 //    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
 //        return SchedulerFlagResponse(enable = true, support = true)

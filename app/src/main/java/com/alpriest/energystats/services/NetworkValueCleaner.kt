@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.BatterySOCResponse
+import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.OpenApiVariable
@@ -21,10 +22,12 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
+        //TODO Capped
         return network.openapi_fetchRealData(deviceSN, variables)
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
+        //TODO Capped
         return network.openapi_fetchHistory(deviceSN, variables, start, end)
     }
 
@@ -33,6 +36,7 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
+        //TODO Capped
         return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
     }
 
@@ -44,16 +48,12 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         return network.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
     }
 
-//    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-//        return network.fetchBatteryTimes(deviceSN)
-//    }
-
-//    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-//        network.setBatteryTimes(deviceSN, times)
-//    }
-//
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
         return network.openapi_fetchDataLoggers()
+    }
+
+    override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
+        return network.openapi_fetchBatteryTimes(deviceSN)
     }
 
     override suspend fun fetchErrorMessages() {

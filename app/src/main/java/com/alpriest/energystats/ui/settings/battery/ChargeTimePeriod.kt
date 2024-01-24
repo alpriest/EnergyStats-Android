@@ -13,15 +13,9 @@ data class ChargeTimePeriod(
 
     fun asChargeTime(): ChargeTime {
         return ChargeTime(
-            enableGrid = enabled,
+            enable = enabled,
             startTime = start,
             endTime = end
         )
     }
-
-    fun hasTimes(): Boolean {
-        return start != Time.zero() || end != Time.zero()
-    }
-
-    companion object
 }

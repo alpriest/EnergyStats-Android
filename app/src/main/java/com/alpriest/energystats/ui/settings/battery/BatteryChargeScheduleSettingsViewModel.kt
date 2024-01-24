@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings.battery
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
@@ -54,19 +53,18 @@ class BatteryChargeScheduleSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    // TODO: This
-//                    val result = network.fetchBatteryTimes(deviceSN)
-//                    result.times.getOrNull(0)?.let {
-//                        timePeriod1Stream.value = ChargeTimePeriod(
-//                            start = it.startTime, end = it.endTime, enabled = it.enableGrid
-//                        )
-//                    }
-//
-//                    result.times.getOrNull(1)?.let {
-//                        timePeriod2Stream.value = ChargeTimePeriod(
-//                            start = it.startTime, end = it.endTime, enabled = it.enableGrid
-//                        )
-//                    }
+                    val result = network.openapi_fetchBatteryTimes(deviceSN)
+                    result.getOrNull(0)?.let {
+                        timePeriod1Stream.value = ChargeTimePeriod(
+                            start = it.startTime, end = it.endTime, enabled = it.enable
+                        )
+                    }
+
+                    result.getOrNull(1)?.let {
+                        timePeriod2Stream.value = ChargeTimePeriod(
+                            start = it.startTime, end = it.endTime, enabled = it.enable
+                        )
+                    }
 
                     generateSummary(timePeriod1Stream.value, timePeriod2Stream.value, context)
                     uiState.value = UiLoadState(LoadState.Inactive)

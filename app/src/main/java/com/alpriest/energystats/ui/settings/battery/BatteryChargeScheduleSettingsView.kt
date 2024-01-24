@@ -138,7 +138,10 @@ class BatteryChargeScheduleSettingsView(
             OutlinedButton(
                 onClick = { timePeriodStream.value = ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false) },
             ) {
-                Text(stringResource(R.string.reset_times))
+                Text(
+                    stringResource(R.string.reset_times),
+                    color = colors.onSecondary
+                )
             }
         }
     }

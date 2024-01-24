@@ -62,51 +62,19 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-//    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchBattery(deviceID)
-//        } else {
-//            network.fetchBattery(deviceID)
-//        }
-//    }
-//
-//    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchBatterySettings(deviceSN)
-//        } else {
-//            network.fetchBatterySettings(deviceSN)
-//        }
-//    }
-//
-//    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.setSoc(minGridSOC, minSOC, deviceSN)
-//        } else {
-//            network.setSoc(minGridSOC, minSOC, deviceSN)
-//        }
-//    }
-//
-//    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchBatteryTimes(deviceSN)
-//        } else {
-//            network.fetchBatteryTimes(deviceSN)
-//        }
-//    }
-
-    //    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.setBatteryTimes(deviceSN, times)
-//        } else {
-//            network.setBatteryTimes(deviceSN, times)
-//        }
-//    }
-//
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
         return if (isDemoUser()) {
             demoFoxESSNetworking.openapi_fetchDataLoggers()
         } else {
             network.openapi_fetchDataLoggers()
+        }
+    }
+
+    override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_fetchBatteryTimes(deviceSN)
+        } else {
+            network.openapi_fetchBatteryTimes(deviceSN)
         }
     }
 

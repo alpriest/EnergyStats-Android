@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.BatterySOCResponse
+import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.OpenApiVariable
@@ -54,46 +55,12 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
         network.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
     }
 
-//    override suspend fun fetchBattery(deviceID: String): BatteryResponse {
-//        val key = makeKey("fetchBattery", deviceID)
-//
-//        val cached = cache[key]
-//        return if (cached != null && cached.item is BatteryResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
-//            cached.item
-//        } else {
-//            val fresh = network.fetchBattery(deviceID)
-//            cache[key] = CachedItem(fresh)
-//            fresh
-//        }
-//    }
-//
-//    override suspend fun fetchBatterySettings(deviceSN: String): BatterySettingsResponse {
-//        val key = makeKey("fetchBatterySettings", deviceSN)
-//
-//        val cached = cache[key]
-//        return if (cached != null && cached.item is BatterySettingsResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
-//            cached.item
-//        } else {
-//            val fresh = network.fetchBatterySettings(deviceSN)
-//            cache[key] = CachedItem(fresh)
-//            fresh
-//        }
-//    }
-
-    //    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
-//        network.setSoc(minGridSOC, minSOC, deviceSN)
-//    }
-//
-//    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-//        return network.fetchBatteryTimes(deviceSN)
-//    }
-//
-//    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-//        network.setBatteryTimes(deviceSN, times)
-//    }
-//
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
         return network.openapi_fetchDataLoggers()
+    }
+
+    override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
+        return network.openapi_fetchBatteryTimes(deviceSN)
     }
 
     override suspend fun fetchErrorMessages() {

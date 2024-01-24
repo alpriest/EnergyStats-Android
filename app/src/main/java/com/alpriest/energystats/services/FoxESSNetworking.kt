@@ -14,11 +14,6 @@ class UnacceptableException: Exception("Unacceptable")
 class ProhibitedActionException: Exception("Schedules")
 
 interface FoxESSNetworking {
-//    suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String)
-//    suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse
-//    suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>)
-    suspend fun fetchErrorMessages()
-
 //    suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse
 //    suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse>
 //    suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse
@@ -31,6 +26,8 @@ interface FoxESSNetworking {
 //    suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse
 //    suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate)
 
+    suspend fun fetchErrorMessages()
+
     // OpenAPI
     suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse>
     suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse
@@ -40,6 +37,7 @@ interface FoxESSNetworking {
     suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse
     suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int)
     suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse>
+    suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime>
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

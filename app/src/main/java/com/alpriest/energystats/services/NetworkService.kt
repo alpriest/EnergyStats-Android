@@ -1,6 +1,8 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.BatterySOCResponse
+import com.alpriest.energystats.models.BatteryTimesResponse
+import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerListRequest
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DataLoggerStatus
@@ -327,35 +329,6 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return response.item.result?.array ?: throw MissingDataException()
     }
 
-//    override suspend fun setSoc(minGridSOC: Int, minSOC: Int, deviceSN: String) {
-//        val body = Gson().toJson(SetSOCRequest(minGridSoc = minGridSOC, minSoc = minSOC, sn = deviceSN))
-//            .toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder().url(URLs.socSet()).post(body).build()
-//
-//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-//        fetch<NetworkResponse<String>>(request, type)
-//    }
-
-//    override suspend fun fetchBatteryTimes(deviceSN: String): BatteryTimesResponse {
-//        val request = Request.Builder().url(URLs.batteryTimes(deviceSN)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
-//        store.batteryTimesResponseStream.value = NetworkOperation(description = "batteryTimesResponse", value = response.item, raw = response.text, request)
-//        return response.item.result ?: throw MissingDataException()
-//    }
-
-//    override suspend fun setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-//        val body = Gson().toJson(SetBatteryTimesRequest(sn = deviceSN, times = times))
-//            .toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder().url(URLs.batteryTimeSet()).post(body).build()
-//
-//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-//        fetch<NetworkResponse<String>>(request, type)
-//    }
-
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
         val body = Gson().toJson(DataLoggerListRequest())
             .toRequestBody("application/json".toMediaTypeOrNull())
@@ -366,6 +339,20 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val response: NetworkTuple<NetworkResponse<List<DataLoggerResponse>>> = fetch(request, type)
         store.dataLoggerListResponse.value = NetworkOperation(description = "DataLoggerResponse", value = response.item, raw = response.text, request)
         return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
+        val request = Request.Builder().url(URLs.getOpenBatteryChargeTimes(deviceSN)).build()
+
+        val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
+        store.batteryTimesResponseStream.value = NetworkOperation(description = "BatteryLoggerResponse", value = response.item, raw = response.text, request)
+        val result = response.item.result ?: throw MissingDataException()
+
+        return listOf(
+            ChargeTime(enable = result.enable1, startTime = result.startTime1, endTime = result.endTime1),
+            ChargeTime(enable = result.enable2, startTime = result.startTime2, endTime = result.endTime2)
+        )
     }
 
     private suspend fun <T : NetworkResponseInterface> fetch(

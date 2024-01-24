@@ -8,13 +8,17 @@ data class BatteryResponse(
 )
 
 data class BatteryTimesResponse(
-    val sn: String,
-    val times: List<ChargeTime>
+    val enable1: Boolean,
+    val startTime1: Time,
+    val endTime1: Time,
+
+    val enable2: Boolean,
+    val startTime2: Time,
+    val endTime2: Time,
 )
 
 data class ChargeTime(
-    val enableCharge: Boolean = true,
-    val enableGrid: Boolean,
+    val enable: Boolean,
     val startTime: Time,
     val endTime: Time
 )

@@ -20,12 +20,12 @@ object URLs {
     }
 
     fun batteryTimeSet(): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/battery/time/set"
+        return "https://www.foxesscloud.com/op/v0/device/battery/forceChargeTime/set"
             .toHttpUrl()
     }
 
-    fun batteryTimes(deviceSN: String): HttpUrl {
-        return "https://www.foxesscloud.com/c/v0/device/battery/time/get"
+    fun getOpenBatteryChargeTimes(deviceSN: String): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/battery/forceChargeTime/get"
             .toHttpUrl()
             .newBuilder()
             .addQueryParameter("sn", deviceSN)

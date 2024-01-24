@@ -8,7 +8,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.FoxESSNetworking
@@ -30,8 +29,6 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Calendar
 import java.util.Currency
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
@@ -220,10 +217,6 @@ class PowerFlowTabViewModel(
             uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Error(ex, ex.localizedMessage ?: "Error unknown"))
             updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
         }
-    }
-
-    private fun variable(variableName: String): Variable? {
-        return configManager.variables.firstOrNull { it.variable.lowercase() == variableName.lowercase() }
     }
 
     private fun calculateTicks(summary: CurrentStatusCalculator) {
