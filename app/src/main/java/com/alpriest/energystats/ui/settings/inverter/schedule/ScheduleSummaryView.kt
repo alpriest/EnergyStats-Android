@@ -2,24 +2,18 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -42,7 +36,6 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -93,7 +86,7 @@ class ScheduleSummaryView(
 
         SettingsPage {
             SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
-                SettingsTitleView(stringResource(R.string.active_schedule))
+                SettingsTitleView(stringResource(R.string.schedule))
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (schedule.phases.isEmpty()) {
@@ -114,39 +107,39 @@ class ScheduleSummaryView(
                 }
             }
 
-            SettingsColumnWithChild {
-                SettingsTitleView(stringResource(R.string.templates))
+//            SettingsColumnWithChild {
+//                SettingsTitleView(stringResource(R.string.templates))
+//
+//                if (templates.isEmpty()) {
+//                    Text(
+//                        stringResource(R.string.you_have_no_templates),
+//                        color = colors.onSecondary
+//                    )
+//                } else {
+//                    templates.forEach {
+//                        Row(verticalAlignment = Alignment.CenterVertically) {
+//                            Text(
+//                                it.name,
+//                                color = colors.onSecondary
+//                            )
+//
+//                            Spacer(modifier = Modifier.weight(0.1f))
+//
+//                            ActivateButton {
+//                                viewModel.activate(it, context)
+//                            }
+//                        }
+//
+//                        if (templates.last() != it) {
+//                            Divider()
+//                        }
+//                    }
+//                }
+//            }
 
-                if (templates.isEmpty()) {
-                    Text(
-                        stringResource(R.string.you_have_no_templates),
-                        color = colors.onSecondary
-                    )
-                } else {
-                    templates.forEach {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                it.name,
-                                color = colors.onSecondary
-                            )
-
-                            Spacer(modifier = Modifier.weight(0.1f))
-
-                            ActivateButton {
-                                viewModel.activate(it, context)
-                            }
-                        }
-
-                        if (templates.last() != it) {
-                            Divider()
-                        }
-                    }
-                }
-            }
-
-            Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
-                Text(stringResource(R.string.manage_templates), color = colors.onPrimary)
-            }
+//            Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
+//                Text(stringResource(R.string.manage_templates), color = colors.onPrimary)
+//            }
         }
     }
 

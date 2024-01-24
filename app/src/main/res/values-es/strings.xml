@@ -250,7 +250,7 @@
     <string name="remove_key">Quitar la llave</string>
     <string name="inverter_charge_schedule_settings_saved">Los ajustes de horario de tu inversor han sido guardados. Ten en cuenta que tus ajustes de horario tendrán prioridad sobre cualquier horario de carga de batería, min SOC y modo de trabajo del inversor que hayas configurado anteriormente.</string>
     <string name="inverter_charge_schedule_deleted">Tu horario fue eliminado</string>
-    <string name="active_schedule">Horario activo</string>
+    <string name="schedule">Horario</string>
     <string name="templates">Plantillas</string>
     <string name="manage_templates">Gestionar plantillas</string>
     <string name="activate">Activar</string>

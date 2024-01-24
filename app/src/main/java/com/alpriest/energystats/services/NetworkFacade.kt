@@ -78,6 +78,14 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
+    override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_fetchSchedulerFlag(deviceSN)
+        } else {
+            network.openapi_fetchSchedulerFlag(deviceSN)
+        }
+    }
+
     override suspend fun fetchErrorMessages() {
         if (isDemoUser()) {
             demoFoxESSNetworking.fetchErrorMessages()

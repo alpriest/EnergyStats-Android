@@ -6,6 +6,7 @@ import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceFunction
+import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -113,6 +114,10 @@ class DemoFoxESSNetworking : FoxESSNetworking {
             ChargeTime(enable = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0)),
             ChargeTime(enable = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0))
         )
+    }
+
+    override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
+        return GetSchedulerFlagResponse(true, true)
     }
 
     override suspend fun fetchErrorMessages() {}

@@ -52,7 +52,7 @@ data class SchedulePhase(
     val id: String,
     val start: Time,
     val end: Time,
-    val mode: SchedulerModeResponse,
+    val mode: WorkMode,
     val forceDischargePower: Int,
     val forceDischargeSOC: Int,
     val batterySOC: Int,
@@ -61,7 +61,7 @@ data class SchedulePhase(
     constructor(
         start: Time,
         end: Time,
-        mode: SchedulerModeResponse,
+        mode: WorkMode,
         forceDischargePower: Int,
         forceDischargeSOC: Int,
         batterySOC: Int,
@@ -73,7 +73,7 @@ data class SchedulePhase(
             id: String? = null,
             start: Time,
             end: Time,
-            mode: SchedulerModeResponse?,
+            mode: WorkMode?,
             forceDischargePower: Int,
             forceDischargeSOC: Int,
             batterySOC: Int,
@@ -93,8 +93,8 @@ data class SchedulePhase(
             )
         }
 
-        fun create(mode: SchedulerModeResponse, device: Device?): SchedulePhase {
-            val color: Color = Color.scheduleColor(mode.key)
+        fun create(mode: WorkMode, device: Device?): SchedulePhase {
+            val color: Color = Color.scheduleColor(mode)
             val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
 
             return SchedulePhase(
@@ -113,11 +113,11 @@ data class SchedulePhase(
             return create(
                 start = Time(hour = 19, minute = 30),
                 end = Time(hour = 23, minute = 30),
-                mode = SchedulerModeResponse(color = "#ff0000", name = "Self Use", key = "SelfUse"),
+                mode = WorkMode.SelfUse,
                 forceDischargePower = 0,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor("SelfUse")
+                color = Color.scheduleColor(WorkMode.SelfUse)
             )!!
         }
     }
@@ -132,31 +132,18 @@ data class SchedulePhase(
         return (time.hour * 60) + time.minute
     }
 
-    fun toPollcy(): SchedulePollcy {
-        return SchedulePollcy(
-            start.hour,
-            start.minute,
-            end.hour,
-            end.minute,
-            forceDischargePower,
-            mode.key,
-            forceDischargeSOC,
-            batterySOC
-        )
-    }
-
     fun isValid(): Boolean {
         return batterySOC <= forceDischargeSOC && end > start
     }
 }
 
-fun Color.Companion.scheduleColor(mode: String): Color {
+fun Color.Companion.scheduleColor(mode: WorkMode): Color {
     return when (mode) {
-        "FeedIn" -> PowerFlowPositive
-        "ForceCharge" -> PowerFlowNegative
-        "ForceDischarge" -> PowerFlowPositive
-        "SelfUse" -> LightGray
-        else -> Color.Black
+        WorkMode.FeedIn -> PowerFlowPositive
+        WorkMode.ForceCharge -> PowerFlowNegative
+        WorkMode.ForceDischarge -> PowerFlowPositive
+        WorkMode.SelfUse -> LightGray
+        else -> Black
     }
 }
 

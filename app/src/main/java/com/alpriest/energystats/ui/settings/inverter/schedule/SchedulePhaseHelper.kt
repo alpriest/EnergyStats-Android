@@ -7,7 +7,7 @@ import com.alpriest.energystats.models.Time
 
 class SchedulePhaseHelper {
     companion object {
-        fun addNewTimePeriod(schedule: Schedule, modes: List<SchedulerModeResponse>, device: Device?): Schedule {
+        fun addNewTimePeriod(schedule: Schedule, modes: List<WorkMode>, device: Device?): Schedule {
             val mode = modes.firstOrNull() ?: return schedule
             val newPhase = SchedulePhase.create(mode = mode, device = device)
             val sortedPhases = schedule.phases + newPhase
@@ -21,7 +21,7 @@ class SchedulePhaseHelper {
             )
         }
 
-        fun appendPhasesInGaps(schedule: Schedule, mode: SchedulerModeResponse, device: Device?): Schedule {
+        fun appendPhasesInGaps(schedule: Schedule, mode: WorkMode, device: Device?): Schedule {
             val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
             val newPhases = schedule.phases + createPhasesInGaps(schedule, mode, minSOC)
 
@@ -33,7 +33,7 @@ class SchedulePhaseHelper {
             )
         }
 
-        private fun createPhasesInGaps(schedule: Schedule, mode: SchedulerModeResponse, soc: Int): List<SchedulePhase> {
+        private fun createPhasesInGaps(schedule: Schedule, mode: WorkMode, soc: Int): List<SchedulePhase> {
             val sortedPhases = schedule.phases.sortedBy { it.start }
 
             val scheduleStartTime = Time(0, 0)
@@ -72,7 +72,7 @@ class SchedulePhaseHelper {
             return newPhases
         }
 
-        private fun makePhase(start: Time, end: Time, mode: SchedulerModeResponse, soc: Int): SchedulePhase {
+        private fun makePhase(start: Time, end: Time, mode: WorkMode, soc: Int): SchedulePhase {
             return SchedulePhase(
                 start = start,
                 end = end,
@@ -80,7 +80,7 @@ class SchedulePhaseHelper {
                 forceDischargePower = 0,
                 forceDischargeSOC = soc,
                 batterySOC = soc,
-                color = Color.scheduleColor(mode.key)
+                color = Color.scheduleColor(mode)
             )
         }
 

@@ -21,10 +21,10 @@ class EditPhaseViewModelFactory(val navController: NavHostController) : ViewMode
 }
 
 class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
-    val modes: List<SchedulerModeResponse> = EditScheduleStore.shared.modes
+    val modes: List<WorkMode> = EditScheduleStore.shared.modes
     val startTimeStream = MutableStateFlow(Time.now())
     val endTimeStream = MutableStateFlow(Time.now())
-    val workModeStream: MutableStateFlow<SchedulerModeResponse> = MutableStateFlow(modes.first())
+    val workModeStream: MutableStateFlow<WorkMode> = MutableStateFlow(modes.first())
     val forceDischargePowerStream = MutableStateFlow("0")
     val forceDischargeSOCStream = MutableStateFlow("0")
     val minSOCStream = MutableStateFlow("0")
@@ -120,7 +120,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
             forceDischargePower = forceDischargePowerStream.value.toIntOrNull() ?: 0,
             forceDischargeSOC = forceDischargeSOCStream.value.toIntOrNull() ?: 0,
             batterySOC = minSOCStream.value.toIntOrNull() ?: 0,
-            color = Color.scheduleColor(workModeStream.value.key)
+            color = Color.scheduleColor(workModeStream.value)
         )
 
         validate(context)

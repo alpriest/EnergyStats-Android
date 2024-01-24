@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
@@ -54,6 +55,10 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 
     override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
         return network.openapi_fetchBatteryTimes(deviceSN)
+    }
+
+    override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
+        return network.openapi_fetchSchedulerFlag(deviceSN)
     }
 
     override suspend fun fetchErrorMessages() {

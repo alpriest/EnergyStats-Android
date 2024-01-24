@@ -250,7 +250,7 @@
     <string name="remove_key">Schlüssel entfernen</string>
     <string name="inverter_charge_schedule_settings_saved">Ihre Wechselrichter-Zeitplaneinstellungen wurden gespeichert. Bitte beachten Sie, dass Ihre Zeitplaneinstellungen Vorrang vor jedem Batterieladeplan, Mindest-SoC und zuvor konfiguriertem Wechselrichter-Arbeitsmodus haben werden.</string>
     <string name="inverter_charge_schedule_deleted">Ihr Zeitplan wurde gelöscht</string>
-    <string name="active_schedule">Aktiver Zeitplan</string>
+    <string name="schedule">Zeitplan</string>
     <string name="templates">Vorlagen</string>
     <string name="manage_templates">Vorlagen verwalten</string>
     <string name="activate">Aktivieren</string>

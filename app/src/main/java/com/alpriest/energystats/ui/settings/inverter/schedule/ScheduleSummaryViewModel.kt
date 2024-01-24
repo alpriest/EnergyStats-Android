@@ -53,22 +53,21 @@ class ScheduleSummaryViewModel(
 
                 try {
 
-                    // TODO
-//                    val supported = network.fetchSchedulerFlag(deviceSN).support
+                    val flags = network.openapi_fetchSchedulerFlag(deviceSN)
 
-//                    if (!supported) {
-//                        supportedErrorStream.value = String.format(
-//                            context.getString(R.string.unsupported_firmware),
-//                            device.deviceDisplayName,
-//                            device.firmware?.manager ?: ""
-//                        )
-//                        uiState.value = UiLoadState(LoadState.Inactive)
-//                    } else {
-//                        // TODO
-////                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
-//                        modes = EditScheduleStore.shared.modes
-//                        uiState.value = UiLoadState(LoadState.Inactive)
-//                    }
+                    if (!flags.support) {
+                        supportedErrorStream.value = String.format(
+                            context.getString(R.string.unsupported_firmware),
+                            device.deviceDisplayName,
+                            device.firmware?.manager ?: ""
+                        )
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                    } else {
+                        // TODO
+//                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
+                        modes = EditScheduleStore.shared.modes
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                    }
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                 }
@@ -157,17 +156,17 @@ class ScheduleSummaryViewModel(
     }
 }
 
-internal fun SchedulePollcy.toSchedulePhase(modes: List<SchedulerModeResponse>): SchedulePhase? {
-    return SchedulePhase.create(
-        start = Time(hour = startH, minute = startM),
-        end = Time(hour = endH, minute = endM),
-        mode = modes.first { it.key == workMode },
-        forceDischargePower = fdpwr ?: 0,
-        forceDischargeSOC = fdsoc,
-        batterySOC = minsocongrid,
-        color = Color.scheduleColor(workMode)
-    )
-}
+//internal fun SchedulePollcy.toSchedulePhase(modes: List<WorkMode>): SchedulePhase? {
+//    return SchedulePhase.create(
+//        start = Time(hour = startH, minute = startM),
+//        end = Time(hour = endH, minute = endM),
+//        mode = modes.first { it.key == workMode },
+//        forceDischargePower = fdpwr ?: 0,
+//        forceDischargeSOC = fdsoc,
+//        batterySOC = minsocongrid,
+//        color = Color.scheduleColor(workMode)
+//    )
+//}
 
 internal fun ScheduleTemplateSummaryResponse.toScheduleTemplate(): ScheduleTemplateSummary? {
     if (templateID.isEmpty()) {

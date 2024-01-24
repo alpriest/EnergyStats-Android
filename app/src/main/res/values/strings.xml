@@ -252,7 +252,7 @@
     <string name="remove_key">Remove key</string>
     <string name="inverter_charge_schedule_settings_saved">Your inverter schedule settings were saved. Please be aware that your schedule settings will take priority over any battery charge schedule, min SOC and inverter work mode you had previously configured.</string>
     <string name="inverter_charge_schedule_deleted">Your schedule was deleted</string>
-    <string name="active_schedule">Active schedule</string>
+    <string name="schedule">Schedule</string>
     <string name="templates">Templates</string>
     <string name="you_have_no_templates">You have no templates</string>
     <string name="manage_templates">Manage templates</string>

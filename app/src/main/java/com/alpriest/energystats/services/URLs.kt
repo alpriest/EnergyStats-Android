@@ -163,6 +163,12 @@ object URLs {
         return "https://www.foxesscloud.com/op/v0/device/battery/soc/set"
             .toHttpUrl()
     }
+
+    fun getOpenSchedulerFlag(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/scheduler/get/flag"
+            .toHttpUrl()
+
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

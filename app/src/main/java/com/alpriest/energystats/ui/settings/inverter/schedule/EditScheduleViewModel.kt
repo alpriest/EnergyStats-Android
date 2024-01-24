@@ -36,7 +36,7 @@ class EditScheduleViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val allowDeletionStream = MutableStateFlow(false)
-    private var modes: List<SchedulerModeResponse> = listOf()
+    private var modes: List<WorkMode> = listOf()
     private var shouldPopNavOnDismissal = false
 
     fun load() {

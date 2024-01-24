@@ -16,6 +16,7 @@ import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
+import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -38,7 +39,7 @@ class EditTemplateViewModel(
     val scheduleStream = EditScheduleStore.shared.scheduleStream
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    private var modes: List<SchedulerModeResponse> = listOf()
+    private var modes: List<WorkMode> = listOf()
     private var templateID: String = ""
     private var shouldPopNavOnDismissal = false
 

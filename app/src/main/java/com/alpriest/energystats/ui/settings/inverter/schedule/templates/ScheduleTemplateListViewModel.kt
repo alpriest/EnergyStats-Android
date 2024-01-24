@@ -13,10 +13,7 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplateSummary
-import com.alpriest.energystats.ui.settings.inverter.schedule.toSchedulePhase
-import com.alpriest.energystats.ui.settings.inverter.schedule.toScheduleTemplate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 

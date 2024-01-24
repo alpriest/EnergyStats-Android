@@ -10,6 +10,8 @@ import com.alpriest.energystats.models.DataLoggerStatusDeserializer
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceListRequest
 import com.alpriest.energystats.models.ErrorMessagesResponse
+import com.alpriest.energystats.models.GetSchedulerFlagRequest
+import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenApiVariableDeserializer
@@ -353,6 +355,17 @@ class NetworkService(private val credentials: CredentialStore, private val store
             ChargeTime(enable = result.enable1, startTime = result.startTime1, endTime = result.endTime1),
             ChargeTime(enable = result.enable2, startTime = result.startTime2, endTime = result.endTime2)
         )
+    }
+
+    override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
+        val body = Gson().toJson(GetSchedulerFlagRequest(deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder().url(URLs.getOpenSchedulerFlag()).post(body).build()
+
+        val type = object : TypeToken<NetworkResponse<GetSchedulerFlagResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<GetSchedulerFlagResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     private suspend fun <T : NetworkResponseInterface> fetch(

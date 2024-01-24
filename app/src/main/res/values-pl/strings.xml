@@ -251,7 +251,7 @@
     <string name="remove_key">Usuń klucz</string>
     <string name="inverter_charge_schedule_settings_saved">Ustawienia harmonogramu Twojego falownika zostały zapisane. Należy pamiętać, że ustawienia harmonogramu będą miały priorytet nad wszelkimi wcześniej skonfigurowanymi harmonogramami ładowania baterii, min SOC i trybem pracy falownika.</string>
     <string name="inverter_charge_schedule_deleted">Twój harmonogram został usunięty</string>
-    <string name="active_schedule">Aktywny harmonogram</string>
+    <string name="schedule">Harmonogram</string>
     <string name="templates">Szablony</string>
     <string name="manage_templates">Zarządzaj szablonami</string>
     <string name="activate">Aktywować</string>

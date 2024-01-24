@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifier) {
-    val extra = when (phase.mode.key) {
-        "ForceDischarge" -> " down to ${phase.forceDischargeSOC}% at ${phase.forceDischargePower}W"
-        "ForceCharge" -> ""
-        "SelfUse" -> " with ${phase.batterySOC}% min SOC"
+    val extra = when (phase.mode) {
+        WorkMode.ForceDischarge -> " down to ${phase.forceDischargeSOC}% at ${phase.forceDischargePower}W"
+        WorkMode.ForceCharge -> ""
+        WorkMode.SelfUse -> " with ${phase.batterySOC}% min SOC"
         else -> ""
     }
 

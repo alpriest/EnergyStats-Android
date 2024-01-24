@@ -39,29 +39,29 @@ internal fun Schedule.Companion.preview(): Schedule {
             SchedulePhase.create(
                 start = Time(hour = 1, minute = 0),
                 end = Time(hour = 2, minute = 0),
-                mode = SchedulerModeResponse(color = "#00ff00", name = "Force charge", key = "ForceCharge"),
+                mode = WorkMode.ForceCharge,
                 forceDischargePower = 0,
                 forceDischargeSOC = 100,
                 batterySOC = 100,
-                color = Color.scheduleColor("ForceCharge")
+                color = Color.scheduleColor(WorkMode.ForceCharge)
             ),
             SchedulePhase.create(
                 start = Time(hour = 10, minute = 30),
                 end = Time(hour = 14, minute = 30),
-                mode = SchedulerModeResponse(color = "#ff0000", name = "Force discharge", key = "ForceDischarge"),
+                mode = WorkMode.ForceDischarge,
                 forceDischargePower = 3500,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor("ForceDischarge")
+                color = Color.scheduleColor(WorkMode.ForceDischarge)
             ),
             SchedulePhase.create(
                 start = Time(hour = 19, minute = 30),
                 end = Time(hour = 23, minute = 30),
-                mode = SchedulerModeResponse(color = "#ff0000", name = "Self Use", key = "SelfUse"),
+                mode = WorkMode.SelfUse,
                 forceDischargePower = 0,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor("SelfUse")
+                color = Color.scheduleColor(WorkMode.SelfUse)
             )
         ),
         description = null

@@ -31,3 +31,12 @@ data class DeviceSettingsGetResponse(
 data class DeviceSettingsValues(
     val operation_mode__work_mode: String
 )
+
+data class GetSchedulerFlagRequest(
+    val deviceSN: String
+)
+
+data class GetSchedulerFlagResponse(
+    val enable: Boolean,
+    val support: Boolean
+)
