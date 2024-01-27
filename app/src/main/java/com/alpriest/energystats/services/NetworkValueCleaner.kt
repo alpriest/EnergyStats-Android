@@ -7,10 +7,14 @@ import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenHistoryResponseData
 import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.OpenReportResponseData
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.UnitData
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -23,13 +27,35 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
-        //TODO Capped
-        return network.openapi_fetchRealData(deviceSN, variables)
+        val original = network.openapi_fetchRealData(deviceSN, variables)
+        return OpenQueryResponse(
+            time = original.time,
+            deviceSN = original.deviceSN,
+            datas = original.datas.map {
+                OpenQueryResponseData(
+                    it.unit,
+                    it.variable,
+                    it.value.capped(themeStream.value.dataCeiling)
+                )
+            }
+        )
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        //TODO Capped
-        return network.openapi_fetchHistory(deviceSN, variables, start, end)
+        val original = network.openapi_fetchHistory(deviceSN, variables, start, end)
+        return OpenHistoryResponse(
+            original.deviceSN,
+            original.datas.map {
+                OpenHistoryResponseData(
+                    name = it.name,
+                    unit = it.unit,
+                    variable = it.variable,
+                    data = it.data.map { data ->
+                        UnitData(data.time, data.value.capped(themeStream.value.dataCeiling))
+                    }
+                )
+            }
+        )
     }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
@@ -37,8 +63,16 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        //TODO Capped
-        return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+        val original = network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+        return original.map {
+            OpenReportResponse(
+                variable = it.variable,
+                unit = it.unit,
+                values = it.values.map { value ->
+                    OpenReportResponseData(value.index, value.value.capped(themeStream.value.dataCeiling))
+                }
+            )
+        }
     }
 
     override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
