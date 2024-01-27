@@ -6,6 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
@@ -124,6 +128,61 @@ class PowerFlowTabViewModel(
         timer?.start()
     }
 
+    private suspend fun loadRealData(device: Device): OpenQueryResponse {
+        val variables: List<String> = listOf(
+            "feedinPower",
+            "gridConsumptionPower",
+            "loadsPower",
+            "generationPower",
+            "pvPower",
+            "meterPower2",
+            "ambientTemperation",
+            "invTemperation",
+            "batChargePower",
+            "batDischargePower",
+            "SoC",
+            "batTemperature",
+            "ResidualEnergy"
+        )
+
+        return network.openapi_fetchRealData(
+            deviceSN = device.deviceSN,
+            variables
+        )
+    }
+
+    private suspend fun loadReportData(device: Device): List<OpenReportResponse> {
+        var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption)
+        if (device.hasBattery) {
+            reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
+        }
+
+        return network.openapi_fetchReport(
+            device.deviceSN,
+            reportVariables,
+            QueryDate(),
+            ReportType.month
+        )
+    }
+
+    private suspend fun loadTotals(device: Device): TotalsViewModel {
+        return TotalsViewModel(loadReportData(device))
+    }
+
+    private suspend fun loadGeneration(device: Device): GenerationViewModel {
+        return GenerationViewModel(loadHistoryData(device))
+    }
+
+    private suspend fun loadHistoryData(device: Device): OpenHistoryResponse {
+        val start = QueryDate().toUtcMillis()
+        return network.openapi_fetchHistory(
+            deviceSN = device.deviceSN,
+            variables = listOf("pvPower", "meterPower2"),
+            start = start,
+            end = start + (86400 * 1000)
+        )
+    }
+
     private suspend fun loadData() {
         try {
             if (configManager.currentDevice.value == null) {
@@ -140,62 +199,20 @@ class PowerFlowTabViewModel(
 //                configManager.currencyCode = earnings.currencyCode()
 //                configManager.currencySymbol = earnings.currencySymbol()
 
-                val variables: List<String> = listOf(
-                    "feedInPower",
-                    "gridConsumptionPower",
-                    "generationPower",
-                    "loadsPower",
-                    "pvPower",
-                    "meterPower2",
-                    "ambientTemperation",
-                    "invTemperation"
-                )
-
-                var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption)
-                if (currentDevice.hasBattery) {
-                    reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
-                }
-
-                val report = network.openapi_fetchReport(
-                    currentDevice.deviceSN,
-                    reportVariables,
-                    QueryDate(),
-                    ReportType.month
-                )
-
-                val real = network.openapi_fetchRealData(
-                    deviceSN = currentDevice.deviceSN,
-                    variables
-                )
+                val real = loadRealData(currentDevice)
+                val totals = loadTotals(currentDevice)
+                val generation = loadGeneration(currentDevice)
 
                 val currentValues = RealQueryResponseMapper().mapCurrentValues(real)
                 val currentViewModel = CurrentStatusCalculator(currentValues, configManager.shouldInvertCT2, configManager.shouldCombineCT2WithPVPower)
-                val totals = TotalsViewModel(report)
 
-                val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
-                    BatteryViewModel(
-                        power = real.datas.currentValue("batChargePower") - (0 - real.datas.currentValue("batDischargePower")),
-                        soc = real.datas.currentValue("SoC").toInt(),
-                        residual = real.datas.currentValue("ResidualEnergy") * 10.0,
-                        temperature = real.datas.currentValue("batTemperature")
-                    )
-                } else {
-                    BatteryViewModel.noBattery()
-                }
-
-                val start = QueryDate().toUtcMillis()
-                val history = network.openapi_fetchHistory(
-                    deviceSN = currentDevice.deviceSN,
-                    variables = listOf("pvPower", "meterPower2"),
-                    start = start,
-                    end = start + (86400 * 1000)
-                )
+                val battery: BatteryViewModel = makeBatteryViewModel(currentDevice, real)
 
                 val summary = HomePowerFlowViewModel(
                     solar = currentViewModel.currentSolarPower,
                     home = currentViewModel.currentHomeConsumption,
                     grid = currentViewModel.currentGrid,
-                    todaysGeneration = GenerationViewModel(history),
+                    todaysGeneration = generation,
                     earnings = EarningsViewModel(EnergyStatsFinancialModel(totals, configManager)),
                     inverterTemperatures = currentViewModel.currentTemperatures,
                     hasBattery = battery.hasBattery,
@@ -217,6 +234,23 @@ class PowerFlowTabViewModel(
             uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Error(ex, ex.localizedMessage ?: "Error unknown"))
             updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
         }
+    }
+
+    private fun makeBatteryViewModel(
+        currentDevice: Device,
+        real: OpenQueryResponse
+    ): BatteryViewModel {
+        val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
+            BatteryViewModel(
+                power = real.datas.currentValue("batChargePower") - (0 - real.datas.currentValue("batDischargePower")),
+                soc = real.datas.currentValue("SoC").toInt(),
+                residual = real.datas.currentValue("ResidualEnergy") * 10.0,
+                temperature = real.datas.currentValue("batTemperature")
+            )
+        } else {
+            BatteryViewModel.noBattery()
+        }
+        return battery
     }
 
     private fun calculateTicks(summary: CurrentStatusCalculator) {

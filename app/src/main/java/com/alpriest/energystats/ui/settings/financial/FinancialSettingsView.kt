@@ -130,7 +130,10 @@ fun FinancialsSettingsView(config: ConfigManaging) {
     }
 
     if (showFinancialSummaryState.value) {
-        Text(stringResource(R.string.energy_stats_earnings_calculation_description))
+        Text(
+            stringResource(R.string.energy_stats_earnings_calculation_description),
+            color = colors.onSecondary
+        )
 
         CalculationDescription(
             stringResource(R.string.exported_income_short_title), stringResource(R.string.exported_income_description), stringResource(R.string.exported_income_formula)
@@ -172,15 +175,22 @@ private fun String.safeToDouble(): Double {
 fun CalculationDescription(title: String, description: String, formula: String) {
     Column(modifier = Modifier.padding(top = 18.dp)) {
         Text(
-            title, style = TextStyle.Default.copy(fontWeight = FontWeight.Bold)
+            title,
+            style = TextStyle.Default.copy(fontWeight = FontWeight.Bold, color = colors.onSecondary)
         )
-        Text(description)
+        Text(
+            description,
+            color = colors.onSecondary,
+        )
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                formula, fontStyle = FontStyle.Italic, modifier = Modifier.align(Alignment.CenterHorizontally)
+                formula,
+                fontStyle = FontStyle.Italic,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                color = colors.onSecondary,
             )
         }
     }
