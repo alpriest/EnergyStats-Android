@@ -21,7 +21,7 @@ data class OpenQueryResponseData(
 
 data class OpenHistoryRequest(
     val sn: String,
-    val variable: List<String>,
+    val variables: List<String>,
     val begin: Long,
     val end: Long
 )

@@ -32,13 +32,31 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
         return network.openapi_fetchDeviceList()
     }
 
+
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
-        //TODO CACHE BASED ON VARIABLES AND TIME
-        return network.openapi_fetchRealData(deviceSN, variables)
+        val key = makeKey("openapi_fetchRealData", deviceSN, variables.joinToString { it })
+
+        val cached = cache[key]
+        return if (cached != null && cached.item is OpenQueryResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
+            cached.item
+        } else {
+            val fresh = network.openapi_fetchRealData(deviceSN, variables)
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        return network.openapi_fetchHistory(deviceSN, variables, start, end)
+        val key = makeKey("openapi_fetchHistory", deviceSN, variables.joinToString { it }, start.toString(), end.toString())
+
+        val cached = cache[key]
+        return if (cached != null && cached.item is OpenHistoryResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
+            cached.item
+        } else {
+            val fresh = network.openapi_fetchHistory(deviceSN, variables, start, end)
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
@@ -46,7 +64,16 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+        val key = makeKey("openapi_fetchReport", deviceSN, variables.joinToString { it.networkTitle() }, queryDate.toString(), reportType.toString())
+
+        val cached = cache[key]
+        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && isListOf<OpenReportResponse>(cached.item)) {
+            cached.item as List<OpenReportResponse>
+        } else {
+            val fresh = network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
@@ -124,4 +151,8 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
     private fun makeKey(base: String, vararg arguments: String): String {
         return listOf(base, *arguments).joinToString(separator = "_")
     }
+}
+
+inline fun <reified T> isListOf(obj: Any): Boolean {
+    return obj is List<*> && obj.all { it is T }
 }
