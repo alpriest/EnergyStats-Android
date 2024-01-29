@@ -48,7 +48,7 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifie
             }
 
             Row {
-                Text(phase.mode.name, color = MaterialTheme.colors.onSecondary.copy(alpha = 0.5f))
+                Text(phase.mode.title(), color = MaterialTheme.colors.onSecondary.copy(alpha = 0.5f))
                 Text(extra, color = MaterialTheme.colors.onSecondary.copy(alpha = 0.5f))
             }
         }

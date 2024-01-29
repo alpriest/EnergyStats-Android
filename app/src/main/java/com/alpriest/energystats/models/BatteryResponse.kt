@@ -1,5 +1,7 @@
 package com.alpriest.energystats.models
 
+import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
+
 data class BatteryResponse(
     val power: Double,
     val soc: Int,
@@ -23,15 +25,6 @@ data class ChargeTime(
     val endTime: Time
 )
 
-data class DeviceSettingsGetResponse(
-    val protocol: String,
-    val values: DeviceSettingsValues
-)
-
-data class DeviceSettingsValues(
-    val operation_mode__work_mode: String
-)
-
 data class GetSchedulerFlagRequest(
     val deviceSN: String
 )
@@ -39,4 +32,21 @@ data class GetSchedulerFlagRequest(
 data class GetSchedulerFlagResponse(
     val enable: Boolean,
     val support: Boolean
+)
+
+data class ScheduleResponse(
+    val enable: Int,
+    val groups: List<SchedulePhaseResponse>
+)
+
+data class SchedulePhaseResponse(
+    val enable: Int,
+    val startHour: Int,
+    val startMinute: Int,
+    val endHour: Int,
+    val endMinute: Int,
+    val workMode: WorkMode,
+    val minSocOnGrid: Int,
+    val fdSoc: Int,
+    val fdPwr: Int?
 )

@@ -15,6 +15,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,6 +44,7 @@ fun FinancialsSettingsView(config: ConfigManaging) {
     val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(config.showFinancialSummaryOnFlowPage) }
     val feedInUnitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
+    val currencySymbol = rememberSaveable { mutableStateOf(config.currencySymbol) }
 
     SettingsColumnWithChild {
         SettingsCheckbox(title = stringResource(R.string.show_financial_summary), state = showFinancialSummaryState, onUpdate = {
@@ -55,76 +58,14 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                 config.showFinancialSummaryOnFlowPage = it
             })
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .background(colors.surface)
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(
-                    stringResource(R.string.feed_in_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = colors.onSecondary
-                )
-
-                Text(
-                    config.currencySymbol,
-                    color = colors.onSecondary,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-
-                TextField(
-                    value = feedInUnitPrice.value,
-                    onValueChange = {
-                        feedInUnitPrice.value = it
-                        config.feedInUnitPrice = it.safeToDouble()
-                    },
-                    modifier = Modifier
-                        .width(90.dp)
-                        .defaultMinSize(
-                            minWidth = TextFieldDefaults.MinWidth,
-                            minHeight = 44.dp
-                        ),
-                    textStyle = LocalTextStyle.current.copy(
-                        textAlign = TextAlign.End,
-                        color = colors.onSecondary
-                    )
-                )
+            makeCurrencySymbolField(config, currencySymbol)
+            makeTextField(config, feedInUnitPrice, stringResource(R.string.feed_in_unit_price)) {
+                feedInUnitPrice.value = it
+                config.feedInUnitPrice = it.safeToDouble()
             }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .background(colors.surface)
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(
-                    stringResource(R.string.grid_import_unit_price), Modifier.weight(1.0f), style = MaterialTheme.typography.body2, color = colors.onSecondary
-                )
-
-                Text(
-                    config.currencySymbol,
-                    color = colors.onSecondary,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-
-                TextField(
-                    value = gridImportUnitPrice.value,
-                    onValueChange = {
-                        gridImportUnitPrice.value = it
-                        config.gridImportUnitPrice = it.safeToDouble()
-                    },
-                    modifier = Modifier
-                        .width(90.dp)
-                        .defaultMinSize(
-                            minWidth = TextFieldDefaults.MinWidth,
-                            minHeight = 44.dp
-                        ),
-                    textStyle = LocalTextStyle.current.copy(
-                        textAlign = TextAlign.End,
-                        color = colors.onSecondary
-                    )
-                )
+            makeTextField(config, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price)) {
+                gridImportUnitPrice.value = it
+                config.gridImportUnitPrice = it.safeToDouble()
             }
         }
     }
@@ -169,6 +110,81 @@ private fun String.safeToDouble(): Double {
     }
 
     return 0.0
+}
+
+@Composable
+fun makeCurrencySymbolField(config: ConfigManaging, state: MutableState<String>) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .background(colors.surface)
+            .padding(vertical = 4.dp)
+    ) {
+        Text(
+            stringResource(R.string.currency_symbol),
+            Modifier.weight(1.0f),
+            style = MaterialTheme.typography.body2,
+            color = colors.onSecondary
+        )
+
+        TextField(
+            value = state.value,
+            onValueChange = {
+                state.value = it
+                config.currencySymbol = it
+            },
+            modifier = Modifier
+                .width(90.dp)
+                .defaultMinSize(
+                    minWidth = TextFieldDefaults.MinWidth,
+                    minHeight = 44.dp
+                ),
+            textStyle = LocalTextStyle.current.copy(
+                textAlign = TextAlign.End,
+                color = colors.onSecondary
+            )
+        )
+    }
+}
+
+@Composable
+fun makeTextField(config: ConfigManaging, state: MutableState<String>, label: String, onValueChange: (String) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .background(colors.surface)
+            .padding(vertical = 4.dp)
+    ) {
+        Text(
+            label,
+            Modifier.weight(1.0f),
+            style = MaterialTheme.typography.body2,
+            color = colors.onSecondary
+        )
+
+        Text(
+            config.currencySymbol,
+            color = colors.onSecondary,
+            modifier = Modifier.padding(end = 8.dp)
+        )
+
+        TextField(
+            value = state.value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .width(90.dp)
+                .defaultMinSize(
+                    minWidth = TextFieldDefaults.MinWidth,
+                    minHeight = 44.dp
+                ),
+            textStyle = LocalTextStyle.current.copy(
+                textAlign = TextAlign.End,
+                color = colors.onSecondary
+            )
+        )
+    }
 }
 
 @Composable

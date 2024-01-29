@@ -167,7 +167,11 @@ object URLs {
     fun getOpenSchedulerFlag(): HttpUrl {
         return "https://www.foxesscloud.com/op/v0/device/scheduler/get/flag"
             .toHttpUrl()
+    }
 
+    fun getOpenCurrentSchedule(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/scheduler/get"
+            .toHttpUrl()
     }
 }
 

@@ -25,6 +25,7 @@ import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.SetBatterySOCRequest
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
@@ -365,6 +366,17 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val type = object : TypeToken<NetworkResponse<GetSchedulerFlagResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<GetSchedulerFlagResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
+        val body = Gson().toJson(GetSchedulerFlagRequest(deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder().url(URLs.getOpenCurrentSchedule()).post(body).build()
+
+        val type = object : TypeToken<NetworkResponse<ScheduleResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<ScheduleResponse>> = fetch(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 

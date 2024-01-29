@@ -78,7 +78,8 @@ class AppContainer(private val context: Context) {
             dataCeiling = DataCeiling.fromInt(config.dataCeiling),
             totalYieldModel = TotalYieldModel.fromInt(config.totalYieldModel),
             showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage,
-            separateParameterGraphsByUnit = config.separateParameterGraphsByUnit
+            separateParameterGraphsByUnit = config.separateParameterGraphsByUnit,
+            currencySymbol = config.currencySymbol
         )
     )
 

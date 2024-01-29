@@ -107,6 +107,11 @@ class ScheduleSummaryView(
                 }
             }
 
+            Text(
+                stringResource(R.string.templates_not_yet_available),
+                color = colors.onSecondary
+            )
+
 //            SettingsColumnWithChild {
 //                SettingsTitleView(stringResource(R.string.templates))
 //

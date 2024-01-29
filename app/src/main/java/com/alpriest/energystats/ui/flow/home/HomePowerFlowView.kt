@@ -80,7 +80,8 @@ fun AppTheme.Companion.preview(
     dataCeiling: DataCeiling = DataCeiling.Mild,
     totalYieldModel: TotalYieldModel = TotalYieldModel.EnergyStats,
     showFinancialSummaryOnFlowPage: Boolean = true,
-    separateParameterGraphsByUnit: Boolean = true
+    separateParameterGraphsByUnit: Boolean = true,
+    currencySymbol: String = "£"
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -110,6 +111,7 @@ fun AppTheme.Companion.preview(
         dataCeiling = dataCeiling,
         totalYieldModel = totalYieldModel,
         showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage,
-        separateParameterGraphsByUnit = separateParameterGraphsByUnit
+        separateParameterGraphsByUnit = separateParameterGraphsByUnit,
+        currencySymbol = currencySymbol
     )
 }

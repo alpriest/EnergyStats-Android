@@ -53,6 +53,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         get() = config.currencySymbol
         set(value) {
             config.currencySymbol = value
+            themeStream.value = themeStream.value.copy(currencySymbol = currencySymbol)
         }
 
     override var gridImportUnitPrice: Double

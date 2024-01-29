@@ -69,9 +69,9 @@ fun NavGraphBuilder.debugGraph(
                 network.openapi_fetchDeviceList()
             })
         }
-        composable("deviceSettings") {
-            ResponseDebugView(networkStore, mapper = { networkStore.deviceSettingsGetResponse }, fetcher = null)
-        }
+//        composable("deviceSettings") {
+//            ResponseDebugView(networkStore, mapper = { networkStore.deviceSettingsGetResponse }, fetcher = null)
+//        }
 //        composable("dataLoggers") {
 //            ResponseDebugView(networkStore, mapper = { networkStore.dataLoggerListResponse }, fetcher = {
 //                network.fetchDataLoggers()

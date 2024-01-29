@@ -15,7 +15,10 @@ import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.SchedulePhaseResponse
+import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -118,6 +121,36 @@ class DemoFoxESSNetworking : FoxESSNetworking {
 
     override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
         return GetSchedulerFlagResponse(true, true)
+    }
+
+    override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
+        return ScheduleResponse(
+            1,
+            listOf(
+                SchedulePhaseResponse(
+                    enable = 1,
+                    startHour = 15,
+                    startMinute = 0,
+                    endHour = 17,
+                    endMinute = 0,
+                    workMode = WorkMode.ForceCharge,
+                    minSocOnGrid = 20,
+                    fdSoc = 100,
+                    fdPwr = 0
+                ),
+                SchedulePhaseResponse(
+                    enable = 1,
+                    startHour = 7,
+                    startMinute = 0,
+                    endHour = 18,
+                    endMinute = 30,
+                    workMode = WorkMode.ForceDischarge,
+                    minSocOnGrid = 20,
+                    fdSoc = 20,
+                    fdPwr = 3500
+                )
+            )
+        )
     }
 
     override suspend fun fetchErrorMessages() {}

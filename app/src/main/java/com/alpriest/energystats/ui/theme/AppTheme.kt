@@ -40,7 +40,8 @@ data class AppTheme(
     val dataCeiling: DataCeiling,
     val totalYieldModel: TotalYieldModel,
     val showFinancialSummaryOnFlowPage: Boolean,
-    val separateParameterGraphsByUnit: Boolean
+    val separateParameterGraphsByUnit: Boolean,
+    val currencySymbol: String
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

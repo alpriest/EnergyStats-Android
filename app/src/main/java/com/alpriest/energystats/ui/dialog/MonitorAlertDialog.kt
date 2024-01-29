@@ -15,8 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.InvalidConfigurationException
-import com.alpriest.energystats.services.MissingDataException
+import com.alpriest.energystats.services.BadCredentialsException
 import com.alpriest.energystats.services.UnacceptableException
 import com.alpriest.energystats.ui.helpers.UnsupportedErrorView
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
@@ -35,6 +34,8 @@ fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding) {
             UnsupportedErrorView(onDismiss = {
                 viewModel.resetDialogMessage()
             })
+        } else if (it.ex is BadCredentialsException) {
+            UpgradeRequiredView()
         } else {
             AlertDialog(message = it.message ?: "Unknown error", onDismiss = {
                 viewModel.resetDialogMessage()

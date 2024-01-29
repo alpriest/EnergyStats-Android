@@ -14,6 +14,7 @@ import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseData
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.UnitData
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -95,14 +96,14 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
         return network.openapi_fetchSchedulerFlag(deviceSN)
     }
 
+    override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
+        return network.openapi_fetchCurrentSchedule(deviceSN)
+    }
+
     override suspend fun fetchErrorMessages() {
         network.fetchErrorMessages()
     }
 
-//    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
-//        return network.fetchSchedulerFlag(deviceSN)
-//    }
-//
 //    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
 //        return network.fetchScheduleModes(deviceID)
 //    }

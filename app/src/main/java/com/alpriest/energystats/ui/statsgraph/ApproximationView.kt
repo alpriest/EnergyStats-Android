@@ -156,7 +156,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                         Text(
-                            it.exportIncome.formattedAmount(),
+                            it.exportIncome.formattedAmount(appTheme.currencySymbol),
                             fontSize = fontSize
                         )
                     }
@@ -171,7 +171,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                         Text(
-                            it.solarSaving.formattedAmount(),
+                            it.solarSaving.formattedAmount(appTheme.currencySymbol),
                             fontSize = fontSize
                         )
                     }
@@ -186,7 +186,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                             fontSize = fontSize
                         )
                         Text(
-                            it.total.formattedAmount(),
+                            it.total.formattedAmount(appTheme.currencySymbol),
                             fontSize = fontSize
                         )
                     }

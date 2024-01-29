@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,11 +41,12 @@ fun SubLabelledView(value: String, label: String, alignment: Alignment.Horizonta
 @Composable
 fun EarningsView(themeStream: MutableStateFlow<AppTheme>, viewModel: EarningsViewModel) {
     val context = LocalContext.current
+    val appTheme = themeStream.collectAsState().value
 
     Row {
         viewModel.amounts().forEach {
             SubLabelledView(
-                value = it.formattedAmount(),
+                value = it.formattedAmount(appTheme.currencySymbol),
                 label = it.title(context),
                 alignment = Alignment.CenterHorizontally
             )
@@ -61,9 +63,9 @@ enum class FinanceAmountType {
     TOTAL
 }
 
-class FinanceAmount(val type: FinanceAmountType, val amount: Double, private val currencyCode: String, val currencySymbol: String) {
-    fun formattedAmount(): String {
-        return amount.roundedToString(2, currencyCode, currencySymbol)
+class FinanceAmount(val type: FinanceAmountType, val amount: Double) {
+    fun formattedAmount(currencySymbol: String): String {
+        return amount.roundedToString(2, currencySymbol)
     }
 
     fun title(context: Context): String {
@@ -88,9 +90,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
     init {
         exportIncome = FinanceAmount(
             type = FinanceAmountType.EXPORTED,
-            amount = totalsViewModel.feedIn * configManager.feedInUnitPrice,
-            currencySymbol = configManager.currencySymbol,
-            currencyCode = configManager.currencyCode
+            amount = totalsViewModel.feedIn * configManager.feedInUnitPrice
         )
         exportBreakdown = CalculationBreakdown(
             formula = "gridExport * feedInUnitPrice",
@@ -99,9 +99,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
 
         solarSaving = FinanceAmount(
             type = FinanceAmountType.AVOIDED,
-            amount = (totalsViewModel.solar - totalsViewModel.feedIn) * configManager.gridImportUnitPrice,
-            currencySymbol = configManager.currencySymbol,
-            currencyCode = configManager.currencyCode
+            amount = (totalsViewModel.solar - totalsViewModel.feedIn) * configManager.gridImportUnitPrice
         )
         solarSavingBreakdown = CalculationBreakdown(
             formula = "(solar - gridExport) * gridImportUnitPrice",
@@ -110,9 +108,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
 
         total = FinanceAmount(
             type = FinanceAmountType.TOTAL,
-            amount = exportIncome.amount + solarSaving.amount,
-            currencySymbol = configManager.currencySymbol,
-            currencyCode = configManager.currencyCode
+            amount = exportIncome.amount + solarSaving.amount
         )
     }
 

@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.helpers
 
-import android.net.http.NetworkException
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

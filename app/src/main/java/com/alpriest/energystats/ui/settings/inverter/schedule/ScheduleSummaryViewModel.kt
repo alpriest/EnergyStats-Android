@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.SchedulePollcy
+import com.alpriest.energystats.models.SchedulePhaseResponse
 import com.alpriest.energystats.models.ScheduleTemplateSummaryResponse
-import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -21,6 +20,7 @@ import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 class ScheduleSummaryViewModelFactory(
     private val network: FoxESSNetworking,
@@ -39,11 +39,11 @@ class ScheduleSummaryViewModel(
     val navController: NavController
 ) : ViewModel(), AlertDialogMessageProviding {
     val scheduleStream = MutableStateFlow<Schedule?>(null)
-    private var modes = EditScheduleStore.shared.modes
     val supportedErrorStream = MutableStateFlow<String?>(null)
     val templateStream = MutableStateFlow<List<ScheduleTemplateSummary>>(listOf())
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    var hasPreloaded = false
 
     private suspend fun preload(context: Context) {
         runCatching {
@@ -63,9 +63,6 @@ class ScheduleSummaryViewModel(
                         )
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } else {
-                        // TODO
-//                        EditScheduleStore.shared.modes = network.fetchScheduleModes(deviceID)
-                        modes = EditScheduleStore.shared.modes
                         uiState.value = UiLoadState(LoadState.Inactive)
                     }
                 } catch (ex: Exception) {
@@ -82,8 +79,9 @@ class ScheduleSummaryViewModel(
             return
         }
 
-        if (modes.isEmpty()) {
+        if (!hasPreloaded) {
             preload(context)
+            hasPreloaded = true
 
             if (supportedErrorStream.value != null) {
                 return
@@ -96,16 +94,14 @@ class ScheduleSummaryViewModel(
 
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
-                // TODO
-//                try {
-//                    val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-//                    templateStream.value = scheduleResponse.data.mapNotNull { it.toScheduleTemplate() }
-//                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.pollcy.mapNotNull { it.toSchedulePhase(modes) }, description = null)
-//
-//                    uiState.value = UiLoadState(LoadState.Inactive)
-//                } catch (ex: Exception) {
-//                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-//                }
+                try {
+                    val scheduleResponse = network.openapi_fetchCurrentSchedule(deviceSN)
+                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() }, description = null)
+
+                    uiState.value = UiLoadState(LoadState.Inactive)
+                } catch (ex: Exception) {
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                }
             }
         }
     }
@@ -156,27 +152,16 @@ class ScheduleSummaryViewModel(
     }
 }
 
-//internal fun SchedulePollcy.toSchedulePhase(modes: List<WorkMode>): SchedulePhase? {
-//    return SchedulePhase.create(
-//        start = Time(hour = startH, minute = startM),
-//        end = Time(hour = endH, minute = endM),
-//        mode = modes.first { it.key == workMode },
-//        forceDischargePower = fdpwr ?: 0,
-//        forceDischargeSOC = fdsoc,
-//        batterySOC = minsocongrid,
-//        color = Color.scheduleColor(workMode)
-//    )
-//}
+internal fun SchedulePhaseResponse.toSchedulePhase(): SchedulePhase? {
+    if (workMode == WorkMode.Invalid) { return null }
 
-internal fun ScheduleTemplateSummaryResponse.toScheduleTemplate(): ScheduleTemplateSummary? {
-    if (templateID.isEmpty()) {
-        return null
-    }
-
-    return ScheduleTemplateSummary(
-        templateID,
-        templateName,
-        enable
+    return SchedulePhase.create(
+        start = Time(hour = startHour, minute = startMinute),
+        end = Time(hour = endHour, minute = endMinute),
+        mode = workMode,
+        forceDischargePower = fdPwr ?: 0,
+        forceDischargeSOC = fdSoc,
+        batterySOC = minSocOnGrid,
+        color = Color.scheduleColor(workMode)
     )
 }
-

@@ -11,6 +11,7 @@ import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import java.lang.Math.abs
 import java.util.Date
@@ -32,7 +33,7 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
-        //TODO CACHE
+        //TODO CACHE BASED ON VARIABLES AND TIME
         return network.openapi_fetchRealData(deviceSN, variables)
     }
 
@@ -66,6 +67,10 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 
     override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
         return network.openapi_fetchSchedulerFlag(deviceSN)
+    }
+
+    override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
+        return network.openapi_fetchCurrentSchedule(deviceSN)
     }
 
     override suspend fun fetchErrorMessages() {

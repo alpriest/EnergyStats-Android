@@ -104,14 +104,32 @@ class SummaryView(
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 
         approximationsViewModel.financialModel?.let { energyStatsModel ->
-            moneySummaryRow(title = stringResource(R.string.export_income), amount = energyStatsModel.exportIncome, textStyle = MaterialTheme.typography.h2)
-            moneySummaryRow(title = stringResource(R.string.grid_import_avoided), amount = energyStatsModel.solarSaving, textStyle = MaterialTheme.typography.h2)
-            moneySummaryRow(title = stringResource(R.string.total_benefit), amount = energyStatsModel.total, textStyle = MaterialTheme.typography.h2)
+            moneySummaryRow(
+                title = stringResource(R.string.export_income),
+                amount = energyStatsModel.exportIncome,
+                textStyle = MaterialTheme.typography.h2,
+                currencySymbol = appTheme.currencySymbol
+            )
+            moneySummaryRow(
+                title = stringResource(R.string.grid_import_avoided),
+                amount = energyStatsModel.solarSaving,
+                textStyle = MaterialTheme.typography.h2,
+                currencySymbol = appTheme.currencySymbol
+            )
+            moneySummaryRow(
+                title = stringResource(R.string.total_benefit),
+                amount = energyStatsModel.total,
+                textStyle = MaterialTheme.typography.h2,
+                currencySymbol = appTheme.currencySymbol
+            )
         }
 
         Text(
             modifier = Modifier.padding(top = 8.dp),
-            text = "Includes data from $oldestDataDate to Present. Figures are approximate and assume the buy/sell energy prices remained constant throughout the period of ownership.",
+            text = stringResource(
+                R.string.includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership,
+                oldestDataDate
+            ),
             color = DimmedTextColor,
             fontSize = appTheme.smallFontSize()
         )
@@ -136,7 +154,7 @@ class SummaryView(
     }
 
     @Composable
-    private fun moneySummaryRow(title: String, amount: FinanceAmount, textStyle: TextStyle, modifier: Modifier = Modifier) {
+    private fun moneySummaryRow(title: String, amount: FinanceAmount, textStyle: TextStyle, modifier: Modifier = Modifier, currencySymbol: String) {
         Row {
             Text(
                 title,
@@ -144,7 +162,7 @@ class SummaryView(
                 style = textStyle
             )
             Text(
-                amount.formattedAmount(),
+                amount.formattedAmount(currencySymbol),
                 modifier = modifier,
                 style = textStyle
             )
