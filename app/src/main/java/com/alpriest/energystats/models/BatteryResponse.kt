@@ -34,6 +34,11 @@ data class GetSchedulerFlagResponse(
     val support: Boolean
 )
 
+data class SetSchedulerFlagRequest(
+    val deviceSN: String,
+    val enable: Int
+)
+
 data class ScheduleResponse(
     val enable: Int,
     val groups: List<SchedulePhaseResponse>

@@ -127,6 +127,14 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
+    override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
+        if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+        } else {
+            return network.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+        }
+    }
+
     override suspend fun fetchErrorMessages() {
         if (isDemoUser()) {
             demoFoxESSNetworking.fetchErrorMessages()

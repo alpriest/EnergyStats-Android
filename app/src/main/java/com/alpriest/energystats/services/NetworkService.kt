@@ -27,6 +27,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.SetBatterySOCRequest
+import com.alpriest.energystats.models.SetSchedulerFlagRequest
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -49,6 +50,11 @@ import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+
+private val Boolean.intValue: Int
+    get() {
+        return if (this) 1 else 0
+    }
 
 interface NetworkResponseInterface {
     val errno: Int
@@ -311,8 +317,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
             .url(URLs.setOpenBatterySOC())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
+        executeWithoutResponse(request)
     }
 
     private suspend fun openapi_getDeviceDetail(deviceSN: String): DeviceDetailResponse {
@@ -378,6 +383,23 @@ class NetworkService(private val credentials: CredentialStore, private val store
         val type = object : TypeToken<NetworkResponse<ScheduleResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<ScheduleResponse>> = fetch(request, type)
         return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
+        val body = Gson().toJson(SetSchedulerFlagRequest(deviceSN, schedulerEnabled.intValue))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.setOpenSchedulerFlag())
+            .build()
+
+        executeWithoutResponse(request)
+    }
+
+    private suspend fun executeWithoutResponse(request: Request) {
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        fetch<NetworkResponse<String>>(request, type)
     }
 
     private suspend fun <T : NetworkResponseInterface> fetch(

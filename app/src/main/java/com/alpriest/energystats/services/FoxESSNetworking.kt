@@ -40,6 +40,7 @@ interface FoxESSNetworking {
     suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime>
     suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse
     suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse
+    suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

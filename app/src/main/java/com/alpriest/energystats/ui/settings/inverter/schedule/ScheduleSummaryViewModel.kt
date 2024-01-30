@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.SchedulePhaseResponse
-import com.alpriest.energystats.models.ScheduleTemplateSummaryResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -20,7 +19,6 @@ import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlin.math.min
 
 class ScheduleSummaryViewModelFactory(
     private val network: FoxESSNetworking,
@@ -43,7 +41,8 @@ class ScheduleSummaryViewModel(
     val templateStream = MutableStateFlow<List<ScheduleTemplateSummary>>(listOf())
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
-    var hasPreloaded = false
+    private var hasPreloaded = false
+    val schedulerEnabledStream = MutableStateFlow(false)
 
     private suspend fun preload(context: Context) {
         runCatching {
@@ -52,7 +51,6 @@ class ScheduleSummaryViewModel(
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {
-
                     val flags = network.openapi_fetchSchedulerFlag(deviceSN)
 
                     if (!flags.support) {
@@ -97,6 +95,7 @@ class ScheduleSummaryViewModel(
                 try {
                     val scheduleResponse = network.openapi_fetchCurrentSchedule(deviceSN)
                     scheduleStream.value = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() }, description = null)
+                    schedulerEnabledStream.value = scheduleResponse.enable == 1
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
@@ -126,7 +125,7 @@ class ScheduleSummaryViewModel(
         navController.navigate(SettingsScreen.EditSchedule.name)
     }
 
-    fun activate(scheduleTemplate: ScheduleTemplateSummary, context: Context) {
+    fun setSchedulerFlag(context: Context, schedulerEnabled: Boolean) {
         if (uiState.value.state != LoadState.Inactive) {
             return
         }
@@ -136,16 +135,19 @@ class ScheduleSummaryViewModel(
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
 
-                    uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
+                    if (schedulerEnabled) {
+                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
+                    } else {
+                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.deactivating)))
+                    }
 
-                    // TODO
-//                    try {
-//                        network.enableScheduleTemplate(deviceSN, scheduleTemplate.id)
-//                        uiState.value = UiLoadState(LoadState.Inactive)
-//                        load(context)
-//                    } catch (ex: Exception) {
-//                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-//                    }
+                    try {
+                        network.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+                        schedulerEnabledStream.value = schedulerEnabled
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                    } catch (ex: Exception) {
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                    }
                 }
             }
         }

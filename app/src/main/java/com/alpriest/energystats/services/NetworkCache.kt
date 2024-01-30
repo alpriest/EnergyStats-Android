@@ -100,6 +100,10 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
         return network.openapi_fetchCurrentSchedule(deviceSN)
     }
 
+    override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
+        network.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+    }
+
     override suspend fun fetchErrorMessages() {
         network.fetchErrorMessages()
     }

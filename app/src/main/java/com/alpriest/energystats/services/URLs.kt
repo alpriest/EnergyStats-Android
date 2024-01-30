@@ -173,6 +173,11 @@ object URLs {
         return "https://www.foxesscloud.com/op/v0/device/scheduler/get"
             .toHttpUrl()
     }
+
+    fun setOpenSchedulerFlag(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/scheduler/set/flag"
+            .toHttpUrl()
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

@@ -153,6 +153,8 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         )
     }
 
+    override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {}
+
     override suspend fun fetchErrorMessages() {}
 
 //    override suspend fun createScheduleTemplate(name: String, description: String) {

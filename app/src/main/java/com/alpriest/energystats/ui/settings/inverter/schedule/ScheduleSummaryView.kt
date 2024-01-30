@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -33,6 +35,7 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -83,8 +86,20 @@ class ScheduleSummaryView(
     fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel) {
         val templates = viewModel.templateStream.collectAsState().value
         val context = LocalContext.current
+        val schedulerEnabled = viewModel.schedulerEnabledStream.collectAsState().value
+        val schedulerEnabledState = rememberSaveable { mutableStateOf(schedulerEnabled) }
 
         SettingsPage {
+            SettingsColumnWithChild {
+                SettingsCheckbox(
+                    title = stringResource(R.string.enable_scheduler),
+                    state = schedulerEnabledState,
+                    onUpdate = {
+                        viewModel.setSchedulerFlag(context, schedulerEnabledState.value)
+                    }
+                )
+            }
+
             SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
                 SettingsTitleView(stringResource(R.string.schedule))
                 Spacer(modifier = Modifier.height(16.dp))
@@ -181,7 +196,8 @@ fun ScheduleSummaryViewPreview() {
             network = DemoFoxESSNetworking(),
             navController = NavHostController(LocalContext.current),
             userManager = FakeUserManager()
-        ).Content(
+        ).Loaded(
+            Schedule.preview(),
             viewModel
         )
     }
