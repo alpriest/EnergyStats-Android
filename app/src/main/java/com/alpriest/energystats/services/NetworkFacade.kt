@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.delay
 import java.util.concurrent.ConcurrentHashMap
@@ -132,6 +133,14 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
             demoFoxESSNetworking.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
         } else {
             return network.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+        }
+    }
+
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
+        if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_saveSchedule(deviceSN, schedule)
+        } else {
+            return network.openapi_saveSchedule(deviceSN, schedule)
         }
     }
 

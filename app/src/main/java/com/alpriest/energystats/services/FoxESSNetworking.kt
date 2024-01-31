@@ -1,6 +1,7 @@
 package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.*
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
 class InvalidConfigurationException(message: String?) : Exception(message)
@@ -41,6 +42,7 @@ interface FoxESSNetworking {
     suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse
     suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse
     suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean)
+    suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

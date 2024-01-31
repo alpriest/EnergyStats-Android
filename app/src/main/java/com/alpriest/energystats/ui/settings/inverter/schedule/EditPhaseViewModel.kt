@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class EditPhaseViewModelFactory(val navController: NavHostController) : ViewModelProvider.Factory {
@@ -40,7 +38,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
             workModeStream.value = originalPhase.mode
             forceDischargePowerStream.value = originalPhase.forceDischargePower.toString()
             forceDischargeSOCStream.value = originalPhase.forceDischargeSOC.toString()
-            minSOCStream.value = originalPhase.batterySOC.toString()
+            minSOCStream.value = originalPhase.minSocOnGrid.toString()
         }
     }
 

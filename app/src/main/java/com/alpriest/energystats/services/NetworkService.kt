@@ -27,9 +27,11 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.SetBatterySOCRequest
+import com.alpriest.energystats.models.SetCurrentScheduleRequest
 import com.alpriest.energystats.models.SetSchedulerFlagRequest
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -387,6 +389,18 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
     override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
         val body = Gson().toJson(SetSchedulerFlagRequest(deviceSN, schedulerEnabled.intValue))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.setOpenSchedulerFlag())
+            .build()
+
+        executeWithoutResponse(request)
+    }
+
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
+        val body = Gson().toJson(SetCurrentScheduleRequest(deviceSN, schedule.phases.map { it.toPhaseResponse() }))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()

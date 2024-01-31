@@ -18,6 +18,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.SchedulePhaseResponse
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
@@ -154,6 +155,7 @@ class DemoFoxESSNetworking : FoxESSNetworking {
     }
 
     override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {}
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {}
 
     override suspend fun fetchErrorMessages() {}
 

@@ -22,7 +22,7 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifie
     val extra = when (phase.mode) {
         WorkMode.ForceDischarge -> " down to ${phase.forceDischargeSOC}% at ${phase.forceDischargePower}W"
         WorkMode.ForceCharge -> ""
-        WorkMode.SelfUse -> " with ${phase.batterySOC}% min SOC"
+        WorkMode.SelfUse -> " with ${phase.minSocOnGrid}% min SOC"
         else -> ""
     }
 

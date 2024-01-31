@@ -18,6 +18,7 @@ import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.UnitData
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.settings.DataCeiling
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -102,6 +103,10 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 
     override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
         network.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+    }
+
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
+        network.openapi_saveSchedule(deviceSN, schedule)
     }
 
     override suspend fun fetchErrorMessages() {

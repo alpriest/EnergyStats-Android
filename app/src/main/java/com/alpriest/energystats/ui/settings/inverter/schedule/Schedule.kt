@@ -2,13 +2,16 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.SchedulePollcy
-import com.alpriest.energystats.models.SchedulerModeResponse
+import com.alpriest.energystats.models.SchedulePhaseResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.alpriest.energystats.ui.theme.PowerFlowPositive
-import java.time.LocalDateTime
 import java.util.UUID
+
+private val Boolean.intValue: Int
+    get() {
+        return if (this) 1 else 0
+    }
 
 data class Schedule(
     val name: String,
@@ -55,7 +58,7 @@ data class SchedulePhase(
     val mode: WorkMode,
     val forceDischargePower: Int,
     val forceDischargeSOC: Int,
-    val batterySOC: Int,
+    val minSocOnGrid: Int,
     val color: Color
 ) {
     constructor(
@@ -64,9 +67,9 @@ data class SchedulePhase(
         mode: WorkMode,
         forceDischargePower: Int,
         forceDischargeSOC: Int,
-        batterySOC: Int,
+        minSocOnGrid: Int,
         color: Color
-    ): this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargeSOC, batterySOC, color)
+    ) : this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargeSOC, minSocOnGrid, color)
 
     companion object {
         fun create(
@@ -133,7 +136,21 @@ data class SchedulePhase(
     }
 
     fun isValid(): Boolean {
-        return batterySOC <= forceDischargeSOC && end > start
+        return minSocOnGrid <= forceDischargeSOC && end > start
+    }
+
+    fun toPhaseResponse(): SchedulePhaseResponse {
+        return SchedulePhaseResponse(
+            enable = true.intValue,
+            startHour = start.hour,
+            startMinute = start.minute,
+            endHour = end.hour,
+            endMinute = end.minute,
+            workMode = mode,
+            minSocOnGrid = minSocOnGrid,
+            fdSoc = forceDischargeSOC,
+            fdPwr = forceDischargePower
+        )
     }
 }
 

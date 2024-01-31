@@ -55,3 +55,8 @@ data class SchedulePhaseResponse(
     val fdSoc: Int,
     val fdPwr: Int?
 )
+
+data class SetCurrentScheduleRequest(
+    val deviceSN: String,
+    val groups: List<SchedulePhaseResponse>
+)

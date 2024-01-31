@@ -79,7 +79,7 @@ class SchedulePhaseHelper {
                 mode = mode,
                 forceDischargePower = 0,
                 forceDischargeSOC = soc,
-                batterySOC = soc,
+                minSocOnGrid = soc,
                 color = Color.scheduleColor(mode)
             )
         }

@@ -49,10 +49,9 @@ class EditScheduleViewModel(
         }
 
         runCatching {
-            uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
+            uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
             try {
-                // TODO
-//                network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
+                network.openapi_saveSchedule(deviceSN = deviceSN, schedule = schedule)
 
                 shouldPopNavOnDismissal = true
                 alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.inverter_charge_schedule_settings_saved))
