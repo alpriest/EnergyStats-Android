@@ -67,34 +67,34 @@ class ScheduleTemplateListViewModel(
     }
 
     fun edit(templateSummary: ScheduleTemplateSummary, context: Context) {
-        if (uiState.value.state != LoadState.Inactive) {
-            return
-        }
-
-        viewModelScope.launch {
-            config.currentDevice.value?.let { device ->
-                val deviceSN = device.deviceSN
-
-                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
-
-                try {
-                    // TODO
-//                    val template = network.fetchScheduleTemplate(deviceSN, templateSummary.id)
-                    val modes = EditScheduleStore.shared.modes
-
-//                    EditScheduleStore.shared.scheduleStream.value = Schedule(
-//                        name = template.templateName,
-//                        phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
-//                        templateID = templateSummary.id,
-//                        description = template.content
-//                    )
-                    navController.navigate(SettingsScreen.EditTemplate.name)
-
-                    uiState.value = UiLoadState(LoadState.Inactive)
-                } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-                }
-            }
-        }
+//        if (uiState.value.state != LoadState.Inactive) {
+//            return
+//        }
+//
+//        viewModelScope.launch {
+//            config.currentDevice.value?.let { device ->
+//                val deviceSN = device.deviceSN
+//
+//                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+//
+//                try {
+//                    // TODO
+////                    val template = network.fetchScheduleTemplate(deviceSN, templateSummary.id)
+//                    val modes = EditScheduleStore.shared.modes
+//
+////                    EditScheduleStore.shared.scheduleStream.value = Schedule(
+////                        name = template.templateName,
+////                        phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
+////                        templateID = templateSummary.id,
+////                        description = template.content
+////                    )
+//                    navController.navigate(SettingsScreen.EditTemplate.name)
+//
+//                    uiState.value = UiLoadState(LoadState.Inactive)
+//                } catch (ex: Exception) {
+//                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+//                }
+//            }
+//        }
     }
 }

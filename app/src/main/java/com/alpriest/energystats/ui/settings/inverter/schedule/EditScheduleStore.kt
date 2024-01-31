@@ -5,8 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class EditScheduleStore(
     var scheduleStream: MutableStateFlow<Schedule?> = MutableStateFlow(null),
     var phaseId: String? = null,
-    var allowDeletion: Boolean = false,
-    var modes: List<WorkMode> = WorkMode.values().asList()
+    var allowDeletion: Boolean = false
 ) {
     fun reset() {
         scheduleStream.value = null

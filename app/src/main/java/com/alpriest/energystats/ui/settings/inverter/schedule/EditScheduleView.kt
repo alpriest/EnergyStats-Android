@@ -9,6 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,6 +30,7 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -61,7 +64,6 @@ class EditScheduleView(
 @Composable
 fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController) {
     val context = LocalContext.current
-    val allowDeletion = viewModel.allowDeletionStream.collectAsState().value
 
     ContentWithBottomButtons(
         navController = navController,
@@ -78,15 +80,15 @@ fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: 
                         Text(stringResource(R.string.autofill_gaps))
                     }
 
-                    if (allowDeletion) {
-                        Button(onClick = { viewModel.delete(context) }) {
-                            Text(stringResource(R.string.delete_schedule))
-                        }
-                    }
+//                    if (allowDeletion) {
+//                        Button(onClick = { viewModel.delete(context) }) {
+//                            Text(stringResource(R.string.delete_schedule))
+//                        }
+//                    }
                 }
             }
         },
-        labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.activate))
+        labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save))
     )
 }
 

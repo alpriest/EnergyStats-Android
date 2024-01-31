@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -39,12 +38,11 @@ class EditTemplateViewModel(
     val scheduleStream = EditScheduleStore.shared.scheduleStream
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    private var modes: List<WorkMode> = listOf()
+    private var modes = WorkMode.values()
     private var templateID: String = ""
     private var shouldPopNavOnDismissal = false
 
     fun load() {
-        modes = EditScheduleStore.shared.modes
         templateID = EditScheduleStore.shared.scheduleStream.value?.templateID ?: return
     }
 
