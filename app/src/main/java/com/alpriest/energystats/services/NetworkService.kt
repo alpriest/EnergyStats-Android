@@ -405,7 +405,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
         val request = Request.Builder()
             .post(body)
-            .url(URLs.setOpenSchedulerFlag())
+            .url(URLs.setOpenCurrentSchedule())
             .build()
 
         executeWithoutResponse(request)
