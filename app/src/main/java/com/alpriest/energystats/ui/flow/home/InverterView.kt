@@ -51,6 +51,9 @@ class InverterViewModel(
     val deviceStationName: String?
         get() = configManager.currentDevice.value?.stationName
 
+    val deviceTypeName: String?
+        get() = configManager.currentDevice.value?.deviceType
+
     val deviceDisplayName: String
         get() = configManager.currentDevice.value?.deviceDisplayName ?: "Re-login to update"
     
@@ -167,6 +170,11 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
         } else {
             if (appTheme.showInverterPlantNameOnPowerflow) {
                 OptionalView(viewModel.deviceStationName) {
+                    Text(it)
+                }
+            }
+            if (appTheme.showInverterTypeNameOnPowerflow) {
+                OptionalView(viewModel.deviceTypeName) {
                     Text(it)
                 }
             }
