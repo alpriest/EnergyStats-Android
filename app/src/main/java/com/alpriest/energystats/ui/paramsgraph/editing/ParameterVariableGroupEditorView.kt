@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -129,7 +130,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
 fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorViewModel, navController: NavHostController) {
     val variables = viewModel.variables.collectAsState().value
 
-    ContentWithBottomButtons(navController = navController, onSave = {
+    ContentWithBottomButtonPair(navController = navController, onSave = {
         viewModel.save()
         navController.popBackStack()
     }, { modifier ->

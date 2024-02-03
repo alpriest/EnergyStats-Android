@@ -171,8 +171,9 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
             themeStream.value = themeStream.value.copy(useLargeDisplay = useLargeDisplay)
         }
 
-    override fun logout() {
-        config.clear()
+    override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
+        config.clearDisplaySettings()
+        config.clearDeviceSettings()
     }
 
     override var showUsableBatteryOnly: Boolean

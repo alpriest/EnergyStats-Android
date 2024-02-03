@@ -45,5 +45,6 @@ interface ConfigInterface {
     var totalYieldModel: Int
     var showFinancialSummaryOnFlowPage: Boolean
 
-    fun clear()
+    fun clearDisplaySettings()
+    fun clearDeviceSettings()
 }

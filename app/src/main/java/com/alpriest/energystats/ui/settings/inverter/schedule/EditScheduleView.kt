@@ -29,6 +29,7 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
@@ -47,7 +48,7 @@ class EditScheduleView(
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
             viewModel.load()
@@ -65,7 +66,7 @@ class EditScheduleView(
 fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController) {
     val context = LocalContext.current
 
-    ContentWithBottomButtons(
+    ContentWithBottomButtonPair(
         navController = navController,
         onSave = { viewModel.saveSchedule(context) },
         { modifier ->

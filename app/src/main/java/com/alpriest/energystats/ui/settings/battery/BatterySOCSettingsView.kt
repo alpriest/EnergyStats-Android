@@ -36,6 +36,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -53,7 +54,7 @@ class BatterySOCSettings(
         val loadState = viewModel.uiState.collectAsState().value.state
         val context = LocalContext.current
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
             viewModel.load(context)
@@ -63,7 +64,7 @@ class BatterySOCSettings(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = {userManager.logout()  })
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save(context) }, { modifier ->
+                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
                     SettingsPage(modifier) {
                         Column {
                             Row(

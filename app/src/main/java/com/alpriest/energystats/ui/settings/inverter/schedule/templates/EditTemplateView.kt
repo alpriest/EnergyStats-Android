@@ -36,7 +36,7 @@ class EditTemplateView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val context = LocalContext.current
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
             viewModel.load()

@@ -54,8 +54,7 @@ fun UnsupportedErrorView(onDismiss: () -> Unit) {
     }
 
     val context = LocalContext.current
-    val windowManager =
-        remember { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
+    val windowManager = remember { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
 
     val metrics = DisplayMetrics().apply {
         windowManager.defaultDisplay.getRealMetrics(this)

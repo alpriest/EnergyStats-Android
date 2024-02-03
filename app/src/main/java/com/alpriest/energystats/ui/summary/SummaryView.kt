@@ -26,12 +26,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.flow.home.preview
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
@@ -43,6 +45,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class SummaryView(
     private val configManager: ConfigManaging,
+    private val userManager: UserManaging,
     private val network: FoxESSNetworking,
     private val solarForecastProvider: () -> SolarForecasting
 ) {
@@ -57,7 +60,7 @@ class SummaryView(
         val oldestDataDate = viewModel.oldestDataDate.collectAsState().value
         var isLoading by remember { mutableStateOf(false) }
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
             isLoading = true
@@ -176,6 +179,7 @@ fun SummaryViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         SummaryView(
             FakeConfigManager(),
+            FakeUserManager(),
             DemoFoxESSNetworking(),
             { DemoSolarForecasting() }
         ).Content(themeStream = MutableStateFlow(AppTheme.preview().copy(showGridTotals = true)))

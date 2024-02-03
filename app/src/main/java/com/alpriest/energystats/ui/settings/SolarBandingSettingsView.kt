@@ -108,7 +108,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
         mutatedAppTheme.value = makeAppTheme(threshold1.value, threshold2.value, threshold3.value)
     }
 
-    ContentWithBottomButtons(navController, onSave = {
+    ContentWithBottomButtonPair(navController, onSave = {
         configManager.solarRangeDefinitions = SolarRangeDefinitions(
             threshold1 = threshold1.floatValue.toDouble(),
             threshold2 = threshold2.floatValue.toDouble(),

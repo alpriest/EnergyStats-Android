@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
@@ -66,6 +67,7 @@ class NavigableParametersGraphTabViewModelFactory(
 
 class NavigableParametersGraphTabView(
     val configManager: ConfigManaging,
+    val userManager: UserManaging,
     val network: FoxESSNetworking,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
@@ -82,7 +84,7 @@ class NavigableParametersGraphTabView(
             exitTransition = { ExitTransition.None }
         ) {
             composable(ParametersScreen.Graph.name) {
-                ParametersGraphTabView(network, configManager, onWriteTempFile, viewModel.graphVariablesStream, navController, filePathChooser).Content(themeStream = themeStream)
+                ParametersGraphTabView(network, configManager, userManager, onWriteTempFile, viewModel.graphVariablesStream, navController, filePathChooser).Content(themeStream = themeStream)
             }
 
             composable(ParametersScreen.ParameterChooser.name) {

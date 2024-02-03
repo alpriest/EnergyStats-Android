@@ -45,6 +45,7 @@ import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -73,6 +74,7 @@ class ParametersGraphTabViewModelFactory(
 class ParametersGraphTabView(
     private val network: FoxESSNetworking,
     private val configManager: ConfigManaging,
+    private val userManager: UserManaging,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>,
     private val navController: NavController,
@@ -92,7 +94,7 @@ class ParametersGraphTabView(
         val producers = viewModel.producers.collectAsState()
         val allChartColors = viewModel.chartColorsStream.collectAsState().value
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(viewModel.displayModeStream) {
             isLoading = true
@@ -140,10 +142,11 @@ class ParametersGraphTabView(
                                 ParameterGraphView(
                                     producer,
                                     chartColors = it,
-                                    viewModel = viewModel,
+                                    viewModel,
                                     themeStream,
                                     modifier = Modifier.padding(bottom = 24.dp),
-                                    showYAxisUnit = true
+                                    showYAxisUnit = true,
+                                    userManager
                                 )
                             }
                         }
@@ -158,7 +161,8 @@ class ParametersGraphTabView(
                             viewModel = viewModel,
                             themeStream,
                             modifier = Modifier.padding(bottom = 24.dp),
-                            showYAxisUnit = false
+                            showYAxisUnit = false,
+                            userManager
                         )
                     }
 

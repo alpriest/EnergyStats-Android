@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -45,7 +44,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -66,7 +65,7 @@ class ParameterGraphVariableChooserView(
         val groups = configManager.themeStream.collectAsState().value.parameterGroups
         val selectedGroupId = viewModel.selectedIdState.collectAsState().value
 
-        ContentWithBottomButtons(navController, onSave = {
+        ContentWithBottomButtonPair(navController, onSave = {
             viewModel.apply()
             navController.popBackStack()
         }, footer = {

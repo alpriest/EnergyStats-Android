@@ -13,7 +13,7 @@ class FakeUserManager : UserManaging {
     override suspend fun login(apiKey: String) {
     }
 
-    override fun logout() {
+    override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
     }
 
     override suspend fun loginDemo() {

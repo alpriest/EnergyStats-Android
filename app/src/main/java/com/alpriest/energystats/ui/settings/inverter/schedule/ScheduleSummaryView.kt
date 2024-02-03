@@ -55,7 +55,7 @@ class ScheduleSummaryView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val supportedError = viewModel.supportedErrorStream.collectAsState().value
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
             viewModel.load(context)

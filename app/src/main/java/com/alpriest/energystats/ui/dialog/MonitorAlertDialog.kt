@@ -18,6 +18,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.services.BadCredentialsException
 import com.alpriest.energystats.services.UnacceptableException
 import com.alpriest.energystats.ui.helpers.UnsupportedErrorView
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 
 data class MonitorAlertDialogData(
@@ -26,20 +27,26 @@ data class MonitorAlertDialogData(
 )
 
 @Composable
-fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding) {
+fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding, userManager: UserManaging) {
     val message = viewModel.alertDialogMessage.collectAsState().value
 
     message?.let {
-        if (it.ex is UnacceptableException) {
-            UnsupportedErrorView(onDismiss = {
-                viewModel.resetDialogMessage()
-            })
-        } else if (it.ex is BadCredentialsException) {
-            UpgradeRequiredView()
-        } else {
-            AlertDialog(message = it.message ?: "Unknown error", onDismiss = {
-                viewModel.resetDialogMessage()
-            })
+        when (it.ex) {
+            is UnacceptableException -> {
+                UnsupportedErrorView(onDismiss = {
+                    viewModel.resetDialogMessage()
+                })
+            }
+
+            is BadCredentialsException -> {
+                UpgradeRequiredView(userManager)
+            }
+
+            else -> {
+                AlertDialog(message = it.message ?: "Unknown error", onDismiss = {
+                    viewModel.resetDialogMessage()
+                })
+            }
         }
     }
 }

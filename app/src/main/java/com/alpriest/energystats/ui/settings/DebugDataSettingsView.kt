@@ -196,9 +196,7 @@ fun prettyPrintJson(jsonString: String): String {
     return gson.toJson(jsonElement)
 }
 
-@Preview(
-    showBackground = true, heightDp = 640
-)
+@Preview(showBackground = true, heightDp = 640)
 @Composable
 fun DataSettingsViewPreview() {
     val networkStore = InMemoryLoggingNetworkStore()

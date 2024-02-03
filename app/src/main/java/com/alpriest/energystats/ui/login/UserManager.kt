@@ -26,7 +26,7 @@ interface UserManaging {
         apiKey: String
     )
 
-    fun logout()
+    fun logout(clearDisplaySettings: Boolean = true, clearDeviceSettings: Boolean = true)
     suspend fun loginDemo()
 }
 
@@ -75,9 +75,9 @@ class UserManager(
         }
     }
 
-    override fun logout() {
+    override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
         store.logout()
-        configManager.logout()
+        configManager.logout(clearDisplaySettings, clearDeviceSettings)
         _loggedInState.value = LoginStateHolder(LoggedOut())
     }
 }

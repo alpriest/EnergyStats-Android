@@ -15,7 +15,7 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface ConfigManaging {
-    fun logout()
+    fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean)
     suspend fun fetchDevices()
     fun select(device: Device)
     val themeStream: MutableStateFlow<AppTheme>

@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import android.graphics.RectF
-import android.icu.text.Transliterator.Position
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.axis.axisGuidelineComponent
@@ -45,7 +45,8 @@ fun ParameterGraphView(
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     modifier: Modifier = Modifier,
-    showYAxisUnit: Boolean
+    showYAxisUnit: Boolean,
+    userManager: UserManaging
 ) {
     val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
         override fun onMarkerHidden(marker: Marker) {
@@ -60,7 +61,7 @@ fun ParameterGraphView(
     val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>() else DecimalFormatAxisValueFormatter("0.0")
 
-    MonitorAlertDialog(viewModel)
+    MonitorAlertDialog(viewModel, userManager)
 
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {

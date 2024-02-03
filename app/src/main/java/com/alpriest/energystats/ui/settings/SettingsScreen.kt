@@ -112,7 +112,7 @@ fun NavigableSettingsView(
             FAQView()
         }
         composable(SettingsScreen.SolcastSolarPrediction.name) {
-            SolcastSettingsView(navController, config, solarForecastingProvider).Content()
+            SolcastSettingsView(navController, config, userManager, solarForecastingProvider).Content()
         }
         composable(SettingsScreen.Summary.name) {
             ScheduleSummaryView(config, network, navController, userManager).Content()

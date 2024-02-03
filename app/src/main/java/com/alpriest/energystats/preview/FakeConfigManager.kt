@@ -103,7 +103,7 @@ class FakeConfigManager : ConfigManaging {
     )
     override val selectedDeviceSN: String? = "f3000_deviceid"
 
-    override fun logout() {
+    override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
     }
 
     override suspend fun fetchDevices() {

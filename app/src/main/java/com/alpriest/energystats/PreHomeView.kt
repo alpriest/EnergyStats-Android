@@ -39,7 +39,7 @@ class PreHomeViewModel(
 
 @Composable
 fun PreHomeView(appContainer: AppContainer, viewModel: PreHomeViewModel) {
-    MonitorAlertDialog(viewModel)
+    MonitorAlertDialog(viewModel, appContainer.userManager)
 
     LaunchedEffect(null) {
         viewModel.loadData()

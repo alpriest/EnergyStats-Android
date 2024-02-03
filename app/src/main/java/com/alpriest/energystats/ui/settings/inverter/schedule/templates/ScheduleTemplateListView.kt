@@ -71,7 +71,7 @@ class ScheduleTemplateListView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val templates = viewModel.templateStream.collectAsState().value
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
             viewModel.load(context)

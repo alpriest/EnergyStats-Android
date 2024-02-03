@@ -1,12 +1,10 @@
 package com.alpriest.energystats.ui.settings.battery
 
 import android.app.TimePickerDialog
-import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme.colors
@@ -39,10 +37,10 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -68,7 +66,7 @@ class BatteryChargeScheduleSettingsView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val context = LocalContext.current
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
             viewModel.load(context)
@@ -78,7 +76,7 @@ class BatteryChargeScheduleSettingsView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
             is LoadState.Inactive ->
-                ContentWithBottomButtons(navController, onSave = { viewModel.save(context) }, { modifier ->
+                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
                     SettingsPage(modifier) {
                         BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
                         BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))

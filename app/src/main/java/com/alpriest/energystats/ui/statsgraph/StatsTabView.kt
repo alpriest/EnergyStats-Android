@@ -30,9 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
@@ -58,7 +60,8 @@ sealed class StatsDisplayMode {
 fun StatsTabView(
     viewModel: StatsTabViewModel,
     filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppTheme>,
+    userManager: UserManaging
 ) {
     val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
@@ -66,7 +69,7 @@ fun StatsTabView(
     val graphShowing = viewModel.showingGraphStream.collectAsState().value
     val showingApproximations = remember { mutableStateOf(false) }
 
-    MonitorAlertDialog(viewModel)
+    MonitorAlertDialog(viewModel, userManager)
 
     LaunchedEffect(viewModel.displayModeStream) {
         isLoading = true
@@ -127,6 +130,7 @@ fun StatsGraphTabViewPreview() {
     StatsTabView(
         StatsTabViewModel(FakeConfigManager(), DemoFoxESSNetworking()) { _, _ -> null },
         { _, _ -> },
-        MutableStateFlow(AppTheme.preview())
+        MutableStateFlow(AppTheme.preview()),
+        FakeUserManager()
     )
 }

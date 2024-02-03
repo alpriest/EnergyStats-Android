@@ -42,6 +42,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.ui.settings.ButtonLabels
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.ErrorTextView
 
@@ -59,7 +60,7 @@ fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewMode
         viewModel.load(context)
     }
 
-    ContentWithBottomButtons(navController, onSave = { viewModel.save(context) }, { modifier ->
+    ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
         SettingsPage(modifier) {
             TimeAndWorkModeView(viewModel)
 

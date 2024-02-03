@@ -50,5 +50,6 @@ class FakeConfigStore(
     override var variables: List<Variable> = listOf()
 
 ) : ConfigInterface {
-    override fun clear() {}
+    override fun clearDisplaySettings() {}
+    override fun clearDeviceSettings() {}
 }

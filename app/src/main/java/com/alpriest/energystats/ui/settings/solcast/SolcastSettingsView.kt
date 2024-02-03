@@ -29,10 +29,13 @@ import coil.compose.AsyncImage
 import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.ClickableUrlText
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
@@ -45,6 +48,7 @@ import java.time.format.DateTimeFormatter
 class SolcastSettingsView(
     private val navController: NavController,
     private val configManager: ConfigManaging,
+    private val userManager: UserManaging,
     private val solarForecastingProvider: () -> SolarForecasting
 ) {
     @Composable
@@ -59,9 +63,9 @@ class SolcastSettingsView(
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val sites = viewModel.sitesStream.collectAsState().value
 
-        MonitorAlertDialog(viewModel)
+        MonitorAlertDialog(viewModel, userManager)
 
-        ContentWithBottomButtons(navController, onSave = { viewModel.save() }, content = { modifier ->
+        ContentWithBottomButtonPair(navController, onSave = { viewModel.save() }, content = { modifier ->
             SettingsPage(modifier) {
                 SettingsColumnWithChild {
                     ClickableUrlText(
@@ -177,13 +181,14 @@ private fun Row(title: String, value: String) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400)
+@Preview(showBackground = true, widthDp = 400, heightDp = 300)
 @Composable
 fun SolcastSettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         SolcastSettingsView(
             navController = NavHostController(LocalContext.current),
             FakeConfigManager(),
+            FakeUserManager(),
             { DemoSolarForecasting() }
         ).Content()
     }
