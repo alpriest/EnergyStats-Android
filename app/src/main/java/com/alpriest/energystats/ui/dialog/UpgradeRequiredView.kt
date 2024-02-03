@@ -51,7 +51,7 @@ fun UpgradeRequiredView(userManager: UserManaging) {
                 ) {
                     Text("What's changed?", fontSize = 20.sp)
 
-                    Text("In December 2023, FoxESS asked all 3rd party integrations to migrate access to a new set of services to access customer data. These new services are known by FoxESS as their OpenAPI services. Energy Stats has been changed internally to use these new services (116 files, 3,500 lines of code changed).")
+                    Text("In December 2023, FoxESS asked all 3rd party integrations to migrate access to a new set of services to access customer data. These new services are known by FoxESS as their OpenAPI services. Energy Stats has been changed internally to use these new services (2,500 lines of code changed).")
 
                     Text("These new services are different from those used by the Fox apps and have some notable differences.")
 
