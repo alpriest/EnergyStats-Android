@@ -9,13 +9,7 @@ data class PagedDeviceListResponse(
 
 class PagedDeviceListResponseDevice(
     val deviceSN: String,
-    val moduleSN: String,
-    val stationID: String,
-    val productType: String,
-    val deviceType: String,
     val hasBattery: Boolean,
-    val hasPV: Boolean,
-    val status: Int
 )
 
 class DeviceDetailResponse(
@@ -41,18 +35,7 @@ data class DeviceFunction(
 
 data class DeviceListRequest(
     val pageSize: Int = 20,
-    val currentPage: Int = 1,
-    val total: Int = 0,
-    val condition: Condition = Condition()
-)
-
-data class Condition(
-    val queryDate: DeviceListQueryDate = DeviceListQueryDate()
-)
-
-data class DeviceListQueryDate(
-    val begin: Int = 0,
-    val end: Int = 0
+    val currentPage: Int = 1
 )
 
 data class Device(
