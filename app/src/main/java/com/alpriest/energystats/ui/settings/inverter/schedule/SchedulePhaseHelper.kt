@@ -2,12 +2,11 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
 
 class SchedulePhaseHelper {
     companion object {
-        fun addNewTimePeriod(schedule: Schedule, modes: Array<WorkMode>, device: Device?): Schedule {
+        fun addNewTimePeriod(schedule: Schedule, modes: List<WorkMode>, device: Device?): Schedule {
             val mode = modes.firstOrNull() ?: return schedule
             val newPhase = SchedulePhase.create(mode = mode, device = device)
             val sortedPhases = schedule.phases + newPhase

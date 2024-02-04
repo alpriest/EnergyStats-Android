@@ -19,7 +19,7 @@ class EditPhaseViewModelFactory(val navController: NavHostController) : ViewMode
 }
 
 class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
-    val modes = WorkMode.values()
+    val modes = EditScheduleStore.shared.modes
     val startTimeStream = MutableStateFlow(Time.now())
     val endTimeStream = MutableStateFlow(Time.now())
     val workModeStream: MutableStateFlow<WorkMode> = MutableStateFlow(modes.first())

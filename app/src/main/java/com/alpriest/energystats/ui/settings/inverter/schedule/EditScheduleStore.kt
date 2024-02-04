@@ -16,6 +16,8 @@ class EditScheduleStore(
     companion object {
         val shared: EditScheduleStore = EditScheduleStore()
     }
+
+    var modes: List<WorkMode> = WorkMode.values().filter { it.title() != "" }
 }
 
 enum class WorkMode {
@@ -33,7 +35,7 @@ enum class WorkMode {
             Backup -> return "Backup"
             ForceCharge -> return "Force Charge"
             ForceDischarge -> return "Force Discharge"
-            Invalid -> return "Invalid"
+            Invalid -> return ""
         }
     }
 }

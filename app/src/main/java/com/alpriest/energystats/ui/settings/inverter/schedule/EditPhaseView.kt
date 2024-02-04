@@ -229,7 +229,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
         Box(contentAlignment = Alignment.TopEnd) {
             Button(onClick = { expanded = !expanded }) {
                 Text(
-                    workMode.name,
+                    workMode.title(),
                     color = MaterialTheme.colors.onPrimary
                 )
                 Icon(
@@ -248,7 +248,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
                         expanded = false
                         viewModel.workModeStream.value = it
                     }) {
-                        Text(it.name)
+                        Text(it.title())
                     }
                 }
             }
