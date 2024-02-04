@@ -64,9 +64,9 @@ fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLog
 
         EqualWidthButtonList(
             listOf(
-                ButtonDefinition(stringResource(R.string.retry), { coroutineScope.launch { onRetry() } }),
-                ButtonDefinition(stringResource(R.string.foxess_cloud_status), { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") }),
-                ButtonDefinition(stringResource(R.string.logout), { onLogout() })
+                ButtonDefinition(stringResource(R.string.retry)) { coroutineScope.launch { onRetry() } },
+                ButtonDefinition(stringResource(R.string.foxess_cloud_status)) { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") },
+                ButtonDefinition(stringResource(R.string.logout)) { onLogout() }
             )
         )
     }
