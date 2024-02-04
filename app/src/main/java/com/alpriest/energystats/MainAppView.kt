@@ -9,11 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.dialog.UpgradeRequiredView
 import com.alpriest.energystats.ui.login.APIKeyLoginView
 import com.alpriest.energystats.ui.login.LoggedIn
 import com.alpriest.energystats.ui.login.LoggedOut
 import com.alpriest.energystats.ui.login.LoggingIn
 import com.alpriest.energystats.ui.login.LoginView
+import com.alpriest.energystats.ui.login.RequiresUpgrade
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
@@ -65,6 +67,9 @@ fun MainAppView(appContainer: AppContainer) {
 
                 is LoggingIn ->
                     LoadingView(title = stringResource(R.string.logging_in))
+
+                is RequiresUpgrade ->
+                    UpgradeRequiredView(appContainer.userManager)
             }
         }
     }

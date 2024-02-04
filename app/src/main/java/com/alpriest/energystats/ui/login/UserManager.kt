@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.login
 
 import androidx.annotation.UiThread
 import com.alpriest.energystats.services.BadCredentialsException
-import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,10 +12,11 @@ data class LoginStateHolder(
     val loadState: LoginState
 )
 
-sealed class LoginState {}
-class LoggedOut(val reason: String? = null) : LoginState() {}
-object LoggingIn : LoginState() {}
-object LoggedIn : LoginState() {}
+sealed class LoginState
+class LoggedOut(val reason: String? = null) : LoginState()
+object LoggingIn : LoginState()
+object LoggedIn : LoginState()
+object RequiresUpgrade : LoginState()
 
 interface UserManaging {
     val loggedInState: StateFlow<LoginStateHolder>
@@ -32,15 +32,16 @@ interface UserManaging {
 
 class UserManager(
     private var configManager: ConfigManaging,
-    private val networking: FoxESSNetworking,
     private val store: CredentialStore
 ) : UserManaging {
     private val _loggedInState = MutableStateFlow(LoginStateHolder(LoggedOut()))
     override val loggedInState: StateFlow<LoginStateHolder> = _loggedInState.asStateFlow()
 
     init {
-        if (store.hasCredentials()) {
+        if (store.hasApiKey()) {
             _loggedInState.value = LoginStateHolder(LoggedIn)
+        } else if (store.hasCredentials()) {
+            _loggedInState.value = LoginStateHolder(RequiresUpgrade)
         }
     }
 

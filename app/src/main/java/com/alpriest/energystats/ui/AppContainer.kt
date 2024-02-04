@@ -28,7 +28,6 @@ import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
-import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.Solcast
 import com.alpriest.energystats.ui.settings.solcast.SolcastCache
@@ -104,7 +103,7 @@ class AppContainer(private val context: Context) {
     }
 
     val userManager: UserManaging by lazy {
-        UserManager(configManager, networking, credentialStore)
+        UserManager(configManager, credentialStore)
     }
 
     fun openAppInPlayStore() {

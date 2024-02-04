@@ -23,6 +23,10 @@ class SharedPreferencesCredentialStore(private val sharedPreferences: SharedPref
     }
 
     override fun hasCredentials(): Boolean {
+        return sharedPreferences.getString("PASSWORD", null) != null
+    }
+
+    override fun hasApiKey(): Boolean {
         return getApiKey() != null
     }
 }
