@@ -20,6 +20,7 @@ object RequiresUpgrade : LoginState()
 
 interface UserManaging {
     val loggedInState: StateFlow<LoginStateHolder>
+    val store: CredentialStore
 
     @UiThread
     suspend fun login(
@@ -32,7 +33,7 @@ interface UserManaging {
 
 class UserManager(
     private var configManager: ConfigManaging,
-    private val store: CredentialStore
+    override val store: CredentialStore
 ) : UserManaging {
     private val _loggedInState = MutableStateFlow(LoginStateHolder(LoggedOut()))
     override val loggedInState: StateFlow<LoginStateHolder> = _loggedInState.asStateFlow()

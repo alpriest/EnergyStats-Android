@@ -308,4 +308,5 @@
     <string name="templates_not_yet_available">Schedule templates are not yet available via OpenAPI from FoxESS. They have been requested and will be added when available.</string>
     <string name="enable_scheduler">Enable Scheduler</string>
     <string name="deactivating">Deactivating</string>
+    <string name="edit_api_key">Edit API Key</string>
 </resources>

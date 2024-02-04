@@ -42,7 +42,8 @@ enum class SettingsScreen {
     EditSchedule,
     EditPhase,
     TemplateList,
-    EditTemplate;
+    EditTemplate,
+    APIKey;
 }
 
 @Composable
@@ -137,6 +138,10 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.EditTemplate.name) {
             EditTemplateView(config, network, navController, userManager).Content()
+        }
+
+        composable(SettingsScreen.APIKey.name) {
+            ConfigureAPIKeyView(userManager.store, navController)
         }
 
         debugGraph(navController, networkStore, config, network, credentialStore)

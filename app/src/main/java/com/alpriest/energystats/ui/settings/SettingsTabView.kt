@@ -127,6 +127,11 @@ fun SettingsTabView(
                 title = stringResource(R.string.view_debug_data),
                 onClick = { navController.navigate(SettingsScreen.Debug.name) }
             )
+
+            SettingsNavButton(
+                title = stringResource(R.string.edit_api_key),
+                onClick = { navController.navigate(SettingsScreen.APIKey.name) }
+            )
         }
 
         SettingsFooterView(config, userManager, onLogout, onRateApp, onBuyMeCoffee)
