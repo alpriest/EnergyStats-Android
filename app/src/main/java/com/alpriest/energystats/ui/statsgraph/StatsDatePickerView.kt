@@ -134,7 +134,7 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
         }
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
-            for (yearIndex in 2015..currentYear) {
+            for (yearIndex in 2021..currentYear) {
                 DropdownMenuItem(onClick = {
                     viewModel.yearStream.value = yearIndex
                     showing = false
