@@ -122,7 +122,7 @@ fun APIKeyLoginView(
             ) {
                 Text(
                     stringResource(R.string.try_demo),
-                    color = MaterialTheme.colors.onSecondary
+                    color = colors.onSecondary
                 )
             }
 
@@ -151,25 +151,25 @@ fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Mod
     ) {
 
         Text(
-            "To get your API key:",
+            stringResource(R.string.how_to_get_api_key),
             modifier = Modifier.padding(bottom = 8.dp),
             color = colors.onSecondary
         )
         ClickableUrlText(
-            text = "1. Login at https://www.foxesscloud.com/",
-            textStyle = TextStyle(MaterialTheme.colors.onSecondary),
+            text = stringResource(R.string.api_key_step_1),
+            textStyle = TextStyle(colors.onSecondary),
             themeStream = themeStream
         )
-        Text("2. Click the person icon top-right", color = colors.onSecondary)
-        Text("3. Click the User Profile menu option", color = colors.onSecondary)
-        Text("4. Click Generate API key", color = colors.onSecondary)
-        Text("5. Copy the API key (make a note of it securely)", color = colors.onSecondary)
-        Text("6. Paste the API key above", color = colors.onSecondary)
+        Text(stringResource(R.string.api_key_step_2), color = colors.onSecondary)
+        Text(stringResource(R.string.api_key_step_3), color = colors.onSecondary)
+        Text(stringResource(R.string.api_key_step_4), color = colors.onSecondary)
+        Text(stringResource(R.string.api_key_step_5), color = colors.onSecondary)
+        Text(stringResource(R.string.api_key_step_6), color = colors.onSecondary)
 
         ClickableUrlText(
-            text = "This change to API key was required by FoxESS in January 2024. The FoxESS site does not function well on mobile devices. Please do not contact Energy Stats with issues about the FoxESS website, only FoxESS will be able to assist you in any issues with their site. service.uk@fox-ess.com",
+            text = stringResource(R.string.api_change_reason),
             modifier = Modifier.padding(top = 12.dp),
-            textStyle = TextStyle(MaterialTheme.colors.onSecondary),
+            textStyle = TextStyle(colors.onSecondary),
             themeStream = themeStream
         )
     }

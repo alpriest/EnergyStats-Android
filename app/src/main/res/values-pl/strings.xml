@@ -302,4 +302,18 @@
     <string name="manage_schedules">Zarządzaj harmonogramami</string>
     <string name="display_options">Opcje wyświetlania</string>
     <string name="unsupported">Nieobsługiwane</string>
+    <string name="currency_symbol">Symbol waluty</string>
+    <string name="includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Zawiera dane od %1$s do teraz. Liczby są przybliżone i zakładają, że ceny kupna/sprzedaży energii pozostały stałe przez cały okres posiadania.</string>
+    <string name="templates_not_yet_available">Szablony harmonogramów nie są jeszcze dostępne za pośrednictwem OpenAPI od FoxESS. Zostały zażądane i zostaną dodane, gdy będą dostępne.</string>
+    <string name="enable_scheduler">Włącz harmonogram</string>
+    <string name="deactivating">Dezaktywacja</string>
+    <string name="edit_api_key">Edytuj klucz API</string>
+    <string name="api_key_step_1">1. Zaloguj się na https://www.foxesscloud.com/</string>
+    <string name="api_key_step_2">2. Kliknij ikonę osoby w prawym górnym rogu</string>
+    <string name="api_key_step_3">3. Kliknij opcję menu Profil Użytkownika</string>
+    <string name="api_key_step_4">4. Kliknij Generuj klucz API</string>
+    <string name="api_key_step_5">5. Skopiuj klucz API (zapisz go bezpiecznie)</string>
+    <string name="api_key_step_6">6. Wklej klucz API powyżej</string>
+    <string name="api_change_reason">Ta zmiana klucza API była wymagana przez FoxESS w styczniu 2024 roku. Strona FoxESS nie działa dobrze na urządzeniach mobilnych. Prosimy nie kontaktować się z Energy Stats w sprawie problemów ze stroną FoxESS, tylko FoxESS będzie w stanie pomóc ci w przypadku problemów z ich stroną. service.uk@fox-ess.com</string>
+    <string name="how_to_get_api_key">Aby uzyskać swój klucz API:</string>
 </resources>

@@ -302,4 +302,18 @@
     <string name="manage_schedules">Gestire programmi</string>
     <string name="display_options">Opzioni di visualizzazione</string>
     <string name="unsupported">Non supportato</string>
+    <string name="currency_symbol">Simbolo della valuta</string>
+    <string name="includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Include dati da %1$s a oggi. Le cifre sono approssimative e assumono che i prezzi di acquisto/vendita dell\'energia siano rimasti costanti per tutto il periodo di proprietà.</string>
+    <string name="templates_not_yet_available">I modelli di pianificazione non sono ancora disponibili tramite OpenAPI da FoxESS. Sono stati richiesti e verranno aggiunti quando disponibili.</string>
+    <string name="enable_scheduler">Abilita pianificatore</string>
+    <string name="deactivating">Disattivando</string>
+    <string name="edit_api_key">Modifica chiave API</string>
+    <string name="api_key_step_1">"1. Accedi su https://www.foxesscloud.com/ "</string>
+    <string name="api_key_step_2">2. Clicca sull\'icona della persona in alto a destra</string>
+    <string name="api_key_step_3">3. Clicca sull\'opzione del menu Profilo Utente</string>
+    <string name="api_key_step_4">4. Clicca su Genera chiave API</string>
+    <string name="api_key_step_5">5. Copia la chiave API (annotala in modo sicuro)</string>
+    <string name="api_key_step_6">6. Incolla la chiave API sopra</string>
+    <string name="api_change_reason">Questo cambiamento nella chiave API è stato richiesto da FoxESS nel gennaio 2024. Il sito di FoxESS non funziona bene su dispositivi mobili. Si prega di non contattare Energy Stats per problemi riguardanti il sito web di FoxESS, solo FoxESS potrà assistervi per qualsiasi problema con il loro sito. service.uk@fox-ess.com</string>
+    <string name="how_to_get_api_key">Per ottenere la tua chiave API:</string>
 </resources>
