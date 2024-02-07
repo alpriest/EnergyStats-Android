@@ -15,6 +15,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -137,35 +138,40 @@ fun APIKeyLoginView(
             }
         }
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
+        HowToObtainAPIKeyView(themeStream, Modifier.padding(horizontal = 16.dp))
+    }
+}
 
-            Text(
-                "To get your API key:",
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            ClickableUrlText(
-                text = "1. Login at https://www.foxesscloud.com/",
-                textStyle = TextStyle(MaterialTheme.colors.onSecondary),
-                themeStream = themeStream
-            )
-            Text("2. Click the person icon top-right")
-            Text("3. Click the User Profile menu option")
-            Text("4. Click Generate API key")
-            Text("5. Copy the API key (make a note of it securely)")
-            Text("6. Paste the API key above")
+@Composable
+fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
 
-            ClickableUrlText(
-                text = "This change to API key was required by FoxESS in January 2024. The FoxESS site does not function well on mobile devices. Please do not contact Energy Stats with issues about the FoxESS website, only FoxESS will be able to assist you in any issues with their site. service.uk@fox-ess.com",
-                modifier = Modifier.padding(top = 12.dp),
-                textStyle = TextStyle(MaterialTheme.colors.onSecondary),
-                themeStream = themeStream
-            )
-        }
+        Text(
+            "To get your API key:",
+            modifier = Modifier.padding(bottom = 8.dp),
+            color = colors.onSecondary
+        )
+        ClickableUrlText(
+            text = "1. Login at https://www.foxesscloud.com/",
+            textStyle = TextStyle(MaterialTheme.colors.onSecondary),
+            themeStream = themeStream
+        )
+        Text("2. Click the person icon top-right", color = colors.onSecondary)
+        Text("3. Click the User Profile menu option", color = colors.onSecondary)
+        Text("4. Click Generate API key", color = colors.onSecondary)
+        Text("5. Copy the API key (make a note of it securely)", color = colors.onSecondary)
+        Text("6. Paste the API key above", color = colors.onSecondary)
+
+        ClickableUrlText(
+            text = "This change to API key was required by FoxESS in January 2024. The FoxESS site does not function well on mobile devices. Please do not contact Energy Stats with issues about the FoxESS website, only FoxESS will be able to assist you in any issues with their site. service.uk@fox-ess.com",
+            modifier = Modifier.padding(top = 12.dp),
+            textStyle = TextStyle(MaterialTheme.colors.onSecondary),
+            themeStream = themeStream
+        )
     }
 }
 

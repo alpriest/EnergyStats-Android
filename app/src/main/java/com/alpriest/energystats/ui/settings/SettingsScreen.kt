@@ -141,7 +141,7 @@ fun NavigableSettingsView(
         }
 
         composable(SettingsScreen.APIKey.name) {
-            ConfigureAPIKeyView(userManager.store, navController)
+            ConfigureAPIKeyView(userManager.store, navController, config.themeStream)
         }
 
         debugGraph(navController, networkStore, config, network, credentialStore)
