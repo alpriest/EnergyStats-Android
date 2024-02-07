@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material3.OutlinedTextField
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -36,6 +34,8 @@ fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, th
         content = { modifier ->
             SettingsPage(modifier) {
                 SettingsColumnWithChild {
+                    SettingsTitleView("FoxESS API Key")
+
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = apiKey,
@@ -43,6 +43,12 @@ fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, th
                         label = { androidx.compose.material3.Text(stringResource(R.string.api_key)) },
                         singleLine = true,
                         textStyle = TextStyle(colors.onSecondary),
+                    )
+
+                    Text(
+                        "If you need to change your API key then you can replace it above without losing your settings.",
+                        color = colors.onSecondary,
+                        modifier = Modifier.padding(top = 4.dp)
                     )
 
                     HowToObtainAPIKeyView(themeStream, modifier = Modifier.padding(top = 44.dp))
