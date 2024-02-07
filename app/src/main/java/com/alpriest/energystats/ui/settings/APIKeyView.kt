@@ -30,7 +30,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, themeStream: MutableStateFlow<AppTheme>) {
     var apiKey by rememberSaveable { mutableStateOf(store.getApiKey() ?: "") }
 
-    ContentWithBottomButtonPair(navController, onSave = { store.store(apiKey) },
+    ContentWithBottomButtonPair(navController, onSave = {
+        store.store(apiKey)
+        navController.popBackStack()
+    },
         content = { modifier ->
             SettingsPage(modifier) {
                 SettingsColumnWithChild {
