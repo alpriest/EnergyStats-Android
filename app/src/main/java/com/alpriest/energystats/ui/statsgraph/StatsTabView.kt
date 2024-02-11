@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.statsgraph
 
 import android.net.Uri
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,7 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -64,61 +66,67 @@ fun StatsTabView(
     userManager: UserManaging
 ) {
     val scrollState = rememberScrollState()
-    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val graphShowing = viewModel.showingGraphStream.collectAsState().value
     val showingApproximations = remember { mutableStateOf(false) }
+    val loadState = viewModel.uiState.collectAsState().value.state
 
     MonitorAlertDialog(viewModel, userManager)
 
     LaunchedEffect(viewModel.displayModeStream) {
-        isLoading = true
         viewModel.displayModeStream
-            .onEach { viewModel.load() }
-            .collect { isLoading = false }
+            .onEach { viewModel.load(context) }
+            .collect {}
     }
 
-    if (isLoading) {
-        Text(stringResource(R.string.loading))
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(12.dp)
-                .verticalScroll(scrollState)
-        ) {
-            StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), viewModel.showingGraphStream, modifier = Modifier.padding(bottom = 24.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(12.dp)
+            .verticalScroll(scrollState)
+    ) {
+        StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), viewModel.showingGraphStream, modifier = Modifier.padding(bottom = 24.dp))
 
+        Box(contentAlignment = Alignment.Center) {
             if (graphShowing) {
                 StatsGraphView(viewModel = viewModel, themeStream, modifier = Modifier.padding(bottom = 24.dp))
             }
 
-            StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+            when (loadState) {
+                is LoadState.Error ->
+                    Text(stringResource(R.string.error))
+                is LoadState.Active ->
+                    Text(stringResource(R.string.loading))
 
-            viewModel.approximationsViewModelStream.collectAsState().value?.let {
-                ApproximationView(viewModel = it, modifier = Modifier, themeStream = themeStream, showingApproximations = showingApproximations)
+                is LoadState.Inactive -> {}
             }
+        }
 
-            Text(
-                text = stringResource(R.string.stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals),
-                fontSize = 12.sp,
-                color = DimmedTextColor,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(top = 44.dp, bottom = 22.dp)
-                    .fillMaxWidth()
-            )
+        StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(modifier = Modifier.clickable {
-                    showExportMethodSelection(context, viewModel.exportFileName, filePathChooser, viewModel)
-                }) {
-                    Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
-                    Text(stringResource(R.string.export_csv_data))
-                }
+        viewModel.approximationsViewModelStream.collectAsState().value?.let {
+            ApproximationView(viewModel = it, modifier = Modifier, themeStream = themeStream, showingApproximations = showingApproximations)
+        }
+
+        Text(
+            text = stringResource(R.string.stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals),
+            fontSize = 12.sp,
+            color = DimmedTextColor,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(top = 44.dp, bottom = 22.dp)
+                .fillMaxWidth()
+        )
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(modifier = Modifier.clickable {
+                showExportMethodSelection(context, viewModel.exportFileName, filePathChooser, viewModel)
+            }) {
+                Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
+                Text(stringResource(R.string.export_csv_data))
             }
         }
     }

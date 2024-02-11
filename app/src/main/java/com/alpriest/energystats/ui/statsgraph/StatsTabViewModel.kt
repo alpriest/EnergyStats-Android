@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.EnergyStatsApplication
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenReportResponse
@@ -18,6 +19,8 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
+import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
@@ -25,6 +28,7 @@ import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.time.LocalDate
@@ -33,14 +37,14 @@ data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: Rep
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
-    val networking: FoxESSNetworking,
+    private val networking: FoxESSNetworking,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
-    var rawData: List<StatsGraphValue> = listOf()
+    private var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     private var exportText: String = ""
     var exportFileName: String = ""
@@ -48,6 +52,7 @@ class StatsTabViewModel(
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     var showingGraphStream = MutableStateFlow(true)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -83,8 +88,9 @@ class StatsTabViewModel(
         }
     }
 
-    suspend fun load() {
+    suspend fun load(context: Context) {
         val device = configManager.currentDevice.value ?: return
+        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
         if (graphVariablesStream.value.isEmpty()) {
             updateGraphVariables(device)
         }
@@ -113,6 +119,7 @@ class StatsTabViewModel(
             rawTotals = generateTotals(device.deviceSN, reportData, reportType, queryDate, reportVariables)
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
+            uiState.value = UiLoadState(LoadState.Inactive)
             return
         }
 
@@ -145,12 +152,14 @@ class StatsTabViewModel(
         totalsStream.value = rawTotals
         refresh()
         calculateSelfSufficiencyEstimate()
+        uiState.value = UiLoadState(LoadState.Inactive)
     }
 
     private fun appEntersForeground() {
+        val context = EnergyStatsApplication.applicationContext()
         if (totalsStream.value.isNotEmpty()) {
             viewModelScope.launch {
-                load()
+                load(context)
             }
         }
     }

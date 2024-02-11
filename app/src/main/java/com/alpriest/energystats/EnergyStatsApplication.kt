@@ -11,9 +11,21 @@ class EnergyStatsApplication : Application() {
         AppContainer(context!!)
     }
 
+    init {
+        instance = this
+    }
+
     override fun onCreate() {
         super.onCreate()
 
         context = applicationContext
+    }
+
+    companion object {
+        private var instance: EnergyStatsApplication? = null
+
+        fun applicationContext() : Context {
+            return instance!!.applicationContext
+        }
     }
 }
