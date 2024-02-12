@@ -271,7 +271,7 @@ class PowerFlowTabViewModel(
     }
 }
 
-fun Double.roundedToString(decimalPlaces: Int, currencySymbol: String? = null): String {
+fun Double.roundedToString(decimalPlaces: Int, currencySymbol: String = ""): String {
     val roundedNumber = this.rounded(decimalPlaces)
 
     val numberFormat = NumberFormat.getNumberInstance()
@@ -279,5 +279,6 @@ fun Double.roundedToString(decimalPlaces: Int, currencySymbol: String? = null): 
     numberFormat.minimumFractionDigits = decimalPlaces
 
     val formattedNumber = numberFormat.format(roundedNumber)
+
     return "$currencySymbol$formattedNumber"
 }
