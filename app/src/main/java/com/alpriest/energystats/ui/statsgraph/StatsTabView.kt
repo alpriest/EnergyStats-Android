@@ -33,6 +33,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
+import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
@@ -96,8 +97,7 @@ fun StatsTabView(
                 is LoadState.Error ->
                     Text(stringResource(R.string.error))
                 is LoadState.Active ->
-                    Text(stringResource(R.string.loading))
-
+                    LoadingOverlayView()
                 is LoadState.Inactive -> {}
             }
         }

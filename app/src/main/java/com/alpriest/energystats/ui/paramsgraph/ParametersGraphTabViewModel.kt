@@ -6,6 +6,8 @@ import android.net.Uri
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.EnergyStatsApplication
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.toUtcMillis
@@ -13,6 +15,8 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
+import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -57,6 +61,7 @@ class ParametersGraphTabViewModel(
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -69,10 +74,11 @@ class ParametersGraphTabViewModel(
                 .collect { it ->
                     val previousHours = hours
                     val updatedDate = QueryDate(it.date.year, it.date.monthValue, it.date.dayOfMonth)
+                    val context = EnergyStatsApplication.applicationContext()
 
                     if (queryDate != updatedDate) {
                         queryDate = updatedDate
-                        load()
+                        load(context)
                     }
                     if (it.hours != previousHours) {
                         hours = it.hours
@@ -91,14 +97,16 @@ class ParametersGraphTabViewModel(
     private fun appEntersForeground() {
         if (rawData.isNotEmpty()) {
             viewModelScope.launch {
-                load()
+                val context = EnergyStatsApplication.applicationContext()
+                load(context)
             }
         }
     }
 
-    suspend fun load() {
+    suspend fun load(context: Context) {
         val device = configManager.currentDevice.value ?: return
         val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type.variable }.toList()
+        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
         try {
             val start = queryDate.toUtcMillis()
@@ -132,6 +140,8 @@ class ParametersGraphTabViewModel(
             refresh()
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
+        } finally {
+            uiState.value = UiLoadState(LoadState.Inactive)
         }
     }
 

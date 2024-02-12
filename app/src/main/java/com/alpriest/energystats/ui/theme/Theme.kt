@@ -10,7 +10,7 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 
 private val DarkColorPalette = darkColors(
     primary = TintColor,
-    secondary = Teal200,
+    secondary = SecondaryBackground,
     background = DarkBackground,
     onBackground = Color.White,
     onPrimary = Color.White,
@@ -22,7 +22,7 @@ private val DarkColorPalette = darkColors(
 
 private val LightColorPalette = lightColors(
     primary = TintColor,
-    secondary = Teal200,
+    secondary = SecondaryBackground,
     background = PaleWhite,
     onBackground = Color.DarkGray,
     onPrimary = Color.White,
