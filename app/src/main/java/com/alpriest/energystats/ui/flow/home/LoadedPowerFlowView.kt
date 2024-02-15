@@ -272,7 +272,7 @@ fun SummaryPowerFlowViewPreview() {
                 solar = 1.0,
                 home = 2.454,
                 grid = 1.234,
-                todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf())),
+                todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), false),
                 earnings = EarningsViewModel.preview(),
                 inverterTemperatures = null,
                 hasBattery = true,

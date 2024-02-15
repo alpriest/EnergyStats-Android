@@ -5,9 +5,9 @@ import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.Locale
 
-class GenerationViewModel(private val response: OpenHistoryResponse) {
+class GenerationViewModel(private val response: OpenHistoryResponse, private val includeCT2: Boolean) {
     fun todayGeneration(): Double {
-        val filteredVariables = response.datas.filter { it.variable == "pvPower" }.flatMap { it.data.toList() }
+        val filteredVariables = response.datas.filter { it.variable == "pvPower" || (it.variable == "meterPower2" && includeCT2) }.flatMap { it.data.toList() }
 
         val timeDifferenceInSeconds: Double = if (filteredVariables.size > 1) {
             val dateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())

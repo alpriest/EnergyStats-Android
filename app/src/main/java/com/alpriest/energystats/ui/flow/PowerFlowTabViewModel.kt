@@ -170,7 +170,7 @@ class PowerFlowTabViewModel(
     }
 
     private suspend fun loadGeneration(device: Device): GenerationViewModel {
-        return GenerationViewModel(loadHistoryData(device))
+        return GenerationViewModel(loadHistoryData(device), configManager.shouldCombineCT2WithPVPower)
     }
 
     private suspend fun loadHistoryData(device: Device): OpenHistoryResponse {

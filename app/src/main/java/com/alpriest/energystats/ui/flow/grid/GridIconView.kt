@@ -104,7 +104,7 @@ fun GridIconViewPreview() {
         solar = 1.0,
         home = 2.45,
         grid = 2.45,
-        todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf())),
+        todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), false),
         earnings = EarningsViewModel.preview(),
         inverterTemperatures = null,
         hasBattery = true,
