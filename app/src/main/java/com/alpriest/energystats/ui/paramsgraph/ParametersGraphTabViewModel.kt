@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.OutputStream
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -62,6 +63,7 @@ class ParametersGraphTabViewModel(
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
+    val xDataPointCount: MutableStateFlow<Float> = MutableStateFlow(360f)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -168,6 +170,7 @@ class ParametersGraphTabViewModel(
                 }
             }
 
+        xDataPointCount.value = calculateDataPointCount()
         boundsStream.value = entries.map { entryList ->
             val max = entryList.maxBy { it.y }.y
             val min = entryList.minBy { it.y }.y
@@ -214,7 +217,7 @@ class ParametersGraphTabViewModel(
 
             val foo2 = foo.groupBy { it.first }
             val foo3 = foo2.map { Pair(it.key, it.value.map { it.second.first() }) }
-            val foo4 = foo3.map { Pair(it.first, it.second.map { it.type.colour() } ) }
+            val foo4 = foo3.map { Pair(it.first, it.second.map { it.type.colour() }) }
                 .toMap()
 
             chartColorsStream.value = foo4
@@ -222,6 +225,20 @@ class ParametersGraphTabViewModel(
 
         prepareExport(rawData, displayModeStream.value)
         storeVariables()
+    }
+
+    private fun calculateDataPointCount(): Float {
+        val reportingIntervalMinutes: Float = if (rawData.count() > 1) {
+            val firstTime = rawData[0]
+            val secondTime = rawData[1]
+
+            val duration = Duration.between(firstTime.time, secondTime.time)
+            duration.toMinutes().toFloat()
+        } else {
+            5f
+        }
+
+        return (60 / reportingIntervalMinutes) * 24
     }
 
     private fun prepareExport(rawData: List<ParametersGraphValue>, displayMode: ParametersDisplayMode) {
