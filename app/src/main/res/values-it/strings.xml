@@ -314,6 +314,6 @@
     <string name="api_key_step_4">4. Clicca su Genera chiave API</string>
     <string name="api_key_step_5">5. Copia la chiave API (annotala in modo sicuro)</string>
     <string name="api_key_step_6">6. Incolla la chiave API sopra</string>
-    <string name="api_change_reason">Questo cambiamento nella chiave API è stato richiesto da FoxESS nel gennaio 2024. Il sito di FoxESS non funziona bene su dispositivi mobili. Si prega di non contattare Energy Stats per problemi riguardanti il sito web di FoxESS, solo FoxESS potrà assistervi per qualsiasi problema con il loro sito. service.uk@fox-ess.com</string>
+    <string name="api_change_reason">Questa modifica alla chiave API è stata richiesta da FoxESS all\'inizio del 2024. Il sito FoxESS non funziona bene sui dispositivi mobili. Si prega di non contattare Energy Stats per problemi relativi al sito web FoxESS, solo FoxESS può assistervi per qualsiasi problema con il loro sito. service.uk@fox-ess.com</string>
     <string name="how_to_get_api_key">Per ottenere la tua chiave API:</string>
 </resources>

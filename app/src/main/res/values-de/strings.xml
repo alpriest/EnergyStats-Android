@@ -313,6 +313,6 @@
     <string name="api_key_step_4">4. Klicke auf API-Schlüssel generieren</string>
     <string name="api_key_step_5">5. Kopiere den API-Schlüssel (notiere ihn sicher)</string>
     <string name="api_key_step_6">6. Füge den API-Schlüssel oben ein</string>
-    <string name="api_change_reason">Diese Änderung des API-Schlüssels wurde von FoxESS im Januar 2024 erforderlich gemacht. Die FoxESS-Website funktioniert auf mobilen Geräten nicht gut. Bitte kontaktiere Energy Stats nicht bei Problemen mit der FoxESS-Website, nur FoxESS kann dir bei Problemen mit ihrer Seite helfen. service.uk@fox-ess.com</string>
+    <string name="api_change_reason">Diese Änderung des API-Schlüssels wurde Anfang 2024 von FoxESS gefordert. Die FoxESS-Website funktioniert nicht gut auf mobilen Geräten. Bitte kontaktieren Sie Energy Stats nicht bei Problemen mit der FoxESS-Website, nur FoxESS kann Ihnen bei Problemen mit ihrer Website helfen. service.uk@fox-ess.com</string>
     <string name="how_to_get_api_key">Um deinen API-Schlüssel zu erhalten:</string>
 </resources>
