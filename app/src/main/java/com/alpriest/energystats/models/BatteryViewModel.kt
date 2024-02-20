@@ -11,7 +11,7 @@ data class BatteryViewModel(
     constructor(power: Double, soc: Int, residual: Double, temperature: Double): this(
         hasBattery = true,
         chargeLevel = soc / 100.0,
-        chargePower = 0 - power,
+        chargePower = power,
         temperature = temperature,
         residual = residual.toInt(),
         hasError = false
