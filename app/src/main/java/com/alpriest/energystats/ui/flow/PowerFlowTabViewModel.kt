@@ -241,8 +241,12 @@ class PowerFlowTabViewModel(
         real: OpenQueryResponse
     ): BatteryViewModel {
         val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
+            val chargePower = real.datas.currentValue("batChargePower")
+            val dischargePower = real.datas.currentValue("batDischargePower")
+            val power = chargePower.takeIf { it > 0 } ?: -dischargePower
+
             BatteryViewModel(
-                power = real.datas.currentValue("batChargePower") - (0 - real.datas.currentValue("batDischargePower")),
+                power = power,
                 soc = real.datas.currentValue("SoC").toInt(),
                 residual = real.datas.currentValue("ResidualEnergy") * 10.0,
                 temperature = real.datas.currentValue("batTemperature")
