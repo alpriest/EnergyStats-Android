@@ -6,8 +6,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class LocalDateAdapter : JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
-    private val formatter = DateTimeFormatter.ISO_INSTANT
-
     override fun serialize(src: LocalDate?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
         return JsonPrimitive(src?.format(DateTimeFormatter.ISO_LOCAL_DATE))
     }

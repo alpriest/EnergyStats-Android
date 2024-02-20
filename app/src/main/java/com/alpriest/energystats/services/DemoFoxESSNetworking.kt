@@ -23,6 +23,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.time.LocalDateTime
 
 class DemoFoxESSNetworking : FoxESSNetworking {
     override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
@@ -64,7 +65,7 @@ class DemoFoxESSNetworking : FoxESSNetworking {
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
         return OpenQueryResponse(
-            time = "now",
+            time = LocalDateTime.now().toString().replace("T", " "),
             deviceSN = deviceSN,
             datas = listOf(
                 OpenQueryResponseData(unit = "kW", variable = "feedinPower", value = 0.0),
