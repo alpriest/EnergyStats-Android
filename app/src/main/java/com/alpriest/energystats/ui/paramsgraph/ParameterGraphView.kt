@@ -22,6 +22,8 @@ import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.component.lineComponent
+import com.patrykandpatrick.vico.compose.component.shapeComponent
+import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
@@ -32,6 +34,9 @@ import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
+import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico.core.component.text.TextComponent
+import com.patrykandpatrick.vico.core.component.text.VerticalPosition
 import com.patrykandpatrick.vico.core.context.DrawContext
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.marker.Marker
@@ -56,7 +61,6 @@ fun ParameterGraphView(
         }
     }
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
-
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>() else DecimalFormatAxisValueFormatter("0.0")
@@ -85,10 +89,22 @@ fun ParameterGraphView(
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
-                            marker = NonDisplayingMarker(
-                                viewModel.valuesAtTimeStream, lineComponent(
+                            marker = VerticalLineMarker(
+                                viewModel.valuesAtTimeStream,
+                                lineComponent(
                                     color = colors.onSurface,
                                     thickness = 1.dp
+                                ),
+                                textComponent(
+                                    colors.onSecondary,
+                                    lineCount = 4,
+                                    background = shapeComponent(
+                                        shape = Shapes.roundedCornerShape(
+                                            bottomLeftPercent = 25,
+                                            bottomRightPercent = 25,
+                                        ),
+                                        color = Color.Black,
+                                    )
                                 )
                             ),
                             diffAnimationSpec = SnapSpec(),
@@ -97,6 +113,7 @@ fun ParameterGraphView(
                         )
                     }
                 }
+
             6 ->
                 Column(modifier = modifier.fillMaxWidth()) {
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
@@ -114,10 +131,22 @@ fun ParameterGraphView(
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
-                            marker = NonDisplayingMarker(
-                                viewModel.valuesAtTimeStream, lineComponent(
+                            marker = VerticalLineMarker(
+                                viewModel.valuesAtTimeStream,
+                                lineComponent(
                                     color = colors.onSurface,
                                     thickness = 1.dp
+                                ),
+                                textComponent(
+                                    colors.onSecondary,
+                                    lineCount = 4,
+                                    background = shapeComponent(
+                                        shape = Shapes.roundedCornerShape(
+                                            bottomLeftPercent = 25,
+                                            bottomRightPercent = 25,
+                                        ),
+                                        color = Color.Black,
+                                    )
                                 )
                             ),
                             diffAnimationSpec = SnapSpec(),
@@ -126,6 +155,7 @@ fun ParameterGraphView(
                         )
                     }
                 }
+
             else ->
                 Column(modifier = modifier.fillMaxWidth()) {
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
@@ -143,10 +173,22 @@ fun ParameterGraphView(
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
-                            marker = NonDisplayingMarker(
-                                viewModel.valuesAtTimeStream, lineComponent(
+                            marker = VerticalLineMarker(
+                                viewModel.valuesAtTimeStream,
+                                lineComponent(
                                     color = colors.onSurface,
                                     thickness = 1.dp
+                                ),
+                                textComponent(
+                                    colors.onSecondary,
+                                    lineCount = 4,
+                                    background = shapeComponent(
+                                        shape = Shapes.roundedCornerShape(
+                                            bottomLeftPercent = 25,
+                                            bottomRightPercent = 25,
+                                        ),
+                                        color = Color.Black,
+                                    )
                                 )
                             ),
                             diffAnimationSpec = SnapSpec(),
@@ -184,14 +226,15 @@ class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFo
     }
 }
 
-class NonDisplayingMarker<T>(
-    private var valuesAtTimeStream: MutableStateFlow<List<T>> = MutableStateFlow(listOf()),
-    private val guideline: LineComponent?
+class VerticalLineMarker(
+    private var valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>> = MutableStateFlow(listOf()),
+    private val guideline: LineComponent?,
+    private val text: TextComponent
 ) : Marker {
     override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
         drawGuideline(context, bounds, markedEntries)
 
-        valuesAtTimeStream.value = markedEntries.mapNotNull { it.entry as? T }
+        valuesAtTimeStream.value = markedEntries.mapNotNull { it.entry as? DateTimeFloatEntry }
     }
 
     private fun drawGuideline(
@@ -199,6 +242,11 @@ class NonDisplayingMarker<T>(
         bounds: RectF,
         markedEntries: List<Marker.EntryModel>,
     ) {
+        val labels = markedEntries
+            .mapNotNull { it.entry as? DateTimeFloatEntry }
+            .map { "${it.type.name} ${it.y}" }
+            .joinToString("\n")
+
         markedEntries
             .map { it.location.x }
             .toSet()
@@ -208,6 +256,14 @@ class NonDisplayingMarker<T>(
                     bounds.top,
                     bounds.bottom,
                     x,
+                )
+
+                text.drawText(
+                    context,
+                    labels,
+                    x,
+                    20f,
+                    verticalPosition = VerticalPosition.Bottom
                 )
             }
     }
