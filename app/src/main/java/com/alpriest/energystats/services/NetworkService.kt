@@ -27,6 +27,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.SetBatterySOCRequest
+import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetCurrentScheduleRequest
 import com.alpriest.energystats.models.SetSchedulerFlagRequest
 import com.alpriest.energystats.models.md5
@@ -306,7 +307,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
         return result.item.result ?: throw MissingDataException()
     }
 
-    override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
+    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
         val request = Request.Builder().url(URLs.getOpenBatterySOC(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<BatterySOCResponse>>() {}.type
@@ -367,6 +368,31 @@ class NetworkService(private val credentials: CredentialStore, private val store
             ChargeTime(enable = result.enable1, startTime = result.startTime1, endTime = result.endTime1),
             ChargeTime(enable = result.enable2, startTime = result.startTime2, endTime = result.endTime2)
         )
+    }
+
+    override suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+        if (times.count() < 2) {
+            return
+        }
+
+        val body = Gson().toJson(
+            SetBatteryTimesRequest(
+                sn = deviceSN,
+                enable1 = times[0].enable,
+                startTime1 = times[0].startTime,
+                endTime1 = times[0].endTime,
+                enable2 = times[1].enable,
+                startTime2 = times[1].startTime,
+                endTime2 = times[1].endTime
+            )
+        ).toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .url(URLs.setOpenBatteryChargeTimes())
+            .post(body)
+            .build()
+
+        executeWithoutResponse(request)
     }
 
     override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {

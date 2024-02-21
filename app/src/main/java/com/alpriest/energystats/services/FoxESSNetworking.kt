@@ -35,10 +35,11 @@ interface FoxESSNetworking {
     suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse
     suspend fun openapi_fetchVariables(): List<OpenApiVariable>
     suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse>
-    suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse
+    suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse
     suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int)
-    suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse>
     suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime>
+    suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>)
+    suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse>
     suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse
     suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse
     suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean)

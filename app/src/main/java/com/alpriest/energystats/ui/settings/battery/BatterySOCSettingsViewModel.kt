@@ -1,9 +1,6 @@
 package com.alpriest.energystats.ui.settings.battery
 
-import android.accounts.NetworkErrorException
 import android.content.Context
-import android.net.http.NetworkException
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
@@ -43,7 +40,7 @@ class BatterySOCSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    val result = network.openapi_fetchBatterySOC(deviceSN)
+                    val result = network.openapi_fetchBatterySettings(deviceSN)
                     minSOCStream.value = result.minSoc.toString()
                     minSOConGridStream.value = result.minSocOnGrid.toString()
                     uiState.value = UiLoadState(LoadState.Inactive)

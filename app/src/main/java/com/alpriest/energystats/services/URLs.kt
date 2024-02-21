@@ -19,7 +19,7 @@ object URLs {
             .toHttpUrl()
     }
 
-    fun batteryTimeSet(): HttpUrl {
+    fun setOpenBatteryChargeTimes(): HttpUrl {
         return "https://www.foxesscloud.com/op/v0/device/battery/forceChargeTime/set"
             .toHttpUrl()
     }

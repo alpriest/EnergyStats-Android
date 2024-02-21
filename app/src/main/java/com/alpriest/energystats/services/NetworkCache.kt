@@ -76,8 +76,8 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
         }
     }
 
-    override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
-        return network.openapi_fetchBatterySOC(deviceSN)
+    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
+        return network.openapi_fetchBatterySettings(deviceSN)
     }
 
     override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
@@ -90,6 +90,10 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 
     override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
         return network.openapi_fetchBatteryTimes(deviceSN)
+    }
+
+    override suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+        network.openapi_setBatteryTimes(deviceSN, times)
     }
 
     override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {

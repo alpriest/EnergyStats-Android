@@ -91,7 +91,7 @@ class DemoFoxESSNetworking : FoxESSNetworking {
         return listOf()
     }
 
-    override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
+    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
         return BatterySOCResponse(minSoc = 20, minSocOnGrid = 20)
     }
 
@@ -119,6 +119,9 @@ class DemoFoxESSNetworking : FoxESSNetworking {
             ChargeTime(enable = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0)),
             ChargeTime(enable = true, startTime = Time(hour = 0, minute = 0), endTime = Time(hour = 0, minute = 0))
         )
+    }
+
+    override suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
     }
 
     override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {

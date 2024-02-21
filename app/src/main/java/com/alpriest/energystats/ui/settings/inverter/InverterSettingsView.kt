@@ -95,9 +95,8 @@ fun DeviceVersionView(device: Device) {
         SettingsRow("Station Name", device.stationName)
         SettingsRow("Device Serial No.", device.deviceSN)
         SettingsRow("Module Serial No", device.moduleSN)
-        // TODO
-//        SettingsRow("Has Battery", if (device.hasBattery) "true" else "false")
-//        SettingsRow("Has Solar", if (device.hasPV) "true" else "false")
+        SettingsRow("Has Battery", if (device.hasBattery) "true" else "false")
+        SettingsRow("Has Solar", if (device.hasPV) "true" else "false")
     }
 }
 

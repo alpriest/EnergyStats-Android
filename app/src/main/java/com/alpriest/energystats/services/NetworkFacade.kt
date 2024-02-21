@@ -60,11 +60,11 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
         }
     }
 
-    override suspend fun openapi_fetchBatterySOC(deviceSN: String): BatterySOCResponse {
+    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchBatterySOC(deviceSN)
+            demoFoxESSNetworking.openapi_fetchBatterySettings(deviceSN)
         } else {
-            return network.openapi_fetchBatterySOC(deviceSN)
+            return network.openapi_fetchBatterySettings(deviceSN)
         }
     }
 
@@ -103,6 +103,14 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
             demoFoxESSNetworking.openapi_fetchBatteryTimes(deviceSN)
         } else {
             network.openapi_fetchBatteryTimes(deviceSN)
+        }
+    }
+
+    override suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_setBatteryTimes(deviceSN, times)
+        } else {
+            network.openapi_setBatteryTimes(deviceSN, times)
         }
     }
 

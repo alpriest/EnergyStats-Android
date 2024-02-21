@@ -10,7 +10,7 @@ import java.time.ZoneId
 import java.util.Locale
 
 class RealQueryResponseMapper {
-    fun mapCurrentValues(response: OpenQueryResponse): CurrentValues {
+    fun mapCurrentValues(response: OpenQueryResponse, hasPV: Boolean): CurrentValues {
         return CurrentValues(
             pvPower = response.datas.currentValue(forKey = "pvPower"),
             feedinPower = response.datas.currentValue(forKey = "feedinPower"),
@@ -19,7 +19,7 @@ class RealQueryResponseMapper {
             ambientTemperation = response.datas.currentValue(forKey = "ambientTemperation"),
             invTemperation = response.datas.currentValue(forKey = "invTemperation"),
             meterPower2 = response.datas.currentValue(forKey = "meterPower2"),
-            hasPV = true, // TODO,
+            hasPV = hasPV,
             lastUpdate = response.time
         )
     }

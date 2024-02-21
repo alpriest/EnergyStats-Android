@@ -304,7 +304,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
                         method = "openapi_fetchRealData"
                         val batteryVariables = networking.openapi_fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC"))
                         method = "openapi_fetchBatterySOC"
-                        val batterySettings = networking.openapi_fetchBatterySOC(networkDevice.deviceSN)
+                        val batterySettings = networking.openapi_fetchBatterySettings(networkDevice.deviceSN)
 
                         BatteryResponseMapper.map(batteryVariables, batterySettings)
                     } catch (_: Exception) {

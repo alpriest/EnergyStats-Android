@@ -199,7 +199,7 @@ class PowerFlowTabViewModel(
                 val totals = loadTotals(currentDevice)
                 val generation = loadGeneration(currentDevice)
 
-                val currentValues = RealQueryResponseMapper().mapCurrentValues(real)
+                val currentValues = RealQueryResponseMapper().mapCurrentValues(real, currentDevice.hasPV)
                 val currentViewModel = CurrentStatusCalculator(currentValues, configManager.shouldInvertCT2, configManager.shouldCombineCT2WithPVPower)
 
                 val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real)

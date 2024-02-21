@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -144,11 +145,7 @@ class BatteryChargeScheduleSettingsViewModel(
                 val times = listOf(timePeriod1Stream.value, timePeriod2Stream.value).map { it.asChargeTime() }
 
                 try {
-                    // TODO
-//                    network.setBatteryTimes(
-//                        deviceSN = deviceSN,
-//                        times = times
-//                    )
+                    network.openapi_setBatteryTimes(deviceSN, times)
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_charge_schedule_was_saved))
 
