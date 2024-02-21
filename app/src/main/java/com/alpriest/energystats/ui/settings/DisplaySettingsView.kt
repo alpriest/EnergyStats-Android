@@ -129,7 +129,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         SettingsSegmentedControl(
-            title = stringResource(R.string.yield),
+            title = stringResource(R.string.solar),
             segmentedControl = {
                 val items = listOf(
                     TotalYieldModel.Off,
@@ -144,10 +144,10 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     config.totalYieldModel = items[it]
                 }
             },
-            footer = buildAnnotatedString {
-                when (totalYieldModelState.value) {
-                    TotalYieldModel.Off -> null
-                    TotalYieldModel.EnergyStats -> append(stringResource(R.string.energystats_total_yield_description))
+            footer = when (totalYieldModelState.value) {
+                TotalYieldModel.Off -> null
+                TotalYieldModel.EnergyStats -> buildAnnotatedString {
+                    append(stringResource(R.string.energystats_total_yield_description))
                 }
             }
         )

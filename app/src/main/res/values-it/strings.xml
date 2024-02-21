@@ -8,7 +8,7 @@
     <string name="nextUpdate">Prossimo aggiornamento tra %1s</string>
     <string name="fullIn">Pieno in</string>
     <string name="emptyIn">Vuoto in</string>
-    <string name="yieldToday">Resa oggi %1s</string>
+    <string name="solarYieldToday">Solare oggi %1s</string>
     <string name="power_flow_tab">Flusso di potenza</string>
     <string name="stats_tab">Statistiche</string>
     <string name="settings_tab">Impostazioni</string>
@@ -291,7 +291,7 @@
     <string name="reset_times">Resetta gli orari</string>
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Impossibile caricare le previsioni - Hai superato il limite giornaliero gratuito</string>
     <string name="pv_only">Solo PV</string>
-    <string name="yield">Rendimento</string>
+    <string name="solar">Resa Solare</string>
     <string name="energystats_total_yield_description">Calculado como una aproximación de la suma de Riemann de la integración de pvPower. Esto será razonablemente preciso, pero solo para hoy.</string>
     <string name="foxess_total_yield_description">Utilizza il valore fornito da FoxESS, che include l\'uscita della batteria e l\'uscita solare.</string>
     <string name="show_on_flow_page">Mostra sulla pagina del flusso</string>

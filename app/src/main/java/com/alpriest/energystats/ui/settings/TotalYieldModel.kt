@@ -9,7 +9,7 @@ enum class TotalYieldModel(val value: Int) {
     fun title(context: Context): String {
         return when (this) {
             Off -> context.getString(R.string.off)
-            EnergyStats -> context.getString(R.string.pv_only)
+            EnergyStats -> context.getString(R.string.on)
         }
     }
 

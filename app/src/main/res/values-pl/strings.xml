@@ -8,7 +8,7 @@
     <string name="nextUpdate">Następna aktualizacja za %1s</string>
     <string name="fullIn">Pełny za</string>
     <string name="emptyIn">Pusty za</string>
-    <string name="yieldToday">Dzisiejszy wydajność %1s</string>
+    <string name="solarYieldToday">Słoneczne dziś %1s</string>
     <string name="power_flow_tab">Przepływ mocy</string>
     <string name="stats_tab">Statystyki</string>
     <string name="settings_tab">Ustawienia</string>
@@ -291,7 +291,7 @@
     <string name="reset_times">Czasy resetowania</string>
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Nie można załadować prognozy - Przekroczyłeś darmowy dzienny limit</string>
     <string name="pv_only">Tylko PV</string>
-    <string name="yield">Wydajność</string>
+    <string name="solar">Wydajność Solarna</string>
     <string name="energystats_total_yield_description">Obliczona jako przybliżenie sumy Riemanna całkowania pvPower. Będzie to dość dokładne, ale tylko na dzisiaj.</string>
     <string name="foxess_total_yield_description">Wykorzystuje wartość dostarczoną przez FoxESS, która zawiera moc wyjściową baterii i energii słonecznej.</string>
     <string name="show_on_flow_page">Pokaż na stronie przepływu</string>

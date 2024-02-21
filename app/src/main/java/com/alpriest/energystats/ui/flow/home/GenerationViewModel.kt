@@ -6,7 +6,7 @@ import java.time.ZoneId
 import java.util.Locale
 
 class GenerationViewModel(private val response: OpenHistoryResponse, private val includeCT2: Boolean) {
-    fun todayGeneration(): Double {
+    fun solarToday(): Double {
         val filteredVariables = response.datas.filter { it.variable == "pvPower" || (it.variable == "meterPower2" && includeCT2) }.flatMap { it.data.toList() }
 
         val timeDifferenceInSeconds: Double = if (filteredVariables.size > 1) {

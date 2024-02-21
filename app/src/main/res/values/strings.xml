@@ -7,7 +7,7 @@
     <string name="nextUpdate">Next update in %1s</string>
     <string name="fullIn">Full in</string>
     <string name="emptyIn">Empty in</string>
-    <string name="yieldToday">Yield today %1s</string>
+    <string name="solarYieldToday">Solar today %1s</string>
     <string name="power_flow_tab">Power flow</string>
     <string name="stats_tab">Stats</string>
     <string name="settings_tab">Settings</string>
@@ -292,7 +292,7 @@
     <string name="reset_times">Reset times</string>
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Could not load forecast - You have exceeded your free daily limit</string>
     <string name="pv_only">PV Only</string>
-    <string name="yield">Yield</string>
+    <string name="solar">Solar Yield</string>
     <string name="energystats_total_yield_description">Calculated as a Riemann sum approximation integration of pvPower. This will be reasonably accurate but is only calculated for today.</string>
     <string name="foxess_total_yield_description">Uses the FoxESS supplied value which contains battery and solar output.</string>
     <string name="show_on_flow_page">Show on flow page</string>
@@ -317,4 +317,5 @@
     <string name="api_key_step_6">6. Paste the API key above</string>
     <string name="api_change_reason">This change to API key was required by FoxESS in early 2024. The FoxESS site does not function well on mobile devices. Please do not contact Energy Stats with issues about the FoxESS website, only FoxESS will be able to assist you in any issues with their site. service.uk@fox-ess.com</string>
     <string name="how_to_get_api_key">To get your API key:</string>
+    <string name="on">On</string>
 </resources>
