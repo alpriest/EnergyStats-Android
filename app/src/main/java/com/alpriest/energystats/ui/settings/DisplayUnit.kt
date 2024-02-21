@@ -17,7 +17,7 @@ enum class DisplayUnit(val value: Int) {
     }
 
     companion object {
-        fun fromInt(value: Int) = DisplayUnit.values().first { it.value == value }
+        fun fromInt(value: Int) = DisplayUnit.values().firstOrNull { it.value == value } ?: Adaptive
     }
 }
 
@@ -35,6 +35,6 @@ enum class DataCeiling(val value: Int) {
     }
 
     companion object {
-        fun fromInt(value: Int) = DataCeiling.values().first { it.value == value }
+        fun fromInt(value: Int) = DataCeiling.values().firstOrNull { it.value == value } ?: None
     }
 }

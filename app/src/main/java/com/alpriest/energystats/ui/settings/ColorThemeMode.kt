@@ -17,6 +17,6 @@ enum class ColorThemeMode(val value: Int) {
     }
 
     companion object {
-        fun fromInt(value: Int) = ColorThemeMode.values().first { it.value == value }
+        fun fromInt(value: Int) = ColorThemeMode.values().firstOrNull { it.value == value } ?: Auto
     }
 }

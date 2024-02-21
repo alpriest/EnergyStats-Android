@@ -14,6 +14,6 @@ enum class TotalYieldModel(val value: Int) {
     }
 
     companion object {
-        fun fromInt(value: Int) = TotalYieldModel.values().first { it.value == value }
+        fun fromInt(value: Int) = TotalYieldModel.values().firstOrNull { it.value == value } ?: EnergyStats
     }
 }

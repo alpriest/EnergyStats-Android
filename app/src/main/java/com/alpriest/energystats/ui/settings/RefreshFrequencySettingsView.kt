@@ -19,7 +19,7 @@ enum class RefreshFrequency(val value: Int) {
     Auto(0);
 
     companion object {
-        fun fromInt(value: Int) = values().first { it.value == value }
+        fun fromInt(value: Int) = values().firstOrNull { it.value == value } ?: Auto
     }
 }
 
