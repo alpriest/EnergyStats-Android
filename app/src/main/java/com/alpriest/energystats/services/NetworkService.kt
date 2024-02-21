@@ -94,6 +94,10 @@ class NetworkService(private val credentials: CredentialStore, private val store
 
                 chain.proceed(requestBuilder.build())
             }
+            .addInterceptor { chain ->
+                InMemoryLoggingNetworkStore.shared.latestRequest = chain.request()
+                chain.proceed(chain.request())
+            }
 
         interceptor?.let {
             builder.addInterceptor(it)

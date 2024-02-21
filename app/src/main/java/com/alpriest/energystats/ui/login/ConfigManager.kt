@@ -283,8 +283,10 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         }
 
     override suspend fun fetchDevices() {
+        var method = "openapi_fetchDeviceList"
         try {
             val deviceList = networking.openapi_fetchDeviceList()
+            method = "openapi_fetchVariables"
             config.variables = networking.openapi_fetchVariables().mapNotNull { variable ->
                 variable.unit?.let {
                     Variable(
@@ -294,11 +296,14 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
                     )
                 }
             }
+
             val mappedDevices = ArrayList<Device>()
             deviceList.asFlow().map { networkDevice ->
                 val deviceBattery: Battery? = if (networkDevice.hasBattery) {
                     try {
+                        method = "openapi_fetchRealData"
                         val batteryVariables = networking.openapi_fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC"))
+                        method = "openapi_fetchBatterySOC"
                         val batterySettings = networking.openapi_fetchBatterySOC(networkDevice.deviceSN)
 
                         BatteryResponseMapper.map(batteryVariables, batterySettings)
@@ -335,7 +340,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         } catch (ex: Exception) {
-            throw DataFetchFailure("Failed to load Device or Battery Settings", ex)
+            throw DataFetchFailure("Failed to load Device or Battery Settings ($method)", ex)
         }
     }
 

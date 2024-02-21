@@ -199,7 +199,7 @@ fun prettyPrintJson(jsonString: String): String {
 @Preview(showBackground = true, heightDp = 640)
 @Composable
 fun DataSettingsViewPreview() {
-    val networkStore = InMemoryLoggingNetworkStore()
+    val networkStore = InMemoryLoggingNetworkStore.shared
     val navController = rememberNavController()
 
     EnergyStatsTheme {

@@ -39,7 +39,7 @@ class AppContainer(private val context: Context) {
     val solarForecastingProvider: () -> SolarForecasting = {
         if (config.isDemoUser) { DemoSolarForecasting() } else { SolcastCache(Solcast(), context) }
     }
-    val networkStore: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore()
+    val networkStore: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore.shared
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences(
             "com.alpriest.energystats",

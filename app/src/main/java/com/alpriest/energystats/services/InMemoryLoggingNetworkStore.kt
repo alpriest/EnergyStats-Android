@@ -7,7 +7,9 @@ import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.PagedDeviceListResponse
+import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import kotlinx.coroutines.flow.MutableStateFlow
+import okhttp3.Request
 
 class InMemoryLoggingNetworkStore {
     val dataLoggerListResponse: MutableStateFlow<NetworkOperation<NetworkResponse<List<DataLoggerResponse>>>?> = MutableStateFlow(null)
@@ -19,4 +21,9 @@ class InMemoryLoggingNetworkStore {
     val batterySOCResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<BatterySOCResponse>>?> = MutableStateFlow(null)
     val deviceListResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<PagedDeviceListResponse>>?> = MutableStateFlow(null)
     val batteryTimesResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<BatteryTimesResponse>>?> = MutableStateFlow(null)
+    var latestRequest: Request? = null
+
+    companion object {
+        val shared: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore()
+    }
 }

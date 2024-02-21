@@ -199,7 +199,7 @@ fun HomepagePreview() {
             userManager = FakeUserManager(),
             {},
             themeStream = themeStream,
-            networkStore = InMemoryLoggingNetworkStore(),
+            networkStore = InMemoryLoggingNetworkStore.shared,
             {},
             {},
             { _, _ -> null },
