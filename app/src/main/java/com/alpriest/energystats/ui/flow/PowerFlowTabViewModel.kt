@@ -195,10 +195,6 @@ class PowerFlowTabViewModel(
                     uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
                 }
 
-                // TODO
-//                configManager.currencyCode = earnings.currencyCode()
-//                configManager.currencySymbol = earnings.currencySymbol()
-
                 val real = loadRealData(currentDevice)
                 val totals = loadTotals(currentDevice)
                 val generation = loadGeneration(currentDevice)
@@ -206,7 +202,7 @@ class PowerFlowTabViewModel(
                 val currentValues = RealQueryResponseMapper().mapCurrentValues(real)
                 val currentViewModel = CurrentStatusCalculator(currentValues, configManager.shouldInvertCT2, configManager.shouldCombineCT2WithPVPower)
 
-                val battery: BatteryViewModel = makeBatteryViewModel(currentDevice, real)
+                val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real)
 
                 val summary = HomePowerFlowViewModel(
                     solar = currentViewModel.currentSolarPower,
@@ -234,27 +230,6 @@ class PowerFlowTabViewModel(
             uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Error(ex, ex.localizedMessage ?: "Error unknown"))
             updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
         }
-    }
-
-    private fun makeBatteryViewModel(
-        currentDevice: Device,
-        real: OpenQueryResponse
-    ): BatteryViewModel {
-        val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
-            val chargePower = real.datas.currentValue("batChargePower")
-            val dischargePower = real.datas.currentValue("batDischargePower")
-            val power = chargePower.takeIf { it > 0 } ?: -dischargePower
-
-            BatteryViewModel(
-                power = power,
-                soc = real.datas.currentValue("SoC").toInt(),
-                residual = real.datas.currentValue("ResidualEnergy") * 10.0,
-                temperature = real.datas.currentValue("batTemperature")
-            )
-        } else {
-            BatteryViewModel.noBattery()
-        }
-        return battery
     }
 
     private fun calculateTicks(summary: CurrentStatusCalculator) {

@@ -2,7 +2,6 @@ package com.alpriest.energystats.widget
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset

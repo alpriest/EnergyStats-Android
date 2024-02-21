@@ -32,7 +32,6 @@ interface ConfigManaging {
     var showInverterPlantNameOnPowerflow: Boolean
     var shouldInvertCT2: Boolean
     val variables: List<Variable>
-    val hasBattery: Boolean
     var showUsableBatteryOnly: Boolean
     var decimalPlaces: Int
     var showFinancialSummary: Boolean

@@ -282,11 +282,6 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
             return config.variables
         }
 
-    override val hasBattery: Boolean
-        get() {
-            return currentDevice.value?.let { it.battery == null } ?: false
-        }
-
     override suspend fun fetchDevices() {
         try {
             val deviceList = networking.openapi_fetchDeviceList()

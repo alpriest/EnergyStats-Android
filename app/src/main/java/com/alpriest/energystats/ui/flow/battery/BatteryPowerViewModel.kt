@@ -35,9 +35,4 @@ class BatteryPowerViewModel(
     fun batteryStateOfCharge(): Double {
         return calculator.effectiveBatteryStateOfCharge(batteryStateOfCharge = actualStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly)
     }
-
-    val hasBattery: Boolean
-        get() {
-            return configManager.hasBattery
-        }
 }

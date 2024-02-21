@@ -25,15 +25,28 @@ class LatestDataRepository private constructor() {
     }
 
     private suspend fun fetchData(context: Context, appContainer: AppContainer, device: Device) {
-        if (appContainer.configManager.hasBattery) {
-//            val battery = appContainer.networking.fetchBattery(device.deviceID)
-//            val minSOC = device.battery?.minSOC?.toDouble() ?: 0.0 // TODO
-//            val calculator = BatteryCapacityCalculator(appContainer.configManager.batteryCapacity, minSOC)
-//            val viewModel = BatteryViewModel(battery, false)
-//            calculator.batteryPercentageRemaining(viewModel.chargePower, viewModel.chargeLevel)?.let {
-//                chargeDescription = duration(context, it)
-//            }
-//            batteryPercentage = battery.soc / 100.0f
+        if (device.hasBattery) {
+            val variables: List<String> = listOf(
+                "batChargePower",
+                "batDischargePower",
+                "SoC",
+                "batTemperature",
+                "ResidualEnergy"
+            )
+
+            val real = appContainer.networking.openapi_fetchRealData(
+                deviceSN = device.deviceSN,
+                variables
+            )
+
+            val minSOC = device.battery?.minSOC?.toDouble() ?: 0.0
+            val calculator = BatteryCapacityCalculator(appContainer.configManager.batteryCapacity, minSOC)
+            val battery = BatteryViewModel.make(device, real)
+            calculator.batteryPercentageRemaining(battery.chargePower, battery.chargeLevel)?.let {
+                chargeDescription = duration(context, it)
+            }
+            batteryPercentage = battery.chargeLevel.toFloat()
+            hasBattery = true
         } else {
             hasBattery = false
         }

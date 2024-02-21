@@ -30,8 +30,6 @@ class FakeConfigManager : ConfigManaging {
     override var currencySymbol: String = "£"
     override val variables: List<Variable>
         get() = listOf()
-    override val hasBattery: Boolean
-        get() = true
     override var showUsableBatteryOnly: Boolean = false
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.preview())
     override var decimalPlaces: Int = 3
