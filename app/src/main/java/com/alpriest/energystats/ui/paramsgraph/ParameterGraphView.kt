@@ -65,6 +65,7 @@ fun ParameterGraphView(
     val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>() else DecimalFormatAxisValueFormatter("0.0")
     val dataPointCount = viewModel.xDataPointCount.collectAsState().value
+    val seriesCount = producer.getModel()?.entries?.count() ?: 0
 
     MonitorAlertDialog(viewModel, userManager)
 
@@ -97,13 +98,10 @@ fun ParameterGraphView(
                                 ),
                                 textComponent(
                                     colors.onSecondary,
-                                    lineCount = 4,
+                                    lineCount = seriesCount,
                                     background = shapeComponent(
-                                        shape = Shapes.roundedCornerShape(
-                                            bottomLeftPercent = 25,
-                                            bottomRightPercent = 25,
-                                        ),
-                                        color = Color.Black,
+                                        shape = Shapes.rectShape,
+                                        color = colors.secondary,
                                     )
                                 )
                             ),
@@ -139,13 +137,10 @@ fun ParameterGraphView(
                                 ),
                                 textComponent(
                                     colors.onSecondary,
-                                    lineCount = 4,
+                                    lineCount = seriesCount,
                                     background = shapeComponent(
-                                        shape = Shapes.roundedCornerShape(
-                                            bottomLeftPercent = 25,
-                                            bottomRightPercent = 25,
-                                        ),
-                                        color = Color.Black,
+                                        shape = Shapes.rectShape,
+                                        color = colors.secondary,
                                     )
                                 )
                             ),
@@ -181,13 +176,10 @@ fun ParameterGraphView(
                                 ),
                                 textComponent(
                                     colors.onSecondary,
-                                    lineCount = 4,
+                                    lineCount = seriesCount,
                                     background = shapeComponent(
-                                        shape = Shapes.roundedCornerShape(
-                                            bottomLeftPercent = 25,
-                                            bottomRightPercent = 25,
-                                        ),
-                                        color = Color.Black,
+                                        shape = Shapes.rectShape,
+                                        color = colors.secondary,
                                     )
                                 )
                             ),

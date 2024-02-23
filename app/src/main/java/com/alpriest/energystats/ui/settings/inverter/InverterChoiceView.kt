@@ -87,7 +87,7 @@ fun InverterChoiceView(
 
 val Device.deviceDisplayName: String
     get() {
-        return "$stationName ($stationID)"
+        return listOfNotNull(stationName, stationID).joinToString { it }
     }
 
 @Preview(showBackground = true, heightDp = 600, widthDp = 400)
