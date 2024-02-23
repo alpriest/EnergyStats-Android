@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
     val scrollState = rememberScrollState()
-    val coroutineScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
 
@@ -70,7 +70,7 @@ fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLog
 
         EqualWidthButtonList(
             listOf(
-                ButtonDefinition(stringResource(R.string.copy_debug_data)) { coroutineScope.launch {
+                ButtonDefinition(stringResource(R.string.copy_debug_data)) { scope.launch {
                     InMemoryLoggingNetworkStore.shared.latestRequest?.let { request ->
                         val text = request.toString()
                         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -78,7 +78,7 @@ fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLog
                         clipboard.setPrimaryClip(clip)
                     }
                 } },
-                ButtonDefinition(stringResource(R.string.retry)) { coroutineScope.launch { onRetry() } },
+                ButtonDefinition(stringResource(R.string.retry)) { scope.launch { onRetry() } },
                 ButtonDefinition(stringResource(R.string.foxess_cloud_status)) { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") },
                 ButtonDefinition(stringResource(R.string.logout)) { onLogout() }
             )

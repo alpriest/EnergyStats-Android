@@ -13,6 +13,8 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.DemoFoxESSNetworking
+import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
@@ -23,13 +25,13 @@ import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController) {
+fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController, network: FoxESSNetworking) {
     val currentDevice = configManager.currentDevice.collectAsState()
     val showInverterTemperaturesState = rememberSaveable { mutableStateOf(configManager.showInverterTemperatures) }
     val showInverterIconState = rememberSaveable { mutableStateOf(configManager.showInverterIcon) }
     val shouldInvertCT2State = rememberSaveable { mutableStateOf(configManager.shouldInvertCT2) }
     val showInverterTypeNameState = rememberSaveable { mutableStateOf(configManager.showInverterTypeNameOnPowerflow) }
-    val showInverterPlantNameState = rememberSaveable { mutableStateOf(configManager.showInverterPlantNameOnPowerflow) }
+    val showInverterStationNameState = rememberSaveable { mutableStateOf(configManager.showInverterStationNameOnPowerflow) }
     val shouldCombineCT2WithPVPowerState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithPVPower) }
 
     SettingsPage {
@@ -60,11 +62,11 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                     onUpdate = { configManager.showInverterTypeNameOnPowerflow = it }
                 )
 
-                SettingsCheckbox(
-                    title = stringResource(R.string.show_inverter_plant_name),
-                    state = showInverterPlantNameState,
-                    onUpdate = { configManager.showInverterPlantNameOnPowerflow = it }
-                )
+//                SettingsCheckbox(
+//                    title = stringResource(R.string.show_inverter_station_name),
+//                    state = showInverterStationNameState,
+//                    onUpdate = { configManager.showInverterStationNameOnPowerflow = it }
+//                )
             }
 
             SettingsColumnWithChild {
@@ -83,7 +85,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 )
             }
 
-            FirmwareVersionView(it)
+            FirmwareVersionView(it, network)
             DeviceVersionView(it)
         }
     }
@@ -106,7 +108,8 @@ fun InverterSettingsViewPreview() {
     EnergyStatsTheme {
         InverterSettingsView(
             FakeConfigManager(),
-            NavHostController(LocalContext.current)
+            NavHostController(LocalContext.current),
+            DemoFoxESSNetworking()
         )
     }
 }

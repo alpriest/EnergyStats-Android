@@ -29,7 +29,7 @@ fun LoadingOverlayView() {
 @Preview
 @Composable
 fun LoadingOverlayPreview() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         LoadingOverlayView()
     }
 }

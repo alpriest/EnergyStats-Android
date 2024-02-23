@@ -34,7 +34,6 @@ class EditTemplateView(
     fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController))) {
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
-        val context = LocalContext.current
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -45,12 +44,12 @@ class EditTemplateView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel, navController) }
+            is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel) }
         }
     }
 
     @Composable
-    fun Loaded(schedule: Schedule, viewModel: EditTemplateViewModel, navController: NavHostController) {
+    fun Loaded(schedule: Schedule, viewModel: EditTemplateViewModel) {
         val context = LocalContext.current
 
         SettingsPage {

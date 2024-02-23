@@ -29,7 +29,7 @@ interface ConfigManaging {
     var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean
     var showInverterTypeNameOnPowerflow: Boolean
-    var showInverterPlantNameOnPowerflow: Boolean
+    var showInverterStationNameOnPowerflow: Boolean
     var shouldInvertCT2: Boolean
     val variables: List<Variable>
     var showUsableBatteryOnly: Boolean

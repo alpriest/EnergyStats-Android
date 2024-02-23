@@ -50,13 +50,6 @@ fun NavGraphBuilder.debugGraph(
 //                }
 //            })
 //        }
-//        composable("batterySettings") {
-//            ResponseDebugView(networkStore, mapper = { networkStore.batterySettingsResponseStream }, fetcher = {
-//                configManager.currentDevice.value?.deviceSN?.let {
-//                    network.fetchBatterySettings(it)
-//                }
-//            })
-//        }
 //        composable("batteryTimes") {
 //            ResponseDebugView(networkStore, mapper = { networkStore.batteryTimesResponseStream }, fetcher = {
 //                configManager.currentDevice.value?.deviceSN?.let {
@@ -100,9 +93,6 @@ fun DebugDataSettingsView(navController: NavController) {
             Text("Battery")
         }
 
-        Button(onClick = { navController.navigate("batterySettings") }) {
-            Text("Battery Settings")
-        }
 
         Button(onClick = { navController.navigate("batteryTimes") }) {
             Text("Battery Charge Schedule")

@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.time.LocalDate
+import java.util.concurrent.CancellationException
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
@@ -238,7 +239,7 @@ class StatsTabViewModel(
         val entries = grouped
             .map { group ->
                 group.value.map {
-                    return@map StatsChartEntry(
+                    StatsChartEntry(
                         x = it.graphPoint.toFloat(),
                         y = it.value.toFloat(),
                         type = it.type,

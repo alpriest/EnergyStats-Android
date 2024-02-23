@@ -36,7 +36,7 @@ class FakeConfigStore(
     override var shouldInvertCT2: Boolean = false,
     override var showGridTotals: Boolean = false,
     override var showInverterTypeNameOnPowerflow: Boolean = true,
-    override var showInverterPlantNameOnPowerflow: Boolean = true,
+    override var showInverterStationNameOnPowerflow: Boolean = true,
     override var deviceBatteryOverrides: Map<String, String> = mapOf(),
     override var showLastUpdateTimestamp: Boolean = false,
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,

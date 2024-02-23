@@ -12,11 +12,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +29,7 @@ import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.FinanceAmount
+import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -58,14 +56,13 @@ class SummaryView(
         val appTheme = themeStream.collectAsState().value
         val approximations = viewModel.approximationsViewModelStream.collectAsState().value
         val oldestDataDate = viewModel.oldestDataDate.collectAsState().value
-        var isLoading by remember { mutableStateOf(false) }
+        val isLoading = viewModel.loadStateStream.collectAsState().value.state
+        val context = LocalContext.current
 
         MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
-            isLoading = true
-            viewModel.load()
-            isLoading = false
+            viewModel.load(context)
         }
 
         Column(
@@ -80,21 +77,24 @@ class SummaryView(
                 fontWeight = FontWeight.Bold
             )
 
-            if (isLoading) {
-                Text(stringResource(R.string.loading))
-            } else {
-                approximations?.let {
-                    LoadedView(
-                        approximationsViewModel = it,
-                        appTheme = appTheme,
-                        oldestDataDate = oldestDataDate
-                    )
-                }
+            when (isLoading) {
+                is LoadState.Active ->
+                    Text(stringResource(R.string.loading))
 
-                SolarForecastView(
-                    solarForecastProvider,
-                    themeStream,
-                ).Content(modifier = Modifier.padding(top = 44.dp))
+                else -> {
+                    approximations?.let {
+                        LoadedView(
+                            approximationsViewModel = it,
+                            appTheme = appTheme,
+                            oldestDataDate = oldestDataDate
+                        )
+                    }
+
+                    SolarForecastView(
+                        solarForecastProvider,
+                        themeStream,
+                    ).Content(modifier = Modifier.padding(top = 44.dp))
+                }
             }
         }
     }

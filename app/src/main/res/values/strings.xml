@@ -169,7 +169,7 @@
     <string name="total_export">Export total</string>
     <string name="show_daily_grid_totals">Show daily grid totals</string>
     <string name="show_inverter_type_name">Show inverter type name</string>
-    <string name="show_inverter_plant_name">Show inverter plant name</string>
+    <string name="show_inverter_station_name">Show inverter plant name</string>
     <string name="logging_in">Logging in…</string>
     <string name="last_update">Last update %1s</string>
     <string name="today">today</string>

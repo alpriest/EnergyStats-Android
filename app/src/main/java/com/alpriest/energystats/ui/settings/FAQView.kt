@@ -20,14 +20,11 @@ fun FAQView() {
 
     val client = OkHttpClient()
 
-    val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(null) {
-        coroutineScope.launch {
-            val remoteUrl = "https://raw.githubusercontent.com/wiki/alpriest/EnergyStats-Android/FAQ.md"
-            val response = fetchMarkdownContent(client, remoteUrl)
-            response?.let {
-                markdownText = it
-            }
+        val remoteUrl = "https://raw.githubusercontent.com/wiki/alpriest/EnergyStats-Android/FAQ.md"
+        val response = fetchMarkdownContent(client, remoteUrl)
+        response?.let {
+            markdownText = it
         }
     }
 

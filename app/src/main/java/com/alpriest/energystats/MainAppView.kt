@@ -14,7 +14,6 @@ import com.alpriest.energystats.ui.login.APIKeyLoginView
 import com.alpriest.energystats.ui.login.LoggedIn
 import com.alpriest.energystats.ui.login.LoggedOut
 import com.alpriest.energystats.ui.login.LoggingIn
-import com.alpriest.energystats.ui.login.LoginView
 import com.alpriest.energystats.ui.login.RequiresUpgrade
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
@@ -28,7 +27,7 @@ fun MainAppView(appContainer: AppContainer) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            val coroutineScope = rememberCoroutineScope()
+            val scope = rememberCoroutineScope()
             val loginStateValue = loginState.value
 
             when (loginStateValue.loadState) {
@@ -54,12 +53,12 @@ fun MainAppView(appContainer: AppContainer) {
                         errorMessage = loginStateValue.loadState.reason,
                         themeStream = appContainer.configManager.themeStream,
                         onLogin = { apiKey ->
-                            coroutineScope.launch {
+                            scope.launch {
                                 appContainer.userManager.login(apiKey)
                             }
                         },
                         onDemoLogin = {
-                            coroutineScope.launch {
+                            scope.launch {
                                 appContainer.userManager.loginDemo()
                             }
                         }

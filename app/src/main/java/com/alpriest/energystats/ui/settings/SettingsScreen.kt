@@ -88,7 +88,7 @@ fun NavigableSettingsView(
             BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, userManager = userManager).Content()
         }
         composable(SettingsScreen.Inverter.name) {
-            InverterSettingsView(configManager = config, navController = navController)
+            InverterSettingsView(configManager = config, network = network, navController = navController)
         }
         composable(SettingsScreen.InverterSchedule.name) {
             ScheduleSummaryView(config, network, navController, userManager).Content()

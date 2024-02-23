@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -18,7 +19,7 @@ import java.lang.Math.abs
 import java.util.Date
 
 data class CachedItem(val item: Any) {
-    val cacheTime: Date = Date()
+    private val cacheTime: Date = Date()
 
     fun isFresherThan(seconds: Int): Boolean {
         return abs(Date().time - cacheTime.time) < (seconds * 1000L)
@@ -29,7 +30,7 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
     private var cache: MutableMap<String, CachedItem> = mutableMapOf()
     private val shortCacheDurationInSeconds = 5
 
-    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
+    override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return network.openapi_fetchDeviceList()
     }
 
@@ -110,6 +111,10 @@ class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
 
     override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
         network.openapi_saveSchedule(deviceSN, schedule)
+    }
+
+    override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
+        return network.openapi_fetchDevice(deviceSN)
     }
 
     override suspend fun fetchErrorMessages() {

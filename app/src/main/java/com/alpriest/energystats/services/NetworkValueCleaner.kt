@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -24,7 +25,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class NetworkValueCleaner(private val network: FoxESSNetworking, private val themeStream: MutableStateFlow<AppTheme>) : FoxESSNetworking {
-    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
+    override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return network.openapi_fetchDeviceList()
     }
 
@@ -111,6 +112,10 @@ class NetworkValueCleaner(private val network: FoxESSNetworking, private val the
 
     override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
         network.openapi_saveSchedule(deviceSN, schedule)
+    }
+
+    override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
+        return network.openapi_fetchDevice(deviceSN)
     }
 
     override suspend fun fetchErrorMessages() {

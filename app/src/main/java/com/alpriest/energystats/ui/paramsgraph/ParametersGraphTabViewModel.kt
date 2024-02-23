@@ -29,6 +29,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
+import java.util.concurrent.CancellationException
 
 interface ExportProviding {
     var exportFileUri: Uri?
@@ -140,6 +141,8 @@ class ParametersGraphTabViewModel(
             this.rawData = rawData
 
             refresh()
+        } catch (ex: CancellationException) {
+            // Ignore as the user navigated away
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
         } finally {
@@ -161,7 +164,7 @@ class ParametersGraphTabViewModel(
         val entries = grouped
             .map { group ->
                 group.value.map {
-                    return@map DateTimeFloatEntry(
+                    DateTimeFloatEntry(
                         type = it.type,
                         localDateTime = it.time,
                         x = it.graphPoint.toFloat(),

@@ -84,7 +84,7 @@ class ScheduleSummaryView(
 
     @Composable
     fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel) {
-        val templates = viewModel.templateStream.collectAsState().value
+//        val templates = viewModel.templateStream.collectAsState().value
         val context = LocalContext.current
         val schedulerEnabled = viewModel.schedulerEnabledStream.collectAsState().value
         val schedulerEnabledState = rememberSaveable { mutableStateOf(schedulerEnabled) }

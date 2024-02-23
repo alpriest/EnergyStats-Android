@@ -51,7 +51,7 @@ class FakeConfigManager : ConfigManaging {
     override var showHomeTotal: Boolean = true
     override var shouldInvertCT2: Boolean = false
     override var showGridTotals: Boolean = false
-    override var showInverterPlantNameOnPowerflow: Boolean = false
+    override var showInverterStationNameOnPowerflow: Boolean = false
     override var showInverterTypeNameOnPowerflow: Boolean = false
     override var showLastUpdateTimestamp: Boolean = false
     override var solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults
@@ -68,7 +68,6 @@ class FakeConfigManager : ConfigManaging {
             stationName = "my station",
             stationID = "station1",
             battery = Battery("1200", "20", false),
-            firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
             moduleSN = "module123",
             hasPV = true,
             hasBattery = true,
@@ -79,7 +78,6 @@ class FakeConfigManager : ConfigManaging {
             stationName = "my station",
             stationID = "station2",
             battery = Battery("1200", "20", false),
-            firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
             moduleSN = "module123",
             hasPV = true,
             hasBattery = true,
@@ -92,7 +90,6 @@ class FakeConfigManager : ConfigManaging {
             stationName = "my station",
             stationID = "station1",
             battery = Battery("1200", "20", false),
-            firmware = DeviceFirmwareVersion("1.50", "1.02", "1.20"),
             moduleSN = "module123",
             hasPV = true,
             hasBattery = true,

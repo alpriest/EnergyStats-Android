@@ -168,7 +168,7 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
                 }
             }
         } else {
-            if (appTheme.showInverterPlantNameOnPowerflow) {
+            if (appTheme.showInverterStationNameOnPowerflow) {
                 OptionalView(viewModel.deviceStationName) {
                     Text(it)
                 }
@@ -186,7 +186,7 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
 private fun inverterLandscapeTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
     val appTheme = themeStream.collectAsState().value
 
-    if (appTheme.showInverterPlantNameOnPowerflow) {
+    if (appTheme.showInverterStationNameOnPowerflow) {
         OptionalView(inverterTemperaturesViewModel.deviceStationName) {
             Text(
                 modifier = Modifier

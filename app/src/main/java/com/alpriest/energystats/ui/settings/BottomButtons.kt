@@ -90,7 +90,7 @@ fun BottomButtonsView(
     footer: @Composable (ColumnScope.() -> Unit) = {},
     buttons: List<BottomButtonConfiguration>
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = modifier
@@ -103,7 +103,7 @@ fun BottomButtonsView(
                     modifier = Modifier.weight(1.0f),
                     disclosureIcon = null
                 ) {
-                    coroutineScope.launch {
+                    scope.launch {
                         button.onTap()
                     }
                 }

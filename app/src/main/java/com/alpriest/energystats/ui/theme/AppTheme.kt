@@ -29,7 +29,7 @@ data class AppTheme(
     val shouldInvertCT2: Boolean,
     val showGridTotals: Boolean,
     val showInverterTypeNameOnPowerflow: Boolean,
-    val showInverterPlantNameOnPowerflow: Boolean,
+    val showInverterStationNameOnPowerflow: Boolean,
     val showLastUpdateTimestamp: Boolean,
     val solarRangeDefinitions: SolarRangeDefinitions,
     val shouldCombineCT2WithPVPower: Boolean,

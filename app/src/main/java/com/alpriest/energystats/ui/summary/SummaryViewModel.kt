@@ -1,7 +1,9 @@
 package com.alpriest.energystats.ui.summary
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
@@ -9,6 +11,8 @@ import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -16,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.concurrent.CancellationException
 
 class SummaryTabViewModelFactory(
     private val network: FoxESSNetworking,
@@ -35,16 +40,19 @@ class SummaryTabViewModel(
     val oldestDataDate = MutableStateFlow("")
     private val approximationsCalculator = ApproximationsCalculator(configManager)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    val loadStateStream = MutableStateFlow(UiLoadState(LoadState.Inactive))
 
-    suspend fun load() {
+    suspend fun load(context: Context) {
         if (approximationsViewModelStream.value != null) {
             return
         }
 
+        loadStateStream.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
         configManager.currentDevice.value?.let {
             val totals = fetchAllYears(it)
             approximationsViewModelStream.value = makeApproximationsViewModel(totals = totals)
         }
+        loadStateStream.value = UiLoadState(LoadState.Inactive)
     }
 
     private suspend fun fetchAllYears(device: Device): Map<ReportVariable, Double> {
@@ -64,10 +72,10 @@ class SummaryTabViewModel(
                 emptyMonth?.let { month ->
                     val calendar = Calendar.getInstance()
                     calendar.set(Calendar.YEAR, year)
-                    calendar.set(Calendar.MONTH, month - 1) // In Java Calendar, January is 0
+                    calendar.set(Calendar.MONTH, month - 1)
                     calendar.set(Calendar.DAY_OF_MONTH, 1)
                     val date = calendar.time
-                    val dateFormatter = SimpleDateFormat("MMMM YYYY", Locale.getDefault())
+                    val dateFormatter = SimpleDateFormat("MMMM y", Locale.getDefault())
                     oldestDataDate.value = dateFormatter.format(date)
                     hasFinished = true
                 }
@@ -75,6 +83,8 @@ class SummaryTabViewModel(
                 yearlyTotals.forEach { (variable, value) ->
                     totals[variable] = (totals[variable] ?: 0.0) + value
                 }
+            } catch (ex: CancellationException) {
+                // Ignore as the user navigated away
             } catch (ex: Exception) {
                 hasFinished = true
                 alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)

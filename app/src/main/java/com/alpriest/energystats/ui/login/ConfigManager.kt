@@ -218,11 +218,11 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
             themeStream.value = themeStream.value.copy(showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow)
         }
 
-    override var showInverterPlantNameOnPowerflow: Boolean
-        get() = config.showInverterPlantNameOnPowerflow
+    override var showInverterStationNameOnPowerflow: Boolean
+        get() = config.showInverterStationNameOnPowerflow
         set(value) {
-            config.showInverterPlantNameOnPowerflow = value
-            themeStream.value = themeStream.value.copy(showInverterPlantNameOnPowerflow = showInverterPlantNameOnPowerflow)
+            config.showInverterStationNameOnPowerflow = value
+            themeStream.value = themeStream.value.copy(showInverterStationNameOnPowerflow = showInverterStationNameOnPowerflow)
         }
 
     override var showLastUpdateTimestamp: Boolean
@@ -319,10 +319,9 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
                 mappedDevices.add(
                     Device(
                         deviceSN = networkDevice.deviceSN,
-                        stationName = networkDevice.stationName,
+                        stationName = null,
                         stationID = networkDevice.stationID,
                         battery = deviceBattery,
-                        firmware = DeviceFirmwareVersion(manager = networkDevice.managerVersion, master = networkDevice.masterVersion, slave = networkDevice.slaveVersion),
                         moduleSN = networkDevice.moduleSN,
                         hasPV = networkDevice.hasPV,
                         hasBattery = networkDevice.hasBattery,

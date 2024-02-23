@@ -67,7 +67,7 @@ class AppContainer(private val context: Context) {
             shouldInvertCT2 = config.shouldInvertCT2,
             showGridTotals = config.showGridTotals,
             showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
-            showInverterPlantNameOnPowerflow = config.showInverterPlantNameOnPowerflow,
+            showInverterStationNameOnPowerflow = config.showInverterStationNameOnPowerflow,
             showLastUpdateTimestamp = config.showLastUpdateTimestamp,
             solarRangeDefinitions = config.solarRangeDefinitions,
             shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,

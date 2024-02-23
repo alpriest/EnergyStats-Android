@@ -38,7 +38,7 @@ interface ConfigInterface {
     var shouldInvertCT2: Boolean
     var showGridTotals: Boolean
     var showInverterTypeNameOnPowerflow: Boolean
-    var showInverterPlantNameOnPowerflow: Boolean
+    var showInverterStationNameOnPowerflow: Boolean
     var deviceBatteryOverrides: Map<String, String>
     var parameterGroups: List<ParameterGroup>
     var solcastSettings: SolcastSettings

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.SchedulePhaseResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxESSNetworking
@@ -54,10 +55,16 @@ class ScheduleSummaryViewModel(
                     val flags = network.openapi_fetchSchedulerFlag(deviceSN)
 
                     if (!flags.support) {
+                        val firmwareVersion: DeviceFirmwareVersion? = try {
+                            val response = network.openapi_fetchDevice(deviceSN)
+                            DeviceFirmwareVersion(master = response.masterVersion, manager = response.managerVersion, slave = response.slaveVersion)
+                        } catch (ex: Exception) {
+                            null
+                        }
                         supportedErrorStream.value = String.format(
                             context.getString(R.string.unsupported_firmware),
                             device.deviceDisplayName,
-                            device.firmware?.manager ?: ""
+                            firmwareVersion?.manager ?: ""
                         )
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } else {

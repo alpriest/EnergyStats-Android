@@ -6,6 +6,7 @@ import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceFunction
+import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
@@ -26,34 +27,22 @@ import com.google.gson.reflect.TypeToken
 import java.time.LocalDateTime
 
 class DemoFoxESSNetworking : FoxESSNetworking {
-    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
+    override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return arrayListOf(
-            DeviceDetailResponse(
+            DeviceSummaryResponse(
                 deviceSN = "998877",
                 moduleSN = "mod111",
                 stationID = "st123",
-                stationName = "h1_deviceid",
-                function = DeviceFunction(scheduler = true),
-                hardwareVersion = "1",
-                managerVersion = "2",
-                masterVersion = "3",
-                slaveVersion = "4",
                 status = 1,
                 deviceType = "h1",
                 hasBattery = true,
                 hasPV = true,
                 productType = "produ1"
             ),
-            DeviceDetailResponse(
+            DeviceSummaryResponse(
                 deviceSN = "123123",
                 moduleSN = "mod222",
                 stationID = "st999",
-                stationName = "f3000_deviceid",
-                function = DeviceFunction(scheduler = true),
-                hardwareVersion = "1",
-                managerVersion = "2",
-                masterVersion = "3",
-                slaveVersion = "4",
                 status = 1,
                 deviceType = "f3000",
                 hasBattery = true,
@@ -160,6 +149,24 @@ class DemoFoxESSNetworking : FoxESSNetworking {
 
     override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {}
     override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {}
+    override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
+        return DeviceDetailResponse(
+            deviceSN = "998877",
+            moduleSN = "mod111",
+            stationID = "st123",
+            status = 1,
+            deviceType = "h1",
+            hasBattery = true,
+            hasPV = true,
+            productType = "produ1",
+            masterVersion = "master1",
+            managerVersion = "manager1",
+            slaveVersion = "slave1",
+            hardwareVersion = "hardware1",
+            function = DeviceFunction(scheduler = true),
+            stationName = "my station"
+        )
+    }
 
     override suspend fun fetchErrorMessages() {}
 

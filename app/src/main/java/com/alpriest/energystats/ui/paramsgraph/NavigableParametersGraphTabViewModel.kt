@@ -30,7 +30,7 @@ class NavigableParametersGraphTabViewModel(val configManager: ConfigManaging) : 
         viewModelScope.launch {
             configManager.currentDevice
                 .collect { it ->
-                    it?.let { device ->
+                    it?.let { _ ->
                         graphVariablesStream.value = configManager.variables.mapNotNull { variable: Variable ->
                             val variable = configManager.variables.firstOrNull { it.variable == variable.variable }
 

@@ -134,7 +134,7 @@ fun SettingsTabView(
             )
         }
 
-        SettingsFooterView(config, userManager, onLogout, onRateApp, onBuyMeCoffee)
+        SettingsFooterView(config, onLogout, onRateApp, onBuyMeCoffee)
     }
 }
 

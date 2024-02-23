@@ -97,7 +97,6 @@ class PowerFlowTabView(
         val errorBackground = remember { largeRadialGradient(listOf(Color.Red.copy(alpha = 0.7f), Color.Transparent)) }
 
         val uiState by viewModel.uiState.collectAsState()
-        val coroutineScope = rememberCoroutineScope()
         val showSunnyBackground = themeStream.collectAsState().value.showSunnyBackground
         val background = when (uiState.state) {
             is PowerFlowLoadState.Active -> loadingBackground
@@ -119,7 +118,7 @@ class PowerFlowTabView(
                 is PowerFlowLoadState.Error -> ErrorView(
                     (uiState.state as PowerFlowLoadState.Error).ex,
                     (uiState.state as PowerFlowLoadState.Error).reason,
-                    onRetry = { coroutineScope.launch { viewModel.timerFired() } },
+                    onRetry = { viewModel.timerFired() },
                     onLogout = { userManager.logout() }
                 )
             }

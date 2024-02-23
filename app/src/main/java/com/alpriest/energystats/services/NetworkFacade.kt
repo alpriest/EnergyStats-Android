@@ -10,7 +10,7 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
     private val demoFoxESSNetworking = DemoFoxESSNetworking()
     private val throttler = ThrottleManager()
 
-    override suspend fun openapi_fetchDeviceList(): List<DeviceDetailResponse> {
+    override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return if (isDemoUser()) {
             demoFoxESSNetworking.openapi_fetchDeviceList()
         } else {
@@ -149,6 +149,14 @@ class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUse
             demoFoxESSNetworking.openapi_saveSchedule(deviceSN, schedule)
         } else {
             return network.openapi_saveSchedule(deviceSN, schedule)
+        }
+    }
+
+    override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
+        return if (isDemoUser()) {
+            demoFoxESSNetworking.openapi_fetchDevice(deviceSN)
+        } else {
+            network.openapi_fetchDevice(deviceSN)
         }
     }
 

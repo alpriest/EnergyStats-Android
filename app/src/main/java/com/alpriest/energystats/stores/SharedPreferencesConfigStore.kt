@@ -308,7 +308,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var showInverterPlantNameOnPowerflow: Boolean
+    override var showInverterStationNameOnPowerflow: Boolean
         get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
