@@ -29,7 +29,7 @@ class HomePowerFlowViewModel(
     val ct2: Double
 ) : ViewModel() {
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
-        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperature, battery.residual, battery.hasError)
+        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperature, battery.residual)
     else
         null
 }

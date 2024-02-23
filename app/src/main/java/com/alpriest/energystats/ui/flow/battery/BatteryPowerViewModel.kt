@@ -1,15 +1,17 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.stores.ConfigManaging
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class BatteryPowerViewModel(
     private val configManager: ConfigManaging,
     private val actualStateOfCharge: Double,
     val chargePowerkWH: Double,
     val temperature: Double,
-    val residual: Int,
-    val hasError: Boolean
+    val residual: Int
 ) : ViewModel() {
     private val calculator: BatteryCapacityCalculator
 
@@ -34,5 +36,9 @@ class BatteryPowerViewModel(
 
     fun batteryStateOfCharge(): Double {
         return calculator.effectiveBatteryStateOfCharge(batteryStateOfCharge = actualStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly)
+    }
+
+    fun setBatteryAsPercentage(value: Boolean) {
+        configManager.showBatteryAsPercentage = value
     }
 }

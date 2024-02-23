@@ -47,7 +47,8 @@ class FakeConfigStore(
     override var totalYieldModel: Int = TotalYieldModel.EnergyStats.value,
     override var showFinancialSummaryOnFlowPage: Boolean = false,
     override var separateParameterGraphsByUnit: Boolean = true,
-    override var variables: List<Variable> = listOf()
+    override var variables: List<Variable> = listOf(),
+    override var showBatterySOCAsPercentage: Boolean = false
 
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}

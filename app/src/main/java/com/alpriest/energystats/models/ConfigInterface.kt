@@ -5,6 +5,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var showBatterySOCAsPercentage: Boolean
     var variables: List<Variable>
     var separateParameterGraphsByUnit: Boolean
     var dataCeiling: Int

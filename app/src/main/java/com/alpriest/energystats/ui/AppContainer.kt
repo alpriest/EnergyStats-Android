@@ -79,7 +79,8 @@ class AppContainer(private val context: Context) {
             totalYieldModel = TotalYieldModel.fromInt(config.totalYieldModel),
             showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage,
             separateParameterGraphsByUnit = config.separateParameterGraphsByUnit,
-            currencySymbol = config.currencySymbol
+            currencySymbol = config.currencySymbol,
+            showBatterySOCAsPercentage = config.showBatterySOCAsPercentage
         )
     )
 

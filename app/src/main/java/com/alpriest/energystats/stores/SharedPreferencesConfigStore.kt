@@ -55,7 +55,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         TOTAL_YIELD_MODEL,
         SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW,
         SEPARATE_PARAMETER_GRAPHS_BY_UNIT,
-        VARIABLES
+        VARIABLES,
+        SHOW_BATTERY_SOC_AS_PERCENTAGE
     }
 
     override fun clearDisplaySettings() {
@@ -411,6 +412,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SEPARATE_PARAMETER_GRAPHS_BY_UNIT.name, value)
+            editor.apply()
+        }
+
+    override var showBatterySOCAsPercentage: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_AS_PERCENTAGE.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_AS_PERCENTAGE.name, value)
             editor.apply()
         }
 

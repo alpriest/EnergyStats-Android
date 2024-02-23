@@ -81,7 +81,8 @@ fun AppTheme.Companion.preview(
     totalYieldModel: TotalYieldModel = TotalYieldModel.EnergyStats,
     showFinancialSummaryOnFlowPage: Boolean = true,
     separateParameterGraphsByUnit: Boolean = true,
-    currencySymbol: String = "£"
+    currencySymbol: String = "£",
+    showBatterySOCAsPercentage: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -112,6 +113,7 @@ fun AppTheme.Companion.preview(
         totalYieldModel = totalYieldModel,
         showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage,
         separateParameterGraphsByUnit = separateParameterGraphsByUnit,
-        currencySymbol = currencySymbol
+        currencySymbol = currencySymbol,
+        showBatterySOCAsPercentage = showBatterySOCAsPercentage
     )
 }

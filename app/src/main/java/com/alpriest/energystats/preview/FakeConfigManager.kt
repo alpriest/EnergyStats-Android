@@ -61,6 +61,7 @@ class FakeConfigManager : ConfigManaging {
     override var totalYieldModel: TotalYieldModel = TotalYieldModel.Off
     override var showFinancialSummaryOnFlowPage: Boolean = false
     override var separateParameterGraphsByUnit: Boolean = true
+    override var showBatteryAsPercentage: Boolean = false
 
     override var devices: List<Device>? = listOf(
         Device(

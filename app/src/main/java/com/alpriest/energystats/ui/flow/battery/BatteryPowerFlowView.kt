@@ -13,10 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -78,7 +74,7 @@ fun BatteryIconView(
     iconHeight: Dp,
     modifier: Modifier = Modifier
 ) {
-    var percentage by remember { mutableStateOf(true) }
+    var percentage = themeStream.collectAsState().value.showBatterySOCAsPercentage
     val fontSize = themeStream.collectAsState().value.fontSize()
     val smallFontSize = themeStream.collectAsState().value.smallFontSize()
     val showBatteryTemperature = themeStream.collectAsState().value.showBatteryTemperature
@@ -98,7 +94,7 @@ fun BatteryIconView(
 
         if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Row {
-                BatteryPercentage({ percentage = !percentage }, percentage, viewModel, fontSize, decimalPlaces)
+                BatteryStateOfChargeView({ viewModel.setBatteryAsPercentage(it) }, percentage, viewModel, fontSize, decimalPlaces)
 
                 if (showBatteryTemperature) {
                     Text(
@@ -109,7 +105,7 @@ fun BatteryIconView(
                 }
             }
         } else {
-            BatteryPercentage({ percentage = !percentage }, percentage, viewModel, fontSize, decimalPlaces)
+            BatteryStateOfChargeView({ viewModel.setBatteryAsPercentage(it) }, percentage, viewModel, fontSize, decimalPlaces)
 
             if (showBatteryTemperature) {
                 Text(
@@ -134,14 +130,16 @@ fun BatteryIconView(
 }
 
 @Composable
-private fun BatteryPercentage(
-    onClick: () -> Unit,
+private fun BatteryStateOfChargeView(
+    onClick: (Boolean) -> Unit,
     percentage: Boolean,
     viewModel: BatteryPowerViewModel,
     fontSize: TextUnit,
     decimalPlaces: Int
 ) {
-    Box(modifier = Modifier.clickable {onClick() }) {
+    Box(modifier = Modifier.clickable {
+        onClick(!percentage)
+    }) {
         Row {
             if (percentage) {
                 Text(
@@ -190,8 +188,7 @@ fun BatteryPowerFlowViewPreview() {
                 actualStateOfCharge = 0.25,
                 chargePowerkWH = -0.5,
                 temperature = 13.6,
-                residual = 5678,
-                hasError = false
+                residual = 5678
             ),
             themeStream = MutableStateFlow(AppTheme.preview(showBatteryTemperature = true, showBatteryEstimate = true)),
             iconHeight = 24.dp

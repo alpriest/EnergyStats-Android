@@ -41,7 +41,8 @@ data class AppTheme(
     val totalYieldModel: TotalYieldModel,
     val showFinancialSummaryOnFlowPage: Boolean,
     val separateParameterGraphsByUnit: Boolean,
-    val currencySymbol: String
+    val currencySymbol: String,
+    val showBatterySOCAsPercentage: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {

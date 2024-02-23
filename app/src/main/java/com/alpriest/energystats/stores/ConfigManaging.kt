@@ -62,4 +62,5 @@ interface ConfigManaging {
     var totalYieldModel: TotalYieldModel
     var showFinancialSummaryOnFlowPage: Boolean
     var separateParameterGraphsByUnit: Boolean
+    var showBatteryAsPercentage: Boolean
 }
