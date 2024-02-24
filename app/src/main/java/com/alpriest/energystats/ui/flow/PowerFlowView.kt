@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.*
-import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.*
 import kotlinx.coroutines.flow.MutableStateFlow
 

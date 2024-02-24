@@ -316,4 +316,9 @@
     <string name="api_key_step_6">6. Incolla la chiave API sopra</string>
     <string name="api_change_reason">Questa modifica alla chiave API è stata richiesta da FoxESS all\'inizio del 2024. Il sito FoxESS non funziona bene sui dispositivi mobili. Si prega di non contattare Energy Stats per problemi relativi al sito web FoxESS, solo FoxESS può assistervi per qualsiasi problema con il loro sito. service.uk@fox-ess.com</string>
     <string name="how_to_get_api_key">Per ottenere la tua chiave API:</string>
+    <string name="on">Attivo</string>
+    <string name="copy_debug_data">Copia dati di debug</string>
+    <string name="combine_ct2_with_pv_power">Combina CT2 con potenza fotovoltaica</string>
+    <string name="combine_ct2_with_loads_power">Combina CT2 con potenza dei carichi</string>
+    <string name="if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this">Se hai più inverter e i tuoi valori di generazione fotovoltaica sono errati, prova ad attivare o disattivare questa opzione.</string>
 </resources>

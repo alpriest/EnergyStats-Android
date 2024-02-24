@@ -16,7 +16,7 @@ android {
         applicationId "com.alpriest.energystats"
         minSdk 26
         targetSdk 34
-        versionCode 154
+        versionCode 155
         versionName '2.10'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

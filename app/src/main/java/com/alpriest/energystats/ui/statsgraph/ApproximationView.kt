@@ -36,7 +36,6 @@ import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.ApproximationHeaderText
@@ -45,6 +44,7 @@ import com.alpriest.energystats.ui.theme.DarkApproximationHeader
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.LightApproximationBackground
 import com.alpriest.energystats.ui.theme.LightApproximationHeader
+import com.alpriest.energystats.ui.theme.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class ApproximationsViewModel(

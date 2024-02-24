@@ -315,4 +315,9 @@
     <string name="api_key_step_6">6. Pega la clave API arriba</string>
     <string name="api_change_reason">Este cambio en la clave API fue requerido por FoxESS a principios de 2024. El sitio de FoxESS no funciona bien en dispositivos móviles. Por favor, no contacte a Energy Stats con problemas sobre el sitio web de FoxESS, solo FoxESS podrá ayudarle con cualquier problema en su sitio. service.uk@fox-ess.com</string>
     <string name="how_to_get_api_key">Para obtener tu clave API:</string>
+    <string name="on">Encendido</string>
+    <string name="copy_debug_data">Copiar datos de depuración</string>
+    <string name="combine_ct2_with_pv_power">Combinar CT2 con energía fotovoltaica</string>
+    <string name="combine_ct2_with_loads_power">Combinar CT2 con energía de las cargas</string>
+    <string name="if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this">Si tienes varios inversores y tus valores de generación fotovoltaica son incorrectos, intenta activar o desactivar esto.</string>
 </resources>

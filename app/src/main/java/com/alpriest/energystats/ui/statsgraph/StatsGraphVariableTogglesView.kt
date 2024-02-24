@@ -12,8 +12,8 @@ import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.ui.ToggleRowView
-import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

@@ -80,7 +80,8 @@ class AppContainer(private val context: Context) {
             showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage,
             separateParameterGraphsByUnit = config.separateParameterGraphsByUnit,
             currencySymbol = config.currencySymbol,
-            showBatterySOCAsPercentage = config.showBatterySOCAsPercentage
+            showBatterySOCAsPercentage = config.showBatterySOCAsPercentage,
+            shouldCombineCT2WithLoadsPower = config.shouldCombineCT2WithLoadsPower
         )
     )
 

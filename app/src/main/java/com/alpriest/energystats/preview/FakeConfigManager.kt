@@ -2,10 +2,8 @@ package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -18,12 +16,14 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSite
 import com.alpriest.energystats.ui.settings.solcast.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import com.alpriest.energystats.ui.theme.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeConfigManager : ConfigManaging {
     override var colorThemeMode: ColorThemeMode = ColorThemeMode.Auto
     override var showGraphValueDescriptions: Boolean = true
     override var shouldCombineCT2WithPVPower: Boolean = true
+    override var shouldCombineCT2WithLoadsPower: Boolean = false
     override var currencyCode: String = "GBP"
     override var feedInUnitPrice: Double = 0.05
     override var gridImportUnitPrice: Double = 0.15

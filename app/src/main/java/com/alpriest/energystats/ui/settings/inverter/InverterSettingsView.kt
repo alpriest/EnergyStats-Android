@@ -33,6 +33,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val showInverterTypeNameState = rememberSaveable { mutableStateOf(configManager.showInverterTypeNameOnPowerflow) }
     val showInverterStationNameState = rememberSaveable { mutableStateOf(configManager.showInverterStationNameOnPowerflow) }
     val shouldCombineCT2WithPVPowerState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithPVPower) }
+    val shouldCombineCT2WithPVLoadsState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithLoadsPower) }
 
     SettingsPage {
         InverterChoiceView(configManager)
@@ -75,13 +76,19 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                     title = stringResource(R.string.invert_ct2_values_when_detected),
                     state = shouldInvertCT2State,
                     onUpdate = { configManager.shouldInvertCT2 = it },
-                    footer = buildAnnotatedString { append("If you have multiple inverters and your PV generation values are incorrect try toggling this.") }
+                    footer = buildAnnotatedString { append(stringResource(R.string.if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this)) }
                 )
 
                 SettingsCheckbox(
-                    title = "Combine CT2 with PV power",
+                    title = stringResource(R.string.combine_ct2_with_pv_power),
                     state = shouldCombineCT2WithPVPowerState,
                     onUpdate = { configManager.shouldCombineCT2WithPVPower = it }
+                )
+
+                SettingsCheckbox(
+                    title = stringResource(R.string.combine_ct2_with_loads_power),
+                    state = shouldCombineCT2WithPVLoadsState,
+                    onUpdate = { configManager.shouldCombineCT2WithLoadsPower = it }
                 )
             }
 

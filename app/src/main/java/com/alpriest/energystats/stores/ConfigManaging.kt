@@ -21,6 +21,7 @@ interface ConfigManaging {
     val themeStream: MutableStateFlow<AppTheme>
 
     var shouldCombineCT2WithPVPower: Boolean
+    var shouldCombineCT2WithLoadsPower: Boolean
     var currencyCode: String
     var gridImportUnitPrice: Double
     var feedInUnitPrice: Double

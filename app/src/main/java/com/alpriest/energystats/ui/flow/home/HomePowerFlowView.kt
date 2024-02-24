@@ -19,6 +19,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import com.alpriest.energystats.ui.theme.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -50,70 +51,4 @@ fun HomePowerFlowViewPreview() {
             )
         }
     }
-}
-
-fun AppTheme.Companion.preview(
-    useLargeDisplay: Boolean = false,
-    useColouredLines: Boolean = true,
-    showBatteryTemperature: Boolean = true,
-    showBatteryEstimate: Boolean = true,
-    showSunnyBackground: Boolean = true,
-    decimalPlaces: Int = 2,
-    showUsableBatteryOnly: Boolean = false,
-    selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
-    showFinancialSummary: Boolean = true,
-    displayUnit: DisplayUnit = DisplayUnit.Kilowatts,
-    showInverterTemperatures: Boolean = false,
-    showInverterIcon: Boolean = true,
-    showHomeTotal: Boolean = false,
-    shouldInvertCT2: Boolean = false,
-    showGridTotals: Boolean = false,
-    showInverterTypeNameOnPowerflow: Boolean = false,
-    showInverterStationNameOnPowerflow: Boolean = false,
-    showLastUpdateTimestamp: Boolean = false,
-    solarRangeDefinitions: SolarRangeDefinitions = SolarRangeDefinitions.defaults,
-    shouldCombineCT2WithPVPower: Boolean = true,
-    showGraphValueDescriptions: Boolean = true,
-    parameterGroups: List<ParameterGroup> = ParameterGroup.defaults,
-    colorTheme: ColorThemeMode = ColorThemeMode.Auto,
-    solcastSettings: SolcastSettings = SolcastSettings.defaults,
-    dataCeiling: DataCeiling = DataCeiling.Mild,
-    totalYieldModel: TotalYieldModel = TotalYieldModel.EnergyStats,
-    showFinancialSummaryOnFlowPage: Boolean = true,
-    separateParameterGraphsByUnit: Boolean = true,
-    currencySymbol: String = "£",
-    showBatterySOCAsPercentage: Boolean = false
-): AppTheme {
-    return AppTheme(
-        useLargeDisplay = useLargeDisplay,
-        useColouredLines = useColouredLines,
-        showBatteryTemperature = showBatteryTemperature,
-        showBatteryEstimate = showBatteryEstimate,
-        decimalPlaces = decimalPlaces,
-        showSunnyBackground = showSunnyBackground,
-        showUsableBatteryOnly = showUsableBatteryOnly,
-        selfSufficiencyEstimateMode = selfSufficiencyEstimateMode,
-        showFinancialSummary = showFinancialSummary,
-        displayUnit = displayUnit,
-        showInverterTemperatures = showInverterTemperatures,
-        showInverterIcon = showInverterIcon,
-        showHomeTotal = showHomeTotal,
-        shouldInvertCT2 = shouldInvertCT2,
-        showGridTotals = showGridTotals,
-        showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow,
-        showInverterStationNameOnPowerflow = showInverterStationNameOnPowerflow,
-        showLastUpdateTimestamp = showLastUpdateTimestamp,
-        solarRangeDefinitions = solarRangeDefinitions,
-        shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower,
-        showGraphValueDescriptions = showGraphValueDescriptions,
-        parameterGroups = parameterGroups,
-        colorTheme = colorTheme,
-        solcastSettings = solcastSettings,
-        dataCeiling = dataCeiling,
-        totalYieldModel = totalYieldModel,
-        showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage,
-        separateParameterGraphsByUnit = separateParameterGraphsByUnit,
-        currencySymbol = currencySymbol,
-        showBatterySOCAsPercentage = showBatterySOCAsPercentage
-    )
 }

@@ -43,6 +43,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
             themeStream.value = themeStream.value.copy(shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower)
         }
 
+    override var shouldCombineCT2WithLoadsPower: Boolean
+        get() = config.shouldCombineCT2WithLoadsPower
+        set(value) {
+            config.shouldCombineCT2WithLoadsPower = value
+            themeStream.value = themeStream.value.copy(shouldCombineCT2WithLoadsPower = shouldCombineCT2WithLoadsPower)
+        }
+
     override var currencyCode: String
         get() = config.currencyCode
         set(value) {

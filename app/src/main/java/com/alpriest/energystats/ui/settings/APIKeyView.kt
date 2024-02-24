@@ -20,10 +20,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.ui.flow.home.preview
 import com.alpriest.energystats.ui.login.HowToObtainAPIKeyView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

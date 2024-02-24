@@ -48,6 +48,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         FEED_IN_UNIT_PRICE,
         GRID_IMPORT_UNIT_PRICE,
         SHOULD_COMBINE_CT2_WITH_PVPOWER,
+        SHOULD_COMBINE_CT2_WITH_LOADSPOWER,
         SHOW_GRAPH_VALUE_DESCRIPTIONS,
         COLOR_THEME_MODE,
         SOLCAST_SETTINGS,
@@ -102,6 +103,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, value)
+            editor.apply()
+        }
+
+    override var shouldCombineCT2WithLoadsPower: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_LOADSPOWER.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_LOADSPOWER.name, value)
             editor.apply()
         }
 
