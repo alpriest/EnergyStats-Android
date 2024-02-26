@@ -63,6 +63,7 @@ class FakeConfigManager : ConfigManaging {
     override var separateParameterGraphsByUnit: Boolean = true
     override var showBatteryAsPercentage: Boolean = false
     override var showSeparateStringsOnPowerFlow: Boolean = false
+    override var useExperimentalLoadFormula: Boolean = false
 
     override var devices: List<Device>? = listOf(
         Device(

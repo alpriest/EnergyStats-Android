@@ -36,6 +36,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
     val dataCeilingState = rememberSaveable { mutableStateOf(config.dataCeiling) }
     val showSeparateStringsOnPowerFlowState = rememberSaveable { mutableStateOf(config.showSeparateStringsOnPowerFlow) }
+    val useExperimentalLoadFormulaState = rememberSaveable { mutableStateOf(config.useExperimentalLoadFormula) }
     val context = LocalContext.current
 
     SettingsColumnWithChild(
@@ -223,6 +224,19 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
                     DataCeiling.Mild -> append(stringResource(R.string.data_ceiling_mild_description))
                     DataCeiling.Enhanced -> append(stringResource(R.string.data_ceiling_enhanced_description))
                 }
+            }
+        )
+    }
+
+    SettingsColumnWithChild(
+        modifier = modifier
+    ) {
+        SettingsCheckbox(
+            title = "Use experimental load formula",
+            state = useExperimentalLoadFormulaState,
+            onUpdate = { config.useExperimentalLoadFormula = it },
+            footer = buildAnnotatedString {
+                append("Uses a formula to calculate load which should handle +ve/-ve CT2 better in house load. Changes only take effect on next data fetch.")
             }
         )
     }

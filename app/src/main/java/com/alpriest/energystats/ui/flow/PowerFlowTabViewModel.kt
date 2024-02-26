@@ -144,7 +144,8 @@ class PowerFlowTabViewModel(
             "batDischargePower",
             "SoC",
             "batTemperature",
-            "ResidualEnergy"
+            "ResidualEnergy",
+            "epsPower"
         )
 
         return network.openapi_fetchRealData(
@@ -206,7 +207,8 @@ class PowerFlowTabViewModel(
                     currentDevice.hasPV,
                     configManager.shouldInvertCT2,
                     configManager.shouldCombineCT2WithPVPower,
-                    configManager.shouldCombineCT2WithLoadsPower
+                    configManager.shouldCombineCT2WithLoadsPower,
+                    configManager.useExperimentalLoadFormula
                 )
 
                 val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real)

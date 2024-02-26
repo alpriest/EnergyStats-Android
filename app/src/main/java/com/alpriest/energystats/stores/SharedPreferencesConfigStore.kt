@@ -58,7 +58,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SEPARATE_PARAMETER_GRAPHS_BY_UNIT,
         VARIABLES,
         SHOW_BATTERY_SOC_AS_PERCENTAGE,
-        SHOW_SEPARATE_STRINGS_ON_POWERFLOW
+        SHOW_SEPARATE_STRINGS_ON_POWERFLOW,
+        USE_EXPERIMENTAL_LOAD_FORMULA
     }
 
     override fun clearDisplaySettings() {
@@ -422,6 +423,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW.name, value)
+            editor.apply()
+        }
+
+    override var useExperimentalLoadFormula: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.USE_EXPERIMENTAL_LOAD_FORMULA.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.USE_EXPERIMENTAL_LOAD_FORMULA.name, value)
             editor.apply()
         }
 

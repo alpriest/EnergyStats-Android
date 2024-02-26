@@ -22,6 +22,10 @@ import kotlinx.coroutines.launch
 open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetworking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
     ConfigManaging {
 
+    override var useExperimentalLoadFormula: Boolean
+        get() = config.useExperimentalLoadFormula
+        set(value) { config.useExperimentalLoadFormula = value }
+
     override var colorThemeMode: ColorThemeMode
         get() = ColorThemeMode.fromInt(config.colorTheme)
         set(value) {

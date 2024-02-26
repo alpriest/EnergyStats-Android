@@ -65,4 +65,5 @@ interface ConfigManaging {
     var separateParameterGraphsByUnit: Boolean
     var showBatteryAsPercentage: Boolean
     var showSeparateStringsOnPowerFlow: Boolean
+    var useExperimentalLoadFormula: Boolean
 }
