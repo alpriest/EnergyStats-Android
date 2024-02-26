@@ -24,6 +24,7 @@ import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.EarningsViewModel
+import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -102,6 +103,10 @@ private fun GridTotals(
 fun GridIconViewPreview() {
     val homePowerFlowViewModel = HomePowerFlowViewModel(
         solar = 1.0,
+        solarStrings = listOf(
+            StringPower("pv1", 0.3),
+            StringPower("pv2", 0.7)
+        ),
         home = 2.45,
         grid = 2.45,
         todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), false),

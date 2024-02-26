@@ -43,7 +43,8 @@ data class AppTheme(
     val separateParameterGraphsByUnit: Boolean,
     val currencySymbol: String,
     val showBatterySOCAsPercentage: Boolean,
-    val shouldCombineCT2WithLoadsPower: Boolean
+    val shouldCombineCT2WithLoadsPower: Boolean,
+    val showSeparateStringsOnPowerFlow: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -104,7 +105,8 @@ fun AppTheme.Companion.preview(
     separateParameterGraphsByUnit: Boolean = true,
     currencySymbol: String = "£",
     showBatterySOCAsPercentage: Boolean = false,
-    shouldCombineCT2WithLoadsPower: Boolean = false
+    shouldCombineCT2WithLoadsPower: Boolean = false,
+    showSeparateStringsOnPowerFlow: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -137,6 +139,7 @@ fun AppTheme.Companion.preview(
         separateParameterGraphsByUnit = separateParameterGraphsByUnit,
         currencySymbol = currencySymbol,
         showBatterySOCAsPercentage = showBatterySOCAsPercentage,
-        shouldCombineCT2WithLoadsPower = shouldCombineCT2WithLoadsPower
+        shouldCombineCT2WithLoadsPower = shouldCombineCT2WithLoadsPower,
+        showSeparateStringsOnPowerFlow = showSeparateStringsOnPowerFlow
     )
 }

@@ -398,6 +398,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
             themeStream.value = themeStream.value.copy(showBatterySOCAsPercentage = showBatteryAsPercentage)
         }
 
+    override var showSeparateStringsOnPowerFlow: Boolean
+        get() = config.showSeparateStringsOnPowerFlow
+        set(value) {
+            config.showSeparateStringsOnPowerFlow = value
+            themeStream.value = themeStream.value.copy(showSeparateStringsOnPowerFlow = showSeparateStringsOnPowerFlow)
+        }
+
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     init {

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EarningsViewModel
+import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -15,6 +16,7 @@ data class InverterTemperatures(
 
 class HomePowerFlowViewModel(
     val solar: Double,
+    val solarStrings: List<StringPower>,
     val home: Double,
     val grid: Double,
     val todaysGeneration: GenerationViewModel,

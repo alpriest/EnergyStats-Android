@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.flow.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
@@ -23,12 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.energy
+import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -38,6 +43,8 @@ import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.flow.PowerFlowView
+import com.alpriest.energystats.ui.flow.PowerText
+import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.flow.grid.GridIconView
@@ -45,6 +52,7 @@ import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import com.alpriest.energystats.ui.theme.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -77,65 +85,41 @@ fun LoadedPowerFlowView(
 
         Box(contentAlignment = Alignment.Center) {
             if (!theme.shouldCombineCT2WithPVPower) {
-                Row {
+                CT2FlowView(iconHeight, themeStream, homePowerFlowViewModel)
+            }
+
+            Box(contentAlignment = Alignment.Center) {
+                SolarPowerFlow(
+                    homePowerFlowViewModel.solar,
+                    modifier = Modifier
+                        .fillMaxHeight(0.4f),
+                    iconHeight = iconHeight * 1.1f,
+                    themeStream = themeStream
+                )
+
+                if (theme.showSeparateStringsOnPowerFlow) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .fillMaxHeight(0.4f)
-                            .weight(1f)
+                            .offset(y = (-20).dp)
+                            .background(Color.LightGray)
+                            .padding(2.dp),
                     ) {
-                        CT2Icon(
-                            modifier = Modifier.size(width = iconHeight + 4.dp, height = iconHeight + 4.dp),
-                            themeStream
-                        )
-
-                        PowerFlowView(
-                            amount = homePowerFlowViewModel.ct2,
-                            themeStream = themeStream,
-                            position = PowerFlowLinePosition.NONE,
-                            orientation = LineOrientation.VERTICAL,
-                            modifier = Modifier
-                                .padding(top = 2.dp)
-                                .fillMaxHeight(0.7f)
-                        )
-                    }
-
-                    Spacer(
-                        modifier = Modifier.weight(3f)
-                    )
-                }
-
-                Column(modifier = Modifier.fillMaxHeight(0.4f)) {
-                    Spacer(modifier = Modifier.fillMaxHeight(0.7f))
-
-                    Row(modifier = Modifier.fillMaxHeight(0.2f)) {
-                        Spacer(modifier = Modifier.weight(0.72f))
-
-                        Column(modifier = Modifier.weight(2.3f)) {
-                            Spacer(modifier = Modifier.height(iconHeight))
-
-                            PowerFlowView(
-                                amount = homePowerFlowViewModel.ct2,
-                                themeStream = themeStream,
-                                position = PowerFlowLinePosition.NONE,
-                                orientation = LineOrientation.HORIZONTAL,
-                                modifier = Modifier
-                                    .padding(top = 2.dp)
-                            )
+                        homePowerFlowViewModel.solarStrings.forEach {
+                            Row {
+                                Text(
+                                    it.name,
+                                    Modifier.padding(end = 4.dp),
+                                    fontSize = 10.sp
+                                )
+                                Text(
+                                    it.amount.power(theme.displayUnit, theme.decimalPlaces),
+                                    fontSize = 10.sp
+                                )
+                            }
                         }
-
-                        Spacer(modifier = Modifier.weight(3f))
                     }
                 }
             }
-
-            SolarPowerFlow(
-                homePowerFlowViewModel.solar,
-                modifier = Modifier
-                    .fillMaxHeight(0.4f),
-                iconHeight = iconHeight * 1.1f,
-                themeStream = themeStream
-            )
         }
 
         Box(modifier = Modifier.weight(1f)) {
@@ -218,6 +202,64 @@ fun LoadedPowerFlowView(
 }
 
 @Composable
+private fun CT2FlowView(
+    iconHeight: Dp,
+    themeStream: MutableStateFlow<AppTheme>,
+    homePowerFlowViewModel: HomePowerFlowViewModel
+) {
+    Row {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxHeight(0.4f)
+                .weight(1f)
+        ) {
+            CT2Icon(
+                modifier = Modifier.size(width = iconHeight + 4.dp, height = iconHeight + 4.dp),
+                themeStream
+            )
+
+            PowerFlowView(
+                amount = homePowerFlowViewModel.ct2,
+                themeStream = themeStream,
+                position = PowerFlowLinePosition.NONE,
+                orientation = LineOrientation.VERTICAL,
+                modifier = Modifier
+                    .padding(top = 2.dp)
+                    .fillMaxHeight(0.7f)
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.weight(3f)
+        )
+    }
+
+    Column(modifier = Modifier.fillMaxHeight(0.4f)) {
+        Spacer(modifier = Modifier.fillMaxHeight(0.7f))
+
+        Row(modifier = Modifier.fillMaxHeight(0.2f)) {
+            Spacer(modifier = Modifier.weight(0.72f))
+
+            Column(modifier = Modifier.weight(2.3f)) {
+                Spacer(modifier = Modifier.height(iconHeight))
+
+                PowerFlowView(
+                    amount = homePowerFlowViewModel.ct2,
+                    themeStream = themeStream,
+                    position = PowerFlowLinePosition.NONE,
+                    orientation = LineOrientation.HORIZONTAL,
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(3f))
+        }
+    }
+}
+
+@Composable
 fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
     val updateState by viewModel.updateMessage.collectAsState()
     val appTheme = themeStream.collectAsState().value
@@ -268,6 +310,10 @@ fun SummaryPowerFlowViewPreview() {
             PowerFlowTabViewModel(DemoFoxESSNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview().copy(decimalPlaces = 3)), LocalContext.current),
             homePowerFlowViewModel = HomePowerFlowViewModel(
                 solar = 1.0,
+                solarStrings = listOf(
+                    StringPower("pv1", 0.3),
+                    StringPower("pv2", 0.7)
+                ),
                 home = 2.454,
                 grid = 1.234,
                 todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), false),

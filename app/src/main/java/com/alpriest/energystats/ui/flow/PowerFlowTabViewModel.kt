@@ -135,6 +135,8 @@ class PowerFlowTabViewModel(
             "loadsPower",
             "generationPower",
             "pvPower",
+            "pv1Power",
+            "pv2Power",
             "meterPower2",
             "ambientTemperation",
             "invTemperation",
@@ -211,6 +213,7 @@ class PowerFlowTabViewModel(
 
                 val summary = HomePowerFlowViewModel(
                     solar = currentViewModel.currentSolarPower,
+                    solarStrings = currentViewModel.currentSolarStringsPower,
                     home = currentViewModel.currentHomeConsumption,
                     grid = currentViewModel.currentGrid,
                     todaysGeneration = generation,

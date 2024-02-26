@@ -33,6 +33,27 @@ enum class LineOrientation {
 }
 
 @Composable
+fun PowerText(amount: Double, themeStream: MutableStateFlow<AppTheme>, backgroundColor: Color, textColor: Color) {
+    val theme by themeStream.collectAsState()
+    val fontSize: TextUnit = theme.fontSize()
+
+    Card(
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
+    ) {
+        Text(
+            text = amount.power(theme.displayUnit, theme.decimalPlaces),
+            color = textColor,
+            fontWeight = FontWeight.Bold,
+            fontSize = fontSize,
+            modifier = Modifier
+                .padding(vertical = 1.dp)
+                .padding(horizontal = 3.dp)
+        )
+    }
+}
+
+@Composable
 fun PowerFlowView(
     amount: Double,
     themeStream: MutableStateFlow<AppTheme>,
@@ -48,7 +69,6 @@ fun PowerFlowView(
         Color.LightGray
     }
     val strokeWidth = theme.strokeWidth()
-    val fontSize: TextUnit = theme.fontSize()
 
     val powerTextColor = if (isFlowing && useColouredLines && theme.useColouredLines) textForeground(amount) else {
         PowerFlowNeutralText
@@ -58,20 +78,7 @@ fun PowerFlowView(
         Line(amount, lineColor, Modifier, theme, orientation, isFlowing)
 
         if (isFlowing) {
-            Card(
-                shape = RoundedCornerShape(4.dp),
-                colors = CardDefaults.cardColors(containerColor = lineColor)
-            ) {
-                Text(
-                    text = amount.power(theme.displayUnit, theme.decimalPlaces),
-                    color = powerTextColor,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = fontSize,
-                    modifier = Modifier
-                        .padding(vertical = 1.dp)
-                        .padding(horizontal = 3.dp)
-                )
-            }
+            PowerText(amount, themeStream, lineColor, powerTextColor)
         }
 
         Canvas(

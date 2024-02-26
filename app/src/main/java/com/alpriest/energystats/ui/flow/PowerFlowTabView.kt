@@ -153,6 +153,10 @@ fun PowerFlowTabViewPreview() {
 
     val homePowerFlowViewModel = HomePowerFlowViewModel(
         solar = 1.0,
+        solarStrings = listOf(
+            StringPower("pv1", 0.3),
+            StringPower("pv2", 0.7)
+        ),
         home = 2.45,
         grid = 2.45,
         todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), false),

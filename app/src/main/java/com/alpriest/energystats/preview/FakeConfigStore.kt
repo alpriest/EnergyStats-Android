@@ -49,7 +49,8 @@ class FakeConfigStore(
     override var separateParameterGraphsByUnit: Boolean = true,
     override var variables: List<Variable> = listOf(),
     override var showBatterySOCAsPercentage: Boolean = false,
-    override var shouldCombineCT2WithLoadsPower: Boolean = false
+    override var shouldCombineCT2WithLoadsPower: Boolean = false,
+    override var showSeparateStringsOnPowerFlow: Boolean = false
 
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}

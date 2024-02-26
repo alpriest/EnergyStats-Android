@@ -10,6 +10,8 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
 
+data class StringPower(val name: String, val amount: Double)
+
 class CurrentStatusCalculator(
     response: OpenQueryResponse,
     hasPV: Boolean,
@@ -23,6 +25,7 @@ class CurrentStatusCalculator(
     val lastUpdate: LocalDateTime
     val currentCT2: Double
     val currentSolarPower: Double
+    val currentSolarStringsPower: List<StringPower>
 
     init {
         val status = mapCurrentValues(response, hasPV)
@@ -30,13 +33,18 @@ class CurrentStatusCalculator(
         currentHomeConsumption = calculateLoadsPower(status, shouldCombineCT2WithLoadsPower)
         currentTemperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
         lastUpdate = convertToTime(item = status.lastUpdate)
-        currentCT2 = if (shouldInvertCT2) 0-status.meterPower2 else status.meterPower2
+        currentCT2 = if (shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
         currentSolarPower = calculateSolarPower(status.hasPV, status, shouldCombineCT2WithPVPower)
+        currentSolarStringsPower = calculateSolarStringsPower(status.hasPV, status)
     }
 
     private fun mapCurrentValues(response: OpenQueryResponse, hasPV: Boolean): CurrentRawValues {
         return CurrentRawValues(
             pvPower = response.datas.currentValue(forKey = "pvPower"),
+            stringsPvPower = listOf(
+                StringPower(name = "PV1", amount = response.datas.currentValue(forKey = "pv1Power")),
+                StringPower(name = "PV2", amount = response.datas.currentValue(forKey = "pv2Power"))
+            ),
             feedinPower = response.datas.currentValue(forKey = "feedinPower"),
             gridConsumptionPower = response.datas.currentValue(forKey = "gridConsumptionPower"),
             loadsPower = response.datas.currentValue(forKey = "loadsPower"),
@@ -61,13 +69,22 @@ class CurrentStatusCalculator(
         }
     }
 
+    private fun calculateSolarStringsPower(hasPV: Boolean, status: CurrentRawValues): List<StringPower> {
+        return if (hasPV) {
+            status.stringsPvPower
+        } else {
+            listOf()
+        }
+    }
+
     private fun calculateLoadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
-        return max(0.0, status.loadsPower + (if (shouldCombineCT2WithLoadsPower) status.meterPower2 else 0.0))
+        return status.loadsPower + (if (shouldCombineCT2WithLoadsPower) status.meterPower2 else 0.0)
     }
 }
 
 data class CurrentRawValues(
     val pvPower: Double,
+    val stringsPvPower: List<StringPower>,
     val feedinPower: Double,
     val gridConsumptionPower: Double,
     val loadsPower: Double,

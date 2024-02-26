@@ -57,7 +57,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW,
         SEPARATE_PARAMETER_GRAPHS_BY_UNIT,
         VARIABLES,
-        SHOW_BATTERY_SOC_AS_PERCENTAGE
+        SHOW_BATTERY_SOC_AS_PERCENTAGE,
+        SHOW_SEPARATE_STRINGS_ON_POWERFLOW
     }
 
     override fun clearDisplaySettings() {
@@ -103,6 +104,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, value)
+            editor.apply()
+        }
+
+    override var showSeparateStringsOnPowerFlow: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_SEPARATE_STRINGS_ON_POWERFLOW.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.SHOW_SEPARATE_STRINGS_ON_POWERFLOW.name, value)
             editor.apply()
         }
 

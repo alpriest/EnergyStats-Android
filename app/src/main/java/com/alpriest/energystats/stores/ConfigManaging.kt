@@ -64,4 +64,5 @@ interface ConfigManaging {
     var showFinancialSummaryOnFlowPage: Boolean
     var separateParameterGraphsByUnit: Boolean
     var showBatteryAsPercentage: Boolean
+    var showSeparateStringsOnPowerFlow: Boolean
 }
