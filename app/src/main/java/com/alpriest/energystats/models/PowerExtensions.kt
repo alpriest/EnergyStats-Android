@@ -97,3 +97,7 @@ fun Double.rounded(decimalPlaces: Int): Double {
 fun Double.sameValueAs(other: Double): Boolean {
     return abs(this - other) < 0.0000001
 }
+
+fun Double.isFlowing(): Boolean {
+    return !rounded(2).sameValueAs(0.0)
+}

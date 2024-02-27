@@ -62,22 +62,21 @@ fun PowerFlowView(
     useColouredLines: Boolean = false,
     orientation: LineOrientation
 ) {
-    val isFlowing = !amount.rounded(2).sameValueAs(0.0)
     val theme by themeStream.collectAsState()
     val inverterColor = Color.LightGray
-    val lineColor = if (isFlowing && useColouredLines && theme.useColouredLines) flowingColour(amount) else {
+    val lineColor = if (amount.isFlowing() && useColouredLines && theme.useColouredLines) flowingColour(amount) else {
         Color.LightGray
     }
     val strokeWidth = theme.strokeWidth()
 
-    val powerTextColor = if (isFlowing && useColouredLines && theme.useColouredLines) textForeground(amount) else {
+    val powerTextColor = if (amount.isFlowing() && useColouredLines && theme.useColouredLines) textForeground(amount) else {
         PowerFlowNeutralText
     }
 
     Box(contentAlignment = Alignment.Center, modifier = modifier) {
-        Line(amount, lineColor, Modifier, theme, orientation, isFlowing)
+        Line(amount, lineColor, Modifier, theme, orientation, amount.isFlowing())
 
-        if (isFlowing) {
+        if (amount.isFlowing()) {
             PowerText(amount, themeStream, lineColor, powerTextColor)
         }
 

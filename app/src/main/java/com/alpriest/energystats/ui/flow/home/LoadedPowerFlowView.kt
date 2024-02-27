@@ -33,6 +33,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.energy
+import com.alpriest.energystats.models.isFlowing
 import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoFoxESSNetworking
@@ -47,8 +48,10 @@ import com.alpriest.energystats.ui.flow.PowerText
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -97,7 +100,7 @@ fun LoadedPowerFlowView(
                     themeStream = themeStream
                 )
 
-                if (theme.showSeparateStringsOnPowerFlow) {
+                if (theme.showSeparateStringsOnPowerFlow && homePowerFlowViewModel.solar.isFlowing()) {
                     Column(
                         modifier = Modifier
                             .offset(y = (-20).dp)
@@ -304,15 +307,15 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: MutableStateFlo
 @Preview(showBackground = true, widthDp = 380, heightDp = 640)
 @Composable
 fun SummaryPowerFlowViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         LoadedPowerFlowView(
             FakeConfigManager(),
             PowerFlowTabViewModel(DemoFoxESSNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview().copy(decimalPlaces = 3)), LocalContext.current),
             homePowerFlowViewModel = HomePowerFlowViewModel(
                 solar = 1.0,
                 solarStrings = listOf(
-                    StringPower("pv1", 0.3),
-                    StringPower("pv2", 0.7)
+                    StringPower("PV1", 0.3),
+                    StringPower("PV2", 0.7)
                 ),
                 home = 2.454,
                 grid = 1.234,
@@ -327,7 +330,7 @@ fun SummaryPowerFlowViewPreview() {
                 homeTotal = 1.0,
                 ct2 = 0.4,
             ),
-            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true, decimalPlaces = 3)),
+            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true, decimalPlaces = 3, showSeparateStringsOnPowerFlow = true)),
         )
     }
 }
