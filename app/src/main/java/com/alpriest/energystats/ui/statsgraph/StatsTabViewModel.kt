@@ -105,10 +105,6 @@ class StatsTabViewModel(
         val reportData: List<OpenReportResponse>
         val rawTotals: MutableMap<ReportVariable, Double>
 
-        if (device.hasBattery) {
-            reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
-        }
-
         try {
             reportData = networking.openapi_fetchReport(
                 device.deviceSN,
