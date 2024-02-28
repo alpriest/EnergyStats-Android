@@ -7,6 +7,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSet
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -407,6 +408,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
         set(value) {
             config.showSeparateStringsOnPowerFlow = value
             themeStream.value = themeStream.value.copy(showSeparateStringsOnPowerFlow = showSeparateStringsOnPowerFlow)
+        }
+
+    override var enabledPowerFlowStrings: PowerFlowStringsSet
+        get() = config.enabledPowerFlowStrings
+        set(value) {
+            config.enabledPowerFlowStrings = value
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

@@ -5,10 +5,13 @@ import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
+import com.alpriest.energystats.ui.settings.PowerFlowStrings
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSet
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.EnumSet
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
     ConfigInterface {
@@ -59,7 +62,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         VARIABLES,
         SHOW_BATTERY_SOC_AS_PERCENTAGE,
         SHOW_SEPARATE_STRINGS_ON_POWERFLOW,
-        USE_EXPERIMENTAL_LOAD_FORMULA
+        USE_EXPERIMENTAL_LOAD_FORMULA,
+        ENABLED_POWER_FLOW_STRINGS
     }
 
     override fun clearDisplaySettings() {
@@ -109,7 +113,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         }
 
     override var showSeparateStringsOnPowerFlow: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_SEPARATE_STRINGS_ON_POWERFLOW.name, true)
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_SEPARATE_STRINGS_ON_POWERFLOW.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOW_SEPARATE_STRINGS_ON_POWERFLOW.name, value)
@@ -431,6 +435,22 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.USE_EXPERIMENTAL_LOAD_FORMULA.name, value)
+            editor.apply()
+        }
+
+    override var enabledPowerFlowStrings: PowerFlowStringsSet
+        get() {
+            val stringSet = sharedPreferences.getStringSet(SharedPreferenceDisplayKey.ENABLED_POWER_FLOW_STRINGS.name, emptySet()) ?: emptySet()
+            return if (stringSet.isNotEmpty()) {
+                val powerFlowStringsSet = EnumSet.copyOf(stringSet.map { PowerFlowStrings.valueOf(it) })
+                PowerFlowStringsSet(powerFlowStringsSet)
+            } else {
+                PowerFlowStringsSet(EnumSet.noneOf(PowerFlowStrings::class.java))
+            }
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putStringSet(SharedPreferenceDisplayKey.ENABLED_POWER_FLOW_STRINGS.name, value.optionSet.map { it.name }.toSet())
             editor.apply()
         }
 

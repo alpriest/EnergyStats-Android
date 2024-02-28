@@ -8,6 +8,8 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.ui.settings.PowerFlowStrings
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSet
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -64,6 +66,7 @@ class FakeConfigManager : ConfigManaging {
     override var showBatteryAsPercentage: Boolean = false
     override var showSeparateStringsOnPowerFlow: Boolean = false
     override var useExperimentalLoadFormula: Boolean = false
+    override var enabledPowerFlowStrings: PowerFlowStringsSet = PowerFlowStringsSet.defaults
 
     override var devices: List<Device>? = listOf(
         Device(

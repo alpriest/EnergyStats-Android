@@ -127,15 +127,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         )
     }
 
-    SettingsColumnWithChild(
-        modifier = modifier
-    ) {
-        SettingsCheckbox(
-            title = stringResource(R.string.show_pv_power_by_strings),
-            state = showSeparateStringsOnPowerFlowState,
-            onUpdate = { config.showSeparateStringsOnPowerFlow = it }
-        )
-    }
+    SolarStringsSettingsView(config, modifier)
 
     SettingsColumnWithChild(
         modifier = modifier
