@@ -45,22 +45,22 @@ class PowerFlowStringsSet(powerFlowStringsSet: EnumSet<PowerFlowStrings>) {
     }
 
     fun makeStringPowers(response: OpenQueryResponse): List<StringPower> {
-        var strings: List<StringPower> = listOf()
+        val strings: MutableList<StringPower> = mutableListOf()
 
         if (contains(PowerFlowStrings.PV1)) {
-            strings.plus(StringPower("PV1", response.datas.currentValue("pv1Power")))
+            strings.add(StringPower("PV1", response.datas.currentValue("pv1Power")))
         }
 
         if (contains(PowerFlowStrings.PV2)) {
-            strings.plus(StringPower("PV2", response.datas.currentValue("pv2Power")))
+            strings.add(StringPower("PV2", response.datas.currentValue("pv2Power")))
         }
 
         if (contains(PowerFlowStrings.PV3)) {
-            strings.plus(StringPower("PV3", response.datas.currentValue("pv3Power")))
+            strings.add(StringPower("PV3", response.datas.currentValue("pv3Power")))
         }
 
         if (contains(PowerFlowStrings.PV4)) {
-            strings.plus(StringPower("PV4", response.datas.currentValue("pv4Power")))
+            strings.add(StringPower("PV4", response.datas.currentValue("pv4Power")))
         }
 
         return strings

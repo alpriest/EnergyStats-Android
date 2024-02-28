@@ -33,8 +33,6 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.Currency
-import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
@@ -128,15 +126,13 @@ class PowerFlowTabViewModel(
         timer?.start()
     }
 
-    private suspend fun loadRealData(device: Device): OpenQueryResponse {
-        val variables: List<String> = listOf(
+    private suspend fun loadRealData(device: Device, configManager: ConfigManaging): OpenQueryResponse {
+        val variables: MutableList<String> = mutableListOf(
             "feedinPower",
             "gridConsumptionPower",
             "loadsPower",
             "generationPower",
             "pvPower",
-            "pv1Power",
-            "pv2Power",
             "meterPower2",
             "ambientTemperation",
             "invTemperation",
@@ -147,6 +143,10 @@ class PowerFlowTabViewModel(
             "ResidualEnergy",
             "epsPower"
         )
+
+        if (configManager.showSeparateStringsOnPowerFlow) {
+            variables.addAll(configManager.enabledPowerFlowStrings.variableNames())
+        }
 
         return network.openapi_fetchRealData(
             deviceSN = device.deviceSN,
@@ -198,17 +198,14 @@ class PowerFlowTabViewModel(
                     uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
                 }
 
-                val real = loadRealData(currentDevice)
+                val real = loadRealData(currentDevice, configManager)
                 val totals = loadTotals(currentDevice)
                 val generation = loadGeneration(currentDevice)
 
                 val currentViewModel = CurrentStatusCalculator(
                     real,
                     currentDevice.hasPV,
-                    configManager.shouldInvertCT2,
-                    configManager.shouldCombineCT2WithPVPower,
-                    configManager.shouldCombineCT2WithLoadsPower,
-                    configManager.useExperimentalLoadFormula
+                    configManager
                 )
 
                 val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real)

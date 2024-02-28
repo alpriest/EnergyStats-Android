@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.flow
 
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import java.text.SimpleDateFormat
@@ -15,10 +16,7 @@ data class StringPower(val name: String, val amount: Double)
 class CurrentStatusCalculator(
     response: OpenQueryResponse,
     hasPV: Boolean,
-    shouldInvertCT2: Boolean,
-    shouldCombineCT2WithPVPower: Boolean,
-    shouldCombineCT2WithLoadsPower: Boolean,
-    useExperimentalLoadsFormula: Boolean
+    val config: ConfigManaging
 ) {
     val currentGrid: Double
     val currentHomeConsumption: Double
@@ -31,11 +29,11 @@ class CurrentStatusCalculator(
     init {
         val status = mapCurrentValues(response, hasPV)
         currentGrid = status.feedinPower - status.gridConsumptionPower
-        currentHomeConsumption = if (useExperimentalLoadsFormula) calculateLoadsPower(status) else loadsPower(status, shouldCombineCT2WithLoadsPower)
+        currentHomeConsumption = if (config.useExperimentalLoadFormula) calculateLoadsPower(status) else loadsPower(status, config.shouldCombineCT2WithLoadsPower)
         currentTemperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
         lastUpdate = convertToTime(item = status.lastUpdate)
-        currentCT2 = if (shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
-        currentSolarPower = calculateSolarPower(status.hasPV, status, shouldCombineCT2WithPVPower)
+        currentCT2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
+        currentSolarPower = calculateSolarPower(status.hasPV, status, config.shouldCombineCT2WithPVPower)
         currentSolarStringsPower = calculateSolarStringsPower(status.hasPV, status)
     }
 
@@ -44,12 +42,14 @@ class CurrentStatusCalculator(
     }
 
     private fun mapCurrentValues(response: OpenQueryResponse, hasPV: Boolean): CurrentRawValues {
+        var stringsPvPower: List<StringPower> = listOf()
+        if (config.showSeparateStringsOnPowerFlow) {
+            stringsPvPower = config.enabledPowerFlowStrings.makeStringPowers(response)
+        }
+
         return CurrentRawValues(
             pvPower = response.datas.currentValue(forKey = "pvPower"),
-            stringsPvPower = listOf(
-                StringPower(name = "PV1", amount = response.datas.currentValue(forKey = "pv1Power")),
-                StringPower(name = "PV2", amount = response.datas.currentValue(forKey = "pv2Power"))
-            ),
+            stringsPvPower = stringsPvPower,
             feedinPower = response.datas.currentValue(forKey = "feedinPower"),
             gridConsumptionPower = response.datas.currentValue(forKey = "gridConsumptionPower"),
             loadsPower = response.datas.currentValue(forKey = "loadsPower"),
