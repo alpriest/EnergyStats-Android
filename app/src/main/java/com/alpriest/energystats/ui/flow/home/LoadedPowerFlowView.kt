@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -112,11 +113,13 @@ fun LoadedPowerFlowView(
                                 Text(
                                     it.name,
                                     Modifier.padding(end = 4.dp),
-                                    fontSize = 10.sp
+                                    fontSize = 10.sp,
+                                    color = PowerFlowNeutralText
                                 )
                                 Text(
                                     it.amount.power(theme.displayUnit, theme.decimalPlaces),
-                                    fontSize = 10.sp
+                                    fontSize = 10.sp,
+                                    color = PowerFlowNeutralText
                                 )
                             }
                         }
