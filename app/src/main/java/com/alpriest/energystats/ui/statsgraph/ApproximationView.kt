@@ -76,7 +76,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
         Column(
             Modifier
                 .background(
-                    ApproximationBackground(themeStream),
+                    ApproximationBackground(themeStream).copy(alpha = 0.5f),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .border(
@@ -230,7 +230,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
 fun StatsApproximationViewPreview() {
     val showingApproximations = remember { mutableStateOf(false) }
 
-    EnergyStatsTheme() {
+    EnergyStatsTheme {
         ApproximationView(
             themeStream = MutableStateFlow(AppTheme.preview().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
             modifier = Modifier.padding(24.dp),

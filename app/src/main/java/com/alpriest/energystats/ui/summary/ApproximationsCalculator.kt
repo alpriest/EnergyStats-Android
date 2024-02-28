@@ -22,16 +22,16 @@ class ApproximationsCalculator(
         val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager)
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
-            loads,
-            grid
-        )
-
-        val absoluteResult = AbsoluteSelfSufficiencyCalculator().calculate(
             grid,
             feedIn,
             loads,
             batteryCharge,
             batteryDischarge
+        )
+
+        val absoluteResult = AbsoluteSelfSufficiencyCalculator().calculate(
+            loads,
+            grid
         )
 
         return ApproximationsViewModel(

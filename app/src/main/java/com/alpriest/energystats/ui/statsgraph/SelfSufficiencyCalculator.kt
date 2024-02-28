@@ -1,14 +1,13 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.flow.roundedToString
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class AbsoluteSelfSufficiencyCalculator {
+class NetSelfSufficiencyCalculator {
     fun calculate(grid: Double, feedIn: Double, loads: Double, batteryCharge: Double, batteryDischarge: Double): Pair<Double, CalculationBreakdown> {
-        val netGeneration = feedIn - grid + batteryDischarge - batteryCharge
+        val netGeneration = feedIn - grid + batteryCharge - batteryDischarge
         val homeConsumption = loads
         val formula = """netGeneration = feedIn - grid + batteryCharge - batteryDischarge
 
@@ -16,15 +15,12 @@ If netGeneration > 0 then result = 1
 Else if netGeneration + homeConsumption < 0 then result = 0
 Else if netGeneration + homeConsumption > 0 then result = (netGeneration + homeConsumption) / homeConsumption
 """
-        val calculation: (Int) -> String = {
-            """netGeneration = $feedIn - $grid + $batteryCharge - $batteryDischarge
+        val calculation: (Int) -> String = { dp ->
+            """netGeneration = ${feedIn.roundedToString(dp)} - ${grid.roundedToString(dp)} + ${batteryCharge.roundedToString(dp)} - ${batteryDischarge.roundedToString(dp)}
 
-If ${netGeneration.roundedToString(it)} > 0 then result = 1
-Else if ${netGeneration.roundedToString(it)} + ${homeConsumption.roundedToString(it)} < 0 then result = 0
-Else if ${netGeneration.roundedToString(it)} + ${homeConsumption.roundedToString(it)} > 0 then result = (${netGeneration.roundedToString(it)} + ${homeConsumption.roundedToString(it)}) / ${
-                homeConsumption.roundedToString(
-                    it
-                )
+If ${netGeneration.roundedToString(dp)} > 0 then result = 1
+Else if ${netGeneration.roundedToString(dp)} + ${homeConsumption.roundedToString(dp)} < 0 then result = 0
+Else if ${netGeneration.roundedToString(dp)} + ${homeConsumption.roundedToString(dp)} > 0 then result = (${netGeneration.roundedToString(dp)} + ${homeConsumption.roundedToString(dp)}) / ${homeConsumption.roundedToString(dp)
             }
 """
         }
@@ -45,7 +41,7 @@ Else if ${netGeneration.roundedToString(it)} + ${homeConsumption.roundedToString
     }
 }
 
-class NetSelfSufficiencyCalculator {
+class AbsoluteSelfSufficiencyCalculator {
     fun calculate(loads: Double, grid: Double): Pair<Double, CalculationBreakdown> {
         val formula = "1 - (min(loads, max(grid, 0.0)) / loads)"
         if (loads <= 0) {
