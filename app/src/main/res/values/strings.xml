@@ -323,4 +323,7 @@
     <string name="combine_ct2_with_loads_power">Combine CT2 with Loads power</string>
     <string name="if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this">If you have multiple inverters and your PV generation values are incorrect try toggling this.</string>
     <string name="show_pv_power_by_strings">Show PV power by strings</string>
+    <string name="api_key_step_7">"7. Your API key will be 36 characters long and look something like "</string>
+    <string name="example_api_key" translatable="false">abcde123-4567-8901-2345-6789abcdef01</string>
+    <string name="show_battery_percentage_remaining">Show battery percentage remaining</string>
 </resources>

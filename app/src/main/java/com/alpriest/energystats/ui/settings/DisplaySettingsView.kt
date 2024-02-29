@@ -35,8 +35,8 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val separateParameterGraphsByUnitState = rememberSaveable { mutableStateOf(config.separateParameterGraphsByUnit) }
     val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
     val dataCeilingState = rememberSaveable { mutableStateOf(config.dataCeiling) }
-    val showSeparateStringsOnPowerFlowState = rememberSaveable { mutableStateOf(config.showSeparateStringsOnPowerFlow) }
     val useExperimentalLoadFormulaState = rememberSaveable { mutableStateOf(config.useExperimentalLoadFormula) }
+    val showBatteryAsPercentageState = rememberSaveable { mutableStateOf(config.showBatteryAsPercentage) }
     val context = LocalContext.current
 
     SettingsColumnWithChild(
@@ -124,6 +124,12 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
             title = stringResource(R.string.separate_parameter_graphs_by_unit),
             state = separateParameterGraphsByUnitState,
             onUpdate = { config.separateParameterGraphsByUnit = it }
+        )
+
+        SettingsCheckbox(
+            title = stringResource(R.string.show_battery_percentage_remaining),
+            state = showBatteryAsPercentageState,
+            onUpdate = { config.showBatteryAsPercentage = it }
         )
     }
 
