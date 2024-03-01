@@ -2,8 +2,6 @@ package com.alpriest.energystats.ui.flow
 
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseData
-import com.alpriest.energystats.models.ReportData
-import com.alpriest.energystats.models.ReportResponse
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.ui.CalculationBreakdown
 import java.lang.Double.max

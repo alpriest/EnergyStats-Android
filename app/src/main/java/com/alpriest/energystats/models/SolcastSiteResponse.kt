@@ -1,7 +1,6 @@
 package com.alpriest.energystats.models
 
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDate
 
 data class SolcastSiteResponseList(
     val sites: List<SolcastSiteResponse>

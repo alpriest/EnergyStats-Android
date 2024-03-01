@@ -3,6 +3,7 @@ package com.alpriest.energystats.models
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import com.google.gson.JsonNull
 import java.lang.reflect.Type
 
 data class OpenApiVariableArray(
@@ -41,7 +42,11 @@ class OpenReportResponseDeserializer : JsonDeserializer<OpenReportResponse> {
         val resultArray = resultObject.get("values").asJsonArray
 
         val values = resultArray.mapIndexedNotNull { index, entry ->
-            OpenReportResponseData(index + 1, entry.asDouble)
+            if (entry != JsonNull.INSTANCE) {
+                OpenReportResponseData(index + 1, entry.asDouble)
+            } else {
+                null
+            }
         }
 
         val variable = resultObject.get("variable").asString
