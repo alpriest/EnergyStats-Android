@@ -38,7 +38,7 @@ class SolcastSettingsViewModel(
             sitesStream.value = configManager.solcastSettings.sites
             alertDialogMessage.value = MonitorAlertDialogData(null, "Your Solcast settings were successfully verified.")
         } catch (ex: Exception) {
-            alertDialogMessage.value = MonitorAlertDialogData(ex, "Your Solcast settings failed to verify (${ex.localizedMessage}")
+            alertDialogMessage.value = MonitorAlertDialogData(ex, "Your Solcast settings failed to verify\n\n${ex.localizedMessage}")
         }
     }
 

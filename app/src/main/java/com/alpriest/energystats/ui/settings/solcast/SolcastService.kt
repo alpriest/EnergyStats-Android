@@ -7,6 +7,7 @@ import com.alpriest.energystats.services.TryLaterException
 import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import okhttp3.Call
 import okhttp3.Callback
@@ -114,6 +115,7 @@ class Solcast : SolarForecasting {
 }
 
 private data class ErrorApiResponse(
+    @SerializedName("response_status")
     val responseStatus: ResponseStatus
 )
 

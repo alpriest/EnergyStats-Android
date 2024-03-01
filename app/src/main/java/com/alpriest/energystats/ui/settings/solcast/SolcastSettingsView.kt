@@ -6,8 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material3.Button
+import androidx.compose.material.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -36,9 +37,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -90,11 +89,14 @@ class SolcastSettingsView(
                     SolcastSiteView(it)
                 }
 
-                SettingsNavButton(
-                    stringResource(R.string.remove_key),
-                    disclosureIcon = null
+                Button(
+                    onClick = { viewModel.removeKey() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = colors.primary)
                 ) {
-                    viewModel.removeKey()
+                    Text(
+                        stringResource(R.string.remove_key),
+                        color = colors.onPrimary,
+                    )
                 }
             }
         })
