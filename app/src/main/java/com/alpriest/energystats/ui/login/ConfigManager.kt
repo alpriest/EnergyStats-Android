@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -350,6 +351,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
             }
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
+        } catch (ex: InvalidTokenException) {
+            throw ex
         } catch (ex: Exception) {
             throw DataFetchFailure("Failed to load Device or Battery Settings ($method)", ex)
         }

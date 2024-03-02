@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.login
 
 import androidx.annotation.UiThread
 import com.alpriest.energystats.services.BadCredentialsException
+import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,6 +72,9 @@ class UserManager(
         } catch (e: BadCredentialsException) {
             logout()
             _loggedInState.value = LoginStateHolder(LoggedOut("Wrong credentials, try again"))
+        } catch (e: InvalidTokenException) {
+            logout()
+            _loggedInState.value = LoginStateHolder(LoggedOut("Invalid Token"))
         } catch (e: Exception) {
             logout()
             _loggedInState.value = LoginStateHolder(LoggedOut("Could not login (${currentAction}). ${e.localizedMessage}"))
