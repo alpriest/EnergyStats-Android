@@ -1,12 +1,11 @@
 package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
-import com.alpriest.energystats.ui.settings.PowerFlowStringsSet
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
-    var showSeparateStringsOnPowerFlow: Boolean
     var shouldCombineCT2WithLoadsPower: Boolean
     var showBatterySOCAsPercentage: Boolean
     var variables: List<Variable>
@@ -49,7 +48,7 @@ interface ConfigInterface {
     var totalYieldModel: Int
     var showFinancialSummaryOnFlowPage: Boolean
     var useExperimentalLoadFormula: Boolean
-    var enabledPowerFlowStrings: PowerFlowStringsSet
+    var powerFlowStrings: PowerFlowStringsSettings
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

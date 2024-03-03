@@ -8,7 +8,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.PowerFlowStringsSet
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -406,17 +406,11 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
             themeStream.value = themeStream.value.copy(showBatterySOCAsPercentage = showBatteryAsPercentage)
         }
 
-    override var showSeparateStringsOnPowerFlow: Boolean
-        get() = config.showSeparateStringsOnPowerFlow
+    override var powerFlowStrings: PowerFlowStringsSettings
+        get() = config.powerFlowStrings
         set(value) {
-            config.showSeparateStringsOnPowerFlow = value
-            themeStream.value = themeStream.value.copy(showSeparateStringsOnPowerFlow = showSeparateStringsOnPowerFlow)
-        }
-
-    override var enabledPowerFlowStrings: PowerFlowStringsSet
-        get() = config.enabledPowerFlowStrings
-        set(value) {
-            config.enabledPowerFlowStrings = value
+            config.powerFlowStrings = value
+            themeStream.value = themeStream.value.copy(powerFlowStrings = powerFlowStrings)
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

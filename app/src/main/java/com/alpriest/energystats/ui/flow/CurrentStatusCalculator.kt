@@ -5,13 +5,30 @@ import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
 import kotlin.math.abs
 
-data class StringPower(val name: String, val amount: Double)
+data class StringPower(val name: String, val amount: Double) {
+    fun displayName(settings: PowerFlowStringsSettings): String {
+        return when (name) {
+            "PV1" ->
+                return settings.pv1Name
+
+            "PV2" ->
+                return settings.pv2Name
+
+            "PV3" ->
+                return settings.pv3Name
+
+            else ->
+                return settings.pv4Name
+        }
+    }
+}
 
 class CurrentStatusCalculator(
     response: OpenQueryResponse,
@@ -43,8 +60,8 @@ class CurrentStatusCalculator(
 
     private fun mapCurrentValues(response: OpenQueryResponse, hasPV: Boolean): CurrentRawValues {
         var stringsPvPower: List<StringPower> = listOf()
-        if (config.showSeparateStringsOnPowerFlow) {
-            stringsPvPower = config.enabledPowerFlowStrings.makeStringPowers(response)
+        if (config.powerFlowStrings.enabled) {
+            stringsPvPower = config.powerFlowStrings.makeStringPowers(response)
         }
 
         return CurrentRawValues(

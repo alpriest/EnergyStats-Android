@@ -1,8 +1,5 @@
 package com.alpriest.energystats.ui.login
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,9 +42,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.ui.ClickableUrlText
 import com.alpriest.energystats.ui.helpers.ButtonDefinition
+import com.alpriest.energystats.ui.helpers.copyDebugData
 import com.alpriest.energystats.ui.helpers.EqualWidthButtonList
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -116,12 +113,7 @@ fun APIKeyLoginView(
 
             EqualWidthButtonList(listOf(
                 ButtonDefinition(stringResource(R.string.copy_debug_data)) {
-                    InMemoryLoggingNetworkStore.shared.latestRequest?.let { request ->
-                        val text = request.toString()
-                        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val clip = ClipData.newPlainText("label", text)
-                        clipboard.setPrimaryClip(clip)
-                    }
+                    copyDebugData(context)
                 }
             ))
         }

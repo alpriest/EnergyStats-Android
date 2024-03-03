@@ -8,6 +8,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
@@ -44,7 +45,7 @@ data class AppTheme(
     val currencySymbol: String,
     val showBatterySOCAsPercentage: Boolean,
     val shouldCombineCT2WithLoadsPower: Boolean,
-    val showSeparateStringsOnPowerFlow: Boolean
+    val powerFlowStrings: PowerFlowStringsSettings
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -106,7 +107,7 @@ fun AppTheme.Companion.preview(
     currencySymbol: String = "£",
     showBatterySOCAsPercentage: Boolean = false,
     shouldCombineCT2WithLoadsPower: Boolean = false,
-    showSeparateStringsOnPowerFlow: Boolean = false
+    powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -140,6 +141,6 @@ fun AppTheme.Companion.preview(
         currencySymbol = currencySymbol,
         showBatterySOCAsPercentage = showBatterySOCAsPercentage,
         shouldCombineCT2WithLoadsPower = shouldCombineCT2WithLoadsPower,
-        showSeparateStringsOnPowerFlow = showSeparateStringsOnPowerFlow
+        powerFlowStrings = powerFlowStrings
     )
 }

@@ -53,6 +53,7 @@ import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -101,7 +102,7 @@ fun LoadedPowerFlowView(
                     themeStream = themeStream
                 )
 
-                if (theme.showSeparateStringsOnPowerFlow && homePowerFlowViewModel.solar.isFlowing()) {
+                if (theme.powerFlowStrings.enabled && homePowerFlowViewModel.solar.isFlowing()) {
                     Column(
                         modifier = Modifier
                             .offset(y = (-20).dp)
@@ -111,7 +112,7 @@ fun LoadedPowerFlowView(
                         homePowerFlowViewModel.solarStrings.forEach {
                             Row {
                                 Text(
-                                    it.name,
+                                    it.displayName(theme.powerFlowStrings),
                                     Modifier.padding(end = 4.dp),
                                     fontSize = 10.sp,
                                     color = PowerFlowNeutralText
@@ -333,7 +334,7 @@ fun SummaryPowerFlowViewPreview() {
                 homeTotal = 1.0,
                 ct2 = 0.4,
             ),
-            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true, decimalPlaces = 3, showSeparateStringsOnPowerFlow = true)),
+            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true, decimalPlaces = 3, powerFlowStrings = PowerFlowStringsSettings.defaults)),
         )
     }
 }

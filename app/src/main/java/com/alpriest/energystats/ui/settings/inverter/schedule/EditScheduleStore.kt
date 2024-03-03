@@ -22,7 +22,7 @@ class EditScheduleStore(
 
 enum class WorkMode {
     SelfUse,
-    FeedIn,
+    Feedin,
     Backup,
     ForceCharge,
     ForceDischarge,
@@ -31,7 +31,7 @@ enum class WorkMode {
     fun title(): String {
         return when (this) {
             SelfUse -> "Self Use"
-            FeedIn -> return "Feed In First"
+            Feedin -> return "Feed In First"
             Backup -> return "Backup"
             ForceCharge -> return "Force Charge"
             ForceDischarge -> return "Force Discharge"

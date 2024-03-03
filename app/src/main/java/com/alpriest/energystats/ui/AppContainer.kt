@@ -54,9 +54,9 @@ class AppContainer(private val context: Context) {
             useLargeDisplay = config.useLargeDisplay,
             useColouredLines = config.useColouredFlowLines,
             showBatteryTemperature = config.showBatteryTemperature,
+            showBatteryEstimate = config.showBatteryEstimate,
             decimalPlaces = config.decimalPlaces,
             showSunnyBackground = config.showSunnyBackground,
-            showBatteryEstimate = config.showBatteryEstimate,
             showUsableBatteryOnly = config.showUsableBatteryOnly,
             selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
             showFinancialSummary = config.showFinancialSummary,
@@ -82,7 +82,7 @@ class AppContainer(private val context: Context) {
             currencySymbol = config.currencySymbol,
             showBatterySOCAsPercentage = config.showBatterySOCAsPercentage,
             shouldCombineCT2WithLoadsPower = config.shouldCombineCT2WithLoadsPower,
-            showSeparateStringsOnPowerFlow = config.showSeparateStringsOnPowerFlow
+            powerFlowStrings = config.powerFlowStrings
         )
     )
 

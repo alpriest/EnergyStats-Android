@@ -5,13 +5,11 @@ import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.ui.settings.PowerFlowStrings
-import com.alpriest.energystats.ui.settings.PowerFlowStringsSet
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.EnumSet
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
     ConfigInterface {
@@ -61,9 +59,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SEPARATE_PARAMETER_GRAPHS_BY_UNIT,
         VARIABLES,
         SHOW_BATTERY_SOC_AS_PERCENTAGE,
-        SHOW_SEPARATE_STRINGS_ON_POWERFLOW,
         USE_EXPERIMENTAL_LOAD_FORMULA,
-        ENABLED_POWER_FLOW_STRINGS
+        POWER_FLOW_STRINGS
     }
 
     override fun clearDisplaySettings() {
@@ -109,14 +106,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, value)
-            editor.apply()
-        }
-
-    override var showSeparateStringsOnPowerFlow: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_SEPARATE_STRINGS_ON_POWERFLOW.name, false)
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceDisplayKey.SHOW_SEPARATE_STRINGS_ON_POWERFLOW.name, value)
             editor.apply()
         }
 
@@ -438,19 +427,20 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var enabledPowerFlowStrings: PowerFlowStringsSet
+    override var powerFlowStrings: PowerFlowStringsSettings
         get() {
-            val stringSet = sharedPreferences.getStringSet(SharedPreferenceDisplayKey.ENABLED_POWER_FLOW_STRINGS.name, emptySet()) ?: emptySet()
-            return if (stringSet.isNotEmpty()) {
-                val powerFlowStringsSet = EnumSet.copyOf(stringSet.map { PowerFlowStrings.valueOf(it) })
-                PowerFlowStringsSet(powerFlowStringsSet)
-            } else {
-                PowerFlowStringsSet(EnumSet.noneOf(PowerFlowStrings::class.java))
+            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.POWER_FLOW_STRINGS.name, null)
+            if (data == null) {
+                data = Gson().toJson(PowerFlowStringsSettings.defaults)
+                powerFlowStrings = PowerFlowStringsSettings.defaults
             }
+
+            return Gson().fromJson(data, object : TypeToken<PowerFlowStringsSettings>() {}.type)
         }
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putStringSet(SharedPreferenceDisplayKey.ENABLED_POWER_FLOW_STRINGS.name, value.optionSet.map { it.name }.toSet())
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceDisplayKey.POWER_FLOW_STRINGS.name, jsonString)
             editor.apply()
         }
 

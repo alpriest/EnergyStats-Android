@@ -59,7 +59,7 @@
     <string name="retry">Retry</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="enter_your_foxess_cloud_details">Enter your FoxESS Cloud details</string>
+    <string name="enter_your_foxess_cloud_details">Enter your FoxESS Cloud API key</string>
     <string name="log_me_in">Log me in</string>
     <string name="try_demo">Try demo</string>
     <string name="ok">OK</string>

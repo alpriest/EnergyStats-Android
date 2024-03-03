@@ -97,7 +97,7 @@ class NetworkService(private val credentials: CredentialStore, private val store
                 chain.proceed(requestBuilder.build())
             }
             .addInterceptor { chain ->
-                InMemoryLoggingNetworkStore.shared.latestRequest = chain.request()
+                InMemoryLoggingNetworkStore.shared.latestRequest = chain.request().toString()
                 chain.proceed(chain.request())
             }
 
@@ -451,8 +451,11 @@ class NetworkService(private val credentials: CredentialStore, private val store
                         return
                     }
 
+                    InMemoryLoggingNetworkStore.shared.latestResponse = response.toString()
+
                     try {
                         val text = response.body?.string()
+                        InMemoryLoggingNetworkStore.shared.latestResponseText = text
                         val builder = GsonBuilder()
                             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
                             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())

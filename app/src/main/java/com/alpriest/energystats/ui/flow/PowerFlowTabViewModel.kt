@@ -144,8 +144,8 @@ class PowerFlowTabViewModel(
             "epsPower"
         )
 
-        if (configManager.showSeparateStringsOnPowerFlow) {
-            variables.addAll(configManager.enabledPowerFlowStrings.variableNames())
+        if (configManager.powerFlowStrings.enabled) {
+            variables.addAll(configManager.powerFlowStrings.variableNames())
         }
 
         return network.openapi_fetchRealData(

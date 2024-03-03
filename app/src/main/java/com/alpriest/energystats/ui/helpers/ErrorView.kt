@@ -70,20 +70,37 @@ fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLog
 
         EqualWidthButtonList(
             listOf(
-                ButtonDefinition(stringResource(R.string.copy_debug_data)) { scope.launch {
-                    InMemoryLoggingNetworkStore.shared.latestRequest?.let { request ->
-                        val text = request.toString()
-                        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val clip = ClipData.newPlainText("label", text)
-                        clipboard.setPrimaryClip(clip)
+                ButtonDefinition(stringResource(R.string.copy_debug_data)) {
+                    scope.launch {
+                        copyDebugData(context)
                     }
-                } },
+                },
                 ButtonDefinition(stringResource(R.string.retry)) { scope.launch { onRetry() } },
                 ButtonDefinition(stringResource(R.string.foxess_cloud_status)) { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") },
                 ButtonDefinition(stringResource(R.string.logout)) { onLogout() }
             )
         )
     }
+}
+
+fun copyDebugData(context: Context) {
+    var text = ""
+
+    InMemoryLoggingNetworkStore.shared.latestRequest?.let { request ->
+        text += request
+    }
+
+    InMemoryLoggingNetworkStore.shared.latestResponse?.let { response ->
+        text += "\n\n$response"
+    }
+
+    InMemoryLoggingNetworkStore.shared.latestResponseText?.let {
+        text += "\n\n$it"
+    }
+
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("label", text)
+    clipboard.setPrimaryClip(clip)
 }
 
 @Preview

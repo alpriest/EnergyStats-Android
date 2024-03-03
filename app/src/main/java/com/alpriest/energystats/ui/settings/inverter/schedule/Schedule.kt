@@ -156,7 +156,7 @@ data class SchedulePhase(
 
 fun Color.Companion.scheduleColor(mode: WorkMode): Color {
     return when (mode) {
-        WorkMode.FeedIn -> PowerFlowPositive
+        WorkMode.Feedin -> PowerFlowPositive
         WorkMode.ForceCharge -> PowerFlowNegative
         WorkMode.ForceDischarge -> PowerFlowPositive
         WorkMode.SelfUse -> LightGray

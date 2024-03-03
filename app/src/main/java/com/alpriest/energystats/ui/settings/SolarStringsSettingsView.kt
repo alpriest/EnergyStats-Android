@@ -3,11 +3,20 @@ package com.alpriest.energystats.ui.settings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,11 +26,15 @@ import com.alpriest.energystats.stores.ConfigManaging
 
 @Composable
 fun SolarStringsSettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
-    val showSeparateStringsOnPowerFlowState = rememberSaveable { mutableStateOf(config.showSeparateStringsOnPowerFlow) }
-    val pv1 = rememberSaveable { mutableStateOf(config.enabledPowerFlowStrings.contains(PowerFlowStrings.PV1)) }
-    val pv2 = rememberSaveable { mutableStateOf(config.enabledPowerFlowStrings.contains(PowerFlowStrings.PV2)) }
-    val pv3 = rememberSaveable { mutableStateOf(config.enabledPowerFlowStrings.contains(PowerFlowStrings.PV3)) }
-    val pv4 = rememberSaveable { mutableStateOf(config.enabledPowerFlowStrings.contains(PowerFlowStrings.PV4)) }
+    val showSeparateStringsOnPowerFlowState = rememberSaveable { mutableStateOf(config.powerFlowStrings.enabled) }
+    val pv1 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv1Enabled) }
+    val pv2 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv2Enabled) }
+    val pv3 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv3Enabled) }
+    val pv4 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv4Enabled) }
+    val pv1Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv1Name) }
+    val pv2Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv2Name) }
+    val pv3Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv3Name) }
+    val pv4Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv4Name) }
 
     SettingsColumnWithChild(
         modifier = modifier
@@ -29,7 +42,7 @@ fun SolarStringsSettingsView(config: ConfigManaging, modifier: Modifier = Modifi
         SettingsCheckbox(
             title = stringResource(R.string.show_pv_power_by_strings),
             state = showSeparateStringsOnPowerFlowState,
-            onUpdate = { config.showSeparateStringsOnPowerFlow = it }
+            onUpdate = { config.powerFlowStrings = config.powerFlowStrings.copy(enabled = it) }
         )
 
         AnimatedVisibility(
@@ -38,28 +51,52 @@ fun SolarStringsSettingsView(config: ConfigManaging, modifier: Modifier = Modifi
             exit = shrinkVertically()
         ) {
             Column {
-                SettingsCheckbox(
-                    title = "PV1",
-                    state = pv1,
-                    onUpdate = update(config, PowerFlowStrings.PV1)
+                SolarCheckbox(
+                    stringName = "PV1",
+                    toggleState = pv1,
+                    onToggle = {
+                        config.powerFlowStrings = config.powerFlowStrings.copy(pv1Enabled = it)
+                    },
+                    name = pv1Name,
+                    onNameChange = {
+                        config.powerFlowStrings = config.powerFlowStrings.copy(pv1Name = it)
+                    }
                 )
 
-                SettingsCheckbox(
-                    title = "PV2",
-                    state = pv2,
-                    onUpdate = update(config, PowerFlowStrings.PV2)
+                SolarCheckbox(
+                    stringName = "PV2",
+                    toggleState = pv2,
+                    onToggle = {
+                        config.powerFlowStrings = config.powerFlowStrings.copy(pv2Enabled = it)
+                    },
+                    name = pv2Name,
+                    onNameChange = {
+                        config.powerFlowStrings = config.powerFlowStrings.copy(pv2Name = it)
+                    }
                 )
 
-                SettingsCheckbox(
-                    title = "PV3",
-                    state = pv3,
-                    onUpdate = update(config, PowerFlowStrings.PV3)
+                SolarCheckbox(
+                    stringName = "PV3",
+                    toggleState = pv3,
+                    onToggle = {
+                        config.powerFlowStrings = config.powerFlowStrings.copy(pv3Enabled = it)
+                    },
+                    name = pv2Name,
+                    onNameChange = {
+                        config.powerFlowStrings = config.powerFlowStrings.copy(pv3Name = it)
+                    }
                 )
 
-                SettingsCheckbox(
-                    title = "PV4",
-                    state = pv4,
-                    onUpdate = update(config, PowerFlowStrings.PV4)
+                SolarCheckbox(
+                    stringName = "PV4",
+                    toggleState = pv4,
+                    onToggle = {
+                        config.powerFlowStrings = config.powerFlowStrings.copy(pv4Enabled = it)
+                    },
+                    name = pv2Name,
+                    onNameChange = {
+                        config.powerFlowStrings = config.powerFlowStrings.copy(pv4Name = it)
+                    }
                 )
             }
         }
@@ -69,10 +106,30 @@ fun SolarStringsSettingsView(config: ConfigManaging, modifier: Modifier = Modifi
 }
 
 @Composable
-private fun update(config: ConfigManaging, string: PowerFlowStrings): (Boolean) -> Unit = {
-    val temp = config.enabledPowerFlowStrings
-    temp.toggle(string)
-    config.enabledPowerFlowStrings = temp
+fun SolarCheckbox(stringName: String, toggleState: MutableState<Boolean>, onToggle: (Boolean) -> Unit, name: MutableState<String>, onNameChange: (String) -> Unit) {
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            OutlinedTextField(
+                value = name.value,
+                onValueChange = {
+                    name.value = it
+                    onNameChange(it)
+                },
+                label = { Text(stringName) }
+            )
+
+            Checkbox(
+                checked = toggleState.value,
+                onCheckedChange = {
+                    toggleState.value = it
+                    onToggle(it)
+                },
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+            )
+        }
+    }
 }
 
 @Preview

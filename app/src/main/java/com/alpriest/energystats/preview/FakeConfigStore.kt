@@ -4,8 +4,7 @@ import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.ui.settings.PowerFlowStrings
-import com.alpriest.energystats.ui.settings.PowerFlowStringsSet
+import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -52,11 +51,10 @@ class FakeConfigStore(
     override var variables: List<Variable> = listOf(),
     override var showBatterySOCAsPercentage: Boolean = false,
     override var shouldCombineCT2WithLoadsPower: Boolean = false,
-    override var showSeparateStringsOnPowerFlow: Boolean = false,
     override var useExperimentalLoadFormula: Boolean = false,
-    override var enabledPowerFlowStrings: PowerFlowStringsSet = PowerFlowStringsSet.defaults,
+    override var powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults,
 
-) : ConfigInterface {
+    ) : ConfigInterface {
     override fun clearDisplaySettings() {}
     override fun clearDeviceSettings() {}
 }
