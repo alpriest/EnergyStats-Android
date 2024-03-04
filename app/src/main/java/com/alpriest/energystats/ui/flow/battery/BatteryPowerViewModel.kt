@@ -31,7 +31,7 @@ class BatteryPowerViewModel(
         }
 
     fun batteryStoredChargekWh(): Double {
-        return residual.toDouble() / 1000.0
+        return calculator.currentEstimatedChargeAmountWh(batteryStateOfCharge = actualStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly) / 1000.0
     }
 
     fun batteryStateOfCharge(): Double {
