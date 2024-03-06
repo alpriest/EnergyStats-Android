@@ -49,11 +49,11 @@
     <string name="grid_consumption">"Consumo di rete "</string>
     <string name="charge">"Carica "</string>
     <string name="discharge">"Scarica "</string>
-    <string name="reportvariable_feedin">Potenza inviata alla rete</string>
-    <string name="reportvariable_gridconsumption">Potenza prelevata dalla rete</string>
-    <string name="reportvariable_generation">Potenza solare/batteria proveniente dall\'inverter</string>
-    <string name="reportvariable_chargeenergytotal">Potenza di carica della batteria</string>
-    <string name="reportvariable_dischargeenergytotal">Potenza di scarica dalla batteria</string>
+    <string name="reportvariable_feedin">Energia esportata alla rete</string>
+    <string name="reportvariable_gridconsumption">Energia importata dalla rete</string>
+    <string name="reportvariable_generation">Energia fornita dall\'inverter</string>
+    <string name="reportvariable_chargeenergytotal">Energia usata per caricare la batteria</string>
+    <string name="reportvariable_dischargeenergytotal">Energia prelevata dalla batteria</string>
     <string name="day">giorno</string>
     <string name="month">mese</string>
     <string name="year">anno</string>
@@ -107,7 +107,7 @@
     <string name="all">Tutto</string>
     <string name="loads">"Carichi "</string>
     <string name="self_sufficiency_estimates">Stime di autosufficienza</string>
-    <string name="reportvariable_loads">Potenza utilizzata dall\'abitazione</string>
+    <string name="reportvariable_loads">Energia utilizzata dalla casa</string>
     <string name="net_self_sufficiency">Si presume che se il tuo consumo netto è positivo, sei autosufficiente.\n\nAutosufficienza = (esportazione - importazione + caricaBatteria - scaricaBatteria) / usoAbitazione</string>
     <string name="absolute_self_sufficiency">Si presume che qualsiasi importo prelevato dalla rete riduca la tua autosufficienza.\n\nAutosufficienza = rete / usoAbitazione</string>
     <string name="approximations">Approssimazioni</string>

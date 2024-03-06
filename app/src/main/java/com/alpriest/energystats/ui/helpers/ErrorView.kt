@@ -70,12 +70,12 @@ fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLog
 
         EqualWidthButtonList(
             listOf(
+                ButtonDefinition(stringResource(R.string.retry)) { scope.launch { onRetry() } },
                 ButtonDefinition(stringResource(R.string.copy_debug_data)) {
                     scope.launch {
                         copyDebugData(context)
                     }
                 },
-                ButtonDefinition(stringResource(R.string.retry)) { scope.launch { onRetry() } },
                 ButtonDefinition(stringResource(R.string.foxess_cloud_status)) { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") },
                 ButtonDefinition(stringResource(R.string.logout)) { onLogout() }
             )

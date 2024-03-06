@@ -48,11 +48,11 @@
     <string name="grid_consumption">"Grid consumption "</string>
     <string name="charge">"Charge "</string>
     <string name="discharge">"Discharge "</string>
-    <string name="reportvariable_feedin">Power being sent to the grid</string>
-    <string name="reportvariable_gridconsumption">Power coming from the grid</string>
-    <string name="reportvariable_generation">Solar / Battery power coming through the inverter</string>
-    <string name="reportvariable_chargeenergytotal">Power charging the battery</string>
-    <string name="reportvariable_dischargeenergytotal">Power discharging from the battery</string>
+    <string name="reportvariable_feedin">Energy exported to the grid</string>
+    <string name="reportvariable_gridconsumption">Energy imported from the grid</string>
+    <string name="reportvariable_generation">Energy supplied by the inverter</string>
+    <string name="reportvariable_chargeenergytotal">Energy used to charge the battery</string>
+    <string name="reportvariable_dischargeenergytotal">Energy taken from the battery</string>
     <string name="day">day</string>
     <string name="month">month</string>
     <string name="year">year</string>
@@ -106,7 +106,7 @@
     <string name="all">All</string>
     <string name="loads">"Loads "</string>
     <string name="self_sufficiency_estimates">Self sufficiency estimates</string>
-    <string name="reportvariable_loads">Power used by the house</string>
+    <string name="reportvariable_loads">Energy used by the house</string>
     <string name="net_self_sufficiency">Assumes if your net consumption is positive then you are self-sufficient.\n\nSufficiency = (export - import + batCharge - batDischarge) / houseUsage</string>
     <string name="absolute_self_sufficiency">Assumes any amount taken from the grid reduces your self-sufficiency.\n\nSufficiency = grid / houseUsage</string>
     <string name="approximations">Approximations</string>

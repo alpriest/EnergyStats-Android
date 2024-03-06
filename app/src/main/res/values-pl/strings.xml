@@ -49,11 +49,11 @@
     <string name="grid_consumption">"Konsumpcja z sieci "</string>
     <string name="charge">"Ładowanie "</string>
     <string name="discharge">"Rozładowanie "</string>
-    <string name="reportvariable_feedin">Moc wysyłana do sieci</string>
-    <string name="reportvariable_gridconsumption">Moc pobierana z sieci</string>
-    <string name="reportvariable_generation">Moc pochodząca z energii słonecznej / baterii przez falownik</string>
-    <string name="reportvariable_chargeenergytotal">Moc ładowania baterii</string>
-    <string name="reportvariable_dischargeenergytotal">Moc rozładowania z baterii</string>
+    <string name="reportvariable_feedin">Energia eksportowana do sieci</string>
+    <string name="reportvariable_gridconsumption">Energia importowana z sieci</string>
+    <string name="reportvariable_generation">Energia dostarczana przez falownik</string>
+    <string name="reportvariable_chargeenergytotal">Energia używana do ładowania baterii</string>
+    <string name="reportvariable_dischargeenergytotal">Energia pobrana z baterii</string>
     <string name="day">dzień</string>
     <string name="month">miesiąc</string>
     <string name="year">rok</string>
@@ -107,7 +107,7 @@
     <string name="all">Wszystko</string>
     <string name="loads">Obciążenia</string>
     <string name="self_sufficiency_estimates">Szacunki samowystarczalności</string>
-    <string name="reportvariable_loads">Moc zużywana przez dom</string>
+    <string name="reportvariable_loads">Energia używana przez dom</string>
     <string name="net_self_sufficiency">Zakłada, że jeśli Twoje zużycie netto jest dodatnie, to jesteś samowystarczalny.\n\nSamowystarczalność = (eksport - import + ładowanie baterii - rozładowywanie baterii) / zużycie domu</string>
     <string name="absolute_self_sufficiency">Zakłada, że każda ilość pobierana z sieci zmniejsza Twoją samowystarczalność.\n\nSamowystarczalność = sieć / zużycie domu</string>
     <string name="approximations">Przybliżenia</string>

@@ -51,11 +51,11 @@
     <string name="grid_consumption">"Consumo de red "</string>
     <string name="charge">"Carga "</string>
     <string name="discharge">"Descarga "</string>
-    <string name="reportvariable_feedin">Potencia enviada a la red</string>
-    <string name="reportvariable_gridconsumption">Potencia proveniente de la red</string>
-    <string name="reportvariable_generation">Potencia solar / de batería que pasa a través del inversor</string>
-    <string name="reportvariable_chargeenergytotal">Potencia de carga de la batería</string>
-    <string name="reportvariable_dischargeenergytotal">Potencia de descarga de la batería</string>
+    <string name="reportvariable_feedin">Energía exportada a la red</string>
+    <string name="reportvariable_gridconsumption">Energía importada de la red</string>
+    <string name="reportvariable_generation">Energía suministrada por el inversor</string>
+    <string name="reportvariable_chargeenergytotal">Energía utilizada para cargar la batería</string>
+    <string name="reportvariable_dischargeenergytotal">Energía tomada de la batería</string>
     <string name="retry">reintentar</string>
     <string name="username">Nombre de usuario</string>
     <string name="password">Contraseña</string>
@@ -106,7 +106,7 @@
     <string name="all">Todo</string>
     <string name="self_sufficiency_estimates">Estimaciones de autosuficiencia</string>
     <string name="loads">"Cargas "</string>
-    <string name="reportvariable_loads">Potencia utilizada por la casa</string>
+    <string name="reportvariable_loads">Energía utilizada por la casa</string>
     <string name="net_self_sufficiency">Supone que si tu consumo neto es positivo, entonces eres autosuficiente.\n\nAutosuficiencia = (exportación - importación + cargaDeBatería - descargaDeBatería) / consumoDeCasa</string>
     <string name="absolute_self_sufficiency">Supone que cualquier cantidad tomada de la red reduce tu autosuficiencia.\n\nAutosuficiencia = red / consumoDeCasa</string>
     <string name="approximations">Approximaciones</string>
