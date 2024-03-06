@@ -10,13 +10,12 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
+import com.alpriest.energystats.services.FoxAPIService
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkCache
 import com.alpriest.energystats.services.NetworkFacade
-import com.alpriest.energystats.services.FoxAPIService
-import com.alpriest.energystats.services.NetworkValueCleaner
-import com.alpriest.energystats.services.FoxAPIServicing
 import com.alpriest.energystats.services.NetworkService
+import com.alpriest.energystats.services.NetworkValueCleaner
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
@@ -52,7 +51,7 @@ class AppContainer(private val context: Context) {
             Context.MODE_PRIVATE
         )
     internal val credentialStore: CredentialStore = SharedPreferencesCredentialStore(sharedPreferences)
-    private val config = SharedPreferencesConfigStore(sharedPreferences)
+    val config = SharedPreferencesConfigStore(sharedPreferences)
     var filePathChooser: ActivityResultLauncher<String>? = null
     var filePathChooserCallback: ((Uri) -> Unit)? = null
     val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
@@ -96,7 +95,7 @@ class AppContainer(private val context: Context) {
         NetworkService(
             NetworkValueCleaner(
                 NetworkFacade(
-                    network = NetworkCache(network = FoxAPIService(credentialStore, networkStore)),
+                    api = NetworkCache(api = FoxAPIService(credentialStore, networkStore)),
                     isDemoUser = { config.isDemoUser }
                 ),
                 themeStream

@@ -111,5 +111,8 @@ class FakeConfigManager : ConfigManaging {
     override fun select(device: Device) {
     }
 
+    override suspend fun fetchPowerStationDetail() {
+    }
+
     override var appVersion: String = "1.29"
 }

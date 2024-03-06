@@ -10,6 +10,7 @@ import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleResponse
@@ -34,6 +35,7 @@ interface Networking {
     suspend fun setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean)
     suspend fun saveSchedule(deviceSN: String, schedule: Schedule)
     suspend fun fetchDevice(deviceSN: String): DeviceDetailResponse
+    suspend fun fetchPowerStationDetail(): PowerStationDetail?
 }
 
 open class NetworkService(val api: FoxAPIServicing) : Networking {
@@ -99,5 +101,14 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
 
     override suspend fun fetchDevice(deviceSN: String): DeviceDetailResponse {
         return api.openapi_fetchDevice(deviceSN)
+    }
+
+    override suspend fun fetchPowerStationDetail(): PowerStationDetail? {
+        val list = api.openapi_fetchPowerStationList()
+        return if (list.data.count() == 1) {
+            api.openapi_fetchPowerStationDetail(list.data.first().stationID).toPowerStationDetail()
+        } else {
+            null
+        }
     }
 }

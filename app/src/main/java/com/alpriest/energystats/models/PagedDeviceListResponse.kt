@@ -60,3 +60,31 @@ data class Battery(
     val minSOC: String?,
     val hasError: Boolean
 )
+
+data class PowerStationListRequest(
+    val currentPage: Int = 1,
+    val pageSize: Int = 100
+)
+
+data class PagedPowerStationListResponse(
+    val currentPage: Int,
+    val pageSize: Int,
+    val total: Int,
+    val data: List<PowerStationSummaryResponse>
+)
+
+data class PowerStationSummaryResponse(val stationID: String)
+
+data class PowerStationDetailResponse(
+    val stationName: String,
+    val capacity: Double,
+    val timezone: String
+) {
+    fun toPowerStationDetail(): PowerStationDetail {
+        return PowerStationDetail(
+            stationName = stationName,
+            capacity = capacity,
+            timezone = timezone
+        )
+    }
+}

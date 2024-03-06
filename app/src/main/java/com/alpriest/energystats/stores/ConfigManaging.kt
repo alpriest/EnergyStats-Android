@@ -19,6 +19,8 @@ interface ConfigManaging {
     fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean)
     suspend fun fetchDevices()
     fun select(device: Device)
+    suspend fun fetchPowerStationDetail()
+
     val themeStream: MutableStateFlow<AppTheme>
 
     var shouldCombineCT2WithPVPower: Boolean

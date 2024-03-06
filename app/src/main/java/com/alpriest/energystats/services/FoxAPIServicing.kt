@@ -1,6 +1,20 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.*
+import com.alpriest.energystats.models.BatterySOCResponse
+import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DataLoggerResponse
+import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceSummaryResponse
+import com.alpriest.energystats.models.GetSchedulerFlagResponse
+import com.alpriest.energystats.models.OpenApiVariable
+import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerStationDetailResponse
+import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
@@ -44,6 +58,8 @@ interface FoxAPIServicing {
     suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean)
     suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule)
     suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse
+    suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse
+    suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

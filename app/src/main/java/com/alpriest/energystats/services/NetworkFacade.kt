@@ -1,31 +1,45 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.*
+import com.alpriest.energystats.models.BatterySOCResponse
+import com.alpriest.energystats.models.ChargeTime
+import com.alpriest.energystats.models.DataLoggerResponse
+import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceSummaryResponse
+import com.alpriest.energystats.models.GetSchedulerFlagResponse
+import com.alpriest.energystats.models.OpenApiVariable
+import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerStationDetailResponse
+import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.delay
 import java.util.concurrent.ConcurrentHashMap
 
-class NetworkFacade(private val network: FoxAPIServicing, private val isDemoUser: () -> Boolean) : FoxAPIServicing {
-    private val demoFoxESSNetworking = DemoAPI()
+class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: () -> Boolean) : FoxAPIServicing {
+    private val demoAPI = DemoAPI()
     private val throttler = ThrottleManager()
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchDeviceList()
+            demoAPI.openapi_fetchDeviceList()
         } else {
-            network.openapi_fetchDeviceList()
+            api.openapi_fetchDeviceList()
         }
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchHistory(deviceSN, variables, start, end)
+            demoAPI.openapi_fetchHistory(deviceSN, variables, start, end)
         } else {
             val method = "openapi_fetchHistory"
             try {
                 throttler.throttle(method)
-                return network.openapi_fetchHistory(deviceSN, variables, start, end)
+                return api.openapi_fetchHistory(deviceSN, variables, start, end)
             } finally {
                 throttler.didInvoke(method)
             }
@@ -34,12 +48,12 @@ class NetworkFacade(private val network: FoxAPIServicing, private val isDemoUser
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchVariables()
+            demoAPI.openapi_fetchVariables()
         } else {
             val method = "openapi_fetchVariables"
             try {
                 throttler.throttle(method)
-                return network.openapi_fetchVariables()
+                return api.openapi_fetchVariables()
             } finally {
                 throttler.didInvoke(method)
             }
@@ -48,12 +62,12 @@ class NetworkFacade(private val network: FoxAPIServicing, private val isDemoUser
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+            demoAPI.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
         } else {
             val method = "openapi_fetchReport"
             try {
                 throttler.throttle(method)
-                return network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+                return api.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
             } finally {
                 throttler.didInvoke(method)
             }
@@ -62,28 +76,28 @@ class NetworkFacade(private val network: FoxAPIServicing, private val isDemoUser
 
     override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchBatterySettings(deviceSN)
+            demoAPI.openapi_fetchBatterySettings(deviceSN)
         } else {
-            return network.openapi_fetchBatterySettings(deviceSN)
+            return api.openapi_fetchBatterySettings(deviceSN)
         }
     }
 
     override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
+            demoAPI.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
         } else {
-            return network.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
+            return api.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
         }
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchRealData(deviceSN, variables)
+            demoAPI.openapi_fetchRealData(deviceSN, variables)
         } else {
             val method = "openapi_fetchRealData"
             try {
                 throttler.throttle(method)
-                network.openapi_fetchRealData(deviceSN, variables)
+                api.openapi_fetchRealData(deviceSN, variables)
             } finally {
                 throttler.didInvoke(method)
             }
@@ -92,44 +106,44 @@ class NetworkFacade(private val network: FoxAPIServicing, private val isDemoUser
 
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchDataLoggers()
+            demoAPI.openapi_fetchDataLoggers()
         } else {
-            network.openapi_fetchDataLoggers()
+            api.openapi_fetchDataLoggers()
         }
     }
 
     override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchBatteryTimes(deviceSN)
+            demoAPI.openapi_fetchBatteryTimes(deviceSN)
         } else {
-            network.openapi_fetchBatteryTimes(deviceSN)
+            api.openapi_fetchBatteryTimes(deviceSN)
         }
     }
 
     override suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_setBatteryTimes(deviceSN, times)
+            demoAPI.openapi_setBatteryTimes(deviceSN, times)
         } else {
-            network.openapi_setBatteryTimes(deviceSN, times)
+            api.openapi_setBatteryTimes(deviceSN, times)
         }
     }
 
     override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchSchedulerFlag(deviceSN)
+            demoAPI.openapi_fetchSchedulerFlag(deviceSN)
         } else {
-            network.openapi_fetchSchedulerFlag(deviceSN)
+            api.openapi_fetchSchedulerFlag(deviceSN)
         }
     }
 
     override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchCurrentSchedule(deviceSN)
+            demoAPI.openapi_fetchCurrentSchedule(deviceSN)
         } else {
             val method = "openapi_fetchCurrentSchedule"
             try {
                 throttler.throttle(method)
-                network.openapi_fetchCurrentSchedule(deviceSN)
+                api.openapi_fetchCurrentSchedule(deviceSN)
             } finally {
                 throttler.didInvoke(method)
             }
@@ -138,33 +152,49 @@ class NetworkFacade(private val network: FoxAPIServicing, private val isDemoUser
 
     override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
         if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+            demoAPI.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
         } else {
-            return network.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+            return api.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
         }
     }
 
     override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
         if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_saveSchedule(deviceSN, schedule)
+            demoAPI.openapi_saveSchedule(deviceSN, schedule)
         } else {
-            return network.openapi_saveSchedule(deviceSN, schedule)
+            return api.openapi_saveSchedule(deviceSN, schedule)
         }
     }
 
     override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
         return if (isDemoUser()) {
-            demoFoxESSNetworking.openapi_fetchDevice(deviceSN)
+            demoAPI.openapi_fetchDevice(deviceSN)
         } else {
-            network.openapi_fetchDevice(deviceSN)
+            api.openapi_fetchDevice(deviceSN)
+        }
+    }
+
+    override suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse {
+        return if(isDemoUser()) {
+            demoAPI.openapi_fetchPowerStationList()
+        } else {
+            api.openapi_fetchPowerStationList()
+        }
+    }
+
+    override suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse {
+        return if(isDemoUser()) {
+            demoAPI.openapi_fetchPowerStationDetail(stationID)
+        } else {
+            api.openapi_fetchPowerStationDetail(stationID)
         }
     }
 
     override suspend fun fetchErrorMessages() {
         if (isDemoUser()) {
-            demoFoxESSNetworking.fetchErrorMessages()
+            demoAPI.fetchErrorMessages()
         } else {
-            network.fetchErrorMessages()
+            api.fetchErrorMessages()
         }
     }
 

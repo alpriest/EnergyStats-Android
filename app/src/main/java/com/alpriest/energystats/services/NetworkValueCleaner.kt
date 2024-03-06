@@ -13,6 +13,8 @@ import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseData
+import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleResponse
@@ -24,13 +26,13 @@ import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class NetworkValueCleaner(private val network: FoxAPIServicing, private val themeStream: MutableStateFlow<AppTheme>) : FoxAPIServicing {
+class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStream: MutableStateFlow<AppTheme>) : FoxAPIServicing {
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
-        return network.openapi_fetchDeviceList()
+        return api.openapi_fetchDeviceList()
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
-        val original = network.openapi_fetchRealData(deviceSN, variables)
+        val original = api.openapi_fetchRealData(deviceSN, variables)
         return OpenQueryResponse(
             time = original.time,
             deviceSN = original.deviceSN,
@@ -45,7 +47,7 @@ class NetworkValueCleaner(private val network: FoxAPIServicing, private val them
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        val original = network.openapi_fetchHistory(deviceSN, variables, start, end)
+        val original = api.openapi_fetchHistory(deviceSN, variables, start, end)
         return OpenHistoryResponse(
             original.deviceSN,
             original.datas.map {
@@ -62,11 +64,11 @@ class NetworkValueCleaner(private val network: FoxAPIServicing, private val them
     }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
-        return network.openapi_fetchVariables()
+        return api.openapi_fetchVariables()
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        val original = network.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+        val original = api.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
         return original.map {
             OpenReportResponse(
                 variable = it.variable,
@@ -79,47 +81,55 @@ class NetworkValueCleaner(private val network: FoxAPIServicing, private val them
     }
 
     override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
-        return network.openapi_fetchBatterySettings(deviceSN)
+        return api.openapi_fetchBatterySettings(deviceSN)
     }
 
     override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
-        return network.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
+        return api.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
     }
 
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
-        return network.openapi_fetchDataLoggers()
+        return api.openapi_fetchDataLoggers()
     }
 
     override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
-        return network.openapi_fetchBatteryTimes(deviceSN)
+        return api.openapi_fetchBatteryTimes(deviceSN)
     }
 
     override suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
-        network.openapi_setBatteryTimes(deviceSN, times)
+        api.openapi_setBatteryTimes(deviceSN, times)
     }
 
     override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
-        return network.openapi_fetchSchedulerFlag(deviceSN)
+        return api.openapi_fetchSchedulerFlag(deviceSN)
     }
 
     override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
-        return network.openapi_fetchCurrentSchedule(deviceSN)
+        return api.openapi_fetchCurrentSchedule(deviceSN)
     }
 
     override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
-        network.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+        api.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
     }
 
     override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
-        network.openapi_saveSchedule(deviceSN, schedule)
+        api.openapi_saveSchedule(deviceSN, schedule)
     }
 
     override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
-        return network.openapi_fetchDevice(deviceSN)
+        return api.openapi_fetchDevice(deviceSN)
+    }
+
+    override suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse {
+        return api.openapi_fetchPowerStationList()
+    }
+
+    override suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse {
+        return api.openapi_fetchPowerStationDetail(stationID)
     }
 
     override suspend fun fetchErrorMessages() {
-        network.fetchErrorMessages()
+        api.fetchErrorMessages()
     }
 
 //    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {

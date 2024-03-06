@@ -183,6 +183,19 @@ object URLs {
         return "https://www.foxesscloud.com/op/v0/device/scheduler/enable"
             .toHttpUrl()
     }
+
+    fun getOpenPlantList(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/plant/list"
+            .toHttpUrl()
+    }
+
+    fun getOpenPlantDetail(stationID: String): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/plant/detail"
+            .toHttpUrl()
+            .newBuilder()
+            .addQueryParameter("id", stationID)
+            .build()
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

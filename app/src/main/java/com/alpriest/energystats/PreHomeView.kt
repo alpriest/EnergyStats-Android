@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.services.FoxAPIServicing
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -19,7 +19,8 @@ import kotlinx.coroutines.launch
 class PreHomeViewModel(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val userManager: UserManaging
+    private val userManager: UserManaging,
+    private val config: SharedPreferencesConfigStore
 ) : ViewModel(), AlertDialogMessageProviding {
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
@@ -27,6 +28,10 @@ class PreHomeViewModel(
         viewModelScope.launch {
             try {
                 network.fetchErrorMessages()
+
+                if (config.powerStationDetail == null) {
+                    configManager.fetchPowerStationDetail()
+                }
 
                 if (userManager.loggedInState.value.loadState == LoggedIn) {
                     configManager.fetchDevices()

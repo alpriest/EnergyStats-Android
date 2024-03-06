@@ -14,6 +14,8 @@ import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.SchedulePhaseResponse
@@ -168,6 +170,14 @@ class DemoAPI : FoxAPIServicing {
             function = DeviceFunction(scheduler = true),
             stationName = "my station"
         )
+    }
+
+    override suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse {
+        return PagedPowerStationListResponse(1,1,0, listOf())
+    }
+
+    override suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse {
+        return PowerStationDetailResponse("", 0.0, "")
     }
 
     override suspend fun fetchErrorMessages() {}

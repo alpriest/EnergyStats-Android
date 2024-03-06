@@ -1,6 +1,7 @@
 package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -53,6 +54,7 @@ class FakeConfigStore(
     override var shouldCombineCT2WithLoadsPower: Boolean = false,
     override var useExperimentalLoadFormula: Boolean = false,
     override var powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults,
+    override var powerStationDetail: PowerStationDetail? = null
 
     ) : ConfigInterface {
     override fun clearDisplaySettings() {}

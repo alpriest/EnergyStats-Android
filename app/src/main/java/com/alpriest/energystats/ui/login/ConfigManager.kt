@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.models.*
-import com.alpriest.energystats.services.FoxAPIServicing
 import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -289,6 +288,10 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
     override fun select(device: Device) {
         selectedDeviceSN = device.deviceSN
         currentDevice.value = devices?.firstOrNull { it.deviceSN == selectedDeviceSN }
+    }
+
+    override suspend fun fetchPowerStationDetail() {
+        config.powerStationDetail = networking.fetchPowerStationDetail()
     }
 
     override val variables: List<Variable>

@@ -2,6 +2,7 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -60,7 +61,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         VARIABLES,
         SHOW_BATTERY_SOC_AS_PERCENTAGE,
         USE_EXPERIMENTAL_LOAD_FORMULA,
-        POWER_FLOW_STRINGS
+        POWER_FLOW_STRINGS,
+        POWER_STATION_DETAIL
     }
 
     override fun clearDisplaySettings() {
@@ -106,6 +108,19 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, value)
+            editor.apply()
+        }
+
+    override var powerStationDetail: PowerStationDetail?
+        get() {
+            val data: String? = sharedPreferences.getString(SharedPreferenceDisplayKey.POWER_STATION_DETAIL.name, null) ?: return null
+
+            return Gson().fromJson(data, object : TypeToken<PowerStationDetail>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceDisplayKey.POWER_STATION_DETAIL.name, jsonString)
             editor.apply()
         }
 
