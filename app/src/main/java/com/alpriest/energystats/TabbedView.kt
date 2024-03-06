@@ -27,9 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
+import com.alpriest.energystats.services.DemoAPI
+import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
@@ -65,7 +66,7 @@ data class TitleItem(
 @Composable
 fun TabbedView(
     configManager: ConfigManaging,
-    network: FoxESSNetworking,
+    network: Networking,
     userManager: UserManaging,
     onLogout: () -> Unit,
     themeStream: MutableStateFlow<AppTheme>,
@@ -191,11 +192,11 @@ fun HomepagePreview() {
         TabbedView(
             ConfigManager(
                 config = FakeConfigStore(),
-                networking = DemoFoxESSNetworking(),
+                networking = DemoNetworking(),
                 appVersion = "1.19",
                 themeStream = themeStream
             ),
-            network = DemoFoxESSNetworking(),
+            network = DemoNetworking(),
             userManager = FakeUserManager(),
             {},
             themeStream = themeStream,

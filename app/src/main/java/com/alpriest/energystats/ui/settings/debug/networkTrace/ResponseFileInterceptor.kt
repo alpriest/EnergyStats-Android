@@ -9,10 +9,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkFacade
-import com.alpriest.energystats.services.NetworkService
+import com.alpriest.energystats.services.FoxAPIService
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -33,7 +32,7 @@ fun NetworkTraceDebugView(configManager: ConfigManaging, credentialStore: Creden
 
     suspend fun downloadFiles() {
         val network = NetworkFacade(
-            NetworkService(credentialStore, interceptor = ResponseFileInterceptor(cacheDirectory), store = InMemoryLoggingNetworkStore())
+            FoxAPIService(credentialStore, interceptor = ResponseFileInterceptor(cacheDirectory), store = InMemoryLoggingNetworkStore())
         ) { configManager.isDemoUser }
 
         configManager.currentDevice.value?.let {

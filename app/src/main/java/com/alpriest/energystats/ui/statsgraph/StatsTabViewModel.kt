@@ -15,7 +15,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.parse
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
@@ -28,17 +28,15 @@ import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.time.LocalDate
-import java.util.concurrent.CancellationException
 
 data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
-    private val networking: FoxESSNetworking,
+    private val networking: Networking,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<Color>())
@@ -106,7 +104,7 @@ class StatsTabViewModel(
         val rawTotals: MutableMap<ReportVariable, Double>
 
         try {
-            reportData = networking.openapi_fetchReport(
+            reportData = networking.fetchReport(
                 device.deviceSN,
                 variables = reportVariables,
                 queryDate = queryDate,
@@ -212,7 +210,7 @@ class StatsTabViewModel(
         val totals = mutableMapOf<ReportVariable, Double>()
 
         if (reportType == ReportType.day) {
-            val reports = networking.openapi_fetchReport(deviceSN, reportVariables, queryDate, ReportType.month)
+            val reports = networking.fetchReport(deviceSN, reportVariables, queryDate, ReportType.month)
             reports.forEach { response ->
                 ReportVariable.parse(response.variable).let {
                     totals[it] = response.values.first { it.index == queryDate.day }.value

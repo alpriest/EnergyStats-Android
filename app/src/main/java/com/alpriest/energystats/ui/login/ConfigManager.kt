@@ -1,8 +1,9 @@
 package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.models.*
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.FoxAPIServicing
 import com.alpriest.energystats.services.InvalidTokenException
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -21,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetworking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
+open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
     ConfigManaging {
 
     override var useExperimentalLoadFormula: Boolean
@@ -298,9 +299,9 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
     override suspend fun fetchDevices() {
         var method = "openapi_fetchDeviceList"
         try {
-            val deviceList = networking.openapi_fetchDeviceList()
+            val deviceList = networking.fetchDeviceList()
             method = "openapi_fetchVariables"
-            config.variables = networking.openapi_fetchVariables().mapNotNull { variable ->
+            config.variables = networking.fetchVariables().mapNotNull { variable ->
                 variable.unit?.let {
                     Variable(
                         name = variable.name,
@@ -315,9 +316,9 @@ open class ConfigManager(var config: ConfigInterface, val networking: FoxESSNetw
                 val deviceBattery: Battery? = if (networkDevice.hasBattery) {
                     try {
                         method = "openapi_fetchRealData"
-                        val batteryVariables = networking.openapi_fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC"))
+                        val batteryVariables = networking.fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC"))
                         method = "openapi_fetchBatterySOC"
-                        val batterySettings = networking.openapi_fetchBatterySettings(networkDevice.deviceSN)
+                        val batterySettings = networking.fetchBatterySettings(networkDevice.deviceSN)
 
                         BatteryResponseMapper.map(batteryVariables, batterySettings)
                     } catch (_: Exception) {

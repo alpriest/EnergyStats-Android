@@ -14,7 +14,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.toUtcMillis
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
@@ -36,7 +36,7 @@ import java.time.LocalDateTime
 import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
     private val context: Context
@@ -148,7 +148,7 @@ class PowerFlowTabViewModel(
             variables.addAll(configManager.powerFlowStrings.variableNames())
         }
 
-        return network.openapi_fetchRealData(
+        return network.fetchRealData(
             deviceSN = device.deviceSN,
             variables
         )
@@ -160,7 +160,7 @@ class PowerFlowTabViewModel(
             reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
         }
 
-        return network.openapi_fetchReport(
+        return network.fetchReport(
             device.deviceSN,
             reportVariables,
             QueryDate(),
@@ -178,7 +178,7 @@ class PowerFlowTabViewModel(
 
     private suspend fun loadHistoryData(device: Device): OpenHistoryResponse {
         val start = QueryDate().toUtcMillis()
-        return network.openapi_fetchHistory(
+        return network.fetchHistory(
             deviceSN = device.deviceSN,
             variables = listOf("pvPower", "meterPower2"),
             start = start,

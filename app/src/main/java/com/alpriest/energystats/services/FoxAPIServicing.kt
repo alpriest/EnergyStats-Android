@@ -14,7 +14,7 @@ class UnknownNetworkException(errno: Int, message: String?) : Exception("$errno 
 class UnacceptableException: Exception("Unacceptable")
 class ProhibitedActionException: Exception("Schedules")
 
-interface FoxESSNetworking {
+interface FoxAPIServicing {
 //    suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse
 //    suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse>
 //    suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse
@@ -29,7 +29,6 @@ interface FoxESSNetworking {
 
     suspend fun fetchErrorMessages()
 
-    // OpenAPI
     suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse>
     suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse
     suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse

@@ -1,10 +1,11 @@
 package com.alpriest.energystats
 
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.FoxAPIServicing
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class PreHomeViewModel(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging
 ) : ViewModel(), AlertDialogMessageProviding {

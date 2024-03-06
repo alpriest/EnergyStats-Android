@@ -10,7 +10,8 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.SchedulePhaseResponse
 import com.alpriest.energystats.models.Time
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -22,7 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ScheduleSummaryViewModelFactory(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val navController: NavController
 ) : ViewModelProvider.Factory {
@@ -33,7 +34,7 @@ class ScheduleSummaryViewModelFactory(
 }
 
 class ScheduleSummaryViewModel(
-    val network: FoxESSNetworking,
+    val network: Networking,
     val config: ConfigManaging,
     val navController: NavController
 ) : ViewModel(), AlertDialogMessageProviding {
@@ -52,11 +53,11 @@ class ScheduleSummaryViewModel(
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {
-                    val flags = network.openapi_fetchSchedulerFlag(deviceSN)
+                    val flags = network.fetchSchedulerFlag(deviceSN)
 
                     if (!flags.support) {
                         val firmwareVersion: DeviceFirmwareVersion? = try {
-                            val response = network.openapi_fetchDevice(deviceSN)
+                            val response = network.fetchDevice(deviceSN)
                             DeviceFirmwareVersion(master = response.masterVersion, manager = response.managerVersion, slave = response.slaveVersion)
                         } catch (ex: Exception) {
                             null
@@ -100,7 +101,7 @@ class ScheduleSummaryViewModel(
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {
-                    val scheduleResponse = network.openapi_fetchCurrentSchedule(deviceSN)
+                    val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
                     scheduleStream.value = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() }, description = null)
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
 
@@ -149,7 +150,7 @@ class ScheduleSummaryViewModel(
                     }
 
                     try {
-                        network.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+                        network.setScheduleFlag(deviceSN, schedulerEnabled)
                         schedulerEnabledStream.value = schedulerEnabled
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } catch (ex: Exception) {

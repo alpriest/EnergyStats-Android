@@ -34,7 +34,7 @@ class LatestDataRepository private constructor() {
                 "ResidualEnergy"
             )
 
-            val real = appContainer.networking.openapi_fetchRealData(
+            val real = appContainer.networking.fetchRealData(
                 deviceSN = device.deviceSN,
                 variables
             )

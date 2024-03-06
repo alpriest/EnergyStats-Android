@@ -37,8 +37,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.DemoAPI
+import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -59,7 +60,7 @@ enum class ParametersScreen {
 }
 
 class ParametersGraphTabViewModelFactory(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
@@ -71,7 +72,7 @@ class ParametersGraphTabViewModelFactory(
 }
 
 class ParametersGraphTabView(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
     private val onWriteTempFile: (String, String) -> Uri?,
@@ -252,7 +253,7 @@ fun PreviewParameterGraphHeaderView() {
     ParameterGraphHeaderView(
         viewModel = ParametersGraphTabViewModel(
             configManager = FakeConfigManager(),
-            networking = DemoFoxESSNetworking(),
+            networking = DemoNetworking(),
             onWriteTempFile = { _, _ -> null },
             graphVariablesStream = MutableStateFlow(listOf()),
         ),

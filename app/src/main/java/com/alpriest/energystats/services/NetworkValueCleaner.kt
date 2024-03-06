@@ -24,7 +24,7 @@ import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class NetworkValueCleaner(private val network: FoxESSNetworking, private val themeStream: MutableStateFlow<AppTheme>) : FoxESSNetworking {
+class NetworkValueCleaner(private val network: FoxAPIServicing, private val themeStream: MutableStateFlow<AppTheme>) : FoxAPIServicing {
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return network.openapi_fetchDeviceList()
     }

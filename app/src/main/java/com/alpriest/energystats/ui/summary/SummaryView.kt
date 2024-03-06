@@ -24,8 +24,9 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.DemoAPI
+import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.FinanceAmount
@@ -44,7 +45,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class SummaryView(
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val solarForecastProvider: () -> SolarForecasting
 ) {
     @Composable
@@ -180,8 +181,7 @@ fun SummaryViewPreview() {
         SummaryView(
             FakeConfigManager(),
             FakeUserManager(),
-            DemoFoxESSNetworking(),
-            { DemoSolarForecasting() }
-        ).Content(themeStream = MutableStateFlow(AppTheme.preview().copy(showGridTotals = true)))
+            DemoNetworking()
+        ) { DemoSolarForecasting() }.Content(themeStream = MutableStateFlow(AppTheme.preview().copy(showGridTotals = true)))
     }
 }

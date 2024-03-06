@@ -5,8 +5,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.UserManaging
@@ -54,7 +54,7 @@ fun NavigableSettingsView(
     networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
-    network: FoxESSNetworking,
+    network: Networking,
     credentialStore: CredentialStore,
     solarForecastingProvider: () -> SolarForecasting
 ) {

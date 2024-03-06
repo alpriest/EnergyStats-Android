@@ -1,27 +1,22 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -30,16 +25,12 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
-import com.alpriest.energystats.ui.settings.SettingsCheckbox
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class EditScheduleView(
     private val configManager: ConfigManaging,
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val navController: NavHostController,
     private val userManager: UserManaging
 ) {
@@ -101,7 +92,7 @@ fun EditScheduleViewPreview() {
             schedule = Schedule.preview(),
             viewModel = EditScheduleViewModel(
                 FakeConfigManager(),
-                DemoFoxESSNetworking(),
+                DemoNetworking(),
                 NavHostController(LocalContext.current)
             ),
             navController = NavHostController(LocalContext.current)

@@ -13,9 +13,11 @@ import androidx.core.content.FileProvider
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkCache
 import com.alpriest.energystats.services.NetworkFacade
-import com.alpriest.energystats.services.NetworkService
+import com.alpriest.energystats.services.FoxAPIService
 import com.alpriest.energystats.services.NetworkValueCleaner
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.FoxAPIServicing
+import com.alpriest.energystats.services.NetworkService
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
@@ -37,7 +39,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class AppContainer(private val context: Context) {
     val solarForecastingProvider: () -> SolarForecasting = {
-        if (config.isDemoUser) { DemoSolarForecasting() } else { SolcastCache(Solcast(), context) }
+        if (config.isDemoUser) {
+            DemoSolarForecasting()
+        } else {
+            SolcastCache(Solcast(), context)
+        }
     }
     val networkStore: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore.shared
     private var sharedPreferences: SharedPreferences =
@@ -86,13 +92,15 @@ class AppContainer(private val context: Context) {
         )
     )
 
-    val networking: FoxESSNetworking by lazy {
-        NetworkValueCleaner(
-            NetworkFacade(
-                network = NetworkCache(network = NetworkService(credentialStore, networkStore)),
-                isDemoUser = { config.isDemoUser }
-            ),
-            themeStream
+    val networking: Networking by lazy {
+        NetworkService(
+            NetworkValueCleaner(
+                NetworkFacade(
+                    network = NetworkCache(network = FoxAPIService(credentialStore, networkStore)),
+                    isDemoUser = { config.isDemoUser }
+                ),
+                themeStream
+            )
         )
     }
 

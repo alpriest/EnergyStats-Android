@@ -31,7 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DataLoggerStatus
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -49,7 +49,7 @@ data class DataLogger(
 )
 
 class DataLoggerViewModelFactory(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val navController: NavController
 ) : ViewModelProvider.Factory {
@@ -60,7 +60,7 @@ class DataLoggerViewModelFactory(
 }
 
 class DataLoggerViewModel(
-    val network: FoxESSNetworking,
+    val network: Networking,
     val config: ConfigManaging,
     val navController: NavController
 ) : ViewModel(), AlertDialogMessageProviding {
@@ -73,7 +73,7 @@ class DataLoggerViewModel(
 
         runCatching {
             try {
-                val result = network.openapi_fetchDataLoggers()
+                val result = network.fetchDataLoggers()
                 itemStream.value = result.map {
                     DataLogger(
                         moduleSN = it.moduleSN,
@@ -92,7 +92,7 @@ class DataLoggerViewModel(
 }
 
 class DataLoggerViewContainer(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val navController: NavController,
     private val context: Context

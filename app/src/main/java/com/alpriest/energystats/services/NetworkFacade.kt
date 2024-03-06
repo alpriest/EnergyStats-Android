@@ -6,8 +6,8 @@ import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.delay
 import java.util.concurrent.ConcurrentHashMap
 
-class NetworkFacade(private val network: FoxESSNetworking, private val isDemoUser: () -> Boolean) : FoxESSNetworking {
-    private val demoFoxESSNetworking = DemoFoxESSNetworking()
+class NetworkFacade(private val network: FoxAPIServicing, private val isDemoUser: () -> Boolean) : FoxAPIServicing {
+    private val demoFoxESSNetworking = DemoAPI()
     private val throttler = ThrottleManager()
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {

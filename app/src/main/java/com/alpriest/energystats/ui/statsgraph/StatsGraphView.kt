@@ -13,7 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
+import com.alpriest.energystats.services.DemoAPI
+import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.preview
@@ -81,7 +82,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
     StatsGraphView(
-        StatsTabViewModel(FakeConfigManager(), DemoFoxESSNetworking(), { _, _ -> null }),
+        StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
         MutableStateFlow(AppTheme.preview())
     )
 }

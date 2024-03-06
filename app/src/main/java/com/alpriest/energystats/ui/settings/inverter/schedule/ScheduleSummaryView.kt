@@ -26,8 +26,8 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -44,7 +44,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleSummaryView(
     private val configManager: ConfigManaging,
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val navController: NavHostController,
     private val userManager: UserManaging
 ) {
@@ -186,14 +186,14 @@ class ScheduleSummaryView(
 @Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun ScheduleSummaryViewPreview() {
-    val viewModel = ScheduleSummaryViewModel(DemoFoxESSNetworking(), FakeConfigManager(), NavHostController(LocalContext.current))
+    val viewModel = ScheduleSummaryViewModel(DemoNetworking(), FakeConfigManager(), NavHostController(LocalContext.current))
     val context = LocalContext.current
     LaunchedEffect(null) { viewModel.load(context) }
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         ScheduleSummaryView(
             configManager = FakeConfigManager(),
-            network = DemoFoxESSNetworking(),
+            network = DemoNetworking(),
             navController = NavHostController(LocalContext.current),
             userManager = FakeUserManager()
         ).Loaded(

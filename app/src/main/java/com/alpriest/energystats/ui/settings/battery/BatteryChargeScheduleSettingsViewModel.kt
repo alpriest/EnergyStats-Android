@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.Time
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -22,7 +21,7 @@ private val ChargeTimePeriod.hasTimes: Boolean
     }
 
 class BatteryChargeScheduleSettingsViewModelFactory(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -37,7 +36,7 @@ private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
 }
 
 class BatteryChargeScheduleSettingsViewModel(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val config: ConfigManaging
 ) : ViewModel(), AlertDialogMessageProviding {
     val timePeriod1Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
@@ -54,7 +53,7 @@ class BatteryChargeScheduleSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    val result = network.openapi_fetchBatteryTimes(deviceSN)
+                    val result = network.fetchBatteryTimes(deviceSN)
                     result.getOrNull(0)?.let {
                         timePeriod1Stream.value = ChargeTimePeriod(
                             start = it.startTime, end = it.endTime, enabled = it.enable
@@ -145,7 +144,7 @@ class BatteryChargeScheduleSettingsViewModel(
                 val times = listOf(timePeriod1Stream.value, timePeriod2Stream.value).map { it.asChargeTime() }
 
                 try {
-                    network.openapi_setBatteryTimes(deviceSN, times)
+                    network.setBatteryTimes(deviceSN, times)
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_charge_schedule_was_saved))
 

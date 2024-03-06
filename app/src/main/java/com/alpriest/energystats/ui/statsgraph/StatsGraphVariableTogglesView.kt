@@ -10,7 +10,8 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
+import com.alpriest.energystats.services.DemoAPI
+import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.preview
@@ -53,7 +54,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
 @Preview(widthDp = 340)
 fun StatsGraphVariableTogglesViewPreview() {
     StatsGraphVariableTogglesView(
-        StatsTabViewModel(FakeConfigManager(), DemoFoxESSNetworking(), { _, _ -> null }),
+        StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
         themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false))
     )
 }

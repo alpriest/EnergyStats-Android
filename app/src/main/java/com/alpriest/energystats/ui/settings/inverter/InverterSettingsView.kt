@@ -13,8 +13,9 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.DemoAPI
+import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
@@ -25,7 +26,7 @@ import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController, network: FoxESSNetworking) {
+fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController, network: Networking) {
     val currentDevice = configManager.currentDevice.collectAsState()
     val showInverterTemperaturesState = rememberSaveable { mutableStateOf(configManager.showInverterTemperatures) }
     val showInverterIconState = rememberSaveable { mutableStateOf(configManager.showInverterIcon) }
@@ -116,7 +117,7 @@ fun InverterSettingsViewPreview() {
         InverterSettingsView(
             FakeConfigManager(),
             NavHostController(LocalContext.current),
-            DemoFoxESSNetworking()
+            DemoNetworking()
         )
     }
 }

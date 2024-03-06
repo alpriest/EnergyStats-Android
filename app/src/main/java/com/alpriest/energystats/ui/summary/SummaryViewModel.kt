@@ -8,7 +8,7 @@ import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.parse
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -23,7 +23,7 @@ import java.util.Locale
 import java.util.concurrent.CancellationException
 
 class SummaryTabViewModelFactory(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -33,7 +33,7 @@ class SummaryTabViewModelFactory(
 }
 
 class SummaryTabViewModel(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
 ) : ViewModel(), AlertDialogMessageProviding {
     val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
@@ -103,7 +103,7 @@ class SummaryTabViewModel(
             ReportVariable.GridConsumption,
             ReportVariable.Loads
         )
-        val reports = network.openapi_fetchReport(deviceSN = device.deviceSN,
+        val reports = network.fetchReport(deviceSN = device.deviceSN,
             variables = reportVariables,
             queryDate = QueryDate(year, null, null),
             reportType = ReportType.year

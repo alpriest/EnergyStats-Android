@@ -18,10 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
-import com.alpriest.energystats.services.FoxESSNetworking
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.R
+import com.alpriest.energystats.services.Networking
 
 @Composable
 fun SettingsRow(title: String, value: String?) {
@@ -51,12 +51,12 @@ fun SettingsRow(title: String, content: @Composable () -> Unit) {
 }
 
 @Composable
-fun FirmwareVersionView(device: Device, network: FoxESSNetworking) {
+fun FirmwareVersionView(device: Device, network: Networking) {
     val uriHandler = LocalUriHandler.current
     var firmware: DeviceFirmwareVersion? by remember { mutableStateOf(null) }
 
     LaunchedEffect(null) {
-        var response = network.openapi_fetchDevice(device.deviceSN)
+        var response = network.fetchDevice(device.deviceSN)
         firmware = DeviceFirmwareVersion(manager = response.managerVersion, slave = response.slaveVersion, master = response.masterVersion)
     }
 

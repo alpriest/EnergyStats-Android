@@ -17,10 +17,8 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +30,8 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
+import com.alpriest.energystats.services.DemoAPI
+import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
@@ -136,7 +135,7 @@ fun StatsTabView(
 @Composable
 fun StatsGraphTabViewPreview() {
     StatsTabView(
-        StatsTabViewModel(FakeConfigManager(), DemoFoxESSNetworking()) { _, _ -> null },
+        StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
         { _, _ -> },
         MutableStateFlow(AppTheme.preview()),
         FakeUserManager()

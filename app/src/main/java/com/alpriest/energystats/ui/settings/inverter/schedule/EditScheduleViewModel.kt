@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class EditScheduleViewModelFactory(
     private val configManager: ConfigManaging,
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val navController: NavHostController
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -26,7 +26,7 @@ class EditScheduleViewModelFactory(
 
 class EditScheduleViewModel(
     val config: ConfigManaging,
-    val network: FoxESSNetworking,
+    val network: Networking,
     val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
     val scheduleStream = EditScheduleStore.shared.scheduleStream
@@ -51,7 +51,7 @@ class EditScheduleViewModel(
         runCatching {
             uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
             try {
-                network.openapi_saveSchedule(deviceSN = deviceSN, schedule = schedule)
+                network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
 
                 shouldPopNavOnDismissal = true
                 alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.inverter_charge_schedule_settings_saved))

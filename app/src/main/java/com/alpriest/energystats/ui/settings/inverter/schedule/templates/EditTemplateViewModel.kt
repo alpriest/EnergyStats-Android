@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class EditTemplateViewModelFactory(
     private val configManager: ConfigManaging,
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val navController: NavHostController
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -30,7 +30,7 @@ class EditTemplateViewModelFactory(
 
 class EditTemplateViewModel(
     val config: ConfigManaging,
-    val network: FoxESSNetworking,
+    val network: Networking,
     val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
     val scheduleStream = EditScheduleStore.shared.scheduleStream

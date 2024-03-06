@@ -26,7 +26,7 @@ data class CachedItem(val item: Any) {
     }
 }
 
-class NetworkCache(private val network: FoxESSNetworking) : FoxESSNetworking {
+class NetworkCache(private val network: FoxAPIServicing) : FoxAPIServicing {
     private var cache: MutableMap<String, CachedItem> = mutableMapOf()
     private val shortCacheDurationInSeconds = 5
 

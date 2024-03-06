@@ -26,7 +26,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.LocalDateTime
 
-class DemoFoxESSNetworking : FoxESSNetworking {
+class DemoNetworking: NetworkService(DemoAPI())
+
+class DemoAPI : FoxAPIServicing {
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return arrayListOf(
             DeviceSummaryResponse(

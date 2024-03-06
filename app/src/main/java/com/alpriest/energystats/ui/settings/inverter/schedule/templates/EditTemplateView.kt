@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -26,7 +26,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
 
 class EditTemplateView(
     private val configManager: ConfigManaging,
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val navController: NavHostController,
     private val userManager: UserManaging
 ) {

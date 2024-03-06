@@ -11,7 +11,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.toUtcMillis
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
@@ -44,7 +44,7 @@ interface AlertDialogMessageProviding {
 }
 
 class ParametersGraphTabViewModel(
-    val networking: FoxESSNetworking,
+    val networking: Networking,
     val configManager: ConfigManaging,
     val onWriteTempFile: (String, String) -> Uri?,
     val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
@@ -115,7 +115,7 @@ class ParametersGraphTabViewModel(
             val start = queryDate.toUtcMillis()
             val end = start + (86400 * 1000)
 
-            val historyResponse = networking.openapi_fetchHistory(
+            val historyResponse = networking.fetchHistory(
                 device.deviceSN,
                 variables = rawGraphVariables,
                 start = start,

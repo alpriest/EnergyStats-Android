@@ -30,8 +30,9 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoFoxESSNetworking
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.DemoAPI
+import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
@@ -46,7 +47,7 @@ import com.alpriest.energystats.ui.theme.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class PowerFlowTabViewModelFactory(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
     private val context: Context
@@ -66,7 +67,7 @@ fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier):
 }
 
 class PowerFlowTabView(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
     private val themeStream: MutableStateFlow<AppTheme>
@@ -149,7 +150,7 @@ fun LoadedView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(DemoFoxESSNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview()), LocalContext.current)
+    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview()), LocalContext.current)
 
     val homePowerFlowViewModel = HomePowerFlowViewModel(
         solar = 1.0,

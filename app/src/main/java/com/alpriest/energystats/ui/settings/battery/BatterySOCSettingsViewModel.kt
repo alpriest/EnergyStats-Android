@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.FoxESSNetworking
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.ProhibitedActionException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -14,7 +14,7 @@ import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class BatterySOCSettingsViewModelFactory(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -24,7 +24,7 @@ class BatterySOCSettingsViewModelFactory(
 }
 
 class BatterySOCSettingsViewModel(
-    private val network: FoxESSNetworking,
+    private val network: Networking,
     private val config: ConfigManaging
 ) : ViewModel(), AlertDialogMessageProviding {
     var minSOCStream = MutableStateFlow("")
@@ -40,7 +40,7 @@ class BatterySOCSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    val result = network.openapi_fetchBatterySettings(deviceSN)
+                    val result = network.fetchBatterySettings(deviceSN)
                     minSOCStream.value = result.minSoc.toString()
                     minSOConGridStream.value = result.minSocOnGrid.toString()
                     uiState.value = UiLoadState(LoadState.Inactive)
@@ -61,7 +61,7 @@ class BatterySOCSettingsViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    network.openapi_setBatterySoc(
+                    network.setBatterySoc(
                         deviceSN = deviceSN,
                         minSOCOnGrid = minSOConGridStream.value.toInt(),
                         minSOC = minSOCStream.value.toInt()
