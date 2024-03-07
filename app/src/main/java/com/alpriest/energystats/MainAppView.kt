@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.LoadingView
@@ -29,6 +30,7 @@ fun MainAppView(appContainer: AppContainer) {
         ) {
             val scope = rememberCoroutineScope()
             val loginStateValue = loginState.value
+            val context = LocalContext.current
 
             when (loginStateValue.loadState) {
                 is LoggedIn -> {
@@ -54,7 +56,7 @@ fun MainAppView(appContainer: AppContainer) {
                         themeStream = appContainer.configManager.themeStream,
                         onLogin = { apiKey ->
                             scope.launch {
-                                appContainer.userManager.login(apiKey)
+                                appContainer.userManager.login(apiKey, context)
                             }
                         },
                         onDemoLogin = {

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.preview
 
+import android.content.Context
 import com.alpriest.energystats.ui.login.LoggedIn
 import com.alpriest.energystats.ui.login.LoginStateHolder
 import com.alpriest.energystats.ui.login.UserManaging
@@ -13,7 +14,7 @@ class FakeUserManager : UserManaging {
     override val loggedInState: StateFlow<LoginStateHolder>
         get() = MutableStateFlow(LoginStateHolder(LoggedIn))
 
-    override suspend fun login(apiKey: String) {
+    override suspend fun login(apiKey: String, context: Context) {
     }
 
     override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {

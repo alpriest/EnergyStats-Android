@@ -28,17 +28,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
+import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.services.MissingDataException
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
+private fun detailedErrorMessage(cause: Exception?, message: String, context: Context): String {
+    cause?.let {
+        when (it) {
+            is InvalidTokenException -> {
+                context.getString(R.string.invalid_api_token_needs_logout)
+            }
+            else -> if (it.localizedMessage != message) return "$message\n\n${it.localizedMessage}" else message
+        }
+    }
+    return message
+}
+
 @Composable
-fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
+fun ErrorView(cause: Exception?, reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
+
+    var detailedMessage = detailedErrorMessage(cause, reason, context)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,7 +79,7 @@ fun ErrorView(ex: Exception?, reason: String, onRetry: suspend () -> Unit, onLog
         )
 
         Text(
-            reason,
+            detailedMessage,
             textAlign = TextAlign.Center
         )
 
@@ -108,7 +123,7 @@ fun copyDebugData(context: Context) {
 fun ErrorPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ErrorView(
-            ex = MissingDataException(),
+            cause = MissingDataException(),
             reason = "BEGIN_OBJECT was expected but got something else instead. Will try again because something else went wrong too.",
             onRetry = {},
             onLogout = {}

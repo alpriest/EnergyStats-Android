@@ -29,12 +29,12 @@ class PreHomeViewModel(
             try {
                 network.fetchErrorMessages()
 
-                if (config.powerStationDetail == null) {
-                    configManager.fetchPowerStationDetail()
-                }
-
                 if (userManager.loggedInState.value.loadState == LoggedIn) {
                     configManager.fetchDevices()
+
+                    if (config.powerStationDetail == null) {
+                        configManager.fetchPowerStationDetail()
+                    }
                 }
             } catch (ex: Exception) {
                 alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)

@@ -1,6 +1,8 @@
 package com.alpriest.energystats.ui.login
 
+import android.content.Context
 import androidx.annotation.UiThread
+import com.alpriest.energystats.R
 import com.alpriest.energystats.services.BadCredentialsException
 import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.stores.ConfigManaging
@@ -23,13 +25,10 @@ interface UserManaging {
     val loggedInState: StateFlow<LoginStateHolder>
     val store: CredentialStore
 
-    @UiThread
-    suspend fun login(
-        apiKey: String
-    )
-
     fun logout(clearDisplaySettings: Boolean = true, clearDeviceSettings: Boolean = true)
     suspend fun loginDemo()
+    @UiThread
+    suspend fun login(apiKey: String, context: Context)
 }
 
 class UserManager(
@@ -55,7 +54,8 @@ class UserManager(
     }
 
     override suspend fun login(
-        apiKey: String
+        apiKey: String,
+        context: Context
     ) {
         if (apiKey.isBlank()) {
             return
@@ -71,10 +71,10 @@ class UserManager(
             _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: BadCredentialsException) {
             logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut("Wrong credentials, try again"))
+            _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.wrong_credentials_try_again)))
         } catch (e: InvalidTokenException) {
             logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut("Invalid Token"))
+            _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.invalid_token_logout_not_required)))
         } catch (e: Exception) {
             logout()
             _loggedInState.value = LoginStateHolder(LoggedOut("Could not login (${currentAction}). ${e.localizedMessage}"))

@@ -326,4 +326,7 @@
     <string name="api_key_step_7">"7. Your API key will be 36 characters long and look something like "</string>
     <string name="example_api_key" translatable="false">abcde123-4567-8901-2345-6789abcdef01</string>
     <string name="show_battery_percentage_remaining">Show battery percentage remaining</string>
+    <string name="invalid_api_token_needs_logout">Your API token is invalid. Please logout and follow the instructions to generate a new API token.</string>
+    <string name="wrong_credentials_try_again">Wrong credentials, try again</string>
+    <string name="invalid_token_logout_not_required">Your API token is invalid. Please follow the instructions to generate a new API token.</string>
 </resources>

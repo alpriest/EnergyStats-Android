@@ -322,4 +322,5 @@
     <string name="if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this">Si tienes varios inversores y tus valores de generación fotovoltaica son incorrectos, intenta activar o desactivar esto.</string>
     <string name="show_pv_power_by_strings">Mostrar potencia fotovoltaica por cadenas</string>
     <string name="api_key_step_7">7. Tu clave API tendrá 36 caracteres de longitud y se parecerá a algo así como</string>
+    <string name="show_battery_percentage_remaining">Mostrar el porcentaje de batería restante</string>
 </resources>
