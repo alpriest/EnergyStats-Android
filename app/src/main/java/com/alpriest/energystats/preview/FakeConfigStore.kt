@@ -52,7 +52,7 @@ class FakeConfigStore(
     override var variables: List<Variable> = listOf(),
     override var showBatterySOCAsPercentage: Boolean = false,
     override var shouldCombineCT2WithLoadsPower: Boolean = false,
-    override var useExperimentalLoadFormula: Boolean = false,
+    override var useTraditionalLoadFormula: Boolean = false,
     override var powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults,
     override var powerStationDetail: PowerStationDetail? = null
 

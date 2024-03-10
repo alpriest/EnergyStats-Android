@@ -67,6 +67,6 @@ interface ConfigManaging {
     var showFinancialSummaryOnFlowPage: Boolean
     var separateParameterGraphsByUnit: Boolean
     var showBatteryAsPercentage: Boolean
-    var useExperimentalLoadFormula: Boolean
+    var useTraditionalLoadFormula: Boolean
     var powerFlowStrings: PowerFlowStringsSettings
 }

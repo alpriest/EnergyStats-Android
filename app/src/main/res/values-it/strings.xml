@@ -211,7 +211,7 @@
     <string name="grid_import_unit_price">Prezzo unitario dell\'importazione dalla rete</string>
     <string name="energy_stats_earnings_calculation_description">Mostra stime finanziarie solo per oggi sulla pagina di flusso e per il periodo di tempo selezionato sulla pagina delle statistiche.</string>
     <string name="foxess_earnings_calculation_description">Questo prezzo unitario è gestito sulla FoxESS Cloud.</string>
-    <string name="show_financial_summary">Mostra il riepilogo finanziario</string>
+    <string name="show_financial_summary">Mostra guadagni stimati</string>
     <string name="hide_graph">Mostra grafico</string>
     <string name="show_graph">Nascondi grafico</string>
     <string name="show_graph_value_descriptions">Mostra descrizioni dei valori del grafico</string>
@@ -324,4 +324,9 @@
     <string name="show_pv_power_by_strings">Mostra la potenza del fotovoltaico per stringhe</string>
     <string name="api_key_step_7">7. La tua chiave API sarà lunga 36 caratteri e assomiglierà a qualcosa del genere</string>
     <string name="show_battery_percentage_remaining">Mostra la percentuale di batteria rimanente</string>
+    <string name="api_key_step_8">8. La tua chiave API sarà lunga 36 caratteri e assomiglierà a qualcosa del tipo</string>
+    <string name="invalid_api_token_needs_logout">Il tuo token API non è valido. Per favore, esci e segui le istruzioni per generare un nuovo token API.</string>
+    <string name="wrong_credentials_try_again">Credenziali errate, riprova.</string>
+    <string name="invalid_token_logout_not_required">Il tuo token API non è valido. Per favore, segui le istruzioni per generare un nuovo token API.</string>
+    <string name="solcast_solar_prediction">Previsione solare di Solcast</string>
 </resources>

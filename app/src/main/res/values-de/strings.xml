@@ -210,7 +210,7 @@
     <string name="grid_import_unit_price">Netzbezugspreis</string>
     <string name="energy_stats_earnings_calculation_description">Zeigt Finanzschätzungen nur für heute auf der Leistungsfluss-Seite und für den ausgewählten Zeitraum auf der Statistik-Seite.</string>
     <string name="foxess_earnings_calculation_description">Dieser Einheitspreis wird in der FoxESS Cloud verwaltet.</string>
-    <string name="show_financial_summary">Finanzielle Zusammenfassung anzeigen</string>
+    <string name="show_financial_summary">Zeige geschätzten Ertrag</string>
     <string name="hide_graph">Diagramm ausblenden</string>
     <string name="show_graph">Diagramm anzeigen</string>
     <string name="show_graph_value_descriptions">Werte-Beschreibungen im Diagramm anzeigen</string>
@@ -224,7 +224,7 @@
     <string name="export_share_or_open_with_another_app">Mit einer anderen App teilen oder öffnen</string>
     <string name="choose_export_method">Exportmethode wählen</string>
     <string name="lifetime_summary">Zusammenfassung</string>
-    <string name="financial_model">Finanzmodell</string>
+    <string name="financial_model">Ertrag</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">"Solcast bietet Solarprognosen basierend auf Ihrem Standort an. Um sich kostenlos anzumelden, besuchen Sie https://solcast.com/free-rooftop-solar-forecasting und registrieren Sie sich für den Hobby-Zugang.  Sobald Sie sich angemeldet und Ihre Website(s) erstellt haben, fügen Sie Ihren API-Schlüssel unten ein. Ihren API-Schlüssel finden Sie unter https://toolkit.solcast.com.au, indem Sie oben rechts auf der Seite auf das Menü klicken. "</string>
     <string name="latitude">Breitengrad</string>
@@ -323,4 +323,9 @@
     <string name="show_pv_power_by_strings">Zeigen Sie die PV-Leistung nach Strings an</string>
     <string name="api_key_step_7">7. Ihr API-Schlüssel wird 36 Zeichen lang sein und so etwas ähnlich aussehen wie</string>
     <string name="show_battery_percentage_remaining">Restprozentsatz der Batterie anzeigen</string>
+    <string name="api_key_step_8">8. Ihr API-Schlüssel wird 36 Zeichen lang sein und so aussehen wie</string>
+    <string name="invalid_api_token_needs_logout">Ihr API-Token ist ungültig. Bitte loggen Sie sich aus und folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
+    <string name="wrong_credentials_try_again">Falsche Anmeldeinformationen, versuchen Sie es erneut.</string>
+    <string name="invalid_token_logout_not_required">Ihr API-Token ist ungültig. Bitte folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
+    <string name="solcast_solar_prediction">Solcast Solarprognose</string>
 </resources>

@@ -186,7 +186,7 @@
     <string name="facebook_group">Facebook group</string>
     <string name="foxess_community">FoxESS Community</string>
     <string name="foxess_cloud_status">FoxESS Cloud Status</string>
-    <string name="show_last_update_timestamp">Show last update timestamp</string>
+    <string name="show_last_update_timestamp">Show timestamp of last update</string>
     <string name="sun_display_variation_thresholds">Sun display variation thresholds</string>
     <string name="tap_the_icon_for_further_detail">Tap the icon for further detail</string>
     <string name="kilowatts">Kilowatts</string>
@@ -212,7 +212,7 @@
     <string name="grid_import_unit_price">Grid Import Unit price</string>
     <string name="energy_stats_earnings_calculation_description">Shows financial estimates for today only on the flow page, and for the selected time period on the stats page.</string>
     <string name="foxess_earnings_calculation_description">This unit price is managed on the FoxESS cloud.\n\nShows earnings today, this month, this year, and all -time based on a calculation of feed - in kWh * unit price.</string>
-    <string name="show_financial_summary">Show financial summary</string>
+    <string name="show_financial_summary">Show estimated earnings</string>
     <string name="hide_graph">Hide graph</string>
     <string name="show_graph">Show graph</string>
     <string name="show_graph_value_descriptions">Show graph value descriptions</string>
@@ -226,7 +226,7 @@
     <string name="export_share_or_open_with_another_app">Share or open with another app</string>
     <string name="choose_export_method">Choose export method</string>
     <string name="lifetime_summary">Lifetime Summary</string>
-    <string name="financial_model">Financial Model</string>
+    <string name="financial_model">Earnings</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">Solcast provide solar predictions based on your location. To sign up for free, visit https://solcast.com/free-rooftop-solar-forecasting and register for Hobbyist Access.\n\nOnce you\'ve signed up and have created your site(s) paste your API key below. Your API key can be found at https://toolkit.solcast.com.au by clicking the menu at the top right of the page.</string>
     <string name="latitude">Latitude</string>
@@ -292,7 +292,7 @@
     <string name="reset_times">Reset times</string>
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Could not load forecast - You have exceeded your free daily limit</string>
     <string name="pv_only">PV Only</string>
-    <string name="solar">Solar Yield</string>
+    <string name="solar">Show solar yield</string>
     <string name="energystats_total_yield_description">Calculated as a Riemann sum approximation integration of pvPower. This will be reasonably accurate but is only calculated for today.</string>
     <string name="foxess_total_yield_description">Uses the FoxESS supplied value which contains battery and solar output.</string>
     <string name="show_on_flow_page">Show on flow page</string>
@@ -312,9 +312,11 @@
     <string name="api_key_step_1">1. Login at https://www.foxesscloud.com/</string>
     <string name="api_key_step_2">2. Click the person icon top-right</string>
     <string name="api_key_step_3">3. Click the User Profile menu option</string>
-    <string name="api_key_step_4">4. Click Generate API key</string>
-    <string name="api_key_step_5">5. Copy the API key (make a note of it securely)</string>
-    <string name="api_key_step_6">6. Paste the API key above</string>
+    <string name="api_key_step_4">4. Click API Management</string>
+    <string name="api_key_step_5">5. Click Generate API key</string>
+    <string name="api_key_step_6">6. Copy the API key (make a note of it securely)</string>
+    <string name="api_key_step_7">7. Paste the API key above</string>
+    <string name="api_key_step_8">"8. Your API key will be 36 characters long and look something like "</string>
     <string name="api_change_reason">This change to API key was required by FoxESS in early 2024. The FoxESS site does not function well on mobile devices. Please do not contact Energy Stats with issues about the FoxESS website, only FoxESS will be able to assist you in any issues with their site. service.uk@fox-ess.com</string>
     <string name="how_to_get_api_key">To get your API key:</string>
     <string name="on">On</string>
@@ -323,10 +325,10 @@
     <string name="combine_ct2_with_loads_power">Combine CT2 with Loads power</string>
     <string name="if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this">If you have multiple inverters and your PV generation values are incorrect try toggling this.</string>
     <string name="show_pv_power_by_strings">Show PV power by strings</string>
-    <string name="api_key_step_7">"7. Your API key will be 36 characters long and look something like "</string>
     <string name="example_api_key" translatable="false">abcde123-4567-8901-2345-6789abcdef01</string>
     <string name="show_battery_percentage_remaining">Show battery percentage remaining</string>
     <string name="invalid_api_token_needs_logout">Your API token is invalid. Please logout and follow the instructions to generate a new API token.</string>
     <string name="wrong_credentials_try_again">Wrong credentials, try again</string>
     <string name="invalid_token_logout_not_required">Your API token is invalid. Please follow the instructions to generate a new API token.</string>
+    <string name="solcast_solar_prediction">Solcast solar prediction</string>
 </resources>

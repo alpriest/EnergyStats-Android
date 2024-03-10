@@ -46,7 +46,7 @@ class CurrentStatusCalculator(
     init {
         val status = mapCurrentValues(response, hasPV)
         currentGrid = status.feedinPower - status.gridConsumptionPower
-        currentHomeConsumption = if (config.useExperimentalLoadFormula) calculateLoadsPower(status) else loadsPower(status, config.shouldCombineCT2WithLoadsPower)
+        currentHomeConsumption = if (config.useTraditionalLoadFormula) calculateLoadsPower(status) else loadsPower(status, config.shouldCombineCT2WithLoadsPower)
         currentTemperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
         lastUpdate = convertToTime(item = status.lastUpdate)
         currentCT2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2

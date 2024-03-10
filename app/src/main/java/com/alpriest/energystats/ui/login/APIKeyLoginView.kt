@@ -44,8 +44,8 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.ClickableUrlText
 import com.alpriest.energystats.ui.helpers.ButtonDefinition
-import com.alpriest.energystats.ui.helpers.copyDebugData
 import com.alpriest.energystats.ui.helpers.EqualWidthButtonList
+import com.alpriest.energystats.ui.helpers.copyDebugData
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.preview
@@ -172,6 +172,7 @@ fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Mod
         Text(stringResource(R.string.api_key_step_4), color = colors.onSecondary)
         Text(stringResource(R.string.api_key_step_5), color = colors.onSecondary)
         Text(stringResource(R.string.api_key_step_6), color = colors.onSecondary)
+        Text(stringResource(R.string.api_key_step_7), color = colors.onSecondary)
 
         val text = stringResource(R.string.api_key_step_7)
         val key = stringResource(R.string.example_api_key)

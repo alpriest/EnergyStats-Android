@@ -211,7 +211,7 @@
     <string name="grid_import_unit_price">Cena za import energii z sieci</string>
     <string name="energy_stats_earnings_calculation_description">Pokazuje szacunki finansowe tylko na stronie przepływu, a także dla wybranego okresu czasu na stronie statystyk.</string>
     <string name="foxess_earnings_calculation_description">Ta cena jednostkowa jest zarządzana w chmurze FoxESS.</string>
-    <string name="show_financial_summary">Pokaż podsumowanie finansowe</string>
+    <string name="show_financial_summary">Pokaż szacowane zyski</string>
     <string name="hide_graph">Ukryj wykres</string>
     <string name="show_graph">Pokaż wykres</string>
     <string name="show_graph_value_descriptions">Pokaż opisy wartości na wykresie</string>
@@ -225,7 +225,7 @@
     <string name="export_share_or_open_with_another_app">Udostępnij lub otwórz za pomocą innej aplikacji</string>
     <string name="choose_export_method">Wybierz metodę eksportu</string>
     <string name="lifetime_summary">Podsumowanie</string>
-    <string name="financial_model">Model Finansowy</string>
+    <string name="financial_model">Zyski</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">"Solcast dostarcza prognozy słoneczne na podstawie Twojej lokalizacji. Aby zarejestrować się za darmo, odwiedź https://solcast.com/free-rooftop-solar-forecasting i zarejestruj się, aby uzyskać dostęp dla Hobbystów.  Po zarejestrowaniu się i utworzeniu swoich stron wklej poniżej swój klucz API. Swój klucz API znajdziesz na stronie https://toolkit.solcast.com.au, klikając na menu w prawym górnym rogu strony. "</string>
     <string name="latitude">Szerokość geograficzna</string>
@@ -324,4 +324,9 @@
     <string name="show_pv_power_by_strings">Pokaż moc PV według ciągów</string>
     <string name="api_key_step_7">7. Twój klucz API będzie miał 36 znaków długości i będzie wyglądał mniej więcej tak</string>
     <string name="show_battery_percentage_remaining">Pokaż pozostały procent baterii</string>
+    <string name="api_key_step_8">8. Twój klucz API będzie miał 36 znaków długości i będzie wyglądał mniej więcej tak</string>
+    <string name="invalid_api_token_needs_logout">Ihr API-Token ist ungültig. Bitte loggen Sie sich aus und folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
+    <string name="wrong_credentials_try_again">Błędne dane uwierzytelniające, spróbuj ponownie.</string>
+    <string name="invalid_token_logout_not_required">Twój token API jest nieprawidłowy. Proszę postępować zgodnie z instrukcjami, aby wygenerować nowy token API.</string>
+    <string name="solcast_solar_prediction">Prognoza słoneczna Solcast</string>
 </resources>

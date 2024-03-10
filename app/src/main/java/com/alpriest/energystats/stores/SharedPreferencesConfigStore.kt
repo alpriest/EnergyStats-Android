@@ -60,7 +60,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SEPARATE_PARAMETER_GRAPHS_BY_UNIT,
         VARIABLES,
         SHOW_BATTERY_SOC_AS_PERCENTAGE,
-        USE_EXPERIMENTAL_LOAD_FORMULA,
+        USE_TRADITIONAL_LOAD_FORMULA,
         POWER_FLOW_STRINGS,
         POWER_STATION_DETAIL
     }
@@ -434,11 +434,11 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var useExperimentalLoadFormula: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.USE_EXPERIMENTAL_LOAD_FORMULA.name, false)
+    override var useTraditionalLoadFormula: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.USE_TRADITIONAL_LOAD_FORMULA.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceDisplayKey.USE_EXPERIMENTAL_LOAD_FORMULA.name, value)
+            editor.putBoolean(SharedPreferenceDisplayKey.USE_TRADITIONAL_LOAD_FORMULA.name, value)
             editor.apply()
         }
 

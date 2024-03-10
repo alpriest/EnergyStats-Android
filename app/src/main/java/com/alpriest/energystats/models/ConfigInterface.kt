@@ -48,7 +48,7 @@ interface ConfigInterface {
     var solcastSettings: SolcastSettings
     var totalYieldModel: Int
     var showFinancialSummaryOnFlowPage: Boolean
-    var useExperimentalLoadFormula: Boolean
+    var useTraditionalLoadFormula: Boolean
     var powerFlowStrings: PowerFlowStringsSettings
 
     fun clearDisplaySettings()

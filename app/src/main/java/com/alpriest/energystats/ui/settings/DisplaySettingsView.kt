@@ -35,7 +35,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val separateParameterGraphsByUnitState = rememberSaveable { mutableStateOf(config.separateParameterGraphsByUnit) }
     val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
     val dataCeilingState = rememberSaveable { mutableStateOf(config.dataCeiling) }
-    val useExperimentalLoadFormulaState = rememberSaveable { mutableStateOf(config.useExperimentalLoadFormula) }
+    val useTraditionalLoadFormulaState = rememberSaveable { mutableStateOf(config.useTraditionalLoadFormula) }
     val showBatteryAsPercentageState = rememberSaveable { mutableStateOf(config.showBatteryAsPercentage) }
     val context = LocalContext.current
 
@@ -230,11 +230,11 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         SettingsCheckbox(
-            title = "Use experimental load formula",
-            state = useExperimentalLoadFormulaState,
-            onUpdate = { config.useExperimentalLoadFormula = it },
+            title = "Use traditional load formula",
+            state = useTraditionalLoadFormulaState,
+            onUpdate = { config.useTraditionalLoadFormula = !it },
             footer = buildAnnotatedString {
-                append("Uses a formula to calculate load which should handle +ve/-ve CT2 better in house load. Changes only take effect on next data fetch.")
+                append("Uses the FoxESS loads value to show load which doesn't handle +ve/-ve CT2 very well. Changes only take effect on next data fetch.")
             }
         )
     }

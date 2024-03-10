@@ -210,7 +210,7 @@
     <string name="grid_import_unit_price">Precio unitario de importación de la red</string>
     <string name="energy_stats_earnings_calculation_description">Muestra estimaciones financieras solo para hoy en la página de flujo, y para el período de tiempo seleccionado en la página de estadísticas.</string>
     <string name="foxess_earnings_calculation_description">Este precio unitario se gestiona en la nube de FoxESS.</string>
-    <string name="show_financial_summary">Mostrar resumen financiero</string>
+    <string name="show_financial_summary">Mostrar ganancias estimadas</string>
     <string name="hide_graph">Ocultar gráfico</string>
     <string name="show_graph">Mostrar gráfico</string>
     <string name="show_graph_value_descriptions">Mostrar descripciones de los valores del gráfico</string>
@@ -224,7 +224,7 @@
     <string name="export_share_or_open_with_another_app">Compartir o abrir con otra aplicación</string>
     <string name="choose_export_method">Elija el método de exportación</string>
     <string name="lifetime_summary">Resumen</string>
-    <string name="financial_model">Modelo Financiero</string>
+    <string name="financial_model">Ganancias</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">"Solcast proporciona predicciones solares basadas en su ubicación. Para registrarse gratis, visite https://solcast.com/free-rooftop-solar-forecasting y regístrese para el Acceso de Aficionado.  Una vez que se haya registrado y haya creado su(s) sitio(s), pegue su clave API a continuación. Su clave API se puede encontrar en https://toolkit.solcast.com.au haciendo clic en el menú en la parte superior derecha de la página. "</string>
     <string name="latitude">Latitud</string>
@@ -323,4 +323,9 @@
     <string name="show_pv_power_by_strings">Mostrar potencia fotovoltaica por cadenas</string>
     <string name="api_key_step_7">7. Tu clave API tendrá 36 caracteres de longitud y se parecerá a algo así como</string>
     <string name="show_battery_percentage_remaining">Mostrar el porcentaje de batería restante</string>
+    <string name="api_key_step_8">8. Tu clave API tendrá 36 caracteres de longitud y se parecerá a algo así como</string>
+    <string name="invalid_api_token_needs_logout">Tu token de API es inválido. Por favor, cierra sesión y sigue las instrucciones para generar un nuevo token de API.</string>
+    <string name="wrong_credentials_try_again">Credenciales incorrectas, intenta de nuevo.</string>
+    <string name="invalid_token_logout_not_required">Tu token de API es inválido. Por favor, sigue las instrucciones para generar un nuevo token de API.</string>
+    <string name="solcast_solar_prediction">Solcast solar prediction</string>
 </resources>
