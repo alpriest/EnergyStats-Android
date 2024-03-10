@@ -1,6 +1,7 @@
 package com.alpriest.energystats.stores
 
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -69,4 +70,5 @@ interface ConfigManaging {
     var showBatteryAsPercentage: Boolean
     var useTraditionalLoadFormula: Boolean
     var powerFlowStrings: PowerFlowStringsSettings
+    var powerStationDetail: PowerStationDetail?
 }

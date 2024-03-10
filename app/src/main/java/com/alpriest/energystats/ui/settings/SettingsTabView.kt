@@ -28,9 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -68,7 +66,6 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
 fun SettingsTabView(
     navController: NavHostController,
     config: ConfigManaging,
-    userManager: UserManaging,
     onLogout: () -> Unit,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit
@@ -78,6 +75,10 @@ fun SettingsTabView(
 
     SettingsPage {
         SettingsButtonList {
+            config.powerStationDetail?.let {
+                SettingsNavButton("Power station") { navController.navigate(SettingsScreen.PowerStation.name) }
+            }
+
             SettingsNavButton(stringResource(R.string.inverter)) { navController.navigate(SettingsScreen.Inverter.name) }
 
             currentDevice.value?.let {
@@ -145,7 +146,6 @@ fun SettingsViewPreview() {
         SettingsTabView(
             navController = NavHostController(LocalContext.current),
             config = FakeConfigManager(),
-            userManager = FakeUserManager(),
             onLogout = {},
             onRateApp = {}
         ) {}

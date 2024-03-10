@@ -417,6 +417,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(powerFlowStrings = powerFlowStrings)
         }
 
+    override var powerStationDetail: PowerStationDetail?
+        get() = config.powerStationDetail
+        set(value) {
+            config.powerStationDetail = value
+        }
+
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     init {

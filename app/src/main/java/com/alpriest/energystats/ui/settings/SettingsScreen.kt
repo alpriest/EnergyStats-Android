@@ -43,7 +43,8 @@ enum class SettingsScreen {
     EditPhase,
     TemplateList,
     EditTemplate,
-    APIKey;
+    APIKey,
+    PowerStation
 }
 
 @Composable
@@ -69,7 +70,6 @@ fun NavigableSettingsView(
             SettingsTabView(
                 navController,
                 config = config,
-                userManager = userManager,
                 onLogout = onLogout,
                 onRateApp = onRateApp,
                 onBuyMeCoffee = onBuyMeCoffee
@@ -142,6 +142,10 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.APIKey.name) {
             ConfigureAPIKeyView(userManager.store, navController, config.themeStream)
+        }
+
+        composable(SettingsScreen.PowerStation.name) {
+            PowerStationView(config, navController)
         }
 
         debugGraph(navController, networkStore, config, network, credentialStore)

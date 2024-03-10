@@ -2,6 +2,7 @@ package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
@@ -65,7 +66,8 @@ class FakeConfigManager : ConfigManaging {
     override var showBatteryAsPercentage: Boolean = false
     override var useTraditionalLoadFormula: Boolean = false
     override var powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults
-
+    override var powerStationDetail: PowerStationDetail? = null
+    
     override var devices: List<Device>? = listOf(
         Device(
             deviceSN = "123123",
