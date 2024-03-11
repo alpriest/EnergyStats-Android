@@ -57,7 +57,7 @@ fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding, userManager: User
 }
 
 @Composable
-private fun AlertDialog(message: String, onDismiss: () -> Unit) {
+fun AlertDialog(message: String, onDismiss: () -> Unit) {
     val context = LocalContext.current
 
     Dialog(onDismissRequest = onDismiss) {

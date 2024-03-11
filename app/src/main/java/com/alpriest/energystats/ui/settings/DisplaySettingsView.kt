@@ -10,7 +10,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -26,7 +25,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
     val decimalPlacesState = rememberSaveable { mutableIntStateOf(config.decimalPlaces) }
-    val totalYieldModelState = rememberSaveable { mutableStateOf(config.totalYieldModel) }
+    val totalYieldModelState = rememberSaveable { mutableStateOf(config.totalYieldModel == TotalYieldModel.Off) }
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
     val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
@@ -139,36 +138,44 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         )
         Divider()
 
+        SettingsCheckbox(
+            title = stringResource(R.string.solar),
+            infoText = stringResource(R.string.energystats_total_yield_description),
+            state = totalYieldModelState,
+            onUpdate = {  config.totalYieldModel = if (it) TotalYieldModel.EnergyStats else TotalYieldModel.Off }
+        )
+        Divider()
+
         InlineSettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
     }
 
-    SettingsColumnWithChild(
-        modifier = modifier
-    ) {
-        SettingsSegmentedControl(
-            title = stringResource(R.string.solar),
-            segmentedControl = {
-                val items = listOf(
-                    TotalYieldModel.Off,
-                    TotalYieldModel.EnergyStats
-                )
-                SegmentedControl(
-                    items = items.map { it.title(context) },
-                    defaultSelectedItemIndex = items.indexOf(totalYieldModelState.value),
-                    color = colors.primary
-                ) {
-                    totalYieldModelState.value = items[it]
-                    config.totalYieldModel = items[it]
-                }
-            },
-            footer = when (totalYieldModelState.value) {
-                TotalYieldModel.Off -> null
-                TotalYieldModel.EnergyStats -> buildAnnotatedString {
-                    append(stringResource(R.string.energystats_total_yield_description))
-                }
-            }
-        )
-    }
+//    SettingsColumnWithChild(
+//        modifier = modifier
+//    ) {
+//        SettingsSegmentedControl(
+//            title = stringResource(R.string.solar),
+//            segmentedControl = {
+//                val items = listOf(
+//                    TotalYieldModel.Off,
+//                    TotalYieldModel.EnergyStats
+//                )
+//                SegmentedControl(
+//                    items = items.map { it.title(context) },
+//                    defaultSelectedItemIndex = items.indexOf(totalYieldModelState.value),
+//                    color = colors.primary
+//                ) {
+//                    totalYieldModelState.value = items[it]
+//                    config.totalYieldModel = items[it]
+//                }
+//            },
+//            footer = when (totalYieldModelState.value) {
+//                TotalYieldModel.Off -> null
+//                TotalYieldModel.EnergyStats -> buildAnnotatedString {
+//                    append(stringResource(R.string.energystats_total_yield_description))
+//                }
+//            }
+//        )
+//    }
 
     SolarStringsSettingsView(config, modifier)
 }

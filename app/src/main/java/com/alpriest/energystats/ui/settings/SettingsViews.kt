@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
@@ -23,20 +24,27 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.dialog.AlertDialog
 
 @Composable
 fun SettingsColumn(
@@ -152,7 +160,29 @@ fun SettingsPage(modifier: Modifier = Modifier, content: @Composable () -> Unit)
 }
 
 @Composable
-fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onUpdate: (Boolean) -> Unit, footer: AnnotatedString? = null) {
+fun InfoButton(text: String) {
+    var message by rememberSaveable { mutableStateOf<String?>(null) }
+
+    Image(
+        imageVector = Icons.Default.Info,
+        contentDescription = "Click for info",
+        colorFilter = ColorFilter.tint(colors.primary),
+        modifier = Modifier
+            .padding(start = 4.dp)
+            .clickable {
+                message = text
+            }
+    )
+
+    message?.let {
+        AlertDialog(message = text, onDismiss = {
+            message = null
+        })
+    }
+}
+
+@Composable
+fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableState<Boolean>, onUpdate: (Boolean) -> Unit, footer: AnnotatedString? = null) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -163,11 +193,19 @@ fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onUpdate: (Boo
                 }
                 .fillMaxWidth()
         ) {
-            Text(
-                title,
-                color = colors.onSecondary,
-                modifier = Modifier.weight(1f)
-            )
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    title,
+                    color = colors.onSecondary
+                )
+
+                infoText?.let {
+                    InfoButton(it)
+                }
+            }
 
             Checkbox(
                 checked = state.value,
