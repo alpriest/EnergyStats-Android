@@ -10,7 +10,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
@@ -188,7 +190,7 @@ fun prettyPrintJson(jsonString: String): String {
 
 @Preview(showBackground = true, heightDp = 640)
 @Composable
-fun DataSettingsViewPreview() {
+fun DebugDataSettingsViewPreview() {
     val networkStore = InMemoryLoggingNetworkStore.shared
     val navController = rememberNavController()
 

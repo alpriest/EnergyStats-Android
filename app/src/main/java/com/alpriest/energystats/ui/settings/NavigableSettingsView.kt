@@ -24,29 +24,6 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.templates.Schedule
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 
-enum class SettingsScreen {
-    Settings,
-    Debug,
-    Battery,
-    BatterySOC,
-    BatteryChargeTimes,
-    Inverter,
-    InverterSchedule,
-    Dataloggers,
-    SelfSufficiencyEstimates,
-    FinancialModel,
-    SolarBandings,
-    SolcastSolarPrediction,
-    FAQ,
-    Summary,
-    EditSchedule,
-    EditPhase,
-    TemplateList,
-    EditTemplate,
-    APIKey,
-    PowerStation
-}
-
 @Composable
 fun NavigableSettingsView(
     config: ConfigManaging,
@@ -146,6 +123,10 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.PowerStation.name) {
             PowerStationView(config, navController)
+        }
+
+        composable(SettingsScreen.DataSettings.name) {
+            DataSettingsView(config)
         }
 
         debugGraph(navController, networkStore, config, network, credentialStore)

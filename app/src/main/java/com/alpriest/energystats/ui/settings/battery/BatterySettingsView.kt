@@ -2,11 +2,23 @@ package com.alpriest.energystats.ui.settings.battery
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.runtime.*
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,10 +37,9 @@ import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.SettingsNavButton
-import com.alpriest.energystats.ui.settings.SettingsButtonList
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -53,7 +64,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             }
         }
 
-        SettingsButtonList {
+        Column {
             SettingsNavButton(stringResource(R.string.minimum_charge_levels)) {
                 navController.navigate(SettingsScreen.BatterySOC.name)
             }

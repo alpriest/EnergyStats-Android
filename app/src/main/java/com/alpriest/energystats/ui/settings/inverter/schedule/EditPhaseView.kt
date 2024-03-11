@@ -7,16 +7,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.Button
 import androidx.compose.material.LocalTextStyle
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,19 +32,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.ui.settings.ButtonLabels
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
+import com.alpriest.energystats.ui.settings.ErrorTextView
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChildAndFooter
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import com.alpriest.energystats.ui.settings.ButtonLabels
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
-import com.alpriest.energystats.ui.settings.ErrorTextView
 
 data class EditPhaseErrorData(
     val minSOCError: String?,
@@ -114,31 +112,30 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
     }
     val errorText = viewModel.errorStream.collectAsState().value
 
-    SettingsColumnWithChildAndFooter(
-        content = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .background(MaterialTheme.colors.surface)
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(
-                    stringResource(R.string.min_soc),
-                    Modifier.weight(1.0f),
-                    color = MaterialTheme.colors.onSecondary
-                )
-                OutlinedTextField(
-                    value = minSOC,
-                    onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
-                    modifier = Modifier.width(100.dp),
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
-                )
-            }
-        },
+    SettingsColumnWithChild(
         footer = footerText,
         error = errorText.minSOCError
-    )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .background(MaterialTheme.colors.surface)
+                .padding(vertical = 4.dp)
+        ) {
+            Text(
+                stringResource(R.string.min_soc),
+                Modifier.weight(1.0f),
+                color = MaterialTheme.colors.onSecondary
+            )
+            OutlinedTextField(
+                value = minSOC,
+                onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
+                modifier = Modifier.width(100.dp),
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
+                trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
+            )
+        }
+    }
 }
 
 @Composable
@@ -151,7 +148,7 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
     }
     val errorText = viewModel.errorStream.collectAsState().value
 
-    SettingsColumnWithChildAndFooter(
+    SettingsColumnWithChild(
         content = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -187,7 +184,7 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
         else -> null
     }
 
-    SettingsColumnWithChildAndFooter(
+    SettingsColumnWithChild(
         content = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
