@@ -149,34 +149,6 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         InlineSettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
     }
 
-//    SettingsColumnWithChild(
-//        modifier = modifier
-//    ) {
-//        SettingsSegmentedControl(
-//            title = stringResource(R.string.solar),
-//            segmentedControl = {
-//                val items = listOf(
-//                    TotalYieldModel.Off,
-//                    TotalYieldModel.EnergyStats
-//                )
-//                SegmentedControl(
-//                    items = items.map { it.title(context) },
-//                    defaultSelectedItemIndex = items.indexOf(totalYieldModelState.value),
-//                    color = colors.primary
-//                ) {
-//                    totalYieldModelState.value = items[it]
-//                    config.totalYieldModel = items[it]
-//                }
-//            },
-//            footer = when (totalYieldModelState.value) {
-//                TotalYieldModel.Off -> null
-//                TotalYieldModel.EnergyStats -> buildAnnotatedString {
-//                    append(stringResource(R.string.energystats_total_yield_description))
-//                }
-//            }
-//        )
-//    }
-
     SolarStringsSettingsView(config, modifier)
 }
 
