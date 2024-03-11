@@ -146,10 +146,11 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         )
         Divider()
 
+        SolarStringsSettingsView(config, modifier)
+        Divider()
+
         InlineSettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
     }
-
-    SolarStringsSettingsView(config, modifier)
 }
 
 @Preview(showBackground = true, heightDp = 940)

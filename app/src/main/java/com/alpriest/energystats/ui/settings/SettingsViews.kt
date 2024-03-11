@@ -41,7 +41,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.dialog.AlertDialog
@@ -135,7 +134,7 @@ fun SettingsTitleView(title: String, modifier: Modifier = Modifier, extra: @Comp
     Row(modifier = modifier.fillMaxWidth()) {
         Text(
             text = title.uppercase(),
-            style = TextStyle.Default.copy(color = colors.onSecondary, fontWeight = FontWeight.Light)
+            style = TextStyle.Default.copy(color = colors.onSecondary)
         )
 
         extra()
@@ -281,11 +280,14 @@ fun InlineSettingsNavButton(title: String, modifier: Modifier = Modifier, disclo
                 style = TextStyle.Default
             )
 
-            Icon(
-                imageVector = Icons.Default.ChevronRight,
-                contentDescription = "Tap for more",
-                modifier = Modifier.padding(end = 12.dp)
-            )
+            disclosureIcon?.let {
+                Icon(
+                    imageVector = it(),
+                    contentDescription = "Tap for more",
+                    modifier = Modifier.padding(end = 12.dp),
+                    tint = colors.onSecondary
+                )
+            }
         }
     }
 }
