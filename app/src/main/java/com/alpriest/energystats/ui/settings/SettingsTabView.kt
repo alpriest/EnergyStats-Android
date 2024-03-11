@@ -27,7 +27,7 @@ fun SettingsTabView(
     val uriHandler = LocalUriHandler.current
 
     SettingsPage {
-        SettingsColumnWithChild {
+        SettingsColumn(header = "Settings") {
             config.powerStationDetail?.let {
                 InlineSettingsNavButton(stringResource(R.string.settings_power_station)) { navController.navigate(SettingsScreen.PowerStation.name) }
             }
@@ -48,7 +48,7 @@ fun SettingsTabView(
 
         DisplaySettingsView(config, navController = navController)
 
-        SettingsColumnWithChild {
+        SettingsColumn {
             InlineSettingsNavButton("Data") { navController.navigate(SettingsScreen.DataSettings.name) }
             Divider()
             InlineSettingsNavButton(stringResource(R.string.self_sufficiency_estimates)) { navController.navigate(SettingsScreen.SelfSufficiencyEstimates.name) }
@@ -58,7 +58,7 @@ fun SettingsTabView(
             InlineSettingsNavButton(stringResource(R.string.solcast_solar_prediction)) { navController.navigate(SettingsScreen.SolcastSolarPrediction.name) }
         }
 
-        SettingsColumnWithChild {
+        SettingsColumn {
             InlineSettingsNavButton(
                 title = stringResource(R.string.foxess_cloud_status),
                 disclosureIcon = { Icons.Default.OpenInBrowser },

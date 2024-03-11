@@ -1,28 +1,25 @@
 package com.alpriest.energystats.ui.settings.inverter
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoAPI
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.SettingsNavButton
+import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsTitleView
+import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -40,12 +37,11 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
         InverterChoiceView(configManager)
 
         currentDevice.value?.let {
-            Column {
-                SettingsNavButton(stringResource(R.string.manage_schedules)) { navController.navigate(SettingsScreen.InverterSchedule.name) }
+            SettingsColumn(header = "Inverter") {
+                InlineSettingsNavButton(stringResource(R.string.manage_schedules)) { navController.navigate(SettingsScreen.InverterSchedule.name) }
             }
 
-            SettingsColumnWithChild {
-                SettingsTitleView(stringResource(R.string.display_options))
+            SettingsColumn(header = stringResource(R.string.display_options)) {
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_temperatures),
                     state = showInverterTemperaturesState,
@@ -71,13 +67,14 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 //                )
             }
 
-            SettingsColumnWithChild {
-                SettingsTitleView(title = stringResource(R.string.ct2_settings))
+            SettingsColumn(
+                header =stringResource(R.string.ct2_settings),
+                footer = stringResource(R.string.if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this)
+            ) {
                 SettingsCheckbox(
                     title = stringResource(R.string.invert_ct2_values_when_detected),
                     state = shouldInvertCT2State,
                     onUpdate = { configManager.shouldInvertCT2 = it },
-                    footer = buildAnnotatedString { append(stringResource(R.string.if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this)) }
                 )
 
                 SettingsCheckbox(
@@ -110,7 +107,7 @@ fun DeviceVersionView(device: Device) {
     }
 }
 
-@Preview(widthDp = 300)
+@Preview(widthDp = 400)
 @Composable
 fun InverterSettingsViewPreview() {
     EnergyStatsTheme {

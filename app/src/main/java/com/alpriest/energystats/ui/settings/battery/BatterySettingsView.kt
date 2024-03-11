@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedTextField
@@ -34,12 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Wh
-import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -65,82 +66,57 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         Column {
-            SettingsNavButton(stringResource(R.string.minimum_charge_levels)) {
+            InlineSettingsNavButton(stringResource(R.string.minimum_charge_levels)) {
                 navController.navigate(SettingsScreen.BatterySOC.name)
             }
 
-            SettingsNavButton(stringResource(R.string.charge_times)) {
+            InlineSettingsNavButton(stringResource(R.string.charge_times)) {
                 navController.navigate(SettingsScreen.BatteryChargeTimes.name)
             }
         }
 
-        SettingsColumnWithChild {
-            minSOC.value?.let { minSOC ->
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = modifier
-                ) {
-                    Column(modifier = modifier) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.Bottom
-                        ) {
+        SettingsColumn(
+            header = "Display options"
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    stringResource(R.string.capacity),
+                    style = MaterialTheme.typography.h4,
+                    color = colors.onSecondary,
+                )
+                Spacer(Modifier.weight(1f))
+
+                if (isEditingCapacity.value) {
+                    OutlinedTextField(
+                        value = editingCapacity,
+                        onValueChange = {
+                            editingCapacity = it
+                        },
+                        label = {
                             Text(
-                                stringResource(R.string.min_battery_charge_soc),
-                                style = MaterialTheme.typography.h4,
-                                color = colors.onSecondary,
+                                stringResource(R.string.total_wh_of_your_battery),
+                                color = colors.onSecondary
                             )
-                            Spacer(Modifier.weight(1f))
-                            Text(
-                                text = minSOC.asPercent(),
-                                color = colors.onSecondary,
-                            )
-                        }
-                    }
+                        },
+                        textStyle = TextStyle(colors.onSecondary),
+                        modifier = Modifier.weight(1f)
+                    )
+                } else {
+                    Text(
+                        text = config.batteryCapacity.Wh(decimalPlaces),
+                        modifier = Modifier.clickable { isEditingCapacity.value = true },
+                        color = colors.onSecondary,
+                    )
                 }
             }
 
-            Column(modifier = modifier) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        stringResource(R.string.capacity),
-                        style = MaterialTheme.typography.h4,
-                        color = colors.onSecondary,
-                    )
-                    Spacer(Modifier.weight(1f))
-
-                    if (isEditingCapacity.value) {
-                        OutlinedTextField(
-                            value = editingCapacity,
-                            onValueChange = {
-                                editingCapacity = it
-                            },
-                            label = {
-                                Text(
-                                    stringResource(R.string.total_wh_of_your_battery),
-                                    color = colors.onSecondary
-                                )
-                            },
-                            textStyle = TextStyle(colors.onSecondary),
-                            modifier = Modifier.weight(1f)
-                        )
-                    } else {
-                        Text(
-                            text = config.batteryCapacity.Wh(decimalPlaces),
-                            modifier = Modifier.clickable { isEditingCapacity.value = true },
-                            color = colors.onSecondary,
-                        )
-                    }
-                }
-
-                if (isEditingCapacity.value) {
+            if (isEditingCapacity.value) {
+                Column {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(5.dp),
                         modifier = Modifier.align(Alignment.End)
@@ -164,24 +140,24 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         }
                     }
                 }
-
-                Text(
-                    buildAnnotatedString {
-                        append(stringResource(R.string.calculated_as))
-                        withStyle(
-                            style = SpanStyle(fontStyle = FontStyle.Italic, color = colors.onSecondary)
-                        ) {
-                            append("residual / (Min SOC / 100)")
-                        }
-                        append(stringResource(R.string.where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value))
-                    },
-                    color = colors.onSecondary
-                )
             }
-        }
 
-        SettingsColumnWithChild {
-            SettingsTitleView("Display Options")
+            Text(
+                buildAnnotatedString {
+                    append(stringResource(R.string.calculated_as))
+                    withStyle(
+                        style = SpanStyle(fontStyle = FontStyle.Italic, color = colors.onSecondary)
+                    ) {
+                        append("residual / (Min SOC / 100)")
+                    }
+                    append(stringResource(R.string.where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value))
+                },
+                color = colors.onSecondary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            Divider()
+
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_full_empty_estimate),
                 state = showBatteryEstimateState,
@@ -189,12 +165,16 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 footer = buildAnnotatedString { append(stringResource(R.string.empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant)) }
             )
 
+            Divider()
+
             SettingsCheckbox(
                 title = stringResource(R.string.show_usable_battery_only),
                 state = showUsableBatteryOnlyState,
                 onUpdate = { config.showUsableBatteryOnly = it },
                 footer = buildAnnotatedString { append(stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining)) }
             )
+
+            Divider()
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_temperature),
