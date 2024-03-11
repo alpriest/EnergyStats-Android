@@ -65,7 +65,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             }
         }
 
-        Column {
+        SettingsColumn {
             InlineSettingsNavButton(stringResource(R.string.minimum_charge_levels)) {
                 navController.navigate(SettingsScreen.BatterySOC.name)
             }
@@ -86,7 +86,6 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             ) {
                 Text(
                     stringResource(R.string.capacity),
-                    style = MaterialTheme.typography.h4,
                     color = colors.onSecondary,
                 )
                 Spacer(Modifier.weight(1f))
@@ -144,13 +143,21 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 
             Text(
                 buildAnnotatedString {
-                    append(stringResource(R.string.calculated_as))
                     withStyle(
-                        style = SpanStyle(fontStyle = FontStyle.Italic, color = colors.onSecondary)
+                        style = SpanStyle(fontSize = MaterialTheme.typography.caption.fontSize)
+                    ) {
+                        append(stringResource(R.string.calculated_as))
+                    }
+                    withStyle(
+                        style = SpanStyle(fontStyle = FontStyle.Italic, fontSize = MaterialTheme.typography.caption.fontSize, color = colors.onSecondary)
                     ) {
                         append("residual / (Min SOC / 100)")
                     }
-                    append(stringResource(R.string.where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value))
+                    withStyle(
+                        style = SpanStyle(fontSize = MaterialTheme.typography.caption.fontSize)
+                    ) {
+                        append(stringResource(R.string.where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value))
+                    }
                 },
                 color = colors.onSecondary,
                 modifier = Modifier.padding(bottom = 8.dp)

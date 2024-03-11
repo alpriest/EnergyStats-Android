@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -128,8 +127,7 @@ fun SettingsTitleView(title: String, modifier: Modifier = Modifier, extra: @Comp
     Row(modifier = modifier.fillMaxWidth()) {
         Text(
             text = title.uppercase(),
-            style = MaterialTheme.typography.h4,
-            color = colors.onSecondary,
+            style = TextStyle.Default.copy(color = colors.onSecondary, fontWeight = FontWeight.Light)
         )
 
         extra()
@@ -168,8 +166,7 @@ fun SettingsCheckbox(title: String, state: MutableState<Boolean>, onUpdate: (Boo
             Text(
                 title,
                 color = colors.onSecondary,
-                modifier = Modifier.weight(1f),
-                style = TextStyle.Default.copy(fontWeight = FontWeight.SemiBold)
+                modifier = Modifier.weight(1f)
             )
 
             Checkbox(
@@ -203,8 +200,7 @@ fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composabl
                 Text(
                     it,
                     color = colors.onSecondary,
-                    modifier = Modifier.weight(1f),
-                    style = TextStyle.Default.copy(fontWeight = FontWeight.Bold)
+                    modifier = Modifier.weight(1f)
                 )
             }
 
@@ -244,7 +240,7 @@ fun InlineSettingsNavButton(title: String, modifier: Modifier = Modifier, disclo
             Text(
                 title,
                 color = colors.onSecondary,
-                style = TextStyle.Default.copy(fontWeight = FontWeight.SemiBold)
+                style = TextStyle.Default
             )
 
             Icon(

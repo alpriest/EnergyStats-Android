@@ -19,8 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
@@ -48,8 +46,7 @@ fun SettingsRow(title: String, content: @Composable () -> Unit) {
         Text(
             title,
             color = colors.onSecondary,
-            modifier = Modifier.padding(end = 8.dp),
-            style = TextStyle.Default.copy(fontWeight = FontWeight.Bold)
+            modifier = Modifier.padding(end = 8.dp)
         )
         content()
     }
