@@ -4,16 +4,19 @@ import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DataLoggerStatus
+import com.alpriest.energystats.models.DataLoggerStatusDeserializer
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceFunction
 import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
+import com.alpriest.energystats.models.OpenApiVariableDeserializer
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedPowerStationListResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.QueryDate
@@ -25,6 +28,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.time.LocalDateTime
 
@@ -95,7 +99,7 @@ class DemoAPI : FoxAPIServicing {
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
         val fileContent = this::class.java.classLoader?.getResource("res/raw/variables.json")?.readText()
 
-        val data: NetworkResponse<OpenApiVariableArray> = Gson().fromJson(fileContent, object : TypeToken<NetworkResponse<OpenApiVariableArray>>() {}.type)
+        val data: NetworkResponse<OpenApiVariableArray> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<OpenApiVariableArray>>() {}.type)
 
         return data.result?.array ?: listOf()
     }
@@ -181,6 +185,14 @@ class DemoAPI : FoxAPIServicing {
     }
 
     override suspend fun fetchErrorMessages() {}
+
+    fun makeGson(): Gson {
+        return GsonBuilder()
+            .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
+            .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
+            .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
+            .create()
+    }
 
 //    override suspend fun createScheduleTemplate(name: String, description: String) {
 //        // Do nothing

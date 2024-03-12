@@ -332,4 +332,5 @@
     <string name="invalid_token_logout_not_required">Your API token is invalid. Please follow the instructions to generate a new API token.</string>
     <string name="solcast_solar_prediction">Solcast solar prediction</string>
     <string name="settings_power_station">Power station</string>
+    <string name="automatic_time_advice">Please ensure the system date/time on your device is set to \'automatic\' otherwise you may be unable to login with your API key.</string>
 </resources>

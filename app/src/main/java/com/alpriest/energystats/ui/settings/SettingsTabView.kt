@@ -30,8 +30,8 @@ fun SettingsTabView(
         SettingsColumn(header = "Settings") {
             config.powerStationDetail?.let {
                 InlineSettingsNavButton(stringResource(R.string.settings_power_station)) { navController.navigate(SettingsScreen.PowerStation.name) }
+                Divider()
             }
-            Divider()
 
             InlineSettingsNavButton(stringResource(R.string.inverter)) { navController.navigate(SettingsScreen.Inverter.name) }
             Divider()

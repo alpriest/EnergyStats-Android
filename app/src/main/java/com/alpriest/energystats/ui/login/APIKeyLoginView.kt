@@ -83,7 +83,7 @@ fun APIKeyLoginView(
                 val (icon, iconColor) = if (showApiKey) {
                     Pair(
                         Icons.Filled.Visibility,
-                        MaterialTheme.colors.primary
+                        colors.primary
                     )
                 } else {
                     Pair(
@@ -174,7 +174,7 @@ fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Mod
         Text(stringResource(R.string.api_key_step_6), color = colors.onSecondary)
         Text(stringResource(R.string.api_key_step_7), color = colors.onSecondary)
 
-        val text = stringResource(R.string.api_key_step_7)
+        val text = stringResource(R.string.api_key_step_8)
         val key = stringResource(R.string.example_api_key)
 
         Text(
@@ -188,9 +188,14 @@ fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Mod
             color = colors.onSecondary
         )
 
+        Text(
+            stringResource(R.string.automatic_time_advice),
+            modifier = Modifier.padding(vertical = 12.dp)
+        )
+
         ClickableUrlText(
             text = stringResource(R.string.api_change_reason),
-            modifier = Modifier.padding(top = 12.dp),
+            modifier = Modifier.padding(vertical = 12.dp),
             textStyle = TextStyle(colors.onSecondary),
             themeStream = themeStream
         )

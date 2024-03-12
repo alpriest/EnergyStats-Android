@@ -122,7 +122,9 @@ fun NavigableSettingsView(
         }
 
         composable(SettingsScreen.PowerStation.name) {
-            PowerStationView(config, navController)
+            config.powerStationDetail?.let {
+                PowerStationSettingsView(it)
+            }
         }
 
         composable(SettingsScreen.DataSettings.name) {

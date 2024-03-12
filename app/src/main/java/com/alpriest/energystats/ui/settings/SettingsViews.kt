@@ -51,7 +51,7 @@ fun SettingsColumn(
     header: String? = null,
     footer: String? = null,
     error: String? = null,
-    padding: PaddingValues = PaddingValues(10.dp),
+    padding: PaddingValues = PaddingValues(horizontal = 10.dp),
     content: @Composable () -> Unit,
 ) {
     SettingsColumnWithChild(
@@ -77,7 +77,7 @@ fun SettingsColumnWithChild(
     header: @Composable (() -> Unit)? = null,
     footer: String? = null,
     error: String? = null,
-    padding: PaddingValues = PaddingValues(10.dp),
+    padding: PaddingValues = PaddingValues(horizontal = 10.dp),
     content: @Composable () -> Unit,
 ) {
     Column {
