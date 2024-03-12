@@ -78,14 +78,23 @@ class DemoAPI : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        return OpenHistoryResponse(
-            deviceSN = "",
-            datas = listOf()
-        )
+        val fileContent = this::class.java.classLoader?.getResource("res/raw/history.json")?.readText()
+
+        val data: NetworkResponse<List<OpenHistoryResponse>> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<List<OpenHistoryResponse>>>() {}.type)
+
+        return data.result?.firstOrNull() ?: throw InvalidTokenException()
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        return listOf()
+        val fileContent: String? = when (reportType) {
+            ReportType.day -> this::class.java.classLoader?.getResource("res/raw/report-day.json")?.readText()
+            ReportType.month -> this::class.java.classLoader?.getResource("res/raw/report-month.json")?.readText()
+            ReportType.year -> this::class.java.classLoader?.getResource("res/raw/report-year.json")?.readText()
+        }
+
+        val data: NetworkResponse<List<OpenReportResponse>> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type)
+
+        return data.result ?: throw InvalidTokenException()
     }
 
     override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
