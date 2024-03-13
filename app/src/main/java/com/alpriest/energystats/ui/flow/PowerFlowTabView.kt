@@ -30,7 +30,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoAPI
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -160,7 +159,7 @@ fun PowerFlowTabViewPreview() {
         ),
         home = 2.45,
         grid = 2.45,
-        todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), false),
+        todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), includeCT2 = false, invertCT2 = false),
         earnings = EarningsViewModel.preview(),
         inverterTemperatures = null,
         hasBattery = true,
