@@ -2,11 +2,11 @@ package com.alpriest.energystats.ui.flow.home
 
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.UnitData
-import java.lang.Double.max
-import java.lang.Double.min
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.max
 
 class GenerationViewModel(private val response: OpenHistoryResponse, private val includeCT2: Boolean, private val invertCT2: Boolean) {
     fun solarToday(): Double {
@@ -18,11 +18,19 @@ class GenerationViewModel(private val response: OpenHistoryResponse, private val
         if (includeCT2) {
             ct2Variables = response.datas.filter { it.variable == "meterPower2" }
                 .flatMap { it.data.toList() }
-                .map {
+                .mapNotNull {
                     if (invertCT2) {
-                        it.copy(value = min(0.0, it.value))
+                        if (it.value < 0) {
+                            it.copy(value = abs(it.value))
+                        } else {
+                            null
+                        }
                     } else {
-                        it.copy(value = max(0.0, it.value))
+                        if (it.value > 0) {
+                            it.copy(value = abs(it.value))
+                        } else {
+                            null
+                        }
                     }
                 }
         } else {
