@@ -36,7 +36,6 @@ import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.models.isFlowing
 import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoAPI
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EarningsView
@@ -321,7 +320,7 @@ fun SummaryPowerFlowViewPreview() {
                 ),
                 home = 2.454,
                 grid = 1.234,
-                todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), false),
+                todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), includeCT2 = false, invertCT2 = false),
                 earnings = EarningsViewModel.preview(),
                 inverterTemperatures = null,
                 hasBattery = true,
