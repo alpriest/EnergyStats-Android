@@ -24,15 +24,21 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.SchedulePhaseResponse
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
-class DemoNetworking: NetworkService(DemoAPI())
+class DemoNetworking : NetworkService(DemoAPI())
 
 class DemoAPI : FoxAPIServicing {
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
@@ -79,17 +85,31 @@ class DemoAPI : FoxAPIServicing {
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
         val fileContent = this::class.java.classLoader?.getResource("res/raw/history.json")?.readText()
+        val formatter = DateTimeFormatter.ofPattern(dateFormat)
+        val now = LocalDate.now()
 
         val data: NetworkResponse<List<OpenHistoryResponse>> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<List<OpenHistoryResponse>>>() {}.type)
 
-        return data.result?.firstOrNull() ?: throw InvalidTokenException()
+        return data.result?.map { response ->
+            response.copy(datas = response.datas.map { datas ->
+                datas.copy(data = datas.data.map {
+                    val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it.time)
+                    val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .withYear(now.year)
+                        .withMonth(now.monthValue)
+                        .withDayOfMonth(now.dayOfMonth)
+
+                    it.copy(time = localDateTime.format(formatter))
+                })
+            })
+        }?.firstOrNull() ?: throw InvalidTokenException()
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
         val fileContent: String? = when (reportType) {
-            ReportType.day -> this::class.java.classLoader?.getResource("res/raw/report-day.json")?.readText()
-            ReportType.month -> this::class.java.classLoader?.getResource("res/raw/report-month.json")?.readText()
-            ReportType.year -> this::class.java.classLoader?.getResource("res/raw/report-year.json")?.readText()
+            ReportType.day -> this::class.java.classLoader?.getResource("res/raw/report_day.json")?.readText()
+            ReportType.month -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
+            ReportType.year -> this::class.java.classLoader?.getResource("res/raw/report_year.json")?.readText()
         }
 
         val data: NetworkResponse<List<OpenReportResponse>> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type)
@@ -186,7 +206,7 @@ class DemoAPI : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse {
-        return PagedPowerStationListResponse(1,1,0, listOf())
+        return PagedPowerStationListResponse(1, 1, 0, listOf())
     }
 
     override suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse {
