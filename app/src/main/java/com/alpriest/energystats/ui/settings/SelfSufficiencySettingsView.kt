@@ -1,5 +1,7 @@
 package com.alpriest.energystats.ui.settings
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -21,15 +24,15 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
     val description: String? = when (selfSufficiencyEstimateModeState.value) {
         SelfSufficiencyEstimateMode.Absolute -> stringResource(R.string.absolute_self_sufficiency)
         SelfSufficiencyEstimateMode.Net -> stringResource(R.string.net_self_sufficiency)
-        else -> null
+        else -> stringResource(R.string.self_sufficiency_off)
     }
     val context = LocalContext.current
 
-    SettingsColumnWithChild(
-        modifier = modifier
+    SettingsColumn(
+        modifier = modifier.fillMaxWidth(),
+        header = stringResource(R.string.self_sufficiency_estimates),
+        padding = PaddingValues(10.dp)
     ) {
-        SettingsTitleView(stringResource(R.string.self_sufficiency_estimates))
-
         SettingsSegmentedControl(title = null, segmentedControl = {
             val items = listOf(SelfSufficiencyEstimateMode.Off, SelfSufficiencyEstimateMode.Net, SelfSufficiencyEstimateMode.Absolute)
             SegmentedControl(
@@ -49,12 +52,12 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
 }
 
 @Preview(
-    showBackground = true,
+    showBackground = false,
     heightDp = 640
 )
 @Composable
 fun SelfSufficiencySettingsViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         SelfSufficiencySettingsView(config = FakeConfigManager())
     }
 }

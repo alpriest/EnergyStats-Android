@@ -328,4 +328,7 @@
     <string name="wrong_credentials_try_again">Credenciales incorrectas, intenta de nuevo.</string>
     <string name="invalid_token_logout_not_required">Tu token de API es inválido. Por favor, sigue las instrucciones para generar un nuevo token de API.</string>
     <string name="solcast_solar_prediction">Solcast solar prediction</string>
+    <string name="settings_power_station">Central eléctrica</string>
+    <string name="automatic_time_advice">Por favor, asegúrese de que la fecha/hora del sistema en su dispositivo esté configurada en \'automático\', de lo contrario, puede que no pueda iniciar sesión con su clave API.</string>
+    <string name="self_sufficiency_off">No se mostrará ninguna estimación de autosuficiencia</string>
 </resources>

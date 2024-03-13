@@ -329,4 +329,7 @@
     <string name="wrong_credentials_try_again">Błędne dane uwierzytelniające, spróbuj ponownie.</string>
     <string name="invalid_token_logout_not_required">Twój token API jest nieprawidłowy. Proszę postępować zgodnie z instrukcjami, aby wygenerować nowy token API.</string>
     <string name="solcast_solar_prediction">Prognoza słoneczna Solcast</string>
+    <string name="settings_power_station">Elektrownia</string>
+    <string name="automatic_time_advice">Upewnij się, że data/czas systemu na Twoim urządzeniu jest ustawiona na \'automatyczny\', w przeciwnym razie możesz nie być w stanie zalogować się za pomocą klucza API.</string>
+    <string name="self_sufficiency_off">Nie zostanie wyświetlona żadna ocena samowystarczalności</string>
 </resources>

@@ -60,7 +60,7 @@ fun SettingsColumn(
             header?.let {
                 SettingsTitleView(
                     it,
-                    modifier = Modifier.padding(PaddingValues(top = 10.dp, start = 22.dp, end = 10.dp, bottom = 8.dp))
+                    modifier = Modifier.padding(PaddingValues(top = 10.dp, start = 22.dp, end = 10.dp, bottom = 8.dp)).fillMaxWidth()
                 )
             }
         },
@@ -80,11 +80,12 @@ fun SettingsColumnWithChild(
     padding: PaddingValues = PaddingValues(horizontal = 10.dp),
     content: @Composable () -> Unit,
 ) {
-    Column {
+    Column(modifier = modifier) {
         header?.let { it() }
 
         Column(
-            modifier = modifier
+            modifier = Modifier
+                .fillMaxWidth()
                 .background(colors.surface)
                 .padding(padding)
         ) {
