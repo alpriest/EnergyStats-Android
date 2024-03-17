@@ -33,12 +33,12 @@ class SummaryTabViewModelFactory(
 }
 
 class SummaryTabViewModel(
-    private val network: Networking,
+    private val networking: Networking,
     private val configManager: ConfigManaging,
 ) : ViewModel(), AlertDialogMessageProviding {
     val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     val oldestDataDate = MutableStateFlow("")
-    private val approximationsCalculator = ApproximationsCalculator(configManager)
+    private val approximationsCalculator = ApproximationsCalculator(configManager, networking)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val loadStateStream = MutableStateFlow(UiLoadState(LoadState.Inactive))
 
@@ -103,7 +103,7 @@ class SummaryTabViewModel(
             ReportVariable.GridConsumption,
             ReportVariable.Loads
         )
-        val reports = network.fetchReport(deviceSN = device.deviceSN,
+        val reports = networking.fetchReport(deviceSN = device.deviceSN,
             variables = reportVariables,
             queryDate = QueryDate(year, null, null),
             reportType = ReportType.year

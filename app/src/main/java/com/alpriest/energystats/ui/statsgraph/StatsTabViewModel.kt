@@ -10,19 +10,16 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.EnergyStatsApplication
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.OpenReportResponse
-import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
-import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.patrykandpatrick.vico.core.entry.ChartEntry
@@ -43,15 +40,17 @@ class StatsTabViewModel(
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
-    private var rawData: List<StatsGraphValue> = listOf()
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
-    private var exportText: String = ""
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     var showingGraphStream = MutableStateFlow(true)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
+    private var rawData: List<StatsGraphValue> = listOf()
+    private var exportText: String = ""
+    private val approximationsCalculator: ApproximationsCalculator = ApproximationsCalculator(configManager, networking)
+    private val fetcher = StatsDataFetcher(networking, approximationsCalculator)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -94,60 +93,26 @@ class StatsTabViewModel(
             updateGraphVariables(device)
         }
         val graphVariables = graphVariablesStream.value
-
         val displayMode = displayModeStream.value
-
-        val queryDate = makeQueryDate(displayMode)
-        val reportType = makeReportType(displayMode)
-        var reportVariables = graphVariables.map { it.type }
-        val reportData: List<OpenReportResponse>
-        val rawTotals: MutableMap<ReportVariable, Double>
+        val reportVariables = graphVariables.map { it.type }
 
         try {
-            reportData = networking.fetchReport(
-                device.deviceSN,
-                variables = reportVariables,
-                queryDate = queryDate,
-                reportType = reportType
+            val (updatedData, totals) = fetcher.fetchData(
+                device,
+                reportVariables,
+                displayMode
             )
 
-            rawTotals = generateTotals(device.deviceSN, reportData, reportType, queryDate, reportVariables)
+            rawData = updatedData
+            totalsStream.value = totals
+            refresh()
+            calculateSelfSufficiencyEstimate()
+            uiState.value = UiLoadState(LoadState.Inactive)
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             uiState.value = UiLoadState(LoadState.Inactive)
             return
         }
-
-        rawData = reportData.flatMap { reportResponse ->
-            val reportVariable = ReportVariable.parse(reportResponse.variable)
-
-            return@flatMap reportResponse.values.map { dataPoint ->
-                val graphPoint: Int = when (displayMode) {
-                    is StatsDisplayMode.Day -> {
-                        dataPoint.index - 1
-                    }
-
-                    is StatsDisplayMode.Month -> {
-                        dataPoint.index
-                    }
-
-                    is StatsDisplayMode.Year -> {
-                        dataPoint.index
-                    }
-                }
-
-                return@map StatsGraphValue(
-                    graphPoint = graphPoint,
-                    value = dataPoint.value,
-                    type = reportVariable
-                )
-            }
-        }
-
-        totalsStream.value = rawTotals
-        refresh()
-        calculateSelfSufficiencyEstimate()
-        uiState.value = UiLoadState(LoadState.Inactive)
     }
 
     private fun appEntersForeground() {
@@ -200,33 +165,6 @@ class StatsTabViewModel(
         writeContentToUri(context, uri, exportText)
     }
 
-    private suspend fun generateTotals(
-        deviceSN: String,
-        reportData: List<OpenReportResponse>,
-        reportType: ReportType,
-        queryDate: QueryDate,
-        reportVariables: List<ReportVariable>
-    ): MutableMap<ReportVariable, Double> {
-        val totals = mutableMapOf<ReportVariable, Double>()
-
-        if (reportType == ReportType.day) {
-            val reports = networking.fetchReport(deviceSN, reportVariables, queryDate, ReportType.month)
-            reports.forEach { response ->
-                ReportVariable.parse(response.variable).let {
-                    totals[it] = response.values.first { it.index == queryDate.day }.value
-                }
-            }
-        } else {
-            reportData.forEach { response ->
-                ReportVariable.parse(response.variable).let {
-                    totals[it] = response.values.sumOf { kotlin.math.abs(it.value) }
-                }
-            }
-        }
-
-        return totals
-    }
-
     private fun refresh() {
         val hiddenVariables = graphVariablesStream.value.filter { !it.enabled }.map { it.type }
         val grouped = rawData.filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
@@ -246,35 +184,6 @@ class StatsTabViewModel(
 
         producer.setEntries(entries)
         prepareExport(rawData, displayModeStream.value)
-    }
-
-    private fun makeQueryDate(displayMode: StatsDisplayMode): QueryDate {
-        return when (displayMode) {
-            is StatsDisplayMode.Day -> {
-                val date = displayMode.date
-                QueryDate(
-                    year = date.year,
-                    month = date.monthValue,
-                    day = date.dayOfMonth
-                )
-            }
-
-            is StatsDisplayMode.Month -> {
-                QueryDate(year = displayMode.year, month = displayMode.month + 1, day = null)
-            }
-
-            is StatsDisplayMode.Year -> {
-                QueryDate(year = displayMode.year, month = null, day = null)
-            }
-        }
-    }
-
-    private fun makeReportType(displayMode: StatsDisplayMode): ReportType {
-        return when (displayMode) {
-            is StatsDisplayMode.Day -> ReportType.day
-            is StatsDisplayMode.Month -> ReportType.month
-            is StatsDisplayMode.Year -> ReportType.year
-        }
     }
 
     fun toggleVisibility(statsGraphVariable: StatsGraphVariable) {
@@ -302,7 +211,7 @@ class StatsTabViewModel(
         val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal] ?: 0.0
         val loads = totals[ReportVariable.Loads] ?: 0.0
 
-        approximationsViewModelStream.value = ApproximationsCalculator(configManager).calculateApproximations(
+        approximationsViewModelStream.value = approximationsCalculator.calculateApproximations(
             grid = grid,
             feedIn = feedIn,
             loads = loads,

@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.settings
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.currentValue
-import java.util.EnumSet
 
 data class PowerFlowStringsSettings(
     val enabled: Boolean = false,
