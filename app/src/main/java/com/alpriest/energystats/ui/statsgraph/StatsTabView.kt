@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.DemoAPI
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -48,12 +47,14 @@ sealed class StatsDisplayMode {
     data class Day(val date: LocalDate) : StatsDisplayMode()
     data class Month(val month: Int, val year: Int) : StatsDisplayMode()
     data class Year(val year: Int) : StatsDisplayMode()
+    data class Custom(val start: LocalDate, val end: LocalDate): StatsDisplayMode()
 
     fun unit(): String {
         return when (this) {
             is Day -> "Hour"
             is Month -> "Day"
             is Year -> "Month"
+            is Custom -> "Day"
         }
     }
 }

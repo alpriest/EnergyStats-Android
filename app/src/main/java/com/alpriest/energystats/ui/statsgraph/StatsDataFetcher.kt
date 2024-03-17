@@ -41,6 +41,10 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                     is StatsDisplayMode.Year -> {
                         dataPoint.index
                     }
+
+                    is StatsDisplayMode.Custom -> {
+                        dataPoint.index
+                    }
                 }
 
                 return@map StatsGraphValue(
@@ -72,6 +76,10 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
             is StatsDisplayMode.Year -> {
                 QueryDate(year = displayMode.year, month = null, day = null)
             }
+
+            is StatsDisplayMode.Custom -> {
+                QueryDate.invoke()
+            }
         }
     }
 
@@ -80,6 +88,7 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
             is StatsDisplayMode.Day -> ReportType.day
             is StatsDisplayMode.Month -> ReportType.month
             is StatsDisplayMode.Year -> ReportType.year
+            is StatsDisplayMode.Custom -> ReportType.month
         }
     }
 }

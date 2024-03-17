@@ -154,6 +154,13 @@ class StatsTabViewModel(
                 val year = displayMode.year
                 baseExportFileName = "energystats_$year"
             }
+
+            is StatsDisplayMode.Custom -> {
+                val start = displayMode.start
+                val end = displayMode.end
+
+                baseExportFileName = "energystats_${start.year}_${start.month}_$start.day_${end.year}_${end.month}_$end.day"
+            }
         }
 
         exportText = (listOf(headers) + rows).joinToString(separator = "\n")

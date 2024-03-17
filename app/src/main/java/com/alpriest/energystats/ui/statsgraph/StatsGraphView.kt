@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoAPI
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -71,6 +70,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                         is Day -> stringResource(R.string.hours)
                         is StatsDisplayMode.Month -> stringResource(R.string.days)
                         is StatsDisplayMode.Year -> stringResource(R.string.months)
+                        is StatsDisplayMode.Custom -> stringResource(R.string.days)
                     }
                 )
             }
@@ -100,6 +100,7 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
                 calendar.set(Calendar.MONTH, value.toInt() - 1)
                 return monthFormat.format(calendar.time)
             }
+            is StatsDisplayMode.Custom -> value.toInt().toString()
         }
     }
 }

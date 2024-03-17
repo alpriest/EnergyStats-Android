@@ -2,34 +2,58 @@ package com.alpriest.energystats.ui.statsgraph
 
 import android.widget.CalendarView
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
-import java.time.*
-import java.util.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.util.Calendar
+import java.util.Locale
 
-enum class DatePickerRange {
-    DAY,
-    MONTH,
-    YEAR
+sealed class DatePickerRange {
+    object DAY : DatePickerRange()
+    object MONTH : DatePickerRange()
+    object YEAR : DatePickerRange()
+    data class CUSTOM(val start: LocalDate, val end: LocalDate) : DatePickerRange()
 }
 
 @Composable
@@ -40,13 +64,13 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
         DateRangePicker(viewModel, range, graphShowingState)
 
         when (range) {
-            DatePickerRange.DAY -> CalendarView(viewModel.dateStream)
-            DatePickerRange.MONTH -> {
+            is DatePickerRange.DAY -> CalendarView(viewModel.dateStream)
+            is DatePickerRange.MONTH -> {
                 MonthPicker(viewModel = viewModel)
                 YearPicker(viewModel = viewModel)
             }
-
-            DatePickerRange.YEAR -> YearPicker(viewModel = viewModel)
+            is DatePickerRange.YEAR -> YearPicker(viewModel = viewModel)
+            is DatePickerRange.CUSTOM -> Text("hi")
         }
 
         Spacer(modifier = Modifier.weight(1.0f))
