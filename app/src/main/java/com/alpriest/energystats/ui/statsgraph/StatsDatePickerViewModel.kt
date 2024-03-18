@@ -13,7 +13,7 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
     var yearStream = MutableStateFlow(0)
     var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
     var isInitialised = false
-    var customStartDate = MutableStateFlow<LocalDate>(LocalDate.now())
+    var customStartDate = MutableStateFlow<LocalDate>(LocalDate.now().minusDays(30))
     var customEndDate = MutableStateFlow<LocalDate>(LocalDate.now())
 
     init {
@@ -21,11 +21,12 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
             monthStream.value = dateStream.value.monthValue - 1
             yearStream.value = dateStream.value.year
 
-            combine(customStartDate, customEndDate) { _, _ ->
+            combine(rangeStream, dateStream, monthStream, yearStream) { _, _, _, _ ->
                 updateDisplayMode()
             }.collect { }
-
-            combine(rangeStream, dateStream, monthStream, yearStream) { _, _, _, _ ->
+        }
+        viewModelScope.launch {
+            combine(customStartDate, customEndDate) { _, _ ->
                 updateDisplayMode()
             }.collect { }
         }
