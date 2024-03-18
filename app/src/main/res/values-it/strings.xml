@@ -54,9 +54,9 @@
     <string name="reportvariable_generation">Energia fornita dall\'inverter</string>
     <string name="reportvariable_chargeenergytotal">Energia usata per caricare la batteria</string>
     <string name="reportvariable_dischargeenergytotal">Energia prelevata dalla batteria</string>
-    <string name="day">giorno</string>
-    <string name="month">mese</string>
-    <string name="year">anno</string>
+    <string name="day">Giorno</string>
+    <string name="month">Mese</string>
+    <string name="year">Anno</string>
     <string name="retry">Riprova</string>
     <string name="username">Nome utente</string>
     <string name="password">Password</string>

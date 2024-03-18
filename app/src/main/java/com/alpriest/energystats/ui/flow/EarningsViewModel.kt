@@ -56,8 +56,6 @@ fun EarningsView(themeStream: MutableStateFlow<AppTheme>, viewModel: EarningsVie
 
 enum class FinanceAmountType {
     TODAY,
-    MONTH,
-    YEAR,
     EXPORTED,
     AVOIDED,
     TOTAL
@@ -74,8 +72,6 @@ class FinanceAmount(val type: FinanceAmountType, val amount: Double) {
             FinanceAmountType.AVOIDED -> context.getString(R.string.grid_import_avoided_short_title)
             FinanceAmountType.TOTAL -> context.getString(R.string.total)
             FinanceAmountType.TODAY -> context.getString(R.string.today)
-            FinanceAmountType.MONTH -> context.getString(R.string.month)
-            FinanceAmountType.YEAR -> context.getString(R.string.year)
         }
     }
 }

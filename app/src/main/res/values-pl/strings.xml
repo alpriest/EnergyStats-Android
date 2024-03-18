@@ -54,9 +54,9 @@
     <string name="reportvariable_generation">Energia dostarczana przez falownik</string>
     <string name="reportvariable_chargeenergytotal">Energia używana do ładowania baterii</string>
     <string name="reportvariable_dischargeenergytotal">Energia pobrana z baterii</string>
-    <string name="day">dzień</string>
-    <string name="month">miesiąc</string>
-    <string name="year">rok</string>
+    <string name="day">Dzień</string>
+    <string name="month">Miesiąc</string>
+    <string name="year">Rok</string>
     <string name="retry">Ponów</string>
     <string name="username">Nazwa użytkownika</string>
     <string name="password">Hasło</string>

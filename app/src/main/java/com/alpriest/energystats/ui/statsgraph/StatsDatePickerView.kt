@@ -54,6 +54,10 @@ sealed class DatePickerRange {
     object MONTH : DatePickerRange()
     object YEAR : DatePickerRange()
     data class CUSTOM(val start: LocalDate, val end: LocalDate) : DatePickerRange()
+
+    fun isCustom(): Boolean {
+        return !(this == DAY || this == MONTH || this == YEAR)
+    }
 }
 
 @Composable
@@ -239,6 +243,17 @@ private fun DateRangePicker(
             }) {
                 Text(stringResource(R.string.year))
                 if (range == DatePickerRange.YEAR) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                }
+            }
+            Divider()
+            DropdownMenuItem(onClick = {
+                viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now(), LocalDate.now().minusDays(30))
+                showing = false
+            }) {
+                Text("Custom range")
+                if (range.isCustom()) {
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }

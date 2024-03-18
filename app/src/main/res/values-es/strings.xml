@@ -41,9 +41,9 @@
     <string name="buy_me_a_coffee">Invítame un café</string>
     <string name="days">Días</string>
     <string name="months">Meses</string>
-    <string name="day">día</string>
-    <string name="month">mes</string>
-    <string name="year">año</string>
+    <string name="day">Día</string>
+    <string name="month">Mes</string>
+    <string name="year">Año</string>
     <string name="stats_are_aggregated_by_foxess_into_1_hr_1_day_or_1_month_totals">Las estadísticas se agregan por FoxESS en totales de 1 hora, 1 día o 1 mes</string>
     <string name="feed_in">"Inyección en red "</string>
     <string name="power">potencia</string>
