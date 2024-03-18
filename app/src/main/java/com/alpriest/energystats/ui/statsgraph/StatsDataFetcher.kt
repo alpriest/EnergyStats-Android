@@ -1,11 +1,13 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
+import java.time.LocalDate
 
 class StatsDataFetcher(val networking: Networking, val approximationsCalculator: ApproximationsCalculator) {
     suspend fun fetchData(
@@ -16,16 +18,16 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
         val queryDate = makeQueryDate(displayMode)
         val reportType = makeReportType(displayMode)
 
-        val reportData = networking.fetchReport(
+        val reports = networking.fetchReport(
             device.deviceSN,
             variables = reportVariables,
             queryDate = queryDate,
             reportType = reportType
         )
 
-        val totals = approximationsCalculator.generateTotals(device.deviceSN, reportData, reportType, queryDate, reportVariables)
+        val totals = approximationsCalculator.generateTotals(device.deviceSN, reports, reportType, queryDate, reportVariables)
 
-        val updatedData = reportData.flatMap { reportResponse ->
+        val updatedData = reports.flatMap { reportResponse ->
             val reportVariable = ReportVariable.parse(reportResponse.variable)
 
             return@flatMap reportResponse.values.map { dataPoint ->
@@ -56,6 +58,70 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
         }
 
         return Pair(updatedData, totals)
+    }
+
+    suspend fun fetchCustomData(
+        device: Device,
+        start: LocalDate,
+        end: LocalDate,
+        reportVariables: List<ReportVariable>,
+        displayMode: StatsDisplayMode
+    ): Pair<List<StatsGraphValue>, MutableMap<ReportVariable, Double>> {
+        var current = start
+        var accumulatedGraphValues: MutableList<StatsGraphValue> = mutableListOf()
+        var accumulatedReportResponses: MutableList<OpenReportResponse> = mutableListOf()
+
+        while (current.month <= end.month || current.year < end.year) {
+            val month: Int = current.monthValue
+            val year: Int = current.year
+            val queryDate = QueryDate(year = year, month = month, day = null)
+            val reports = networking.fetchReport(
+                device.deviceSN,
+                variables = reportVariables,
+                queryDate = queryDate,
+                reportType = ReportType.month
+            ).map { response ->
+                response.copy(values = response.values.filter {
+                    val dataDate: LocalDate = LocalDate.of(year, month, it.index)
+
+                    start.atStartOfDay() <= dataDate.atStartOfDay() && dataDate.atStartOfDay() <= end.atStartOfDay()
+                })
+            }
+
+            val graphValues = reports.flatMap { reportResponse ->
+                val reportVariable = ReportVariable.parse(reportResponse.variable)
+
+                reportResponse.values.map { dataPoint ->
+                    StatsGraphValue(
+                        graphPoint = dataPoint.index,
+                        value = dataPoint.value,
+                        type = reportVariable
+                    )
+                }
+            }
+
+            reports.forEach { response ->
+                if (accumulatedReportResponses.find { it.variable == response.variable } != null) {
+                    accumulatedReportResponses = accumulatedReportResponses.map {
+                        if (it.variable == response.variable) {
+                            OpenReportResponse(variable = it.variable, unit = it.unit, values = it.values + response.values)
+                        } else {
+                            it
+                        }
+                    }.toMutableList()
+                } else {
+                    accumulatedReportResponses.add(response)
+                }
+            }
+
+            accumulatedGraphValues.addAll(graphValues)
+
+            current = current.plusMonths(1)
+        }
+
+        val totals = approximationsCalculator.generateTotals(device.deviceSN, accumulatedReportResponses, ReportType.month, queryDate = null, reportVariables)
+
+        return Pair(accumulatedGraphValues, totals)
     }
 
     private fun makeQueryDate(displayMode: StatsDisplayMode): QueryDate {

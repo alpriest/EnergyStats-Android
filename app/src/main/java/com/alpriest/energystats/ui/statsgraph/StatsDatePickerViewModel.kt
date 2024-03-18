@@ -91,10 +91,10 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
 
     fun increase() {
         when (rangeStream.value) {
-            DatePickerRange.DAY -> {
+            is DatePickerRange.DAY -> {
                 dateStream.value = dateStream.value.plusDays(1)
             }
-            DatePickerRange.MONTH -> {
+            is DatePickerRange.MONTH -> {
                 if (monthStream.value + 1 > 11) {
                     monthStream.value = 0
                     yearStream.value += 1
@@ -102,7 +102,7 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
                     monthStream.value += 1
                 }
             }
-            DatePickerRange.YEAR -> yearStream.value += 1
+            is DatePickerRange.YEAR -> yearStream.value += 1
             is DatePickerRange.CUSTOM -> {}
         }
 
