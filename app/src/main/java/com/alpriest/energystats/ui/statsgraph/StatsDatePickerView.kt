@@ -19,6 +19,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -70,34 +71,36 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
         when (range) {
             is DatePickerRange.DAY -> CalendarView(viewModel.dateStream)
             is DatePickerRange.MONTH -> {
-                MonthPicker(viewModel = viewModel)
-                YearPicker(viewModel = viewModel)
+                MonthPicker(viewModel)
+                YearPicker(viewModel)
             }
-            is DatePickerRange.YEAR -> YearPicker(viewModel = viewModel)
-            is DatePickerRange.CUSTOM -> Text("hi")
+            is DatePickerRange.YEAR -> YearPicker(viewModel)
+            is DatePickerRange.CUSTOM -> CustomRangePicker(viewModel)
         }
 
         Spacer(modifier = Modifier.weight(1.0f))
 
-        Button(
-            modifier = Modifier
-                .padding(end = 14.dp)
-                .padding(vertical = 6.dp)
-                .size(36.dp),
-            onClick = { viewModel.decrease() },
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
-        }
+        if (!range.isCustom()) {
+            Button(
+                modifier = Modifier
+                    .padding(end = 14.dp)
+                    .padding(vertical = 6.dp)
+                    .size(36.dp),
+                onClick = { viewModel.decrease() },
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
+            }
 
-        Button(
-            modifier = Modifier
-                .padding(vertical = 6.dp)
-                .size(36.dp),
-            onClick = { viewModel.increase() },
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
+            Button(
+                modifier = Modifier
+                    .padding(vertical = 6.dp)
+                    .size(36.dp),
+                onClick = { viewModel.increase() },
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
+            }
         }
     }
 }
@@ -272,6 +275,24 @@ private fun DateRangePicker(
                 Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
             }
         }
+    }
+}
+
+@Composable
+fun CustomRangePicker(viewModel: StatsDatePickerViewModel) {
+    val customStartDate = MutableStateFlow(LocalDate.now())
+    val customEndDate = MutableStateFlow(LocalDate.now())
+    
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CalendarView(customStartDate)
+        Icon(
+            imageVector = Icons.Filled.ArrowForward,
+            contentDescription = null,
+            modifier = Modifier.padding(end = 14.dp)
+        )
+        CalendarView(customEndDate)
     }
 }
 
