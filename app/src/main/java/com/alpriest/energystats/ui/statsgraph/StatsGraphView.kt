@@ -100,7 +100,7 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
                 calendar.set(Calendar.MONTH, value.toInt() - 1)
                 return monthFormat.format(calendar.time)
             }
-            is StatsDisplayMode.Custom -> value.toInt().toString()
+            is StatsDisplayMode.Custom -> displayMode.start.plusDays(value.toLong()).dayOfMonth.toString()
         }
     }
 }
