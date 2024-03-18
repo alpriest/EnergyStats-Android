@@ -21,6 +21,10 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
             monthStream.value = dateStream.value.monthValue - 1
             yearStream.value = dateStream.value.year
 
+            combine(customStartDate, customEndDate) { _, _ ->
+                updateDisplayMode()
+            }.collect { }
+
             combine(rangeStream, dateStream, monthStream, yearStream) { _, _, _, _ ->
                 updateDisplayMode()
             }.collect { }
@@ -32,15 +36,18 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
                     dateStream.value = displayMode.date
                     rangeStream.value = DatePickerRange.DAY
                 }
+
                 is StatsDisplayMode.Month -> {
                     monthStream.value = displayMode.month
                     yearStream.value = displayMode.year
                     rangeStream.value = DatePickerRange.MONTH
                 }
+
                 is StatsDisplayMode.Year -> {
                     yearStream.value = displayMode.year
                     rangeStream.value = DatePickerRange.YEAR
                 }
+
                 is StatsDisplayMode.Custom -> {
                     customStartDate.value = displayMode.start
                     customEndDate.value = displayMode.end
@@ -57,7 +64,7 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
             is DatePickerRange.DAY -> StatsDisplayMode.Day(dateStream.value)
             is DatePickerRange.MONTH -> StatsDisplayMode.Month(monthStream.value, yearStream.value)
             is DatePickerRange.YEAR -> StatsDisplayMode.Year(yearStream.value)
-            is DatePickerRange.CUSTOM -> StatsDisplayMode.Custom(range.start, range.end)
+            is DatePickerRange.CUSTOM -> StatsDisplayMode.Custom(customStartDate.value, customEndDate.value)
         }
     }
 
@@ -74,6 +81,7 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
             is DatePickerRange.DAY -> {
                 dateStream.value = dateStream.value.minusDays(1)
             }
+
             is DatePickerRange.MONTH -> {
                 if (monthStream.value - 1 < 0) {
                     monthStream.value = 11
@@ -82,6 +90,7 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
                     monthStream.value -= 1
                 }
             }
+
             is DatePickerRange.YEAR -> yearStream.value -= 1
             is DatePickerRange.CUSTOM -> {}
         }
@@ -94,6 +103,7 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
             is DatePickerRange.DAY -> {
                 dateStream.value = dateStream.value.plusDays(1)
             }
+
             is DatePickerRange.MONTH -> {
                 if (monthStream.value + 1 > 11) {
                     monthStream.value = 0
@@ -102,6 +112,7 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
                     monthStream.value += 1
                 }
             }
+
             is DatePickerRange.YEAR -> yearStream.value += 1
             is DatePickerRange.CUSTOM -> {}
         }

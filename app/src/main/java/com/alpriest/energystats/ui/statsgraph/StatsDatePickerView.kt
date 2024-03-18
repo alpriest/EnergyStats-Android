@@ -252,7 +252,7 @@ private fun DateRangePicker(
             }
             Divider()
             DropdownMenuItem(onClick = {
-                viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now(), LocalDate.now().minusDays(30))
+                viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now().minusDays(30), LocalDate.now())
                 showing = false
             }) {
                 Text("Custom range")
@@ -280,19 +280,16 @@ private fun DateRangePicker(
 
 @Composable
 fun CustomRangePicker(viewModel: StatsDatePickerViewModel) {
-    val customStartDate = MutableStateFlow(LocalDate.now())
-    val customEndDate = MutableStateFlow(LocalDate.now())
-    
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CalendarView(customStartDate)
+        CalendarView(viewModel.customStartDate)
         Icon(
             imageVector = Icons.Filled.ArrowForward,
             contentDescription = null,
             modifier = Modifier.padding(end = 14.dp)
         )
-        CalendarView(customEndDate)
+        CalendarView(viewModel.customEndDate)
     }
 }
 

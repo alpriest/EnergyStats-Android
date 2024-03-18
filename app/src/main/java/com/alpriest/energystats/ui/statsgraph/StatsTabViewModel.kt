@@ -97,11 +97,28 @@ class StatsTabViewModel(
         val reportVariables = graphVariables.map { it.type }
 
         try {
-            val (updatedData, totals) = fetcher.fetchData(
-                device,
-                reportVariables,
-                displayMode
-            )
+            val updatedData: List<StatsGraphValue>
+            val totals: MutableMap<ReportVariable, Double>
+
+            if (displayMode is StatsDisplayMode.Custom) {
+                val result = fetcher.fetchCustomData(
+                    device,
+                    displayMode.start,
+                    displayMode.end,
+                    reportVariables,
+                    displayMode
+                )
+                updatedData = result.first
+                totals = result.second
+            } else {
+                val result = fetcher.fetchData(
+                    device,
+                    reportVariables,
+                    displayMode
+                )
+                updatedData = result.first
+                totals = result.second
+            }
 
             rawData = updatedData
             totalsStream.value = totals
