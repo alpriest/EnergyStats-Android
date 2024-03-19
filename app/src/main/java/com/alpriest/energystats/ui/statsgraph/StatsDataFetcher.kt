@@ -8,6 +8,7 @@ import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 class StatsDataFetcher(val networking: Networking, val approximationsCalculator: ApproximationsCalculator) {
     suspend fun fetchData(
@@ -92,8 +93,10 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                 val reportVariable = ReportVariable.parse(reportResponse.variable)
 
                 reportResponse.values.map { dataPoint ->
+                    val index = ChronoUnit.DAYS.between(start.atStartOfDay().toLocalDate(), LocalDate.of(year, month, dataPoint.index)).toInt()
+
                     StatsGraphValue(
-                        graphPoint = dataPoint.index,
+                        graphPoint = index,
                         value = dataPoint.value,
                         type = reportVariable
                     )
