@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.LoadingView
@@ -17,7 +15,6 @@ import com.alpriest.energystats.ui.login.LoggedOut
 import com.alpriest.energystats.ui.login.LoggingIn
 import com.alpriest.energystats.ui.login.RequiresUpgrade
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainAppView(appContainer: AppContainer) {
@@ -28,9 +25,7 @@ fun MainAppView(appContainer: AppContainer) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            val scope = rememberCoroutineScope()
             val loginStateValue = loginState.value
-            val context = LocalContext.current
 
             when (loginStateValue.loadState) {
                 is LoggedIn -> {
@@ -51,20 +46,7 @@ fun MainAppView(appContainer: AppContainer) {
                 }
 
                 is LoggedOut ->
-                    APIKeyLoginView(
-                        errorMessage = loginStateValue.loadState.reason,
-                        themeStream = appContainer.configManager.themeStream,
-                        onLogin = { apiKey ->
-                            scope.launch {
-                                appContainer.userManager.login(apiKey, context)
-                            }
-                        },
-                        onDemoLogin = {
-                            scope.launch {
-                                appContainer.userManager.loginDemo()
-                            }
-                        }
-                    )
+                    APIKeyLoginView(appContainer.userManager).Content(themeStream = appContainer.configManager.themeStream)
 
                 is LoggingIn ->
                     LoadingView(title = stringResource(R.string.logging_in))

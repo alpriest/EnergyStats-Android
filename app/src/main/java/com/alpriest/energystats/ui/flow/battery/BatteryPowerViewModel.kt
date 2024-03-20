@@ -1,10 +1,7 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.stores.ConfigManaging
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 class BatteryPowerViewModel(
     private val configManager: ConfigManaging,
