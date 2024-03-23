@@ -11,6 +11,7 @@ class DeviceSummaryResponse(
     val deviceSN: String,
     val moduleSN: String,
     val stationID: String,
+    val stationName: String,
     val productType: String,
     val deviceType: String,
     val hasBattery: Boolean,

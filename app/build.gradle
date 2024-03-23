@@ -16,8 +16,8 @@ android {
         applicationId "com.alpriest.energystats"
         minSdk 26
         targetSdk 34
-        versionCode 166
-        versionName '2.21'
+        versionCode 167
+        versionName '2.22'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -76,7 +76,7 @@ dependencies {
     implementation 'androidx.compose.material3:material3'
     implementation 'androidx.activity:activity-compose:1.8.2'
     implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation 'androidx.compose.material:material-icons-extended:1.6.3'
+    implementation 'androidx.compose.material:material-icons-extended:1.6.4'
     testImplementation 'junit:junit:4.13.2'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"

@@ -336,7 +336,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                 mappedDevices.add(
                     Device(
                         deviceSN = networkDevice.deviceSN,
-                        stationName = null,
+                        stationName = networkDevice.stationName,
                         stationID = networkDevice.stationID,
                         battery = deviceBattery,
                         moduleSN = networkDevice.moduleSN,
