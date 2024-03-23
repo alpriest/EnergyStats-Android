@@ -248,7 +248,7 @@ class VerticalLineMarker(
         markedEntries: List<Marker.EntryModel>,
         background: ShapeComponent,
     ) {
-        val leadingLabelPadding = 10f
+        val backgroundPadding = 10f
         val labelToValueSpacing = 20f
         val entries = markedEntries.mapNotNull {
             it.entry as? DateTimeFloatEntry
@@ -273,11 +273,14 @@ class VerticalLineMarker(
                 }
 
                 var currentHeight = 20f
-                entries.forEachIndexed { index, it ->
+                val backgroundWidth = labelMaxWidth + labelToValueSpacing + valueMaxWidth + (2 * backgroundPadding)
+                val startX = if (x > bounds.right - backgroundWidth + (2 * backgroundPadding)) x - backgroundWidth - backgroundPadding else x + backgroundPadding
+
+                entries.forEach {
                     text.drawText(
                         context,
                         it.type.name,
-                        x + leadingLabelPadding,
+                        startX + backgroundPadding,
                         currentHeight,
                         verticalPosition = VerticalPosition.Bottom,
                         horizontalPosition = HorizontalPosition.End
@@ -286,7 +289,7 @@ class VerticalLineMarker(
                     text.drawText(
                         context,
                         it.y.toString(),
-                        x + leadingLabelPadding + labelMaxWidth + labelToValueSpacing,
+                        startX + backgroundPadding + labelMaxWidth + labelToValueSpacing,
                         currentHeight,
                         verticalPosition = VerticalPosition.Bottom,
                         horizontalPosition = HorizontalPosition.End
@@ -297,8 +300,8 @@ class VerticalLineMarker(
 
                 background.draw(
                     context,
-                    left = x,
-                    right = x + leadingLabelPadding + labelMaxWidth + labelToValueSpacing + valueMaxWidth + 10f,
+                    left = startX,
+                    right = startX + backgroundWidth,
                     top = 20f,
                     bottom = currentHeight
                 )
