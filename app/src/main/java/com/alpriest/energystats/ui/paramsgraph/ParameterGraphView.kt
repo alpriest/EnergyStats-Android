@@ -34,7 +34,9 @@ import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
+import com.patrykandpatrick.vico.core.component.shape.ShapeComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico.core.component.text.HorizontalPosition
 import com.patrykandpatrick.vico.core.component.text.TextComponent
 import com.patrykandpatrick.vico.core.component.text.VerticalPosition
 import com.patrykandpatrick.vico.core.context.DrawContext
@@ -99,10 +101,12 @@ fun ParameterGraphView(
                                 textComponent(
                                     colors.onSecondary,
                                     lineCount = seriesCount,
-                                    background = shapeComponent(
-                                        shape = Shapes.rectShape,
-                                        color = colors.secondary,
-                                    )
+                                ),
+                                shapeComponent(
+                                    shape = Shapes.rectShape,
+                                    color = colors.secondary.copy(alpha = 0.3f),
+                                    strokeColor = colors.secondary,
+                                    strokeWidth = 1.dp
                                 )
                             ),
                             diffAnimationSpec = SnapSpec(),
@@ -137,11 +141,13 @@ fun ParameterGraphView(
                                 ),
                                 textComponent(
                                     colors.onSecondary,
-                                    lineCount = seriesCount,
-                                    background = shapeComponent(
-                                        shape = Shapes.rectShape,
-                                        color = colors.secondary,
-                                    )
+                                    lineCount = seriesCount
+                                ),
+                                background = shapeComponent(
+                                    shape = Shapes.rectShape,
+                                    color = colors.secondary.copy(alpha = 0.3f),
+                                    strokeColor = colors.secondary,
+                                    strokeWidth = 1.dp
                                 )
                             ),
                             diffAnimationSpec = SnapSpec(),
@@ -181,6 +187,12 @@ fun ParameterGraphView(
                                         shape = Shapes.rectShape,
                                         color = colors.secondary,
                                     )
+                                ),
+                                shapeComponent(
+                                    shape = Shapes.rectShape,
+                                    color = colors.secondary.copy(alpha = 0.3f),
+                                    strokeColor = colors.secondary,
+                                    strokeWidth = 1.dp
                                 )
                             ),
                             diffAnimationSpec = SnapSpec(),
@@ -221,10 +233,11 @@ class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFo
 class VerticalLineMarker(
     private var valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>> = MutableStateFlow(listOf()),
     private val guideline: LineComponent?,
-    private val text: TextComponent
+    private val text: TextComponent,
+    private val background: ShapeComponent
 ) : Marker {
     override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
-        drawGuideline(context, bounds, markedEntries)
+        drawGuideline(context, bounds, markedEntries, background)
 
         valuesAtTimeStream.value = markedEntries.mapNotNull { it.entry as? DateTimeFloatEntry }
     }
@@ -233,11 +246,13 @@ class VerticalLineMarker(
         context: DrawContext,
         bounds: RectF,
         markedEntries: List<Marker.EntryModel>,
+        background: ShapeComponent,
     ) {
-        val labels = markedEntries
-            .mapNotNull { it.entry as? DateTimeFloatEntry }
-            .map { "${it.type.name} ${it.y}" }
-            .joinToString("\n")
+        val leadingLabelPadding = 10f
+        val labelToValueSpacing = 20f
+        val entries = markedEntries.mapNotNull {
+            it.entry as? DateTimeFloatEntry
+        }
 
         markedEntries
             .map { it.location.x }
@@ -250,12 +265,42 @@ class VerticalLineMarker(
                     x,
                 )
 
-                text.drawText(
+                val labelMaxWidth = entries.maxOf {
+                    text.getTextBounds(context, it.type.name).width()
+                }
+                val valueMaxWidth = entries.maxOf {
+                    text.getTextBounds(context, it.y.toString()).width()
+                }
+
+                var currentHeight = 20f
+                entries.forEachIndexed { index, it ->
+                    text.drawText(
+                        context,
+                        it.type.name,
+                        x + leadingLabelPadding,
+                        currentHeight,
+                        verticalPosition = VerticalPosition.Bottom,
+                        horizontalPosition = HorizontalPosition.End
+                    )
+
+                    text.drawText(
+                        context,
+                        it.y.toString(),
+                        x + leadingLabelPadding + labelMaxWidth + labelToValueSpacing,
+                        currentHeight,
+                        verticalPosition = VerticalPosition.Bottom,
+                        horizontalPosition = HorizontalPosition.End
+                    )
+
+                    currentHeight += maxOf(text.getTextBounds(context, it.type.name).height(), text.getTextBounds(context, it.y.toString()).height())
+                }
+
+                background.draw(
                     context,
-                    labels,
-                    x,
-                    20f,
-                    verticalPosition = VerticalPosition.Bottom
+                    left = x,
+                    right = x + leadingLabelPadding + labelMaxWidth + labelToValueSpacing + valueMaxWidth + 10f,
+                    top = 20f,
+                    bottom = currentHeight
                 )
             }
     }
