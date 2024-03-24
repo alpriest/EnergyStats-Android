@@ -14,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -45,8 +44,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsTitleView
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -84,16 +82,10 @@ class ParameterGraphVariableChooserView(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 Box {
-                    SettingsColumnWithChild(modifier = Modifier.padding(top = 12.dp)) {
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "Groups",
-                                style = MaterialTheme.typography.h4,
-                                color = colors.onSecondary,
-                                modifier = Modifier.weight(1.0f)
-                            )
-                        }
-
+                    SettingsColumn(
+                        modifier = Modifier.padding(top = 16.dp),
+                        header = "Groups"
+                    ) {
                         listRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
                         Divider()
                         listRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
@@ -130,9 +122,10 @@ class ParameterGraphVariableChooserView(
                     }
                 }
 
-                SettingsColumnWithChild(modifier = Modifier.padding(bottom = 12.dp)) {
-                    SettingsTitleView(stringResource(id = R.string.all))
-
+                SettingsColumn(
+                    modifier = Modifier.padding(bottom = 12.dp),
+                    header = "All"
+                ) {
                     ParameterVariableListView(variables, onTap = { viewModel.toggle(it) })
                 }
 

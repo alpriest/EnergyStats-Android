@@ -332,4 +332,5 @@
     <string name="settings_power_station">Elektrownia</string>
     <string name="automatic_time_advice">Upewnij się, że data/czas systemu na Twoim urządzeniu jest ustawiona na \'automatyczny\', w przeciwnym razie możesz nie być w stanie zalogować się za pomocą klucza API.</string>
     <string name="self_sufficiency_off">Nie zostanie wyświetlona żadna ocena samowystarczalności</string>
+    <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">Moc rozładowania musi być większa niż 0, aby rozładować</string>
 </resources>

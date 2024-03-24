@@ -331,4 +331,5 @@
     <string name="settings_power_station">Kraftwerk</string>
     <string name="automatic_time_advice">Bitte stellen Sie sicher, dass das Systemdatum/die Systemzeit auf Ihrem Gerät auf \'automatisch\' eingestellt ist, da Sie sonst möglicherweise nicht mit Ihrem API-Schlüssel anmelden können.</string>
     <string name="self_sufficiency_off">Es wird keine Selbsteinschätzung der Selbstständigkeit angezeigt</string>
+    <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">Die Entladungskraft muss größer als 0 sein, um zu entladen</string>
 </resources>

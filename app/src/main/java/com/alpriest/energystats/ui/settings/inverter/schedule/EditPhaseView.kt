@@ -47,7 +47,8 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 data class EditPhaseErrorData(
     val minSOCError: String?,
     val fdSOCError: String?,
-    val timeError: String?
+    val timeError: String?,
+    val forceDischargePowerError: String?
 )
 
 @Composable
@@ -132,7 +133,8 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
                 onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
                 modifier = Modifier.width(100.dp),
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
+                trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) },
+                singleLine = true
             )
         }
     }
@@ -166,7 +168,8 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
                     onValueChange = { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } },
                     modifier = Modifier.width(100.dp),
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
+                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) },
+                    singleLine = true
                 )
             }
         },
@@ -183,6 +186,7 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
         WorkMode.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_power_description)
         else -> null
     }
+    val errorText = viewModel.errorStream.collectAsState().value
 
     SettingsColumnWithChild(
         content = {
@@ -202,12 +206,13 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
                     onValueChange = { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } },
                     modifier = Modifier.width(100.dp),
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) }
+                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) },
+                    singleLine = true
                 )
             }
         },
         footer = footerText,
-        error = null
+        error = errorText.forceDischargePowerError
     )
 }
 

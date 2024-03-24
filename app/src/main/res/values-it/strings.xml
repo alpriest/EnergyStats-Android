@@ -332,4 +332,5 @@
     <string name="settings_power_station">Centrale elettrica</string>
     <string name="automatic_time_advice">Assicurati che la data/l\'ora del sistema sul tuo dispositivo sia impostata su \'automatico\', altrimenti potresti non essere in grado di accedere con la tua chiave API.</string>
     <string name="self_sufficiency_off">Nessuna stima di autosufficienza sarà mostrata</string>
+    <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">La forza di scarica deve essere maggiore di 0 per scaricare</string>
 </resources>

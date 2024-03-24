@@ -334,4 +334,5 @@
     <string name="settings_power_station">Power station</string>
     <string name="automatic_time_advice">Please ensure the system date/time on your device is set to \'automatic\' otherwise you may be unable to login with your API key.</string>
     <string name="self_sufficiency_off">No self sufficiency will be shown.</string>
+    <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">Force Discharge power needs to be greater than 0 to discharge</string>
 </resources>

@@ -26,7 +26,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
     val forceDischargePowerStream = MutableStateFlow("0")
     val forceDischargeSOCStream = MutableStateFlow("0")
     val minSOCStream = MutableStateFlow("0")
-    val errorStream = MutableStateFlow(EditPhaseErrorData(minSOCError = null, fdSOCError = null, timeError = null))
+    val errorStream = MutableStateFlow(EditPhaseErrorData(minSOCError = null, fdSOCError = null, timeError = null, forceDischargePowerError = null))
     private var originalPhaseId: String? = null
 
     init {
@@ -79,6 +79,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
         var minSOCError: String? = null
         var fdSOCError: String? = null
         var timeError: String? = null
+        var forceDischargePowerError: String? = null
 
         minSOCStream.value.toIntOrNull()?.let {
             if (it < 10 || it > 100) {
@@ -104,7 +105,11 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
             timeError = context.getString(R.string.end_time_must_be_after_start_time)
         }
 
-        errorStream.value = EditPhaseErrorData(minSOCError, fdSOCError, timeError)
+        if (workModeStream.value == WorkMode.ForceDischarge && forceDischargePowerStream.value.toIntOrNull() == 0) {
+            forceDischargePowerError  = context.getString(R.string.force_discharge_power_needs_to_be_greater_than_0_to_discharge)
+        }
+
+        errorStream.value = EditPhaseErrorData(minSOCError, fdSOCError, timeError, forceDischargePowerError)
     }
 
     fun save(context: Context) {

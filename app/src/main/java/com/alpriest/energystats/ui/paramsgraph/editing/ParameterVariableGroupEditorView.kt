@@ -30,10 +30,9 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
@@ -137,8 +136,9 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
         SettingsPage(modifier) {
             Header(viewModel)
 
-            SettingsColumnWithChild {
-                SettingsTitleView("Choose parameters")
+            SettingsColumn(
+                header = "Choose parameters"
+            ) {
                 ParameterVariableListView(variables = variables, onTap = { viewModel.toggle(it) })
             }
         }
