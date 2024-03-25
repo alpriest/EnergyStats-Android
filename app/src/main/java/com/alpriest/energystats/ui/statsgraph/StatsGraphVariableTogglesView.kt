@@ -1,7 +1,8 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -10,11 +11,10 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoAPI
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -55,6 +55,6 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
 fun StatsGraphVariableTogglesViewPreview() {
     StatsGraphVariableTogglesView(
         StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
-        themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false))
+        themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = false))
     )
 }

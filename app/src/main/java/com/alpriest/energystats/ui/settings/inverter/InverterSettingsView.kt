@@ -60,11 +60,11 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                     onUpdate = { configManager.showInverterTypeNameOnPowerflow = it }
                 )
 
-//                SettingsCheckbox(
-//                    title = stringResource(R.string.show_inverter_station_name),
-//                    state = showInverterStationNameState,
-//                    onUpdate = { configManager.showInverterStationNameOnPowerflow = it }
-//                )
+                SettingsCheckbox(
+                    title = stringResource(R.string.show_inverter_station_name),
+                    state = showInverterStationNameState,
+                    onUpdate = { configManager.showInverterStationNameOnPowerflow = it }
+                )
             }
 
             SettingsColumn(

@@ -29,7 +29,7 @@ import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -125,7 +125,7 @@ fun GridIconViewPreview() {
         GridIconView(
             homePowerFlowViewModel,
             iconHeight = 30.dp,
-            themeStream = MutableStateFlow(AppTheme.preview().copy(showGridTotals = true)),
+            themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true)),
             modifier = Modifier
         )
     }

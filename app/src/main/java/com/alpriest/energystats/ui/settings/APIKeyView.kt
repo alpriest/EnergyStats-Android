@@ -29,7 +29,7 @@ import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.ClickableUrlText
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -132,7 +132,7 @@ fun PreviewConfigureAPIKeyView() {
         ConfigureAPIKeyView(
             FakeCredentialStore(),
             NavHostController(LocalContext.current),
-            MutableStateFlow(AppTheme.preview())
+            MutableStateFlow(AppTheme.demo())
         )
     }
 }

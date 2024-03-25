@@ -18,7 +18,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSite
 import com.alpriest.energystats.ui.settings.solcast.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeConfigManager : ConfigManaging {
@@ -33,7 +33,7 @@ class FakeConfigManager : ConfigManaging {
     override val variables: List<Variable>
         get() = listOf()
     override var showUsableBatteryOnly: Boolean = false
-    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.preview())
+    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.demo())
     override var decimalPlaces: Int = 3
     override var showSunnyBackground: Boolean = true
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off

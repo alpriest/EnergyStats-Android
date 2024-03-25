@@ -34,7 +34,7 @@ import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -190,7 +190,7 @@ fun BatteryPowerFlowViewPreview() {
                 temperature = 13.6,
                 residual = 5678
             ),
-            themeStream = MutableStateFlow(AppTheme.preview(showBatteryTemperature = true, showBatteryEstimate = true)),
+            themeStream = MutableStateFlow(AppTheme.demo(showBatteryTemperature = true, showBatteryEstimate = true)),
             iconHeight = 24.dp
         )
     }

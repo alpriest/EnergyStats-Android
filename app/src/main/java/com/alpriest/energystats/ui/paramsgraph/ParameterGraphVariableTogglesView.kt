@@ -12,14 +12,13 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.services.DemoAPI
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.GraphBounds
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.title
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @SuppressLint("DiscouragedApi")
@@ -72,6 +71,6 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
 fun ParameterGraphVariableTogglesViewPreview() {
     ParameterGraphVariableTogglesView(
         ParametersGraphTabViewModel(DemoNetworking(), FakeConfigManager(), onWriteTempFile = { _, _ -> null }, MutableStateFlow(previewParameterGraphVariables())),
-        themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false))
+        themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = false))
     )
 }

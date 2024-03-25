@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.summary
 
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.SolcastForecastResponseList
+import com.alpriest.energystats.models.SolcastSiteResponse
 import com.alpriest.energystats.models.SolcastSiteResponseList
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
@@ -10,7 +11,33 @@ import java.util.Locale
 
 class DemoSolarForecasting : SolarForecasting {
     override suspend fun fetchSites(apiKey: String): SolcastSiteResponseList {
-        TODO("Not yet implemented")
+        return SolcastSiteResponseList(
+            listOf(
+                SolcastSiteResponse(
+                    name = "Front",
+                    resourceId = "abc-123",
+                    capacity = 3.7,
+                    longitude = -0.2664026,
+                    latitude = 51.5287398,
+                    azimuth = 134,
+                    tilt = 45,
+                    lossFactor = 0.9,
+                    dcCapacity = 5.6,
+                    installDate = ""
+                ),
+                SolcastSiteResponse(
+                    name = "Back",
+                    resourceId = "def-123",
+                    capacity = 3.7,
+                    longitude = -0.2664026,
+                    latitude = 51.5287398,
+                    azimuth = 134,
+                    tilt = 45,
+                    lossFactor = 0.9,
+                    dcCapacity = 5.6,
+                    installDate = ""
+                )
+        ))
     }
 
     override suspend fun fetchForecast(site: SolcastSite, apiKey: String): SolcastForecastResponseList {
@@ -42,7 +69,7 @@ class DemoSolarForecasting : SolarForecasting {
                 SolcastForecastResponse(pvEstimate = 0.0028, pvEstimate10 = 0.0028, pvEstimate90 = 0.0055, dateFormat.parse("2023-11-14T16:30:00Z")!!, "PT30M"),
                 SolcastForecastResponse(pvEstimate = 0.0, pvEstimate10 = 0.0, pvEstimate90 = 0.0, dateFormat.parse("2023-11-14T17:00:00Z")!!, "PT30M"),
                 SolcastForecastResponse(pvEstimate = 0.0, pvEstimate10 = 0.0, pvEstimate90 = 0.0, dateFormat.parse("2023-11-14T17:30:00Z")!!, "PT30M"),
-                SolcastForecastResponse(pvEstimate = 0.0, pvEstimate10 = 0.0, pvEstimate90 = 0.0, dateFormat.parse("2023-11-14T18:00:00Z")!!,"PT30M"),
+                SolcastForecastResponse(pvEstimate = 0.0, pvEstimate10 = 0.0, pvEstimate90 = 0.0, dateFormat.parse("2023-11-14T18:00:00Z")!!, "PT30M"),
                 SolcastForecastResponse(pvEstimate = 0.0, pvEstimate10 = 0.0, pvEstimate90 = 0.0, dateFormat.parse("2023-11-14T18:30:00Z")!!, "PT30M"),
                 SolcastForecastResponse(pvEstimate = 0.0, pvEstimate10 = 0.0, pvEstimate90 = 0.0, dateFormat.parse("2023-11-14T19:00:00Z")!!, "PT30M"),
                 SolcastForecastResponse(pvEstimate = 0.0, pvEstimate10 = 0.0, pvEstimate90 = 0.0, dateFormat.parse("2023-11-14T19:30:00Z")!!, "PT30M"),

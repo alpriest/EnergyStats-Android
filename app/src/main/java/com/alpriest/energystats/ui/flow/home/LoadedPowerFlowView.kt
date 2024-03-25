@@ -55,7 +55,7 @@ import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -311,7 +311,7 @@ fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         LoadedPowerFlowView(
             FakeConfigManager(),
-            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview().copy(decimalPlaces = 3)), LocalContext.current),
+            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)), LocalContext.current),
             homePowerFlowViewModel = HomePowerFlowViewModel(
                 solar = 1.0,
                 solarStrings = listOf(
@@ -331,7 +331,7 @@ fun SummaryPowerFlowViewPreview() {
                 homeTotal = 1.0,
                 ct2 = 0.4,
             ),
-            themeStream = MutableStateFlow(AppTheme.preview(showInverterTemperatures = true, showHomeTotal = true, decimalPlaces = 3, powerFlowStrings = PowerFlowStringsSettings.defaults)),
+            themeStream = MutableStateFlow(AppTheme.demo(showInverterTemperatures = true, showHomeTotal = true, decimalPlaces = 3, powerFlowStrings = PowerFlowStringsSettings.defaults)),
         )
     }
 }

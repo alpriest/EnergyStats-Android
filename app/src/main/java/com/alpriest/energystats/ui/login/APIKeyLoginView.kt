@@ -43,7 +43,7 @@ import com.alpriest.energystats.ui.helpers.EqualWidthButtonList
 import com.alpriest.energystats.ui.helpers.copyDebugData
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -214,7 +214,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
 fun APIKeyLoginViewPreview() {
     EnergyStatsTheme {
         APIKeyLoginView(FakeUserManager()).Content(
-            themeStream = MutableStateFlow(AppTheme.preview())
+            themeStream = MutableStateFlow(AppTheme.demo())
         )
     }
 }

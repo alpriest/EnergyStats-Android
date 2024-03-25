@@ -38,7 +38,7 @@ import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SummaryView(
@@ -181,6 +181,6 @@ fun SummaryViewPreview() {
             FakeConfigManager(),
             FakeUserManager(),
             DemoNetworking()
-        ) { DemoSolarForecasting() }.Content(themeStream = MutableStateFlow(AppTheme.preview().copy(showGridTotals = true)))
+        ) { DemoSolarForecasting() }.Content(themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true)))
     }
 }

@@ -19,7 +19,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -47,7 +47,7 @@ fun HomePowerFlowViewPreview() {
             HomePowerFlowView(
                 amount = 1.0,
                 modifier = Modifier,
-                themeStream = MutableStateFlow(AppTheme.preview())
+                themeStream = MutableStateFlow(AppTheme.demo())
             )
         }
     }

@@ -42,7 +42,7 @@ import com.alpriest.energystats.ui.flow.inverter.InverterIconView
 import com.alpriest.energystats.ui.helpers.OptionalView
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class InverterViewModel(
@@ -57,7 +57,7 @@ class InverterViewModel(
 
     val deviceDisplayName: String
         get() = configManager.currentDevice.value?.deviceDisplayName ?: "Re-login to update"
-    
+
     val devices: List<Device>
         get() = configManager.devices ?: listOf()
 
@@ -143,15 +143,33 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
                     contentPadding = PaddingValues(2.dp),
                     elevation = ButtonDefaults.elevation(1.dp)
                 ) {
-                    Text(
-                        viewModel.deviceDisplayName,
-                        fontSize = 12.sp,
-                        color = colors.onSurface
-                    )
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = null,
-                    )
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                viewModel.deviceDisplayName,
+                                fontSize = 12.sp,
+                                color = colors.onSurface
+                            )
+                            Icon(
+                                imageVector = Icons.Filled.ArrowDropDown,
+                                contentDescription = null,
+                            )
+                        }
+                        if (appTheme.showInverterStationNameOnPowerflow) {
+                            OptionalView(viewModel.deviceStationName) {
+                                Row {
+                                    Text(it)
+                                }
+                            }
+                        }
+                        if (appTheme.showInverterTypeNameOnPowerflow) {
+                            OptionalView(viewModel.deviceTypeName) {
+                                Row {
+                                    Text(it)
+                                }
+                            }
+                        }
+                    }
                 }
 
                 DropdownMenu(
@@ -163,7 +181,7 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
                             expanded = false
                             viewModel.select(device)
                         }) {
-                            Text(text = device.deviceDisplayName)
+                            Text("${device.deviceDisplayName} (${device.deviceType})")
                         }
                     }
                 }
@@ -235,7 +253,7 @@ fun InverterViewPreview() {
 
         InverterView(
             MutableStateFlow(
-                AppTheme.preview()
+                AppTheme.demo()
             ),
             InverterViewModel(temperatures = null, configManager = FakeConfigManager()),
             orientation = Configuration.ORIENTATION_PORTRAIT

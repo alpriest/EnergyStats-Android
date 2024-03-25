@@ -150,19 +150,19 @@ fun PowerFlowViewPreview() {
     Row(Modifier.height(200.dp)) {
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppTheme.preview()),
+            themeStream = MutableStateFlow(AppTheme.demo()),
             position = PowerFlowLinePosition.LEFT,
             orientation = LineOrientation.VERTICAL
         )
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = true, showBatteryTemperature = true)),
+            themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = true, showBatteryTemperature = true)),
             position = PowerFlowLinePosition.MIDDLE,
             orientation = LineOrientation.VERTICAL
         )
         PowerFlowView(
             -3.0,
-            themeStream = MutableStateFlow(AppTheme.preview(useLargeDisplay = false, showBatteryTemperature = false)),
+            themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = false, showBatteryTemperature = false)),
             position = PowerFlowLinePosition.RIGHT,
             orientation = LineOrientation.VERTICAL
         )

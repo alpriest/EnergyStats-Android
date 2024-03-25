@@ -32,7 +32,7 @@ import com.alpriest.energystats.ui.flow.home.SolarPowerFlow
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -180,7 +180,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
 }
 
 fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTheme {
-    return AppTheme.preview()
+    return AppTheme.demo()
         .copy(
             solarRangeDefinitions = SolarRangeDefinitions(
                 threshold1 = threshold1.toDouble(),

@@ -16,7 +16,7 @@ import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -94,7 +94,7 @@ fun PylonViewPreview() {
                 .width(pylonHeight * 1.2f)
         ) {
             PylonView(
-                themeStream = MutableStateFlow(AppTheme.preview()),
+                themeStream = MutableStateFlow(AppTheme.demo()),
                 modifier = Modifier
                     .height(pylonHeight)
                     .width(pylonHeight * 0.9f)

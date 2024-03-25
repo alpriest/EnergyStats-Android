@@ -75,7 +75,7 @@ data class AppTheme(
     companion object
 }
 
-fun AppTheme.Companion.preview(
+fun AppTheme.Companion.demo(
     useLargeDisplay: Boolean = false,
     useColouredLines: Boolean = true,
     showBatteryTemperature: Boolean = true,

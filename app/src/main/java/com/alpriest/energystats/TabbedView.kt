@@ -47,7 +47,7 @@ import com.alpriest.energystats.ui.summary.SummaryView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -186,7 +186,7 @@ fun TabbedView(
 @Preview(showBackground = true)
 @Composable
 fun HomepagePreview() {
-    val themeStream = MutableStateFlow(AppTheme.preview())
+    val themeStream = MutableStateFlow(AppTheme.demo())
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         TabbedView(
             ConfigManager(

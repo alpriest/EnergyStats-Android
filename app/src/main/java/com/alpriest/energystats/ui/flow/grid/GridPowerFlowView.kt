@@ -10,7 +10,7 @@ import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -39,7 +39,7 @@ fun GridPowerFlowViewPreview() {
         GridPowerFlowView(
             amount = 1.0,
             modifier = Modifier,
-            themeStream = MutableStateFlow(AppTheme.preview().copy(showGridTotals = true))
+            themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true))
         )
     }
 }

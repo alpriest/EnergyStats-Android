@@ -16,7 +16,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
@@ -83,7 +83,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
 fun StatsGraphViewPreview() {
     StatsGraphView(
         StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
-        MutableStateFlow(AppTheme.preview())
+        MutableStateFlow(AppTheme.demo())
     )
 }
 

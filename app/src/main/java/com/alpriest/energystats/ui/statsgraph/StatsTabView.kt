@@ -38,7 +38,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
@@ -138,7 +138,7 @@ fun StatsGraphTabViewPreview() {
     StatsTabView(
         StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
         { _, _ -> },
-        MutableStateFlow(AppTheme.preview()),
+        MutableStateFlow(AppTheme.demo()),
         FakeUserManager()
     )
 }

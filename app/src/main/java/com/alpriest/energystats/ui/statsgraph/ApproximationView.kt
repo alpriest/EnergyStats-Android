@@ -44,7 +44,7 @@ import com.alpriest.energystats.ui.theme.DarkApproximationHeader
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.LightApproximationBackground
 import com.alpriest.energystats.ui.theme.LightApproximationHeader
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class ApproximationsViewModel(
@@ -232,7 +232,7 @@ fun StatsApproximationViewPreview() {
 
     EnergyStatsTheme {
         ApproximationView(
-            themeStream = MutableStateFlow(AppTheme.preview().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
+            themeStream = MutableStateFlow(AppTheme.demo().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
             modifier = Modifier.padding(24.dp),
             viewModel = ApproximationsViewModel(
                 netSelfSufficiencyEstimate = "95%",

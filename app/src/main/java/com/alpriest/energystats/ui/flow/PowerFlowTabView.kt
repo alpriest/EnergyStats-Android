@@ -42,7 +42,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class PowerFlowTabViewModelFactory(
@@ -149,7 +149,7 @@ fun LoadedView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.preview()), LocalContext.current)
+    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo()), LocalContext.current)
 
     val homePowerFlowViewModel = HomePowerFlowViewModel(
         solar = 1.0,
@@ -176,7 +176,7 @@ fun PowerFlowTabViewPreview() {
             viewModel = viewModel,
             configManager = FakeConfigManager(),
             homePowerFlowViewModel = homePowerFlowViewModel,
-            themeStream = MutableStateFlow(AppTheme.preview())
+            themeStream = MutableStateFlow(AppTheme.demo())
         )
     }
 }

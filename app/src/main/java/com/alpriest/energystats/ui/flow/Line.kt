@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -92,7 +92,7 @@ fun LinePreview() {
             amount = 2.0,
             color = Color.Red,
             modifier = Modifier,
-            theme = AppTheme.preview(),
+            theme = AppTheme.demo(),
             orientation = LineOrientation.HORIZONTAL,
             isFlowing = true
         )
@@ -100,7 +100,7 @@ fun LinePreview() {
             amount = 2.0,
             color = Color.Red,
             modifier = Modifier,
-            theme = AppTheme.preview(),
+            theme = AppTheme.demo(),
             orientation = LineOrientation.VERTICAL,
             isFlowing = true
         )

@@ -25,8 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsTitleView
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -37,9 +36,7 @@ fun InverterChoiceView(
     val currentDevice = configManager.currentDevice.collectAsState()
 
     if ((configManager.devices?.count() ?: 0) > 1) {
-        SettingsColumnWithChild {
-            SettingsTitleView("Device selection")
-
+        SettingsColumn(header = "Device selection") {
             currentDevice.value?.let {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -87,7 +84,7 @@ fun InverterChoiceView(
 
 val Device.deviceDisplayName: String
     get() {
-        return listOfNotNull(stationName, stationID).joinToString { it }
+        return listOfNotNull(stationName).firstOrNull() ?: ""
     }
 
 @Preview(showBackground = true, heightDp = 600, widthDp = 400)

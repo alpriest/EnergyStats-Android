@@ -25,7 +25,7 @@ import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -101,7 +101,7 @@ fun InverterIconView(modifier: Modifier = Modifier, themeStream: MutableStateFlo
         EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
             InverterIconView(
                 modifier = Modifier.width(50.dp).height(65.dp),
-                MutableStateFlow(AppTheme.preview())
+                MutableStateFlow(AppTheme.demo())
             )
         }
     }

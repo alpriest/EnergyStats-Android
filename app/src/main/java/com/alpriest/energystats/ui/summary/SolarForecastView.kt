@@ -33,7 +33,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red
 import com.alpriest.energystats.ui.theme.TintColor
-import com.alpriest.energystats.ui.theme.preview
+import com.alpriest.energystats.ui.theme.demo
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
@@ -237,7 +237,7 @@ fun SolarForecastViewPreview() {
     EnergyStatsTheme {
         SolarForecastView(
             solarForecastProvider = { DemoSolarForecasting() },
-            themeStream = MutableStateFlow(AppTheme.preview()),
+            themeStream = MutableStateFlow(AppTheme.demo()),
         ).Content()
     }
 }
