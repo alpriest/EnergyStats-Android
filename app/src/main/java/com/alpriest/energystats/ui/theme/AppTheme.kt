@@ -99,7 +99,7 @@ fun AppTheme.Companion.demo(
     showGraphValueDescriptions: Boolean = true,
     parameterGroups: List<ParameterGroup> = ParameterGroup.defaults,
     colorTheme: ColorThemeMode = ColorThemeMode.Auto,
-    solcastSettings: SolcastSettings = SolcastSettings.defaults,
+    solcastSettings: SolcastSettings = SolcastSettings.demo,
     dataCeiling: DataCeiling = DataCeiling.Mild,
     totalYieldModel: TotalYieldModel = TotalYieldModel.EnergyStats,
     showFinancialSummaryOnFlowPage: Boolean = true,

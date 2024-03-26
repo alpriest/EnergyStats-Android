@@ -7,6 +7,8 @@ import com.alpriest.energystats.services.BadCredentialsException
 import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
+import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,6 +51,7 @@ class UserManager(
     override suspend fun loginDemo() {
         configManager.isDemoUser = true
         store.store("demo")
+        configManager.themeStream.value = AppTheme.demo()
         configManager.fetchDevices()
         _loggedInState.value = LoginStateHolder(LoggedIn)
     }

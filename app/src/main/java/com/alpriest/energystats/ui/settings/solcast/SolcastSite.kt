@@ -1,8 +1,6 @@
 package com.alpriest.energystats.ui.settings.solcast
 
 import com.alpriest.energystats.models.SolcastSiteResponse
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
-import com.alpriest.energystats.ui.theme.AppTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -12,6 +10,9 @@ data class SolcastSettings(
 ) {
     companion object {
         val defaults: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf())
+        val demo: SolcastSettings = SolcastSettings(
+            apiKey = "123", sites = listOf(SolcastSite.preview())
+        )
     }
 }
 
