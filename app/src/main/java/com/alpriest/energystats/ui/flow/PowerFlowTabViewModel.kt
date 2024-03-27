@@ -16,8 +16,9 @@ import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.home.DeviceState
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
-import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
@@ -186,6 +187,11 @@ class PowerFlowTabViewModel(
         )
     }
 
+    private suspend fun loadDeviceStatus(currentDevice: Device): DeviceState {
+        val device = network.fetchDevice(currentDevice.deviceSN)
+        return DeviceState.fromInt(device.status)
+    }
+
     private suspend fun loadData() {
         try {
             if (configManager.currentDevice.value == null) {
@@ -198,6 +204,7 @@ class PowerFlowTabViewModel(
                     uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
                 }
 
+                val deviceState = loadDeviceStatus(currentDevice)
                 val real = loadRealData(currentDevice, configManager)
                 val totals = loadTotals(currentDevice)
                 val generation = loadGeneration(currentDevice)
@@ -210,7 +217,7 @@ class PowerFlowTabViewModel(
 
                 val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real)
 
-                val summary = HomePowerFlowViewModel(
+                val summary = LoadedPowerFlowViewModel(
                     solar = currentViewModel.currentSolarPower,
                     solarStrings = currentViewModel.currentSolarStringsPower,
                     home = currentViewModel.currentHomeConsumption,
@@ -224,7 +231,8 @@ class PowerFlowTabViewModel(
                     homeTotal = totals.loads,
                     gridImportTotal = totals.grid,
                     gridExportTotal = totals.feedIn,
-                    ct2 = currentViewModel.currentCT2
+                    ct2 = currentViewModel.currentCT2,
+                    deviceState = deviceState
                 )
                 batteryErrorStream.value = currentDevice.battery?.hasError ?: false
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))

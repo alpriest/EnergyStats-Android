@@ -25,15 +25,16 @@ import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.StringPower
+import com.alpriest.energystats.ui.flow.home.DeviceState
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
-import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun GridIconView(viewModel: HomePowerFlowViewModel, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
     val showGridTotals = themeStream.collectAsState().value.showGridTotals
 
@@ -63,7 +64,7 @@ fun GridIconView(viewModel: HomePowerFlowViewModel, iconHeight: Dp, themeStream:
 
 @Composable
 private fun GridTotals(
-    viewModel: HomePowerFlowViewModel,
+    viewModel: LoadedPowerFlowViewModel,
     decimalPlaces: Int,
     themeStream: MutableStateFlow<AppTheme>
 ) {
@@ -101,7 +102,7 @@ private fun GridTotals(
 @Preview(showBackground = true, heightDp = 400)
 @Composable
 fun GridIconViewPreview() {
-    val homePowerFlowViewModel = HomePowerFlowViewModel(
+    val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
         solar = 1.0,
         solarStrings = listOf(
             StringPower("pv1", 0.3),
@@ -118,12 +119,13 @@ fun GridIconViewPreview() {
         homeTotal = 1.0,
         gridImportTotal = 1.0,
         gridExportTotal = 2.0,
-        ct2 = 0.4
+        ct2 = 0.4,
+        deviceState = DeviceState.Online
     )
 
     EnergyStatsTheme {
         GridIconView(
-            homePowerFlowViewModel,
+            loadedPowerFlowViewModel,
             iconHeight = 30.dp,
             themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true)),
             modifier = Modifier

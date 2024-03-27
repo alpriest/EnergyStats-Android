@@ -23,7 +23,7 @@ class DemoSolarForecasting : SolarForecasting {
                     longitude = -0.2664026,
                     latitude = 51.5287398,
                     azimuth = 134,
-                    tilt = 45,
+                    tilt = 45.0,
                     lossFactor = 0.9,
                     dcCapacity = 5.6,
                     installDate = ""
@@ -35,7 +35,7 @@ class DemoSolarForecasting : SolarForecasting {
                     longitude = -0.2664026,
                     latitude = 51.5287398,
                     azimuth = 134,
-                    tilt = 45,
+                    tilt = 45.0,
                     lossFactor = 0.9,
                     dcCapacity = 5.6,
                     installDate = ""

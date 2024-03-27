@@ -18,7 +18,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun HomeIconView(viewModel: HomePowerFlowViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier, iconHeight: Dp) {
+fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier, iconHeight: Dp) {
     val showHomeTotal = themeStream.collectAsState().value.showHomeTotal
     val fontSize = themeStream.collectAsState().value.fontSize()
     val smallFontSize = themeStream.collectAsState().value.smallFontSize()

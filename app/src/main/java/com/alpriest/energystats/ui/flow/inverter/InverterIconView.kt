@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -39,8 +38,6 @@ fun InverterIconView(modifier: Modifier = Modifier, themeStream: MutableStateFlo
     ) {
         val cablesHeight = size.height * 0.12f
         val cablesWidth = size.width * 0.1f
-        val panelX = size.width * 0.15f
-        val panelY = size.height * 0.2f
         val cornerSize = CornerRadius(x = 8f, y = 8f)
         val inverterLineWidth = 5f
         val cablesLineWidth = 5f
@@ -65,23 +62,16 @@ fun InverterIconView(modifier: Modifier = Modifier, themeStream: MutableStateFlo
         // Cables
         drawRect(
             topLeft = Offset(x = cablesWidth * 1.5f, y = size.height - cablesHeight - cablesLineWidth),
-            size =  Size(width = cablesWidth, height = cablesHeight),
+            size = Size(width = cablesWidth, height = cablesHeight),
             color = inverterBackground,
             style = Stroke(width = cablesLineWidth)
         )
 
         drawRect(
             topLeft = Offset(x = cablesWidth * 3.5f, y = size.height - cablesHeight - cablesLineWidth),
-            size =  Size(width = cablesWidth, height = cablesHeight),
+            size = Size(width = cablesWidth, height = cablesHeight),
             color = inverterBackground,
             style = Stroke(width = cablesLineWidth)
-        )
-
-        // Panel
-        drawRect(
-            topLeft = Offset(x = panelX, y = panelY),
-            size = Size(width = panelX * 2.3f, height = panelY * 1.3f),
-            color = Color.Gray.copy(alpha = 0.5f)
         )
 
         with(painter) {
@@ -96,11 +86,14 @@ fun InverterIconView(modifier: Modifier = Modifier, themeStream: MutableStateFlo
 }
 
 @Preview(showBackground = false, widthDp = 200, heightDp = 300)
-@Composable fun InverterViewPreview() {
+@Composable
+fun InverterViewPreview() {
     Column {
         EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
             InverterIconView(
-                modifier = Modifier.width(50.dp).height(65.dp),
+                modifier = Modifier
+                    .width(50.dp)
+                    .height(65.dp),
                 MutableStateFlow(AppTheme.demo())
             )
         }

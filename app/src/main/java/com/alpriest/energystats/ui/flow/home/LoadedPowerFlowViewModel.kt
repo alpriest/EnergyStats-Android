@@ -14,7 +14,7 @@ data class InverterTemperatures(
     val inverter: Double
 )
 
-class HomePowerFlowViewModel(
+class LoadedPowerFlowViewModel(
     val solar: Double,
     val solarStrings: List<StringPower>,
     val home: Double,
@@ -28,7 +28,8 @@ class HomePowerFlowViewModel(
     val homeTotal: Double,
     val gridImportTotal: Double,
     val gridExportTotal: Double,
-    val ct2: Double
+    val ct2: Double,
+    val deviceState: DeviceState
 ) : ViewModel() {
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
         BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperature, battery.residual)

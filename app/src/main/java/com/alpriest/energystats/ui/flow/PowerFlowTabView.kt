@@ -34,9 +34,10 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.flow.home.DeviceState
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
-import com.alpriest.energystats.ui.flow.home.HomePowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
+import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -128,7 +129,7 @@ class PowerFlowTabView(
 fun LoadedView(
     viewModel: PowerFlowTabViewModel,
     configManager: ConfigManaging,
-    homePowerFlowViewModel: HomePowerFlowViewModel,
+    loadedPowerFlowViewModel: LoadedPowerFlowViewModel,
     themeStream: MutableStateFlow<AppTheme>
 ) {
     Column(
@@ -140,7 +141,7 @@ fun LoadedView(
         LoadedPowerFlowView(
             configManager = configManager,
             powerFlowViewModel = viewModel,
-            homePowerFlowViewModel = homePowerFlowViewModel,
+            loadedPowerFlowViewModel = loadedPowerFlowViewModel,
             themeStream = themeStream
         )
     }
@@ -151,7 +152,7 @@ fun LoadedView(
 fun PowerFlowTabViewPreview() {
     val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo()), LocalContext.current)
 
-    val homePowerFlowViewModel = HomePowerFlowViewModel(
+    val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
         solar = 1.0,
         solarStrings = listOf(
             StringPower("pv1", 0.3),
@@ -169,13 +170,14 @@ fun PowerFlowTabViewPreview() {
         gridImportTotal = 1.0,
         gridExportTotal = 2.0,
         ct2 = 0.4,
+        deviceState = DeviceState.Online
     )
 
     EnergyStatsTheme {
         LoadedView(
             viewModel = viewModel,
             configManager = FakeConfigManager(),
-            homePowerFlowViewModel = homePowerFlowViewModel,
+            loadedPowerFlowViewModel = loadedPowerFlowViewModel,
             themeStream = MutableStateFlow(AppTheme.demo())
         )
     }
@@ -188,7 +190,7 @@ data class UiPowerFlowLoadState(
 sealed class PowerFlowLoadState {
     data class Error(val ex: Exception, val reason: String) : PowerFlowLoadState()
     data class Active(val value: String) : PowerFlowLoadState()
-    data class Loaded(val viewModel: HomePowerFlowViewModel) : PowerFlowLoadState()
+    data class Loaded(val viewModel: LoadedPowerFlowViewModel) : PowerFlowLoadState()
 }
 
 data class UiLoadState(

@@ -62,7 +62,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun LoadedPowerFlowView(
     configManager: ConfigManaging,
     powerFlowViewModel: PowerFlowTabViewModel,
-    homePowerFlowViewModel: HomePowerFlowViewModel = viewModel(),
+    loadedPowerFlowViewModel: LoadedPowerFlowViewModel = viewModel(),
     themeStream: MutableStateFlow<AppTheme>,
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
@@ -76,37 +76,37 @@ fun LoadedPowerFlowView(
             Text(
                 text = stringResource(
                     id = R.string.solarYieldToday,
-                    homePowerFlowViewModel.todaysGeneration.solarToday().energy(theme.displayUnit, theme.decimalPlaces)
+                    loadedPowerFlowViewModel.todaysGeneration.solarToday().energy(theme.displayUnit, theme.decimalPlaces)
                 )
             )
         }
 
         if (theme.showFinancialSummaryOnFlowPage) {
-            EarningsView(themeStream, homePowerFlowViewModel.earnings)
+            EarningsView(themeStream, loadedPowerFlowViewModel.earnings)
         }
 
         Box(contentAlignment = Alignment.Center) {
             if (!theme.shouldCombineCT2WithPVPower) {
-                CT2FlowView(iconHeight, themeStream, homePowerFlowViewModel)
+                CT2FlowView(iconHeight, themeStream, loadedPowerFlowViewModel)
             }
 
             Box(contentAlignment = Alignment.Center) {
                 SolarPowerFlow(
-                    homePowerFlowViewModel.solar,
+                    loadedPowerFlowViewModel.solar,
                     modifier = Modifier
                         .fillMaxHeight(0.4f),
                     iconHeight = iconHeight * 1.1f,
                     themeStream = themeStream
                 )
 
-                if (theme.powerFlowStrings.enabled && homePowerFlowViewModel.solar.isFlowing()) {
+                if (theme.powerFlowStrings.enabled && loadedPowerFlowViewModel.solar.isFlowing()) {
                     Column(
                         modifier = Modifier
                             .offset(y = (-20).dp)
                             .background(Color.LightGray)
                             .padding(2.dp),
                     ) {
-                        homePowerFlowViewModel.solarStrings.forEach {
+                        loadedPowerFlowViewModel.solarStrings.forEach {
                             Row {
                                 Text(
                                     it.displayName(theme.powerFlowStrings),
@@ -128,8 +128,8 @@ fun LoadedPowerFlowView(
 
         Box(modifier = Modifier.weight(1f)) {
             Row {
-                homePowerFlowViewModel.batteryViewModel?.let { model ->
-                    if (homePowerFlowViewModel.hasBattery) {
+                loadedPowerFlowViewModel.batteryViewModel?.let { model ->
+                    if (loadedPowerFlowViewModel.hasBattery) {
                         BatteryPowerFlow(
                             viewModel = model,
                             modifier = Modifier.weight(2f),
@@ -142,27 +142,34 @@ fun LoadedPowerFlowView(
                     }
                 }
                 HomePowerFlowView(
-                    amount = homePowerFlowViewModel.home,
+                    amount = loadedPowerFlowViewModel.home,
                     modifier = Modifier.weight(2f),
                     themeStream = themeStream,
-                    position = if (homePowerFlowViewModel.hasBattery) PowerFlowLinePosition.MIDDLE else PowerFlowLinePosition.LEFT
+                    position = if (loadedPowerFlowViewModel.hasBattery) PowerFlowLinePosition.MIDDLE else PowerFlowLinePosition.LEFT
                 )
                 InverterSpacer(
                     modifier = Modifier.weight(1f),
                     themeStream = themeStream
                 )
                 GridPowerFlowView(
-                    amount = homePowerFlowViewModel.grid,
+                    amount = loadedPowerFlowViewModel.grid,
                     modifier = Modifier.weight(2f),
                     themeStream = themeStream
                 )
             }
 
-            InverterView(themeStream, InverterViewModel(configManager, temperatures = homePowerFlowViewModel.inverterTemperatures))
+            InverterView(
+                themeStream,
+                InverterViewModel(
+                    configManager,
+                    temperatures = loadedPowerFlowViewModel.inverterTemperatures,
+                    loadedPowerFlowViewModel.deviceState
+                )
+            )
         }
 
         Row {
-            homePowerFlowViewModel.batteryViewModel?.let { model ->
+            loadedPowerFlowViewModel.batteryViewModel?.let { model ->
                 BatteryIconView(
                     viewModel = model,
                     themeStream = themeStream,
@@ -178,7 +185,7 @@ fun LoadedPowerFlowView(
             }
 
             HomeIconView(
-                viewModel = homePowerFlowViewModel,
+                viewModel = loadedPowerFlowViewModel,
                 themeStream = themeStream,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -192,7 +199,7 @@ fun LoadedPowerFlowView(
             )
 
             GridIconView(
-                viewModel = homePowerFlowViewModel,
+                viewModel = loadedPowerFlowViewModel,
                 iconHeight = iconHeight,
                 themeStream = themeStream,
                 modifier = Modifier
@@ -209,7 +216,7 @@ fun LoadedPowerFlowView(
 private fun CT2FlowView(
     iconHeight: Dp,
     themeStream: MutableStateFlow<AppTheme>,
-    homePowerFlowViewModel: HomePowerFlowViewModel
+    loadedPowerFlowViewModel: LoadedPowerFlowViewModel
 ) {
     Row {
         Column(
@@ -224,7 +231,7 @@ private fun CT2FlowView(
             )
 
             PowerFlowView(
-                amount = homePowerFlowViewModel.ct2,
+                amount = loadedPowerFlowViewModel.ct2,
                 themeStream = themeStream,
                 position = PowerFlowLinePosition.NONE,
                 orientation = LineOrientation.VERTICAL,
@@ -249,7 +256,7 @@ private fun CT2FlowView(
                 Spacer(modifier = Modifier.height(iconHeight))
 
                 PowerFlowView(
-                    amount = homePowerFlowViewModel.ct2,
+                    amount = loadedPowerFlowViewModel.ct2,
                     themeStream = themeStream,
                     position = PowerFlowLinePosition.NONE,
                     orientation = LineOrientation.HORIZONTAL,
@@ -312,7 +319,7 @@ fun SummaryPowerFlowViewPreview() {
         LoadedPowerFlowView(
             FakeConfigManager(),
             PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)), LocalContext.current),
-            homePowerFlowViewModel = HomePowerFlowViewModel(
+            loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
                 solar = 1.0,
                 solarStrings = listOf(
                     StringPower("PV1", 0.3),
@@ -330,8 +337,16 @@ fun SummaryPowerFlowViewPreview() {
                 gridExportTotal = 2.0,
                 homeTotal = 1.0,
                 ct2 = 0.4,
+                deviceState = DeviceState.Online
             ),
-            themeStream = MutableStateFlow(AppTheme.demo(showInverterTemperatures = true, showHomeTotal = true, decimalPlaces = 3, powerFlowStrings = PowerFlowStringsSettings.defaults)),
+            themeStream = MutableStateFlow(
+                AppTheme.demo(
+                    showInverterTemperatures = true,
+                    showHomeTotal = true,
+                    decimalPlaces = 3,
+                    powerFlowStrings = PowerFlowStringsSettings.defaults
+                )
+            ),
         )
     }
 }
