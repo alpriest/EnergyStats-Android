@@ -71,4 +71,5 @@ interface ConfigManaging {
     var useTraditionalLoadFormula: Boolean
     var powerFlowStrings: PowerFlowStringsSettings
     var powerStationDetail: PowerStationDetail?
+    var showBatteryTimeEstimateOnWidget: Boolean
 }

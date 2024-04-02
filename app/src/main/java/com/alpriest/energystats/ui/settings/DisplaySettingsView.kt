@@ -21,6 +21,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
+    val showBatteryTimeEstimateOnWidgetState = rememberSaveable { mutableStateOf(config.showBatteryTimeEstimateOnWidget) }
     val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
     val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
@@ -147,6 +148,13 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         Divider()
 
         SolarStringsSettingsView(config, modifier)
+        Divider()
+
+        SettingsCheckbox(
+            title = "Show battery estimate on widget",
+            state = showBatteryTimeEstimateOnWidgetState,
+            onUpdate = { config.showBatteryTimeEstimateOnWidget = it }
+        )
         Divider()
 
         InlineSettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }

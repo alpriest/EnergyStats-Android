@@ -2,14 +2,11 @@ package com.alpriest.energystats.ui.flow
 
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
+import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
-import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Locale
 import kotlin.math.abs
 
 data class StringPower(val name: String, val amount: Double) {
@@ -48,7 +45,7 @@ class CurrentStatusCalculator(
         currentGrid = status.feedinPower - status.gridConsumptionPower
         currentHomeConsumption = if (config.useTraditionalLoadFormula) calculateLoadsPower(status) else loadsPower(status, config.shouldCombineCT2WithLoadsPower)
         currentTemperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
-        lastUpdate = convertToTime(item = status.lastUpdate)
+        lastUpdate = parseToLocalDate(status.lastUpdate)
         currentCT2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
         currentSolarPower = calculateSolarPower(status.hasPV, status, config.shouldCombineCT2WithPVPower)
         currentSolarStringsPower = calculateSolarStringsPower(status.hasPV, status)
@@ -78,11 +75,6 @@ class CurrentStatusCalculator(
             hasPV = hasPV,
             lastUpdate = response.time
         )
-    }
-
-    private fun convertToTime(item: String): LocalDateTime {
-        val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(item)
-        return simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
     }
 
     private fun calculateSolarPower(hasPV: Boolean, status: CurrentRawValues, shouldCombineCT2WithPVPower: Boolean): Double {

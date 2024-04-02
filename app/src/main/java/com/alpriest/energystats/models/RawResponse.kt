@@ -52,7 +52,7 @@ data class QueryDate(val year: Int, val month: Int?, val day: Int?) {
 }
 
 fun QueryDate.toUtcMillis(): Long {
-    val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+    val calendar = Calendar.getInstance(TimeZone.getDefault()).apply {
         set(Calendar.YEAR, year)
         // Adjust month to 0-based index used by Calendar
         set(Calendar.MONTH, (month ?: 1) - 1)

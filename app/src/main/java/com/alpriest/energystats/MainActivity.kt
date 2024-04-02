@@ -8,8 +8,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,4 +44,9 @@ class MainActivity : ComponentActivity() {
             PreHomeView(appContainer = appContainer, viewModel = preHomeViewModel)
         }
     }
+}
+
+fun parseToLocalDate(input: String): LocalDateTime {
+    val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(input)
+    return simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 }

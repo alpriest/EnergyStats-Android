@@ -42,8 +42,10 @@ class LatestDataRepository private constructor() {
             val minSOC = device.battery?.minSOC?.toDouble() ?: 0.0
             val calculator = BatteryCapacityCalculator(appContainer.configManager.batteryCapacity, minSOC)
             val battery = BatteryViewModel.make(device, real)
-            calculator.batteryPercentageRemaining(battery.chargePower, battery.chargeLevel)?.let {
-                chargeDescription = duration(context, it)
+            if (appContainer.config.showBatteryTimeEstimateOnWidget) {
+                calculator.batteryPercentageRemaining(battery.chargePower, battery.chargeLevel)?.let {
+                    chargeDescription = duration(context, it)
+                }
             }
             batteryPercentage = battery.chargeLevel.toFloat()
             hasBattery = true

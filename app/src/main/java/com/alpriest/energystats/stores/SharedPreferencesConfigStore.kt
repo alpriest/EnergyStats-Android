@@ -62,7 +62,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_BATTERY_SOC_AS_PERCENTAGE,
         USE_TRADITIONAL_LOAD_FORMULA,
         POWER_FLOW_STRINGS,
-        POWER_STATION_DETAIL
+        POWER_STATION_DETAIL,
+        SHOW_ESTIMATED_TIME_ON_WIDGET
     }
 
     override fun clearDisplaySettings() {
@@ -488,6 +489,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             val editor = sharedPreferences.edit()
             val jsonString = Gson().toJson(value)
             editor.putString(SharedPreferenceDisplayKey.VARIABLES.name, jsonString)
+            editor.apply()
+        }
+
+    override var showBatteryTimeEstimateOnWidget: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_ESTIMATED_TIME_ON_WIDGET.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.SHOW_ESTIMATED_TIME_ON_WIDGET.name, value)
             editor.apply()
         }
 }

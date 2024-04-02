@@ -24,6 +24,10 @@ import kotlinx.coroutines.launch
 open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
     ConfigManaging {
 
+    override var showBatteryTimeEstimateOnWidget: Boolean
+        get() = config.showBatteryTimeEstimateOnWidget
+        set(value) { config.showBatteryTimeEstimateOnWidget = value }
+
     override var useTraditionalLoadFormula: Boolean
         get() = config.useTraditionalLoadFormula
         set(value) { config.useTraditionalLoadFormula = value }

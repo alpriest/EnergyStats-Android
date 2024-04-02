@@ -6,6 +6,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var showBatteryTimeEstimateOnWidget: Boolean
     var powerStationDetail: PowerStationDetail?
     var shouldCombineCT2WithLoadsPower: Boolean
     var showBatterySOCAsPercentage: Boolean

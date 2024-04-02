@@ -67,7 +67,8 @@ class FakeConfigManager : ConfigManaging {
     override var useTraditionalLoadFormula: Boolean = false
     override var powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults
     override var powerStationDetail: PowerStationDetail? = null
-    
+    override var showBatteryTimeEstimateOnWidget: Boolean = true
+
     override var devices: List<Device>? = listOf(
         Device(
             deviceSN = "123123",

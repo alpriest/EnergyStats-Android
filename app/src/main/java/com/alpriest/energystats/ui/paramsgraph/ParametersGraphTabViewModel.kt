@@ -11,24 +11,21 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.toUtcMillis
+import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.OutputStream
-import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Locale
 import java.util.concurrent.CancellationException
 
 interface ExportProviding {
@@ -126,8 +123,7 @@ class ParametersGraphTabViewModel(
                 val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
 
                 response.data.mapIndexed { index, item ->
-                    val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(item.time)
-                    val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                    val localDateTime = parseToLocalDate(item.time)
 
                     return@mapIndexed ParametersGraphValue(
                         graphPoint = index,

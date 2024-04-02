@@ -208,7 +208,7 @@ fun ParameterGraphView(
 class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
         return (chartValues.chartEntryModel.entries.first().firstOrNull { it.x == value } as? DateTimeFloatEntry)
-            ?.localDateTime
+            ?.localDateTime?.toLocalTime()
             ?.run {
                 String.format("%d:%02d", hour, minute)
             }
