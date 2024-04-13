@@ -23,78 +23,80 @@ fun DataSettingsView(config: ConfigManaging) {
     val useTraditionalLoadFormulaState = rememberSaveable { mutableStateOf(config.useTraditionalLoadFormula) }
     val context = LocalContext.current
 
-    SettingsColumn(
-        header = "Data"
-    ) {
-        SettingsSegmentedControl(
-            title = stringResource(R.string.units),
-            segmentedControl = {
-                val items = listOf(
-                    DisplayUnit.Watts,
-                    DisplayUnit.Kilowatts,
-                    DisplayUnit.Adaptive
-                )
-                SegmentedControl(
-                    items = items.map { it.title(context) },
-                    defaultSelectedItemIndex = items.indexOf(displayUnitState.value),
-                    color = MaterialTheme.colors.primary
-                ) {
-                    displayUnitState.value = items[it]
-                    config.displayUnit = items[it]
-                }
-            },
-            footer = buildAnnotatedString {
-                when (displayUnitState.value) {
-                    DisplayUnit.Kilowatts -> append(
-                        stringResource(
-                            R.string.display_unit_kilowatts_description,
-                            3.456.kW(config.decimalPlaces),
-                            0.123.kW(config.decimalPlaces)
-                        )
+    SettingsPage {
+        SettingsColumn(
+            header = "Data"
+        ) {
+            SettingsSegmentedControl(
+                title = stringResource(R.string.units),
+                segmentedControl = {
+                    val items = listOf(
+                        DisplayUnit.Watts,
+                        DisplayUnit.Kilowatts,
+                        DisplayUnit.Adaptive
                     )
+                    SegmentedControl(
+                        items = items.map { it.title(context) },
+                        defaultSelectedItemIndex = items.indexOf(displayUnitState.value),
+                        color = MaterialTheme.colors.primary
+                    ) {
+                        displayUnitState.value = items[it]
+                        config.displayUnit = items[it]
+                    }
+                },
+                footer = buildAnnotatedString {
+                    when (displayUnitState.value) {
+                        DisplayUnit.Kilowatts -> append(
+                            stringResource(
+                                R.string.display_unit_kilowatts_description,
+                                3.456.kW(config.decimalPlaces),
+                                0.123.kW(config.decimalPlaces)
+                            )
+                        )
 
-                    DisplayUnit.Watts -> append(stringResource(R.string.display_unit_watts_description, 3.456.w(), 0.123.w()))
-                    DisplayUnit.Adaptive -> append(stringResource(R.string.display_unit_adaptive_description, 3.456.kW(config.decimalPlaces), 0.123.w()))
+                        DisplayUnit.Watts -> append(stringResource(R.string.display_unit_watts_description, 3.456.w(), 0.123.w()))
+                        DisplayUnit.Adaptive -> append(stringResource(R.string.display_unit_adaptive_description, 3.456.kW(config.decimalPlaces), 0.123.w()))
+                    }
                 }
-            }
-        )
-    }
+            )
+        }
 
-    SettingsColumn {
-        SettingsSegmentedControl(
-            title = stringResource(R.string.data_ceiling),
-            segmentedControl = {
-                val items = listOf(DataCeiling.None, DataCeiling.Mild, DataCeiling.Enhanced)
-                SegmentedControl(
-                    items = items.map { it.title(context) },
-                    defaultSelectedItemIndex = items.indexOf(dataCeilingState.value),
-                    color = MaterialTheme.colors.primary
-                ) {
-                    dataCeilingState.value = items[it]
-                    config.dataCeiling = items[it]
+        SettingsColumn {
+            SettingsSegmentedControl(
+                title = stringResource(R.string.data_ceiling),
+                segmentedControl = {
+                    val items = listOf(DataCeiling.None, DataCeiling.Mild, DataCeiling.Enhanced)
+                    SegmentedControl(
+                        items = items.map { it.title(context) },
+                        defaultSelectedItemIndex = items.indexOf(dataCeilingState.value),
+                        color = MaterialTheme.colors.primary
+                    ) {
+                        dataCeilingState.value = items[it]
+                        config.dataCeiling = items[it]
+                    }
+                },
+                footer = buildAnnotatedString {
+                    when (dataCeilingState.value) {
+                        DataCeiling.None -> append(stringResource(R.string.data_ceiling_none_description))
+                        DataCeiling.Mild -> append(stringResource(R.string.data_ceiling_mild_description))
+                        DataCeiling.Enhanced -> append(stringResource(R.string.data_ceiling_enhanced_description))
+                    }
                 }
-            },
-            footer = buildAnnotatedString {
-                when (dataCeilingState.value) {
-                    DataCeiling.None -> append(stringResource(R.string.data_ceiling_none_description))
-                    DataCeiling.Mild -> append(stringResource(R.string.data_ceiling_mild_description))
-                    DataCeiling.Enhanced -> append(stringResource(R.string.data_ceiling_enhanced_description))
+            )
+        }
+
+        RefreshFrequencySettingsView(config)
+
+        SettingsColumn {
+            SettingsCheckbox(
+                title = "Use traditional load formula",
+                state = useTraditionalLoadFormulaState,
+                onUpdate = { config.useTraditionalLoadFormula = !it },
+                footer = buildAnnotatedString {
+                    append("Uses the FoxESS loads value to show load which doesn't handle +ve/-ve CT2 very well. Changes only take effect on next data fetch.")
                 }
-            }
-        )
-    }
-
-    RefreshFrequencySettingsView(config)
-
-    SettingsColumn {
-        SettingsCheckbox(
-            title = "Use traditional load formula",
-            state = useTraditionalLoadFormulaState,
-            onUpdate = { config.useTraditionalLoadFormula = !it },
-            footer = buildAnnotatedString {
-                append("Uses the FoxESS loads value to show load which doesn't handle +ve/-ve CT2 very well. Changes only take effect on next data fetch.")
-            }
-        )
+            )
+        }
     }
 }
 
