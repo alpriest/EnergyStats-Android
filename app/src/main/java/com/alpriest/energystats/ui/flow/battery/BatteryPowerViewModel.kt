@@ -38,4 +38,7 @@ class BatteryPowerViewModel(
     fun setBatteryAsPercentage(value: Boolean) {
         configManager.showBatteryAsPercentage = value
     }
+
+    val showUsableBatteryOnly: Boolean
+        get() { return configManager.showUsableBatteryOnly }
 }

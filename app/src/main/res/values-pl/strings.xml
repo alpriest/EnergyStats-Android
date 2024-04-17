@@ -26,7 +26,7 @@
     <string name="show_battery_temperature">Pokaż temperaturę baterii</string>
     <string name="show_battery_full_empty_estimate">Pokaż oszacowanie pełny/pusty stan baterii</string>
     <string name="show_usable_battery_only">Pokaż tylko użyteczną baterię</string>
-    <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Odejmuje ilość Min SOC od poziomu naładowania baterii i procentu. Ze względu na niedokładności w pomiarze poziomu baterii może czasami pokazywać ujemny pozostały stan.</string>
+    <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Odejmuje ilość Min SOC od poziomu naładowania baterii i procentu. Ze względu na niedokładności w pomiarze poziomu baterii może czasami pokazywać ujemny pozostały stan. Gwiazdka * będzie wyświetlana, gdy ta opcja będzie zaznaczona.</string>
     <string name="show_sunny_background">Pokaż słoneczne tło</string>
     <string name="refresh_frequency">Częstotliwość odświeżania</string>
     <string name="_1_min">1m</string>

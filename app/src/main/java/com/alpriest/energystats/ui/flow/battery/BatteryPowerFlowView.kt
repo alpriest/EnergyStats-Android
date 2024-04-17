@@ -118,7 +118,7 @@ fun BatteryIconView(
         if (showBatteryEstimate) {
             viewModel.batteryExtra?.let {
                 Text(
-                    duration(estimate = it),
+                    duration(estimate = it) + (if (viewModel.showUsableBatteryOnly) "*" else ""),
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     color = Color.Gray,
@@ -143,13 +143,13 @@ private fun BatteryStateOfChargeView(
         Row {
             if (percentage) {
                 Text(
-                    viewModel.batteryStateOfCharge().asPercent(),
+                    viewModel.batteryStateOfCharge().asPercent()+ (if (viewModel.showUsableBatteryOnly) "*" else ""),
                     fontSize = fontSize,
                     fontWeight = FontWeight.Bold
                 )
             } else {
                 Text(
-                    viewModel.batteryStoredChargekWh().kWh(decimalPlaces),
+                    viewModel.batteryStoredChargekWh().kWh(decimalPlaces)+ (if (viewModel.showUsableBatteryOnly) "*" else ""),
                     fontSize = fontSize,
                     fontWeight = FontWeight.Bold
                 )
@@ -178,15 +178,19 @@ fun duration(estimate: BatteryCapacityEstimate): String {
     }
 }
 
-@Preview(showBackground = true, widthDp = 800, heightDp = 300)
+@Preview(showBackground = true, widthDp = 300, heightDp = 300)
+@Preview(name = "Dark Mode", showBackground = true, widthDp = 300, heightDp = 300, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BatteryPowerFlowViewPreview() {
+    val configManager = FakeConfigManager()
+    configManager.showUsableBatteryOnly = true
+
     EnergyStatsTheme {
         BatteryIconView(
             viewModel = BatteryPowerViewModel(
-                FakeConfigManager(),
+                configManager,
                 actualStateOfCharge = 0.25,
-                chargePowerkWH = -0.5,
+                chargePowerkWH = 0.5,
                 temperature = 13.6,
                 residual = 5678
             ),

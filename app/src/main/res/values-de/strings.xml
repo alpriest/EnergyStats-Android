@@ -26,7 +26,7 @@
     <string name="show_battery_temperature">Zeige die Batterie-Temperatur</string>
     <string name="show_battery_full_empty_estimate">Zeige die Schätzung für Batterie voll/leer</string>
     <string name="show_usable_battery_only">Zeige nur die verwendbare Batteriekapazität</string>
-    <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">\'Zeige nur die verwendbare Batteriekapazität\' leitet den minimalen SOC vom Batterieladezustand und -prozentsatz ab. Aufgrund von Ungenauigkeiten in der Art und Weise, wie der Batterieladezustand gemessen wird, kann dies manchmal zur Anzeige von einer negativen verbleibenden Restladung führen.</string>
+    <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">\'Zeige nur die verwendbare Batteriekapazität\' leitet den minimalen SOC vom Batterieladezustand und -prozentsatz ab. Aufgrund von Ungenauigkeiten in der Art und Weise, wie der Batterieladezustand gemessen wird, kann dies manchmal zur Anzeige von einer negativen verbleibenden Restladung führen. Ein * wird angezeigt, wenn diese Option ausgewählt ist.</string>
     <string name="show_sunny_background">Zeige den Sonnenschein-Hintergrund</string>
     <string name="refresh_frequency">Aktualisierungshäufigkeit</string>
     <string name="_1_min">1m</string>
