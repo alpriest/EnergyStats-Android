@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -58,28 +57,22 @@ fun FirmwareVersionView(device: Device, network: Networking) {
     var firmware: DeviceFirmwareVersion? by remember { mutableStateOf(null) }
 
     LaunchedEffect(null) {
-        var response = network.fetchDevice(device.deviceSN)
+        val response = network.fetchDevice(device.deviceSN)
         firmware = DeviceFirmwareVersion(manager = response.managerVersion, slave = response.slaveVersion, master = response.masterVersion)
     }
 
     firmware?.let {
         SettingsColumn(
             header = stringResource(R.string.firmware_versions),
+            footer = stringResource(R.string.find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website),
+            footerModifier = Modifier
+                .clickable {
+                    uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
+                }
         ) {
             SettingsRow("Manager", it.manager)
             SettingsRow("Slave", it.slave)
             SettingsRow("Master", it.master)
-
-            Text(
-                text = stringResource(R.string.find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website),
-                color = colors.onSecondary,
-                style = MaterialTheme.typography.caption,
-                modifier = Modifier
-                    .clickable {
-                        uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
-                    }
-                    .padding(top = 12.dp)
-            )
         }
     }
 }

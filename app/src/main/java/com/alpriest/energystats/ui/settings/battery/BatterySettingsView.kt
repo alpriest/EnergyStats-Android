@@ -81,7 +81,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp),
+                    .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
@@ -160,7 +160,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     }
                 },
                 color = colors.onSecondary,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(vertical = 8.dp)
             )
 
             Divider()

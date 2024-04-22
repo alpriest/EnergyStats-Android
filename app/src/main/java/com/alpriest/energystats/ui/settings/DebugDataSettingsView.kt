@@ -43,36 +43,39 @@ fun NavGraphBuilder.debugGraph(
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") { DebugDataSettingsView(navController) }
-        composable("raw") { ResponseDebugView(networkStore, mapper = { networkStore.rawResponseStream }, fetcher = null) }
-        composable("report") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
-//        composable("battery") {
-//            ResponseDebugView(networkStore, mapper = { networkStore.batteryResponseStream }, fetcher = {
-//                configManager.currentDevice.value?.deviceSN?.let {
-//                    network.fetchBattery(it)
-//                }
-//            })
-//        }
-//        composable("batteryTimes") {
-//            ResponseDebugView(networkStore, mapper = { networkStore.batteryTimesResponseStream }, fetcher = {
-//                configManager.currentDevice.value?.deviceSN?.let {
-//                    network.fetchBatteryTimes(it)
-//                }
-//            })
-//        }
-        composable("deviceList") {
+
+        composable("debugReport") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
+        composable("debugQuery") { ResponseDebugView(networkStore, mapper = { networkStore.queryResponseStream }, fetcher = null) }
+        composable("debugDeviceList") {
             ResponseDebugView(networkStore, mapper = { networkStore.deviceListResponseStream }, fetcher = {
                 network.fetchDeviceList()
             })
         }
-//        composable("deviceSettings") {
-//            ResponseDebugView(networkStore, mapper = { networkStore.deviceSettingsGetResponse }, fetcher = null)
-//        }
-//        composable("dataLoggers") {
-//            ResponseDebugView(networkStore, mapper = { networkStore.dataLoggerListResponse }, fetcher = {
-//                network.fetchDataLoggers()
-//            })
-//        }
-        composable("networkTrace") {
+        composable("debugVariables") {
+            ResponseDebugView(networkStore, mapper = { networkStore.variablesResponseStream }, fetcher = {
+                network.fetchVariables()
+            })
+        }
+        composable("debugBatterySOC") {
+            ResponseDebugView(networkStore, mapper = { networkStore.batterySOCResponseStream }, fetcher = {
+                configManager.currentDevice.value?.deviceSN?.let {
+                    network.fetchBatterySettings(it)
+                }
+            })
+        }
+        composable("debugBatteryTimes") {
+            ResponseDebugView(networkStore, mapper = { networkStore.batteryTimesResponseStream }, fetcher = {
+                configManager.currentDevice.value?.deviceSN?.let {
+                    network.fetchBatteryTimes(it)
+                }
+            })
+        }
+        composable("debugDataLoggers") {
+            ResponseDebugView(networkStore, mapper = { networkStore.dataLoggerListResponse }, fetcher = {
+                network.fetchDataLoggers()
+            })
+        }
+        composable("debugNetworkTrace") {
             NetworkTraceDebugView(configManager, credentialStore)
         }
     }
@@ -83,44 +86,35 @@ fun DebugDataSettingsView(navController: NavController) {
     SettingsColumnWithChild {
         SettingsTitleView("Debug")
 
-        Button(onClick = { navController.navigate("raw") }) {
-            Text("Raw")
+        Button(onClick = { navController.navigate("debugReport") }) {
+            Text("device/report/Query")
         }
 
-        Button(onClick = { navController.navigate("report") }) {
-            Text("Report")
+        Button(onClick = { navController.navigate("debugQuery") }) {
+            Text("device/real/Query")
         }
 
-        Button(onClick = { navController.navigate("battery") }) {
-            Text("Battery")
+        Button(onClick = { navController.navigate("debugDeviceList") }) {
+            Text("device/list")
         }
 
-
-        Button(onClick = { navController.navigate("batteryTimes") }) {
-            Text("Battery Charge Schedule")
+        Button(onClick = { navController.navigate("debugVariables") }) {
+            Text("device/variable/get")
         }
 
-        Button(onClick = { navController.navigate("deviceList") }) {
-            Text("Device List")
+        Button(onClick = { navController.navigate("debugBatterySOC") }) {
+            Text("device/battery/soc/get")
         }
 
-        Button(onClick = { navController.navigate("addressBook") }) {
-            Text("Address Book")
+        Button(onClick = { navController.navigate("debugBatteryTimes") }) {
+            Text("device/battery/forceChargeTime/get")
         }
 
-        Button(onClick = { navController.navigate("earnings") }) {
-            Text("Earnings")
-        }
-
-        Button(onClick = { navController.navigate("deviceSettings") }) {
-            Text("Device Settings")
-        }
-
-        Button(onClick = { navController.navigate("dataLoggers") }) {
+        Button(onClick = { navController.navigate("debugDataLoggers") }) {
             Text("Dataloggers")
         }
 
-        Button(onClick = { navController.navigate("networkTrace") }) {
+        Button(onClick = { navController.navigate("debugNetworkTrace") }) {
             Text("Network trace")
         }
     }
@@ -200,12 +194,11 @@ fun DebugDataSettingsViewPreview() {
             startDestination = "debug"
         ) {
             composable("debug") { DebugDataSettingsView(navController) }
-            composable("raw") { ResponseDebugView(networkStore, { networkStore.rawResponseStream }, null) }
-            composable("report") { ResponseDebugView(networkStore, { networkStore.reportResponseStream }, null) }
-            composable("battery") { ResponseDebugView(networkStore, { networkStore.batteryResponseStream }, null) }
-            composable("batterySettings") { ResponseDebugView(networkStore, { networkStore.batterySOCResponseStream }, null) }
-            composable("deviceList") { ResponseDebugView(networkStore, { networkStore.deviceListResponseStream }, null) }
-            composable("addressBook") { ResponseDebugView(networkStore, { networkStore.addressBookResponseStream }, null) }
+            composable("debugQuery") { ResponseDebugView(networkStore, { networkStore.queryResponseStream }, null) }
+            composable("debugReport") { ResponseDebugView(networkStore, { networkStore.reportResponseStream }, null) }
+            composable("debugBatterySOC") { ResponseDebugView(networkStore, { networkStore.batterySOCResponseStream }, null) }
+            composable("debugBatteryTimes") { ResponseDebugView(networkStore, { networkStore.batteryTimesResponseStream }, null) }
+            composable("debugDeviceList") { ResponseDebugView(networkStore, { networkStore.deviceListResponseStream }, null) }
         }
     }
 }

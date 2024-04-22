@@ -50,6 +50,7 @@ fun SettingsColumn(
     modifier: Modifier = Modifier,
     header: String? = null,
     footer: String? = null,
+    footerModifier: Modifier = Modifier,
     error: String? = null,
     padding: PaddingValues = PaddingValues(horizontal = 10.dp),
     content: @Composable () -> Unit,
@@ -65,6 +66,7 @@ fun SettingsColumn(
             }
         },
         footer = footer,
+        footerModifier = footerModifier,
         error = error,
         padding = padding,
         content = content
@@ -76,6 +78,7 @@ fun SettingsColumnWithChild(
     modifier: Modifier = Modifier,
     header: @Composable (() -> Unit)? = null,
     footer: String? = null,
+    footerModifier: Modifier = Modifier,
     error: String? = null,
     padding: PaddingValues = PaddingValues(horizontal = 10.dp),
     content: @Composable () -> Unit,
@@ -97,7 +100,7 @@ fun SettingsColumnWithChild(
                         it,
                         style = MaterialTheme.typography.caption,
                         color = colors.onSecondary,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = footerModifier.padding(bottom = 8.dp)
                     )
                 }
 

@@ -245,9 +245,9 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
             .build()
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
-        store.deviceListResponseStream.value = NetworkOperation(description = "fetchDeviceList", value = response.item, raw = response.text, request)
-        return response.item.result?.data ?: throw MissingDataException()
+        val result: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
+        store.deviceListResponseStream.value = NetworkOperation(description = "fetchDeviceList", value = result.item, raw = result.text, request)
+        return result.item.result?.data ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
@@ -261,6 +261,7 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<List<OpenQueryResponse>>>() {}.type
         val result: NetworkTuple<NetworkResponse<List<OpenQueryResponse>>> = fetch(request, type)
+        store.queryResponseStream.value = NetworkOperation(description = "fetchRealData", value = result.item, raw = result.text, request)
 
         return result.item.result?.let { list ->
             list.firstOrNull { it.deviceSN == deviceSN }
@@ -294,9 +295,10 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
             .build()
 
         val type = object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type
-        val result: NetworkTuple<NetworkResponse<List<OpenReportResponse>>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<List<OpenReportResponse>>> = fetch(request, type)
+        store.reportResponseStream.value = NetworkOperation("fetchReport", response.item, response.text, request)
 
-        return result.item.result ?: throw MissingDataException()
+        return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
@@ -304,6 +306,7 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<BatterySOCResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatterySOCResponse>> = fetch(request, type)
+        store.batterySOCResponseStream.value = NetworkOperation("fetchBatterySettings", response.item, response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
