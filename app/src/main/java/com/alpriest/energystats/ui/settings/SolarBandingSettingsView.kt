@@ -113,7 +113,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             threshold2 = threshold2.floatValue.toDouble(),
             threshold3 = threshold3.floatValue.toDouble()
         )
-        Toast.makeText(context, "Thresholds were saved", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, context.getString(R.string.thresholds_were_saved), Toast.LENGTH_LONG).show()
     }, { modifier ->
         SettingsPage(modifier) {
             ThresholdView(
@@ -132,9 +132,10 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                 description = stringResource(R.string.between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing)
             )
 
-            SettingsColumnWithChild {
-                SettingsTitleView("Example")
-
+            SettingsColumn(
+                header = stringResource(R.string.example),
+                padding = SettingsPaddingValues.withVertical()
+            ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     SolarPowerFlow(
                         amount = amount.value.toDouble(),
@@ -160,7 +161,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                 }
 
                 Text(
-                    "Drag the slider above to see how your solar flow will display when generating different levels of power.",
+                    stringResource(R.string.drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power),
                     color = colors.onSecondary,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
