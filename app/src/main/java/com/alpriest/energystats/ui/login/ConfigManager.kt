@@ -323,7 +323,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                 val deviceBattery: Battery? = if (networkDevice.hasBattery) {
                     try {
                         method = "openapi_fetchRealData"
-                        val batteryVariables = networking.fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC"))
+                        val batteryVariables = networking.fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC", "SoC_1"))
                         method = "openapi_fetchBatterySOC"
                         val batterySettings = networking.fetchBatterySettings(networkDevice.deviceSN)
 

@@ -30,6 +30,7 @@ class LatestDataRepository private constructor() {
                 "batChargePower",
                 "batDischargePower",
                 "SoC",
+                "SoC_1",
                 "batTemperature",
                 "ResidualEnergy"
             )

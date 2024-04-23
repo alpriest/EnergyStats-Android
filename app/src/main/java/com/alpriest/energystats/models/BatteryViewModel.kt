@@ -1,5 +1,6 @@
 package com.alpriest.energystats.models
 
+import com.alpriest.energystats.ui.flow.SoC
 import com.alpriest.energystats.ui.flow.currentValue
 
 data class BatteryViewModel(
@@ -35,7 +36,7 @@ data class BatteryViewModel(
 
                 BatteryViewModel(
                     power = power,
-                    soc = real.datas.currentValue("SoC").toInt(),
+                    soc = real.datas.SoC().toInt(),
                     residual = real.datas.currentValue("ResidualEnergy") * 10.0,
                     temperature = real.datas.currentValue("batTemperature")
                 )

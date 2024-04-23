@@ -140,6 +140,7 @@ class PowerFlowTabViewModel(
             "batChargePower",
             "batDischargePower",
             "SoC",
+            "SoC_1",
             "batTemperature",
             "ResidualEnergy",
             "epsPower"

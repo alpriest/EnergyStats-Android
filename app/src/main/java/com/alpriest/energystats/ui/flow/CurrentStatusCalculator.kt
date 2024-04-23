@@ -120,3 +120,7 @@ fun List<OpenQueryResponseData>.currentValue(forKey: String): Double {
 fun List<OpenQueryResponseData>.currentData(forKey: String): OpenQueryResponseData? {
     return firstOrNull { it.variable.lowercase() == forKey.lowercase() }
 }
+
+fun List<OpenQueryResponseData>.SoC(): Double {
+    return currentData("SoC")?.value ?: currentData("SoC_1")?.value ?: 0.0
+}
