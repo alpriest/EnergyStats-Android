@@ -45,6 +45,28 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.dialog.AlertDialog
 
+class SettingsPaddingValues {
+    companion object {
+        fun default(): PaddingValues {
+            return PaddingValues(
+                start = 10.dp,
+                end = 10.dp,
+                top = 0.dp,
+                bottom = 0.dp
+            )
+        }
+
+        fun withVertical(): PaddingValues {
+            return PaddingValues(
+                start = 10.dp,
+                end = 10.dp,
+                top = 10.dp,
+                bottom = 10.dp
+            )
+        }
+    }
+}
+
 @Composable
 fun SettingsColumn(
     modifier: Modifier = Modifier,
@@ -52,7 +74,7 @@ fun SettingsColumn(
     footer: String? = null,
     footerModifier: Modifier = Modifier,
     error: String? = null,
-    padding: PaddingValues = PaddingValues(horizontal = 10.dp),
+    padding: PaddingValues = SettingsPaddingValues.default(),
     content: @Composable () -> Unit,
 ) {
     SettingsColumnWithChild(
@@ -61,7 +83,9 @@ fun SettingsColumn(
             header?.let {
                 SettingsTitleView(
                     it,
-                    modifier = Modifier.padding(PaddingValues(top = 10.dp, start = 22.dp, end = 10.dp, bottom = 8.dp)).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(PaddingValues(top = 10.dp, start = 22.dp, end = 10.dp, bottom = 8.dp))
+                        .fillMaxWidth()
                 )
             }
         },
@@ -80,7 +104,7 @@ fun SettingsColumnWithChild(
     footer: String? = null,
     footerModifier: Modifier = Modifier,
     error: String? = null,
-    padding: PaddingValues = PaddingValues(horizontal = 10.dp),
+    padding: PaddingValues = SettingsPaddingValues.default(),
     content: @Composable () -> Unit,
 ) {
     Column(modifier = modifier) {

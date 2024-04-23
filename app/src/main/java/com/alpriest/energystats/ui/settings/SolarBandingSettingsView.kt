@@ -39,9 +39,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, description: String) {
     val value = mutableStateValue.value
 
-    SettingsColumnWithChild {
-        SettingsTitleView(title)
-
+    SettingsColumn(
+        padding = SettingsPaddingValues.withVertical(),
+        header = title
+    ) {
         Row {
             Slider(
                 value = value,

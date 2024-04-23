@@ -36,8 +36,10 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
+import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -69,7 +71,7 @@ class ScheduleSummaryView(
                     schedule?.let { Loaded(it, viewModel) }
                 } else {
                     SettingsPage {
-                        SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
+                        SettingsColumnWithChild(padding = SettingsPaddingValues.withVertical()) {
                             SettingsTitleView(stringResource(R.string.unsupported))
                             Text(
                                 supportedError,
@@ -90,7 +92,7 @@ class ScheduleSummaryView(
         val schedulerEnabledState = rememberSaveable { mutableStateOf(schedulerEnabled) }
 
         SettingsPage {
-            SettingsColumnWithChild {
+            SettingsColumn {
                 SettingsCheckbox(
                     title = stringResource(R.string.enable_scheduler),
                     state = schedulerEnabledState,
@@ -100,8 +102,10 @@ class ScheduleSummaryView(
                 )
             }
 
-            SettingsColumnWithChild(padding = PaddingValues(start = 10.dp, top = 10.dp, bottom = 10.dp)) {
-                SettingsTitleView(stringResource(R.string.schedule))
+            SettingsColumn(
+                padding = SettingsPaddingValues.withVertical(),
+                header = stringResource(R.string.schedule)
+            ) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (schedule.phases.isEmpty()) {
