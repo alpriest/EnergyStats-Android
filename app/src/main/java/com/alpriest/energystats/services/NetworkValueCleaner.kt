@@ -40,7 +40,8 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
                 OpenQueryResponseData(
                     it.unit,
                     it.variable,
-                    it.value.capped(themeStream.value.dataCeiling)
+                    it.value?.capped(themeStream.value.dataCeiling),
+                    it.valueString
                 )
             }
         )

@@ -20,6 +20,7 @@ import com.alpriest.energystats.models.OpenHistoryRequest
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryRequest
 import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenQueryResponseDeserializer
 import com.alpriest.energystats.models.OpenReportRequest
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseDeserializer
@@ -488,6 +489,7 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
                             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
                             .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
+                            .registerTypeAdapter(OpenQueryResponse::class.java, OpenQueryResponseDeserializer())
                             .create()
                         val body: T = builder.fromJson(text, type)
                         val result: Result<T> = check(body)

@@ -15,6 +15,7 @@ import com.alpriest.energystats.models.OpenApiVariableDeserializer
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
+import com.alpriest.energystats.models.OpenQueryResponseDeserializer
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedPowerStationListResponse
@@ -73,14 +74,14 @@ class DemoAPI : FoxAPIServicing {
             time = LocalDateTime.now().toString().replace("T", " "),
             deviceSN = deviceSN,
             datas = listOf(
-                OpenQueryResponseData(unit = "kW", variable = "feedinPower", value = 0.0),
-                OpenQueryResponseData(unit = "kW", variable = "gridConsumptionPower", value = 2.634),
-                OpenQueryResponseData(unit = "kW", variable = "loadsPower", value = 2.708),
-                OpenQueryResponseData(unit = "kW", variable = "generationPower", value = 0.071),
-                OpenQueryResponseData(unit = "kW", variable = "pvPower", value = 0.111),
-                OpenQueryResponseData(unit = "kW", variable = "meterPower2", value = 0.0),
-                OpenQueryResponseData(unit = "℃", variable = "ambientTemperation", value = 32.5),
-                OpenQueryResponseData(unit = "℃", variable = "invTemperation", value = 23.2)
+                OpenQueryResponseData(unit = "kW", variable = "feedinPower", value = 0.0, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "gridConsumptionPower", value = 2.634, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "loadsPower", value = 2.708, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "generationPower", value = 0.071, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "pvPower", value = 0.111, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "meterPower2", value = 0.0, valueString = null),
+                OpenQueryResponseData(unit = "℃", variable = "ambientTemperation", value = 32.5, valueString = null),
+                OpenQueryResponseData(unit = "℃", variable = "invTemperation", value = 23.2, valueString = null)
             )
         )
     }
@@ -222,6 +223,7 @@ class DemoAPI : FoxAPIServicing {
             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
             .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
+            .registerTypeAdapter(OpenQueryResponseDeserializer::class.java, OpenQueryResponseDeserializer())
             .create()
     }
 

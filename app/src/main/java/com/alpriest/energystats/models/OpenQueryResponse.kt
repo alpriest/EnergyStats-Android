@@ -14,9 +14,10 @@ data class OpenQueryResponse(
 )
 
 data class OpenQueryResponseData(
-    val unit: String,
+    val unit: String?,
     val variable: String,
-    val value: Double
+    val value: Double?,
+    val valueString: String?
 )
 
 data class OpenHistoryRequest(
