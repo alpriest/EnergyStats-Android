@@ -52,6 +52,7 @@ import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.inverter.InverterIconView
 import com.alpriest.energystats.ui.helpers.OptionalView
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -64,7 +65,9 @@ class InverterViewModel(
     val temperatures: InverterTemperatures?,
     val deviceState: DeviceState,
     val faults: List<String>
-) {
+) : AlertDialogMessageProviding {
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+
     val hasFault: Boolean
         get() = deviceState != DeviceState.Online || faults.isNotEmpty()
 
@@ -86,6 +89,13 @@ class InverterViewModel(
     fun select(device: Device) {
         configManager.select(device)
     }
+
+    fun showFaults() {
+        alertDialogMessage.value = MonitorAlertDialogData(
+            ex = null,
+            message = "Faults Detected\n\n" + faults.joinToString(separator = "\n")
+        )
+    }
 }
 
 @Composable
@@ -94,12 +104,12 @@ fun InverterView(
     viewModel: InverterViewModel,
     orientation: Int = LocalConfiguration.current.orientation
 ) {
-    val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val appTheme = themeStream.collectAsState().value
+    val message = viewModel.alertDialogMessage.collectAsState().value
 
-    alertDialogMessage.value?.let {
+    message?.let {
         AlertDialog(message = it.message ?: "Unknown error", onDismiss = {
-            alertDialogMessage.value = null
+            viewModel.resetDialogMessage()
         })
     }
 
@@ -120,7 +130,7 @@ fun InverterView(
                             .background(colors.background)
                             .clickable {
                                 if (viewModel.hasFault) {
-                                    alertDialogMessage.value = MonitorAlertDialogData(ex = null, message = "hello")
+                                    viewModel.showFaults()
                                 }
                             },
                         themeStream
