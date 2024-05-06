@@ -13,9 +13,9 @@ import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenApiVariableDeserializer
 import com.alpriest.energystats.models.OpenHistoryResponse
-import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
-import com.alpriest.energystats.models.OpenQueryResponseDeserializer
+import com.alpriest.energystats.models.OpenRealQueryResponseDeserializer
+import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedPowerStationListResponse
@@ -69,8 +69,8 @@ class DemoAPI : FoxAPIServicing {
         )
     }
 
-    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
-        return OpenQueryResponse(
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
+        return OpenRealQueryResponse(
             time = LocalDateTime.now().toString().replace("T", " "),
             deviceSN = deviceSN,
             datas = listOf(
@@ -223,7 +223,7 @@ class DemoAPI : FoxAPIServicing {
             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
             .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
-            .registerTypeAdapter(OpenQueryResponseDeserializer::class.java, OpenQueryResponseDeserializer())
+            .registerTypeAdapter(OpenRealQueryResponseDeserializer::class.java, OpenRealQueryResponseDeserializer())
             .create()
     }
 

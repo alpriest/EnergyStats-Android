@@ -18,9 +18,9 @@ import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenApiVariableDeserializer
 import com.alpriest.energystats.models.OpenHistoryRequest
 import com.alpriest.energystats.models.OpenHistoryResponse
-import com.alpriest.energystats.models.OpenQueryRequest
-import com.alpriest.energystats.models.OpenQueryResponse
-import com.alpriest.energystats.models.OpenQueryResponseDeserializer
+import com.alpriest.energystats.models.OpenRealQueryRequest
+import com.alpriest.energystats.models.OpenRealQueryResponse
+import com.alpriest.energystats.models.OpenRealQueryResponseDeserializer
 import com.alpriest.energystats.models.OpenReportRequest
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseDeserializer
@@ -251,8 +251,8 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         return result.item.result?.data ?: throw MissingDataException()
     }
 
-    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
-        val body = Gson().toJson(OpenQueryRequest(deviceSN, variables))
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
+        val body = Gson().toJson(OpenRealQueryRequest(deviceSN, variables))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -260,9 +260,9 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
             .url(URLs.getOpenRealData())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<List<OpenQueryResponse>>>() {}.type
-        val result: NetworkTuple<NetworkResponse<List<OpenQueryResponse>>> = fetch(request, type)
-        store.queryResponseStream.value = NetworkOperation(description = "fetchRealData", value = result.item, raw = result.text, request)
+        val type = object : TypeToken<NetworkResponse<List<OpenRealQueryResponse>>>() {}.type
+        val result: NetworkTuple<NetworkResponse<List<OpenRealQueryResponse>>> = fetch(request, type)
+        store.realQueryResponseStream.value = NetworkOperation(description = "fetchRealData", value = result.item, raw = result.text, request)
 
         return result.item.result?.let { list ->
             list.firstOrNull { it.deviceSN == deviceSN }
@@ -489,7 +489,7 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
                             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
                             .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
-                            .registerTypeAdapter(OpenQueryResponse::class.java, OpenQueryResponseDeserializer())
+                            .registerTypeAdapter(OpenRealQueryResponse::class.java, OpenRealQueryResponseDeserializer())
                             .create()
                         val body: T = builder.fromJson(text, type)
                         val result: Result<T> = check(body)

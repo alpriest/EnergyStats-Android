@@ -120,7 +120,8 @@ fun GridIconViewPreview() {
         gridImportTotal = 1.0,
         gridExportTotal = 2.0,
         ct2 = 0.4,
-        deviceState = DeviceState.Online
+        deviceState = DeviceState.Online,
+        faults = listOf()
     )
 
     EnergyStatsTheme {

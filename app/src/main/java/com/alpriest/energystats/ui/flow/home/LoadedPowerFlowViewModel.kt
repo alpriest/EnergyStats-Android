@@ -29,7 +29,8 @@ class LoadedPowerFlowViewModel(
     val gridImportTotal: Double,
     val gridExportTotal: Double,
     val ct2: Double,
-    val deviceState: DeviceState
+    val deviceState: DeviceState,
+    val faults: List<String>
 ) : ViewModel() {
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
         BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperature, battery.residual)

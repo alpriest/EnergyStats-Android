@@ -8,7 +8,7 @@ import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
-import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.QueryDate
@@ -21,7 +21,7 @@ interface Networking {
     suspend fun fetchErrorMessages()
 
     suspend fun fetchDeviceList(): List<DeviceSummaryResponse>
-    suspend fun fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse
+    suspend fun fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse
     suspend fun fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse
     suspend fun fetchVariables(): List<OpenApiVariable>
     suspend fun fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse>
@@ -47,7 +47,7 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
         return api.openapi_fetchDeviceList()
     }
 
-    override suspend fun fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
+    override suspend fun fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
         return api.openapi_fetchRealData(deviceSN, variables)
     }
 

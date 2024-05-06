@@ -1,7 +1,7 @@
 package com.alpriest.energystats.ui.flow
 
-import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
+import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
@@ -28,7 +28,7 @@ data class StringPower(val name: String, val amount: Double) {
 }
 
 class CurrentStatusCalculator(
-    response: OpenQueryResponse,
+    response: OpenRealQueryResponse,
     hasPV: Boolean,
     val config: ConfigManaging
 ) {
@@ -39,6 +39,7 @@ class CurrentStatusCalculator(
     val currentCT2: Double
     val currentSolarPower: Double
     val currentSolarStringsPower: List<StringPower>
+    val currentFaults: List<String>
 
     init {
         val status = mapCurrentValues(response, hasPV)
@@ -49,13 +50,20 @@ class CurrentStatusCalculator(
         currentCT2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
         currentSolarPower = calculateSolarPower(status.hasPV, status, config.shouldCombineCT2WithPVPower)
         currentSolarStringsPower = calculateSolarStringsPower(status.hasPV, status)
+        currentFaults = currentFaults(response)
+    }
+
+    private fun currentFaults(response: OpenRealQueryResponse): List<String> {
+        response.datas.currentData("currentFault")?.valueString?.let {
+            return it.split(",").filter { it.isNotBlank() }
+        } ?: return listOf()
     }
 
     private fun loadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
         return status.loadsPower + (if (shouldCombineCT2WithLoadsPower) status.meterPower2 else 0.0)
     }
 
-    private fun mapCurrentValues(response: OpenQueryResponse, hasPV: Boolean): CurrentRawValues {
+    private fun mapCurrentValues(response: OpenRealQueryResponse, hasPV: Boolean): CurrentRawValues {
         var stringsPvPower: List<StringPower> = listOf()
         if (config.powerFlowStrings.enabled) {
             stringsPvPower = config.powerFlowStrings.makeStringPowers(response)

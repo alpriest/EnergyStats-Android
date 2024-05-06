@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
-import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.currentValue
 
@@ -37,7 +37,7 @@ data class PowerFlowStringsSettings(
         return variables
     }
 
-    fun makeStringPowers(response: OpenQueryResponse): List<StringPower> {
+    fun makeStringPowers(response: OpenRealQueryResponse): List<StringPower> {
         val strings: MutableList<StringPower> = mutableListOf()
 
         if (pv1Enabled) {

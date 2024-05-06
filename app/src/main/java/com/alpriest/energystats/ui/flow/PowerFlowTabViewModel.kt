@@ -8,7 +8,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenHistoryResponse
-import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
@@ -127,7 +127,7 @@ class PowerFlowTabViewModel(
         timer?.start()
     }
 
-    private suspend fun loadRealData(device: Device, configManager: ConfigManaging): OpenQueryResponse {
+    private suspend fun loadRealData(device: Device, configManager: ConfigManaging): OpenRealQueryResponse {
         val variables: MutableList<String> = mutableListOf(
             "feedinPower",
             "gridConsumptionPower",
@@ -143,7 +143,8 @@ class PowerFlowTabViewModel(
             "SoC_1",
             "batTemperature",
             "ResidualEnergy",
-            "epsPower"
+            "epsPower",
+            "currentFault"
         )
 
         if (configManager.powerFlowStrings.enabled) {
@@ -233,7 +234,8 @@ class PowerFlowTabViewModel(
                     gridImportTotal = totals.grid,
                     gridExportTotal = totals.feedIn,
                     ct2 = currentViewModel.currentCT2,
-                    deviceState = deviceState
+                    deviceState = deviceState,
+                    faults = currentViewModel.currentFaults
                 )
                 batteryErrorStream.value = currentDevice.battery?.hasError ?: false
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))

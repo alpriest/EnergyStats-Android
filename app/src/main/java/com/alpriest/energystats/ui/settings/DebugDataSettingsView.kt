@@ -45,7 +45,7 @@ fun NavGraphBuilder.debugGraph(
         composable("debug") { DebugDataSettingsView(navController) }
 
         composable("debugReport") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
-        composable("debugQuery") { ResponseDebugView(networkStore, mapper = { networkStore.queryResponseStream }, fetcher = null) }
+        composable("debugQuery") { ResponseDebugView(networkStore, mapper = { networkStore.realQueryResponseStream }, fetcher = null) }
         composable("debugDeviceList") {
             ResponseDebugView(networkStore, mapper = { networkStore.deviceListResponseStream }, fetcher = {
                 network.fetchDeviceList()
@@ -194,7 +194,7 @@ fun DebugDataSettingsViewPreview() {
             startDestination = "debug"
         ) {
             composable("debug") { DebugDataSettingsView(navController) }
-            composable("debugQuery") { ResponseDebugView(networkStore, { networkStore.queryResponseStream }, null) }
+            composable("debugQuery") { ResponseDebugView(networkStore, { networkStore.realQueryResponseStream }, null) }
             composable("debugReport") { ResponseDebugView(networkStore, { networkStore.reportResponseStream }, null) }
             composable("debugBatterySOC") { ResponseDebugView(networkStore, { networkStore.batterySOCResponseStream }, null) }
             composable("debugBatteryTimes") { ResponseDebugView(networkStore, { networkStore.batteryTimesResponseStream }, null) }

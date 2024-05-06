@@ -8,6 +8,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,6 +45,8 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.dialog.AlertDialog
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.battery.asTemperature
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
@@ -59,8 +62,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class InverterViewModel(
     private val configManager: ConfigManaging,
     val temperatures: InverterTemperatures?,
-    val deviceState: DeviceState
+    val deviceState: DeviceState,
+    val faults: List<String>
 ) {
+    val hasFault: Boolean
+        get() = deviceState != DeviceState.Online || faults.isNotEmpty()
+
     val deviceStationName: String?
         get() = configManager.currentDevice.value?.stationName
 
@@ -87,7 +94,14 @@ fun InverterView(
     viewModel: InverterViewModel,
     orientation: Int = LocalConfiguration.current.orientation
 ) {
+    val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val appTheme = themeStream.collectAsState().value
+
+    alertDialogMessage.value?.let {
+        AlertDialog(message = it.message ?: "Unknown error", onDismiss = {
+            alertDialogMessage.value = null
+        })
+    }
 
     if (orientation == Configuration.ORIENTATION_PORTRAIT) {
         Column(
@@ -103,11 +117,16 @@ fun InverterView(
                             .width(43.dp)
                             .height(50.dp)
                             .padding(bottom = 4.dp)
-                            .background(colors.background),
+                            .background(colors.background)
+                            .clickable {
+                                if (viewModel.hasFault) {
+                                    alertDialogMessage.value = MonitorAlertDialogData(ex = null, message = "hello")
+                                }
+                            },
                         themeStream
                     )
 
-                    panelView(themeStream, viewModel.deviceState)
+                    panelView(themeStream, viewModel.hasFault)
                 }
             }
 
@@ -143,27 +162,20 @@ fun InverterView(
 }
 
 @Composable
-fun panelColor(state: DeviceState): Color {
-    return when (state)  {
-        DeviceState.Online -> Color.Gray
-        else -> PowerFlowNegative
+fun panelColor(hasFault: Boolean): Color {
+    return when (hasFault) {
+        true -> PowerFlowNegative
+        false -> Color.Gray
     }
 }
 
 @Composable
-private fun panelView(themeStream: MutableStateFlow<AppTheme>, deviceState: DeviceState) {
+private fun panelView(themeStream: MutableStateFlow<AppTheme>, hasFault: Boolean) {
     val infiniteTransition = rememberInfiniteTransition(label = "inverter-panel")
 
-    if (deviceState == DeviceState.Online) {
-        Rectangle(
-            color = Color.Gray,
-            modifier = Modifier
-                .size(width = 14.5.dp, height = 12.dp)
-                .offset(6.5.dp, 9.dp)
-        )
-    } else {
+    if (hasFault) {
         val color by infiniteTransition.animateColor(
-            initialValue = panelColor(deviceState),
+            initialValue = panelColor(hasFault),
             targetValue = iconBackgroundColor(isDarkMode(themeStream)),
             animationSpec = infiniteRepeatable(
                 animation = tween(600, 200, easing = EaseInOut),
@@ -174,6 +186,13 @@ private fun panelView(themeStream: MutableStateFlow<AppTheme>, deviceState: Devi
 
         Rectangle(
             color = color,
+            modifier = Modifier
+                .size(width = 14.5.dp, height = 12.dp)
+                .offset(6.5.dp, 9.dp)
+        )
+    } else {
+        Rectangle(
+            color = Color.Gray,
             modifier = Modifier
                 .size(width = 14.5.dp, height = 12.dp)
                 .offset(6.5.dp, 9.dp)
@@ -310,7 +329,7 @@ fun InverterViewPreview() {
             MutableStateFlow(
                 AppTheme.demo()
             ),
-            InverterViewModel(temperatures = null, configManager = FakeConfigManager(), deviceState = DeviceState.Fault),
+            InverterViewModel(configManager = FakeConfigManager(), temperatures = null, deviceState = DeviceState.Online, faults = listOf("abc", "def")),
             orientation = Configuration.ORIENTATION_PORTRAIT
         )
     }

@@ -2,12 +2,12 @@ package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.statsgraph.ReportType
 
-data class OpenQueryRequest(
+data class OpenRealQueryRequest(
     val deviceSN: String,
     val variables: List<String>
 )
 
-data class OpenQueryResponse(
+data class OpenRealQueryResponse(
     val time: String,
     val deviceSN: String,
     val datas: List<OpenQueryResponseData>

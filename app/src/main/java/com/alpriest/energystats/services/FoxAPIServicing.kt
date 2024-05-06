@@ -8,7 +8,7 @@ import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
-import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedPowerStationListResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
@@ -44,7 +44,7 @@ interface FoxAPIServicing {
     suspend fun fetchErrorMessages()
 
     suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse>
-    suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse
+    suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse
     suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse
     suspend fun openapi_fetchVariables(): List<OpenApiVariable>
     suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse>

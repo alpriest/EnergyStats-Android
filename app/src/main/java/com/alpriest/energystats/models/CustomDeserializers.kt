@@ -54,8 +54,8 @@ class DataLoggerStatusDeserializer : JsonDeserializer<DataLoggerStatus> {
     }
 }
 
-class OpenQueryResponseDeserializer : JsonDeserializer<OpenQueryResponse> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): OpenQueryResponse {
+class OpenRealQueryResponseDeserializer : JsonDeserializer<OpenRealQueryResponse> {
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): OpenRealQueryResponse {
         val resultObject = json.asJsonObject
         val resultArray = resultObject.get("datas").asJsonArray
 
@@ -80,6 +80,6 @@ class OpenQueryResponseDeserializer : JsonDeserializer<OpenQueryResponse> {
         val time = resultObject.get("time").asString
         val deviceSN = resultObject.get("deviceSN").asString
 
-        return OpenQueryResponse(time, deviceSN, values)
+        return OpenRealQueryResponse(time, deviceSN, values)
     }
 }

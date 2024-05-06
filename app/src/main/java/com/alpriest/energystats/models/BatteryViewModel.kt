@@ -27,7 +27,7 @@ data class BatteryViewModel(
 
         fun make(
             currentDevice: Device,
-            real: OpenQueryResponse
+            real: OpenRealQueryResponse
         ): BatteryViewModel {
             val battery: BatteryViewModel = if (currentDevice.battery != null || currentDevice.hasBattery) {
                 val chargePower = real.datas.currentValue("batChargePower")

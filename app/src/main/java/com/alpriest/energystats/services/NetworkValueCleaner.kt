@@ -9,8 +9,8 @@ import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenHistoryResponseData
-import com.alpriest.energystats.models.OpenQueryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
+import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseData
 import com.alpriest.energystats.models.PagedPowerStationListResponse
@@ -31,9 +31,9 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
         return api.openapi_fetchDeviceList()
     }
 
-    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
         val original = api.openapi_fetchRealData(deviceSN, variables)
-        return OpenQueryResponse(
+        return OpenRealQueryResponse(
             time = original.time,
             deviceSN = original.deviceSN,
             datas = original.datas.map {

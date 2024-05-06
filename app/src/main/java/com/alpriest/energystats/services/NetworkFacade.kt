@@ -8,7 +8,7 @@ import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
-import com.alpriest.energystats.models.OpenQueryResponse
+import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedPowerStationListResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
@@ -90,7 +90,7 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
         }
     }
 
-    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenQueryResponse {
+    override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
         return if (isDemoUser()) {
             demoAPI.openapi_fetchRealData(deviceSN, variables)
         } else {

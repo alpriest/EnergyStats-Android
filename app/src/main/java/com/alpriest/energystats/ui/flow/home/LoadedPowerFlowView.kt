@@ -163,7 +163,8 @@ fun LoadedPowerFlowView(
                 InverterViewModel(
                     configManager,
                     temperatures = loadedPowerFlowViewModel.inverterTemperatures,
-                    loadedPowerFlowViewModel.deviceState
+                    deviceState = loadedPowerFlowViewModel.deviceState,
+                    faults = loadedPowerFlowViewModel.faults
                 )
             )
         }
@@ -337,7 +338,8 @@ fun SummaryPowerFlowViewPreview() {
                 gridExportTotal = 2.0,
                 homeTotal = 1.0,
                 ct2 = 0.4,
-                deviceState = DeviceState.Online
+                deviceState = DeviceState.Online,
+                faults = listOf()
             ),
             themeStream = MutableStateFlow(
                 AppTheme.demo(
