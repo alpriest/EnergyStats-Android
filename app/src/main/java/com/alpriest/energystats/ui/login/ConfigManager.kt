@@ -427,6 +427,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.powerStationDetail = value
         }
 
+    override var showSelfSufficiencyStatsGraphOverlay: Boolean
+        get() = config.showSelfSufficiencyStatsGraphOverlay
+        set(value) {
+            config.showSelfSufficiencyStatsGraphOverlay = value
+        }
+
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     init {

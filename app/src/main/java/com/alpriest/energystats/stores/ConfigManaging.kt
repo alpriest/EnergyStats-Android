@@ -72,4 +72,5 @@ interface ConfigManaging {
     var powerFlowStrings: PowerFlowStringsSettings
     var powerStationDetail: PowerStationDetail?
     var showBatteryTimeEstimateOnWidget: Boolean
+    var showSelfSufficiencyStatsGraphOverlay: Boolean
 }

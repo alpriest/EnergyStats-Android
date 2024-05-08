@@ -63,7 +63,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         USE_TRADITIONAL_LOAD_FORMULA,
         POWER_FLOW_STRINGS,
         POWER_STATION_DETAIL,
-        SHOW_ESTIMATED_TIME_ON_WIDGET
+        SHOW_ESTIMATED_TIME_ON_WIDGET,
+        SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY
     }
 
     override fun clearDisplaySettings() {
@@ -497,6 +498,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOW_ESTIMATED_TIME_ON_WIDGET.name, value)
+            editor.apply()
+        }
+
+    override var showSelfSufficiencyStatsGraphOverlay: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY.name, value)
             editor.apply()
         }
 }

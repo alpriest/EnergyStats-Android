@@ -51,6 +51,7 @@ interface ConfigInterface {
     var showFinancialSummaryOnFlowPage: Boolean
     var useTraditionalLoadFormula: Boolean
     var powerFlowStrings: PowerFlowStringsSettings
+    var showSelfSufficiencyStatsGraphOverlay: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

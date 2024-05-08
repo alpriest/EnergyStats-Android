@@ -21,6 +21,7 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
+import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -244,11 +245,15 @@ class StatsTabViewModel(
             batteryDischarge = batteryDischarge,
         )
 
-        selfSufficiencyProducer.setEntries(calculateSelfSufficiencyAcrossTimePeriod())
+        if (configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && configManager.showSelfSufficiencyStatsGraphOverlay) {
+            selfSufficiencyProducer.setEntries(calculateSelfSufficiencyAcrossTimePeriod())
+        } else {
+            selfSufficiencyProducer.setEntries(listOf<StatsChartEntry>())
+        }
     }
 
     private fun calculateSelfSufficiencyAcrossTimePeriod(): List<StatsChartEntry> {
-        val graphPoints = rawData.map { it.graphPoint }
+        val graphPoints = rawData.map { it.graphPoint }.distinct()
         val entries: MutableList<StatsChartEntry> = mutableListOf()
 
         for (graphPoint in graphPoints) {

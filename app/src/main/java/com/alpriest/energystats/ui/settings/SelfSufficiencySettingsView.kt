@@ -21,6 +21,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 @Composable
 fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
     val selfSufficiencyEstimateModeState = rememberSaveable { mutableStateOf(config.selfSufficiencyEstimateMode) }
+    val showSelfSufficiencyStatsGraphOverlayState = rememberSaveable { mutableStateOf(config.showSelfSufficiencyStatsGraphOverlay) }
     val description: String? = when (selfSufficiencyEstimateModeState.value) {
         SelfSufficiencyEstimateMode.Absolute -> stringResource(R.string.absolute_self_sufficiency)
         SelfSufficiencyEstimateMode.Net -> stringResource(R.string.net_self_sufficiency)
@@ -48,6 +49,16 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
                 append(it)
             }
         })
+
+        if (selfSufficiencyEstimateModeState.value != SelfSufficiencyEstimateMode.Off) {
+            SettingsCheckbox(
+                title = "Show self sufficiency percentage on stats graph",
+                state = showSelfSufficiencyStatsGraphOverlayState,
+                onUpdate = {
+                    config.showSelfSufficiencyStatsGraphOverlay = it
+                }
+            )
+        }
     }
 }
 

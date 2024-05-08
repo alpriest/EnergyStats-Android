@@ -55,7 +55,8 @@ class FakeConfigStore(
     override var useTraditionalLoadFormula: Boolean = false,
     override var powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults,
     override var powerStationDetail: PowerStationDetail? = null,
-    override var showBatteryTimeEstimateOnWidget: Boolean = true
+    override var showBatteryTimeEstimateOnWidget: Boolean = true,
+    override var showSelfSufficiencyStatsGraphOverlay: Boolean = true
 
     ) : ConfigInterface {
     override fun clearDisplaySettings() {}
