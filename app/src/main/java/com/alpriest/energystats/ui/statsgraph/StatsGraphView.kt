@@ -1,14 +1,15 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
@@ -22,16 +23,21 @@ import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
 import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
+import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.compose.chart.line.lineSpec
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
+import com.patrykandpatrick.vico.compose.component.lineComponent
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.composed.plus
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico.core.entry.composed.plus
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -45,34 +51,56 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
     if (viewModel.producer.getModel()?.entries?.isEmpty() == true) {
         Text("No data")
     } else {
-        Column(modifier = modifier.fillMaxWidth()) {
-            ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                Chart(
-                    chart = columnChart(axisValuesOverrider = ZeroValuesAxisOverrider()),
-                    chartModelProducer = viewModel.producer,
-                    chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                    endAxis = rememberEndAxis(
-                        itemPlacer = AxisItemPlacer.Vertical.default(5),
-                        valueFormatter = DecimalFormatAxisValueFormatter("0.0")
-                    ),
-                    bottomAxis = rememberBottomAxis(
-                        itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
-                        valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
-                        guideline = null
-                    ),
-                    diffAnimationSpec = SnapSpec(),
-                    horizontalLayout = HorizontalLayout.fullWidth()
+        val columnChart = columnChart(
+            columns = chartColors.map {
+                lineComponent(color = it)
+            }.toList(),
+            axisValuesOverrider = ZeroValuesAxisOverrider(),
+            targetVerticalAxisPosition = AxisPosition.Vertical.End
+        )
+        val lineChart = lineChart(
+            lines = listOf(
+                lineSpec(
+                    lineColor = Color.Black,
+                    lineBackgroundShader = null,
                 )
-            }
-            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                Text(
-                    when (displayMode) {
-                        is Day -> stringResource(R.string.hours)
-                        is StatsDisplayMode.Month -> stringResource(R.string.days)
-                        is StatsDisplayMode.Year -> stringResource(R.string.months)
-                        is StatsDisplayMode.Custom -> stringResource(R.string.days)
-                    }
-                )
+            ),
+            targetVerticalAxisPosition = AxisPosition.Vertical.Start
+        )
+        val composedChart = remember(columnChart, lineChart) { columnChart + lineChart }
+        val statsEntries = viewModel.producer.getModel()
+        val selfSufficiencyEntries = viewModel.selfSufficiencyProducer.getModel()
+
+        if (statsEntries != null && selfSufficiencyEntries != null) {
+            Column(modifier = modifier.fillMaxWidth()) {
+                ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+                    Chart(
+                        chart = composedChart,
+                        model = statsEntries + selfSufficiencyEntries,
+                        chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                        endAxis = rememberEndAxis(
+                            itemPlacer = AxisItemPlacer.Vertical.default(5),
+                            valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+                        ),
+                        bottomAxis = rememberBottomAxis(
+                            itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
+                            valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
+                            guideline = null
+                        ),
+//                    diffAnimationSpec = SnapSpec(),
+                        horizontalLayout = HorizontalLayout.fullWidth()
+                    )
+                }
+                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    Text(
+                        when (displayMode) {
+                            is Day -> stringResource(R.string.hours)
+                            is StatsDisplayMode.Month -> stringResource(R.string.days)
+                            is StatsDisplayMode.Year -> stringResource(R.string.months)
+                            is StatsDisplayMode.Custom -> stringResource(R.string.days)
+                        }
+                    )
+                }
             }
         }
     }
@@ -100,6 +128,7 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
                 calendar.set(Calendar.MONTH, value.toInt() - 1)
                 return monthFormat.format(calendar.time)
             }
+
             is StatsDisplayMode.Custom -> displayMode.start.plusDays(value.toLong()).dayOfMonth.toString()
         }
     }

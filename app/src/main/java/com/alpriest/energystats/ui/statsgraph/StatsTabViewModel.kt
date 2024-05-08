@@ -38,6 +38,7 @@ class StatsTabViewModel(
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<Color>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
+    var selfSufficiencyProducer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
@@ -242,8 +243,49 @@ class StatsTabViewModel(
             batteryCharge = batteryCharge,
             batteryDischarge = batteryDischarge,
         )
+
+        selfSufficiencyProducer.setEntries(calculateSelfSufficiencyAcrossTimePeriod())
+    }
+
+    private fun calculateSelfSufficiencyAcrossTimePeriod(): List<StatsChartEntry> {
+        val graphPoints = rawData.map { it.graphPoint }
+        val entries: MutableList<StatsChartEntry> = mutableListOf()
+
+        for (graphPoint in graphPoints) {
+            val valuesAtTime = ValuesAtTime(values = rawData.filter { it.graphPoint == graphPoint })
+
+            val grid = valuesAtTime.values.firstOrNull { it.type == ReportVariable.GridConsumption }
+            val feedIn = valuesAtTime.values.firstOrNull { it.type == ReportVariable.FeedIn }
+            val loads = valuesAtTime.values.firstOrNull { it.type == ReportVariable.Loads }
+            val batteryCharge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.ChargeEnergyToTal }
+            val batteryDischarge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.DischargeEnergyToTal }
+
+            if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null) {
+                val approximations = approximationsCalculator.calculateApproximations(
+                    grid = grid.value,
+                    feedIn = feedIn.value,
+                    loads = loads.value,
+                    batteryCharge = batteryCharge.value,
+                    batteryDischarge = batteryDischarge.value,
+                )
+
+                approximations.netSelfSufficiencyEstimateValue?.let {
+                    entries.add(
+                        graphPoint, StatsChartEntry(
+                            x = graphPoint.toFloat(),
+                            y = it.toFloat(),
+                            type = ReportVariable.Generation
+                        )
+                    )
+                }
+            }
+        }
+
+        return entries
     }
 }
+
+data class ValuesAtTime<T>(val values: List<T>)
 
 interface GraphVariable {
     val enabled: Boolean
