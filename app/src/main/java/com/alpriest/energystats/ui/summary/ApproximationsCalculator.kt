@@ -42,8 +42,10 @@ class ApproximationsCalculator(
         )
 
         return ApproximationsViewModel(
+            netSelfSufficiencyEstimateValue = netResult.first,
             netSelfSufficiencyEstimate = "${netResult.first}%",
             netSelfSufficiencyEstimateCalculationBreakdown = netResult.second,
+            absoluteSelfSufficiencyEstimateValue = absoluteResult.first,
             absoluteSelfSufficiencyEstimate = "${absoluteResult.first}%",
             absoluteSelfSufficiencyEstimateCalculationBreakdown = absoluteResult.second,
             financialModel = financialModel,

@@ -49,8 +49,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 data class ApproximationsViewModel(
     val netSelfSufficiencyEstimate: String?,
+    val netSelfSufficiencyEstimateValue: Double?,
     val netSelfSufficiencyEstimateCalculationBreakdown: CalculationBreakdown,
     val absoluteSelfSufficiencyEstimate: String?,
+    val absoluteSelfSufficiencyEstimateValue: Double?,
     val absoluteSelfSufficiencyEstimateCalculationBreakdown: CalculationBreakdown,
     val financialModel: EnergyStatsFinancialModel?,
     val homeUsage: Double?,
@@ -235,8 +237,10 @@ fun StatsApproximationViewPreview() {
             themeStream = MutableStateFlow(AppTheme.demo().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
             modifier = Modifier.padding(24.dp),
             viewModel = ApproximationsViewModel(
+                netSelfSufficiencyEstimateValue = 0.95,
                 netSelfSufficiencyEstimate = "95%",
                 netSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", { "def" }),
+                absoluteSelfSufficiencyEstimateValue = 1.0,
                 absoluteSelfSufficiencyEstimate = "100%",
                 absoluteSelfSufficiencyEstimateCalculationBreakdown = CalculationBreakdown("abc", { "def" }),
                 financialModel = null,
