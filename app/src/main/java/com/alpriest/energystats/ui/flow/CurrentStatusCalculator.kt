@@ -102,7 +102,7 @@ class CurrentStatusCalculator(
     }
 
     private fun calculateLoadsPower(status: CurrentRawValues): Double {
-        return status.gridConsumptionPower + status.generationPower + status.epsPower - status.feedinPower + abs(status.meterPower2)
+        return status.gridConsumptionPower + status.generationPower - status.feedinPower + abs(status.meterPower2)
     }
 }
 
