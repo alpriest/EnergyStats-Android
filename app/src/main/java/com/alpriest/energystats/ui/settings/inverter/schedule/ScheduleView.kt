@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.models.SchedulerModeResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 

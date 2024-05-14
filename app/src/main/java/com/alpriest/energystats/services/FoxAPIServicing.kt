@@ -29,18 +29,6 @@ class UnacceptableException: Exception("Unacceptable")
 class ProhibitedActionException: Exception("Schedules")
 
 interface FoxAPIServicing {
-//    suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse
-//    suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse>
-//    suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse
-//    suspend fun saveSchedule(deviceSN: String, schedule: Schedule)
-//    suspend fun deleteSchedule(deviceSN: String)
-//    suspend fun enableScheduleTemplate(deviceSN: String, templateID: String)
-//    suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse
-//    suspend fun deleteScheduleTemplate(templateID: String)
-//    suspend fun createScheduleTemplate(name: String, description: String)
-//    suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse
-//    suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate)
-
     suspend fun fetchErrorMessages()
 
     suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse>

@@ -333,4 +333,8 @@
     <string name="automatic_time_advice">Assicurati che la data/l\'ora del sistema sul tuo dispositivo sia impostata su \'automatico\', altrimenti potresti non essere in grado di accedere con la tua chiave API.</string>
     <string name="self_sufficiency_off">Nessuna stima di autosufficienza sarà mostrata</string>
     <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">La forza di scarica deve essere maggiore di 0 per scaricare</string>
+    <string name="example">Esempio</string>
+    <string name="thresholds_were_saved">Le soglie sono state salvate</string>
+    <string name="drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power">Trascina il cursore sopra per vedere come verrà visualizzato il tuo flusso solare quando viene generato un diverso livello di potenza.</string>
+    <string name="foxess_timeout">FoxESS OpenAPI non ha risposto abbastanza velocemente. Riprova o segnala un problema a FoxESS se vedi spesso questo messaggio.</string>
 </resources>

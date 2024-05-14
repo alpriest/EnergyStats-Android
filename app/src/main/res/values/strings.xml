@@ -338,4 +338,5 @@
     <string name="example">Example</string>
     <string name="thresholds_were_saved">Thresholds were saved</string>
     <string name="drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power">Drag the slider above to see how your solar flow will display when generating different levels of power.</string>
+    <string name="foxess_timeout">The FoxESS OpenAPI failed to respond quickly enough. Please try again or raise an issue with FoxESS if you often see this.</string>
 </resources>

@@ -175,7 +175,7 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
     }
 
     override suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse {
-        return if(isDemoUser()) {
+        return if (isDemoUser()) {
             demoAPI.openapi_fetchPowerStationList()
         } else {
             api.openapi_fetchPowerStationList()
@@ -183,7 +183,7 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
     }
 
     override suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse {
-        return if(isDemoUser()) {
+        return if (isDemoUser()) {
             demoAPI.openapi_fetchPowerStationDetail(stationID)
         } else {
             api.openapi_fetchPowerStationDetail(stationID)
@@ -197,94 +197,6 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
             api.fetchErrorMessages()
         }
     }
-
-//    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchSchedulerFlag(deviceSN)
-//        } else {
-//            network.fetchSchedulerFlag(deviceSN)
-//        }
-//    }
-//
-//    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchScheduleModes(deviceID)
-//        } else {
-//            network.fetchScheduleModes(deviceID)
-//        }
-//    }
-//
-//    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchCurrentSchedule(deviceSN)
-//        } else {
-//            network.fetchCurrentSchedule(deviceSN)
-//        }
-//    }
-//
-//    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
-//        if (isDemoUser()) {
-//            demoFoxESSNetworking.saveSchedule(deviceSN, schedule)
-//        } else {
-//            network.saveSchedule(deviceSN, schedule)
-//        }
-//    }
-//
-//    override suspend fun deleteSchedule(deviceSN: String) {
-//        if (isDemoUser()) {
-//            demoFoxESSNetworking.deleteSchedule(deviceSN)
-//        } else {
-//            network.deleteSchedule(deviceSN)
-//        }
-//    }
-//
-//    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
-//        if (isDemoUser()) {
-//            demoFoxESSNetworking.enableScheduleTemplate(deviceSN, templateID)
-//        } else {
-//            network.enableScheduleTemplate(deviceSN, templateID)
-//        }
-//    }
-//
-//    override suspend fun deleteScheduleTemplate(templateID: String) {
-//        if (isDemoUser()) {
-//            demoFoxESSNetworking.deleteScheduleTemplate(templateID)
-//        } else {
-//            network.deleteScheduleTemplate(templateID)
-//        }
-//    }
-//
-//    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchScheduleTemplate(deviceSN, templateID)
-//        } else {
-//            network.fetchScheduleTemplate(deviceSN, templateID)
-//        }
-//    }
-//
-//    override suspend fun createScheduleTemplate(name: String, description: String) {
-//        if (isDemoUser()) {
-//            demoFoxESSNetworking.createScheduleTemplate(name, description)
-//        } else {
-//            network.createScheduleTemplate(name, description)
-//        }
-//    }
-
-//    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
-//        return if (isDemoUser()) {
-//            demoFoxESSNetworking.fetchScheduleTemplates()
-//        } else {
-//            network.fetchScheduleTemplates()
-//        }
-//    }
-//
-//    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
-//        if (isDemoUser()) {
-//            demoFoxESSNetworking.saveScheduleTemplate(deviceSN, scheduleTemplate)
-//        } else {
-//            network.saveScheduleTemplate(deviceSN, scheduleTemplate)
-//        }
-//    }
 }
 
 class ThrottleManager {

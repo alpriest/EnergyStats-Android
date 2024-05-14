@@ -33,17 +33,25 @@ import com.alpriest.energystats.services.MissingDataException
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
 
 private fun detailedErrorMessage(cause: Exception?, message: String, context: Context): String {
-    cause?.let {
+    return cause?.let {
         when (it) {
             is InvalidTokenException -> {
                 context.getString(R.string.invalid_api_token_needs_logout)
             }
-            else -> if (it.localizedMessage != message) return "$message\n\n${it.localizedMessage}" else message
+            is SocketTimeoutException -> {
+                context.getString(R.string.foxess_timeout)
+            }
+            else -> {
+                if (it.localizedMessage != message)
+                    return "$message\n\n${it.localizedMessage}"
+                else
+                    message
+            }
         }
-    }
-    return message
+    } ?: message
 }
 
 @Composable
@@ -52,8 +60,7 @@ fun ErrorView(cause: Exception?, reason: String, onRetry: suspend () -> Unit, on
     val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
-
-    var detailedMessage = detailedErrorMessage(cause, reason, context)
+    val detailedMessage = detailedErrorMessage(cause, reason, context)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

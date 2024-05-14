@@ -332,4 +332,8 @@
     <string name="automatic_time_advice">Bitte stellen Sie sicher, dass das Systemdatum/die Systemzeit auf Ihrem Gerät auf \'automatisch\' eingestellt ist, da Sie sonst möglicherweise nicht mit Ihrem API-Schlüssel anmelden können.</string>
     <string name="self_sufficiency_off">Es wird keine Selbsteinschätzung der Selbstständigkeit angezeigt</string>
     <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">Die Entladungskraft muss größer als 0 sein, um zu entladen</string>
+    <string name="example">Beispiel</string>
+    <string name="thresholds_were_saved">Die Schwellenwerte wurden gespeichert</string>
+    <string name="drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power">Ziehen Sie den Schieberegler oben, um zu sehen, wie Ihr Solarfluss angezeigt wird, wenn verschiedene Leistungsstufen erzeugt werden.</string>
+    <string name="foxess_timeout">Die FoxESS OpenAPI hat nicht schnell genug geantwortet. Bitte versuche es erneut oder melde ein Problem bei FoxESS, wenn du dies häufig siehst.</string>
 </resources>

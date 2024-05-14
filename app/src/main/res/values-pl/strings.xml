@@ -333,4 +333,8 @@
     <string name="automatic_time_advice">Upewnij się, że data/czas systemu na Twoim urządzeniu jest ustawiona na \'automatyczny\', w przeciwnym razie możesz nie być w stanie zalogować się za pomocą klucza API.</string>
     <string name="self_sufficiency_off">Nie zostanie wyświetlona żadna ocena samowystarczalności</string>
     <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">Moc rozładowania musi być większa niż 0, aby rozładować</string>
+    <string name="example">Przykład</string>
+    <string name="thresholds_were_saved">Progi zostały zapisane</string>
+    <string name="drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power">Przesuń suwak powyżej, aby zobaczyć, jak będzie wyświetlany Twój przepływ energii słonecznej przy różnych poziomach mocy.</string>
+    <string name="foxess_timeout">FoxESS OpenAPI nie odpowiedział wystarczająco szybko. Spróbuj ponownie lub zgłoś problem do FoxESS, jeśli często widzisz ten komunikat.</string>
 </resources>

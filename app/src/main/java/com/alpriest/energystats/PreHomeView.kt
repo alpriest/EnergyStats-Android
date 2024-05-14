@@ -36,8 +36,7 @@ class PreHomeViewModel(
                         configManager.fetchPowerStationDetail()
                     }
                 }
-            } catch (ex: Exception) {
-                alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
+            } catch (_: Exception) {
             }
         }
     }
