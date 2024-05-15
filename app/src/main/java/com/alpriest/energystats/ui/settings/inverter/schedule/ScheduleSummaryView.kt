@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -20,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -128,24 +130,16 @@ class ScheduleSummaryView(
                 }
             }
 
-            SettingsColumn(
-                header = stringResource(R.string.templates)
-            ) {
-                if (templates.isEmpty()) {
-                    Text(
-                        stringResource(R.string.you_have_no_templates),
-                        modifier = Modifier
-                            .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
-                    )
-                }
-            }
-
             templates.forEach {
-                SettingsColumn {
-                    SettingsTitleView(
-                        it.name,
+                SettingsColumn(
+                    header = if (it == templates.first()) { stringResource(R.string.templates) } else { null }
+                ) {
+                    Text(
+                        text = it.name,
+                        style = TextStyle.Default.copy(color = colors.onSecondary),
                         modifier = Modifier
                             .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
+                            .fillMaxWidth()
                     )
 
                     OutlinedButton(
@@ -162,7 +156,7 @@ class ScheduleSummaryView(
                     }
 
                     ActivateButton {
-//                                viewModel.activate(it, context) // TODO
+                        viewModel.activate(it, context)
                     }
                 }
             }

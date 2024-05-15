@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme.colors
@@ -16,21 +15,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsScreen
-import com.alpriest.energystats.ui.settings.SettingsTitleView
 
 @Composable
 fun ScheduleDetailView(title: String, navController: NavHostController, schedule: Schedule) {
-    SettingsColumnWithChild {
-        SettingsTitleView(title)
-        Spacer(modifier = Modifier.height(16.dp))
+    SettingsColumn {
+        Text(
+            text = title,
+            style = TextStyle.Default.copy(color = colors.onSecondary),
+            modifier = Modifier
+                .padding(PaddingValues(top = 10.dp, start = 22.dp, end = 10.dp, bottom = 8.dp))
+                .fillMaxWidth()
+        )
 
         if (schedule.name.isNotEmpty()) {
-            Column(modifier = Modifier.padding(bottom = 16.dp)) {
+            Column(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp))) {
                 Text(schedule.name, color = colors.onSecondary)
             }
         }

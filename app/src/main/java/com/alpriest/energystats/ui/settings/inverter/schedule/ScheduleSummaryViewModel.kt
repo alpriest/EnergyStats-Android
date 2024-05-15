@@ -169,6 +169,32 @@ class ScheduleSummaryViewModel(
 
         navController.navigate(SettingsScreen.EditTemplate.name)
     }
+
+    fun activate(template: ScheduleTemplate, context: Context) {
+        if (uiState.value.state != LoadState.Inactive) {
+            return
+        }
+        val schedule = template.asSchedule()
+
+        if (!schedule.isValid()) {
+            alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_periods_overlap))
+            return
+        }
+
+        viewModelScope.launch {
+            runCatching {
+                config.currentDevice.value?.let { device ->
+                    val deviceSN = device.deviceSN
+                    try {
+                        network.saveSchedule(deviceSN, schedule)
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                    } catch (ex: Exception) {
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                    }
+                }
+            }
+        }
+    }
 }
 
 internal fun SchedulePhaseResponse.toSchedulePhase(): SchedulePhase? {
