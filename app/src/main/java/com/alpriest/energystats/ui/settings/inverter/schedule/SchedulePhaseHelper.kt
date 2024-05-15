@@ -14,9 +14,7 @@ class SchedulePhaseHelper {
 
             return Schedule(
                 name = schedule.name,
-                phases = sortedPhases,
-                templateID = schedule.templateID,
-                description = null
+                phases = sortedPhases
             )
         }
 
@@ -26,9 +24,7 @@ class SchedulePhaseHelper {
 
             return Schedule(
                 name = schedule.name,
-                phases = newPhases.sortedBy { it.start },
-                templateID = schedule.templateID,
-                description = null
+                phases = newPhases.sortedBy { it.start }
             )
         }
 
@@ -92,9 +88,7 @@ class SchedulePhaseHelper {
                     } else {
                         it
                     }
-                },
-                templateID = schedule.templateID,
-                description = schedule.description
+                }
             )
         }
 
@@ -107,9 +101,7 @@ class SchedulePhaseHelper {
                     } else {
                         it
                     }
-                },
-                templateID = schedule.templateID,
-                description = schedule.description
+                }
             )
         }
     }

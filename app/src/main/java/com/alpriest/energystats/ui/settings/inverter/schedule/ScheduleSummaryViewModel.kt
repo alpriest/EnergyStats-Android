@@ -10,7 +10,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.SchedulePhaseResponse
 import com.alpriest.energystats.models.Time
-import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -19,6 +18,7 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -40,7 +40,7 @@ class ScheduleSummaryViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     val scheduleStream = MutableStateFlow<Schedule?>(null)
     val supportedErrorStream = MutableStateFlow<String?>(null)
-    val templateStream = MutableStateFlow<List<ScheduleTemplateSummary>>(listOf())
+    val templateStream = MutableStateFlow<List<ScheduleTemplate>>(listOf())
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     private var hasPreloaded = false
@@ -102,8 +102,9 @@ class ScheduleSummaryViewModel(
 
                 try {
                     val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() }, description = null)
+                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() })
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
+                    templateStream.value = TemplateStore().templates //TODO Inject store
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {

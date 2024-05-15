@@ -10,7 +10,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplateSummary
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ScheduleTemplateListViewModel(
@@ -20,7 +20,7 @@ class ScheduleTemplateListViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    val templateStream = MutableStateFlow<List<ScheduleTemplateSummary>>(listOf())
+    val templateStream = MutableStateFlow<List<ScheduleTemplate>>(listOf())
 
     suspend fun load(context: Context) {
         if (uiState.value.state != LoadState.Inactive) {
@@ -62,7 +62,7 @@ class ScheduleTemplateListViewModel(
 //        }
     }
 
-    fun edit(templateSummary: ScheduleTemplateSummary, context: Context) {
+    fun edit(templateSummary: ScheduleTemplate, context: Context) {
 //        if (uiState.value.state != LoadState.Inactive) {
 //            return
 //        }

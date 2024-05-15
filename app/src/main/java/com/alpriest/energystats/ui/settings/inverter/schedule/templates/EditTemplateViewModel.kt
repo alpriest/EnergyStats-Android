@@ -14,6 +14,8 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
+import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -33,7 +35,7 @@ class EditTemplateViewModel(
     val network: Networking,
     val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
-    val scheduleStream = EditScheduleStore.shared.scheduleStream
+    val templateStream = EditScheduleStore.shared.templateStream
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     private var modes = EditScheduleStore.shared.modes
@@ -41,19 +43,22 @@ class EditTemplateViewModel(
     private var shouldPopNavOnDismissal = false
 
     fun load() {
-        templateID = EditScheduleStore.shared.scheduleStream.value?.templateID ?: return
+        templateID = EditScheduleStore.shared.templateStream.value?.id ?: return
     }
 
     fun addTimePeriod() {
-        val schedule = scheduleStream.value ?: return
-        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(schedule, modes = modes, device = config.currentDevice.value)
+        val template = templateStream.value ?: return
+        val updatedSchedule = SchedulePhaseHelper.addNewTimePeriod(template.asSchedule(), modes = modes, device = config.currentDevice.value)
+        val updatedTemplate = ScheduleTemplate(templateID, template.name, updatedSchedule.phases)
+        EditScheduleStore.shared.templateStream.value = updatedTemplate
     }
 
     fun autoFillScheduleGaps() {
-        val schedule = scheduleStream.value ?: return
+        val template = templateStream.value ?: return
         val mode = modes.firstOrNull() ?: return
-
-        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.appendPhasesInGaps(schedule, mode = mode, device = config.currentDevice.value)
+        val updatedSchedule = SchedulePhaseHelper.appendPhasesInGaps(template.asSchedule(), mode = mode, device = config.currentDevice.value)
+        val updatedTemplate = ScheduleTemplate(templateID, template.name, updatedSchedule.phases)
+        EditScheduleStore.shared.templateStream.value = updatedTemplate
     }
 
     fun delete(context: Context) {
@@ -86,7 +91,7 @@ class EditTemplateViewModel(
     }
 
     fun saveTemplate(context: Context) {
-        val schedule = scheduleStream.value ?: return
+        val template = templateStream.value ?: return
         if (templateID == "") return
 
         viewModelScope.launch {
@@ -112,7 +117,7 @@ class EditTemplateViewModel(
     }
 
     fun activate(context: Context) {
-        val schedule = scheduleStream.value ?: return
+        val template = templateStream.value ?: return
         if (templateID == "") return
 
         viewModelScope.launch {

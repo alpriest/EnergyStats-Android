@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class EditScheduleStore(
     var scheduleStream: MutableStateFlow<Schedule?> = MutableStateFlow(null),
+    var templateStream: MutableStateFlow<ScheduleTemplate?> = MutableStateFlow(null),
     var phaseId: String? = null,
     var allowDeletion: Boolean = false
 ) {

@@ -2,20 +2,23 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -41,6 +44,7 @@ import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -86,7 +90,7 @@ class ScheduleSummaryView(
 
     @Composable
     fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel) {
-//        val templates = viewModel.templateStream.collectAsState().value
+        val templates = viewModel.templateStream.collectAsState().value
         val context = LocalContext.current
         val schedulerEnabled = viewModel.schedulerEnabledStream.collectAsState().value
         val schedulerEnabledState = rememberSaveable { mutableStateOf(schedulerEnabled) }
@@ -126,44 +130,40 @@ class ScheduleSummaryView(
                 }
             }
 
-            Text(
-                stringResource(R.string.templates_not_yet_available),
-                color = colors.onSecondary
-            )
+            SettingsColumn(
+                header = stringResource(R.string.templates)
+            ) {
+                if (templates.isEmpty()) {
+                    Text(
+                        stringResource(R.string.you_have_no_templates),
+                        color = colors.onSecondary
+                    )
+                }
+            }
 
-//            SettingsColumnWithChild {
-//                SettingsTitleView(stringResource(R.string.templates))
-//
-//                if (templates.isEmpty()) {
-//                    Text(
-//                        stringResource(R.string.you_have_no_templates),
-//                        color = colors.onSecondary
-//                    )
-//                } else {
-//                    templates.forEach {
-//                        Row(verticalAlignment = Alignment.CenterVertically) {
-//                            Text(
-//                                it.name,
-//                                color = colors.onSecondary
-//                            )
-//
-//                            Spacer(modifier = Modifier.weight(0.1f))
-//
-//                            ActivateButton {
-//                                viewModel.activate(it, context)
-//                            }
-//                        }
-//
-//                        if (templates.last() != it) {
-//                            Divider()
-//                        }
-//                    }
-//                }
-//            }
+            templates.forEach {
+                SettingsColumn {
+                    Text(it.name)
 
-//            Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
-//                Text(stringResource(R.string.manage_templates), color = colors.onPrimary)
-//            }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        ScheduleView(it.asSchedule())
+
+                        Spacer(modifier = Modifier.weight(0.1f))
+
+                        ActivateButton {
+//                                viewModel.activate(it, context) // TODO
+                        }
+                    }
+
+                    if (templates.last() != it) {
+                        Divider()
+                    }
+                }
+            }
+
+            Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
+                Text(stringResource(R.string.manage_templates), color = colors.onPrimary)
+            }
         }
     }
 
@@ -185,6 +185,13 @@ class ScheduleSummaryView(
             }
         }
     }
+}
+
+fun ScheduleTemplate.asSchedule(): Schedule {
+    return Schedule(
+        name = name,
+        phases = phases,
+    )
 }
 
 @Preview(showBackground = true, widthDp = 400, heightDp = 600)

@@ -42,7 +42,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplateSummary
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -83,7 +83,7 @@ class ScheduleTemplateListView(
     }
 
     @Composable
-    fun Loaded(templates: List<ScheduleTemplateSummary>, viewModel: ScheduleTemplateListViewModel) {
+    fun Loaded(templates: List<ScheduleTemplate>, viewModel: ScheduleTemplateListViewModel) {
         val context = LocalContext.current
 
         SettingsPage {
@@ -165,8 +165,8 @@ fun EditPhaseViewPreview() {
             userManager = FakeUserManager()
         ).Loaded(
             templates = listOf(
-                ScheduleTemplateSummary("1", "Summer saving", false),
-                ScheduleTemplateSummary("2", "Winter overnight charge", false)
+                ScheduleTemplate("1", "Summer saving", listOf()),
+                ScheduleTemplate("2", "Winter overnight charge", listOf())
             ),
             viewModel = ScheduleTemplateListViewModel(
                 FakeConfigManager(),

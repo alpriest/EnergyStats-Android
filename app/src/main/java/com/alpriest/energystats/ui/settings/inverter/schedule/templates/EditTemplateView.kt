@@ -21,8 +21,9 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
+import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 
 class EditTemplateView(
     private val configManager: ConfigManaging,
@@ -32,7 +33,7 @@ class EditTemplateView(
 ) {
     @Composable
     fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController))) {
-        val schedule = viewModel.scheduleStream.collectAsState().value
+        val template = viewModel.templateStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 
         MonitorAlertDialog(viewModel, userManager)
@@ -44,16 +45,16 @@ class EditTemplateView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel) }
+            is LoadState.Inactive -> template?.let { Loaded(it, viewModel) }
         }
     }
 
     @Composable
-    fun Loaded(schedule: Schedule, viewModel: EditTemplateViewModel) {
+    fun Loaded(template: ScheduleTemplate, viewModel: EditTemplateViewModel) {
         val context = LocalContext.current
 
         SettingsPage {
-            ScheduleDetailView(stringResource(R.string.edit_template), viewModel.navController, schedule)
+            ScheduleDetailView(stringResource(R.string.edit_template), viewModel.navController, template.asSchedule())
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Button(onClick = { viewModel.addTimePeriod() }) {

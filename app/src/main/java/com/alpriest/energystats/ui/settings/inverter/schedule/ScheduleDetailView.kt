@@ -32,9 +32,6 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
         if (schedule.name.isNotEmpty()) {
             Column(modifier = Modifier.padding(bottom = 16.dp)) {
                 Text(schedule.name, color = colors.onSecondary)
-                schedule.description?.let {
-                    Text(it,color = colors.onSecondary)
-                }
             }
         }
 

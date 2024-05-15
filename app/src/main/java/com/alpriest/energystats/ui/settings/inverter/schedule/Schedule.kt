@@ -15,9 +15,7 @@ private val Boolean.intValue: Int
 
 data class Schedule(
     val name: String,
-    val phases: List<SchedulePhase>,
-    val templateID: String? = null,
-    val description: String?
+    val phases: List<SchedulePhase>
 ) {
     fun isValid(): Boolean {
         for ((index, phase) in phases.withIndex()) {
@@ -45,8 +43,8 @@ data class Schedule(
     }
 
     companion object {
-        fun create(name: String? = null, phases: List<SchedulePhase>, templateID: String? = null): Schedule {
-            return Schedule(name ?: "Schedule", phases, templateID, description = null)
+        fun create(name: String? = null, phases: List<SchedulePhase>): Schedule {
+            return Schedule(name ?: "Schedule", phases)
         }
     }
 }
@@ -164,13 +162,8 @@ fun Color.Companion.scheduleColor(mode: WorkMode): Color {
     }
 }
 
-data class ScheduleTemplateSummary(
-    val id: String,
-    val name: String,
-    val enabled: Boolean
-)
-
 data class ScheduleTemplate(
     val id: String,
+    val name: String,
     val phases: List<SchedulePhase>
 )
