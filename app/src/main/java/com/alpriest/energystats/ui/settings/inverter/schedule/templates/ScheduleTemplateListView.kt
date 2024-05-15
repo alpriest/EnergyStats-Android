@@ -31,8 +31,6 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -48,23 +46,23 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleTemplateListViewModelFactory(
     private val configManager: ConfigManaging,
-    private val network: Networking,
+    private val templateStore: TemplateStoring,
     private val navController: NavHostController
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ScheduleTemplateListViewModel(configManager, network, navController) as T
+        return ScheduleTemplateListViewModel(configManager, templateStore, navController) as T
     }
 }
 
 class ScheduleTemplateListView(
     private val configManager: ConfigManaging,
-    private val network: Networking,
+    private val templateStore: TemplateStoring,
     private val navController: NavHostController,
     private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: ScheduleTemplateListViewModel = viewModel(factory = ScheduleTemplateListViewModelFactory(configManager, network, navController))) {
+    fun Content(viewModel: ScheduleTemplateListViewModel = viewModel(factory = ScheduleTemplateListViewModelFactory(configManager, templateStore, navController))) {
         val context = LocalContext.current
         val loadState = viewModel.uiState.collectAsState().value.state
         val templates = viewModel.templateStream.collectAsState().value
@@ -160,7 +158,7 @@ fun EditPhaseViewPreview() {
     EnergyStatsTheme {
         ScheduleTemplateListView(
             configManager = FakeConfigManager(),
-            network = DemoNetworking(),
+            templateStore = PreviewTemplateStore(),
             navController = NavHostController(LocalContext.current),
             userManager = FakeUserManager()
         ).Loaded(
@@ -170,7 +168,7 @@ fun EditPhaseViewPreview() {
             ),
             viewModel = ScheduleTemplateListViewModel(
                 FakeConfigManager(),
-                DemoNetworking(),
+                PreviewTemplateStore(),
                 NavHostController(LocalContext.current)
             )
         )

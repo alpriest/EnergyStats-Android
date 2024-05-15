@@ -21,6 +21,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.EditTemplateView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.ScheduleTemplateListView
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 
@@ -38,6 +39,7 @@ fun NavigableSettingsView(
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
+    val templateStore = TemplateStore() // TODO
 
     NavHost(
         navController = navController,
@@ -110,7 +112,7 @@ fun NavigableSettingsView(
         }
 
         composable(SettingsScreen.TemplateList.name) {
-            ScheduleTemplateListView(config, network, navController, userManager).Content()
+            ScheduleTemplateListView(config, templateStore, navController, userManager).Content()
         }
 
         composable(SettingsScreen.EditTemplate.name) {
