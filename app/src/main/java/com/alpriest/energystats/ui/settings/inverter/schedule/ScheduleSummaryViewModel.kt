@@ -102,9 +102,9 @@ class ScheduleSummaryViewModel(
 
                 try {
                     val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
+                    templateStream.value = TemplateStore().templates //TODO Inject store
                     scheduleStream.value = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() })
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
-                    templateStream.value = TemplateStore().templates //TODO Inject store
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
@@ -160,6 +160,14 @@ class ScheduleSummaryViewModel(
                 }
             }
         }
+    }
+
+    fun editTemplate(template: ScheduleTemplate) {
+        EditScheduleStore.shared.templateStream.value = template
+        EditScheduleStore.shared.phaseId = null
+        EditScheduleStore.shared.allowDeletion = true
+
+        navController.navigate(SettingsScreen.EditTemplate.name)
     }
 }
 

@@ -2,11 +2,10 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedButton
@@ -18,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -136,27 +134,35 @@ class ScheduleSummaryView(
                 if (templates.isEmpty()) {
                     Text(
                         stringResource(R.string.you_have_no_templates),
-                        color = colors.onSecondary
+                        modifier = Modifier
+                            .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
                     )
                 }
             }
 
             templates.forEach {
                 SettingsColumn {
-                    Text(it.name)
+                    SettingsTitleView(
+                        it.name,
+                        modifier = Modifier
+                            .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
+                    )
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        ScheduleView(it.asSchedule())
+                    OutlinedButton(
+                        onClick = { viewModel.editTemplate(it) },
+                        border = null,
+                        contentPadding = PaddingValues()
+                    ) {
+                        ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
 
-                        Spacer(modifier = Modifier.weight(0.1f))
-
-                        ActivateButton {
-//                                viewModel.activate(it, context) // TODO
-                        }
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = "Edit"
+                        )
                     }
 
-                    if (templates.last() != it) {
-                        Divider()
+                    ActivateButton {
+//                                viewModel.activate(it, context) // TODO
                     }
                 }
             }
