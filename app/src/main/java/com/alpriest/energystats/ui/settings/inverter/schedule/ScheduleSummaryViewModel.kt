@@ -18,25 +18,27 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
-import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ScheduleSummaryViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val navController: NavController
+    private val navController: NavController,
+    private val templateStore: TemplateStoring
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ScheduleSummaryViewModel(network, configManager, navController) as T
+        return ScheduleSummaryViewModel(network, configManager, navController, templateStore) as T
     }
 }
 
 class ScheduleSummaryViewModel(
     val network: Networking,
     val config: ConfigManaging,
-    val navController: NavController
+    val navController: NavController,
+    val templateStore: TemplateStoring
 ) : ViewModel(), AlertDialogMessageProviding {
     val scheduleStream = MutableStateFlow<Schedule?>(null)
     val supportedErrorStream = MutableStateFlow<String?>(null)
@@ -102,7 +104,7 @@ class ScheduleSummaryViewModel(
 
                 try {
                     val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-                    templateStream.value = TemplateStore().templates //TODO Inject store
+                    templateStream.value = templateStore.load()
                     scheduleStream.value = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() })
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
 
@@ -163,8 +165,8 @@ class ScheduleSummaryViewModel(
     }
 
     fun editTemplate(template: ScheduleTemplate) {
+        EditScheduleStore.shared.reset()
         EditScheduleStore.shared.templateStream.value = template
-        EditScheduleStore.shared.phaseId = null
         EditScheduleStore.shared.allowDeletion = true
 
         navController.navigate(SettingsScreen.EditTemplate.name)

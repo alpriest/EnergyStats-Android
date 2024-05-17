@@ -9,6 +9,7 @@ class EditScheduleStore(
     var allowDeletion: Boolean = false
 ) {
     fun reset() {
+        templateStream.value = null
         scheduleStream.value = null
         phaseId = null
         allowDeletion = false

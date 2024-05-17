@@ -11,12 +11,13 @@ import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 
-interface ConfigManaging {
+interface ConfigManaging: ScheduleTemplateConfigManager {
     fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean)
     suspend fun fetchDevices()
     fun select(device: Device)
@@ -74,3 +75,8 @@ interface ConfigManaging {
     var showBatteryTimeEstimateOnWidget: Boolean
     var showSelfSufficiencyStatsGraphOverlay: Boolean
 }
+
+interface ScheduleTemplateConfigManager {
+    var scheduleTemplates: List<ScheduleTemplate>
+}
+

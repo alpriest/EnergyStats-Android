@@ -7,10 +7,12 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 class FakeConfigStore(
+    override var scheduleTemplates: List<ScheduleTemplate> = listOf(),
     override var colorTheme: Int = 0,
     override var showGraphValueDescriptions: Boolean = true,
     override var shouldCombineCT2WithPVPower: Boolean = false,

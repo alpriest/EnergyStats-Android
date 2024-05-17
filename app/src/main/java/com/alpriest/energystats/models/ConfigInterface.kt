@@ -2,10 +2,12 @@ package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 
 interface ConfigInterface {
+    var scheduleTemplates: List<ScheduleTemplate>
     var showBatteryTimeEstimateOnWidget: Boolean
     var powerStationDetail: PowerStationDetail?
     var shouldCombineCT2WithLoadsPower: Boolean

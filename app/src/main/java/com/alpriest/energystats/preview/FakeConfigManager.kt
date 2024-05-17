@@ -13,6 +13,7 @@ import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
 import com.alpriest.energystats.ui.settings.solcast.preview
@@ -69,6 +70,7 @@ class FakeConfigManager : ConfigManaging {
     override var powerStationDetail: PowerStationDetail? = null
     override var showBatteryTimeEstimateOnWidget: Boolean = true
     override var showSelfSufficiencyStatsGraphOverlay: Boolean = true
+    override var scheduleTemplates: List<ScheduleTemplate> = listOf()
 
     override var devices: List<Device>? = listOf(
         Device(

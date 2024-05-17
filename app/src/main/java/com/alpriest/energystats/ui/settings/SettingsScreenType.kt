@@ -14,7 +14,7 @@ enum class SettingsScreen {
     SolarBandings,
     SolcastSolarPrediction,
     FAQ,
-    Summary,
+    ScheduleSummary,
     EditSchedule,
     EditPhase,
     TemplateList,

@@ -12,6 +12,7 @@ import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -431,6 +432,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.showSelfSufficiencyStatsGraphOverlay
         set(value) {
             config.showSelfSufficiencyStatsGraphOverlay = value
+        }
+
+    override var scheduleTemplates: List<ScheduleTemplate>
+        get() = config.scheduleTemplates
+        set(value) {
+            config.scheduleTemplates = value
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

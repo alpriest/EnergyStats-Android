@@ -29,10 +29,11 @@ class EditTemplateView(
     private val configManager: ConfigManaging,
     private val network: Networking,
     private val navController: NavHostController,
-    private val userManager: UserManaging
+    private val userManager: UserManaging,
+    private val templateStore: TemplateStoring
 ) {
     @Composable
-    fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController))) {
+    fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController, templateStore))) {
         val template = viewModel.templateStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 

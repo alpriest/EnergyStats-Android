@@ -46,16 +46,19 @@ import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.PreviewTemplateStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleSummaryView(
     private val configManager: ConfigManaging,
     private val network: Networking,
     private val navController: NavHostController,
-    private val userManager: UserManaging
+    private val userManager: UserManaging,
+    private val templateStore: TemplateStoring
 ) {
     @Composable
-    fun Content(viewModel: ScheduleSummaryViewModel = viewModel(factory = ScheduleSummaryViewModelFactory(network, configManager, navController))) {
+    fun Content(viewModel: ScheduleSummaryViewModel = viewModel(factory = ScheduleSummaryViewModelFactory(network, configManager, navController, templateStore))) {
         val context = LocalContext.current
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
@@ -197,7 +200,7 @@ fun ScheduleTemplate.asSchedule(): Schedule {
 @Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun ScheduleSummaryViewPreview() {
-    val viewModel = ScheduleSummaryViewModel(DemoNetworking(), FakeConfigManager(), NavHostController(LocalContext.current))
+    val viewModel = ScheduleSummaryViewModel(DemoNetworking(), FakeConfigManager(), NavHostController(LocalContext.current), PreviewTemplateStore())
     val context = LocalContext.current
     LaunchedEffect(null) { viewModel.load(context) }
 
@@ -206,7 +209,8 @@ fun ScheduleSummaryViewPreview() {
             configManager = FakeConfigManager(),
             network = DemoNetworking(),
             navController = NavHostController(LocalContext.current),
-            userManager = FakeUserManager()
+            userManager = FakeUserManager(),
+            templateStore = PreviewTemplateStore()
         ).Loaded(
             Schedule.preview(),
             viewModel

@@ -39,7 +39,7 @@ fun NavigableSettingsView(
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
-    val templateStore = TemplateStore() // TODO
+    val templateStore = TemplateStore(config) // TODO inject this
 
     NavHost(
         navController = navController,
@@ -70,7 +70,7 @@ fun NavigableSettingsView(
             InverterSettingsView(configManager = config, network = network, navController = navController)
         }
         composable(SettingsScreen.InverterSchedule.name) {
-            ScheduleSummaryView(config, network, navController, userManager).Content()
+            ScheduleSummaryView(config, network, navController, userManager, templateStore).Content()
         }
         composable(SettingsScreen.Dataloggers.name) {
             DataLoggerViewContainer(network = network, configManager = config, navController = navController, context = context).Content()
@@ -94,8 +94,8 @@ fun NavigableSettingsView(
         composable(SettingsScreen.SolcastSolarPrediction.name) {
             SolcastSettingsView(navController, config, userManager, solarForecastingProvider).Content()
         }
-        composable(SettingsScreen.Summary.name) {
-            ScheduleSummaryView(config, network, navController, userManager).Content()
+        composable(SettingsScreen.ScheduleSummary.name) {
+            ScheduleSummaryView(config, network, navController, userManager, templateStore).Content()
         }
 
         composable(SettingsScreen.EditSchedule.name) {
@@ -116,7 +116,7 @@ fun NavigableSettingsView(
         }
 
         composable(SettingsScreen.EditTemplate.name) {
-            EditTemplateView(config, network, navController, userManager).Content()
+            EditTemplateView(config, network, navController, userManager, templateStore).Content()
         }
 
         composable(SettingsScreen.APIKey.name) {

@@ -22,18 +22,20 @@ import kotlinx.coroutines.launch
 class EditTemplateViewModelFactory(
     private val configManager: ConfigManaging,
     private val network: Networking,
-    private val navController: NavHostController
+    private val navController: NavHostController,
+    private val templateStore: TemplateStoring
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return EditTemplateViewModel(configManager, network, navController) as T
+        return EditTemplateViewModel(configManager, network, navController, templateStore) as T
     }
 }
 
 class EditTemplateViewModel(
     val config: ConfigManaging,
     val network: Networking,
-    val navController: NavHostController
+    val navController: NavHostController,
+    private val templateStore: TemplateStoring
 ) : ViewModel(), AlertDialogMessageProviding {
     val templateStream = EditScheduleStore.shared.templateStream
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
@@ -44,6 +46,7 @@ class EditTemplateViewModel(
 
     fun load() {
         templateID = EditScheduleStore.shared.templateStream.value?.id ?: return
+        templateStream.value = templateStore.load().first { it.id == templateID }
     }
 
     fun addTimePeriod() {
@@ -62,23 +65,19 @@ class EditTemplateViewModel(
     }
 
     fun delete(context: Context) {
+        val template = templateStream.value ?: return
+
         viewModelScope.launch {
             runCatching {
-                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.deleting)))
+                templateStore.delete(template)
 
-                // TODO
-//                try {
-//                    network.deleteScheduleTemplate(templateID)
-//
-//                    uiState.value = UiLoadState(LoadState.Inactive)
-//                    shouldPopNavOnDismissal = true
-//                    EditScheduleStore.shared.reset()
-//                    alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_deleted))
-//                } catch (ex: Exception) {
-//                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-//                }
+                uiState.value = UiLoadState(LoadState.Inactive)
+                shouldPopNavOnDismissal = true
+                EditScheduleStore.shared.reset()
+                alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_deleted))
             }
         }
+
     }
 
     override fun resetDialogMessage() {
@@ -92,26 +91,15 @@ class EditTemplateViewModel(
 
     fun saveTemplate(context: Context) {
         val template = templateStream.value ?: return
-        if (templateID == "") return
 
         viewModelScope.launch {
             runCatching {
-                config.currentDevice.value?.let { device ->
-                    val deviceSN = device.deviceSN
-                    uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+                templateStore.save(template)
 
-                    // TODO
-//                    try {
-//                        network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
-//
-//                        uiState.value = UiLoadState(LoadState.Inactive)
-//                        shouldPopNavOnDismissal = true
-//                        EditScheduleStore.shared.reset()
-//                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_saved))
-//                    } catch (ex: Exception) {
-//                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-//                    }
-                }
+                uiState.value = UiLoadState(LoadState.Inactive)
+                shouldPopNavOnDismissal = true
+                EditScheduleStore.shared.reset()
+                alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_saved))
             }
         }
     }
@@ -125,21 +113,20 @@ class EditTemplateViewModel(
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
 
-                    // TODO
-//                    try {
-//                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
-//                        network.saveScheduleTemplate(deviceSN, ScheduleTemplate(templateID, schedule.phases))
-//
-//                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
-//                        network.enableScheduleTemplate(deviceSN, templateID)
-//
-//                        uiState.value = UiLoadState(LoadState.Inactive)
-//                        shouldPopNavOnDismissal = true
-//                        EditScheduleStore.shared.reset()
-//                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_activated))
-//                    } catch (ex: Exception) {
-//                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-//                    }
+                    try {
+                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+                        network.saveSchedule(deviceSN, template.asSchedule())
+
+                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
+                        network.setScheduleFlag(deviceSN, true)
+
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                        shouldPopNavOnDismissal = true
+                        EditScheduleStore.shared.reset()
+                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_activated))
+                    } catch (ex: Exception) {
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                    }
                 }
             }
         }

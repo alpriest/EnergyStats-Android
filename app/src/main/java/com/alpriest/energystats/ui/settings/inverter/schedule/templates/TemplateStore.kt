@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 
+import com.alpriest.energystats.stores.ScheduleTemplateConfigManager
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhase
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import java.util.UUID
@@ -11,8 +12,10 @@ interface TemplateStoring {
     fun create(name: String)
 }
 
-class TemplateStore : TemplateStoring {
-    var templates: MutableList<ScheduleTemplate> = mutableListOf(
+class TemplateStore(
+    private val config: ScheduleTemplateConfigManager
+) : TemplateStoring {
+    var templates: List<ScheduleTemplate> = listOf(
         ScheduleTemplate(
             id = "1",
             name = "First schedule",
@@ -27,21 +30,30 @@ class TemplateStore : TemplateStoring {
     }
 
     override fun save(template: ScheduleTemplate) {
-        TODO("Not yet implemented")
+        val mutableTemplates = templates.toMutableList()
+        val index = mutableTemplates.indexOfFirst { it.id == template.id }
+        if (index != -1) {
+            mutableTemplates[index] = template
+        } else {
+            mutableTemplates.add(template)
+        }
+        templates = mutableTemplates
     }
 
     override fun delete(template: ScheduleTemplate) {
-        TODO("Not yet implemented")
+        templates = templates.filter { it.id != template.id }.toMutableList()
     }
 
     override fun create(name: String) {
-        templates.add(
+        val mutableTemplates = templates.toMutableList()
+        mutableTemplates.add(
             ScheduleTemplate(
                 id = UUID.randomUUID().toString(),
                 name = name,
                 phases = listOf()
             )
         )
+        templates = mutableTemplates
     }
 }
 

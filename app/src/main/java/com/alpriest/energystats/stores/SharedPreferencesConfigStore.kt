@@ -7,6 +7,7 @@ import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
@@ -64,7 +65,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         POWER_FLOW_STRINGS,
         POWER_STATION_DETAIL,
         SHOW_ESTIMATED_TIME_ON_WIDGET,
-        SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY
+        SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY,
+        SCHEDULE_TEMPLATES
     }
 
     override fun clearDisplaySettings() {
@@ -506,6 +508,22 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY.name, value)
+            editor.apply()
+        }
+
+    override var scheduleTemplates: List<ScheduleTemplate>
+        get() {
+            val data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, null)
+            if (data == null) {
+                scheduleTemplates = listOf()
+            }
+
+            return Gson().fromJson(data, object : TypeToken<List<ScheduleTemplate>>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, jsonString)
             editor.apply()
         }
 }
