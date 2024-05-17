@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
 class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: () -> Boolean) : FoxAPIServicing {
     private val demoAPI = DemoAPI()
     private val throttler = ThrottleManager()
+    private val writeAPIkey = "writeable-method"
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return if (isDemoUser()) {
@@ -86,7 +87,12 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
         return if (isDemoUser()) {
             demoAPI.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
         } else {
-            return api.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
+            try {
+                throttler.throttle(writeAPIkey, seconds = 2)
+                return api.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
+            } finally {
+                throttler.didInvoke(writeAPIkey)
+            }
         }
     }
 
@@ -124,7 +130,12 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
         return if (isDemoUser()) {
             demoAPI.openapi_setBatteryTimes(deviceSN, times)
         } else {
-            api.openapi_setBatteryTimes(deviceSN, times)
+            try {
+                throttler.throttle(writeAPIkey, seconds = 2)
+                api.openapi_setBatteryTimes(deviceSN, times)
+            } finally {
+                throttler.didInvoke(writeAPIkey)
+            }
         }
     }
 
@@ -154,7 +165,12 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
         if (isDemoUser()) {
             demoAPI.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
         } else {
-            return api.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+            try {
+                throttler.throttle(writeAPIkey, seconds = 2)
+                return api.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
+            } finally {
+                throttler.didInvoke(writeAPIkey)
+            }
         }
     }
 
@@ -162,7 +178,12 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
         if (isDemoUser()) {
             demoAPI.openapi_saveSchedule(deviceSN, schedule)
         } else {
-            return api.openapi_saveSchedule(deviceSN, schedule)
+            try {
+                throttler.throttle(writeAPIkey, seconds = 2)
+                return api.openapi_saveSchedule(deviceSN, schedule)
+            } finally {
+                throttler.didInvoke(writeAPIkey)
+            }
         }
     }
 
@@ -202,16 +223,16 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
 class ThrottleManager {
     private val lastCallTimes: ConcurrentHashMap<String, Long> = ConcurrentHashMap()
 
-    suspend fun throttle(method: String) {
+    suspend fun throttle(method: String, seconds: Int = 1) {
         val now = System.nanoTime()
         val lastCallTime = lastCallTimes[method]
 
         if (lastCallTime != null) {
             val timeSinceLastCall = now - lastCallTime
-            val waitTime = 1_000_000_000 - timeSinceLastCall  // 1 second in nanoseconds
+            val waitTime = (seconds * 1_000_000_000) - timeSinceLastCall  // 1 second in nanoseconds
 
             if (waitTime > 0) {
-                delay(waitTime / 1_000_000)  // Convert nanoseconds to milliseconds for delay
+                delay(waitTime / (seconds * 1_000_000))  // Convert nanoseconds to milliseconds for delay
             }
         }
 
