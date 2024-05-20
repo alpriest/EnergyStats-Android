@@ -1,16 +1,14 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +21,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,10 +37,11 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleView
+import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -85,27 +86,33 @@ class ScheduleTemplateListView(
         val context = LocalContext.current
 
         SettingsPage {
-            SettingsColumnWithChild {
-                SettingsTitleView(stringResource(R.string.templates))
+            templates.forEach {
+                SettingsColumn(
+                    header = if (it == templates.first()) {
+                        stringResource(R.string.templates)
+                    } else {
+                        null
+                    }
+                ) {
+                    Text(
+                        text = it.name,
+                        style = TextStyle.Default.copy(color = MaterialTheme.colors.onSecondary),
+                        modifier = Modifier
+                            .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
+                            .fillMaxWidth()
+                    )
 
-                templates.forEach {
                     OutlinedButton(
-                        onClick = { viewModel.edit(it, context) },
+                        onClick = { viewModel.edit(it) },
                         border = null,
                         contentPadding = PaddingValues()
                     ) {
-                        Text(
-                            it.name,
-                            color = colors.onSecondary
+                        ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
+
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = "Edit"
                         )
-
-                        Spacer(modifier = Modifier.weight(0.1f))
-
-                        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Edit")
-                    }
-
-                    if (templates.last() != it) {
-                        Divider()
                     }
                 }
             }
@@ -118,28 +125,22 @@ class ScheduleTemplateListView(
     fun CreateTemplateView(viewModel: ScheduleTemplateListViewModel) {
         val context = LocalContext.current
         var newTemplateName by remember { mutableStateOf("") }
-        var newTemplateDescription by remember { mutableStateOf("") }
         var triggerCreateFunction by remember { mutableStateOf(false) }
 
         LaunchedEffect(triggerCreateFunction) {
             if (triggerCreateFunction) {
-                viewModel.createTemplate(newTemplateName, newTemplateDescription, context)
+                viewModel.createTemplate(newTemplateName, context)
                 triggerCreateFunction = false
             }
         }
 
-        SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
-            SettingsTitleView(stringResource(R.string.new_template))
-
+        SettingsColumn(
+            header = stringResource(R.string.new_template)
+        ) {
             OutlinedTextField(
                 value = newTemplateName,
                 onValueChange = { newTemplateName = it },
                 label = { Text(stringResource(R.string.name), color = DimmedTextColor) }
-            )
-            OutlinedTextField(
-                value = newTemplateDescription,
-                onValueChange = { newTemplateDescription = it },
-                label = { Text(stringResource(R.string.description), color = DimmedTextColor) }
             )
 
             Button(onClick = { triggerCreateFunction = true }) {

@@ -9,6 +9,8 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -34,53 +36,24 @@ class ScheduleTemplateListViewModel(
         }
     }
 
-    suspend fun createTemplate(templateName: String, templateDescription: String, context: Context) {
+    fun createTemplate(templateName: String, context: Context) {
         if (uiState.value.state != LoadState.Inactive) {
             return
         }
 
-        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
-
-        // TODO
-//        try {
-//            network.createScheduleTemplate(templateName, templateDescription)
-//            uiState.value = UiLoadState(LoadState.Inactive)
-//
-//            load(context)
-//        } catch (ex: Exception) {
-//            uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-//        }
+        templateStore.create(templateName)
+        load(context)
     }
 
-    fun edit(templateSummary: ScheduleTemplate, context: Context) {
-//        if (uiState.value.state != LoadState.Inactive) {
-//            return
-//        }
-//
-//        viewModelScope.launch {
-//            config.currentDevice.value?.let { device ->
-//                val deviceSN = device.deviceSN
-//
-//                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
-//
-//                try {
-//                    // TODO
-////                    val template = network.fetchScheduleTemplate(deviceSN, templateSummary.id)
-//                    val modes = EditScheduleStore.shared.modes
-//
-////                    EditScheduleStore.shared.scheduleStream.value = Schedule(
-////                        name = template.templateName,
-////                        phases = template.pollcy.mapNotNull { it.toSchedulePhase(modes) },
-////                        templateID = templateSummary.id,
-////                        description = template.content
-////                    )
-//                    navController.navigate(SettingsScreen.EditTemplate.name)
-//
-//                    uiState.value = UiLoadState(LoadState.Inactive)
-//                } catch (ex: Exception) {
-//                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-//                }
-//            }
-//        }
+    fun edit(template: ScheduleTemplate) {
+        if (uiState.value.state != LoadState.Inactive) {
+            return
+        }
+
+        EditScheduleStore.shared.reset()
+        EditScheduleStore.shared.templateStream.value = template
+        EditScheduleStore.shared.allowDeletion = true
+
+        navController.navigate(SettingsScreen.EditTemplate.name)
     }
 }
