@@ -45,8 +45,12 @@ class EditTemplateViewModel(
     private var shouldPopNavOnDismissal = false
 
     fun load() {
-        templateID = EditScheduleStore.shared.templateStream.value?.id ?: return
-        templateStream.value = templateStore.load().first { it.id == templateID }
+        if (EditScheduleStore.shared.scheduleStream.value == null) {
+            templateID = EditScheduleStore.shared.templateStream.value?.id ?: return
+            val template = templateStore.load().first { it.id == templateID }
+            templateStream.value = template
+            EditScheduleStore.shared.scheduleStream.value = template.asSchedule()
+        }
     }
 
     fun addTimePeriod() {
@@ -77,7 +81,6 @@ class EditTemplateViewModel(
                 alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_deleted))
             }
         }
-
     }
 
     override fun resetDialogMessage() {

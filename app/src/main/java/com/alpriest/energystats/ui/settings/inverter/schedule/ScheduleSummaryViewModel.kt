@@ -201,6 +201,7 @@ class ScheduleSummaryViewModel(
 
 internal fun SchedulePhaseResponse.toSchedulePhase(): SchedulePhase? {
     if (workMode == WorkMode.Invalid) { return null }
+    if (enable == 0) { return null }
 
     return SchedulePhase.create(
         start = Time(hour = startHour, minute = startMinute),

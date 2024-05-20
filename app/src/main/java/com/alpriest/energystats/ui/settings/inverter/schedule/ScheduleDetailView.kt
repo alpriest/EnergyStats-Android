@@ -52,9 +52,9 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
             schedule.phases.forEach {
                 OutlinedButton(
                     onClick = {
+                        EditScheduleStore.shared.scheduleStream.value = schedule
                         EditScheduleStore.shared.phaseId = it.id
                         navController.navigate(SettingsScreen.EditPhase.name)
-
                     },
                     border = null,
                     contentPadding = PaddingValues()
