@@ -65,8 +65,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         POWER_FLOW_STRINGS,
         POWER_STATION_DETAIL,
         SHOW_ESTIMATED_TIME_ON_WIDGET,
-        SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY,
-        SCHEDULE_TEMPLATES
+        SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY
     }
 
     override fun clearDisplaySettings() {
@@ -76,7 +75,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.remove(it.name)
         }
 
-        editor.clear()
         editor.apply()
     }
 
@@ -87,7 +85,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.remove(it.name)
         }
 
-        editor.clear()
         editor.apply()
     }
 
@@ -481,8 +478,9 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var variables: List<Variable>
         get() {
-            val data = sharedPreferences.getString(SharedPreferenceDisplayKey.VARIABLES.name, null)
+            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.VARIABLES.name, null)
             if (data == null) {
+                data = Gson().toJson(listOf<Variable>())
                 variables = listOf()
             }
 
@@ -513,8 +511,9 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var scheduleTemplates: List<ScheduleTemplate>
         get() {
-            val data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, null)
+            var data = sharedPreferences.getString("SCHEDULE_TEMPLATES", null)
             if (data == null) {
+                data = Gson().toJson(listOf<ScheduleTemplate>())
                 scheduleTemplates = listOf()
             }
 
@@ -523,7 +522,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             val jsonString = Gson().toJson(value)
-            editor.putString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, jsonString)
+            editor.putString("SCHEDULE_TEMPLATES", jsonString)
             editor.apply()
         }
 }

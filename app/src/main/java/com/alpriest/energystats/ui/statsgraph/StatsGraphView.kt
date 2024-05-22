@@ -89,7 +89,6 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                             valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
                             guideline = null
                         ),
-//                    diffAnimationSpec = SnapSpec(),
                         horizontalLayout = HorizontalLayout.fullWidth()
                     )
                 }

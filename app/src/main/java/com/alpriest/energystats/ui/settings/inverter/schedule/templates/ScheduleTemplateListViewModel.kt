@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.alpriest.energystats.R
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -29,10 +28,7 @@ class ScheduleTemplateListViewModel(
         }
 
         config.currentDevice.value?.let { _ ->
-            uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
-
             templateStream.value = templateStore.load()
-            uiState.value = UiLoadState(LoadState.Inactive)
         }
     }
 

@@ -164,7 +164,7 @@ class StatsTabViewModel(
 
             is StatsDisplayMode.Month -> {
                 val dateFormatSymbols = DateFormatSymbols.getInstance()
-                val month = dateFormatSymbols.months[displayMode.month]
+                val month = dateFormatSymbols.months.getOrNull(displayMode.month) ?: "${displayMode.month}"
                 val year = displayMode.year
                 baseExportFileName = "energystats_${year}_$month"
             }

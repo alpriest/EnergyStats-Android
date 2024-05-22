@@ -337,4 +337,5 @@
     <string name="thresholds_were_saved">Le soglie sono state salvate</string>
     <string name="drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power">Trascina il cursore sopra per vedere come verrà visualizzato il tuo flusso solare quando viene generato un diverso livello di potenza.</string>
     <string name="foxess_timeout">FoxESS OpenAPI non ha risposto abbastanza velocemente. Riprova o segnala un problema a FoxESS se vedi spesso questo messaggio.</string>
+    <string name="templates_overview">I modelli di programma sono locali al tuo dispositivo e non saranno visibili su Fox Cloud. Questa è una limitazione imposta da FoxESS. Non saranno rimossi se esci.</string>
 </resources>

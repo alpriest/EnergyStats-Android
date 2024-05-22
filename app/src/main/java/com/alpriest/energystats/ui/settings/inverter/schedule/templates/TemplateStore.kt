@@ -15,37 +15,27 @@ interface TemplateStoring {
 class TemplateStore(
     private val config: ScheduleTemplateConfigManager
 ) : TemplateStoring {
-    var templates: List<ScheduleTemplate> = listOf(
-        ScheduleTemplate(
-            id = "1",
-            name = "First schedule",
-            phases = listOf(
-                SchedulePhase.preview()
-            )
-        )
-    )
-
     override fun load(): List<ScheduleTemplate> {
-        return templates
+        return config.scheduleTemplates
     }
 
     override fun save(template: ScheduleTemplate) {
-        val mutableTemplates = templates.toMutableList()
+        val mutableTemplates = config.scheduleTemplates.toMutableList()
         val index = mutableTemplates.indexOfFirst { it.id == template.id }
         if (index != -1) {
             mutableTemplates[index] = template
         } else {
             mutableTemplates.add(template)
         }
-        templates = mutableTemplates
+        config.scheduleTemplates = mutableTemplates
     }
 
     override fun delete(template: ScheduleTemplate) {
-        templates = templates.filter { it.id != template.id }.toMutableList()
+        config.scheduleTemplates = config.scheduleTemplates.filter { it.id != template.id }.toMutableList()
     }
 
     override fun create(name: String) {
-        val mutableTemplates = templates.toMutableList()
+        val mutableTemplates = config.scheduleTemplates.toMutableList()
         mutableTemplates.add(
             ScheduleTemplate(
                 id = UUID.randomUUID().toString(),
@@ -53,7 +43,7 @@ class TemplateStore(
                 phases = listOf()
             )
         )
-        templates = mutableTemplates
+        config.scheduleTemplates = mutableTemplates
     }
 }
 

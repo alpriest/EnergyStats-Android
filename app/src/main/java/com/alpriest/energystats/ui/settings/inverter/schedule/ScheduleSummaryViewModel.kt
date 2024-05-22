@@ -188,8 +188,10 @@ class ScheduleSummaryViewModel(
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
                     try {
+                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
                         network.saveSchedule(deviceSN, schedule)
                         uiState.value = UiLoadState(LoadState.Inactive)
+                        load(context)
                     } catch (ex: Exception) {
                         uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
                     }

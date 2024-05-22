@@ -45,11 +45,16 @@ class EditTemplateViewModel(
     private var shouldPopNavOnDismissal = false
 
     fun load() {
-        if (EditScheduleStore.shared.scheduleStream.value == null) {
-            templateID = EditScheduleStore.shared.templateStream.value?.id ?: return
+        val sharedSchedule = EditScheduleStore.shared.scheduleStream.value
+        val sharedTemplate = EditScheduleStore.shared.templateStream.value
+
+        if (sharedSchedule == null && sharedTemplate != null) {
+            templateID = sharedTemplate.id
             val template = templateStore.load().first { it.id == templateID }
             templateStream.value = template
             EditScheduleStore.shared.scheduleStream.value = template.asSchedule()
+        } else if (sharedSchedule != null && sharedTemplate != null) {
+            EditScheduleStore.shared.templateStream.value = ScheduleTemplate(templateID, sharedTemplate.name, sharedSchedule.phases)
         }
     }
 

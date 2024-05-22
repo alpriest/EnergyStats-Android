@@ -167,6 +167,8 @@ class ScheduleSummaryView(
             Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
                 Text(stringResource(R.string.manage_templates), color = colors.onPrimary)
             }
+
+            Text(stringResource(R.string.templates_overview))
         }
     }
 
