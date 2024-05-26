@@ -65,7 +65,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         POWER_FLOW_STRINGS,
         POWER_STATION_DETAIL,
         SHOW_ESTIMATED_TIME_ON_WIDGET,
-        SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY
+        SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY,
+        TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS
     }
 
     override fun clearDisplaySettings() {
@@ -523,6 +524,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             val editor = sharedPreferences.edit()
             val jsonString = Gson().toJson(value)
             editor.putString("SCHEDULE_TEMPLATES", jsonString)
+            editor.apply()
+        }
+
+    override var truncatedYAxisOnParameterGraphs: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, true)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, value)
             editor.apply()
         }
 }

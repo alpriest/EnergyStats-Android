@@ -440,6 +440,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.scheduleTemplates = value
         }
 
+    override var truncatedYAxisOnParameterGraphs: Boolean
+        get() = config.truncatedYAxisOnParameterGraphs
+        set(value) {
+            config.truncatedYAxisOnParameterGraphs = value
+            themeStream.value = themeStream.value.copy(truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs)
+        }
+
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     init {

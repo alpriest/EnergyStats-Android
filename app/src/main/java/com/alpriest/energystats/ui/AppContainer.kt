@@ -87,7 +87,8 @@ class AppContainer(private val context: Context) {
             currencySymbol = config.currencySymbol,
             showBatterySOCAsPercentage = config.showBatterySOCAsPercentage,
             shouldCombineCT2WithLoadsPower = config.shouldCombineCT2WithLoadsPower,
-            powerFlowStrings = config.powerFlowStrings
+            powerFlowStrings = config.powerFlowStrings,
+            truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs
         )
     )
 

@@ -40,6 +40,8 @@ interface AlertDialogMessageProviding {
     }
 }
 
+data class AxisScale(val min: Float?, val max: Float?)
+
 class ParametersGraphTabViewModel(
     val networking: Networking,
     val configManager: ConfigManaging,
@@ -62,6 +64,7 @@ class ParametersGraphTabViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val xDataPointCount: MutableStateFlow<Float> = MutableStateFlow(360f)
+    val yAxisScale: MutableStateFlow<AxisScale> = MutableStateFlow(AxisScale(null, null))
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -171,10 +174,15 @@ class ParametersGraphTabViewModel(
 
         xDataPointCount.value = calculateDataPointCount()
         boundsStream.value = entries.map { entryList ->
-            val max = entryList.maxBy { it.y }.y
-            val min = entryList.minBy { it.y }.y
+            val max = (entryList.maxBy { it.y }.y) * 1.1f
+            val min = (entryList.minBy { it.y }.y) * 0.9f
 
             ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
+        }
+        if (configManager.themeStream.value.truncatedYAxisOnParameterGraphs) {
+            yAxisScale.value = AxisScale(boundsStream.value.minBy { it.min }.min, boundsStream.value.maxBy { it.max }.max)
+        } else {
+            yAxisScale.value = AxisScale(null, null)
         }
 
         if (entries.isEmpty()) {

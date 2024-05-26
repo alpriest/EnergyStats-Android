@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,8 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.IconColorInDarkTheme
+import com.alpriest.energystats.ui.theme.IconColorInLightTheme
 import com.alpriest.energystats.ui.theme.demo
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
@@ -62,7 +65,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
         val lineChart = lineChart(
             lines = listOf(
                 lineSpec(
-                    lineColor = Color.Black,
+                    lineColor = selfSufficiencyLineColor(isSystemInDarkTheme()),
                     lineThickness = 1.dp,
                     lineBackgroundShader = null,
                 )
@@ -137,4 +140,13 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
 
 class ZeroValuesAxisOverrider : AxisValuesOverrider<ChartEntryModel> {
     override fun getMaxY(model: ChartEntryModel) = if (model.maxY != 0f) model.maxY else 1f
+}
+
+@Composable
+private fun selfSufficiencyLineColor(isDarkMode: Boolean): Color {
+    return if (isDarkMode) {
+        IconColorInDarkTheme
+    } else {
+        IconColorInLightTheme
+    }
 }

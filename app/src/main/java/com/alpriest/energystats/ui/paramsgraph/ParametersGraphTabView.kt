@@ -106,7 +106,7 @@ class ParametersGraphTabView(
                 .padding(12.dp)
                 .verticalScroll(scrollState)
         ) {
-            ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp), navController)
+            ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp), navController, configManager)
 
             if (hasData) {
                 Column(
@@ -256,6 +256,7 @@ fun PreviewParameterGraphHeaderView() {
             onWriteTempFile = { _, _ -> null },
             graphVariablesStream = MutableStateFlow(listOf()),
         ),
-        navController = NavHostController(LocalContext.current)
+        navController = NavHostController(LocalContext.current),
+        configManager = FakeConfigManager()
     )
 }

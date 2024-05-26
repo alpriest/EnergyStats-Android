@@ -276,7 +276,7 @@ class StatsTabViewModel(
 
                 approximations.netSelfSufficiencyEstimateValue?.let {
                     entries.add(
-                        graphPoint, StatsChartEntry(
+                        StatsChartEntry(
                             x = graphPoint.toFloat(),
                             y = it.toFloat(),
                             type = ReportVariable.Generation

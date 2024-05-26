@@ -74,6 +74,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var powerStationDetail: PowerStationDetail?
     var showBatteryTimeEstimateOnWidget: Boolean
     var showSelfSufficiencyStatsGraphOverlay: Boolean
+    var truncatedYAxisOnParameterGraphs: Boolean
 }
 
 interface ScheduleTemplateConfigManager {

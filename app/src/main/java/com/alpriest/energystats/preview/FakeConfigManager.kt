@@ -31,8 +31,7 @@ class FakeConfigManager : ConfigManaging {
     override var feedInUnitPrice: Double = 0.05
     override var gridImportUnitPrice: Double = 0.15
     override var currencySymbol: String = "£"
-    override val variables: List<Variable>
-        get() = listOf()
+    override val variables: List<Variable> = listOf()
     override var showUsableBatteryOnly: Boolean = false
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.demo())
     override var decimalPlaces: Int = 3
@@ -71,6 +70,7 @@ class FakeConfigManager : ConfigManaging {
     override var showBatteryTimeEstimateOnWidget: Boolean = true
     override var showSelfSufficiencyStatsGraphOverlay: Boolean = true
     override var scheduleTemplates: List<ScheduleTemplate> = listOf()
+    override var truncatedYAxisOnParameterGraphs: Boolean = true
 
     override var devices: List<Device>? = listOf(
         Device(

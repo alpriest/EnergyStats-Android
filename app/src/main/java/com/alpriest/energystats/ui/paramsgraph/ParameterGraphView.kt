@@ -68,6 +68,7 @@ fun ParameterGraphView(
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>() else DecimalFormatAxisValueFormatter("0.0")
     val dataPointCount = viewModel.xDataPointCount.collectAsState().value
     val seriesCount = producer.getModel()?.entries?.count() ?: 0
+    val yAxisScale = viewModel.yAxisScale.collectAsState().value
 
     MonitorAlertDialog(viewModel, userManager)
 
@@ -78,7 +79,10 @@ fun ParameterGraphView(
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                         Chart(
                             chart = lineChart(
-                                axisValuesOverrider = AxisValuesOverrider.fixed(0f, dataPointCount)
+                                axisValuesOverrider = AxisValuesOverrider.fixed(
+                                    minX = 0f, maxX = dataPointCount,
+                                    minY = yAxisScale.min, maxY = yAxisScale.max
+                                )
                             ),
                             chartModelProducer = producer,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),

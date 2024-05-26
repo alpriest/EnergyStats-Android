@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,27 +16,38 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.CalendarView
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 
 @Composable
-fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier, navController: NavController) {
+fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier, navController: NavController, configManager: ConfigManaging) {
     var hours by remember { mutableStateOf(viewModel.displayModeStream.value.hours) }
     val candidateQueryDate = MutableStateFlow(viewModel.displayModeStream.collectAsState().value.date)
     var hoursButtonEnabled by remember { mutableStateOf(true) }
@@ -53,18 +65,37 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        ParameterGraphVariableChooserButton(navController)
+        MenuWithButton(
+            modifier = Modifier.padding(end = 14.dp),
+            Icons.AutoMirrored.Filled.List
+        ) { showing ->
+            DropdownMenuItem(onClick = {
+                navController.navigate(ParametersScreen.ParameterChooser.name)
+            }) {
+                Text("Parameters...")
+            }
 
-        CalendarView(dateStream = candidateQueryDate)
+            Divider(thickness = 5.dp)
 
-        HourPicker(
-            hours,
-            enabled = hoursButtonEnabled,
-            onHoursChanged = {
+            HourPickerItems(hours, showing, onHoursChanged = {
                 hours = it
                 viewModel.displayModeStream.value = ParametersDisplayMode(candidateQueryDate.value, hours)
+            })
+
+            Divider(thickness = 5.dp)
+
+            DropdownMenuItem(onClick = {
+                configManager.truncatedYAxisOnParameterGraphs = !configManager.truncatedYAxisOnParameterGraphs
+            }) {
+                Text(stringResource(R.string.display_truncated_y_axis))
+                if (configManager.truncatedYAxisOnParameterGraphs) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+                }
             }
-        )
+        }
+
+        CalendarView(dateStream = candidateQueryDate)
 
         Spacer(modifier = Modifier.weight(2.0f))
 
@@ -100,59 +131,73 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
 }
 
 @Composable
-private fun HourPicker(hours: Int, enabled: Boolean, onHoursChanged: (Int) -> Unit) {
-    var showingHours by remember { mutableStateOf(false) }
+private fun MenuWithButton(modifier: Modifier = Modifier, icon: ImageVector, content: @Composable() (ColumnScope.(MutableState<Boolean>) -> Unit)) {
+    val showing = remember { mutableStateOf(false) }
 
-    Box {
+    Box(modifier) {
         Button(
-            onClick = { showingHours = true },
+            onClick = { showing.value = true },
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .size(36.dp),
-            contentPadding = PaddingValues(0.dp),
-            enabled = enabled
+            contentPadding = PaddingValues(0.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Schedule,
+                imageVector = icon,
                 contentDescription = null
             )
         }
 
-        DropdownMenu(expanded = showingHours, onDismissRequest = { showingHours = false }) {
-            DropdownMenuItem(onClick = {
-                onHoursChanged(6)
-                showingHours = false
-            }) {
-                Text("6 hours")
-                if (hours == 6) {
-                    Spacer(modifier = Modifier.weight(1f))
-                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                }
-            }
-            Divider()
-
-            DropdownMenuItem(onClick = {
-                onHoursChanged(12)
-                showingHours = false
-            }) {
-                Text("12 hours")
-                if (hours == 12) {
-                    Spacer(modifier = Modifier.weight(1f))
-                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                }
-            }
-            Divider()
-
-            DropdownMenuItem(onClick = {
-                onHoursChanged(24)
-                showingHours = false
-            }) {
-                Text("24 hours")
-                if (hours == 24) {
-                    Spacer(modifier = Modifier.weight(1f))
-                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                }
-            }
+        DropdownMenu(expanded = showing.value, onDismissRequest = { showing.value = false }) {
+            content(showing)
         }
     }
+}
+
+@Composable
+private fun HourPickerItems(hours: Int, showing: MutableState<Boolean>, onHoursChanged: (Int) -> Unit) {
+    DropdownMenuItem(onClick = {
+        onHoursChanged(6)
+        showing.value = false
+    }) {
+        Text("6 hours")
+        if (hours == 6) {
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+        }
+    }
+    Divider()
+
+    DropdownMenuItem(onClick = {
+        onHoursChanged(12)
+        showing.value = false
+    }) {
+        Text("12 hours")
+        if (hours == 12) {
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+        }
+    }
+    Divider()
+
+    DropdownMenuItem(onClick = {
+        onHoursChanged(24)
+        showing.value = false
+    }) {
+        Text("24 hours")
+        if (hours == 24) {
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
+        }
+    }
+}
+
+@Composable
+@Preview(heightDp=400)
+fun ParameterGraphHeaderViewPreview() {
+    ParameterGraphHeaderView(
+        ParametersGraphTabViewModel(DemoNetworking(), FakeConfigManager(), onWriteTempFile = { _, _ -> null }, MutableStateFlow(previewParameterGraphVariables())),
+        navController = NavHostController(LocalContext.current),
+        configManager = FakeConfigManager()
+    )
 }

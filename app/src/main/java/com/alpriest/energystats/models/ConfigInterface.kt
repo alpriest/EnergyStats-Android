@@ -54,6 +54,7 @@ interface ConfigInterface {
     var useTraditionalLoadFormula: Boolean
     var powerFlowStrings: PowerFlowStringsSettings
     var showSelfSufficiencyStatsGraphOverlay: Boolean
+    var truncatedYAxisOnParameterGraphs: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +40,8 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.ui.theme.IconColorInDarkTheme
+import com.alpriest.energystats.ui.theme.IconColorInLightTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
@@ -47,7 +51,7 @@ sealed class StatsDisplayMode {
     data class Day(val date: LocalDate) : StatsDisplayMode()
     data class Month(val month: Int, val year: Int) : StatsDisplayMode()
     data class Year(val year: Int) : StatsDisplayMode()
-    data class Custom(val start: LocalDate, val end: LocalDate): StatsDisplayMode()
+    data class Custom(val start: LocalDate, val end: LocalDate) : StatsDisplayMode()
 
     fun unit(): String {
         return when (this) {
@@ -96,8 +100,15 @@ fun StatsTabView(
             when (loadState) {
                 is LoadState.Error ->
                     Text(stringResource(R.string.error))
+
                 is LoadState.Active ->
-                    LoadingOverlayView()
+                    Box(
+                        modifier = Modifier.height(200.dp).fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        LoadingOverlayView()
+                    }
+
                 is LoadState.Inactive -> {}
             }
         }
