@@ -337,4 +337,5 @@
     <string name="drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power">Ziehen Sie den Schieberegler oben, um zu sehen, wie Ihr Solarfluss angezeigt wird, wenn verschiedene Leistungsstufen erzeugt werden.</string>
     <string name="foxess_timeout">Die FoxESS OpenAPI hat nicht schnell genug geantwortet. Bitte versuche es erneut oder melde ein Problem bei FoxESS, wenn du dies häufig siehst.</string>
     <string name="templates_overview">Zeitplanvorlagen sind nur lokal auf deinem Gerät und werden nicht in der Fox Cloud sichtbar sein. Dies ist eine Einschränkung, die von FoxESS auferlegt wurde. Sie werden nicht entfernt, wenn du dich abmeldest.</string>
+    <string name="display_truncated_y_axis">Abgeschnittene Y-Achse anzeigen</string>
 </resources>

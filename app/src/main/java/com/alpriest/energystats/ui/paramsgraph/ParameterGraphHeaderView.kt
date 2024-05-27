@@ -86,6 +86,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
 
             DropdownMenuItem(onClick = {
                 configManager.truncatedYAxisOnParameterGraphs = !configManager.truncatedYAxisOnParameterGraphs
+                showing.value = false
             }) {
                 Text(stringResource(R.string.display_truncated_y_axis))
                 if (configManager.truncatedYAxisOnParameterGraphs) {

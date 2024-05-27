@@ -68,6 +68,7 @@ fun ParameterGraphView(
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>() else DecimalFormatAxisValueFormatter("0.0")
     val dataPointCount = viewModel.xDataPointCount.collectAsState().value
     val seriesCount = producer.getModel()?.entries?.count() ?: 0
+    val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
     val yAxisScale = viewModel.yAxisScale.collectAsState().value
 
     MonitorAlertDialog(viewModel, userManager)
@@ -78,10 +79,11 @@ fun ParameterGraphView(
                 Column(modifier = modifier.fillMaxWidth()) {
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                         Chart(
+                            runInitialAnimation = truncatedYAxisOnParameterGraphs,
                             chart = lineChart(
                                 axisValuesOverrider = AxisValuesOverrider.fixed(
-                                    minX = 0f, maxX = dataPointCount,
-                                    minY = yAxisScale.min, maxY = yAxisScale.max
+                                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
                                 )
                             ),
                             chartModelProducer = producer,
@@ -124,7 +126,13 @@ fun ParameterGraphView(
                 Column(modifier = modifier.fillMaxWidth()) {
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                         Chart(
-                            chart = lineChart(),
+                            runInitialAnimation = truncatedYAxisOnParameterGraphs,
+                            chart = lineChart(
+                                axisValuesOverrider = AxisValuesOverrider.fixed(
+                                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
+                                )
+                            ),
                             chartModelProducer = producer,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
@@ -165,7 +173,13 @@ fun ParameterGraphView(
                 Column(modifier = modifier.fillMaxWidth()) {
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                         Chart(
-                            chart = lineChart(),
+                            runInitialAnimation = truncatedYAxisOnParameterGraphs,
+                            chart = lineChart(
+                                axisValuesOverrider = AxisValuesOverrider.fixed(
+                                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
+                                )
+                            ),
                             chartModelProducer = producer,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(

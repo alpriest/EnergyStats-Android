@@ -179,11 +179,7 @@ class ParametersGraphTabViewModel(
 
             ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
         }
-        if (configManager.themeStream.value.truncatedYAxisOnParameterGraphs) {
-            yAxisScale.value = AxisScale(boundsStream.value.minBy { it.min }.min, boundsStream.value.maxBy { it.max }.max)
-        } else {
-            yAxisScale.value = AxisScale(null, null)
-        }
+        yAxisScale.value = AxisScale(boundsStream.value.minBy { it.min }.min, boundsStream.value.maxBy { it.max }.max)
 
         if (entries.isEmpty()) {
             hasDataStream.value = false

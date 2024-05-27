@@ -337,4 +337,5 @@
     <string name="drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power">Arrastra el control deslizante de arriba para ver cómo se mostrará tu flujo solar al generar diferentes niveles de energía.</string>
     <string name="foxess_timeout">FoxESS OpenAPI no respondió lo suficientemente rápido. Por favor, inténtalo de nuevo o informa un problema a FoxESS si ves esto a menudo.</string>
     <string name="templates_overview">Las plantillas de horarios son locales a tu dispositivo y no serán visibles en Fox Cloud. Esta es una limitación impuesta por FoxESS. No se eliminarán si cierras sesión.</string>
+    <string name="display_truncated_y_axis">Mostrar eje Y truncado</string>
 </resources>
