@@ -43,19 +43,20 @@ fun <T : GraphVariable> ToggleRowView(
     val textColor = if (it.enabled) MaterialTheme.colors.onBackground else DimmedTextColor
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
+    val colour = it.colour().copy(alpha = if (it.enabled) 1.0f else 0.5f)
 
     Row(
         verticalAlignment = Alignment.Top,
         modifier = Modifier
-            .padding(bottom = 6.dp)
+            .padding(bottom = 5.dp)
             .clickable {
                 toggleVisibility(it)
             }
     ) {
-        Box(modifier = Modifier.padding(top = if (appTheme.useLargeDisplay) 10.dp else 4.dp)) {
+        Box(modifier = Modifier.padding(top = if (appTheme.useLargeDisplay) 10.dp else 1.dp)) {
             Canvas(modifier = Modifier.size(16.dp)) {
                 drawCircle(
-                    color = it.colour.copy(alpha = if (it.enabled) 1.0f else 0.5f),
+                    color = colour,
                     radius = size.minDimension / 2,
                     center = Offset(size.width / 2, size.height / 2)
                 )

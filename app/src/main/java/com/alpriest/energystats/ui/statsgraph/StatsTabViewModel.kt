@@ -37,7 +37,7 @@ class StatsTabViewModel(
     private val networking: Networking,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
-    var chartColorsStream = MutableStateFlow(listOf<Color>())
+    var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
     val producer: ChartEntryModelProducer = ChartEntryModelProducer()
     var selfSufficiencyProducer: ChartEntryModelProducer = ChartEntryModelProducer()
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
@@ -82,7 +82,8 @@ class StatsTabViewModel(
             ReportVariable.GridConsumption,
             if (device.hasBattery) ReportVariable.ChargeEnergyToTal else null,
             if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
-            ReportVariable.Loads
+            ReportVariable.Loads,
+            ReportVariable.SelfSufficiency
         ).mapNotNull { it }.map {
             StatsGraphVariable(it, true)
         }
@@ -205,8 +206,7 @@ class StatsTabViewModel(
                 }.toList()
             }.toList()
 
-        chartColorsStream.value = grouped
-            .map { it.key.colour() }
+        chartColorsStream.value = grouped.keys.toList()
 
         producer.setEntries(entries)
         prepareExport(rawData, displayModeStream.value)
@@ -294,7 +294,9 @@ data class ValuesAtTime<T>(val values: List<T>)
 
 interface GraphVariable {
     val enabled: Boolean
-    val colour: Color
+
+    @Composable
+    fun colour(): Color
 }
 
 @Composable

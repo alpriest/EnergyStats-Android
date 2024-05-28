@@ -50,7 +50,7 @@ import java.util.Locale
 @Composable
 fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsState().value
-    val chartColors = viewModel.chartColorsStream.collectAsState().value
+    val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour() }
 
     if (viewModel.producer.getModel()?.entries?.isEmpty() == true) {
         Text("No data")
@@ -143,7 +143,7 @@ class ZeroValuesAxisOverrider : AxisValuesOverrider<ChartEntryModel> {
 }
 
 @Composable
-private fun selfSufficiencyLineColor(isDarkMode: Boolean): Color {
+fun selfSufficiencyLineColor(isDarkMode: Boolean): Color {
     return if (isDarkMode) {
         IconColorInDarkTheme
     } else {

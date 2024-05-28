@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.statsgraph.GraphVariable
@@ -18,8 +19,10 @@ data class ParameterGraphVariable(
     val isSelected: Boolean,
     override val enabled: Boolean
 ) : GraphVariable {
-    override val colour: Color
-        get() = type.colour()
+    @Composable
+    override fun colour(): Color {
+        return type.colour()
+    }
 }
 
 data class ParameterGraphBounds(

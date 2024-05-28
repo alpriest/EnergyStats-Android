@@ -1,6 +1,9 @@
 package com.alpriest.energystats.models
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.ui.statsgraph.selfSufficiencyLineColor
 
 enum class ValueUsage {
     SNAPSHOT,
@@ -13,7 +16,8 @@ enum class ReportVariable {
     GridConsumption,
     ChargeEnergyToTal,
     DischargeEnergyToTal,
-    Loads;
+    Loads,
+    SelfSufficiency;
 
     fun networkTitle(): String {
         return when (this) {
@@ -23,9 +27,11 @@ enum class ReportVariable {
             ChargeEnergyToTal -> "chargeEnergyToTal"
             DischargeEnergyToTal -> "dischargeEnergyToTal"
             Loads -> "loads"
+            SelfSufficiency -> "selfSufficiency"
         }
     }
 
+    @Composable
     fun colour(): Color {
         return when (this) {
             Generation -> Color(244, 184, 96)
@@ -34,6 +40,7 @@ enum class ReportVariable {
             DischargeEnergyToTal -> Color(80, 147, 248)
             GridConsumption -> Color(236, 109, 96)
             Loads -> Color(209,207,83)
+            SelfSufficiency -> selfSufficiencyLineColor(isSystemInDarkTheme())
         }
     }
 

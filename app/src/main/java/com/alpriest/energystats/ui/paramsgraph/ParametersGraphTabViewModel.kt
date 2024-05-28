@@ -213,17 +213,13 @@ class ParametersGraphTabViewModel(
                 }
                 .toMap()
 
-            val foo = grouped
+            chartColorsStream.value = grouped
                 .map { group ->
                     return@map Pair(group.key.unit, group.value)
                 }
-
-            val foo2 = foo.groupBy { it.first }
-            val foo3 = foo2.map { Pair(it.key, it.value.map { it.second.first() }) }
-            val foo4 = foo3.map { Pair(it.first, it.second.map { it.type.colour() }) }
-                .toMap()
-
-            chartColorsStream.value = foo4
+                .groupBy { it.first }
+                .map { Pair(it.key, it.value.map { it.second.first() }) }
+                .associate { Pair(it.first, it.second.map { it.type.colour() }) }
         }
 
         prepareExport(rawData, displayModeStream.value)
