@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 
-data class StatsGraphValue(val graphPoint: Int, val value: Double, val type: ReportVariable)
+data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double)
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
@@ -95,9 +95,8 @@ class StatsTabViewModel(
         if (graphVariablesStream.value.isEmpty()) {
             updateGraphVariables(device)
         }
-        val graphVariables = graphVariablesStream.value
         val displayMode = displayModeStream.value
-        val reportVariables = graphVariables.map { it.type }
+        val reportVariables: List<ReportVariable> = listOf(ReportVariable.FeedIn, ReportVariable.Generation, ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal, ReportVariable.GridConsumption, ReportVariable.Loads)
 
         try {
             val updatedData: List<StatsGraphValue>
@@ -123,7 +122,16 @@ class StatsTabViewModel(
                 totals = result.second
             }
 
-            rawData = updatedData
+            rawData = updatedData + generateSelfSufficiency(updatedData)
+            selfSufficiencyProducer.setEntries(rawData
+                .filter { it.type == ReportVariable.SelfSufficiency }
+                .map {
+                    StatsChartEntry(
+                        x = it.graphPoint.toFloat(),
+                        y = it.graphValue.toFloat(),
+                        type = it.type
+                    )
+                })
             totalsStream.value = totals
             refresh()
             calculateSelfSufficiencyEstimate()
@@ -147,7 +155,7 @@ class StatsTabViewModel(
     private fun prepareExport(rawData: List<StatsGraphValue>, displayMode: StatsDisplayMode) {
         val headers = listOf("Type", "Date", "Value").joinToString(",")
         val rows = rawData.map {
-            listOf(it.type.networkTitle(), it.graphPoint, it.value.toString()).joinToString(",")
+            listOf(it.type.networkTitle(), it.graphPoint, it.graphValue.toString()).joinToString(",")
         }
 
         val baseExportFileName: String
@@ -194,13 +202,15 @@ class StatsTabViewModel(
 
     private fun refresh() {
         val hiddenVariables = graphVariablesStream.value.filter { !it.enabled }.map { it.type }
-        val grouped = rawData.filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
+        val grouped = rawData
+            .filter { it.type != ReportVariable.SelfSufficiency }
+            .filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
         val entries = grouped
             .map { group ->
                 group.value.map {
                     StatsChartEntry(
                         x = it.graphPoint.toFloat(),
-                        y = it.value.toFloat(),
+                        y = it.graphValue.toFloat(),
                         type = it.type,
                     )
                 }.toList()
@@ -244,17 +254,19 @@ class StatsTabViewModel(
             batteryCharge = batteryCharge,
             batteryDischarge = batteryDischarge,
         )
+    }
 
-        if (configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && configManager.showSelfSufficiencyStatsGraphOverlay) {
-            selfSufficiencyProducer.setEntries(calculateSelfSufficiencyAcrossTimePeriod())
+    private fun generateSelfSufficiency(rawData: List<StatsGraphValue>): List<StatsGraphValue> {
+        return if (configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && configManager.showSelfSufficiencyStatsGraphOverlay) {
+            calculateSelfSufficiencyAcrossTimePeriod(rawData)
         } else {
-            selfSufficiencyProducer.setEntries(listOf<StatsChartEntry>())
+            listOf()
         }
     }
 
-    private fun calculateSelfSufficiencyAcrossTimePeriod(): List<StatsChartEntry> {
+    private fun calculateSelfSufficiencyAcrossTimePeriod(rawData: List<StatsGraphValue>): List<StatsGraphValue> {
         val graphPoints = rawData.map { it.graphPoint }.distinct()
-        val entries: MutableList<StatsChartEntry> = mutableListOf()
+        val entries: MutableList<StatsGraphValue> = mutableListOf()
 
         for (graphPoint in graphPoints) {
             val valuesAtTime = ValuesAtTime(values = rawData.filter { it.graphPoint == graphPoint })
@@ -267,19 +279,19 @@ class StatsTabViewModel(
 
             if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null) {
                 val approximations = approximationsCalculator.calculateApproximations(
-                    grid = grid.value,
-                    feedIn = feedIn.value,
-                    loads = loads.value,
-                    batteryCharge = batteryCharge.value,
-                    batteryDischarge = batteryDischarge.value,
+                    grid = grid.graphValue,
+                    feedIn = feedIn.graphValue,
+                    loads = loads.graphValue,
+                    batteryCharge = batteryCharge.graphValue,
+                    batteryDischarge = batteryDischarge.graphValue,
                 )
 
                 approximations.netSelfSufficiencyEstimateValue?.let {
                     entries.add(
-                        StatsChartEntry(
-                            x = graphPoint.toFloat(),
-                            y = it.toFloat(),
-                            type = ReportVariable.Generation
+                        StatsGraphValue(
+                            type = ReportVariable.SelfSufficiency,
+                            graphPoint = graphPoint,
+                            graphValue = it
                         )
                     )
                 }

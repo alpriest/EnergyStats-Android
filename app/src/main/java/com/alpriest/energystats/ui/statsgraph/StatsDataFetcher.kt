@@ -51,9 +51,9 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                 }
 
                 return@map StatsGraphValue(
+                    type = reportVariable,
                     graphPoint = graphPoint,
-                    value = dataPoint.value,
-                    type = reportVariable
+                    graphValue = dataPoint.value
                 )
             }
         }
@@ -96,9 +96,9 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                     val index = ChronoUnit.DAYS.between(start.atStartOfDay().toLocalDate(), LocalDate.of(year, month, dataPoint.index)).toInt()
 
                     StatsGraphValue(
+                        type = reportVariable,
                         graphPoint = index,
-                        value = dataPoint.value,
-                        type = reportVariable
+                        graphValue = dataPoint.value
                     )
                 }
             }

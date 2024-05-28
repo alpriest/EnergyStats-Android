@@ -56,9 +56,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
         Text("No data")
     } else {
         val columnChart = columnChart(
-            columns = chartColors.map {
-                lineComponent(color = it)
-            }.toList(),
+            columns = chartColors.map { lineComponent(color = it) }.toList(),
             axisValuesOverrider = ZeroValuesAxisOverrider(),
             targetVerticalAxisPosition = AxisPosition.Vertical.End
         )
