@@ -51,8 +51,10 @@ import java.util.Locale
 fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour() }
+    val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsState().value
+    val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
 
-    if (viewModel.producer.getModel()?.entries?.isEmpty() == true) {
+    if (statsGraphData == null) {
         Text("No data")
     } else {
         val columnChart = columnChart(
@@ -71,15 +73,13 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
             targetVerticalAxisPosition = AxisPosition.Vertical.Start
         )
         val composedChart = remember(columnChart, lineChart) { columnChart + lineChart }
-        val statsEntries = viewModel.producer.getModel()
-        val selfSufficiencyEntries = viewModel.selfSufficiencyProducer.getModel()
 
-        if (statsEntries != null && selfSufficiencyEntries != null) {
+        if (statsGraphData != null && selfSufficiencyGraphData != null) {
             Column(modifier = modifier.fillMaxWidth()) {
                 ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                     Chart(
                         chart = composedChart,
-                        model = statsEntries + selfSufficiencyEntries,
+                        model = statsGraphData + selfSufficiencyGraphData,
                         chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                         endAxis = rememberEndAxis(
                             itemPlacer = AxisItemPlacer.Vertical.default(5),

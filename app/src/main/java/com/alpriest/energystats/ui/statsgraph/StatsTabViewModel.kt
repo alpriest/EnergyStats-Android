@@ -24,6 +24,7 @@ import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.patrykandpatrick.vico.core.entry.ChartEntry
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -34,12 +35,13 @@ data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val gr
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
-    private val networking: Networking,
+    networking: Networking,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
-    val producer: ChartEntryModelProducer = ChartEntryModelProducer()
-    var selfSufficiencyProducer: ChartEntryModelProducer = ChartEntryModelProducer()
+    val selfSufficiencyProducer: ChartEntryModelProducer = ChartEntryModelProducer()
+    val selfSufficiencyGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
+    val statsGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
@@ -96,7 +98,14 @@ class StatsTabViewModel(
             updateGraphVariables(device)
         }
         val displayMode = displayModeStream.value
-        val reportVariables: List<ReportVariable> = listOf(ReportVariable.FeedIn, ReportVariable.Generation, ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal, ReportVariable.GridConsumption, ReportVariable.Loads)
+        val reportVariables: List<ReportVariable> = listOf(
+            ReportVariable.FeedIn,
+            ReportVariable.Generation,
+            ReportVariable.ChargeEnergyToTal,
+            ReportVariable.DischargeEnergyToTal,
+            ReportVariable.GridConsumption,
+            ReportVariable.Loads
+        )
 
         try {
             val updatedData: List<StatsGraphValue>
@@ -123,15 +132,6 @@ class StatsTabViewModel(
             }
 
             rawData = updatedData + generateSelfSufficiency(updatedData)
-            selfSufficiencyProducer.setEntries(rawData
-                .filter { it.type == ReportVariable.SelfSufficiency }
-                .map {
-                    StatsChartEntry(
-                        x = it.graphPoint.toFloat(),
-                        y = it.graphValue.toFloat(),
-                        type = it.type
-                    )
-                })
             totalsStream.value = totals
             refresh()
             calculateSelfSufficiencyEstimate()
@@ -217,8 +217,19 @@ class StatsTabViewModel(
             }.toList()
 
         chartColorsStream.value = grouped.keys.toList()
+        statsGraphDataStream.value = ChartEntryModelProducer(entries).getModel()
 
-        producer.setEntries(entries)
+        selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(rawData
+            .filter { it.type == ReportVariable.SelfSufficiency }
+            .filter { !hiddenVariables.contains(it.type) }
+            .map {
+                StatsChartEntry(
+                    x = it.graphPoint.toFloat(),
+                    y = it.graphValue.toFloat(),
+                    type = it.type
+                )
+            }).getModel()
+
         prepareExport(rawData, displayModeStream.value)
     }
 
