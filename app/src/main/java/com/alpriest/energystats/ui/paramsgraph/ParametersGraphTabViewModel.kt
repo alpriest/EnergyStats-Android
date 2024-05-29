@@ -53,7 +53,7 @@ class ParametersGraphTabViewModel(
     override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
     var chartColorsStream: MutableStateFlow<Map<String, List<Color>>> = MutableStateFlow(mapOf())
-    val producers: MutableStateFlow<Map<String, ChartEntryModelProducer>> = MutableStateFlow(mapOf())
+    val producers: MutableStateFlow<Map<String, Pair<ChartEntryModelProducer, AxisScale>>> = MutableStateFlow(mapOf())
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     var rawData: List<ParametersGraphValue> = listOf()
     var queryDate = QueryDate()
@@ -64,7 +64,6 @@ class ParametersGraphTabViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val xDataPointCount: MutableStateFlow<Float> = MutableStateFlow(360f)
-    val yAxisScale: MutableStateFlow<AxisScale> = MutableStateFlow(AxisScale(null, null))
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -179,7 +178,6 @@ class ParametersGraphTabViewModel(
 
             ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
         }
-        yAxisScale.value = AxisScale(boundsStream.value.minBy { it.min }.min, boundsStream.value.maxBy { it.max }.max)
 
         if (entries.isEmpty()) {
             hasDataStream.value = false
@@ -196,19 +194,25 @@ class ParametersGraphTabViewModel(
                 .map { Pair(it.key, it.value.map { it.second }) }
                 .toMap()
                 .map {
+                    val values = it.value.flatMap{ it.map { it.value }}
+                    val yAxisScale = AxisScale(values.min().toFloat(), values.max().toFloat())
+
                     Pair(
                         it.key,
-                        ChartEntryModelProducer(
-                            it.value.map { group ->
-                                group.map { graphValue ->
-                                    return@map DateTimeFloatEntry(
-                                        type = graphValue.type,
-                                        localDateTime = graphValue.time,
-                                        x = graphValue.graphPoint.toFloat(),
-                                        y = graphValue.value.toFloat()
-                                    )
-                                }
-                            })
+                        Pair(
+                            ChartEntryModelProducer(
+                                it.value.map { group ->
+                                    group.map { graphValue ->
+                                        return@map DateTimeFloatEntry(
+                                            type = graphValue.type,
+                                            localDateTime = graphValue.time,
+                                            x = graphValue.graphPoint.toFloat(),
+                                            y = graphValue.value.toFloat()
+                                        )
+                                    }
+                                }),
+                            yAxisScale
+                        )
                     )
                 }
                 .toMap()

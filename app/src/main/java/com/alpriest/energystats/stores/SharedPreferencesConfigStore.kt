@@ -528,7 +528,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         }
 
     override var truncatedYAxisOnParameterGraphs: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, true)
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, value)

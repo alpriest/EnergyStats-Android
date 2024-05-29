@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ParameterGraphView(
     producer: ChartEntryModelProducer,
+    yAxisScale: AxisScale,
     chartColors: List<Color>,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
@@ -69,7 +70,6 @@ fun ParameterGraphView(
     val dataPointCount = viewModel.xDataPointCount.collectAsState().value
     val seriesCount = producer.getModel()?.entries?.count() ?: 0
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
-    val yAxisScale = viewModel.yAxisScale.collectAsState().value
 
     MonitorAlertDialog(viewModel, userManager)
 

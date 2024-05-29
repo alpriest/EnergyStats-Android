@@ -89,7 +89,7 @@ class ParametersGraphTabView(
         val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
         val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
         val context = LocalContext.current
-        val producers = viewModel.producers.collectAsState()
+        val producerAxisScalePairs = viewModel.producers.collectAsState()
         val allChartColors = viewModel.chartColorsStream.collectAsState().value
 
         MonitorAlertDialog(viewModel, userManager)
@@ -126,10 +126,11 @@ class ParametersGraphTabView(
                 }
 
                 if (configManager.separateParameterGraphsByUnit) {
-                    producers.value.forEach { (unit, producer) ->
+                    producerAxisScalePairs.value.forEach { (unit, producerAxisScale) ->
                         allChartColors[unit]?.let {
                             ParameterGraph(
-                                producer,
+                                producerAxisScale.first,
+                                producerAxisScale.second,
                                 chartColors = it,
                                 viewModel,
                                 themeStream,
@@ -140,11 +141,13 @@ class ParametersGraphTabView(
                     }
                 } else {
                     val chartColors = allChartColors.values.flatten()
-                    val allEntries = producers.value.values.flatMap { it.getModel()?.entries ?: listOf() }
+                    val allEntries = producerAxisScalePairs.value.values.flatMap { it.first.getModel()?.entries ?: listOf() }
+                    val yAxisScale = producerAxisScalePairs.value.values.map { it.second }.firstOrNull() ?: AxisScale(null, null)
                     val producer = ChartEntryModelProducer(allEntries)
 
                     ParameterGraph(
                         producer,
+                        yAxisScale,
                         chartColors,
                         viewModel,
                         themeStream,
@@ -188,6 +191,7 @@ class ParametersGraphTabView(
 @Composable
 private fun ParameterGraph(
     producer: ChartEntryModelProducer,
+    yAxisScale: AxisScale,
     chartColors: List<Color>,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
@@ -199,6 +203,7 @@ private fun ParameterGraph(
     Box(contentAlignment = Alignment.Center) {
         ParameterGraphView(
             producer,
+            yAxisScale,
             chartColors = chartColors,
             viewModel = viewModel,
             themeStream,
@@ -210,8 +215,10 @@ private fun ParameterGraph(
         when (loadState) {
             is LoadState.Error ->
                 Text(stringResource(R.string.error))
+
             is LoadState.Active ->
                 LoadingOverlayView()
+
             is LoadState.Inactive -> {}
         }
     }
