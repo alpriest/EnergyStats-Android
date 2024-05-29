@@ -85,7 +85,7 @@ class StatsTabViewModel(
             if (device.hasBattery) ReportVariable.ChargeEnergyToTal else null,
             if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
             ReportVariable.Loads,
-            ReportVariable.SelfSufficiency
+            if (configManager.showSelfSufficiencyStatsGraphOverlay && configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off) ReportVariable.SelfSufficiency else null
         ).mapNotNull { it }.map {
             StatsGraphVariable(it, true)
         }
