@@ -173,8 +173,8 @@ class ParametersGraphTabViewModel(
 
         xDataPointCount.value = calculateDataPointCount()
         boundsStream.value = entries.map { entryList ->
-            val max = (entryList.maxBy { it.y }.y) * 1.1f
-            val min = (entryList.minBy { it.y }.y) * 0.9f
+            val max = (entryList.maxBy { it.y }.y)
+            val min = (entryList.minBy { it.y }.y)
 
             ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
         }
@@ -194,8 +194,8 @@ class ParametersGraphTabViewModel(
                 .map { Pair(it.key, it.value.map { it.second }) }
                 .toMap()
                 .map {
-                    val values = it.value.flatMap{ it.map { it.value }}
-                    val yAxisScale = AxisScale(values.min().toFloat(), values.max().toFloat())
+                    val values = it.value.flatMap { it.map { it.value } }
+                    val yAxisScale = AxisScale(values.min().toFloat() * 0.9f, values.max().toFloat() * 1.1f)
 
                     Pair(
                         it.key,
