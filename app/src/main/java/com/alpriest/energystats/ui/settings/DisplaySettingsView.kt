@@ -26,7 +26,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
     val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
     val decimalPlacesState = rememberSaveable { mutableIntStateOf(config.decimalPlaces) }
-    val totalYieldModelState = rememberSaveable { mutableStateOf(config.totalYieldModel == TotalYieldModel.Off) }
+    val totalYieldModelState = rememberSaveable { mutableStateOf(config.totalYieldModel == TotalYieldModel.EnergyStats) }
     val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
     val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
     val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
