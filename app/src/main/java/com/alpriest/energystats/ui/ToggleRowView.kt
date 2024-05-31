@@ -43,7 +43,7 @@ fun <T : GraphVariable> ToggleRowView(
     val textColor = if (it.enabled) MaterialTheme.colors.onBackground else DimmedTextColor
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
-    val colour = it.colour().copy(alpha = if (it.enabled) 1.0f else 0.5f)
+    val colour = it.colour(themeStream).copy(alpha = if (it.enabled) 1.0f else 0.5f)
 
     Row(
         verticalAlignment = Alignment.Top,

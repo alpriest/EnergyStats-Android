@@ -180,10 +180,10 @@ fun drawBattery(): ImageBitmap {
     val barHeight = 4f
     val halfBarHeight = barHeight / 2f
 
-    val blackPaint = Paint()
-    blackPaint.color = Color.White
     val whitePaint = Paint()
-    whitePaint.color = Color.Black
+    whitePaint.color = Color.White
+    val blackPaint = Paint()
+    blackPaint.color = Color.Black
     val bitmap = ImageBitmap(size.width.toInt(), size.height.toInt())
     val canvas = Canvas(bitmap)
 
@@ -202,7 +202,7 @@ fun drawBattery(): ImageBitmap {
     // Battery
     val batterySize = Size(size.width, size.height - boxTop)
     drawRoundRect(
-        paint = blackPaint,
+        paint = whitePaint,
         topLeft = Offset(x = 0f, y = boxTop),
         size = batterySize,
         cornerRadius = CornerRadius(x = 5f, y = 5f)
@@ -210,7 +210,7 @@ fun drawBattery(): ImageBitmap {
 
     // Negative terminal
     drawRoundRect(
-        paint = blackPaint,
+        paint = whitePaint,
         topLeft = Offset(x = terminalInset, y = 0f),
         size = Size(terminalWidth, boxTop + barHeight),
         cornerRadius = CornerRadius(x = 3f, y = 3f)
@@ -218,7 +218,7 @@ fun drawBattery(): ImageBitmap {
 
     // Positive terminal
     drawRoundRect(
-        paint = blackPaint,
+        paint = whitePaint,
         topLeft = Offset(x = size.width - 2 * terminalInset, y = 0f),
         size = Size(terminalWidth, boxTop + barHeight),
         cornerRadius = CornerRadius(x = 3f, y = 3f)
@@ -226,7 +226,7 @@ fun drawBattery(): ImageBitmap {
 
     // Minus
     drawRoundRect(
-        paint = whitePaint,
+        paint = blackPaint,
         topLeft = Offset(x = terminalInset, y = boxTop + batterySize.height / 2.0f),
         size = Size(terminalWidth, barHeight),
         cornerRadius = CornerRadius(2f, 2f)
@@ -234,7 +234,7 @@ fun drawBattery(): ImageBitmap {
 
     // Plus
     drawRoundRect(
-        paint = whitePaint,
+        paint = blackPaint,
         topLeft = Offset(
             x = size.width - 2 * terminalInset,
             y = boxTop + batterySize.height / 2.0f
@@ -243,7 +243,7 @@ fun drawBattery(): ImageBitmap {
         cornerRadius = CornerRadius(2f, 2f)
     )
     drawRoundRect(
-        paint = whitePaint,
+        paint = blackPaint,
         topLeft = Offset(
             x = size.width - 2 * terminalInset + (terminalInset / 2f) - halfBarHeight,
             y = boxTop + batterySize.height / 2.0f - (terminalInset / 2f) + halfBarHeight

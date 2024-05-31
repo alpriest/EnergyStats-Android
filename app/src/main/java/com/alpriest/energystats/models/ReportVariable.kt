@@ -1,9 +1,11 @@
 package com.alpriest.energystats.models
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.statsgraph.selfSufficiencyLineColor
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 enum class ValueUsage {
     SNAPSHOT,
@@ -32,7 +34,7 @@ enum class ReportVariable {
     }
 
     @Composable
-    fun colour(): Color {
+    fun colour(themeStream: MutableStateFlow<AppTheme>): Color {
         return when (this) {
             Generation -> Color(244, 184, 96)
             FeedIn -> Color(181, 121, 223)
@@ -40,7 +42,7 @@ enum class ReportVariable {
             DischargeEnergyToTal -> Color(80, 147, 248)
             GridConsumption -> Color(236, 109, 96)
             Loads -> Color(209,207,83)
-            SelfSufficiency -> selfSufficiencyLineColor(isSystemInDarkTheme())
+            SelfSufficiency -> selfSufficiencyLineColor(isDarkMode(themeStream))
         }
     }
 

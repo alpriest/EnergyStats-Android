@@ -1,14 +1,14 @@
 package com.alpriest.energystats.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 
-private val DarkColorPalette = darkColors(
+private val darkColorPalette = darkColors(
     primary = TintColor,
     secondary = DarkSecondaryBackground,
     background = DarkBackground,
@@ -20,7 +20,7 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Color.DarkGray
 )
 
-private val LightColorPalette = lightColors(
+private val lightColorPalette = lightColors(
     primary = TintColor,
     secondary = SecondaryBackground,
     background = PaleWhite,
@@ -34,15 +34,10 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun EnergyStatsTheme(useLargeDisplay: Boolean = false, colorThemeMode: ColorThemeMode = ColorThemeMode.Auto, content: @Composable () -> Unit) {
-    val darkTheme = when (colorThemeMode) {
-        ColorThemeMode.Auto -> isSystemInDarkTheme()
-        ColorThemeMode.Light -> false
-        ColorThemeMode.Dark -> true
-    }
-    val colors = if (darkTheme) {
-        DarkColorPalette
+    val colors = if (isDarkMode(colorThemeMode)) {
+        darkColorPalette
     } else {
-        LightColorPalette
+        lightColorPalette
     }
 
     val typography = if (useLargeDisplay) {

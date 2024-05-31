@@ -1,5 +1,6 @@
 package com.alpriest.energystats.preview
 
+import androidx.compose.runtime.Composable
 import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.PowerStationDetail

@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.IconColorInDarkTheme
@@ -50,7 +50,7 @@ import java.util.Locale
 @Composable
 fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsState().value
-    val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour() }
+    val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour(themeStream) }
     val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsState().value
     val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
 
@@ -65,7 +65,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
         val lineChart = lineChart(
             lines = listOf(
                 lineSpec(
-                    lineColor = selfSufficiencyLineColor(isSystemInDarkTheme()),
+                    lineColor = selfSufficiencyLineColor(isDarkMode(themeStream)),
                     lineThickness = 1.dp,
                     lineBackgroundShader = null,
                 )
@@ -74,7 +74,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
         )
         val composedChart = remember(columnChart, lineChart) { columnChart + lineChart }
 
-        if (statsGraphData != null && selfSufficiencyGraphData != null) {
+        if (selfSufficiencyGraphData != null) {
             Column(modifier = modifier.fillMaxWidth()) {
                 ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                     Chart(

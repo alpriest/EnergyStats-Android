@@ -5,11 +5,10 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -30,12 +29,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val systemUiController = rememberSystemUiController()
-            val isDarkMode = when (appContainer.configManager.colorThemeMode) {
-                ColorThemeMode.Auto -> isSystemInDarkTheme()
-                ColorThemeMode.Dark -> true
-                ColorThemeMode.Light -> false
-            }
-            if (isDarkMode) {
+            if (isDarkMode(appContainer.configManager.themeStream)) {
                 SideEffect {
                     systemUiController.setSystemBarsColor(Color.Black, darkIcons = false)
                 }

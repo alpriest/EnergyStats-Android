@@ -16,8 +16,8 @@ android {
         applicationId "com.alpriest.energystats"
         minSdk 26
         targetSdk 34
-        versionCode 185
-        versionName '2.40'
+        versionCode 186
+        versionName '2.41'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

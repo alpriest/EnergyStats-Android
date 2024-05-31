@@ -23,6 +23,7 @@ import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -319,7 +320,7 @@ interface GraphVariable {
     val enabled: Boolean
 
     @Composable
-    fun colour(): Color
+    fun colour(themeStream: MutableStateFlow<AppTheme>): Color
 }
 
 @Composable

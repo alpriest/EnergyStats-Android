@@ -60,7 +60,12 @@ fun BatteryPowerFlow(
 
 @Composable
 fun isDarkMode(themeStream: MutableStateFlow<AppTheme>): Boolean {
-    return when (themeStream.collectAsState().value.colorTheme) {
+    return isDarkMode(colorTheme = themeStream.collectAsState().value.colorTheme)
+}
+
+@Composable
+fun isDarkMode(colorTheme: ColorThemeMode): Boolean {
+    return when (colorTheme) {
         ColorThemeMode.Light -> false
         ColorThemeMode.Dark -> true
         ColorThemeMode.Auto -> isSystemInDarkTheme()

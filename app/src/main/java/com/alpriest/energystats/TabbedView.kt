@@ -122,9 +122,8 @@ fun TabbedView(
                     backgroundColor = darkenColor(colors.background, 0.02f),
                     indicator = { tabPositions ->
                         TabRowDefaults.Indicator(
-                            Modifier
-                                .pagerTabIndicatorOffset(pagerState, tabPositions),
-                            color = Color.Black,
+                            Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                            color = colors.primary,
                         )
                     }
                 ) {
@@ -149,7 +148,6 @@ fun TabbedView(
                                             text = item.title,
                                             fontSize = 10.sp
                                         )
-
                                     }
 
                                     if (configManager.isDemoUser && item.isSettings) {

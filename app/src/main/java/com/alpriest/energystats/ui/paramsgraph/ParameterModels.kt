@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.statsgraph.GraphVariable
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -20,7 +22,7 @@ data class ParameterGraphVariable(
     override val enabled: Boolean
 ) : GraphVariable {
     @Composable
-    override fun colour(): Color {
+    override fun colour(themeStream: MutableStateFlow<AppTheme>): Color {
         return type.colour()
     }
 }
