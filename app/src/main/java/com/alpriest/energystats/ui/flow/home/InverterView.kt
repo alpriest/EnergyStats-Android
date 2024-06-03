@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.flow.home
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.EaseInOut
@@ -42,6 +43,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -90,11 +92,26 @@ class InverterViewModel(
         configManager.select(device)
     }
 
-    fun showFaults() {
+    fun showFaults(context: Context) {
         alertDialogMessage.value = MonitorAlertDialogData(
             ex = null,
-            message = "Faults Detected\n\n" + faults.joinToString(separator = "\n")
+            message = faultsMessage(context)
         )
+    }
+
+    private fun faultsMessage(context: Context): String {
+        val messages = mutableListOf<String>()
+        messages.add(context.getString(R.string.your_inverter_state_is_reported_as_being) + "'${deviceState}'.")
+
+        if (faults.isNotEmpty()) {
+            messages.add(context.getString(R.string.reasons_reported))
+            messages.addAll(faults)
+        } else {
+            messages.add("\n")
+            messages.add(context.getString(R.string.no_reason_was_given_check_the_front_screen_of_your_inverter))
+        }
+
+        return messages.joinToString(separator = "\n")
     }
 }
 

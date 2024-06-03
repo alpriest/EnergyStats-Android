@@ -341,4 +341,7 @@
     <string name="foxess_timeout">The FoxESS OpenAPI failed to respond quickly enough. Please try again or raise an issue with FoxESS if you often see this.</string>
     <string name="templates_overview">Schedule Templates are local to your device and will not be visible on Fox Cloud. This is a limitation imposed by FoxESS. They will not be removed if you log out.</string>
     <string name="display_truncated_y_axis">Display truncated Y axis</string>
+    <string name="your_inverter_state_is_reported_as_being">Your inverter state is reported as being</string>
+    <string name="reasons_reported">Reasons reported:</string>
+    <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">No reason was given. Check the front screen of your inverter.</string>
 </resources>
