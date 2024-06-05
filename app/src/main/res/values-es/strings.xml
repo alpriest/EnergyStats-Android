@@ -338,4 +338,7 @@
     <string name="foxess_timeout">FoxESS OpenAPI no respondió lo suficientemente rápido. Por favor, inténtalo de nuevo o informa un problema a FoxESS si ves esto a menudo.</string>
     <string name="templates_overview">Las plantillas de horarios son locales a tu dispositivo y no serán visibles en Fox Cloud. Esta es una limitación impuesta por FoxESS. No se eliminarán si cierras sesión.</string>
     <string name="display_truncated_y_axis">Mostrar eje Y truncado</string>
+    <string name="your_inverter_state_is_reported_as_being">El estado de su inversor se informa como</string>
+    <string name="reasons_reported">Razones reportadas:</string>
+    <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">No se dio ninguna razón. Verifique la pantalla frontal de su inversor.</string>
 </resources>

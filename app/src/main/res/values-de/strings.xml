@@ -338,4 +338,7 @@
     <string name="foxess_timeout">Die FoxESS OpenAPI hat nicht schnell genug geantwortet. Bitte versuche es erneut oder melde ein Problem bei FoxESS, wenn du dies häufig siehst.</string>
     <string name="templates_overview">Zeitplanvorlagen sind nur lokal auf deinem Gerät und werden nicht in der Fox Cloud sichtbar sein. Dies ist eine Einschränkung, die von FoxESS auferlegt wurde. Sie werden nicht entfernt, wenn du dich abmeldest.</string>
     <string name="display_truncated_y_axis">Abgeschnittene Y-Achse anzeigen</string>
+    <string name="your_inverter_state_is_reported_as_being">Der Zustand Ihres Wechselrichters wird als</string>
+    <string name="reasons_reported">Gemeldete Gründe:</string>
+    <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">Es wurde kein Grund angegeben. Überprüfen Sie den vorderen Bildschirm Ihres Wechselrichters.</string>
 </resources>

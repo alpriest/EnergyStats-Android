@@ -339,4 +339,7 @@
     <string name="foxess_timeout">FoxESS OpenAPI non ha risposto abbastanza velocemente. Riprova o segnala un problema a FoxESS se vedi spesso questo messaggio.</string>
     <string name="templates_overview">I modelli di programma sono locali al tuo dispositivo e non saranno visibili su Fox Cloud. Questa è una limitazione imposta da FoxESS. Non saranno rimossi se esci.</string>
     <string name="display_truncated_y_axis">Visualizza asse Y troncato</string>
+    <string name="your_inverter_state_is_reported_as_being">Lo stato del tuo inverter è segnalato come</string>
+    <string name="reasons_reported">Ragioni riportate:</string>
+    <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">Non è stata fornita alcuna ragione. Controlla lo schermo frontale del tuo inverter.</string>
 </resources>
