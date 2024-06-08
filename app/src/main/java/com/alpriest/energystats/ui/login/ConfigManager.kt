@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
 
 open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
     ConfigManaging {
@@ -361,6 +362,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
         } catch (ex: InvalidTokenException) {
+            throw ex
+        } catch (ex: SocketTimeoutException) {
             throw ex
         } catch (ex: Exception) {
             throw DataFetchFailure("Failed to load Device or Battery Settings ($method)", ex)

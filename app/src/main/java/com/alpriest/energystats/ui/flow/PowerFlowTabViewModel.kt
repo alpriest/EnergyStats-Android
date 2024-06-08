@@ -48,7 +48,6 @@ class PowerFlowTabViewModel(
 
     val uiState = MutableStateFlow(UiPowerFlowLoadState(PowerFlowLoadState.Active("")))
     val updateMessage: MutableStateFlow<UiUpdateMessageState> = MutableStateFlow(UiUpdateMessageState(EmptyUpdateMessageState))
-    val batteryErrorStream = MutableStateFlow(false)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { timer?.cancel() },
@@ -237,7 +236,6 @@ class PowerFlowTabViewModel(
                     deviceState = deviceState,
                     faults = currentViewModel.currentFaults
                 )
-                batteryErrorStream.value = currentDevice.battery?.hasError ?: false
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
                 lastUpdateTime = currentViewModel.lastUpdate

@@ -336,7 +336,7 @@
     <string name="example">Przykład</string>
     <string name="thresholds_were_saved">Progi zostały zapisane</string>
     <string name="drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power">Przesuń suwak powyżej, aby zobaczyć, jak będzie wyświetlany Twój przepływ energii słonecznej przy różnych poziomach mocy.</string>
-    <string name="foxess_timeout">FoxESS OpenAPI nie odpowiedział wystarczająco szybko. Spróbuj ponownie lub zgłoś problem do FoxESS, jeśli często widzisz ten komunikat.</string>
+    <string name="foxess_timeout">Die FoxESS OpenAPI hat nicht schnell genug reagiert. Bitte versuchen Sie es erneut oder melden Sie ein Problem bei FoxESS bezüglich der Leistung ihrer OpenAPI unter https://www.foxesscloud.com/bus/workorder/list, wenn Sie dies häufig sehen.</string>
     <string name="templates_overview">Szablony harmonogramów są lokalne na Twoim urządzeniu i nie będą widoczne w Fox Cloud. Jest to ograniczenie narzucone przez FoxESS. Nie zostaną usunięte, jeśli się wylogujesz.</string>
     <string name="display_truncated_y_axis">Wyświetl skróconą oś Y</string>
     <string name="your_inverter_state_is_reported_as_being">Stan Twojego inwertera jest zgłaszany jako</string>

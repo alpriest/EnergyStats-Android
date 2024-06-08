@@ -31,16 +31,26 @@ data class CachedItem(val item: Any) {
 class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
     private var cache: MutableMap<String, CachedItem> = mutableMapOf()
     private val shortCacheDurationInSeconds = 5
+    private val longCacheDurationInSeconds = 300
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
-        return api.openapi_fetchDeviceList()
+        val key = makeKey(currentFunctionName())
+
+        val cached = cache[key]
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && isListOf<DeviceSummaryResponse>(cached)) {
+            cached.item as List<DeviceSummaryResponse>
+        } else {
+            val fresh = api.openapi_fetchDeviceList()
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
-        val key = makeKey("openapi_fetchRealData", deviceSN, variables.joinToString { it })
+        val key = makeKey(currentFunctionName(), deviceSN, variables.sorted().joinToString { it })
 
         val cached = cache[key]
-        return if (cached != null && cached.item is OpenRealQueryResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
+        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && cached.item is OpenRealQueryResponse) {
             cached.item
         } else {
             val fresh = api.openapi_fetchRealData(deviceSN, variables)
@@ -50,10 +60,10 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        val key = makeKey("openapi_fetchHistory", deviceSN, variables.joinToString { it }, start.toString(), end.toString())
+        val key = makeKey(currentFunctionName(), deviceSN, variables.sorted().joinToString { it }, start.toString(), end.toString())
 
         val cached = cache[key]
-        return if (cached != null && cached.item is OpenHistoryResponse && cached.isFresherThan(seconds = shortCacheDurationInSeconds)) {
+        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && cached.item is OpenHistoryResponse) {
             cached.item
         } else {
             val fresh = api.openapi_fetchHistory(deviceSN, variables, start, end)
@@ -63,11 +73,20 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
-        return api.openapi_fetchVariables()
+        val key = makeKey(currentFunctionName())
+
+        val cached = cache[key]
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && isListOf<OpenApiVariable>(cached)) {
+            cached.item as List<OpenApiVariable>
+        } else {
+            val fresh = api.openapi_fetchVariables()
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        val key = makeKey("openapi_fetchReport", deviceSN, variables.joinToString { it.networkTitle() }, queryDate.toString(), reportType.toString())
+        val key = makeKey(currentFunctionName(), deviceSN, variables.sorted().joinToString { it.networkTitle() }, queryDate.toString(), reportType.toString())
 
         val cached = cache[key]
         return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && isListOf<OpenReportResponse>(cached.item)) {
@@ -88,7 +107,16 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
-        return api.openapi_fetchDataLoggers()
+        val key = makeKey(currentFunctionName())
+
+        val cached = cache[key]
+        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && isListOf<DataLoggerResponse>(cached.item)) {
+            cached.item as List<DataLoggerResponse>
+        } else {
+            val fresh = api.openapi_fetchDataLoggers()
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
@@ -116,15 +144,42 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
-        return api.openapi_fetchDevice(deviceSN)
+        val key = makeKey(currentFunctionName(), deviceSN)
+
+        val cached = cache[key]
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && cached.item is DeviceDetailResponse) {
+            cached.item
+        } else {
+            val fresh = api.openapi_fetchDevice(deviceSN)
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse {
-        return api.openapi_fetchPowerStationList()
+        val key = makeKey(currentFunctionName())
+
+        val cached = cache[key]
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && cached.item is PagedPowerStationListResponse) {
+            cached.item
+        } else {
+            val fresh = api.openapi_fetchPowerStationList()
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse {
-        return api.openapi_fetchPowerStationDetail(stationID)
+        val key = makeKey(currentFunctionName())
+
+        val cached = cache[key]
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && cached.item is PowerStationDetailResponse) {
+            cached.item
+        } else {
+            val fresh = api.openapi_fetchPowerStationDetail(stationID)
+            cache[key] = CachedItem(fresh)
+            fresh
+        }
     }
 
     override suspend fun fetchErrorMessages() {
@@ -138,4 +193,8 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
 
 inline fun <reified T> isListOf(obj: Any): Boolean {
     return obj is List<*> && obj.all { it is T }
+}
+
+fun currentFunctionName(): String {
+    return Throwable().stackTrace[1].methodName
 }

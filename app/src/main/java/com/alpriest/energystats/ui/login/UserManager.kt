@@ -12,6 +12,7 @@ import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.net.SocketTimeoutException
 
 data class LoginStateHolder(
     val loadState: LoginState
@@ -65,11 +66,9 @@ class UserManager(
         }
 
         _loggedInState.value = LoginStateHolder(LoggingIn)
-        var currentAction = "fetch login Token"
 
         try {
             store.store(apiKey)
-            currentAction = "fetch devices"
             configManager.fetchDevices()
             _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: BadCredentialsException) {
@@ -78,9 +77,12 @@ class UserManager(
         } catch (e: InvalidTokenException) {
             logout()
             _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.invalid_token_logout_not_required)))
+        } catch (e: SocketTimeoutException) {
+            logout()
+            _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.foxess_timeout)))
         } catch (e: Exception) {
             logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut("Could not login (${currentAction}). ${e.localizedMessage}"))
+            _loggedInState.value = LoginStateHolder(LoggedOut("Could not login. ${e.localizedMessage}"))
         }
     }
 

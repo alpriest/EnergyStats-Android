@@ -85,7 +85,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
         viewModel: APIKeyLoginViewModel = viewModel(factory = APIKeyLoginViewModelFactory(userManager)),
         themeStream: MutableStateFlow<AppTheme>
     ) {
-        var apiKey = viewModel.apiKeyStream.collectAsState().value
+        val apiKey = viewModel.apiKeyStream.collectAsState().value
         val context = LocalContext.current
         val errorMessage = viewModel.errorMessageStream.collectAsState().value
         val scope = rememberCoroutineScope()
