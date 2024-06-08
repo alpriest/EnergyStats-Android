@@ -30,6 +30,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -173,13 +174,12 @@ fun PowerFlowTabViewPreview() {
         deviceState = DeviceState.Online,
         faults = listOf()
     )
+    val themeStream = MutableStateFlow(AppTheme.demo())
 
     EnergyStatsTheme {
-        LoadedView(
+        PowerFlowTabView(DemoNetworking(), FakeConfigManager(), FakeUserManager(), themeStream).Content(
             viewModel = viewModel,
-            configManager = FakeConfigManager(),
-            loadedPowerFlowViewModel = loadedPowerFlowViewModel,
-            themeStream = MutableStateFlow(AppTheme.demo())
+            themeStream = themeStream
         )
     }
 }
