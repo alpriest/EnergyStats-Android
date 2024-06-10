@@ -206,7 +206,7 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
                     onValueChange = { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } },
                     modifier = Modifier.width(100.dp),
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) },
+                    trailingIcon = { Text("W", color = MaterialTheme.colors.onSecondary) },
                     singleLine = true
                 )
             }
