@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
@@ -35,7 +36,6 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
-import com.alpriest.energystats.ui.flow.home.DeviceState
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
@@ -162,17 +162,14 @@ fun PowerFlowTabViewPreview() {
         home = 2.45,
         grid = 2.45,
         todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), includeCT2 = false, invertCT2 = false),
-        earnings = EarningsViewModel.preview(),
         inverterTemperatures = null,
         hasBattery = true,
         battery = BatteryViewModel(),
         FakeConfigManager(),
-        homeTotal = 1.0,
-        gridImportTotal = 1.0,
-        gridExportTotal = 2.0,
         ct2 = 0.4,
-        deviceState = DeviceState.Online,
-        faults = listOf()
+        faults = listOf(),
+        currentDevice = Device.preview(),
+        network = DemoNetworking()
     )
     val themeStream = MutableStateFlow(AppTheme.demo())
 
@@ -182,6 +179,10 @@ fun PowerFlowTabViewPreview() {
             themeStream = themeStream
         )
     }
+}
+
+fun Device.Companion.preview(): Device {
+    return Device("",true,"","",true,"",null, "")
 }
 
 data class UiPowerFlowLoadState(

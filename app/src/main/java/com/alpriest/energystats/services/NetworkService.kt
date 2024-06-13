@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
@@ -36,6 +37,7 @@ interface Networking {
     suspend fun saveSchedule(deviceSN: String, schedule: Schedule)
     suspend fun fetchDevice(deviceSN: String): DeviceDetailResponse
     suspend fun fetchPowerStationDetail(): PowerStationDetail?
+    suspend fun fetchRequestCount(): ApiRequestCountResponse
 }
 
 open class NetworkService(val api: FoxAPIServicing) : Networking {
@@ -110,5 +112,9 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
         } else {
             null
         }
+    }
+
+    override suspend fun fetchRequestCount(): ApiRequestCountResponse {
+        return api.openapi_fetchRequestCount()
     }
 }

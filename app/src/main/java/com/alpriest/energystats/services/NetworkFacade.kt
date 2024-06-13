@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
@@ -208,6 +209,14 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
             demoAPI.openapi_fetchPowerStationDetail(stationID)
         } else {
             api.openapi_fetchPowerStationDetail(stationID)
+        }
+    }
+
+    override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
+        return if (isDemoUser()) {
+            demoAPI.openapi_fetchRequestCount()
+        } else {
+            api.openapi_fetchRequestCount()
         }
     }
 

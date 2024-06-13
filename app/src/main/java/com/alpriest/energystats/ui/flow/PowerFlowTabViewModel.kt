@@ -9,14 +9,11 @@ import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenRealQueryResponse
-import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.home.DeviceState
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
@@ -24,7 +21,6 @@ import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageSt
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.ui.settings.RefreshFrequency
-import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -156,24 +152,6 @@ class PowerFlowTabViewModel(
         )
     }
 
-    private suspend fun loadReportData(device: Device): List<OpenReportResponse> {
-        var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption)
-        if (device.hasBattery) {
-            reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
-        }
-
-        return network.fetchReport(
-            device.deviceSN,
-            reportVariables,
-            QueryDate(),
-            ReportType.month
-        )
-    }
-
-    private suspend fun loadTotals(device: Device): TotalsViewModel {
-        return TotalsViewModel(loadReportData(device))
-    }
-
     private suspend fun loadGeneration(device: Device): GenerationViewModel {
         return GenerationViewModel(loadHistoryData(device), includeCT2 = configManager.shouldCombineCT2WithPVPower, invertCT2 = configManager.shouldInvertCT2)
     }
@@ -188,11 +166,6 @@ class PowerFlowTabViewModel(
         )
     }
 
-    private suspend fun loadDeviceStatus(currentDevice: Device): DeviceState {
-        val device = network.fetchDevice(currentDevice.deviceSN)
-        return DeviceState.fromInt(device.status)
-    }
-
     private suspend fun loadData() {
         try {
             if (configManager.currentDevice.value == null) {
@@ -205,9 +178,7 @@ class PowerFlowTabViewModel(
                     uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
                 }
 
-                val deviceState = loadDeviceStatus(currentDevice)
                 val real = loadRealData(currentDevice, configManager)
-                val totals = loadTotals(currentDevice)
                 val generation = loadGeneration(currentDevice)
 
                 val currentViewModel = CurrentStatusCalculator(
@@ -224,17 +195,14 @@ class PowerFlowTabViewModel(
                     home = currentViewModel.currentHomeConsumption,
                     grid = currentViewModel.currentGrid,
                     todaysGeneration = generation,
-                    earnings = EarningsViewModel(EnergyStatsFinancialModel(totals, configManager)),
                     inverterTemperatures = currentViewModel.currentTemperatures,
                     hasBattery = battery.hasBattery,
                     battery = battery,
                     configManager = configManager,
-                    homeTotal = totals.loads,
-                    gridImportTotal = totals.grid,
-                    gridExportTotal = totals.feedIn,
                     ct2 = currentViewModel.currentCT2,
-                    deviceState = deviceState,
-                    faults = currentViewModel.currentFaults
+                    faults = currentViewModel.currentFaults,
+                    currentDevice = currentDevice,
+                    network = network
                 )
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

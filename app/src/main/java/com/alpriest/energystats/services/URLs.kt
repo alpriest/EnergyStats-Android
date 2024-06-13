@@ -196,6 +196,10 @@ object URLs {
             .addQueryParameter("id", stationID)
             .build()
     }
+
+    fun getRequestCount(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/user/getAccessCount".toHttpUrl()
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

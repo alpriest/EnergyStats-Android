@@ -25,6 +25,7 @@ fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateF
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
     val displayUnit = themeStream.collectAsState().value.displayUnit
     val context = LocalContext.current
+    val homeTotal = viewModel.homeTotal.collectAsState().value ?: 0.0 // TODO
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -40,7 +41,7 @@ fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateF
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = viewModel.homeTotal.energy(displayUnit, decimalPlaces),
+                    text = homeTotal.energy(displayUnit, decimalPlaces),
                     fontSize = fontSize,
                     fontWeight = FontWeight.Bold
                 )

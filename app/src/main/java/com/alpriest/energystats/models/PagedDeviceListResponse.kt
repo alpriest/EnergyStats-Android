@@ -54,7 +54,9 @@ data class Device(
     val deviceType: String,
     val battery: Battery?,
     val moduleSN: String
-)
+) {
+    companion object
+}
 
 data class Battery(
     val capacity: String?,
@@ -89,3 +91,8 @@ data class PowerStationDetailResponse(
         )
     }
 }
+
+data class ApiRequestCountResponse(
+    val total: String,
+    val remaining: String
+)

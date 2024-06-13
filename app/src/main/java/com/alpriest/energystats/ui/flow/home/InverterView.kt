@@ -72,7 +72,7 @@ class InverterViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     val hasFault: Boolean
-        get() = deviceState != DeviceState.Online || faults.isNotEmpty()
+        get() = deviceState == DeviceState.Fault || deviceState == DeviceState.Offline || faults.isNotEmpty()
 
     val deviceStationName: String?
         get() = configManager.currentDevice.value?.stationName

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
@@ -14,8 +15,8 @@ import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenApiVariableDeserializer
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenQueryResponseData
-import com.alpriest.energystats.models.OpenRealQueryResponseDeserializer
 import com.alpriest.energystats.models.OpenRealQueryResponse
+import com.alpriest.energystats.models.OpenRealQueryResponseDeserializer
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedPowerStationListResponse
@@ -214,6 +215,10 @@ class DemoAPI : FoxAPIServicing {
 
     override suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse {
         return PowerStationDetailResponse("", 0.0, "")
+    }
+
+    override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
+        return ApiRequestCountResponse("10", "5")
     }
 
     override suspend fun fetchErrorMessages() {}

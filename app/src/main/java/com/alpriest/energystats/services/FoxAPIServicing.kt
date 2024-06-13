@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
@@ -48,6 +49,7 @@ interface FoxAPIServicing {
     suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse
     suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse
     suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse
+    suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

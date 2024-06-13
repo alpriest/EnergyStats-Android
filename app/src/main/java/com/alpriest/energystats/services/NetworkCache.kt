@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
@@ -180,6 +181,10 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
             cache[key] = CachedItem(fresh)
             fresh
         }
+    }
+
+    override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
+        return api.openapi_fetchRequestCount()
     }
 
     override suspend fun fetchErrorMessages() {

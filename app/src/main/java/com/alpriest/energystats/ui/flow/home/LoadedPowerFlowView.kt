@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.models.isFlowing
@@ -39,7 +40,6 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EarningsView
-import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
@@ -49,6 +49,7 @@ import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
+import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -56,7 +57,28 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import com.alpriest.energystats.ui.theme.demo
+import com.valentinilk.shimmer.Shimmer
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
+import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
+
+@Composable
+fun ShimmerText(shimmering: Boolean, shimmerInstance: Shimmer, text: String, color: Color = Color.Black) {
+    Box(modifier = Modifier.let {
+        if (shimmering) {
+            it.shimmer(shimmerInstance)
+        } else {
+            it
+        }
+    }) {
+        Text(
+            text = text,
+            color = if (shimmering) Color.Transparent else color,
+            modifier = Modifier.background(if (shimmering) Color.LightGray else Color.Transparent)
+        )
+    }
+}
 
 @Composable
 fun LoadedPowerFlowView(
@@ -67,13 +89,18 @@ fun LoadedPowerFlowView(
 ) {
     val iconHeight = themeStream.collectAsState().value.iconHeight()
     val theme by themeStream.collectAsState()
+    val deviceState = loadedPowerFlowViewModel.deviceState.collectAsState().value
+    val earnings = loadedPowerFlowViewModel.earnings.collectAsState().value
+    val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
     ) {
         if (theme.totalYieldModel != TotalYieldModel.Off) {
-            Text(
+            ShimmerText(
+                shimmering = false,
+                shimmerInstance = shimmerInstance,
                 text = stringResource(
                     id = R.string.solarYieldToday,
                     loadedPowerFlowViewModel.todaysGeneration.solarToday().energy(theme.displayUnit, theme.decimalPlaces)
@@ -81,8 +108,8 @@ fun LoadedPowerFlowView(
             )
         }
 
-        if (theme.showFinancialSummaryOnFlowPage) {
-            EarningsView(themeStream, loadedPowerFlowViewModel.earnings)
+        if (theme.showFinancialSummaryOnFlowPage && earnings != null) {
+            EarningsView(themeStream, earnings)
         }
 
         Box(contentAlignment = Alignment.Center) {
@@ -163,7 +190,7 @@ fun LoadedPowerFlowView(
                 InverterViewModel(
                     configManager,
                     temperatures = loadedPowerFlowViewModel.inverterTemperatures,
-                    deviceState = loadedPowerFlowViewModel.deviceState,
+                    deviceState = deviceState,
                     faults = loadedPowerFlowViewModel.faults
                 )
             )
@@ -329,17 +356,14 @@ fun SummaryPowerFlowViewPreview() {
                 home = 2.454,
                 grid = 1.234,
                 todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), includeCT2 = false, invertCT2 = false),
-                earnings = EarningsViewModel.preview(),
                 inverterTemperatures = null,
                 hasBattery = true,
                 battery = BatteryViewModel(),
                 FakeConfigManager(),
-                gridImportTotal = 1.0,
-                gridExportTotal = 2.0,
-                homeTotal = 1.0,
                 ct2 = 0.4,
-                deviceState = DeviceState.Online,
-                faults = listOf()
+                faults = listOf(),
+                currentDevice = Device.preview(),
+                network = DemoNetworking()
             ),
             themeStream = MutableStateFlow(
                 AppTheme.demo(
@@ -352,3 +376,4 @@ fun SummaryPowerFlowViewPreview() {
         )
     }
 }
+

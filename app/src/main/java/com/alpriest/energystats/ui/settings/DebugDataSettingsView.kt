@@ -12,6 +12,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,11 +25,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
+import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.settings.debug.networkTrace.NetworkTraceDebugView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.google.gson.GsonBuilder
@@ -42,7 +46,7 @@ fun NavGraphBuilder.debugGraph(
     credentialStore: CredentialStore
 ) {
     navigation(startDestination = "debug", route = "login") {
-        composable("debug") { DebugDataSettingsView(navController) }
+        composable("debug") { DebugDataSettingsView(navController, network) }
 
         composable("debugReport") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
         composable("debugQuery") { ResponseDebugView(networkStore, mapper = { networkStore.realQueryResponseStream }, fetcher = null) }
@@ -82,7 +86,16 @@ fun NavGraphBuilder.debugGraph(
 }
 
 @Composable
-fun DebugDataSettingsView(navController: NavController) {
+fun DebugDataSettingsView(navController: NavController, network: Networking) {
+    val scope = rememberCoroutineScope()
+    val alertDialogMessage = remember { mutableStateOf(null as String?) }
+
+    alertDialogMessage.value?.let {
+        AlertDialog(message = it, onDismiss = {
+            alertDialogMessage.value = null
+        })
+    }
+
     SettingsColumnWithChild {
         SettingsTitleView("Debug")
 
@@ -117,6 +130,16 @@ fun DebugDataSettingsView(navController: NavController) {
         Button(onClick = { navController.navigate("debugNetworkTrace") }) {
             Text("Network trace")
         }
+
+        Button(onClick = {
+            scope.launch {
+                val counts = network.fetchRequestCount()
+
+                alertDialogMessage.value = "${counts.remaining} remaining out of ${counts.total} total"
+            }
+        }) {
+            Text("View request count")
+        }
     }
 }
 
@@ -146,7 +169,7 @@ private fun <T> ResponseDebugView(
             Text("${it.time}")
             Text(it.request.url.toString())
 
-            val raw = it.raw?.let {
+            it.raw?.let {
                 prettyPrintJson(it).split("\n").map {
                     Row(Modifier.fillMaxWidth()) {
                         Text(
@@ -193,7 +216,7 @@ fun DebugDataSettingsViewPreview() {
             navController = navController,
             startDestination = "debug"
         ) {
-            composable("debug") { DebugDataSettingsView(navController) }
+            composable("debug") { DebugDataSettingsView(navController, DemoNetworking()) }
             composable("debugQuery") { ResponseDebugView(networkStore, { networkStore.realQueryResponseStream }, null) }
             composable("debugReport") { ResponseDebugView(networkStore, { networkStore.reportResponseStream }, null) }
             composable("debugBatterySOC") { ResponseDebugView(networkStore, { networkStore.batterySOCResponseStream }, null) }

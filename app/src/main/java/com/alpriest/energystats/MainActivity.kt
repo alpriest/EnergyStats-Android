@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                 appContainer.filePathChooserCallback?.invoke(it)
             }
         }
-        val preHomeViewModel = PreHomeViewModel(appContainer.networking, appContainer.configManager, appContainer.userManager, appContainer.config)
+        val preHomeViewModel = PreHomeViewModel(appContainer.networking)
 
         setContent {
             val systemUiController = rememberSystemUiController()

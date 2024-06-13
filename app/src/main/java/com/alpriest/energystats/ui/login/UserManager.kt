@@ -70,6 +70,7 @@ class UserManager(
         try {
             store.store(apiKey)
             configManager.fetchDevices()
+            configManager.fetchPowerStationDetail()
             _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: BadCredentialsException) {
             logout()

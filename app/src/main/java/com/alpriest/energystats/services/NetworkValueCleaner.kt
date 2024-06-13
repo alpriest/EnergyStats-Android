@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
@@ -129,49 +130,13 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
         return api.openapi_fetchPowerStationDetail(stationID)
     }
 
+    override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
+        return api.openapi_fetchRequestCount()
+    }
+
     override suspend fun fetchErrorMessages() {
         api.fetchErrorMessages()
     }
-
-//    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
-//        return network.fetchScheduleModes(deviceID)
-//    }
-//
-//    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-//        return network.fetchCurrentSchedule(deviceSN)
-//    }
-//
-//    override suspend fun deleteSchedule(deviceSN: String) {
-//        return network.deleteSchedule(deviceSN)
-//    }
-//
-//    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
-//        return network.saveSchedule(deviceSN, schedule)
-//    }
-//
-//    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
-//        network.enableScheduleTemplate(deviceSN, templateID)
-//    }
-//
-//    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
-//        return network.fetchScheduleTemplate(deviceSN, templateID)
-//    }
-//
-//    override suspend fun deleteScheduleTemplate(templateID: String) {
-//        network.deleteScheduleTemplate(templateID)
-//    }
-//
-//    override suspend fun createScheduleTemplate(name: String, description: String) {
-//        network.createScheduleTemplate(name, description)
-//    }
-//
-//    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
-//        return network.fetchScheduleTemplates()
-//    }
-//
-//    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
-//        network.saveScheduleTemplate(deviceSN, scheduleTemplate)
-//    }
 
     private fun Double.capped(dataCeiling: DataCeiling): Double {
         return if (this > 0) {

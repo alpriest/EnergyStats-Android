@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
 import com.alpriest.energystats.models.ChargeTime
@@ -350,6 +351,14 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<PowerStationDetailResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<PowerStationDetailResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
+        val request = Request.Builder().url(URLs.getRequestCount()).build()
+
+        val type = object : TypeToken<NetworkResponse<ApiRequestCountResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<ApiRequestCountResponse>> = fetch(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
