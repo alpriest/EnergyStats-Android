@@ -24,15 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.models.isFlowing
 import com.alpriest.energystats.models.power
@@ -64,7 +65,14 @@ import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun ShimmerText(shimmering: Boolean, shimmerInstance: Shimmer, text: String, color: Color = Color.Black) {
+fun ShimmerText(
+    shimmering: Boolean,
+    shimmerInstance: Shimmer? = null,
+    text: String,
+    color: Color = Color.Black,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontWeight: FontWeight? = null
+) {
     Box(modifier = Modifier.let {
         if (shimmering) {
             it.shimmer(shimmerInstance)
@@ -75,7 +83,9 @@ fun ShimmerText(shimmering: Boolean, shimmerInstance: Shimmer, text: String, col
         Text(
             text = text,
             color = if (shimmering) Color.Transparent else color,
-            modifier = Modifier.background(if (shimmering) Color.LightGray else Color.Transparent)
+            modifier = Modifier.background(if (shimmering) Color.LightGray else Color.Transparent),
+            fontSize = fontSize,
+            fontWeight = fontWeight
         )
     }
 }
@@ -92,6 +102,7 @@ fun LoadedPowerFlowView(
     val deviceState = loadedPowerFlowViewModel.deviceState.collectAsState().value
     val earnings = loadedPowerFlowViewModel.earnings.collectAsState().value
     val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
+    val solarTotal = loadedPowerFlowViewModel.todaysGeneration.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -99,16 +110,16 @@ fun LoadedPowerFlowView(
     ) {
         if (theme.totalYieldModel != TotalYieldModel.Off) {
             ShimmerText(
-                shimmering = false,
+                shimmering = solarTotal == null,
                 shimmerInstance = shimmerInstance,
                 text = stringResource(
                     id = R.string.solarYieldToday,
-                    loadedPowerFlowViewModel.todaysGeneration.solarToday().energy(theme.displayUnit, theme.decimalPlaces)
+                    (solarTotal?.solarToday() ?: 0.0).energy(theme.displayUnit, theme.decimalPlaces)
                 )
             )
         }
 
-        if (theme.showFinancialSummaryOnFlowPage && earnings != null) {
+        if (theme.showFinancialSummaryOnFlowPage) {
             EarningsView(themeStream, earnings)
         }
 
@@ -355,7 +366,6 @@ fun SummaryPowerFlowViewPreview() {
                 ),
                 home = 2.454,
                 grid = 1.234,
-                todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), includeCT2 = false, invertCT2 = false),
                 inverterTemperatures = null,
                 hasBattery = true,
                 battery = BatteryViewModel(),

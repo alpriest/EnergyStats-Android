@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EarningsViewModel
@@ -14,6 +16,7 @@ import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
+import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -30,7 +33,6 @@ class LoadedPowerFlowViewModel(
     val solarStrings: List<StringPower>,
     val home: Double,
     val grid: Double,
-    val todaysGeneration: GenerationViewModel,
     val inverterTemperatures: InverterTemperatures?,
     val hasBattery: Boolean,
     val battery: BatteryViewModel,
@@ -45,10 +47,34 @@ class LoadedPowerFlowViewModel(
     val gridImportTotal = MutableStateFlow<Double?>(null)
     val gridExportTotal = MutableStateFlow<Double?>(null)
     val earnings = MutableStateFlow<EarningsViewModel?>(null)
+    val todaysGeneration = MutableStateFlow<GenerationViewModel?>(null)
 
     init {
         loadDeviceStatus()
         loadTotals()
+        loadGeneration()
+    }
+
+    private fun loadGeneration() {
+        if (configManager.totalYieldModel != TotalYieldModel.Off) {
+            viewModelScope.launch {
+                todaysGeneration.value = GenerationViewModel(
+                    loadHistoryData(currentDevice),
+                    includeCT2 = configManager.shouldCombineCT2WithPVPower,
+                    invertCT2 = configManager.shouldInvertCT2
+                )
+            }
+        }
+    }
+
+    private suspend fun loadHistoryData(device: Device): OpenHistoryResponse {
+        val start = QueryDate().toUtcMillis()
+        return network.fetchHistory(
+            deviceSN = device.deviceSN,
+            variables = listOf("pvPower", "meterPower2"),
+            start = start,
+            end = start + (86400 * 1000)
+        )
     }
 
     private fun loadDeviceStatus() {

@@ -119,7 +119,17 @@ fun SettingsColumnWithChild(
             Column(modifier = Modifier.padding(horizontal = 12.dp)) {
                 content()
 
-                footer?.let {
+                ErrorTextView(error)
+            }
+        }
+
+        footer?.let {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(padding)
+            ) {
+                Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
                     Text(
                         it,
                         style = MaterialTheme.typography.caption,
@@ -127,8 +137,6 @@ fun SettingsColumnWithChild(
                         modifier = footerModifier.padding(bottom = 8.dp)
                     )
                 }
-
-                ErrorTextView(error)
             }
         }
     }

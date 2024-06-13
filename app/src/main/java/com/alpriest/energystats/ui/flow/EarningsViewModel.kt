@@ -19,6 +19,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.CalculationBreakdown
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -39,17 +40,27 @@ fun SubLabelledView(value: String, label: String, alignment: Alignment.Horizonta
 }
 
 @Composable
-fun EarningsView(themeStream: MutableStateFlow<AppTheme>, viewModel: EarningsViewModel) {
+fun EarningsView(themeStream: MutableStateFlow<AppTheme>, viewModel: EarningsViewModel?) {
     val context = LocalContext.current
     val appTheme = themeStream.collectAsState().value
 
-    Row {
-        viewModel.amounts().forEach {
-            SubLabelledView(
-                value = it.formattedAmount(appTheme.currencySymbol),
-                label = it.title(context),
-                alignment = Alignment.CenterHorizontally
-            )
+    Row(
+        modifier = Modifier.let {
+            if (viewModel == null) {
+                it.shimmer()
+            } else {
+                it
+            }
+        }
+    ) {
+        viewModel?.let {
+            it.amounts().forEach {
+                SubLabelledView(
+                    value = it.formattedAmount(appTheme.currencySymbol),
+                    label = it.title(context),
+                    alignment = Alignment.CenterHorizontally
+                )
+            }
         }
     }
 }

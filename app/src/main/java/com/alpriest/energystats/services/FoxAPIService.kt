@@ -77,8 +77,8 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
     private val okHttpClient by lazy {
         val builder = OkHttpClient()
             .newBuilder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(45, TimeUnit.SECONDS)
+            .readTimeout(45, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val original = chain.request()

@@ -152,20 +152,6 @@ class PowerFlowTabViewModel(
         )
     }
 
-    private suspend fun loadGeneration(device: Device): GenerationViewModel {
-        return GenerationViewModel(loadHistoryData(device), includeCT2 = configManager.shouldCombineCT2WithPVPower, invertCT2 = configManager.shouldInvertCT2)
-    }
-
-    private suspend fun loadHistoryData(device: Device): OpenHistoryResponse {
-        val start = QueryDate().toUtcMillis()
-        return network.fetchHistory(
-            deviceSN = device.deviceSN,
-            variables = listOf("pvPower", "meterPower2"),
-            start = start,
-            end = start + (86400 * 1000)
-        )
-    }
-
     private suspend fun loadData() {
         try {
             if (configManager.currentDevice.value == null) {
@@ -179,7 +165,6 @@ class PowerFlowTabViewModel(
                 }
 
                 val real = loadRealData(currentDevice, configManager)
-                val generation = loadGeneration(currentDevice)
 
                 val currentViewModel = CurrentStatusCalculator(
                     real,
@@ -194,7 +179,6 @@ class PowerFlowTabViewModel(
                     solarStrings = currentViewModel.currentSolarStringsPower,
                     home = currentViewModel.currentHomeConsumption,
                     grid = currentViewModel.currentGrid,
-                    todaysGeneration = generation,
                     inverterTemperatures = currentViewModel.currentTemperatures,
                     hasBattery = battery.hasBattery,
                     battery = battery,

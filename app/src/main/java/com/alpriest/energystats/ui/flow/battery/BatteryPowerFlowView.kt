@@ -79,7 +79,7 @@ fun BatteryIconView(
     iconHeight: Dp,
     modifier: Modifier = Modifier
 ) {
-    var percentage = themeStream.collectAsState().value.showBatterySOCAsPercentage
+    val percentage = themeStream.collectAsState().value.showBatterySOCAsPercentage
     val fontSize = themeStream.collectAsState().value.fontSize()
     val smallFontSize = themeStream.collectAsState().value.smallFontSize()
     val showBatteryTemperature = themeStream.collectAsState().value.showBatteryTemperature

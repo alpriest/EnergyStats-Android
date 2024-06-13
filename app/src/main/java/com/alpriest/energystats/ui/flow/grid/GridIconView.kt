@@ -21,13 +21,12 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.StringPower
-import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.ShimmerText
 import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -72,14 +71,15 @@ private fun GridTotals(
     val displayUnit = themeStream.collectAsState().value.displayUnit
     val fontSize = themeStream.collectAsState().value.fontSize()
     val smallFontSize = themeStream.collectAsState().value.smallFontSize()
-    val gridImportTotal = viewModel.gridImportTotal.collectAsState().value ?: 0.0 // TODO
-    val gridExportTotal = viewModel.gridExportTotal.collectAsState().value ?: 0.0 // TODO
+    val gridImportTotal = viewModel.gridImportTotal.collectAsState().value
+    val gridExportTotal = viewModel.gridExportTotal.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = gridImportTotal.energy(displayUnit, decimalPlaces),
+        ShimmerText(
+            shimmering = gridImportTotal == null,
+            text = (gridImportTotal ?: 0.0).energy(displayUnit, decimalPlaces),
             fontSize = fontSize,
             fontWeight = FontWeight.Bold
         )
@@ -89,8 +89,9 @@ private fun GridTotals(
             color = Color.Gray,
         )
 
-        Text(
-            text = gridExportTotal.energy(displayUnit, decimalPlaces),
+        ShimmerText(
+            shimmering = gridExportTotal == null,
+            text = (gridExportTotal ?: 0.0).energy(displayUnit, decimalPlaces),
             fontSize = fontSize,
             fontWeight = FontWeight.Bold
         )
@@ -113,7 +114,6 @@ fun GridIconViewPreview() {
         ),
         home = 2.45,
         grid = 2.45,
-        todaysGeneration = GenerationViewModel(response = OpenHistoryResponse(deviceSN = "1", datas = listOf()), includeCT2 = false, invertCT2 = false),
         inverterTemperatures = null,
         hasBattery = true,
         battery = BatteryViewModel(),

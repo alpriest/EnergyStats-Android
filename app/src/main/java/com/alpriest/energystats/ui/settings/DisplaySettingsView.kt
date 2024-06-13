@@ -38,7 +38,8 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 
     SettingsColumn(
         modifier = modifier,
-        header = stringResource(R.string.display)
+        header = stringResource(R.string.display),
+        footer = stringResource(R.string.some_settings_will_only_take_effect_on_the_next_data_refresh)
     ) {
         SettingsCheckbox(
             title = stringResource(R.string.increase_sizes_for_large_display),
