@@ -1,19 +1,33 @@
 package com.alpriest.energystats.ui.settings
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsTabView(
@@ -21,12 +35,16 @@ fun SettingsTabView(
     config: ConfigManaging,
     onLogout: () -> Unit,
     onRateApp: () -> Unit,
-    onBuyMeCoffee: () -> Unit
+    onBuyMeCoffee: () -> Unit,
 ) {
     val currentDevice = config.currentDevice.collectAsState()
     val uriHandler = LocalUriHandler.current
 
     SettingsPage {
+        SettingsColumn {
+            ReloadDevicesButton(config)
+        }
+
         SettingsColumn(header = "Settings") {
             config.powerStationDetail?.let {
                 InlineSettingsNavButton(stringResource(R.string.settings_power_station)) { navController.navigate(SettingsScreen.PowerStation.name) }
@@ -39,8 +57,8 @@ fun SettingsTabView(
             currentDevice.value?.let {
                 if (it.battery != null) {
                     InlineSettingsNavButton(stringResource(R.string.battery)) { navController.navigate(SettingsScreen.Battery.name) }
+                    Divider()
                 }
-                Divider()
             }
 
             InlineSettingsNavButton("Dataloggers") { navController.navigate(SettingsScreen.Dataloggers.name) }
@@ -96,10 +114,51 @@ fun SettingsTabView(
                 title = stringResource(R.string.edit_api_key),
                 onClick = { navController.navigate(SettingsScreen.APIKey.name) }
             )
+
+            ReloadDevicesButton(config)
+
+            Divider()
         }
 
         SettingsFooterView(config, onLogout, onRateApp, onBuyMeCoffee)
     }
+}
+
+@Composable
+fun ReloadDevicesButton(config: ConfigManaging) {
+    val scope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false) }
+
+    InlineSettingsNavButton(
+        title = "Reload devices from FoxESS Cloud",
+        disclosureIcon = null,
+        disclosureView = {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colors.primary,
+                    modifier = Modifier.size(22.dp)
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "Tap to refresh",
+                    modifier = Modifier.padding(end = 12.dp),
+                    tint = MaterialTheme.colors.onSecondary
+                )
+            }
+        },
+        onClick = {
+            scope.launch {
+                try {
+                    isLoading = true
+                    config.fetchDevices()
+                    isLoading = false
+                } catch (ex: Exception) {
+                    isLoading = false
+                }
+            }
+        }
+    )
 }
 
 @Preview(showBackground = true, heightDp = 1200, widthDp = 400)
@@ -110,7 +169,8 @@ fun SettingsViewPreview() {
             navController = NavHostController(LocalContext.current),
             config = FakeConfigManager(),
             onLogout = {},
-            onRateApp = {}
-        ) {}
+            onRateApp = {},
+            {}
+        )
     }
 }

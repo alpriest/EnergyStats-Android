@@ -20,6 +20,8 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
+import com.alpriest.energystats.ui.paramsgraph.LastLoadState
+import com.alpriest.energystats.ui.paramsgraph.isSameDay
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
@@ -31,6 +33,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double)
 
@@ -56,6 +60,7 @@ class StatsTabViewModel(
     private var exportText: String = ""
     private val approximationsCalculator: ApproximationsCalculator = ApproximationsCalculator(configManager, networking)
     private val fetcher = StatsDataFetcher(networking, approximationsCalculator)
+    private var lastLoadState: LastLoadState<StatsDisplayMode>? = null
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -94,6 +99,7 @@ class StatsTabViewModel(
 
     suspend fun load(context: Context) {
         val device = configManager.currentDevice.value ?: return
+        if (!requiresLoad()) return
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
         if (graphVariablesStream.value.isEmpty()) {
             updateGraphVariables(device)
@@ -137,11 +143,25 @@ class StatsTabViewModel(
             refresh()
             calculateSelfSufficiencyEstimate()
             uiState.value = UiLoadState(LoadState.Inactive)
+            lastLoadState = LastLoadState(LocalDateTime.now(), displayMode)
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             uiState.value = UiLoadState(LoadState.Inactive)
             return
         }
+    }
+
+    private fun requiresLoad(): Boolean {
+        val lastLoadState = lastLoadState ?: return true
+
+        val now = LocalDateTime.now(ZoneId.systemDefault())
+        val lastLoadHour = lastLoadState.lastLoadTime.hour
+        val currentHour = now.hour
+
+        val sufficientTimeHasPassed = !lastLoadState.lastLoadTime.isSameDay(now) || lastLoadHour != currentHour
+        val viewDataHasChanged = lastLoadState.loadState != displayModeStream.value
+
+        return sufficientTimeHasPassed || viewDataHasChanged
     }
 
     private fun appEntersForeground() {

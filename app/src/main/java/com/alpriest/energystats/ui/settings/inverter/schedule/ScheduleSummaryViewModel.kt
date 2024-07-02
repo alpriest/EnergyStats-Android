@@ -91,7 +91,7 @@ class ScheduleSummaryViewModel(
             preload(context)
             hasPreloaded = true
 
-            if (supportedErrorStream.value != null) {
+            if (supportedErrorStream.value != null || uiState.value.state is LoadState.Error) {
                 return
             }
         }
@@ -215,3 +215,4 @@ internal fun SchedulePhaseResponse.toSchedulePhase(): SchedulePhase? {
         color = Color.scheduleColor(workMode)
     )
 }
+

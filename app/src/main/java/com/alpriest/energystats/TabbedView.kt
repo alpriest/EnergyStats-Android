@@ -2,16 +2,27 @@ package com.alpriest.energystats
 
 import android.content.Context
 import android.net.Uri
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Insights
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -41,7 +52,6 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.statsgraph.StatsTabView
-import com.alpriest.energystats.ui.statsgraph.StatsTabViewModel
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.summary.SummaryView
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -98,7 +108,7 @@ fun TabbedView(
             ) { page ->
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
-                    1 -> StatsTabView(StatsTabViewModel(configManager, network, onWriteTempFile), filePathChooser, themeStream, userManager)
+                    1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
                     2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
                     3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).Content(themeStream = themeStream)
                     4 -> NavigableSettingsView(

@@ -6,13 +6,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +24,9 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.settings.SettingsColumn
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsRow(title: String, value: String?) {
@@ -55,11 +58,8 @@ fun SettingsRow(title: String, content: @Composable () -> Unit) {
 fun FirmwareVersionView(device: Device, network: Networking) {
     val uriHandler = LocalUriHandler.current
     var firmware: DeviceFirmwareVersion? by remember { mutableStateOf(null) }
-
-    LaunchedEffect(null) {
-        val response = network.fetchDevice(device.deviceSN)
-        firmware = DeviceFirmwareVersion(manager = response.managerVersion, slave = response.slaveVersion, master = response.masterVersion)
-    }
+    val scope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false) }
 
     firmware?.let {
         SettingsColumn(
@@ -73,6 +73,26 @@ fun FirmwareVersionView(device: Device, network: Networking) {
             SettingsRow("Manager", it.manager)
             SettingsRow("Slave", it.slave)
             SettingsRow("Master", it.master)
+        }
+    } ?: SettingsColumn {
+        if (isLoading) {
+            LoadingView(title = stringResource(R.string.loading))
+        } else {
+            Button(
+                onClick = {
+                    scope.launch {
+                        try {
+                            isLoading = true
+                            val response = network.fetchDevice(device.deviceSN)
+                            firmware = DeviceFirmwareVersion(manager = response.managerVersion, slave = response.slaveVersion, master = response.masterVersion)
+                            isLoading = false
+                        } catch (ex: Exception) {
+                            isLoading = false
+                        }
+                    }
+                }) {
+                Text("Tap to load firmware versions")
+            }
         }
     }
 }

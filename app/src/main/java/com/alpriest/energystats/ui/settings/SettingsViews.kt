@@ -293,7 +293,13 @@ fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composabl
 }
 
 @Composable
-fun InlineSettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIcon: (() -> ImageVector)? = { Icons.Default.ChevronRight }, onClick: () -> Unit) {
+fun InlineSettingsNavButton(
+    title: String,
+    modifier: Modifier = Modifier,
+    disclosureIcon: (() -> ImageVector)? = { Icons.Default.ChevronRight },
+    disclosureView: (@Composable () -> Unit)? = null,
+    onClick: () -> Unit
+) {
     val interactionSource = remember { MutableInteractionSource() }
 
     TextButton(
@@ -306,7 +312,7 @@ fun InlineSettingsNavButton(title: String, modifier: Modifier = Modifier, disclo
         border = null
     ) {
         Row(
-            modifier = if (disclosureIcon == null) Modifier else Modifier.fillMaxWidth(),
+            modifier = if (disclosureIcon == null && disclosureView == null) Modifier else Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -324,6 +330,8 @@ fun InlineSettingsNavButton(title: String, modifier: Modifier = Modifier, disclo
                     tint = colors.onSecondary
                 )
             }
+
+            disclosureView?.let { it() }
         }
     }
 }

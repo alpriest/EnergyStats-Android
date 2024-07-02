@@ -7,14 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenRealQueryResponse
-import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.rounded
-import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
@@ -69,6 +65,8 @@ class PowerFlowTabViewModel(
 
     fun finalize() {
         appLifecycleObserver.detach()
+        timer?.cancel()
+        timer = null
     }
 
     fun timerFired() {

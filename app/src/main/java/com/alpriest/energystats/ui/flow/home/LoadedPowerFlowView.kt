@@ -69,7 +69,7 @@ fun ShimmerText(
     shimmering: Boolean,
     shimmerInstance: Shimmer? = null,
     text: String,
-    color: Color = Color.Black,
+    color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
     fontWeight: FontWeight? = null
 ) {

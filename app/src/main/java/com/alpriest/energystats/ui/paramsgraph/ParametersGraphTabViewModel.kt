@@ -26,6 +26,7 @@ import java.io.OutputStream
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.concurrent.CancellationException
 
 interface ExportProviding {
@@ -40,7 +41,17 @@ interface AlertDialogMessageProviding {
     }
 }
 
+data class LastLoadState<T>(
+    val lastLoadTime: LocalDateTime,
+    val loadState: T
+)
+
 data class AxisScale(val min: Float?, val max: Float?)
+
+data class ParametersGraphViewState(
+    val displayMode: ParametersDisplayMode,
+    val variables: List<ParameterGraphVariable>
+)
 
 class ParametersGraphTabViewModel(
     val networking: Networking,
@@ -64,6 +75,7 @@ class ParametersGraphTabViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val xDataPointCount: MutableStateFlow<Float> = MutableStateFlow(360f)
+    private var lastLoadState: LastLoadState<ParametersGraphViewState>? = null
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -105,8 +117,20 @@ class ParametersGraphTabViewModel(
         }
     }
 
+    private fun requiresLoad(): Boolean {
+        val lastLoadState = lastLoadState ?: return true
+
+        val sufficientTimeHasPassed = lastLoadState.lastLoadTime.timeUntilNow() > (5 * 60)
+        val viewDataHasChanged = lastLoadState.loadState.displayMode != displayModeStream.value ||
+                lastLoadState.loadState.variables != graphVariablesStream.value
+        return sufficientTimeHasPassed || viewDataHasChanged
+    }
+
     suspend fun load(context: Context) {
         val device = configManager.currentDevice.value ?: return
+        if (!requiresLoad()) {
+            return
+        }
         val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type.variable }.toList()
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
@@ -137,8 +161,8 @@ class ParametersGraphTabViewModel(
             }
 
             this.rawData = rawData
-
             refresh()
+            lastLoadState = LastLoadState(lastLoadTime = LocalDateTime.now(), ParametersGraphViewState(displayModeStream.value, graphVariablesStream.value))
         } catch (ex: CancellationException) {
             // Ignore as the user navigated away
         } catch (ex: Exception) {
@@ -315,4 +339,13 @@ class DateTimeFloatEntry(
         y = y,
         type = type,
     )
+}
+
+fun LocalDateTime.timeUntilNow(): Long {
+    val now = LocalDateTime.now(ZoneId.systemDefault())
+    return Duration.between(this, now).seconds
+}
+
+fun LocalDateTime.isSameDay(other: LocalDateTime): Boolean {
+    return this.toLocalDate() == other.toLocalDate()
 }

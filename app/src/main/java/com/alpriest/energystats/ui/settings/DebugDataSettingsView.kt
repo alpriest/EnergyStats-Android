@@ -133,9 +133,13 @@ fun DebugDataSettingsView(navController: NavController, network: Networking) {
 
         Button(onClick = {
             scope.launch {
-                val counts = network.fetchRequestCount()
+                try {
+                    val counts = network.fetchRequestCount()
 
-                alertDialogMessage.value = "${counts.remaining} remaining out of ${counts.total} total"
+                    alertDialogMessage.value = "${counts.remaining} remaining out of ${counts.total} total"
+                } catch (ex: Exception) {
+                    alertDialogMessage.value = "API Timeout"
+                }
             }
         }) {
             Text("View request count")
