@@ -41,10 +41,6 @@ fun SettingsTabView(
     val uriHandler = LocalUriHandler.current
 
     SettingsPage {
-        SettingsColumn {
-            ReloadDevicesButton(config)
-        }
-
         SettingsColumn(header = "Settings") {
             config.powerStationDetail?.let {
                 InlineSettingsNavButton(stringResource(R.string.settings_power_station)) { navController.navigate(SettingsScreen.PowerStation.name) }
@@ -115,9 +111,9 @@ fun SettingsTabView(
                 onClick = { navController.navigate(SettingsScreen.APIKey.name) }
             )
 
-            ReloadDevicesButton(config)
-
             Divider()
+
+            ReloadDevicesButton(config)
         }
 
         SettingsFooterView(config, onLogout, onRateApp, onBuyMeCoffee)
