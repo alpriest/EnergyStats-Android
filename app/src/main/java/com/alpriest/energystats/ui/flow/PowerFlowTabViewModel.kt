@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.concurrent.CancellationException
 import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
@@ -191,6 +192,8 @@ class PowerFlowTabViewModel(
                 lastUpdateTime = currentViewModel.lastUpdate
                 calculateTicks(currentViewModel)
             }
+        } catch (ex: CancellationException) {
+            // Ignore as the user navigated away
         } catch (ex: Exception) {
             stopTimer()
             uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Error(ex, ex.localizedMessage ?: "Error unknown"))

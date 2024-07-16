@@ -35,6 +35,7 @@ import java.text.DateFormatSymbols
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import kotlin.coroutines.cancellation.CancellationException
 
 data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double)
 
@@ -144,6 +145,8 @@ class StatsTabViewModel(
             calculateSelfSufficiencyEstimate()
             uiState.value = UiLoadState(LoadState.Inactive)
             lastLoadState = LastLoadState(LocalDateTime.now(), displayMode)
+        } catch (ex: CancellationException) {
+            // Ignore as the user navigated away
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             uiState.value = UiLoadState(LoadState.Inactive)
