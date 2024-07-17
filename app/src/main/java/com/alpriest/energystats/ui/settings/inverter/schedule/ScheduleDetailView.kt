@@ -14,14 +14,21 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.demo
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun ScheduleDetailView(title: String, navController: NavHostController, schedule: Schedule) {
@@ -74,5 +81,18 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ScheduleDetailViewPreview() {
+    val themeStream = MutableStateFlow(AppTheme.demo())
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+        ScheduleDetailView(
+            title = "Something",
+            navController = NavHostController(LocalContext.current),
+            schedule = Schedule.preview()
+        )
     }
 }

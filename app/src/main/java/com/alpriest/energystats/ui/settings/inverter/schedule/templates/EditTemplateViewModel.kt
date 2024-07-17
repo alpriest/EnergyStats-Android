@@ -139,4 +139,18 @@ class EditTemplateViewModel(
             }
         }
     }
+
+    fun duplicate(name: String) {
+        val template = templateStream.value ?: return
+
+        viewModelScope.launch {
+            runCatching {
+                templateStore.duplicate(template, name)
+
+                EditScheduleStore.shared.reset()
+                uiState.value = UiLoadState(LoadState.Inactive)
+                navController.popBackStack()
+            }
+        }
+    }
 }

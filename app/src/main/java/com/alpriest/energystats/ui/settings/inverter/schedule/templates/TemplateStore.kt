@@ -10,6 +10,7 @@ interface TemplateStoring {
     fun save(template: ScheduleTemplate)
     fun delete(template: ScheduleTemplate)
     fun create(name: String)
+    fun duplicate(template: ScheduleTemplate, name: String)
 }
 
 class TemplateStore(
@@ -45,6 +46,18 @@ class TemplateStore(
         )
         config.scheduleTemplates = mutableTemplates
     }
+
+    override fun duplicate(template: ScheduleTemplate, name: String) {
+        val mutableTemplates = config.scheduleTemplates.toMutableList()
+        mutableTemplates.add(
+            ScheduleTemplate(
+                id = UUID.randomUUID().toString(),
+                name = name,
+                phases = template.phases
+            )
+        )
+        config.scheduleTemplates = mutableTemplates
+    }
 }
 
 class PreviewTemplateStore : TemplateStoring {
@@ -69,4 +82,6 @@ class PreviewTemplateStore : TemplateStoring {
     override fun create(name: String) {
     }
 
+    override fun duplicate(template: ScheduleTemplate, name: String) {
+    }
 }

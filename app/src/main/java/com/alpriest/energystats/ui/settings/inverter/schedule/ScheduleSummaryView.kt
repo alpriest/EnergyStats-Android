@@ -47,6 +47,7 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.PreviewTemplateStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 

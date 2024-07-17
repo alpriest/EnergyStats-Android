@@ -3,21 +3,15 @@ package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -42,7 +36,6 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
-import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleTemplateListViewModelFactory(
@@ -83,8 +76,6 @@ class ScheduleTemplateListView(
 
     @Composable
     fun Loaded(templates: List<ScheduleTemplate>, viewModel: ScheduleTemplateListViewModel) {
-        val context = LocalContext.current
-
         SettingsPage {
             templates.forEach {
                 SettingsColumn(
@@ -124,30 +115,10 @@ class ScheduleTemplateListView(
     @Composable
     fun CreateTemplateView(viewModel: ScheduleTemplateListViewModel) {
         val context = LocalContext.current
-        var newTemplateName by remember { mutableStateOf("") }
-        var triggerCreateFunction by remember { mutableStateOf(false) }
 
-        LaunchedEffect(triggerCreateFunction) {
-            if (triggerCreateFunction) {
-                viewModel.createTemplate(newTemplateName, context)
-                triggerCreateFunction = false
-            }
-        }
-
-        SettingsColumn(
-            header = stringResource(R.string.new_template)
-        ) {
-            OutlinedTextField(
-                value = newTemplateName,
-                onValueChange = { newTemplateName = it },
-                label = { Text(stringResource(R.string.name), color = DimmedTextColor) }
-            )
-
-            Button(onClick = { triggerCreateFunction = true }) {
-                Text(
-                    stringResource(R.string.create_new_template),
-                    color = MaterialTheme.colors.onPrimary
-                )
+        SettingsColumn {
+            CreateTemplateButtonView("New template") {
+                viewModel.createTemplate(it, context)
             }
         }
     }
