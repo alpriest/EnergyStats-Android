@@ -77,6 +77,7 @@ class EditTemplateView(
     fun Loaded(template: ScheduleTemplate, viewModel: EditTemplateViewModel) {
         val context = LocalContext.current
         val presentDuplicateAlert = remember { mutableStateOf(false) }
+        val presentRenameAlert = remember { mutableStateOf(false) }
 
         SettingsPage {
             ScheduleDetailView(stringResource(R.string.edit_template), viewModel.navController, template.asSchedule())
@@ -132,21 +133,18 @@ class EditTemplateView(
                     ) {
                         Image(
                             imageVector = Icons.Default.ContentCopy,
-                            contentDescription = "Copy",
+                            contentDescription = "Duplicate",
                             colorFilter = ColorFilter.tint(Color.White)
                         )
                     }
-//                    {
-//                        viewModel.duplicate(it)
-//                    }
 
                     Button(
-                        onClick = { },
+                        onClick = { presentRenameAlert.value = true },
                         modifier = Modifier.weight(1f)
                     ) {
                         Image(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit",
+                            contentDescription = "Rename",
                             colorFilter = ColorFilter.tint(Color.White)
                         )
                     }
@@ -165,6 +163,24 @@ class EditTemplateView(
                             colorFilter = ColorFilter.tint(Color.White)
                         )
                     }
+                }
+            }
+        }
+
+        if (presentDuplicateAlert.value) {
+            TemplateNameAlertDialog(AlertConfiguration.DuplicateTemplate) {
+                presentDuplicateAlert.value = false
+                it?.let {
+                    viewModel.duplicate(it)
+                }
+            }
+        }
+
+        if (presentRenameAlert.value) {
+            TemplateNameAlertDialog(AlertConfiguration.RenameTemplate) {
+                presentRenameAlert.value = false
+                it?.let {
+                    viewModel.rename(it)
                 }
             }
         }

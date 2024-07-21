@@ -153,4 +153,14 @@ class EditTemplateViewModel(
             }
         }
     }
+
+    fun rename(name: String) {
+        val template = templateStream.value ?: return
+
+        templateStore.rename(template, name)
+
+        EditScheduleStore.shared.reset()
+        uiState.value = UiLoadState(LoadState.Inactive)
+        navController.popBackStack()
+    }
 }

@@ -11,6 +11,7 @@ interface TemplateStoring {
     fun delete(template: ScheduleTemplate)
     fun create(name: String)
     fun duplicate(template: ScheduleTemplate, name: String)
+    fun rename(template: ScheduleTemplate, name: String)
 }
 
 class TemplateStore(
@@ -58,6 +59,11 @@ class TemplateStore(
         )
         config.scheduleTemplates = mutableTemplates
     }
+
+    override fun rename(template: ScheduleTemplate, name: String) {
+        val renamed = template.copy(name = name)
+        save(renamed)
+    }
 }
 
 class PreviewTemplateStore : TemplateStoring {
@@ -83,5 +89,8 @@ class PreviewTemplateStore : TemplateStoring {
     }
 
     override fun duplicate(template: ScheduleTemplate, name: String) {
+    }
+
+    override fun rename(template: ScheduleTemplate, name: String) {
     }
 }

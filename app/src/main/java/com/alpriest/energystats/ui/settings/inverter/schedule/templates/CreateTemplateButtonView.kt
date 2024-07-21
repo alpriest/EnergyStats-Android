@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -22,28 +21,28 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
-@Composable
-fun CreateTemplateButtonView(content: @Composable RowScope.() -> Unit, onDismiss: (String) -> Unit) {
-    val show = remember { mutableStateOf(false) }
+enum class AlertConfiguration {
+    DuplicateTemplate,
+    CreateTemplate,
+    RenameTemplate;
 
-    Button(
-        onClick = { show.value = true },
-    ) {
-        content()
-    }
-
-    if (show.value) {
-        TemplateNameAlertDialog {
-            show.value = false
-            it?.let {
-                onDismiss(it)
-            }
+    val title: String
+        get() = when (this) {
+            CreateTemplate -> "Create template"
+            DuplicateTemplate -> "Duplicate template"
+            RenameTemplate -> "Rename template"
         }
-    }
+
+    val actionButton: String
+        get() = when (this) {
+            CreateTemplate -> "Create"
+            DuplicateTemplate -> "Duplicate"
+            RenameTemplate -> "Rename"
+        }
 }
 
 @Composable
-private fun TemplateNameAlertDialog(onDismiss: (String?) -> Unit) {
+fun TemplateNameAlertDialog(configuration: AlertConfiguration, onDismiss: (String?) -> Unit) {
     val context = LocalContext.current
     val name = remember { mutableStateOf("") }
 
@@ -54,15 +53,15 @@ private fun TemplateNameAlertDialog(onDismiss: (String?) -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Text("Enter template name")
+                Text(configuration.title)
                 OutlinedTextField(value = name.value, onValueChange = { name.value = it })
 
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Button(onClick = { onDismiss(name.value) }) {
-                        Text(context.getString(R.string.ok))
-                    }
                     Button(onClick = { onDismiss(null) }) {
                         Text(context.getString(R.string.cancel))
+                    }
+                    Button(onClick = { onDismiss(name.value) }) {
+                        Text(configuration.actionButton)
                     }
                 }
             }
@@ -74,8 +73,8 @@ private fun TemplateNameAlertDialog(onDismiss: (String?) -> Unit) {
 @Composable
 fun CreateTemplateButtonViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-        CreateTemplateButtonView(
-            content = { Text("Create new template") },
+        TemplateNameAlertDialog(
+            configuration = AlertConfiguration.RenameTemplate,
             onDismiss = { }
         )
     }
