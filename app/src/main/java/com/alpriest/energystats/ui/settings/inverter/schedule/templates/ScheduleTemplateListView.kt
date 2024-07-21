@@ -117,7 +117,7 @@ class ScheduleTemplateListView(
         val context = LocalContext.current
 
         SettingsColumn {
-            CreateTemplateButtonView("New template") {
+            CreateTemplateButtonView(content = { Text("New template")}) {
                 viewModel.createTemplate(it, context)
             }
         }

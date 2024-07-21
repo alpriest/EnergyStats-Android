@@ -2,11 +2,9 @@ package com.alpriest.energystats.ui.paramsgraph.editing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavHostController
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.UUID
 
 data class ParameterGroup(val id: String, val title: String, val parameterNames: List<String>) {
     companion object {
@@ -14,7 +12,7 @@ data class ParameterGroup(val id: String, val title: String, val parameterNames:
             get() {
                 return listOf(
                     ParameterGroup(
-                        id = UUID.randomUUID().toString(),
+                        id = "5875390f-62d0-4373-909c-87225ad5150c",
                         "Compare strings", listOf(
                             "pv1Power",
                             "pv2Power",
@@ -23,7 +21,7 @@ data class ParameterGroup(val id: String, val title: String, val parameterNames:
                         )
                     ),
                     ParameterGroup(
-                        id = UUID.randomUUID().toString(),
+                        id = "ae0a66a8-d8ba-463b-8c58-c671ba130dc9",
                         "Temperatures", listOf(
                             "ambientTemperation",
                             "boostTemperation",
@@ -34,7 +32,7 @@ data class ParameterGroup(val id: String, val title: String, val parameterNames:
                         )
                     ),
                     ParameterGroup(
-                        id = UUID.randomUUID().toString(),
+                        id = "f633b777-29c5-4809-a783-6038e055cc86",
                         "Battery", listOf(
                             "batTemperature",
                             "batVolt",

@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -22,11 +23,13 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun CreateTemplateButtonView(title: String, onDismiss: (String) -> Unit) {
+fun CreateTemplateButtonView(content: @Composable RowScope.() -> Unit, onDismiss: (String) -> Unit) {
     val show = remember { mutableStateOf(false) }
 
-    Button(onClick = { show.value = true }) {
-        Text(title)
+    Button(
+        onClick = { show.value = true },
+    ) {
+        content()
     }
 
     if (show.value) {
@@ -72,7 +75,7 @@ private fun TemplateNameAlertDialog(onDismiss: (String?) -> Unit) {
 fun CreateTemplateButtonViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         CreateTemplateButtonView(
-            title = "Create new template",
+            content = { Text("Create new template") },
             onDismiss = { }
         )
     }

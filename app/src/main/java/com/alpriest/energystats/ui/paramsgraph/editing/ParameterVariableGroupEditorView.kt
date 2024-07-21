@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -23,10 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
@@ -34,6 +35,8 @@ import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.PaleWhite
+import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.input
@@ -48,6 +51,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
     val renameDialogState = rememberMaterialDialogState()
     val createDialogState = rememberMaterialDialogState()
     val dialogText = remember { mutableStateOf("") }
+    val canDelete = viewModel.canDelete.collectAsState().value
 
     Column {
         SettingsColumnWithChild {
@@ -92,16 +96,18 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
             }
         }
 
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Button(
                 onClick = {
                     dialogText.value = viewModel.selected.value.title
                     renameDialogState.show()
-                },
-                modifier = Modifier.padding(end = 12.dp)
+                }
             ) {
                 Text(
-                    "Rename...",
+                    stringResource(R.string.rename),
                     color = colors.onPrimary
                 )
             }
@@ -110,7 +116,23 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                 createDialogState.show()
             }) {
                 Text(
-                    "Create new...",
+                    stringResource(R.string.create_new),
+                    color = colors.onPrimary
+                )
+            }
+
+            Button(
+                onClick = {
+                    viewModel.delete()
+                },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = PowerFlowNegative,
+                    contentColor = PaleWhite
+                ),
+                enabled = canDelete
+            ) {
+                Text(
+                    stringResource(R.string.delete),
                     color = colors.onPrimary
                 )
             }

@@ -9,6 +9,7 @@ class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, v
     var variables = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
     val selected = MutableStateFlow(configManager.parameterGroups.first())
     val groups = MutableStateFlow(configManager.parameterGroups)
+    val canDelete = MutableStateFlow<Boolean>(false)
 
     init {
         updateVariables(selected.value)
@@ -16,6 +17,7 @@ class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, v
 
     fun select(group: ParameterGroup) {
         selected.value = group
+        canDelete.value = ParameterGroup.defaults.all { it.id != group.id }
         updateVariables(group)
     }
 
@@ -69,6 +71,11 @@ class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, v
             )
         )
 
+        configManager.parameterGroups = groups.value
+    }
+
+    fun delete() {
+        groups.value = groups.value.filter { it.id != selected.value.id }
         configManager.parameterGroups = groups.value
     }
 

@@ -345,4 +345,7 @@
     <string name="reasons_reported">Reasons reported:</string>
     <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">No reason was given. Check the front screen of your inverter.</string>
     <string name="some_settings_will_only_take_effect_on_the_next_data_refresh">Some settings will only take effect on the next data refresh</string>
+    <string name="rename">Rename...</string>
+    <string name="create_new">Create new...</string>
+    <string name="delete">Delete</string>
 </resources>
