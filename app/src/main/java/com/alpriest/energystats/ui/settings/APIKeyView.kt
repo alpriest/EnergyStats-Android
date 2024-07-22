@@ -43,8 +43,6 @@ fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, th
         content = { modifier ->
             SettingsPage(modifier) {
                 SettingsColumnWithChild {
-                    SettingsTitleView("FoxESS API Key")
-
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = apiKey,

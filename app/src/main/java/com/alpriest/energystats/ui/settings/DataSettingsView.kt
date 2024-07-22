@@ -24,9 +24,7 @@ fun DataSettingsView(config: ConfigManaging) {
     val context = LocalContext.current
 
     SettingsPage {
-        SettingsColumn(
-            header = "Data"
-        ) {
+        SettingsColumn {
             SettingsSegmentedControl(
                 title = stringResource(R.string.units),
                 segmentedControl = {

@@ -37,7 +37,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
         InverterChoiceView(configManager)
 
         currentDevice.value?.let {
-            SettingsColumn(header = "Inverter") {
+            SettingsColumn {
                 InlineSettingsNavButton(stringResource(R.string.manage_schedules)) { navController.navigate(SettingsScreen.InverterSchedule.name) }
             }
 

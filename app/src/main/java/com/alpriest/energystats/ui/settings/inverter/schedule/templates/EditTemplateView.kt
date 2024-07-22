@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,7 +38,10 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
+import com.alpriest.energystats.ui.settings.LoadedScaffold
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
@@ -59,6 +61,7 @@ class EditTemplateView(
     fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController, templateStore))) {
         val template = viewModel.templateStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
+        val context = LocalContext.current
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -69,7 +72,11 @@ class EditTemplateView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> template?.let { Loaded(it, viewModel) }
+            is LoadState.Inactive -> template?.let {
+                LoadedScaffold(stringResource(R.string.edit_template), navController) {
+                    Loaded(it, viewModel)
+                }
+            }
         }
     }
 
@@ -79,111 +86,107 @@ class EditTemplateView(
         val presentDuplicateAlert = remember { mutableStateOf(false) }
         val presentRenameAlert = remember { mutableStateOf(false) }
 
-        SettingsPage {
-            ScheduleDetailView(stringResource(R.string.edit_template), viewModel.navController, template.asSchedule())
+        ContentWithBottomButtonPair(
+            navController = navController,
+            onSave = { viewModel.saveTemplate(context) },
+            { modifier ->
+                SettingsPage {
+                    ScheduleDetailView("", viewModel.navController, template.asSchedule())
 
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = { viewModel.addTimePeriod() },
-                        modifier = Modifier.weight(1.0f)
-                    ) {
-                        Text(stringResource(R.string.add_time_period))
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Button(
+                                onClick = { viewModel.addTimePeriod() },
+                                modifier = Modifier.weight(1.0f)
+                            ) {
+                                Text(stringResource(R.string.add_time_period))
+                            }
+
+                            Button(
+                                onClick = { viewModel.autoFillScheduleGaps() },
+                                modifier = Modifier.weight(1.0f)
+                            ) {
+                                Text(stringResource(R.string.autofill_gaps))
+                            }
+                        }
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Button(
+                                onClick = { viewModel.activate(context) },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Image(
+                                    imageVector = Icons.Default.PlayArrow,
+                                    contentDescription = "Activate",
+                                    colorFilter = ColorFilter.tint(Color.White)
+                                )
+                            }
+
+                            Button(
+                                onClick = { presentDuplicateAlert.value = true },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Image(
+                                    imageVector = Icons.Default.ContentCopy,
+                                    contentDescription = "Duplicate",
+                                    colorFilter = ColorFilter.tint(Color.White)
+                                )
+                            }
+
+                            Button(
+                                onClick = { presentRenameAlert.value = true },
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Image(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Rename",
+                                    colorFilter = ColorFilter.tint(Color.White)
+                                )
+                            }
+
+                            Button(
+                                onClick = { viewModel.delete(context) },
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = PowerFlowNegative,
+                                    contentColor = PaleWhite
+                                ),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Image(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete",
+                                    colorFilter = ColorFilter.tint(Color.White)
+                                )
+                            }
+                        }
                     }
+                }
 
-                    Button(
-                        onClick = { viewModel.autoFillScheduleGaps() },
-                        modifier = Modifier.weight(1.0f)
-                    ) {
-                        Text(stringResource(R.string.autofill_gaps))
+                if (presentDuplicateAlert.value) {
+                    TemplateNameAlertDialog(AlertConfiguration.DuplicateTemplate) {
+                        presentDuplicateAlert.value = false
+                        it?.let {
+                            viewModel.duplicate(it)
+                        }
                     }
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = { viewModel.saveTemplate(context) },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Image(
-                            imageVector = Icons.Default.Save,
-                            contentDescription = "Save",
-                            colorFilter = ColorFilter.tint(Color.White)
-                        )
-                    }
-
-                    Button(
-                        onClick = { viewModel.activate(context) },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Image(
-                            imageVector = Icons.Default.PlayArrow,
-                            contentDescription = "Activate",
-                            colorFilter = ColorFilter.tint(Color.White)
-                        )
-                    }
-
-                    Button(
-                        onClick = { presentDuplicateAlert.value = true },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Image(
-                            imageVector = Icons.Default.ContentCopy,
-                            contentDescription = "Duplicate",
-                            colorFilter = ColorFilter.tint(Color.White)
-                        )
-                    }
-
-                    Button(
-                        onClick = { presentRenameAlert.value = true },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Image(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Rename",
-                            colorFilter = ColorFilter.tint(Color.White)
-                        )
-                    }
-
-                    Button(
-                        onClick = { viewModel.delete(context) },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = PowerFlowNegative,
-                            contentColor = PaleWhite
-                        ),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Image(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete",
-                            colorFilter = ColorFilter.tint(Color.White)
-                        )
+                if (presentRenameAlert.value) {
+                    TemplateNameAlertDialog(AlertConfiguration.RenameTemplate) {
+                        presentRenameAlert.value = false
+                        it?.let {
+                            viewModel.rename(it)
+                        }
                     }
                 }
-            }
-        }
-
-        if (presentDuplicateAlert.value) {
-            TemplateNameAlertDialog(AlertConfiguration.DuplicateTemplate) {
-                presentDuplicateAlert.value = false
-                it?.let {
-                    viewModel.duplicate(it)
-                }
-            }
-        }
-
-        if (presentRenameAlert.value) {
-            TemplateNameAlertDialog(AlertConfiguration.RenameTemplate) {
-                presentRenameAlert.value = false
-                it?.let {
-                    viewModel.rename(it)
-                }
-            }
-        }
+            },
+            labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save))
+        )
     }
 }
 

@@ -31,7 +31,6 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
 
     SettingsColumn(
         modifier = modifier.fillMaxWidth(),
-        header = stringResource(R.string.self_sufficiency_estimates),
         padding = PaddingValues(10.dp)
     ) {
         SettingsSegmentedControl(title = null, segmentedControl = {

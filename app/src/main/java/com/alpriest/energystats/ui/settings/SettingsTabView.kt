@@ -41,7 +41,7 @@ fun SettingsTabView(
     val uriHandler = LocalUriHandler.current
 
     SettingsPage {
-        SettingsColumn(header = "Settings") {
+        SettingsColumn {
             config.powerStationDetail?.let {
                 InlineSettingsNavButton(stringResource(R.string.settings_power_station)) { navController.navigate(SettingsScreen.PowerStation.name) }
                 Divider()
@@ -57,13 +57,13 @@ fun SettingsTabView(
                 }
             }
 
-            InlineSettingsNavButton("Dataloggers") { navController.navigate(SettingsScreen.Dataloggers.name) }
+            InlineSettingsNavButton(stringResource(R.string.dataloggers)) { navController.navigate(SettingsScreen.Dataloggers.name) }
         }
 
         DisplaySettingsView(config, navController = navController)
 
         SettingsColumn {
-            InlineSettingsNavButton("Data") { navController.navigate(SettingsScreen.DataSettings.name) }
+            InlineSettingsNavButton(stringResource(R.string.settings_data)) { navController.navigate(SettingsScreen.DataSettings.name) }
             Divider()
             InlineSettingsNavButton(stringResource(R.string.self_sufficiency_estimates)) { navController.navigate(SettingsScreen.SelfSufficiencyEstimates.name) }
             Divider()

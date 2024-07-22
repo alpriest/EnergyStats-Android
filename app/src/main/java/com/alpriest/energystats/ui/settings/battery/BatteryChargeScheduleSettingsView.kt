@@ -99,7 +99,10 @@ class BatteryChargeScheduleSettingsView(
         val textColor = remember { mutableStateOf(Color.Black) }
 
         SettingsColumnWithChild {
-            SettingsTitleView(periodTitle)
+            SettingsTitleView(
+                periodTitle,
+                modifier = Modifier.padding(vertical = 6.dp)
+            )
 
             Row(
                 verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()

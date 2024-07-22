@@ -73,7 +73,9 @@ class ScheduleTemplateListView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> Loaded(templates, viewModel)
+            is LoadState.Inactive -> {
+                Loaded(templates, viewModel)
+            }
         }
     }
 
@@ -81,13 +83,7 @@ class ScheduleTemplateListView(
     fun Loaded(templates: List<ScheduleTemplate>, viewModel: ScheduleTemplateListViewModel) {
         SettingsPage {
             templates.forEach {
-                SettingsColumn(
-                    header = if (it == templates.first()) {
-                        stringResource(R.string.templates)
-                    } else {
-                        null
-                    }
-                ) {
+                SettingsColumn {
                     Text(
                         text = it.name,
                         style = TextStyle.Default.copy(color = MaterialTheme.colors.onSecondary),

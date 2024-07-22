@@ -94,8 +94,7 @@ class DataLoggerViewModel(
 class DataLoggerViewContainer(
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val navController: NavController,
-    private val context: Context
+    private val navController: NavController
 ) {
     @Composable
     fun Content(viewModel: DataLoggerViewModel = viewModel(factory = DataLoggerViewModelFactory(network, configManager, navController))) {

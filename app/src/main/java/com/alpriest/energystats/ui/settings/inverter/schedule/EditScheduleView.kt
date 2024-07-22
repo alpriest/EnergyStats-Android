@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
@@ -25,6 +27,7 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
+import com.alpriest.energystats.ui.settings.LoadedScaffold
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -48,27 +51,40 @@ class EditScheduleView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> schedule?.let { Loaded(it, viewModel, navController) }
+            is LoadState.Inactive -> schedule?.let {
+                LoadedScaffold(stringResource(R.string.edit_schedule), navController) {
+                    Loaded(schedule, viewModel, navController)
+                }
+            }
         }
     }
 }
 
 @Composable
-fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController) {
+private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController) {
     val context = LocalContext.current
 
     ContentWithBottomButtonPair(
         navController = navController,
         onSave = { viewModel.saveSchedule(context) },
         { modifier ->
-            SettingsPage(modifier) {
-                ScheduleDetailView(stringResource(R.string.edit_schedule), viewModel.navController, schedule)
+            SettingsPage {
+                ScheduleDetailView("", viewModel.navController, schedule)
 
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Button(onClick = { viewModel.addTimePeriod() }) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Button(
+                        onClick = { viewModel.addTimePeriod() },
+                        modifier = Modifier.weight(1.0f)
+                    ) {
                         Text(stringResource(R.string.add_time_period))
                     }
-                    Button(onClick = { viewModel.autoFillScheduleGaps() }) {
+                    Button(
+                        onClick = { viewModel.autoFillScheduleGaps() },
+                        modifier = Modifier.weight(1.0f)
+                    ) {
                         Text(stringResource(R.string.autofill_gaps))
                     }
 
@@ -95,7 +111,7 @@ fun EditScheduleViewPreview() {
                 DemoNetworking(),
                 NavHostController(LocalContext.current)
             ),
-            navController = NavHostController(LocalContext.current)
+            NavHostController(LocalContext.current)
         )
     }
 }

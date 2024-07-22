@@ -62,11 +62,15 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
             Text(
                 value.toDouble().kWh(3),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.weight(0.2f)
+                modifier = Modifier.weight(0.2f),
+                color = colors.onSecondary
             )
         }
 
-        Text(description)
+        Text(
+            description,
+            color = colors.onSecondary
+        )
     }
 }
 
@@ -79,32 +83,32 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
     val mutatedAppTheme = remember { MutableStateFlow(configManager.themeStream.value) }
     val context = LocalContext.current
 
-    LaunchedEffect(threshold1.value) {
-        if (threshold1.value > threshold2.value) {
-            threshold2.value = threshold1.value
+    LaunchedEffect(threshold1.floatValue) {
+        if (threshold1.floatValue > threshold2.floatValue) {
+            threshold2.floatValue = threshold1.floatValue
         }
 
-        mutatedAppTheme.value = makeAppTheme(threshold1.value, threshold2.value, threshold3.value)
+        mutatedAppTheme.value = makeAppTheme(threshold1.floatValue, threshold2.floatValue, threshold3.floatValue)
     }
 
-    LaunchedEffect(threshold2.value) {
-        if (threshold2.value > threshold3.value) {
-            threshold3.value = threshold2.value
+    LaunchedEffect(threshold2.floatValue) {
+        if (threshold2.floatValue > threshold3.floatValue) {
+            threshold3.floatValue = threshold2.floatValue
         }
 
-        if (threshold2.value < threshold1.value) {
-            threshold1.value = threshold2.value
+        if (threshold2.floatValue < threshold1.floatValue) {
+            threshold1.floatValue = threshold2.floatValue
         }
 
-        mutatedAppTheme.value = makeAppTheme(threshold1.value, threshold2.value, threshold3.value)
+        mutatedAppTheme.value = makeAppTheme(threshold1.floatValue, threshold2.floatValue, threshold3.floatValue)
     }
 
-    LaunchedEffect(threshold3.value) {
-        if (threshold3.value < threshold2.value) {
-            threshold2.value = threshold3.value
+    LaunchedEffect(threshold3.floatValue) {
+        if (threshold3.floatValue < threshold2.floatValue) {
+            threshold2.floatValue = threshold3.floatValue
         }
 
-        mutatedAppTheme.value = makeAppTheme(threshold1.value, threshold2.value, threshold3.value)
+        mutatedAppTheme.value = makeAppTheme(threshold1.floatValue, threshold2.floatValue, threshold3.floatValue)
     }
 
     ContentWithBottomButtonPair(navController, onSave = {
@@ -196,7 +200,7 @@ fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTh
 @Preview(showBackground = true, widthDp = 400, heightDp = 400)
 @Composable
 fun SolarBandingSettingsPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         SolarBandingSettingsView(
             NavHostController(LocalContext.current),
             configManager = FakeConfigManager()

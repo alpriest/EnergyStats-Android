@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ScheduleDetailView(title: String, navController: NavHostController, schedule: Schedule) {
     SettingsColumn(
-        header = title,
         padding = SettingsPaddingValues.default()
     ) {
         if (schedule.name.isNotEmpty()) {

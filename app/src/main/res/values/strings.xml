@@ -348,4 +348,7 @@
     <string name="rename">Rename...</string>
     <string name="create_new">Create new...</string>
     <string name="delete">Delete</string>
+    <string name="dataloggers">Dataloggers</string>
+    <string name="edit_phase">Edit Phase</string>
+    <string name="settings_data">Data</string>
 </resources>

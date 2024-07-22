@@ -8,7 +8,7 @@ import com.alpriest.energystats.ui.settings.inverter.SettingsRow
 @Composable
 fun PowerStationSettingsView(powerStationDetail: PowerStationDetail) {
     SettingsPage {
-        SettingsColumn(header = "Power Station") {
+        SettingsColumn {
             SettingsRow("Name", powerStationDetail.stationName)
             SettingsRow("Capacity", powerStationDetail.capacity.w())
             SettingsRow("Timezone", powerStationDetail.timezone)
