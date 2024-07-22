@@ -341,4 +341,12 @@
     <string name="your_inverter_state_is_reported_as_being">Der Zustand Ihres Wechselrichters wird als</string>
     <string name="reasons_reported">Gemeldete Gründe:</string>
     <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">Es wurde kein Grund angegeben. Überprüfen Sie den vorderen Bildschirm Ihres Wechselrichters.</string>
+    <string name="some_settings_will_only_take_effect_on_the_next_data_refresh">Einige Einstellungen werden erst bei der nächsten Datenaktualisierung wirksam</string>
+    <string name="rename">Umbenennen...</string>
+    <string name="create_new">Neu erstellen...</string>
+    <string name="delete">Löschen</string>
+    <string name="dataloggers">Datenlogger</string>
+    <string name="edit_phase">Phase bearbeiten</string>
+    <string name="settings_data">Daten</string>
+    <string name="choose_group_to_edit">Gruppe zum Bearbeiten auswählen</string>
 </resources>

@@ -342,4 +342,12 @@
     <string name="your_inverter_state_is_reported_as_being">Stan Twojego inwertera jest zgłaszany jako</string>
     <string name="reasons_reported">Zgłoszone powody:</string>
     <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">Nie podano powodu. Sprawdź przedni ekran swojego inwertera.</string>
+    <string name="some_settings_will_only_take_effect_on_the_next_data_refresh">Niektóre ustawienia zaczną obowiązywać dopiero po następnym odświeżeniu danych</string>
+    <string name="rename">Zmień nazwę...</string>
+    <string name="create_new">Utwórz nowe...</string>
+    <string name="delete">Usuń</string>
+    <string name="dataloggers">Rejestratory danych</string>
+    <string name="edit_phase">Edytuj fazę</string>
+    <string name="settings_data">Dane</string>
+    <string name="choose_group_to_edit">Wybierz grupę do edycji</string>
 </resources>

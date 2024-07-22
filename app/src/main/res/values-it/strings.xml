@@ -342,4 +342,12 @@
     <string name="your_inverter_state_is_reported_as_being">Lo stato del tuo inverter è segnalato come</string>
     <string name="reasons_reported">Ragioni riportate:</string>
     <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">Non è stata fornita alcuna ragione. Controlla lo schermo frontale del tuo inverter.</string>
+    <string name="some_settings_will_only_take_effect_on_the_next_data_refresh">Alcune impostazioni avranno effetto solo al prossimo aggiornamento dei dati</string>
+    <string name="rename">Rinomina...</string>
+    <string name="create_new">Crea nuovo...</string>
+    <string name="delete">Elimina</string>
+    <string name="dataloggers">Datalogger</string>
+    <string name="edit_phase">Modifica fase</string>
+    <string name="settings_data">Dati</string>
+    <string name="choose_group_to_edit">Scegli il gruppo da modificare</string>
 </resources>
