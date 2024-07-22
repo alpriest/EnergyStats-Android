@@ -61,7 +61,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    "Choose group to edit",
+                    stringResource(R.string.choose_group_to_edit),
                     color = colors.onSecondary
                 )
 
@@ -88,7 +88,10 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                                 expanded = false
                                 viewModel.select(group)
                             }) {
-                                Text(group.title)
+                                Text(
+                                    group.title,
+                                    color = colors.onPrimary
+                                )
                             }
                         }
                     }

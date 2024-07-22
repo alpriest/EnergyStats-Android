@@ -351,4 +351,5 @@
     <string name="dataloggers">Dataloggers</string>
     <string name="edit_phase">Edit Phase</string>
     <string name="settings_data">Data</string>
+    <string name="choose_group_to_edit">Choose group to edit</string>
 </resources>
