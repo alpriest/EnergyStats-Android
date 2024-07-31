@@ -349,4 +349,7 @@
     <string name="edit_phase">Phase bearbeiten</string>
     <string name="settings_data">Daten</string>
     <string name="choose_group_to_edit">Gruppe zum Bearbeiten auswählen</string>
+    <string name="slow_performance">Langsame Leistung</string>
+    <string name="slow_performance_message">Sie haben den Ladekreisel wahrscheinlich immer häufiger gesehen. Energy Stats nutzt öffentliche Server (OpenAPI), die von FoxESS bereitgestellt werden und schlecht funktionieren. FoxESS wurde Anfang Mai informiert und hat sich verpflichtet, das Problem zu lösen, aber es wurde kein Zeitrahmen angegeben. Diese Server unterscheiden sich von denen, die von den FoxCloud-Apps verwendet werden, weshalb die FoxCloud-Apps oft laden.\n\nSiehe untenstehendes Diagramm, das die Antwortzeiten über einen Zeitraum von 48 Stunden zeigt.</string>
+    <string name="always_loading_tap_for_details">Immer am Laden? Tippen für Details</string>
 </resources>

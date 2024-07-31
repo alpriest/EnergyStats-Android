@@ -350,4 +350,7 @@
     <string name="edit_phase">Edytuj fazę</string>
     <string name="settings_data">Dane</string>
     <string name="choose_group_to_edit">Wybierz grupę do edycji</string>
+    <string name="slow_performance">Wolne działanie</string>
+    <string name="slow_performance_message">Prawdopodobnie coraz częściej widzisz kręcący się wskaźnik ładowania. Energy Stats korzysta z publicznych serwerów (OpenAPI) udostępnianych przez FoxESS, które działają słabo. FoxESS zostało poinformowane na początku maja i zobowiązało się do rozwiązania problemu, ale nie podano żadnego terminu. Te serwery są inne niż te używane przez aplikacje FoxCloud, dlatego aplikacje FoxCloud często się ładują.\n\nZobacz poniższy wykres pokazujący czasy odpowiedzi w okresie 48 godzin.</string>
+    <string name="always_loading_tap_for_details">Zawsze ładuje? Dotknij, aby uzyskać szczegóły</string>
 </resources>

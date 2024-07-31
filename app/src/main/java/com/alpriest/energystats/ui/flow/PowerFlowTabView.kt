@@ -53,6 +53,7 @@ import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
@@ -115,7 +116,7 @@ class PowerFlowTabView(
             is PowerFlowLoadState.Loaded -> loadedBackground
             is PowerFlowLoadState.Error -> errorBackground
         }
-        var showSlowServerBanner by remember { mutableStateOf(true) }
+        var showSlowServerBanner by remember { mutableStateOf(false) }
 
         Box(
             modifier = Modifier
@@ -154,7 +155,7 @@ class PowerFlowTabView(
     private fun SlowServerMessageView(dismiss: () -> Unit) {
         Box(
             modifier = Modifier
-                .background(Color.White)
+                .background(MaterialTheme.colors.background)
                 .padding(16.dp)
                 .shadow(elevation = 5.dp),
             contentAlignment = Alignment.Center
@@ -162,8 +163,9 @@ class PowerFlowTabView(
             Column(
                 modifier = Modifier
                     .padding(16.dp)
-                    .background(Color.White),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .background(MaterialTheme.colors.background),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
                     stringResource(R.string.slow_performance),
@@ -198,7 +200,7 @@ class PowerFlowTabView(
                 .clickable { onToggle() }
         ) {
             Text(
-                "Always loading? Tap for details",
+                stringResource(R.string.always_loading_tap_for_details),
                 color = Color.White
             )
         }
@@ -233,7 +235,7 @@ fun PowerFlowTabViewPreview() {
     val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo()), LocalContext.current)
     val themeStream = MutableStateFlow(AppTheme.demo())
 
-    EnergyStatsTheme {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         PowerFlowTabView(DemoNetworking(), FakeConfigManager(), FakeUserManager(), themeStream).Content(
             viewModel = viewModel,
             themeStream = themeStream
