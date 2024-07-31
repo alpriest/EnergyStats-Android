@@ -352,4 +352,6 @@
     <string name="edit_phase">Edit Phase</string>
     <string name="settings_data">Data</string>
     <string name="choose_group_to_edit">Choose group to edit</string>
+    <string name="slow_performance">Slow performance</string>
+    <string name="slow_performance_message">You have probably seen the loading spinner more and more frequently. Energy Stats uses public servers (OpenAPI) provided by FoxESS which are performing poorly. FoxESS have were informed at the beginning of May and have committed to resolving the issue but no timescale has been provided. These servers are different from the ones that are used by the FoxCloud apps which is why the FoxCloud apps often load.\n\nSee graph below showing response times across a 48hr period.</string>
 </resources>

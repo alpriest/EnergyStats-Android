@@ -98,7 +98,7 @@ fun SettingsFooterView(
         SettingsFooterRowView({
             Image(
                 painter = painterResource(id = R.drawable.paypal_logo),
-                contentDescription = "Donate via PayPalde-",
+                contentDescription = "Donate via PayPal",
                 modifier = Modifier.padding(end = 6.dp)
             )
         }, "Donate via PayPal") { uriHandler.openUri("https://www.paypal.me/alpriest") }
