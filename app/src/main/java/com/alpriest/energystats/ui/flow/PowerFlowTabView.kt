@@ -4,19 +4,11 @@ import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -34,7 +25,6 @@ import androidx.compose.ui.graphics.RadialGradientShader
 import androidx.compose.ui.graphics.Shader
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,6 +39,8 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.dialog.SlowServerBannerView
+import com.alpriest.energystats.ui.dialog.SlowServerMessageView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
@@ -148,61 +140,6 @@ class PowerFlowTabView(
             ) {
                 SlowServerMessageView { showSlowServerBanner = false }
             }
-        }
-    }
-
-    @Composable
-    private fun SlowServerMessageView(dismiss: () -> Unit) {
-        Box(
-            modifier = Modifier
-                .background(MaterialTheme.colors.background)
-                .padding(16.dp)
-                .shadow(elevation = 5.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .background(MaterialTheme.colors.background),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Text(
-                    stringResource(R.string.slow_performance),
-                    color = MaterialTheme.colors.onSecondary,
-                    style = MaterialTheme.typography.h2
-                )
-
-                Text(
-                    stringResource(R.string.slow_performance_message),
-                    color = MaterialTheme.colors.onSecondary
-                )
-
-                Image(
-                    painter = painterResource(R.drawable.slow_performance),
-                    contentDescription = "Slow performance",
-                )
-
-                Button(onClick = { dismiss() }) {
-                    Text(stringResource(id = R.string.ok))
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun SlowServerBannerView(onToggle: () -> Unit) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Red)
-                .clickable { onToggle() }
-        ) {
-            Text(
-                stringResource(R.string.always_loading_tap_for_details),
-                color = Color.White
-            )
         }
     }
 }
