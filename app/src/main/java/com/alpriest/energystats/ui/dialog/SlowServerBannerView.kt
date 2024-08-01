@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -39,7 +40,7 @@ fun SlowServerMessageView(dismiss: () -> Unit) {
         Column(
             modifier = Modifier
                 .shadow(6.dp)
-                .background(MaterialTheme.colors.secondary)
+                .background(MaterialTheme.colors.background)
                 .padding(16.dp)
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -84,10 +85,10 @@ fun SlowServerBannerView(onToggle: () -> Unit) {
     }
 }
 
-@Preview(heightDp = 200)
+@Preview(heightDp = 600)
 @Composable
 fun SlowServerMessagePreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
