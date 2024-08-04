@@ -90,7 +90,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                             }) {
                                 Text(
                                     group.title,
-                                    color = colors.onPrimary
+                                    color = colors.onSecondary
                                 )
                             }
                         }

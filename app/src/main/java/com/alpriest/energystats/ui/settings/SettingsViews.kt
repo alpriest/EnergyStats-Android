@@ -102,6 +102,7 @@ fun SettingsColumnWithChild(
     modifier: Modifier = Modifier,
     header: @Composable (() -> Unit)? = null,
     footer: String? = null,
+    footerAnnotatedString: AnnotatedString? = null,
     footerModifier: Modifier = Modifier,
     error: String? = null,
     padding: PaddingValues = SettingsPaddingValues.default(),
@@ -133,7 +134,24 @@ fun SettingsColumnWithChild(
                     Text(
                         it,
                         style = MaterialTheme.typography.caption,
-                        color = colors.onSecondary,
+                        color = colors.onSecondary.copy(alpha = 0.7f),
+                        modifier = footerModifier.padding(bottom = 8.dp)
+                    )
+                }
+            }
+        }
+
+        footerAnnotatedString?.let {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(padding)
+            ) {
+                Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.caption,
+                        color = colors.onSecondary.copy(alpha = 0.7f),
                         modifier = footerModifier.padding(bottom = 8.dp)
                     )
                 }

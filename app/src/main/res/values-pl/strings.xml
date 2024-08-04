@@ -353,4 +353,9 @@
     <string name="slow_performance">Wolne działanie</string>
     <string name="slow_performance_message">Prawdopodobnie coraz częściej widzisz kręcący się wskaźnik ładowania. Energy Stats korzysta z publicznych serwerów (OpenAPI) udostępnianych przez FoxESS, które działają słabo. FoxESS zostało poinformowane na początku maja i zobowiązało się do rozwiązania problemu, ale nie podano żadnego terminu. Te serwery są inne niż te używane przez aplikacje FoxCloud, dlatego aplikacje FoxCloud często się ładują.\n\nZobacz poniższy wykres pokazujący czasy odpowiedzi w okresie 48 godzin.</string>
     <string name="always_loading_tap_for_details">Zawsze ładuje? Dotknij, aby uzyskać szczegóły</string>
+    <string name="workmode_self_use_description">W tym trybie inwerter priorytetowo alokuje moc zgodnie z następującym porządkiem:\n\n1. Obciążenie domu\n2. Ładowanie baterii\n3. Eksport</string>
+    <string name="workmode_feed_in_first_description">W tym trybie inwerter priorytetowo alokuje moc zgodnie z następującym porządkiem:\n\n1. Obciążenie domu\n2. Eksport\n3. Ładowanie baterii</string>
+    <string name="workmode_backup_description">W tym trybie falownik priorytetowo przydziela moc w następujący sposób:\n\n1. Ładowanie baterii\n2. Obciążenie domu\n3. Eksport\n\nPodobnie jak w trybie Autokonsumpcji, z tą różnicą, że bateria nie jest rozładowywana.</string>
+    <string name="workmode_force_charge_description">Ładuje baterię z sieci</string>
+    <string name="workmode_force_discharge_description">Rozładowuje baterię do sieci</string>
 </resources>

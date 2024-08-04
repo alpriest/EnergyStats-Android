@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -29,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +46,8 @@ import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.PaleWhite
+import com.alpriest.energystats.ui.theme.PowerFlowNegative
 
 data class EditPhaseErrorData(
     val minSOCError: String?,
@@ -69,7 +74,13 @@ fun EditPhaseView(navController: NavHostController, viewModel: EditPhaseViewMode
 
             ForceDischargePowerView(viewModel)
 
-            Button(onClick = { viewModel.deletePhase() }) {
+            Button(
+                onClick = { viewModel.deletePhase() },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = PowerFlowNegative,
+                    contentColor = PaleWhite
+                ),
+            ) {
                 Text(stringResource(R.string.delete_time_period))
             }
         }
@@ -81,8 +92,22 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
     val startTime = viewModel.startTimeStream.collectAsState().value
     val endTime = viewModel.endTimeStream.collectAsState().value
     val errorText = viewModel.errorStream.collectAsState().value
+    val footerText = when (viewModel.workModeStream.collectAsState().value) {
+        WorkMode.SelfUse -> stringResource(R.string.workmode_self_use_description)
+        WorkMode.Feedin -> stringResource(R.string.workmode_feed_in_first_description)
+        WorkMode.Backup -> stringResource(R.string.workmode_backup_description)
+        WorkMode.ForceCharge -> stringResource(R.string.workmode_force_charge_description)
+        WorkMode.ForceDischarge -> stringResource(R.string.workmode_force_discharge_description)
+        else -> null
+    }
 
-    SettingsColumnWithChild {
+    SettingsColumnWithChild(
+        footerAnnotatedString = buildAnnotatedString {
+            footerText?.let {
+                append(it)
+            }
+        }
+    ) {
         TimePeriodView(
             startTime, stringResource(R.string.start_time), labelStyle = TextStyle.Default,
             modifier = Modifier
@@ -98,6 +123,8 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
         ) { hour, minute -> viewModel.endTimeStream.value = Time(hour, minute) }
 
         ErrorTextView(errorText.timeError)
+
+        Divider()
 
         WorkModeView(viewModel)
     }
@@ -255,10 +282,12 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
                 }
             }
         }
+
+
     }
 }
 
-@Preview(heightDp = 600, widthDp = 400)
+@Preview(heightDp = 600, widthDp = 400, locale = "DE")
 @Composable
 fun EditPhaseViewPreview() {
     EnergyStatsTheme {

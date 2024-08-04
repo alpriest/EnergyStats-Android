@@ -342,8 +342,8 @@
     <string name="reasons_reported">Razones reportadas:</string>
     <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">No se dio ninguna razón. Verifique la pantalla frontal de su inversor.</string>
     <string name="some_settings_will_only_take_effect_on_the_next_data_refresh">Algunas configuraciones solo tendrán efecto en la próxima actualización de datos</string>
-    <string name="rename">Renombrar...</string>
-    <string name="create_new">Crear nuevo...</string>
+    <string name="rename">Renombrar…</string>
+    <string name="create_new">Crear nuevo…</string>
     <string name="delete">Eliminar</string>
     <string name="dataloggers">Registradores de datos</string>
     <string name="edit_phase">Editar fase</string>
@@ -352,4 +352,9 @@
     <string name="slow_performance">Rendimiento lento</string>
     <string name="slow_performance_message">Probablemente hayas visto el cargador giratorio con más frecuencia. Energy Stats utiliza servidores públicos (OpenAPI) proporcionados por FoxESS que están funcionando mal. FoxESS fue informado a principios de mayo y se ha comprometido a resolver el problema, pero no se ha proporcionado un plazo. Estos servidores son diferentes de los que usan las aplicaciones de FoxCloud, por lo que las aplicaciones de FoxCloud suelen cargarse.\n\nVea el gráfico a continuación que muestra los tiempos de respuesta durante un período de 48 horas.</string>
     <string name="always_loading_tap_for_details">¿Siempre cargando? Toca para más detalles</string>
+    <string name="workmode_self_use_description">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la casa\n2. Carga de batería\n3. Exportar</string>
+    <string name="workmode_feed_in_first_description">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la casa\n2. Exportar\n3. Carga de batería</string>
+    <string name="workmode_backup_description">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la batería\n2. Carga de la casa\n3. Exportación\n\nSimilar al modo de Autoconsumo, excepto que la batería no se descarga.</string>
+    <string name="workmode_force_charge_description">LäCarga la batería desde la red</string>
+    <string name="workmode_force_discharge_description">Descarga la batería a la red</string>
 </resources>

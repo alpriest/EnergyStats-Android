@@ -342,8 +342,8 @@
     <string name="reasons_reported">Gemeldete Gründe:</string>
     <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">Es wurde kein Grund angegeben. Überprüfen Sie den vorderen Bildschirm Ihres Wechselrichters.</string>
     <string name="some_settings_will_only_take_effect_on_the_next_data_refresh">Einige Einstellungen werden erst bei der nächsten Datenaktualisierung wirksam</string>
-    <string name="rename">Umbenennen...</string>
-    <string name="create_new">Neu erstellen...</string>
+    <string name="rename">Umbenennen…</string>
+    <string name="create_new">Neu erstellen…</string>
     <string name="delete">Löschen</string>
     <string name="dataloggers">Datenlogger</string>
     <string name="edit_phase">Phase bearbeiten</string>
@@ -352,4 +352,9 @@
     <string name="slow_performance">Langsame Leistung</string>
     <string name="slow_performance_message">Sie haben den Ladekreisel wahrscheinlich immer häufiger gesehen. Energy Stats nutzt öffentliche Server (OpenAPI), die von FoxESS bereitgestellt werden und schlecht funktionieren. FoxESS wurde Anfang Mai informiert und hat sich verpflichtet, das Problem zu lösen, aber es wurde kein Zeitrahmen angegeben. Diese Server unterscheiden sich von denen, die von den FoxCloud-Apps verwendet werden, weshalb die FoxCloud-Apps oft laden.\n\nSiehe untenstehendes Diagramm, das die Antwortzeiten über einen Zeitraum von 48 Stunden zeigt.</string>
     <string name="always_loading_tap_for_details">Immer am Laden? Tippen für Details</string>
+    <string name="workmode_self_use_description">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Hauslast\n2. Batterieladung\n3. Einspeisung</string>
+    <string name="workmode_feed_in_first_description">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Hauslast\n2. Einspeisung\n3. Batterieladung</string>
+    <string name="workmode_backup_description">In diesem Modus priorisiert der Wechselrichter die Energiezuweisung wie folgt:\n\n1. Batterieladung\n2. Hauslast\n3. Export\n\nÄhnlich wie beim Eigenverbrauch, außer dass die Batterie nicht entladen wird.</string>
+    <string name="workmode_force_charge_description">Lädt die Batterie aus dem Netz</string>
+    <string name="workmode_force_discharge_description">Entlädt die Batterie ins Netz</string>
 </resources>

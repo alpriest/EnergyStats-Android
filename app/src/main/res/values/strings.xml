@@ -345,8 +345,8 @@
     <string name="reasons_reported">Reasons reported:</string>
     <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">No reason was given. Check the front screen of your inverter.</string>
     <string name="some_settings_will_only_take_effect_on_the_next_data_refresh">Some settings will only take effect on the next data refresh</string>
-    <string name="rename">Rename...</string>
-    <string name="create_new">Create new...</string>
+    <string name="rename">Rename…</string>
+    <string name="create_new">Create new…</string>
     <string name="delete">Delete</string>
     <string name="dataloggers">Dataloggers</string>
     <string name="edit_phase">Edit Phase</string>
@@ -355,4 +355,9 @@
     <string name="slow_performance">Slow performance</string>
     <string name="slow_performance_message">You have probably seen the loading spinner more and more frequently. Energy Stats uses public servers (OpenAPI) provided by FoxESS which are performing poorly. FoxESS have were informed at the beginning of May and have committed to resolving the issue but no timescale has been provided. These servers are different from the ones that are used by the FoxCloud apps which is why the FoxCloud apps often load.\n\nSee graph below showing response times across a 48hr period.</string>
     <string name="always_loading_tap_for_details">Always loading? Tap for details</string>
+    <string name="workmode_self_use_description">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Battery Charging\n3. Export</string>
+    <string name="workmode_feed_in_first_description">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Export\n3. Battery Charging</string>
+    <string name="workmode_backup_description">In this mode, the inverter prioritises power allocation as follows:\n\n1. Battery Charging\n2. House Load\n3. Export\n\nSimilar to Self Use, except the battery is not discharged.</string>
+    <string name="workmode_force_charge_description">Charges the battery from the grid</string>
+    <string name="workmode_force_discharge_description">Discharges the battery to the grid</string>
 </resources>
