@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -49,6 +50,7 @@ import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -89,8 +91,7 @@ class ParametersGraphTabView(
         val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
         val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
         val context = LocalContext.current
-        val producerAxisScalePairs = viewModel.producers.collectAsState()
-        val allChartColors = viewModel.chartColorsStream.collectAsState().value
+        val loadState = viewModel.uiState.collectAsState().value.state
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -108,61 +109,31 @@ class ParametersGraphTabView(
         ) {
             ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp), navController, configManager)
 
-            if (hasData) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .fillMaxWidth()
-                ) {
-                    selectedDateTime?.let {
-                        androidx.compose.material3.Text(
-                            text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                            color = MaterialTheme.colors.onSecondary
+            when (loadState) {
+                is LoadState.Error ->
+                    Text(stringResource(R.string.error))
+
+                is LoadState.Active ->
+                    Box(
+                        modifier = Modifier
+                            .height(200.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        LoadingOverlayView()
+                    }
+
+                is LoadState.Inactive -> {
+                    if (hasData) {
+                        LoadedData(selectedDateTime, viewModel, themeStream)
+                    } else {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "No data. Try changing your filters",
+                            textAlign = TextAlign.Center
                         )
-                    } ?: run {
-                        Text(stringResource(R.string.touch_the_graph_to_see_values_at_that_time))
                     }
                 }
-
-                if (configManager.separateParameterGraphsByUnit) {
-                    producerAxisScalePairs.value.forEach { (unit, producerAxisScale) ->
-                        allChartColors[unit]?.let {
-                            ParameterGraph(
-                                producerAxisScale.first,
-                                producerAxisScale.second,
-                                chartColors = it,
-                                viewModel,
-                                themeStream,
-                                showYAxisUnit = true,
-                                userManager
-                            )
-                        }
-                    }
-                } else {
-                    val chartColors = allChartColors.values.flatten()
-                    val allEntries = producerAxisScalePairs.value.values.flatMap { it.first.getModel()?.entries ?: listOf() }
-                    val yAxisScale = producerAxisScalePairs.value.values.map { it.second }.firstOrNull() ?: AxisScale(null, null)
-                    val producer = ChartEntryModelProducer(allEntries)
-
-                    ParameterGraph(
-                        producer,
-                        yAxisScale,
-                        chartColors,
-                        viewModel,
-                        themeStream,
-                        showYAxisUnit = false,
-                        userManager
-                    )
-                }
-
-                ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
-            } else {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "No data. Try changing your filters",
-                    textAlign = TextAlign.Center
-                )
             }
 
             Text(
@@ -185,6 +156,61 @@ class ParametersGraphTabView(
                 }
             }
         }
+    }
+
+    @Composable
+    private fun LoadedData(selectedDateTime: LocalDateTime?, viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
+        val producerAxisScalePairs = viewModel.producers.collectAsState()
+        val allChartColors = viewModel.chartColorsStream.collectAsState().value
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth()
+        ) {
+            selectedDateTime?.let {
+                androidx.compose.material3.Text(
+                    text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                    color = MaterialTheme.colors.onSecondary
+                )
+            } ?: run {
+                Text(stringResource(R.string.touch_the_graph_to_see_values_at_that_time))
+            }
+        }
+
+        if (configManager.separateParameterGraphsByUnit) {
+            producerAxisScalePairs.value.forEach { (unit, producerAxisScale) ->
+                allChartColors[unit]?.let {
+                    ParameterGraph(
+                        producerAxisScale.first,
+                        producerAxisScale.second,
+                        chartColors = it,
+                        viewModel,
+                        themeStream,
+                        showYAxisUnit = true,
+                        userManager
+                    )
+                }
+            }
+        } else {
+            val chartColors = allChartColors.values.flatten()
+            val allEntries = producerAxisScalePairs.value.values.flatMap { it.first.getModel()?.entries ?: listOf() }
+            val yAxisScale = producerAxisScalePairs.value.values.map { it.second }.firstOrNull() ?: AxisScale(null, null)
+            val producer = ChartEntryModelProducer(allEntries)
+
+            ParameterGraph(
+                producer,
+                yAxisScale,
+                chartColors,
+                viewModel,
+                themeStream,
+                showYAxisUnit = false,
+                userManager
+            )
+        }
+
+        ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
     }
 }
 

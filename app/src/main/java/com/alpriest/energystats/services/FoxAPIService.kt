@@ -126,117 +126,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         }
     }
 
-//    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
-//        val body = Gson().toJson(
-//            ScheduleSaveRequest(
-//                pollcy = scheduleTemplate.phases.map { it.toPollcy() },
-//                templateID = scheduleTemplate.id,
-//                deviceSN
-//            )
-//        ).toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder()
-//            .url(URLs.saveScheduleTemplate())
-//            .method("POST", body)
-//            .build()
-//
-//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-//        fetch<NetworkResponse<String>>(request, type)
-//    }
-//
-//    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
-//        val request = Request.Builder().url(URLs.fetchScheduleTemplates()).build()
-//
-//        val type = object : TypeToken<NetworkResponse<ScheduleTemplateListResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<ScheduleTemplateListResponse>> = fetch(request, type)
-//        return response.item.result ?: throw MissingDataException()
-//    }
-//
-//    override suspend fun createScheduleTemplate(name: String, description: String) {
-//        val body = Gson().toJson(ScheduleTemplateCreateRequest(templateName = name, content = description))
-//            .toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder()
-//            .url(URLs.createScheduleTemplate())
-//            .method("POST", body)
-//            .build()
-//
-//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-//        fetch<NetworkResponse<String>>(request, type)
-//    }
-//
-//    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
-//        val request = Request.Builder().url(URLs.getSchedule(deviceSN, templateID)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<ScheduleTemplateResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<ScheduleTemplateResponse>> = fetch(request, type)
-//        return response.item.result ?: throw MissingDataException()
-//    }
-//
-//    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
-//        val body = Gson().toJson(ScheduleSaveRequest(schedule.phases.map { it.toPollcy() }, templateID = null, deviceSN = deviceSN))
-//            .toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder()
-//            .url(URLs.enableSchedule())
-//            .method("POST", body)
-//            .build()
-//
-//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-//        fetch<NetworkResponse<String>>(request, type)
-//    }
-//
-//    override suspend fun deleteScheduleTemplate(templateID: String) {
-//        val request = Request.Builder().url(URLs.deleteScheduleTemplate(templateID)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-//        fetch<NetworkResponse<String>>(request, type)
-//    }
-//
-//    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
-//        val body = Gson().toJson(ScheduleEnableRequest(templateID = templateID, deviceSN = deviceSN))
-//            .toRequestBody("application/json".toMediaTypeOrNull())
-//
-//        val request = Request.Builder()
-//            .url(URLs.enableSchedule())
-//            .method("POST", body)
-//            .build()
-//
-//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-//        fetch<NetworkResponse<String>>(request, type)
-//    }
-//
-//    override suspend fun deleteSchedule(deviceSN: String) {
-//        val request = Request.Builder().url(URLs.getDeleteSchedule(deviceSN)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-//        fetch<NetworkResponse<String>>(request, type)
-//    }
-//
-//    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
-//        val request = Request.Builder().url(URLs.getSchedulerFlag(deviceSN)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<SchedulerFlagResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<SchedulerFlagResponse>> = fetch(request, type)
-//        return response.item.result ?: throw MissingDataException()
-//    }
-//
-//    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
-//        val request = Request.Builder().url(URLs.schedulerModes(deviceID)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<SchedulerModesResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<SchedulerModesResponse>> = fetch(request, type)
-//        return response.item.result?.modes ?: throw MissingDataException()
-//    }
-//
-//    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-//        val request = Request.Builder().url(URLs.getCurrentSchedule(deviceSN)).build()
-//
-//        val type = object : TypeToken<NetworkResponse<ScheduleListResponse>>() {}.type
-//        val response: NetworkTuple<NetworkResponse<ScheduleListResponse>> = fetch(request, type)
-//        return response.item.result ?: throw MissingDataException()
-//    }
-
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         val body = Gson().toJson(DeviceListRequest())
             .toRequestBody("application/json".toMediaTypeOrNull())
@@ -486,6 +375,11 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                 override fun onResponse(call: Call, response: Response) {
                     if (response.code == 406) {
                         continuation.resumeWithException(UnacceptableException())
+                        return
+                    }
+
+                    if (response.code !in 200 .. 299) {
+                        continuation.resumeWithException(UnknownServerError(response.code))
                         return
                     }
 

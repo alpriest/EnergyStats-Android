@@ -28,6 +28,7 @@ class MissingDataException : Exception("Missing data")
 class UnknownNetworkException(errno: Int, message: String?) : Exception("$errno $message")
 class UnacceptableException: Exception("Unacceptable")
 class ProhibitedActionException: Exception("Schedules")
+class UnknownServerError(responseCode: Int): Exception("Fox servers failed with HTTP code $responseCode")
 
 interface FoxAPIServicing {
     suspend fun fetchErrorMessages()
