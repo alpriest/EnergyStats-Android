@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -194,24 +195,45 @@ class ParametersGraphTabView(
                 }
             }
         } else {
-            val chartColors = allChartColors.values.flatten()
-            val allEntries = producerAxisScalePairs.value.values.flatMap { it.first.getModel()?.entries ?: listOf() }
-            val yAxisScale = producerAxisScalePairs.value.values.map { it.second }.firstOrNull() ?: AxisScale(null, null)
-            val producer = ChartEntryModelProducer(allEntries)
-
-            ParameterGraph(
-                producer,
-                yAxisScale,
-                chartColors,
+            SingleParameterGraph(
+                allChartColors,
                 viewModel,
                 themeStream,
-                showYAxisUnit = false,
-                userManager
+                userManager,
+                producerAxisScalePairs
             )
         }
 
         ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
     }
+}
+
+@Composable
+private fun SingleParameterGraph(
+    allChartColors: Map<String, List<Color>>,
+    viewModel: ParametersGraphTabViewModel,
+    themeStream: MutableStateFlow<AppTheme>,
+    userManager: UserManaging,
+    producerAxisScalePairs: androidx.compose.runtime.State<Map<String, Pair<ChartEntryModelProducer, AxisScale>>>
+) {
+    val chartColors = remember(allChartColors) { allChartColors.values.flatten() }
+    val allEntries = remember(producerAxisScalePairs.value) {
+        producerAxisScalePairs.value.values.flatMap { it.first.getModel()?.entries ?: listOf() }
+    }
+    val yAxisScale = remember(producerAxisScalePairs.value) {
+        producerAxisScalePairs.value.values.map { it.second }.firstOrNull() ?: AxisScale(null, null)
+    }
+    val producer = remember(allEntries) { ChartEntryModelProducer(allEntries) }
+
+    ParameterGraph(
+        producer,
+        yAxisScale,
+        chartColors,
+        viewModel,
+        themeStream,
+        showYAxisUnit = false,
+        userManager
+    )
 }
 
 @Composable
