@@ -133,7 +133,7 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.EditPhase.name) {
             LoadedScaffold(title = stringResource(R.string.edit_phase), navController = navController) {
-                EditPhaseView(navController)
+                EditPhaseView(navController, userManager)
             }
         }
 

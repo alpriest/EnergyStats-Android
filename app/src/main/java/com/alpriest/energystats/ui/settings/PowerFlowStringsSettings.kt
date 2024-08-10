@@ -13,7 +13,11 @@ data class PowerFlowStringsSettings(
     val pv3Name: String = "PV3",
     val pv3Enabled: Boolean = false,
     val pv4Name: String = "PV4",
-    val pv4Enabled: Boolean = false
+    val pv4Enabled: Boolean = false,
+    val pv5Name: String = "PV5",
+    val pv5Enabled: Boolean = false,
+    val pv6Name: String = "PV6",
+    val pv6Enabled: Boolean = false
 ) {
     fun variableNames(): Set<String> {
         val variables: MutableSet<String> = mutableSetOf()
@@ -32,6 +36,14 @@ data class PowerFlowStringsSettings(
 
         if (pv4Enabled) {
             variables.add("pv4Power")
+        }
+
+        if (pv5Enabled) {
+            variables.add("pv5Power")
+        }
+
+        if (pv6Enabled) {
+            variables.add("pv6Power")
         }
 
         return variables
@@ -56,6 +68,14 @@ data class PowerFlowStringsSettings(
             strings.add(StringPower("PV4", response.datas.currentValue("pv4Power")))
         }
 
+        if (pv5Enabled) {
+            strings.add(StringPower("PV5", response.datas.currentValue("pv5Power")))
+        }
+
+        if (pv6Enabled) {
+            strings.add(StringPower("PV6", response.datas.currentValue("pv6Power")))
+        }
+
         return strings
     }
 
@@ -68,7 +88,11 @@ data class PowerFlowStringsSettings(
         pv3Name: String? = null,
         pv3Enabled: Boolean? = null,
         pv4Name: String? = null,
-        pv4Enabled: Boolean? = null
+        pv4Enabled: Boolean? = null,
+        pv5Name: String? = null,
+        pv5Enabled: Boolean? = null,
+        pv6Name: String? = null,
+        pv6Enabled: Boolean? = null
     ): PowerFlowStringsSettings {
         return PowerFlowStringsSettings(
             enabled = enabled ?: this.enabled,
@@ -79,7 +103,11 @@ data class PowerFlowStringsSettings(
             pv3Name = pv3Name ?: this.pv3Name,
             pv3Enabled = pv3Enabled ?: this.pv3Enabled,
             pv4Name = pv4Name ?: this.pv4Name,
-            pv4Enabled = pv4Enabled ?: this.pv4Enabled
+            pv4Enabled = pv4Enabled ?: this.pv4Enabled,
+            pv5Name = pv5Name ?: this.pv5Name,
+            pv5Enabled = pv5Enabled ?: this.pv5Enabled,
+            pv6Name = pv6Name ?: this.pv6Name,
+            pv6Enabled = pv6Enabled ?: this.pv6Enabled
         )
     }
 

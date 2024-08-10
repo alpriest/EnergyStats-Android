@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -18,7 +20,7 @@ class EditPhaseViewModelFactory(val navController: NavHostController) : ViewMode
     }
 }
 
-class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
+class EditPhaseViewModel(val navController: NavHostController) : ViewModel(), AlertDialogMessageProviding {
     val modes = EditScheduleStore.shared.modes
     val startTimeStream = MutableStateFlow(Time.now())
     val endTimeStream = MutableStateFlow(Time.now())
@@ -28,6 +30,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
     val minSOCStream = MutableStateFlow("0")
     val errorStream = MutableStateFlow(EditPhaseErrorData(minSOCError = null, fdSOCError = null, timeError = null, forceDischargePowerError = null))
     private var originalPhaseId: String? = null
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     init {
         EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
@@ -106,7 +109,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
         }
 
         if (workModeStream.value == WorkMode.ForceDischarge && forceDischargePowerStream.value.toIntOrNull() == 0) {
-            forceDischargePowerError  = context.getString(R.string.force_discharge_power_needs_to_be_greater_than_0_to_discharge)
+            forceDischargePowerError = context.getString(R.string.force_discharge_power_needs_to_be_greater_than_0_to_discharge)
         }
 
         errorStream.value = EditPhaseErrorData(minSOCError, fdSOCError, timeError, forceDischargePowerError)
@@ -129,9 +132,16 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel() {
         validate(context)
 
         val schedule = EditScheduleStore.shared.scheduleStream.value
-        if (phase != null && schedule != null && schedule.isValid()) {
-            EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.update(phase, schedule)
-            navController.popBackStack()
+        if (phase != null && schedule != null) {
+            val updatedSchedule = SchedulePhaseHelper.update(phase, schedule)
+            if (updatedSchedule.isValid()) {
+                EditScheduleStore.shared.scheduleStream.value = updatedSchedule
+                navController.popBackStack()
+            } else {
+                alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.this_schedule_phase_contains_invalid_phases_please_correct_and_try_again))
+            }
+        } else {
+            alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.this_schedule_phase_contains_invalid_phases_please_correct_and_try_again))
         }
     }
 }

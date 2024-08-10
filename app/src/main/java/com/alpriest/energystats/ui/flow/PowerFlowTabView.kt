@@ -1,9 +1,6 @@
 package com.alpriest.energystats.ui.flow
 
 import android.content.Context
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
@@ -39,8 +34,6 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
-import com.alpriest.energystats.ui.dialog.SlowServerBannerView
-import com.alpriest.energystats.ui.dialog.SlowServerMessageView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
@@ -108,7 +101,6 @@ class PowerFlowTabView(
             is PowerFlowLoadState.Loaded -> loadedBackground
             is PowerFlowLoadState.Error -> errorBackground
         }
-        var showSlowServerBanner by remember { mutableStateOf(false) }
 
         Box(
             modifier = Modifier
@@ -119,8 +111,6 @@ class PowerFlowTabView(
             contentAlignment = TopEnd
         ) {
             Column {
-                SlowServerBannerView { showSlowServerBanner = !showSlowServerBanner }
-
                 when (uiState.state) {
                     is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
                     is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, (uiState.state as PowerFlowLoadState.Loaded).viewModel, themeStream)
@@ -131,14 +121,6 @@ class PowerFlowTabView(
                         onLogout = { userManager.logout() }
                     )
                 }
-            }
-
-            AnimatedVisibility(
-                visible = showSlowServerBanner,
-                enter = expandVertically(),
-                exit = shrinkVertically()
-            ) {
-                SlowServerMessageView { showSlowServerBanner = false }
             }
         }
     }

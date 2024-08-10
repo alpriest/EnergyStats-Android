@@ -11,7 +11,7 @@ import kotlin.math.abs
 
 data class StringPower(val name: String, val amount: Double) {
     fun displayName(settings: PowerFlowStringsSettings): String {
-        return when (name) {
+        when (name) {
             "PV1" ->
                 return settings.pv1Name
 
@@ -21,8 +21,14 @@ data class StringPower(val name: String, val amount: Double) {
             "PV3" ->
                 return settings.pv3Name
 
-            else ->
+            "PV4" ->
                 return settings.pv4Name
+
+            "PV5" ->
+                return settings.pv5Name
+
+            else ->
+                return settings.pv6Name
         }
     }
 }

@@ -25,16 +25,20 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 
 @Composable
-fun SolarStringsSettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
+fun SolarStringsSettingsView(config: ConfigManaging) {
     val showSeparateStringsOnPowerFlowState = rememberSaveable { mutableStateOf(config.powerFlowStrings.enabled) }
     val pv1 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv1Enabled) }
     val pv2 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv2Enabled) }
     val pv3 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv3Enabled) }
     val pv4 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv4Enabled) }
+    val pv5 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv5Enabled) }
+    val pv6 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv6Enabled) }
     val pv1Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv1Name) }
     val pv2Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv2Name) }
     val pv3Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv3Name) }
     val pv4Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv4Name) }
+    val pv5Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv5Name) }
+    val pv6Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv6Name) }
 
     SettingsCheckbox(
         title = stringResource(R.string.show_pv_power_by_strings),
@@ -94,6 +98,30 @@ fun SolarStringsSettingsView(config: ConfigManaging, modifier: Modifier = Modifi
                 name = pv4Name,
                 onNameChange = {
                     config.powerFlowStrings = config.powerFlowStrings.copy(pv4Name = it)
+                }
+            )
+
+            SolarCheckbox(
+                stringName = "PV5",
+                toggleState = pv5,
+                onToggle = {
+                    config.powerFlowStrings = config.powerFlowStrings.copy(pv5Enabled = it)
+                },
+                name = pv5Name,
+                onNameChange = {
+                    config.powerFlowStrings = config.powerFlowStrings.copy(pv5Name = it)
+                }
+            )
+
+            SolarCheckbox(
+                stringName = "PV6",
+                toggleState = pv6,
+                onToggle = {
+                    config.powerFlowStrings = config.powerFlowStrings.copy(pv6Enabled = it)
+                },
+                name = pv6Name,
+                onNameChange = {
+                    config.powerFlowStrings = config.powerFlowStrings.copy(pv6Name = it)
                 }
             )
         }

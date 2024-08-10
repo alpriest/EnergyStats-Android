@@ -148,7 +148,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         )
         Divider()
 
-        SolarStringsSettingsView(config, modifier)
+        SolarStringsSettingsView(config)
         Divider()
 
         SettingsCheckbox(

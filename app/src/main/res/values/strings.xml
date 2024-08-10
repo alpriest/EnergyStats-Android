@@ -360,4 +360,5 @@
     <string name="workmode_backup_description">In this mode, the inverter prioritises power allocation as follows:\n\n1. Battery Charging\n2. House Load\n3. Export\n\nSimilar to Self Use, except the battery is not discharged.</string>
     <string name="workmode_force_charge_description">Charges the battery from the grid</string>
     <string name="workmode_force_discharge_description">Discharges the battery to the grid</string>
+    <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">This schedule phase contains invalid phases. Please correct and try again.</string>
 </resources>

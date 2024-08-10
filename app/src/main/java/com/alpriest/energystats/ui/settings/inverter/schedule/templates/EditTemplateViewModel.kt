@@ -99,6 +99,10 @@ class EditTemplateViewModel(
 
     fun saveTemplate(context: Context) {
         val template = templateStream.value ?: return
+        if (!template.asSchedule().isValid()) {
+            alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.this_schedule_phase_contains_invalid_phases_please_correct_and_try_again))
+            return
+        }
 
         viewModelScope.launch {
             runCatching {

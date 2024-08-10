@@ -357,4 +357,5 @@
     <string name="workmode_backup_description">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la batería\n2. Carga de la casa\n3. Exportación\n\nSimilar al modo de Autoconsumo, excepto que la batería no se descarga.</string>
     <string name="workmode_force_charge_description">LäCarga la batería desde la red</string>
     <string name="workmode_force_discharge_description">Descarga la batería a la red</string>
+    <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">Esta fase del cronograma contiene fases no válidas. Por favor, corrige y vuelve a intentarlo.</string>
 </resources>

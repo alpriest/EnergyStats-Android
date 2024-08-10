@@ -358,4 +358,5 @@
     <string name="workmode_backup_description">W tym trybie falownik priorytetowo przydziela moc w następujący sposób:\n\n1. Ładowanie baterii\n2. Obciążenie domu\n3. Eksport\n\nPodobnie jak w trybie Autokonsumpcji, z tą różnicą, że bateria nie jest rozładowywana.</string>
     <string name="workmode_force_charge_description">Ładuje baterię z sieci</string>
     <string name="workmode_force_discharge_description">Rozładowuje baterię do sieci</string>
+    <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">Ta faza harmonogramu zawiera nieprawidłowe fazy. Popraw to i spróbuj ponownie.</string>
 </resources>
