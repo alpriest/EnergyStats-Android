@@ -12,16 +12,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -159,12 +159,12 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                     .padding(vertical = 24.dp)
             ) {
                 Button(
-                    colors = ButtonDefaults.buttonColors(backgroundColor = colors.background),
+                    colors = ButtonDefaults.buttonColors(containerColor = colorScheme.background),
                     onClick = { scope.launch { viewModel.onDemoLogin() } }
                 ) {
                     Text(
                         stringResource(R.string.try_demo),
-                        color = colors.onSecondary
+                        color = colorScheme.onSecondary
                     )
                 }
 
@@ -175,7 +175,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                 }) {
                     Text(
                         stringResource(R.string.log_me_in),
-                        color = colors.onPrimary
+                        color = colorScheme.onPrimary
                     )
                 }
             }
@@ -195,19 +195,19 @@ class APIKeyLoginView(private val userManager: UserManaging) {
             Text(
                 stringResource(R.string.how_to_get_api_key),
                 modifier = Modifier.padding(bottom = 8.dp),
-                color = colors.onSecondary
+                color = colorScheme.onSecondary
             )
             ClickableUrlText(
                 text = stringResource(R.string.api_key_step_1),
-                textStyle = TextStyle(colors.onSecondary),
+                textStyle = TextStyle(colorScheme.onSecondary),
                 themeStream = themeStream
             )
-            Text(stringResource(R.string.api_key_step_2), color = colors.onSecondary)
-            Text(stringResource(R.string.api_key_step_3), color = colors.onSecondary)
-            Text(stringResource(R.string.api_key_step_4), color = colors.onSecondary)
-            Text(stringResource(R.string.api_key_step_5), color = colors.onSecondary)
-            Text(stringResource(R.string.api_key_step_6), color = colors.onSecondary)
-            Text(stringResource(R.string.api_key_step_7), color = colors.onSecondary)
+            Text(stringResource(R.string.api_key_step_2), color = colorScheme.onSecondary)
+            Text(stringResource(R.string.api_key_step_3), color = colorScheme.onSecondary)
+            Text(stringResource(R.string.api_key_step_4), color = colorScheme.onSecondary)
+            Text(stringResource(R.string.api_key_step_5), color = colorScheme.onSecondary)
+            Text(stringResource(R.string.api_key_step_6), color = colorScheme.onSecondary)
+            Text(stringResource(R.string.api_key_step_7), color = colorScheme.onSecondary)
 
             val text = stringResource(R.string.api_key_step_8)
             val key = stringResource(R.string.example_api_key)
@@ -220,7 +220,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                         append(key)
                     }
                 },
-                color = colors.onSecondary
+                color = colorScheme.onSecondary
             )
 
             Text(
@@ -231,7 +231,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
             ClickableUrlText(
                 text = stringResource(R.string.api_change_reason),
                 modifier = Modifier.padding(vertical = 12.dp),
-                textStyle = TextStyle(colors.onSecondary),
+                textStyle = TextStyle(colorScheme.onSecondary),
                 themeStream = themeStream
             )
         }
