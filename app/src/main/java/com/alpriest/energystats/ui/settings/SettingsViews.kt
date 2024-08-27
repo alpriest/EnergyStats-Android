@@ -116,7 +116,7 @@ fun SettingsColumnWithChild(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(colors.surface)
+                .background(colorScheme.surface)
                 .padding(padding)
         ) {
             Column(modifier = Modifier.padding(horizontal = 12.dp)) {
@@ -135,8 +135,8 @@ fun SettingsColumnWithChild(
                 Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
                     Text(
                         it,
-                        style = MaterialTheme.typography.caption,
-                        color = colors.onSecondary.copy(alpha = 0.7f),
+                        style = typography.bodySmall,
+                        color = colorScheme.onSecondary.copy(alpha = 0.7f),
                         modifier = footerModifier.padding(bottom = 8.dp)
                     )
                 }
@@ -364,7 +364,8 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .indication(interactionSource, rememberRipple())
+            .indication(interactionSource, rememberRipple()),
+        colors = ButtonDefaults.buttonColors(backgroundColor = colorScheme.primary)
     ) {
         Row(
             modifier = if (disclosureIcon == null) Modifier else Modifier.fillMaxWidth(),
