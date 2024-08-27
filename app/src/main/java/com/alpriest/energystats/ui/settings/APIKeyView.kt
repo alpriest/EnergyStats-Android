@@ -92,12 +92,6 @@ fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Mod
         val text = stringResource(R.string.api_key_step_8)
         val key = stringResource(R.string.example_api_key)
 
-        ClickableUrlText(
-            text = stringResource(R.string.api_change_reason),
-            modifier = Modifier.padding(vertical = 12.dp),
-            textStyle = TextStyle(colorScheme.onSecondary),
-            themeStream = themeStream
-        )
         Text(
             buildAnnotatedString {
                 append(text)
@@ -111,7 +105,8 @@ fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Mod
 
         Text(
             stringResource(R.string.automatic_time_advice),
-            modifier = Modifier.padding(vertical = 12.dp)
+            modifier = Modifier.padding(vertical = 12.dp),
+            color = colorScheme.onSecondary
         )
 
         ClickableUrlText(
@@ -126,7 +121,7 @@ fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Mod
 @Preview
 @Composable
 fun PreviewConfigureAPIKeyView() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         ConfigureAPIKeyView(
             FakeCredentialStore(),
             NavHostController(LocalContext.current),
