@@ -2,7 +2,7 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -38,7 +38,7 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
             SegmentedControl(
                 items = items.map { it.title(context) },
                 defaultSelectedItemIndex = items.indexOf(selfSufficiencyEstimateModeState.value),
-                color = colors.primary
+                color = colorScheme.primary
             ) {
                 selfSufficiencyEstimateModeState.value = items[it]
                 config.selfSufficiencyEstimateMode = items[it]

@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,7 +36,7 @@ fun DataSettingsView(config: ConfigManaging) {
                     SegmentedControl(
                         items = items.map { it.title(context) },
                         defaultSelectedItemIndex = items.indexOf(displayUnitState.value),
-                        color = MaterialTheme.colors.primary
+                        color = colorScheme.primary
                     ) {
                         displayUnitState.value = items[it]
                         config.displayUnit = items[it]
@@ -67,7 +67,7 @@ fun DataSettingsView(config: ConfigManaging) {
                     SegmentedControl(
                         items = items.map { it.title(context) },
                         defaultSelectedItemIndex = items.indexOf(dataCeilingState.value),
-                        color = MaterialTheme.colors.primary
+                        color = colorScheme.primary
                     ) {
                         dataCeilingState.value = items[it]
                         config.dataCeiling = items[it]
