@@ -16,8 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
@@ -26,7 +24,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -188,7 +190,7 @@ fun SettingsTitleView(title: String, modifier: Modifier = Modifier, extra: @Comp
     Row(modifier = modifier.fillMaxWidth()) {
         Text(
             text = title.uppercase(),
-            style = TextStyle.Default.copy(color = colors.onSecondary)
+            style = TextStyle.Default.copy(color = colorScheme.onSecondary)
         )
 
         extra()
@@ -202,7 +204,7 @@ fun SettingsPage(modifier: Modifier = Modifier, content: @Composable () -> Unit)
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(colors.background)
+            .background(colorScheme.background)
             .padding(12.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -219,7 +221,7 @@ fun InfoButton(text: String) {
     Image(
         imageVector = Icons.Default.Info,
         contentDescription = "Click for info",
-        colorFilter = ColorFilter.tint(colors.primary),
+        colorFilter = ColorFilter.tint(colorScheme.primary),
         modifier = Modifier
             .padding(start = 4.dp)
             .clickable {
@@ -252,7 +254,7 @@ fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableStat
             ) {
                 Text(
                     title,
-                    color = colors.onSecondary
+                    color = colorScheme.onSecondary
                 )
 
                 infoText?.let {
@@ -266,15 +268,15 @@ fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableStat
                     state.value = it
                     onUpdate(it)
                 },
-                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colorScheme.primary)
             )
         }
 
         footer?.let {
             Text(
                 it,
-                style = MaterialTheme.typography.caption,
-                color = colors.onSecondary,
+                style = typography.bodySmall,
+                color = colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -290,7 +292,7 @@ fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composabl
             title?.let {
                 Text(
                     it,
-                    color = colors.onSecondary,
+                    color = colorScheme.onSecondary,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -302,7 +304,7 @@ fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composabl
             Text(
                 it,
                 style = MaterialTheme.typography.caption,
-                color = colors.onSecondary,
+                color = colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -336,7 +338,7 @@ fun InlineSettingsNavButton(
         ) {
             Text(
                 title,
-                color = colors.onSecondary,
+                color = colorScheme.onSecondary,
                 style = TextStyle.Default
             )
 
@@ -345,7 +347,7 @@ fun InlineSettingsNavButton(
                     imageVector = it(),
                     contentDescription = "Tap for more",
                     modifier = Modifier.padding(end = 12.dp),
-                    tint = colors.onSecondary
+                    tint = colorScheme.onSecondary
                 )
             }
 
@@ -371,7 +373,7 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
         ) {
             Text(
                 title,
-                color = colors.onPrimary
+                color = colorScheme.onPrimary
             )
 
             disclosureIcon?.let {

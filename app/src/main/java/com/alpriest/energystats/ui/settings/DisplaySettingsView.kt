@@ -1,8 +1,8 @@
 package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,35 +46,35 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             state = largeDisplayState,
             onUpdate = { config.useLargeDisplay = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_coloured_flow_lines),
             state = colouredFlowLinesState,
             onUpdate = { config.useColouredFlowLines = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_home_usage_total),
             state = showHomeTotalState,
             onUpdate = { config.showHomeTotal = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_daily_grid_totals),
             state = showGridTotalsState,
             onUpdate = { config.showGridTotals = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_sunny_background),
             state = showSunnyBackgroundState,
             onUpdate = { config.showSunnyBackground = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsSegmentedControl(
             title = "Appearance",
@@ -87,14 +87,14 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 SegmentedControl(
                     items = items.map { it.title(context) },
                     defaultSelectedItemIndex = items.indexOf(colorThemeModeState.value),
-                    color = colors.primary
+                    color = colorScheme.primary
                 ) {
                     colorThemeModeState.value = items[it]
                     config.colorThemeMode = items[it]
                 }
             }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsSegmentedControl(
             title = stringResource(R.string.decimal_places),
@@ -102,61 +102,61 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 val items = listOf("2", "3")
                 SegmentedControl(
                     items = items,
-                    defaultSelectedItemIndex = items.indexOf(decimalPlacesState.value.toString()),
-                    color = colors.primary
+                    defaultSelectedItemIndex = items.indexOf(decimalPlacesState.intValue.toString()),
+                    color = colorScheme.primary
                 ) {
-                    decimalPlacesState.value = items[it].toInt()
+                    decimalPlacesState.intValue = items[it].toInt()
                     config.decimalPlaces = items[it].toInt()
                 }
             }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_last_update_timestamp),
             state = showLastUpdateTimestampState,
             onUpdate = { config.showLastUpdateTimestamp = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_graph_value_descriptions),
             state = showGraphValueDescriptionsState,
             onUpdate = { config.showGraphValueDescriptions = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.separate_parameter_graphs_by_unit),
             state = separateParameterGraphsByUnitState,
             onUpdate = { config.separateParameterGraphsByUnit = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_battery_percentage_remaining),
             state = showBatteryAsPercentageState,
             onUpdate = { config.showBatteryAsPercentage = it }
         )
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.solar),
             infoText = stringResource(R.string.energystats_total_yield_description),
             state = totalYieldModelState,
-            onUpdate = {  config.totalYieldModel = if (it) TotalYieldModel.EnergyStats else TotalYieldModel.Off }
+            onUpdate = { config.totalYieldModel = if (it) TotalYieldModel.EnergyStats else TotalYieldModel.Off }
         )
-        Divider()
+        HorizontalDivider()
 
         SolarStringsSettingsView(config)
-        Divider()
+        HorizontalDivider()
 
         SettingsCheckbox(
             title = "Show battery estimate on widget",
             state = showBatteryTimeEstimateOnWidgetState,
             onUpdate = { config.showBatteryTimeEstimateOnWidget = it }
         )
-        Divider()
+        HorizontalDivider()
 
         InlineSettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
     }
