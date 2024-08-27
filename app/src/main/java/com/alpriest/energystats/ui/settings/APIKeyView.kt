@@ -121,7 +121,7 @@ fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Mod
 @Preview
 @Composable
 fun PreviewConfigureAPIKeyView() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ConfigureAPIKeyView(
             FakeCredentialStore(),
             NavHostController(LocalContext.current),
