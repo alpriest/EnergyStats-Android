@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -51,11 +51,11 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
                 modifier = Modifier.weight(1.0f),
                 steps = 48,
                 colors = SliderDefaults.colors(
-                    activeTickColor = colors.primary,
-                    inactiveTickColor = colors.background,
-                    activeTrackColor = colors.primary,
-                    inactiveTrackColor = colors.background,
-                    thumbColor = colors.primary
+                    activeTickColor = colorScheme.primary,
+                    inactiveTickColor = colorScheme.background,
+                    activeTrackColor = colorScheme.primary,
+                    inactiveTrackColor = colorScheme.background,
+                    thumbColor = colorScheme.primary
                 )
             )
 
@@ -63,13 +63,13 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
                 value.toDouble().kWh(3),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(0.2f),
-                color = colors.onSecondary
+                color = colorScheme.onSecondary
             )
         }
 
         Text(
             description,
-            color = colors.onSecondary
+            color = colorScheme.onSecondary
         )
     }
 }
@@ -155,18 +155,18 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                         onValueChange = { amount.value = it },
                         valueRange = 0.0f..threshold3.value + 0.5f,
                         colors = SliderDefaults.colors(
-                            activeTickColor = colors.primary,
-                            inactiveTickColor = colors.background,
-                            activeTrackColor = colors.primary,
-                            inactiveTrackColor = colors.background,
-                            thumbColor = colors.primary
+                            activeTickColor = colorScheme.primary,
+                            inactiveTickColor = colorScheme.background,
+                            activeTrackColor = colorScheme.primary,
+                            inactiveTrackColor = colorScheme.background,
+                            thumbColor = colorScheme.primary
                         )
                     )
                 }
 
                 Text(
                     stringResource(R.string.drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power),
-                    color = colors.onSecondary,
+                    color = colorScheme.onSecondary,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
@@ -200,7 +200,7 @@ fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTh
 @Preview(showBackground = true, widthDp = 400, heightDp = 400)
 @Composable
 fun SolarBandingSettingsPreview() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SolarBandingSettingsView(
             NavHostController(LocalContext.current),
             configManager = FakeConfigManager()
