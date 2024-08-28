@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -86,7 +86,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             ) {
                 Text(
                     stringResource(R.string.capacity),
-                    color = colors.onSecondary,
+                    color = colorScheme.onSecondary,
                 )
                 Spacer(Modifier.weight(1f))
 
@@ -99,17 +99,17 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         label = {
                             Text(
                                 stringResource(R.string.total_wh_of_your_battery),
-                                color = colors.onSecondary
+                                color = colorScheme.onSecondary
                             )
                         },
-                        textStyle = TextStyle(colors.onSecondary),
+                        textStyle = TextStyle(colorScheme.onSecondary),
                         modifier = Modifier.weight(1f)
                     )
                 } else {
                     Text(
                         text = config.batteryCapacity.Wh(decimalPlaces),
                         modifier = Modifier.clickable { isEditingCapacity.value = true },
-                        color = colors.onSecondary,
+                        color = colorScheme.onSecondary,
                     )
                 }
             }
@@ -128,13 +128,13 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         ) {
                             Text(
                                 stringResource(R.string.ok),
-                                color = colors.onPrimary,
+                                color = colorScheme.onPrimary,
                             )
                         }
                         Button(onClick = { isEditingCapacity.value = false }) {
                             Text(
                                 stringResource(R.string.cancel),
-                                color = colors.onPrimary,
+                                color = colorScheme.onPrimary,
                             )
                         }
                     }
@@ -144,22 +144,22 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             Text(
                 buildAnnotatedString {
                     withStyle(
-                        style = SpanStyle(fontSize = MaterialTheme.typography.caption.fontSize)
+                        style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     ) {
                         append(stringResource(R.string.calculated_as))
                     }
                     withStyle(
-                        style = SpanStyle(fontStyle = FontStyle.Italic, fontSize = MaterialTheme.typography.caption.fontSize, color = colors.onSecondary)
+                        style = SpanStyle(fontStyle = FontStyle.Italic, fontSize = MaterialTheme.typography.bodySmall.fontSize, color = colorScheme.onSecondary)
                     ) {
                         append("residual / (Min SOC / 100)")
                     }
                     withStyle(
-                        style = SpanStyle(fontSize = MaterialTheme.typography.caption.fontSize)
+                        style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     ) {
                         append(stringResource(R.string.where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value))
                     }
                 },
-                color = colors.onSecondary,
+                color = colorScheme.onSecondary,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 

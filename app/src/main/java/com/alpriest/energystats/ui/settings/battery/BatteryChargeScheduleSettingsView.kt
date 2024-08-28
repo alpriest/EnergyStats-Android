@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -85,7 +85,7 @@ class BatteryChargeScheduleSettingsView(
                             SettingsTitleView(stringResource(R.string.schedule_summary))
                             Text(
                                 chargeSummary,
-                                color = colors.onSecondary,
+                                color = colorScheme.onSecondary,
                             )
                         }
                     }
@@ -109,7 +109,7 @@ class BatteryChargeScheduleSettingsView(
             ) {
                 Text(
                     stringResource(R.string.enable_charge_from_grid),
-                    color = colors.onSecondary,
+                    color = colorScheme.onSecondary,
                 )
                 Switch(checked = timePeriod.enabled, onCheckedChange = {
                     timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)
@@ -141,7 +141,7 @@ class BatteryChargeScheduleSettingsView(
             ) {
                 Text(
                     stringResource(R.string.reset_times),
-                    color = colors.onSecondary
+                    color = colorScheme.onSecondary
                 )
             }
         }
@@ -167,13 +167,13 @@ fun TimePeriodView(time: Time, title: String, labelStyle: TextStyle, textStyle: 
         Text(
             title,
             style = labelStyle,
-            color = colors.onSecondary,
+            color = colorScheme.onSecondary,
         )
 
         Text(
             "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}",
             style = textStyle,
-            color = colors.onSecondary,
+            color = colorScheme.onSecondary,
             modifier = Modifier.clickable {
                 dialog.show()
             })
