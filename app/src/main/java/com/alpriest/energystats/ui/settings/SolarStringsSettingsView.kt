@@ -6,11 +6,11 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun SolarStringsSettingsView(config: ConfigManaging) {
@@ -149,7 +150,7 @@ fun SolarCheckbox(stringName: String, toggleState: MutableState<Boolean>, onTogg
                     toggleState.value = it
                     onToggle(it)
                 },
-                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary)
             )
         }
     }
@@ -158,5 +159,9 @@ fun SolarCheckbox(stringName: String, toggleState: MutableState<Boolean>, onTogg
 @Preview
 @Composable
 fun SolarStringsSettingsPreview() {
-    SolarStringsSettingsView(config = FakeConfigManager())
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+        SettingsColumn {
+            SolarStringsSettingsView(config = FakeConfigManager())
+        }
+    }
 }
