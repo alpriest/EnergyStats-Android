@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -54,10 +54,10 @@ fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "00:00", fontSize = 12.sp, color = colors.onSecondary)
-            Text(text = "08:00", fontSize = 12.sp, color = colors.onSecondary)
-            Text(text = "16:00", fontSize = 12.sp, color = colors.onSecondary)
-            Text(text = "24:00", fontSize = 12.sp, color = colors.onSecondary)
+            Text(text = "00:00", fontSize = 12.sp, color = colorScheme.onSecondary)
+            Text(text = "08:00", fontSize = 12.sp, color = colorScheme.onSecondary)
+            Text(text = "16:00", fontSize = 12.sp, color = colorScheme.onSecondary)
+            Text(text = "24:00", fontSize = 12.sp, color = colorScheme.onSecondary)
         }
 
     }

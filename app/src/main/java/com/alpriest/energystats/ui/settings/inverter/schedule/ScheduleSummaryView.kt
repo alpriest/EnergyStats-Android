@@ -6,19 +6,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -82,7 +83,7 @@ class ScheduleSummaryView(
                             SettingsTitleView(stringResource(R.string.unsupported))
                             Text(
                                 supportedError,
-                                color = colors.onSecondary
+                                color = colorScheme.onSecondary
                             )
                         }
                     }
@@ -121,7 +122,8 @@ class ScheduleSummaryView(
                     OutlinedButton(
                         onClick = { viewModel.editSchedule() },
                         border = null,
-                        contentPadding = PaddingValues()
+                        contentPadding = PaddingValues(),
+                        shape = RectangleShape
                     ) {
                         ScheduleView(schedule, modifier = Modifier.weight(1.0f))
 
@@ -143,7 +145,7 @@ class ScheduleSummaryView(
                 ) {
                     Text(
                         text = it.name,
-                        style = TextStyle.Default.copy(color = colors.onSecondary),
+                        style = TextStyle.Default.copy(color = colorScheme.onSecondary),
                         modifier = Modifier
                             .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
                             .fillMaxWidth()
@@ -152,7 +154,8 @@ class ScheduleSummaryView(
                     OutlinedButton(
                         onClick = { viewModel.editTemplate(it) },
                         border = null,
-                        contentPadding = PaddingValues()
+                        contentPadding = PaddingValues(),
+                        shape = RectangleShape
                     ) {
                         ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
 
@@ -169,7 +172,7 @@ class ScheduleSummaryView(
             }
 
             Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
-                Text(stringResource(R.string.manage_templates), color = colors.onPrimary)
+                Text(stringResource(R.string.manage_templates), color = colorScheme.onPrimary)
             }
 
             Text(stringResource(R.string.templates_overview))
@@ -178,10 +181,9 @@ class ScheduleSummaryView(
 
     @Composable
     fun ActivateButton(onClick: () -> Unit) {
-        Button(onClick = onClick) {
+        Button(onClick) {
             Text(
-                stringResource(R.string.activate),
-                color = colors.onPrimary
+                stringResource(R.string.activate)
             )
         }
     }
@@ -210,7 +212,7 @@ fun ScheduleSummaryViewPreview() {
     val context = LocalContext.current
     LaunchedEffect(null) { viewModel.load(context) }
 
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ScheduleSummaryView(
             configManager = FakeConfigManager(),
             network = DemoNetworking(),

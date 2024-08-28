@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,7 +39,6 @@ fun NavigableSettingsView(
     solarForecastingProvider: () -> SolarForecasting
 ) {
     val navController = rememberNavController()
-    val context = LocalContext.current
     val templateStore = TemplateStore(config) // TODO inject this
 
     NavHost(
@@ -54,7 +52,8 @@ fun NavigableSettingsView(
                     config = config,
                     onLogout = onLogout,
                     onRateApp = onRateApp,
-                    onBuyMeCoffee = onBuyMeCoffee
+                    onBuyMeCoffee = onBuyMeCoffee,
+                    modifier = it
                 )
             }
         }
@@ -78,7 +77,7 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.Inverter.name) {
             LoadedScaffold(title = "Inverter", navController = navController) {
-                InverterSettingsView(configManager = config, network = network, navController = navController)
+                InverterSettingsView(configManager = config, network = network, navController = navController, modifier = it)
             }
         }
         composable(SettingsScreen.InverterSchedule.name) {
@@ -149,14 +148,14 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.APIKey.name) {
             LoadedScaffold(title = stringResource(R.string.edit_api_key), navController = navController) {
-                ConfigureAPIKeyView(userManager.store, navController, config.themeStream)
+                ConfigureAPIKeyView(userManager.store, navController, config.themeStream, it)
             }
         }
 
         composable(SettingsScreen.PowerStation.name) {
-            config.powerStationDetail?.let {
+            config.powerStationDetail?.let {powerStationDetail ->
                 LoadedScaffold(title = stringResource(R.string.settings_power_station), navController = navController) {
-                    PowerStationSettingsView(it)
+                    PowerStationSettingsView(powerStationDetail, it)
                 }
             }
         }

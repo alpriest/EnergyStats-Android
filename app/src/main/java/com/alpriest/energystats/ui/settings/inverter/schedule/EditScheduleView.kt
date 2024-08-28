@@ -69,7 +69,7 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
         onSave = { viewModel.saveSchedule(context) },
         { modifier ->
             SettingsPage {
-                ScheduleDetailView("", viewModel.navController, schedule)
+                ScheduleDetailView(viewModel.navController, schedule)
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),

@@ -33,21 +33,21 @@ import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, themeStream: MutableStateFlow<AppTheme>) {
+fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier) {
     var apiKey by rememberSaveable { mutableStateOf(store.getApiKey() ?: "") }
 
-    ContentWithBottomButtonPair(navController, onSave = {
+    ContentWithBottomButtonPair(navController, modifier = modifier, onSave = {
         store.store(apiKey)
         navController.popBackStack()
     },
-        content = { modifier ->
-            SettingsPage(modifier) {
+        content = { innerModifier ->
+            SettingsPage(innerModifier) {
                 SettingsColumnWithChild {
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = apiKey,
                         onValueChange = { apiKey = it },
-                        label = { androidx.compose.material3.Text(stringResource(R.string.api_key)) },
+                        label = { Text(stringResource(R.string.api_key)) },
                         singleLine = true,
                         textStyle = TextStyle(colorScheme.onSecondary),
                     )
@@ -125,7 +125,8 @@ fun PreviewConfigureAPIKeyView() {
         ConfigureAPIKeyView(
             FakeCredentialStore(),
             NavHostController(LocalContext.current),
-            MutableStateFlow(AppTheme.demo())
+            MutableStateFlow(AppTheme.demo()),
+            modifier = Modifier
         )
     }
 }

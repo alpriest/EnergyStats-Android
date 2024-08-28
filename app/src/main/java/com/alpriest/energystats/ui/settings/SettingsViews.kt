@@ -14,21 +14,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -152,8 +150,8 @@ fun SettingsColumnWithChild(
                 Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
                     Text(
                         it,
-                        style = MaterialTheme.typography.caption,
-                        color = colors.onSecondary.copy(alpha = 0.7f),
+                        style = typography.bodySmall,
+                        color = colorScheme.onSecondary.copy(alpha = 0.7f),
                         modifier = footerModifier.padding(bottom = 8.dp)
                     )
                 }
@@ -167,8 +165,8 @@ fun ErrorTextView(text: String?) {
     text?.let {
         Text(
             it,
-            style = MaterialTheme.typography.caption,
-            color = colors.error,
+            style = typography.bodySmall,
+            color = colorScheme.error,
             modifier = Modifier.padding(bottom = 8.dp)
         )
     }
@@ -303,7 +301,7 @@ fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composabl
         footer?.let {
             Text(
                 it,
-                style = MaterialTheme.typography.caption,
+                style = typography.bodySmall,
                 color = colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -327,7 +325,7 @@ fun InlineSettingsNavButton(
         modifier = modifier
             .fillMaxWidth()
             .indication(interactionSource, rememberRipple()),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         contentPadding = PaddingValues(all = 0.dp),
         border = null
     ) {
@@ -365,7 +363,7 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
         modifier = modifier
             .fillMaxWidth()
             .indication(interactionSource, rememberRipple()),
-        colors = ButtonDefaults.buttonColors(backgroundColor = colorScheme.primary)
+        colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary)
     ) {
         Row(
             modifier = if (disclosureIcon == null) Modifier else Modifier.fillMaxWidth(),

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -18,7 +20,7 @@ import androidx.navigation.NavHostController
 fun LoadedScaffold(
     title: String,
     navController: NavHostController? = null,
-    content: @Composable () -> Unit
+    content: @Composable (modifier: Modifier) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -38,7 +40,7 @@ fun LoadedScaffold(
                 }
             )
         },
-    ) { _ ->
-        content()
+    ) { innerPadding ->
+        content(Modifier.padding(innerPadding))
     }
 }

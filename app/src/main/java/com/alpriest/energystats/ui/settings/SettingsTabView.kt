@@ -2,10 +2,10 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,11 +36,12 @@ fun SettingsTabView(
     onLogout: () -> Unit,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
+    modifier: Modifier,
 ) {
     val currentDevice = config.currentDevice.collectAsState()
     val uriHandler = LocalUriHandler.current
 
-    SettingsPage {
+    SettingsPage(modifier) {
         SettingsColumn {
             config.powerStationDetail?.let {
                 InlineSettingsNavButton(stringResource(R.string.settings_power_station)) { navController.navigate(SettingsScreen.PowerStation.name) }
@@ -166,7 +167,8 @@ fun SettingsViewPreview() {
             config = FakeConfigManager(),
             onLogout = {},
             onRateApp = {},
-            {}
+            {},
+            Modifier
         )
     }
 }
