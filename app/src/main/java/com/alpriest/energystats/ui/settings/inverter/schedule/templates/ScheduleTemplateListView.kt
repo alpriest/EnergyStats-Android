@@ -3,12 +3,12 @@ package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -34,6 +35,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
@@ -86,7 +88,7 @@ class ScheduleTemplateListView(
                 SettingsColumn {
                     Text(
                         text = it.name,
-                        style = TextStyle.Default.copy(color = MaterialTheme.colors.onSecondary),
+                        style = TextStyle.Default.copy(color = MaterialTheme.colorScheme.onSecondary),
                         modifier = Modifier
                             .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
                             .fillMaxWidth()
@@ -95,7 +97,8 @@ class ScheduleTemplateListView(
                     OutlinedButton(
                         onClick = { viewModel.edit(it) },
                         border = null,
-                        contentPadding = PaddingValues()
+                        contentPadding = PaddingValues(),
+                        shape = RectangleShape
                     ) {
                         ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
 
@@ -122,7 +125,7 @@ class ScheduleTemplateListView(
             ) {
                 Text(
                     stringResource(id = R.string.create_new_template),
-                    color = MaterialTheme.colors.onPrimary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
@@ -141,7 +144,7 @@ class ScheduleTemplateListView(
 @Preview(heightDp = 600, widthDp = 400)
 @Composable
 fun EditPhaseViewPreview() {
-    EnergyStatsTheme {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ScheduleTemplateListView(
             configManager = FakeConfigManager(),
             templateStore = PreviewTemplateStore(),

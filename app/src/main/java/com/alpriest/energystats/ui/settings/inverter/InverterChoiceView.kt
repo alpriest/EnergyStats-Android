@@ -4,14 +4,14 @@ import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,7 +45,7 @@ fun InverterChoiceView(
                 ) {
                     Text(
                         "Inverter",
-                        color = colors.onSecondary
+                        color = colorScheme.onSecondary
                     )
 
                     Box(contentAlignment = Alignment.TopEnd) {
@@ -53,12 +53,12 @@ fun InverterChoiceView(
                             Text(
                                 it.deviceDisplayName,
                                 fontSize = 12.sp,
-                                color = colors.onPrimary,
+                                color = colorScheme.onPrimary,
                             )
                             Icon(
                                 imageVector = Icons.Filled.ArrowDropDown,
                                 contentDescription = null,
-                                tint = colors.onPrimary
+                                tint = colorScheme.onPrimary
                             )
                         }
 
@@ -70,9 +70,9 @@ fun InverterChoiceView(
                                 DropdownMenuItem(onClick = {
                                     expanded = false
                                     configManager.select(device)
-                                }) {
+                                }, text = {
                                     Text(text = device.deviceDisplayName)
-                                }
+                                })
                             }
                         }
                     }
