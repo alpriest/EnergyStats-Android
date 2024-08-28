@@ -61,7 +61,10 @@ class ScheduleTemplateListView(
     private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: ScheduleTemplateListViewModel = viewModel(factory = ScheduleTemplateListViewModelFactory(configManager, templateStore, navController))) {
+    fun Content(
+        viewModel: ScheduleTemplateListViewModel = viewModel(factory = ScheduleTemplateListViewModelFactory(configManager, templateStore, navController)),
+        modifier: Modifier
+    ) {
         val context = LocalContext.current
         val loadState = viewModel.uiState.collectAsState().value.state
         val templates = viewModel.templateStream.collectAsState().value
@@ -76,14 +79,14 @@ class ScheduleTemplateListView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
             is LoadState.Inactive -> {
-                Loaded(templates, viewModel)
+                Loaded(templates, viewModel, modifier)
             }
         }
     }
 
     @Composable
-    fun Loaded(templates: List<ScheduleTemplate>, viewModel: ScheduleTemplateListViewModel) {
-        SettingsPage {
+    fun Loaded(templates: List<ScheduleTemplate>, viewModel: ScheduleTemplateListViewModel, modifier: Modifier) {
+        SettingsPage(modifier) {
             templates.forEach {
                 SettingsColumn {
                     Text(
@@ -159,7 +162,8 @@ fun EditPhaseViewPreview() {
                 FakeConfigManager(),
                 PreviewTemplateStore(),
                 NavHostController(LocalContext.current)
-            )
+            ),
+            Modifier
         )
     }
 }

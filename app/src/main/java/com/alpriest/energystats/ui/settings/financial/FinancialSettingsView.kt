@@ -216,7 +216,7 @@ fun CalculationDescription(title: String, description: String, formula: String) 
 @Composable
 fun FinancialsSettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        SettingsPage {
+        SettingsPage(Modifier) {
             FinancialsSettingsView(
                 config = FakeConfigManager()
             )

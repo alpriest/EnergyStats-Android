@@ -46,7 +46,7 @@ class BatterySOCSettings(
     private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager))) {
+    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager)), modifier: Modifier) {
         val minSOC = viewModel.minSOCStream.collectAsState().value
         val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
@@ -62,8 +62,8 @@ class BatterySOCSettings(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = {userManager.logout()  })
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
-                    SettingsPage(modifier) {
+                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, modifier = modifier, content = { innerModifier ->
+                    SettingsPage(innerModifier) {
                         Column {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -143,7 +143,7 @@ class BatterySOCSettings(
                             }
                         }
                     }
-                }, Modifier)
+                })
         }
     }
 }
@@ -157,6 +157,6 @@ fun BatterySOCSettingsViewPreview() {
             configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current),
             userManager = FakeUserManager()
-        ).Content()
+        ).Content(modifier = Modifier)
     }
 }

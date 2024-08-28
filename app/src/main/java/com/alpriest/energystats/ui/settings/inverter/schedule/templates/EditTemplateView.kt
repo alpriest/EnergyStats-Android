@@ -58,7 +58,7 @@ class EditTemplateView(
     private val templateStore: TemplateStoring
 ) {
     @Composable
-    fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController, templateStore))) {
+    fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController, templateStore)), modifier: Modifier) {
         val template = viewModel.templateStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 
@@ -73,14 +73,14 @@ class EditTemplateView(
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
             is LoadState.Inactive -> template?.let { it ->
                 LoadedScaffold(stringResource(R.string.edit_template), navController) {modifier ->
-                    Loaded(it, viewModel)
+                    Loaded(it, viewModel, modifier)
                 }
             }
         }
     }
 
     @Composable
-    fun Loaded(template: ScheduleTemplate, viewModel: EditTemplateViewModel) {
+    fun Loaded(template: ScheduleTemplate, viewModel: EditTemplateViewModel, modifier: Modifier) {
         val context = LocalContext.current
         val presentDuplicateAlert = remember { mutableStateOf(false) }
         val presentRenameAlert = remember { mutableStateOf(false) }
@@ -88,8 +88,8 @@ class EditTemplateView(
         ContentWithBottomButtonPair(
             navController = navController,
             onSave = { viewModel.saveTemplate(context) },
-            { modifier ->
-                SettingsPage {
+            { _ ->
+                SettingsPage(modifier) {
                     ScheduleDetailView(viewModel.navController, template.asSchedule())
 
                     Column(modifier = Modifier.fillMaxWidth()) {
@@ -210,7 +210,8 @@ fun EditTemplateViewPreview() {
                 DemoNetworking(),
                 NavHostController(LocalContext.current),
                 PreviewTemplateStore()
-            )
+            ),
+            Modifier
         )
     }
 }

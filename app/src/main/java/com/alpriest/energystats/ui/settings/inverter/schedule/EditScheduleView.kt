@@ -38,7 +38,7 @@ class EditScheduleView(
     private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: EditScheduleViewModel = viewModel(factory = EditScheduleViewModelFactory(configManager, network, navController))) {
+    fun Content(viewModel: EditScheduleViewModel = viewModel(factory = EditScheduleViewModelFactory(configManager, network, navController)), modifier: Modifier) {
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 
@@ -53,7 +53,7 @@ class EditScheduleView(
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
             is LoadState.Inactive -> schedule?.let {
                 LoadedScaffold(stringResource(R.string.edit_schedule), navController) {
-                    Loaded(schedule, viewModel, navController)
+                    Loaded(schedule, viewModel, navController, modifier)
                 }
             }
         }
@@ -61,14 +61,14 @@ class EditScheduleView(
 }
 
 @Composable
-private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController) {
+private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController, modifier: Modifier) {
     val context = LocalContext.current
 
     ContentWithBottomButtonPair(
         navController = navController,
         onSave = { viewModel.saveSchedule(context) },
-        { modifier ->
-            SettingsPage {
+        { _ ->
+            SettingsPage(modifier) {
                 ScheduleDetailView(viewModel.navController, schedule)
 
                 Row(
@@ -111,7 +111,8 @@ fun EditScheduleViewPreview() {
                 DemoNetworking(),
                 NavHostController(LocalContext.current)
             ),
-            NavHostController(LocalContext.current)
+            NavHostController(LocalContext.current),
+            Modifier
         )
     }
 }

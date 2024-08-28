@@ -54,10 +54,9 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
-    val minSOC = config.minSOC.collectAsState()
     val hasError = config.currentDevice.collectAsState().value?.battery?.hasError ?: false
 
-    SettingsPage {
+    SettingsPage(modifier) {
         if (hasError) {
             SettingsColumnWithChild(modifier = Modifier.border(width = 2.dp, color = Color.Red)) {
                 SettingsTitleView(stringResource(R.string.error))

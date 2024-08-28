@@ -59,7 +59,10 @@ class ScheduleSummaryView(
     private val templateStore: TemplateStoring
 ) {
     @Composable
-    fun Content(viewModel: ScheduleSummaryViewModel = viewModel(factory = ScheduleSummaryViewModelFactory(network, configManager, navController, templateStore))) {
+    fun Content(
+        viewModel: ScheduleSummaryViewModel = viewModel(factory = ScheduleSummaryViewModelFactory(network, configManager, navController, templateStore)),
+        modifier: Modifier
+    ) {
         val context = LocalContext.current
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
@@ -76,9 +79,9 @@ class ScheduleSummaryView(
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
             is LoadState.Inactive -> {
                 if (supportedError == null) {
-                    schedule?.let { Loaded(it, viewModel) }
+                    schedule?.let { Loaded(it, viewModel, modifier) }
                 } else {
-                    SettingsPage {
+                    SettingsPage(modifier) {
                         SettingsColumnWithChild(padding = SettingsPaddingValues.withVertical()) {
                             SettingsTitleView(stringResource(R.string.unsupported))
                             Text(
@@ -93,13 +96,13 @@ class ScheduleSummaryView(
     }
 
     @Composable
-    fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel) {
+    fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel, modifier: Modifier) {
         val templates = viewModel.templateStream.collectAsState().value
         val context = LocalContext.current
         val schedulerEnabled = viewModel.schedulerEnabledStream.collectAsState().value
         val schedulerEnabledState = rememberSaveable { mutableStateOf(schedulerEnabled) }
 
-        SettingsPage {
+        SettingsPage(modifier) {
             SettingsColumn {
                 SettingsCheckbox(
                     title = stringResource(R.string.enable_scheduler),
@@ -221,7 +224,8 @@ fun ScheduleSummaryViewPreview() {
             templateStore = PreviewTemplateStore()
         ).Loaded(
             Schedule.preview(),
-            viewModel
+            viewModel,
+            Modifier
         )
     }
 }

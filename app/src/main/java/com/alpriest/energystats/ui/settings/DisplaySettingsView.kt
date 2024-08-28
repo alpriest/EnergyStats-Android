@@ -166,7 +166,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 @Composable
 fun DisplaySettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        SettingsPage {
+        SettingsPage(Modifier) {
             DisplaySettingsView(
                 config = FakeConfigManager(),
                 modifier = Modifier.padding(horizontal = 12.dp),

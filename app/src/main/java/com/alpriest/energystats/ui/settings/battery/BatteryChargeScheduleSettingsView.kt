@@ -60,7 +60,8 @@ class BatteryChargeScheduleSettingsView(
                 network = network,
                 configManager = configManager
             )
-        )
+        ),
+        modifier: Modifier
     ) {
         val chargeSummary = viewModel.summaryStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
@@ -76,8 +77,8 @@ class BatteryChargeScheduleSettingsView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
-                    SettingsPage(modifier) {
+                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { innerModifier ->
+                    SettingsPage(innerModifier) {
                         BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
                         BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 
@@ -89,7 +90,7 @@ class BatteryChargeScheduleSettingsView(
                             )
                         }
                     }
-                }, Modifier)
+                }, modifier)
         }
     }
 
@@ -189,6 +190,6 @@ fun BatteryForceChargeTimesViewPreview() {
             configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current),
             userManager = FakeUserManager()
-        ).Content()
+        ).Content(modifier = Modifier)
     }
 }
