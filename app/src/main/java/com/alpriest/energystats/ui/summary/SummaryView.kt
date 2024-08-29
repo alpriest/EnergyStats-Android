@@ -68,8 +68,8 @@ class SummaryView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp)
                 .verticalScroll(scrollState)
+                .padding(12.dp)
         ) {
             Text(
                 stringResource(R.string.lifetime_summary),

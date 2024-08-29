@@ -4,7 +4,7 @@ import android.graphics.RectF
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -44,6 +44,7 @@ import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.Locale
 
 @Composable
 fun ParameterGraphView(
@@ -101,17 +102,17 @@ fun ParameterGraphView(
                             marker = VerticalLineMarker(
                                 viewModel.valuesAtTimeStream,
                                 lineComponent(
-                                    color = colors.onSurface,
+                                    color = colorScheme.onSurface,
                                     thickness = 1.dp
                                 ),
                                 textComponent(
-                                    colors.onSecondary,
+                                    colorScheme.onSecondary,
                                     lineCount = seriesCount,
                                 ),
                                 shapeComponent(
                                     shape = Shapes.rectShape,
-                                    color = colors.secondary.copy(alpha = 0.3f),
-                                    strokeColor = colors.secondary,
+                                    color = colorScheme.secondary.copy(alpha = 0.3f),
+                                    strokeColor = colorScheme.secondary,
                                     strokeWidth = 1.dp
                                 )
                             ),
@@ -148,17 +149,17 @@ fun ParameterGraphView(
                             marker = VerticalLineMarker(
                                 viewModel.valuesAtTimeStream,
                                 lineComponent(
-                                    color = colors.onSurface,
+                                    color = colorScheme.onSurface,
                                     thickness = 1.dp
                                 ),
                                 textComponent(
-                                    colors.onSecondary,
+                                    colorScheme.onSecondary,
                                     lineCount = seriesCount
                                 ),
                                 background = shapeComponent(
                                     shape = Shapes.rectShape,
-                                    color = colors.secondary.copy(alpha = 0.3f),
-                                    strokeColor = colors.secondary,
+                                    color = colorScheme.secondary.copy(alpha = 0.3f),
+                                    strokeColor = colorScheme.secondary,
                                     strokeWidth = 1.dp
                                 )
                             ),
@@ -195,21 +196,21 @@ fun ParameterGraphView(
                             marker = VerticalLineMarker(
                                 viewModel.valuesAtTimeStream,
                                 lineComponent(
-                                    color = colors.onSurface,
+                                    color = colorScheme.onSurface,
                                     thickness = 1.dp
                                 ),
                                 textComponent(
-                                    colors.onSecondary,
+                                    colorScheme.onSecondary,
                                     lineCount = seriesCount,
                                     background = shapeComponent(
                                         shape = Shapes.rectShape,
-                                        color = colors.secondary,
+                                        color = colorScheme.secondary,
                                     )
                                 ),
                                 shapeComponent(
                                     shape = Shapes.rectShape,
-                                    color = colors.secondary.copy(alpha = 0.3f),
-                                    strokeColor = colors.secondary,
+                                    color = colorScheme.secondary.copy(alpha = 0.3f),
+                                    strokeColor = colorScheme.secondary,
                                     strokeWidth = 1.dp
                                 )
                             ),
@@ -228,7 +229,7 @@ class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValu
         return (chartValues.chartEntryModel.entries.first().firstOrNull { it.x == value } as? DateTimeFloatEntry)
             ?.localDateTime?.toLocalTime()
             ?.run {
-                String.format("%d:%02d", hour, minute)
+                String.format(Locale.getDefault(),"%d:%02d", hour, minute)
             }
             .orEmpty()
     }
@@ -239,9 +240,9 @@ class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFo
         return (chartValues.chartEntryModel.entries.first().firstOrNull() as? DateTimeFloatEntry)
             ?.run {
                 if (this.type.unit == "%") {
-                    String.format("%d %s", value.toInt(), type.unit)
+                    String.format(Locale.getDefault(), "%d %s", value.toInt(), type.unit)
                 } else {
-                    String.format("%.02f %s", value, type.unit)
+                    String.format(Locale.getDefault(), "%.02f %s", value, type.unit)
                 }
             }
             .orEmpty()

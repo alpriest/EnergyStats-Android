@@ -105,8 +105,8 @@ class ParametersGraphTabView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp)
                 .verticalScroll(scrollState)
+                .padding(12.dp)
         ) {
             ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp), navController, configManager)
 
@@ -149,9 +149,12 @@ class ParametersGraphTabView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(modifier = Modifier.clickable {
-                    showExportMethodSelection(context, viewModel.exportFileName, filePathChooser, viewModel)
-                }) {
+                Row(
+                    modifier = Modifier.clickable {
+                        showExportMethodSelection(context, viewModel.exportFileName, filePathChooser, viewModel)
+                    },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
                     Text(stringResource(R.string.export_csv_data))
                 }

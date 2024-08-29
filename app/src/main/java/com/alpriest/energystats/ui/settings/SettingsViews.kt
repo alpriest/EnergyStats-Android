@@ -203,7 +203,6 @@ fun SettingsPage(modifier: Modifier, content: @Composable () -> Unit) {
         modifier = modifier
             .fillMaxWidth()
             .background(colorScheme.background)
-            .padding(12.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)

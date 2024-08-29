@@ -103,7 +103,7 @@ fun TabbedView(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         content = { padding ->
             HorizontalPager(
-                modifier = Modifier.padding(bottom = 54.dp),
+                modifier = Modifier.padding(padding),
                 count = titles.size,
                 state = pagerState
             ) { page ->

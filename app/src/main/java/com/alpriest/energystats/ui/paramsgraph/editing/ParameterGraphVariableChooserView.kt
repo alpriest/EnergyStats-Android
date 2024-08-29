@@ -76,9 +76,9 @@ class ParameterGraphVariableChooserView(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
+                    .verticalScroll(scrollState)
                     .padding(horizontal = 12.dp)
-                    .padding(bottom = 24.dp)
-                    .verticalScroll(scrollState),
+                    .padding(bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 Box {
