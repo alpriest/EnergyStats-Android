@@ -112,7 +112,9 @@ fun NavigableSettingsView(
             }
         }
         composable(SettingsScreen.FAQ.name) {
-            FAQView()
+            LoadedScaffold(title = stringResource(R.string.frequently_asked_questions), navController = navController) {
+                FAQView()
+            }
         }
         composable(SettingsScreen.SolcastSolarPrediction.name) {
             LoadedScaffold(title = stringResource(R.string.solcast_solar_prediction), navController = navController) {
