@@ -25,7 +25,11 @@ fun LoadedScaffold(
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = colorScheme.primary, titleContentColor = colorScheme.onPrimary),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = colorScheme.primary,
+                    titleContentColor = colorScheme.onPrimary,
+                    navigationIconContentColor = colorScheme.onPrimary
+                ),
                 navigationIcon = {
                     navController?.let {
                         IconButton(onClick = {

@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,7 +46,7 @@ fun NavigableSettingsView(
         startDestination = SettingsScreen.Settings.name
     ) {
         composable(SettingsScreen.Settings.name) {
-            LoadedScaffold(title = "Settings") {
+            LoadedScaffold(title = stringResource(R.string.settings_tab)) {
                 SettingsTabView(
                     navController,
                     config = config,
@@ -59,7 +58,7 @@ fun NavigableSettingsView(
             }
         }
         composable(SettingsScreen.Battery.name) {
-            LoadedScaffold(title = "Battery", navController = navController) {
+            LoadedScaffold(title = stringResource(R.string.battery), navController = navController) {
                 BatterySettingsView(
                     navController = navController,
                     config = config,
@@ -68,22 +67,22 @@ fun NavigableSettingsView(
             }
         }
         composable(SettingsScreen.BatterySOC.name) {
-            LoadedScaffold(title = "Battery SOC", navController = navController) {
+            LoadedScaffold(title = stringResource(R.string.battery_soc), navController = navController) {
                 BatterySOCSettings(configManager = config, network = network, navController = navController, userManager = userManager).Content(modifier = it)
             }
         }
         composable(SettingsScreen.BatteryChargeTimes.name) {
-            LoadedScaffold(title = "Battery Charge Schedule", navController = navController) {
+            LoadedScaffold(title = stringResource(R.string.battery_charge_schedule), navController = navController) {
                 BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, userManager = userManager).Content(modifier = it)
             }
         }
         composable(SettingsScreen.Inverter.name) {
-            LoadedScaffold(title = "Inverter", navController = navController) {
+            LoadedScaffold(title = stringResource(id = R.string.inverter), navController = navController) {
                 InverterSettingsView(configManager = config, network = network, navController = navController, modifier = it)
             }
         }
         composable(SettingsScreen.InverterSchedule.name) {
-            LoadedScaffold(title = "Schedules", navController = navController) {
+            LoadedScaffold(title = stringResource(id = R.string.manage_schedules), navController = navController) {
                 ScheduleSummaryView(config, network, navController, userManager, templateStore).Content(modifier = it)
             }
         }
@@ -121,10 +120,6 @@ fun NavigableSettingsView(
                 SolcastSettingsView(navController, config, userManager, solarForecastingProvider).Content(modifier = it)
             }
         }
-        composable(SettingsScreen.ScheduleSummary.name) {
-            ScheduleSummaryView(config, network, navController, userManager, templateStore).Content(modifier = Modifier) //TODO: Should this be using LoadedScaffold?
-        }
-
         composable(SettingsScreen.EditSchedule.name) {
             LoadedScaffold(title = stringResource(R.string.edit_schedule), navController = navController) {
                 EditScheduleView(
