@@ -361,4 +361,6 @@
     <string name="workmode_force_charge_description">Charges the battery from the grid</string>
     <string name="workmode_force_discharge_description">Discharges the battery to the grid</string>
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">This schedule phase contains invalid phases. Please correct and try again.</string>
+    <string name="battery_soc">Battery SOC</string>
+    <string name="battery_charge_schedule">Battery Charge Schedule</string>
 </resources>
