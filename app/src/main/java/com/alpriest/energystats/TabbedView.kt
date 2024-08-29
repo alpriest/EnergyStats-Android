@@ -8,13 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Insights
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
@@ -156,7 +157,7 @@ fun TabbedView(
 
                                     if (configManager.isDemoUser && item.isSettings) {
                                         Card(
-                                            backgroundColor = Color.Red,
+                                            colors = CardDefaults.cardColors(containerColor = Color.Red),
                                             shape = RoundedCornerShape(6.dp),
                                             modifier = Modifier
                                                 .padding(2.dp)
