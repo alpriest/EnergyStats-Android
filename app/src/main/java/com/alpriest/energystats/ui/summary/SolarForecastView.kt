@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -62,8 +62,8 @@ class SolarForecastView(
 
     @Composable
     fun Content(
-        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, this.themeStream)),
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
+        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, this.themeStream))
     ) {
         val data = viewModel.dataStream.collectAsState().value
         val loadState: LoadState = viewModel.loadStateStream.collectAsState().value
@@ -81,15 +81,15 @@ class SolarForecastView(
                 ) {
                     Text(
                         stringResource(R.string.solar_forecasts),
-                        style = MaterialTheme.typography.h2,
+                        style = typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = colors.onSecondary,
+                        color = colorScheme.onSecondary,
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     Text(
                         loadState.reason,
-                        color = colors.onSecondary
+                        color = colorScheme.onSecondary
                     )
                 }
             }
@@ -101,9 +101,9 @@ class SolarForecastView(
                 ) {
                     Text(
                         stringResource(R.string.solar_forecasts),
-                        style = MaterialTheme.typography.h2,
+                        style = typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = colors.onSecondary,
+                        color = colorScheme.onSecondary,
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -118,7 +118,7 @@ class SolarForecastView(
                         Text(
                             stringResource(R.string.solar_forecasts_not_configured),
                             modifier = Modifier.fillMaxWidth(),
-                            color = colors.onSecondary
+                            color = colorScheme.onSecondary
                         )
                     } else {
                         Row(
@@ -134,7 +134,7 @@ class SolarForecastView(
                             Text(
                                 stringResource(R.string.prediction),
                                 modifier = Modifier.padding(end = 15.dp),
-                                style = TextStyle(color = colors.onSecondary)
+                                style = TextStyle(color = colorScheme.onSecondary)
                             )
 
                             Rectangle(
@@ -146,7 +146,7 @@ class SolarForecastView(
                             Text(
                                 stringResource(R.string.high_estimate),
                                 modifier = Modifier.padding(end = 15.dp),
-                                style = TextStyle(color = colors.onSecondary)
+                                style = TextStyle(color = colorScheme.onSecondary)
                             )
 
                             Rectangle(
@@ -158,7 +158,7 @@ class SolarForecastView(
                             Text(
                                 stringResource(R.string.low_estimate),
                                 modifier = Modifier.padding(end = 15.dp),
-                                style = TextStyle(color = colors.onSecondary)
+                                style = TextStyle(color = colorScheme.onSecondary)
                             )
                         }
                     }
@@ -186,18 +186,18 @@ class SolarForecastView(
                     Text(
                         it,
                         fontWeight = FontWeight.Bold,
-                        style = TextStyle(color = colors.onSecondary)
+                        style = TextStyle(color = colorScheme.onSecondary)
                     )
                 }
 
                 Text(
                     title,
-                    style = TextStyle(color = colors.onSecondary)
+                    style = TextStyle(color = colorScheme.onSecondary)
                 )
 
                 Text(
                     todayTotal.energy(theme.displayUnit, theme.decimalPlaces),
-                    style = TextStyle(color = colors.onSecondary)
+                    style = TextStyle(color = colorScheme.onSecondary)
                 )
             }
 

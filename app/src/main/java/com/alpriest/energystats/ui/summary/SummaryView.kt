@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -73,7 +73,7 @@ class SummaryView(
         ) {
             Text(
                 stringResource(R.string.lifetime_summary),
-                style = MaterialTheme.typography.h1,
+                style = typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
 
@@ -101,8 +101,8 @@ class SummaryView(
 
     @Composable
     fun LoadedView(approximationsViewModel: ApproximationsViewModel, appTheme: AppTheme, oldestDataDate: String) {
-        energySummaryRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = MaterialTheme.typography.h2)
-        energySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = MaterialTheme.typography.h2)
+        energySummaryRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = typography.titleMedium)
+        energySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = typography.titleMedium)
 
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 
@@ -110,19 +110,19 @@ class SummaryView(
             moneySummaryRow(
                 title = stringResource(R.string.export_income),
                 amount = energyStatsModel.exportIncome,
-                textStyle = MaterialTheme.typography.h2,
+                textStyle = typography.titleMedium,
                 currencySymbol = appTheme.currencySymbol
             )
             moneySummaryRow(
                 title = stringResource(R.string.grid_import_avoided),
                 amount = energyStatsModel.solarSaving,
-                textStyle = MaterialTheme.typography.h2,
+                textStyle = typography.titleMedium,
                 currencySymbol = appTheme.currencySymbol
             )
             moneySummaryRow(
                 title = stringResource(R.string.total_benefit),
                 amount = energyStatsModel.total,
-                textStyle = MaterialTheme.typography.h2,
+                textStyle = typography.titleMedium,
                 currencySymbol = appTheme.currencySymbol
             )
         }
