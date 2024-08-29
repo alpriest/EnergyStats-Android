@@ -350,8 +350,6 @@
     <string name="edit_phase">Modifica fase</string>
     <string name="settings_data">Dati</string>
     <string name="choose_group_to_edit">Scegli il gruppo da modificare</string>
-    <string name="slow_performance">Prestazioni lente</string>
-    <string name="slow_performance_message">Probabilmente hai visto il caricamento più frequentemente. Energy Stats utilizza server pubblici (OpenAPI) forniti da FoxESS che stanno funzionando male. FoxESS è stata informata all\'inizio di maggio e si è impegnata a risolvere il problema, ma non è stato fornito alcun tempo di risoluzione. Questi server sono diversi da quelli utilizzati dalle app FoxCloud, motivo per cui le app FoxCloud si caricano spesso.\n\nVedi il grafico sotto che mostra i tempi di risposta su un periodo di 48 ore.</string>
     <string name="always_loading_tap_for_details">Sempre in caricamento? Tocca per i dettagli</string>
     <string name="workmode_self_use_description">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carico della casa\n2. Carica della batteria\n3. Esportazione</string>
     <string name="workmode_feed_in_first_description">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la casa\n2. Exportar\n3. Carga de batería</string>

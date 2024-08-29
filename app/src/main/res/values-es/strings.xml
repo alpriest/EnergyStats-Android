@@ -349,8 +349,6 @@
     <string name="edit_phase">Editar fase</string>
     <string name="settings_data">Datos</string>
     <string name="choose_group_to_edit">Elige el grupo a editar</string>
-    <string name="slow_performance">Rendimiento lento</string>
-    <string name="slow_performance_message">Probablemente hayas visto el cargador giratorio con más frecuencia. Energy Stats utiliza servidores públicos (OpenAPI) proporcionados por FoxESS que están funcionando mal. FoxESS fue informado a principios de mayo y se ha comprometido a resolver el problema, pero no se ha proporcionado un plazo. Estos servidores son diferentes de los que usan las aplicaciones de FoxCloud, por lo que las aplicaciones de FoxCloud suelen cargarse.\n\nVea el gráfico a continuación que muestra los tiempos de respuesta durante un período de 48 horas.</string>
     <string name="always_loading_tap_for_details">¿Siempre cargando? Toca para más detalles</string>
     <string name="workmode_self_use_description">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la casa\n2. Carga de batería\n3. Exportar</string>
     <string name="workmode_feed_in_first_description">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la casa\n2. Exportar\n3. Carga de batería</string>
