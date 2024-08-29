@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
@@ -41,7 +41,7 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -99,12 +99,9 @@ class BatteryChargeScheduleSettingsView(
         val timePeriod = timePeriodStream.collectAsState().value
         val textColor = remember { mutableStateOf(Color.Black) }
 
-        SettingsColumnWithChild {
-            SettingsTitleView(
-                periodTitle,
-                modifier = Modifier.padding(vertical = 6.dp)
-            )
-
+        SettingsColumn(
+            header = periodTitle
+        ) {
             Row(
                 verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
             ) {
@@ -117,7 +114,7 @@ class BatteryChargeScheduleSettingsView(
                 })
             }
 
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
             TimePeriodView(
                 timePeriod.start,
@@ -127,7 +124,7 @@ class BatteryChargeScheduleSettingsView(
                 timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
             }
 
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
             TimePeriodView(
                 timePeriod.end,

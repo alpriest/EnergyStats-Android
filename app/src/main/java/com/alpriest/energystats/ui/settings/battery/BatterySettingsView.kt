@@ -69,6 +69,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 navController.navigate(SettingsScreen.BatterySOC.name)
             }
 
+            HorizontalDivider()
+
             InlineSettingsNavButton(stringResource(R.string.charge_times)) {
                 navController.navigate(SettingsScreen.BatteryChargeTimes.name)
             }

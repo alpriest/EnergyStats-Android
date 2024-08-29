@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.settings
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -179,8 +178,6 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                 threshold2.value = 2.0f
                 threshold3.value = 3.0f
             }
-
-            Spacer(modifier = Modifier.height(60.dp))
         }
     }, modifier)
 }

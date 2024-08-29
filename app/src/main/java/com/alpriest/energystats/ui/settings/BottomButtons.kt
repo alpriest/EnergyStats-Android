@@ -53,7 +53,7 @@ fun ContentWithBottomButtons(
             .fillMaxSize()
             .background(colorScheme.background)
     ) {
-        content(Modifier.padding(bottom = 90.dp))
+        content(Modifier.padding(bottom = 86.dp))
 
         Box(
             contentAlignment = Alignment.BottomCenter,
@@ -68,9 +68,9 @@ fun ContentWithBottomButtons(
                 )
 
                 BottomButtonsView(
-                    modifier = modifier
+                    modifier = Modifier
                             .background(colorScheme.surface)
-                        .padding(12.dp),
+                            .padding(12.dp),
                     footer = footer,
                     buttons = buttons
                 )
