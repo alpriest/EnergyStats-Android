@@ -75,7 +75,7 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
 }
 
 @Composable
-fun SolarBandingSettingsView(navController: NavHostController, configManager: ConfigManaging) {
+fun SolarBandingSettingsView(navController: NavHostController, configManager: ConfigManaging, modifier: Modifier) {
     val amount = remember { mutableFloatStateOf(2.0f) }
     val threshold1 = remember { mutableFloatStateOf(configManager.themeStream.value.solarRangeDefinitions.threshold1.toFloat()) }
     val threshold2 = remember { mutableFloatStateOf(configManager.themeStream.value.solarRangeDefinitions.threshold2.toFloat()) }
@@ -118,8 +118,8 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             threshold3 = threshold3.floatValue.toDouble()
         )
         Toast.makeText(context, context.getString(R.string.thresholds_were_saved), Toast.LENGTH_LONG).show()
-    }, { modifier ->
-        SettingsPage(modifier) {
+    }, { innerModifier ->
+        SettingsPage(innerModifier) {
             ThresholdView(
                 mutableStateValue = threshold1,
                 title = stringResource(R.string.low_threshold),
@@ -182,7 +182,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
 
             Spacer(modifier = Modifier.height(60.dp))
         }
-    }, Modifier)
+    }, modifier)
 }
 
 fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTheme {
@@ -203,7 +203,8 @@ fun SolarBandingSettingsPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SolarBandingSettingsView(
             NavHostController(LocalContext.current),
-            configManager = FakeConfigManager()
+            configManager = FakeConfigManager(),
+ Modifier
         )
     }
 }

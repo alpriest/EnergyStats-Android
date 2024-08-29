@@ -2,10 +2,10 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
-import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.OpenApiVariableArray
 import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -16,7 +16,7 @@ class InMemoryLoggingNetworkStore {
     val variablesResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<OpenApiVariableArray>>?> = MutableStateFlow(null)
     val batterySOCResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<BatterySOCResponse>>?> = MutableStateFlow(null)
     val batteryTimesResponseStream: MutableStateFlow<NetworkOperation<NetworkResponse<BatteryTimesResponse>>?> = MutableStateFlow(null)
-    val dataLoggerListResponse: MutableStateFlow<NetworkOperation<NetworkResponse<List<DataLoggerResponse>>>?> = MutableStateFlow(null)
+    val dataLoggerListResponse: MutableStateFlow<NetworkOperation<NetworkResponse<PagedDataLoggerListResponse>>?> = MutableStateFlow(null)
 
     var latestRequest: String? = null
     var latestResponse: String? = null

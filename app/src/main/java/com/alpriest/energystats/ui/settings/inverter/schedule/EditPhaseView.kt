@@ -61,15 +61,20 @@ data class EditPhaseErrorData(
 )
 
 @Composable
-fun EditPhaseView(navController: NavHostController, userManager: UserManaging, viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController))) {
+fun EditPhaseView(
+    navController: NavHostController,
+    userManager: UserManaging,
+    viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController)),
+    modifier: Modifier
+) {
     val context = LocalContext.current
 
     LaunchedEffect(null) {
         viewModel.load(context)
     }
 
-    ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
-        SettingsPage(modifier) {
+    ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { innerModifier ->
+        SettingsPage(innerModifier) {
             TimeAndWorkModeView(viewModel, userManager)
 
             MinSOCView(viewModel)
@@ -88,7 +93,10 @@ fun EditPhaseView(navController: NavHostController, userManager: UserManaging, v
                 Text(stringResource(R.string.delete_time_period))
             }
         }
-    }, labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply)))
+    },
+        modifier = modifier,
+        labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply))
+    )
 }
 
 @Composable
@@ -295,7 +303,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
 @Composable
 fun EditPhaseViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-        EditPhaseView(NavHostController(LocalContext.current), FakeUserManager())
+        EditPhaseView(NavHostController(LocalContext.current), FakeUserManager(), modifier = Modifier)
     }
 }
 

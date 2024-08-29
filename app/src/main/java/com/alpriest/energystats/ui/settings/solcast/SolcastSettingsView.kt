@@ -58,15 +58,16 @@ class SolcastSettingsView(
                 configManager = configManager,
                 solarForecastingProvider = solarForecastingProvider
             )
-        )
+        ),
+        modifier: Modifier
     ) {
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val sites = viewModel.sitesStream.collectAsState().value
 
         MonitorAlertDialog(viewModel, userManager)
 
-        ContentWithBottomButtonPair(navController, onSave = { viewModel.save() }, content = { modifier ->
-            SettingsPage(modifier) {
+        ContentWithBottomButtonPair(navController, onSave = { viewModel.save() }, content = { innerModifier ->
+            SettingsPage(innerModifier) {
                 SettingsColumn(padding = SettingsPaddingValues.withVertical()) {
                     ClickableUrlText(
                         text = stringResource(R.string.solcast_how_to_find_keys),
@@ -100,7 +101,7 @@ class SolcastSettingsView(
                     )
                 }
             }
-        })
+        }, modifier)
     }
 }
 
@@ -196,6 +197,6 @@ fun SolcastSettingsViewPreview() {
             FakeConfigManager(),
             FakeUserManager(),
             { DemoSolarForecasting() }
-        ).Content()
+        ).Content(modifier = Modifier)
     }
 }

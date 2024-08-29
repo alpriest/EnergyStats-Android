@@ -178,7 +178,7 @@ class ScheduleSummaryView(
                 Text(stringResource(R.string.manage_templates), color = colorScheme.onPrimary)
             }
 
-            Text(stringResource(R.string.templates_overview), color = colorScheme.onPrimary)
+            Text(stringResource(R.string.templates_overview), color = colorScheme.onSecondary)
         }
     }
 

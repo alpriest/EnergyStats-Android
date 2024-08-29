@@ -1,5 +1,10 @@
 package com.alpriest.energystats.models
 
+data class PagedDataLoggerListResponse(
+    val total: Int,
+    val data: List<DataLoggerResponse>
+)
+
 data class DataLoggerResponse(
     val moduleSN: String,
     val stationID: String,

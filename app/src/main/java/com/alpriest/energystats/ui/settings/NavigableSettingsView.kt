@@ -89,7 +89,7 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.Dataloggers.name) {
             LoadedScaffold(title = stringResource(R.string.dataloggers), navController = navController) {
-                DataLoggerViewContainer(network = network, configManager = config, navController = navController).Content()
+                DataLoggerViewContainer(network = network, configManager = config, navController = navController).Content(modifier = it)
             }
         }
         composable(SettingsScreen.FinancialModel.name) {
@@ -108,7 +108,7 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.SolarBandings.name) {
             LoadedScaffold(title = stringResource(R.string.sun_display_variation_thresholds), navController = navController) {
-                SolarBandingSettingsView(navController, config)
+                SolarBandingSettingsView(navController, config, it)
             }
         }
         composable(SettingsScreen.FAQ.name) {
@@ -116,7 +116,7 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.SolcastSolarPrediction.name) {
             LoadedScaffold(title = stringResource(R.string.solcast_solar_prediction), navController = navController) {
-                SolcastSettingsView(navController, config, userManager, solarForecastingProvider).Content()
+                SolcastSettingsView(navController, config, userManager, solarForecastingProvider).Content(modifier = it)
             }
         }
         composable(SettingsScreen.ScheduleSummary.name) {
@@ -136,7 +136,7 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.EditPhase.name) {
             LoadedScaffold(title = stringResource(R.string.edit_phase), navController = navController) {
-                EditPhaseView(navController, userManager)
+                EditPhaseView(navController, userManager, modifier = it)
             }
         }
 

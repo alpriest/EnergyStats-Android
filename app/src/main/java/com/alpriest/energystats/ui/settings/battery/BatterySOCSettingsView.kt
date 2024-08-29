@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -74,7 +73,6 @@ class BatterySOCSettings(
                                 Text(
                                     stringResource(R.string.min_soc),
                                     Modifier.weight(1.0f),
-                                    style = MaterialTheme.typography.headlineSmall,
                                     color = colorScheme.onSecondary
                                 )
                                 OutlinedTextField(
@@ -106,7 +104,6 @@ class BatterySOCSettings(
                                 Text(
                                     stringResource(R.string.min_soc_on_grid),
                                     Modifier.weight(1.0f),
-                                    style = MaterialTheme.typography.headlineSmall,
                                     color = colorScheme.onSecondary
                                 )
                                 OutlinedTextField(
