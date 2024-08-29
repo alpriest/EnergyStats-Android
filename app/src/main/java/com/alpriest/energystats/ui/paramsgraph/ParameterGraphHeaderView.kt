@@ -20,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -167,7 +168,7 @@ private fun HourPickerItems(hours: Int, showing: MutableState<Boolean>, onHoursC
             Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
         }
     }
-    Divider()
+    HorizontalDivider()
 
     DropdownMenuItem(onClick = {
         onHoursChanged(12)
@@ -179,7 +180,7 @@ private fun HourPickerItems(hours: Int, showing: MutableState<Boolean>, onHoursC
             Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
         }
     }
-    Divider()
+    HorizontalDivider()
 
     DropdownMenuItem(onClick = {
         onHoursChanged(24)

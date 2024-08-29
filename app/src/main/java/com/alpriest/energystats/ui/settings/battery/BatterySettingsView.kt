@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
@@ -162,7 +162,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            Divider()
+            HorizontalDivider()
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_full_empty_estimate),
@@ -171,7 +171,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 footer = buildAnnotatedString { append(stringResource(R.string.empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant)) }
             )
 
-            Divider()
+            HorizontalDivider()
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_usable_battery_only),
@@ -180,7 +180,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 footer = buildAnnotatedString { append(stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining)) }
             )
 
-            Divider()
+            HorizontalDivider()
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_temperature),

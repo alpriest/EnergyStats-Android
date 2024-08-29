@@ -11,9 +11,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -138,7 +138,7 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging
 
         ErrorTextView(errorText.timeError)
 
-        Divider()
+        HorizontalDivider()
 
         WorkModeView(viewModel)
     }

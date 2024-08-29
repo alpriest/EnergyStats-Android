@@ -12,12 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.BarChart
@@ -25,6 +21,10 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -140,7 +140,7 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
                     }
                 }
                 if (monthIndex < 11) {
-                    Divider()
+                    HorizontalDivider()
                 }
             }
         }
@@ -177,7 +177,7 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
                     }
                 }
                 if (yearIndex < currentYear) {
-                    Divider()
+                    HorizontalDivider()
                 }
             }
         }
@@ -228,7 +228,7 @@ private fun DateRangePicker(
                     }
                 }
             }
-            Divider()
+            HorizontalDivider()
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.MONTH
                 showing = false
@@ -239,7 +239,7 @@ private fun DateRangePicker(
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }
             }
-            Divider()
+            HorizontalDivider()
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.YEAR
                 showing = false
@@ -250,7 +250,7 @@ private fun DateRangePicker(
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }
             }
-            Divider()
+            HorizontalDivider()
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now().minusDays(30), LocalDate.now())
                 showing = false
@@ -262,8 +262,7 @@ private fun DateRangePicker(
                 }
             }
 
-            Divider(thickness = 4.dp)
-
+            HorizontalDivider(thickness = 4.dp)
             DropdownMenuItem(onClick = {
                 graphShowingState.value = !graphShowing.value
                 showing = false
