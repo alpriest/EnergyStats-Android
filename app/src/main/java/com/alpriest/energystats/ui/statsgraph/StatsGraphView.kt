@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.statsgraph
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -122,7 +122,7 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
 
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
         return when (displayMode) {
-            is Day -> String.format("%d:00", value.toInt())
+            is Day -> String.format(Locale.getDefault(), "%d:00", value.toInt())
             is StatsDisplayMode.Month -> value.toInt().toString()
             is StatsDisplayMode.Year -> {
                 val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
