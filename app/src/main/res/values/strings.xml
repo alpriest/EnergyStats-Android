@@ -361,4 +361,10 @@
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">This schedule phase contains invalid phases. Please correct and try again.</string>
     <string name="battery_soc">Battery SOC</string>
     <string name="battery_charge_schedule">Battery Charge Schedule</string>
+    <string name="earnings_generated_description">Enter the unit price you are paid per kWh for generating electricity</string>
+    <string name="earnings_exported_description">Enter the unit price you are paid per kWh for exporting electricity</string>
+    <string name="earnings_imported_description">Enter the price you pay per kWh for importing electricity</string>
+    <string name="i_am_paid_for">I am paid for</string>
+    <string name="exporting">exporting</string>
+    <string name="generating">generating</string>
 </resources>

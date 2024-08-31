@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -83,12 +84,12 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                 }
 
                 SettingsSegmentedControl(
-                    title = "I am paid for",
+                    title = stringResource(R.string.i_am_paid_for),
                     segmentedControl = {
                         val items = EarningsModel.values()
                         val itemTitles = listOf(
-                            "exporting", // TODO: Localise
-                            "generating"
+                            stringResource(R.string.exporting),
+                            stringResource(R.string.generating)
                         )
 
                         SegmentedControl(
@@ -103,9 +104,9 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                 )
             },
             footer = if (earningsModel.value == EarningsModel.Generated) {
-                "Enter the unit price you are paid per kWh for generating electricity"
+                stringResource(R.string.earnings_generated_description)
             } else {
-                "Enter the unit price you are paid per kWh for exporting electricity"
+                stringResource(R.string.earnings_exported_description)
             }
         )
 
@@ -114,7 +115,7 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                 gridImportUnitPrice.value = it
                 config.gridImportUnitPrice = it.safeToDouble()
             }
-        }, footer = "Enter the price you pay per kWh for importing electricity")
+        }, footer = stringResource(R.string.earnings_imported_description))
     }
 
     if (showFinancialSummaryState.value) {
@@ -231,10 +232,10 @@ private fun MakeTextField(config: ConfigManaging, state: MutableState<String>, l
 
 @Composable
 fun CalculationDescription(title: String, description: String, formula: String) {
-    Column(modifier = Modifier.padding(top = 18.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 22.dp)) {
         Text(
             title,
-            style = TextStyle.Default.copy(color = colorScheme.onSecondary)
+            style = TextStyle.Default.copy(color = colorScheme.onSecondary, fontWeight = FontWeight.Bold)
         )
         Text(
             description,
