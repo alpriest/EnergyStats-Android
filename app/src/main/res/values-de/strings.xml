@@ -356,4 +356,12 @@
     <string name="workmode_force_charge_description">Lädt die Batterie aus dem Netz</string>
     <string name="workmode_force_discharge_description">Entlädt die Batterie ins Netz</string>
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">Diese Planungsphase enthält ungültige Phasen. Bitte korrigieren Sie dies und versuchen Sie es erneut.</string>
+    <string name="battery_soc">SOC der Batterie</string>
+    <string name="battery_charge_schedule">Ladezeitplan der Batterie</string>
+    <string name="earnings_generated_description">Geben Sie den Einheitspreis ein, den Sie pro kWh für die Erzeugung von Strom erhalten</string>
+    <string name="earnings_exported_description">Geben Sie den Einheitspreis ein, den Sie pro kWh für den Export von Strom erhalten</string>
+    <string name="earnings_imported_description">Geben Sie den Preis ein, den Sie pro kWh für den Import von Strom zahlen</string>
+    <string name="i_am_paid_for">Ich werde bezahlt für</string>
+    <string name="exporting">exportieren</string>
+    <string name="generating">erzeugen</string>
 </resources>

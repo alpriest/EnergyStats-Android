@@ -357,4 +357,12 @@
     <string name="workmode_force_charge_description">Carica la batteria dalla rete</string>
     <string name="workmode_force_discharge_description">Scarica la batteria nella rete</string>
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">Questa fase del programma contiene fasi non valide. Correggi e riprova.</string>
+    <string name="battery_soc">SOC de la batería</string>
+    <string name="battery_charge_schedule">Programma di ricarica della batteria</string>
+    <string name="earnings_generated_description">Inserisci il prezzo unitario che ti viene pagato per kWh per generare elettricità</string>
+    <string name="earnings_exported_description">Inserisci il prezzo unitario che ti viene pagato per kWh per esportare elettricità</string>
+    <string name="earnings_imported_description">Inserisci il prezzo che paghi per kWh per importare elettricità</string>
+    <string name="i_am_paid_for">Sono pagato per</string>
+    <string name="exporting">esportazione</string>
+    <string name="generating">generando</string>
 </resources>

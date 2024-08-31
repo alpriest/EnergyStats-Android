@@ -357,4 +357,12 @@
     <string name="workmode_force_charge_description">Ładuje baterię z sieci</string>
     <string name="workmode_force_discharge_description">Rozładowuje baterię do sieci</string>
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">Ta faza harmonogramu zawiera nieprawidłowe fazy. Popraw to i spróbuj ponownie.</string>
+    <string name="battery_soc">SOC baterii</string>
+    <string name="battery_charge_schedule">Harmonogram ładowania baterii</string>
+    <string name="earnings_generated_description">Wprowadź cenę jednostkową, którą otrzymujesz za kWh za generowanie energii elektrycznej</string>
+    <string name="earnings_exported_description">Wprowadź cenę jednostkową, którą otrzymujesz za kWh za eksport energii elektrycznej</string>
+    <string name="earnings_imported_description">Wprowadź cenę, którą płacisz za kWh za import energii elektrycznej</string>
+    <string name="i_am_paid_for">Jestem opłacany za</string>
+    <string name="exporting">eksportowanie</string>
+    <string name="generating">generowanie</string>
 </resources>
