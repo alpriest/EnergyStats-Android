@@ -18,6 +18,7 @@ import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.CalculationBreakdown
+import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,25 +66,13 @@ fun EarningsView(themeStream: MutableStateFlow<AppTheme>, viewModel: EarningsVie
     }
 }
 
-enum class FinanceAmountType {
-    TODAY,
-    EXPORTED,
-    AVOIDED,
-    TOTAL
-}
-
-class FinanceAmount(val type: FinanceAmountType, val amount: Double) {
+class FinanceAmount(val shortTitleResId: Int, val amount: Double) {
     fun formattedAmount(currencySymbol: String): String {
         return amount.roundedToString(2, currencySymbol)
     }
 
     fun title(context: Context): String {
-        return when (type) {
-            FinanceAmountType.EXPORTED -> context.getString(R.string.exported_income_short_title)
-            FinanceAmountType.AVOIDED -> context.getString(R.string.grid_import_avoided_short_title)
-            FinanceAmountType.TOTAL -> context.getString(R.string.total)
-            FinanceAmountType.TODAY -> context.getString(R.string.today)
-        }
+        return context.getString(shortTitleResId)
     }
 }
 
@@ -95,9 +84,10 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
     val solarSavingBreakdown: CalculationBreakdown
 
     init {
+        val amountForIncomeCalculation = if (configManager.earningsModel == EarningsModel.Exported) totalsViewModel.feedIn else totalsViewModel.solar
         exportIncome = FinanceAmount(
-            type = FinanceAmountType.EXPORTED,
-            amount = totalsViewModel.feedIn * configManager.feedInUnitPrice
+            shortTitleResId = R.string.exported_income_short_title,
+            amount = amountForIncomeCalculation * configManager.feedInUnitPrice
         )
         exportBreakdown = CalculationBreakdown(
             formula = "gridExport * feedInUnitPrice",
@@ -105,7 +95,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
         )
 
         solarSaving = FinanceAmount(
-            type = FinanceAmountType.AVOIDED,
+            shortTitleResId = R.string.grid_import_avoided_short_title,
             amount = (totalsViewModel.solar - totalsViewModel.feedIn) * configManager.gridImportUnitPrice
         )
         solarSavingBreakdown = CalculationBreakdown(
@@ -114,7 +104,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
         )
 
         total = FinanceAmount(
-            type = FinanceAmountType.TOTAL,
+            shortTitleResId =  R.string.total,
             amount = exportIncome.amount + solarSaving.amount
         )
     }
