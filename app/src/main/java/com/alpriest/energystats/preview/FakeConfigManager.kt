@@ -1,6 +1,5 @@
 package com.alpriest.energystats.preview
 
-import androidx.compose.runtime.Composable
 import com.alpriest.energystats.models.Battery
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.PowerStationDetail
@@ -14,6 +13,7 @@ import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
@@ -72,6 +72,7 @@ class FakeConfigManager : ConfigManaging {
     override var showSelfSufficiencyStatsGraphOverlay: Boolean = true
     override var scheduleTemplates: List<ScheduleTemplate> = listOf()
     override var truncatedYAxisOnParameterGraphs: Boolean = true
+    override var earningsModel: EarningsModel = EarningsModel.Exported
 
     override var devices: List<Device>? = listOf(
         Device(

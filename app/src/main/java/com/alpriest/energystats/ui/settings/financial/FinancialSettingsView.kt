@@ -29,53 +29,95 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.Locale
 
+enum class EarningsModel(val value: Int) {
+    Exported(0),
+    Generated(1);
+
+    companion object {
+        fun fromInt(value: Int) = EarningsModel.values().firstOrNull { it.value == value } ?: EarningsModel.Exported
+    }
+}
+
 @Composable
 fun FinancialsSettingsView(config: ConfigManaging) {
     val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
     val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(config.showFinancialSummaryOnFlowPage) }
-    val feedInUnitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
+    val unitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
     val currencySymbol = rememberSaveable { mutableStateOf(config.currencySymbol) }
+    val earningsModel = rememberSaveable { mutableStateOf(config.earningsModel) }
 
-    SettingsColumnWithChild {
+    SettingsColumn(content = {
         SettingsCheckbox(title = stringResource(R.string.show_financial_summary), state = showFinancialSummaryState, onUpdate = {
             config.showFinancialSummary = it
 
             if (!it) config.showFinancialSummaryOnFlowPage = false
         })
+    }, footer = stringResource(R.string.energy_stats_earnings_calculation_description))
 
-        if (showFinancialSummaryState.value) {
+    if (showFinancialSummaryState.value) {
+        SettingsColumn {
             SettingsCheckbox(title = stringResource(R.string.show_on_flow_page), state = showFinancialSummaryOnFlowPageState, onUpdate = {
                 config.showFinancialSummaryOnFlowPage = it
             })
 
             MakeCurrencySymbolField(config, currencySymbol)
-            MakeTextField(config, feedInUnitPrice, stringResource(R.string.feed_in_unit_price)) {
-                feedInUnitPrice.value = it
-                config.feedInUnitPrice = it.safeToDouble()
+        }
+
+        SettingsColumn(
+            content = {
+                MakeTextField(config, unitPrice, stringResource(R.string.unit_price)) {
+                    unitPrice.value = it
+                    config.feedInUnitPrice = it.safeToDouble()
+                }
+
+                SettingsSegmentedControl(
+                    title = "I am paid for",
+                    segmentedControl = {
+                        val items = EarningsModel.values()
+                        val itemTitles = listOf(
+                            "exporting", // TODO: Localise
+                            "generating"
+                        )
+
+                        SegmentedControl(
+                            items = itemTitles,
+                            defaultSelectedItemIndex = items.indexOf(earningsModel.value),
+                            color = colorScheme.primary
+                        ) {
+                            earningsModel.value = items[it]
+                            config.earningsModel = items[it]
+                        }
+                    }
+                )
+            },
+            footer = if (earningsModel.value == EarningsModel.Generated) {
+                "Enter the unit price you are paid per kWh for generating electricity"
+            } else {
+                "Enter the unit price you are paid per kWh for exporting electricity"
             }
+        )
+
+        SettingsColumn(content = {
             MakeTextField(config, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price)) {
                 gridImportUnitPrice.value = it
                 config.gridImportUnitPrice = it.safeToDouble()
             }
-        }
+        }, footer = "Enter the price you pay per kWh for importing electricity")
     }
 
     if (showFinancialSummaryState.value) {
-        Text(
-            stringResource(R.string.energy_stats_earnings_calculation_description),
-            color = colorScheme.onSecondary
-        )
-
         CalculationDescription(
             stringResource(R.string.exported_income_short_title), stringResource(R.string.exported_income_description), stringResource(R.string.exported_income_formula)
         )
@@ -94,7 +136,7 @@ fun FinancialsSettingsView(config: ConfigManaging) {
 
 private fun Double.toCurrency(): String {
     val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
-    val currencySymbol = currencyFormat.currency.symbol
+    val currencySymbol = currencyFormat.currency?.symbol ?: ""
     return currencyFormat.format(this).replace(currencySymbol, "").trim()
 }
 
@@ -216,7 +258,7 @@ fun CalculationDescription(title: String, description: String, formula: String) 
 @Composable
 fun FinancialsSettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        SettingsPage(Modifier) {
+        SettingsPage(Modifier.padding(12.dp)) {
             FinancialsSettingsView(
                 config = FakeConfigManager()
             )

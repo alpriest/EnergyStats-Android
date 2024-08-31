@@ -206,7 +206,7 @@
     <string name="grid_import_description">Ungefähre eingesparte Ausgaben durch die Erzeugung Ihrer eigenen Solarenergie.</string>
     <string name="grid_import_formula">(Solarenergie kWh - Einspeiseenergie kWh) * Netzbezugspreis</string>
     <string name="total_formula_description">Ungefährer Gesamtnutzen Ihrer Solar-/Batterieanlage.</string>
-    <string name="feed_in_unit_price">Einspeisevergütung</string>
+    <string name="unit_price">Stückpreis</string>
     <string name="grid_import_unit_price">Netzbezugspreis</string>
     <string name="energy_stats_earnings_calculation_description">Zeigt Finanzschätzungen nur für heute auf der Leistungsfluss-Seite und für den ausgewählten Zeitraum auf der Statistik-Seite.</string>
     <string name="foxess_earnings_calculation_description">Dieser Einheitspreis wird in der FoxESS Cloud verwaltet.</string>

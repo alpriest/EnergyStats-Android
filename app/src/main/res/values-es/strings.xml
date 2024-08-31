@@ -206,7 +206,7 @@
     <string name="grid_import_description">Gasto aproximado evitado al generar tu propia energía solar.</string>
     <string name="grid_import_formula">(SolarGeneration kWh - Feed-In kWh) * ImportUnitPrice</string>
     <string name="total_formula_description">Beneficio total aproximado de tener tu instalación solar/batería.</string>
-    <string name="feed_in_unit_price">Precio de la unidad de alimentación</string>
+    <string name="unit_price">Precio unitario</string>
     <string name="grid_import_unit_price">Precio unitario de importación de la red</string>
     <string name="energy_stats_earnings_calculation_description">Muestra estimaciones financieras solo para hoy en la página de flujo, y para el período de tiempo seleccionado en la página de estadísticas.</string>
     <string name="foxess_earnings_calculation_description">Este precio unitario se gestiona en la nube de FoxESS.</string>

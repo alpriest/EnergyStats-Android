@@ -207,7 +207,7 @@
     <string name="grid_import_description">Przybliżone wydatki uniknięte dzięki własnemu wytwarzaniu energii słonecznej.</string>
     <string name="grid_import_formula">(SolarGeneration kWh - Feed-In kWh) * ImportUnitPrice</string>
     <string name="total_formula_description">Przybliżony ogólny korzyść z posiadania instalacji solarnej/baterii.</string>
-    <string name="feed_in_unit_price">Cena za oddawaną energię</string>
+    <string name="unit_price">Cena jednostkowa</string>
     <string name="grid_import_unit_price">Cena za import energii z sieci</string>
     <string name="energy_stats_earnings_calculation_description">Pokazuje szacunki finansowe tylko na stronie przepływu, a także dla wybranego okresu czasu na stronie statystyk.</string>
     <string name="foxess_earnings_calculation_description">Ta cena jednostkowa jest zarządzana w chmurze FoxESS.</string>
