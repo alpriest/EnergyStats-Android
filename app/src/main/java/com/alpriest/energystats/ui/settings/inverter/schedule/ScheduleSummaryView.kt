@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,9 +41,8 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
-import com.alpriest.energystats.ui.settings.SettingsPaddingValues
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -82,7 +81,7 @@ class ScheduleSummaryView(
                     schedule?.let { Loaded(it, viewModel, modifier) }
                 } else {
                     SettingsPage(modifier) {
-                        SettingsColumnWithChild(padding = SettingsPaddingValues.withVertical()) {
+                        SettingsColumn {
                             SettingsTitleView(stringResource(R.string.unsupported))
                             Text(
                                 supportedError,
@@ -102,7 +101,7 @@ class ScheduleSummaryView(
         val schedulerEnabled = viewModel.schedulerEnabledStream.collectAsState().value
         val schedulerEnabledState = rememberSaveable { mutableStateOf(schedulerEnabled) }
 
-        SettingsPage(modifier) {
+        SettingsPage(modifier.padding(bottom = 12.dp)) {
             SettingsColumn {
                 SettingsCheckbox(
                     title = stringResource(R.string.enable_scheduler),
@@ -114,7 +113,6 @@ class ScheduleSummaryView(
             }
 
             SettingsColumn(
-                padding = SettingsPaddingValues.withVertical(),
                 header = stringResource(R.string.schedule)
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -148,7 +146,8 @@ class ScheduleSummaryView(
                 ) {
                     Text(
                         text = it.name,
-                        style = TextStyle.Default.copy(color = colorScheme.onSecondary),
+                        color = colorScheme.onSecondary,
+                        fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
                             .fillMaxWidth()
@@ -178,7 +177,9 @@ class ScheduleSummaryView(
                 Text(stringResource(R.string.manage_templates), color = colorScheme.onPrimary)
             }
 
-            Text(stringResource(R.string.templates_overview), color = colorScheme.onSecondary)
+            Text(stringResource(R.string.templates_overview),
+                color = colorScheme.onSecondary,
+                modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL))
         }
     }
 

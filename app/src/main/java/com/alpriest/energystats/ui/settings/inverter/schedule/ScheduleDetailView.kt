@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -32,7 +33,11 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
     SettingsColumn(padding = PaddingValues()) {
         if (schedule.name.isNotEmpty()) {
             Column(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp))) {
-                Text(schedule.name, color = colorScheme.onSecondary)
+                Text(
+                    schedule.name,
+                    color = colorScheme.onSecondary,
+                    fontWeight = FontWeight.Bold
+                )
             }
         } else {
             Spacer(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp)))
