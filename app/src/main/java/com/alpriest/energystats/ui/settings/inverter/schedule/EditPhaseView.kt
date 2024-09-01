@@ -73,27 +73,30 @@ fun EditPhaseView(
         viewModel.load(context)
     }
 
-    ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { innerModifier ->
-        SettingsPage(innerModifier) {
-            TimeAndWorkModeView(viewModel, userManager)
+    ContentWithBottomButtonPair(
+        navController,
+        onSave = { viewModel.save(context) }, { innerModifier ->
+            SettingsPage(innerModifier) {
+                TimeAndWorkModeView(viewModel, userManager)
 
-            MinSOCView(viewModel)
+                MinSOCView(viewModel)
 
-            ForceDischargeSOCView(viewModel)
+                ForceDischargeSOCView(viewModel)
 
-            ForceDischargePowerView(viewModel)
+                ForceDischargePowerView(viewModel)
 
-            Button(
-                onClick = { viewModel.deletePhase() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PowerFlowNegative,
-                    contentColor = PaleWhite
-                ),
-            ) {
-                Text(stringResource(R.string.delete_time_period))
+                Button(
+                    onClick = { viewModel.deletePhase() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = PowerFlowNegative,
+                        contentColor = PaleWhite
+                    ),
+                    modifier = Modifier.padding(bottom = 24.dp)
+                ) {
+                    Text(stringResource(R.string.delete_time_period))
+                }
             }
-        }
-    },
+        },
         modifier = modifier,
         labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply))
     )

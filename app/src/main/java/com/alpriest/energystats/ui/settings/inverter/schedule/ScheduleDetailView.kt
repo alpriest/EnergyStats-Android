@@ -23,16 +23,13 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsColumn
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsPaddingValues
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
-    SettingsColumn(
-        padding = SettingsPaddingValues.default()
-    ) {
+    SettingsColumn(padding = PaddingValues()) {
         if (schedule.name.isNotEmpty()) {
             Column(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp))) {
                 Text(schedule.name, color = colorScheme.onSecondary)
@@ -47,12 +44,15 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
     if (schedule.phases.isEmpty()) {
         Text(
             stringResource(R.string.no_schedule_time_periods),
-            color = colorScheme.onSecondary
+            color = colorScheme.onSecondary,
+            modifier = Modifier.padding(
+                horizontal = SettingsPadding.PANEL_OUTER_HORIZONTAL
+            )
         )
     }
 
     if (schedule.phases.isNotEmpty()) {
-        SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
+        SettingsColumn(modifier = Modifier.fillMaxWidth(), padding = PaddingValues()) {
             schedule.phases.forEach {
                 OutlinedButton(
                     onClick = {

@@ -16,6 +16,7 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.BottomButtonConfiguration
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
@@ -44,7 +45,7 @@ fun UpgradeRequiredView(userManager: UserManaging) {
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)
                 ) {
                     Text("What's changed?", fontSize = 20.sp)
 

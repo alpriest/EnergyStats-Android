@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
@@ -42,6 +43,7 @@ import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.LoadedScaffold
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
@@ -92,7 +94,7 @@ class EditTemplateView(
                 SettingsPage(modifier) {
                     ScheduleDetailView(viewModel.navController, template.asSchedule())
 
-                    Column(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = SettingsPadding.PANEL_OUTER_HORIZONTAL)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -202,7 +204,7 @@ fun EditTemplateViewPreview() {
         ).Loaded(
             template = ScheduleTemplate(
                 id = "123",
-                name = "foo",
+                name = "Winter routine",
                 phases = listOf()
             ),
             viewModel = EditTemplateViewModel(

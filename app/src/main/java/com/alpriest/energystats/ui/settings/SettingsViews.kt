@@ -41,16 +41,22 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.dialog.AlertDialog
+
+object SettingsPadding {
+    val PANEL_OUTER_HORIZONTAL = 12.dp
+    val PANEL_INNER_HORIZONTAL = 12.dp
+}
 
 class SettingsPaddingValues {
     companion object {
         fun default(): PaddingValues {
             return PaddingValues(
-                start = 10.dp,
-                end = 10.dp,
+                start = 4.dp,
+                end = 0.dp,
                 top = 0.dp,
                 bottom = 0.dp
             )
@@ -84,7 +90,14 @@ fun SettingsColumn(
                 SettingsTitleView(
                     it,
                     modifier = Modifier
-                        .padding(PaddingValues(top = 10.dp, start = 22.dp, end = 10.dp, bottom = 8.dp))
+                        .padding(
+                            PaddingValues(
+                                top = 10.dp,
+                                start = padding.calculateLeftPadding(LayoutDirection.Ltr) + SettingsPadding.PANEL_OUTER_HORIZONTAL,
+                                end = padding.calculateRightPadding(LayoutDirection.Ltr) + SettingsPadding.PANEL_OUTER_HORIZONTAL,
+                                bottom = 8.dp
+                            )
+                        )
                         .fillMaxWidth()
                 )
             }
@@ -117,7 +130,7 @@ fun SettingsColumnWithChild(
                 .background(colorScheme.surface)
                 .padding(padding)
         ) {
-            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+            Column(modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)) {
                 content()
 
                 ErrorTextView(error)
