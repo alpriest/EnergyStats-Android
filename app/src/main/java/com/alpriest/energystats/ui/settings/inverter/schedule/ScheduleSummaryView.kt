@@ -185,7 +185,10 @@ class ScheduleSummaryView(
 
     @Composable
     fun ActivateButton(onClick: () -> Unit) {
-        Button(onClick) {
+        Button(
+            onClick,
+            modifier = Modifier.padding(bottom = SettingsPadding.COLUMN_BOTTOM)
+        ) {
             Text(
                 stringResource(R.string.activate)
             )

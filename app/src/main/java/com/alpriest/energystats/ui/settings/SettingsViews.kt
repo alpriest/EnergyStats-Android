@@ -41,14 +41,17 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.dialog.AlertDialog
 
 object SettingsPadding {
+    val COLUMN_BOTTOM: Dp = 12.dp
     val PANEL_OUTER_HORIZONTAL = 12.dp
     val PANEL_INNER_HORIZONTAL = 12.dp
+    val CONTENT_BOTTOM = 24.dp
 }
 
 class SettingsPaddingValues {

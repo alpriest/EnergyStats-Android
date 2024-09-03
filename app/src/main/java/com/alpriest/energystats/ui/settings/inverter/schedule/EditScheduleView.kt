@@ -69,8 +69,8 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
     ContentWithBottomButtonPair(
         navController = navController,
         onSave = { viewModel.saveSchedule(context) },
-        { _ ->
-            SettingsPage(modifier) {
+        { innerModifier ->
+            SettingsPage(innerModifier) {
                 ScheduleDetailView(viewModel.navController, schedule)
 
                 Row(
@@ -98,11 +98,12 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
                 }
             }
         },
-        labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save))
+        labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save)),
+        modifier = modifier.padding(bottom = SettingsPadding.CONTENT_BOTTOM)
     )
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 600)
+@Preview(showBackground = true, widthDp = 400, heightDp = 400)
 @Composable
 fun EditScheduleViewPreview() {
     EnergyStatsTheme {

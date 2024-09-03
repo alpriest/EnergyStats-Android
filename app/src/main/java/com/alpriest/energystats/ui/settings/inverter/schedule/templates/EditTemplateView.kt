@@ -90,8 +90,8 @@ class EditTemplateView(
         ContentWithBottomButtonPair(
             navController = navController,
             onSave = { viewModel.saveTemplate(context) },
-            { _ ->
-                SettingsPage(modifier) {
+            { innerModifier ->
+                SettingsPage(innerModifier) {
                     ScheduleDetailView(viewModel.navController, template.asSchedule())
 
                     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = SettingsPadding.PANEL_OUTER_HORIZONTAL)) {
@@ -186,7 +186,8 @@ class EditTemplateView(
                     }
                 }
             },
-            labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save))
+            labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save)),
+            modifier = modifier.padding(bottom = SettingsPadding.CONTENT_BOTTOM)
         )
     }
 }

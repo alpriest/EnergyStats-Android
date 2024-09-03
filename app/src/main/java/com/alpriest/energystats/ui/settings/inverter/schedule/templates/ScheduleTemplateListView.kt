@@ -37,6 +37,7 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleView
@@ -86,7 +87,7 @@ class ScheduleTemplateListView(
 
     @Composable
     fun Loaded(templates: List<ScheduleTemplate>, viewModel: ScheduleTemplateListViewModel, modifier: Modifier) {
-        SettingsPage(modifier) {
+        SettingsPage(modifier.padding(bottom = SettingsPadding.CONTENT_BOTTOM)) {
             templates.forEach {
                 SettingsColumn {
                     Text(
@@ -122,22 +123,20 @@ class ScheduleTemplateListView(
         val context = LocalContext.current
         val presentCreateAlert = remember { mutableStateOf(false) }
 
-        SettingsColumn {
-            Button(
-                onClick = { presentCreateAlert.value = true }
-            ) {
-                Text(
-                    stringResource(id = R.string.create_new_template),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
+        Button(
+            onClick = { presentCreateAlert.value = true }
+        ) {
+            Text(
+                stringResource(id = R.string.create_new_template),
+                color = MaterialTheme.colorScheme.onPrimary,
+            )
+        }
 
-            if (presentCreateAlert.value) {
-                TemplateNameAlertDialog(configuration = AlertConfiguration.CreateTemplate) {
-                    presentCreateAlert.value = false
-                    it?.let {
-                        viewModel.createTemplate(it, context)
-                    }
+        if (presentCreateAlert.value) {
+            TemplateNameAlertDialog(configuration = AlertConfiguration.CreateTemplate) {
+                presentCreateAlert.value = false
+                it?.let {
+                    viewModel.createTemplate(it, context)
                 }
             }
         }

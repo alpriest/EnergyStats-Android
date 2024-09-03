@@ -258,7 +258,7 @@
     <string name="manage_templates">Manage templates</string>
     <string name="activate">Activate</string>
     <string name="create_a_schedule">Create a schedule</string>
-    <string name="activating">Activating...</string>
+    <string name="activating">Activating…</string>
     <string name="no_schedule_time_periods">You have no time periods defined. Add a time period to define how you\'d like your inverter to behave during specific hours.</string>
     <string name="edit_template">Edit template</string>
     <string name="add_time_period">Add time period</string>
@@ -267,7 +267,7 @@
     <string name="activate_template">Activate template</string>
     <string name="delete_template">Delete template</string>
     <string name="your_template_was_deleted">Your template was deleted</string>
-    <string name="deleting">Deleting...</string>
+    <string name="deleting">Deleting…</string>
     <string name="your_template_was_saved">Your template was saved</string>
     <string name="your_template_was_activated">Your template was activated</string>
     <string name="new_template">New template</string>
