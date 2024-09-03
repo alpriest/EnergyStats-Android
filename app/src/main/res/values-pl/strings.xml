@@ -188,7 +188,7 @@
     <string name="foxess_community">Społeczność FoxESS</string>
     <string name="foxess_cloud_status">Stan chmury FoxESS</string>
     <string name="show_last_update_timestamp">Pokaż ostatni znacznik czasu aktualizacji</string>
-    <string name="sun_display_variation_thresholds">Progi zmienności wyświetlania słońca</string>
+    <string name="sun_display_thresholds">Progi zmienności wyświetlania słońca</string>
     <string name="tap_the_icon_for_further_detail">Dotknij ikony, aby uzyskać więcej informacji</string>
     <string name="kilowatts">Kilowaty</string>
     <string name="watts">Waty</string>

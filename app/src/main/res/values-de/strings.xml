@@ -187,7 +187,7 @@
     <string name="foxess_community">FoxESS-Community</string>
     <string name="foxess_cloud_status">FoxESS-Cloudstatus</string>
     <string name="show_last_update_timestamp">Letzten Aktualisierungszeitpunkt anzeigen</string>
-    <string name="sun_display_variation_thresholds">Schwellenwerte der Sonnenanzeigevielfalt</string>
+    <string name="sun_display_thresholds">Schwellenwerte der Sonnenanzeigevielfalt</string>
     <string name="tap_the_icon_for_further_detail">Tippen Sie auf das Symbol für weitere Details</string>
     <string name="kilowatts">Kilowatt</string>
     <string name="watts">Watt</string>

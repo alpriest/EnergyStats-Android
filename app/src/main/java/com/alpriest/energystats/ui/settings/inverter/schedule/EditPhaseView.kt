@@ -46,6 +46,7 @@ import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.ErrorTextView
+import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
@@ -91,10 +92,11 @@ fun EditPhaseView(
                         containerColor = PowerFlowNegative,
                         contentColor = PaleWhite
                     ),
-                    modifier = Modifier.padding(bottom = 24.dp)
                 ) {
                     Text(stringResource(R.string.delete_time_period))
                 }
+
+                SettingsBottomSpace()
             }
         },
         modifier = modifier,

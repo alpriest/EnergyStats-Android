@@ -187,7 +187,7 @@
     <string name="foxess_community">FoxESS Community</string>
     <string name="foxess_cloud_status">FoxESS Cloud Status</string>
     <string name="show_last_update_timestamp">Show timestamp of last update</string>
-    <string name="sun_display_variation_thresholds">Sun display variation thresholds</string>
+    <string name="sun_display_thresholds">Sun display thresholds</string>
     <string name="tap_the_icon_for_further_detail">Tap the icon for further detail</string>
     <string name="kilowatts">Kilowatts</string>
     <string name="watts">Watts</string>

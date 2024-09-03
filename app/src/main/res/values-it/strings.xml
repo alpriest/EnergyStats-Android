@@ -188,7 +188,7 @@
     <string name="foxess_community">Comunità FoxESS</string>
     <string name="foxess_cloud_status">Stato della nuvola FoxESS</string>
     <string name="show_last_update_timestamp">Mostra l\'ultimo timestamp di aggiornamento</string>
-    <string name="sun_display_variation_thresholds">Soglie di variazione della visualizzazione del sole</string>
+    <string name="sun_display_thresholds">Soglie di variazione della visualizzazione del sole</string>
     <string name="tap_the_icon_for_further_detail">Tocca l\'icona per ulteriori dettagli</string>
     <string name="kilowatts">Kilowatt</string>
     <string name="watts">Watt</string>

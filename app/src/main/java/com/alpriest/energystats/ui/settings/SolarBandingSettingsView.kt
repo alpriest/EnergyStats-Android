@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -141,7 +142,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     SolarPowerFlow(
-                        amount = amount.value.toDouble(),
+                        amount = amount.floatValue.toDouble(),
                         modifier = Modifier
                             .width(100.dp)
                             .height(100.dp),
@@ -150,9 +151,9 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                     )
 
                     Slider(
-                        value = amount.value,
-                        onValueChange = { amount.value = it },
-                        valueRange = 0.0f..threshold3.value + 0.5f,
+                        value = amount.floatValue,
+                        onValueChange = { amount.floatValue = it },
+                        valueRange = 0.0f..threshold3.floatValue + 0.5f,
                         colors = SliderDefaults.colors(
                             activeTickColor = colorScheme.primary,
                             inactiveTickColor = colorScheme.background,
@@ -170,13 +171,12 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                 )
             }
 
-            SettingsNavButton(
-                stringResource(R.string.restore_defaults),
-                disclosureIcon = null
-            ) {
-                threshold1.value = 1.0f
-                threshold2.value = 2.0f
-                threshold3.value = 3.0f
+            Button({
+                threshold1.floatValue = 1.0f
+                threshold2.floatValue = 2.0f
+                threshold3.floatValue = 3.0f
+            }) {
+                Text(stringResource(R.string.restore_defaults))
             }
         }
     }, modifier)
@@ -194,7 +194,7 @@ fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTh
         )
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 400)
+@Preview(showBackground = true, widthDp = 400, heightDp = 1000)
 @Composable
 fun SolarBandingSettingsPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {

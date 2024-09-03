@@ -157,7 +157,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         )
         HorizontalDivider()
 
-        InlineSettingsNavButton(stringResource(R.string.sun_display_variation_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
+        InlineSettingsNavButton(stringResource(R.string.sun_display_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
     }
 }
 

@@ -106,7 +106,7 @@ fun NavigableSettingsView(
             }
         }
         composable(SettingsScreen.SolarBandings.name) {
-            LoadedScaffold(title = stringResource(R.string.sun_display_variation_thresholds), navController = navController) {
+            LoadedScaffold(title = stringResource(R.string.sun_display_thresholds), navController = navController) {
                 SolarBandingSettingsView(navController, config, it)
             }
         }

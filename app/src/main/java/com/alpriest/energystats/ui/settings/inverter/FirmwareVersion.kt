@@ -31,7 +31,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsRow(title: String, value: String?) {
     SettingsRow(title) {
-        Text(value ?: "(unknown)", color = colorScheme.onSecondary)
+        Text(
+            value ?: "(unknown)",
+            color = colorScheme.onSecondary,
+            modifier = Modifier.padding(end = 4.dp)
+        )
     }
 }
 

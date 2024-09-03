@@ -29,6 +29,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.LoadedScaffold
+import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -74,7 +75,8 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
                 ScheduleDetailView(viewModel.navController, schedule)
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
@@ -89,17 +91,13 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
                     ) {
                         Text(stringResource(R.string.autofill_gaps))
                     }
-
-//                    if (allowDeletion) {
-//                        Button(onClick = { viewModel.delete(context) }) {
-//                            Text(stringResource(R.string.delete_schedule))
-//                        }
-//                    }
                 }
+
+                SettingsBottomSpace()
             }
         },
         labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save)),
-        modifier = modifier.padding(bottom = SettingsPadding.CONTENT_BOTTOM)
+        modifier = modifier
     )
 }
 

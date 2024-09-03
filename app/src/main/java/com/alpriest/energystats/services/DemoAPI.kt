@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
@@ -30,6 +31,7 @@ import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
+import com.alpriest.energystats.ui.summary.PreviewContextHolder
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -110,10 +112,21 @@ class DemoAPI : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        val fileContent: String? = when (reportType) {
-            ReportType.day -> this::class.java.classLoader?.getResource("res/raw/report_day.json")?.readText()
-            ReportType.month -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
-            ReportType.year -> this::class.java.classLoader?.getResource("res/raw/report_year.json")?.readText()
+        val fileContent: String?
+        val context = PreviewContextHolder.context
+
+        fileContent = if (context != null) {
+            when (reportType) {
+                ReportType.day -> context.resources.openRawResource(R.raw.report_day).bufferedReader().use { it.readText() }
+                ReportType.month -> context.resources.openRawResource(R.raw.report_month).bufferedReader().use { it.readText() }
+                ReportType.year -> context.resources.openRawResource(R.raw.report_year).bufferedReader().use { it.readText() }
+            }
+        } else {
+            when (reportType) {
+                ReportType.day -> this::class.java.classLoader?.getResource("res/raw/report_day.json")?.readText()
+                ReportType.month -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
+                ReportType.year -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
+            }
         }
 
         val data: NetworkResponse<List<OpenReportResponse>> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type)

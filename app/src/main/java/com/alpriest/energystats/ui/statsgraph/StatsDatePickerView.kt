@@ -303,7 +303,8 @@ fun CalendarView(dateStream: MutableStateFlow<LocalDate>) {
         .wrapContentSize(Alignment.BottomCenter)
         .padding(end = 14.dp)) {
         Button(
-            onClick = { showingDatePicker = true }
+            onClick = { showingDatePicker = true },
+            contentPadding = PaddingValues(horizontal = 12.dp)
         ) {
             Text(dateState.toString())
         }
