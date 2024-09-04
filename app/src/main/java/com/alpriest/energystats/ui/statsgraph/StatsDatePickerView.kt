@@ -9,11 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.BarChart
@@ -22,6 +19,8 @@ import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -40,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.settings.SlimButton
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -74,6 +74,7 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
                 MonthPicker(viewModel)
                 YearPicker(viewModel)
             }
+
             is DatePickerRange.YEAR -> YearPicker(viewModel)
             is DatePickerRange.CUSTOM -> CustomRangePicker(viewModel)
         }
@@ -118,7 +119,7 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
             .wrapContentSize(Alignment.TopStart)
             .padding(end = 14.dp)
     ) {
-        Button(
+        SlimButton(
             onClick = { showing = true }
         ) {
             calendar.set(Calendar.MONTH, month)
@@ -132,13 +133,13 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
                 DropdownMenuItem(onClick = {
                     viewModel.monthStream.value = monthIndex
                     showing = false
-                }) {
+                }, text = {
                     Text(monthName)
+                }, trailingIcon = {
                     if (monthIndex == month) {
-                        Spacer(modifier = Modifier.weight(1f))
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                     }
-                }
+                })
                 if (monthIndex < 11) {
                     HorizontalDivider()
                 }
@@ -158,7 +159,7 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
             .wrapContentSize(Alignment.TopStart)
             .padding(end = 14.dp)
     ) {
-        Button(
+        SlimButton(
             onClick = { showing = true }
         ) {
             Text(year.toString())
@@ -169,13 +170,13 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
                 DropdownMenuItem(onClick = {
                     viewModel.yearStream.value = yearIndex
                     showing = false
-                }) {
+                }, text = {
                     Text(yearIndex.toString())
+                }, trailingIcon = {
                     if (yearIndex == year) {
-                        Spacer(modifier = Modifier.weight(1f))
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                     }
-                }
+                })
                 if (yearIndex < currentYear) {
                     HorizontalDivider()
                 }
@@ -219,60 +220,56 @@ private fun DateRangePicker(
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.DAY
                 showing = false
-            }) {
-                Row {
-                    Text(stringResource(R.string.day))
-                    if (range == DatePickerRange.DAY) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                    }
+            }, text = {
+                Text(stringResource(R.string.day))
+            }, trailingIcon = {
+                if (range == DatePickerRange.DAY) {
+                    Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }
-            }
+            })
             HorizontalDivider()
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.MONTH
                 showing = false
-            }) {
+            }, text = {
                 Text(stringResource(R.string.month))
+            }, trailingIcon = {
                 if (range == DatePickerRange.MONTH) {
-                    Spacer(modifier = Modifier.weight(1f))
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }
-            }
+            })
             HorizontalDivider()
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.YEAR
                 showing = false
-            }) {
+            }, text = {
                 Text(stringResource(R.string.year))
+            }, trailingIcon = {
                 if (range == DatePickerRange.YEAR) {
-                    Spacer(modifier = Modifier.weight(1f))
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }
-            }
+            })
             HorizontalDivider()
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now().minusDays(30), LocalDate.now())
                 showing = false
-            }) {
-                Text("Custom range")
+            }, text = {
+                Text(stringResource(R.string.custom_range))
+            }, trailingIcon = {
                 if (range.isCustom()) {
-                    Spacer(modifier = Modifier.weight(1f))
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }
-            }
+            })
 
             HorizontalDivider(thickness = 4.dp)
             DropdownMenuItem(onClick = {
                 graphShowingState.value = !graphShowing.value
                 showing = false
-            }) {
+            }, text = {
                 Text(if (graphShowing.value) stringResource(R.string.hide_graph) else stringResource(R.string.show_graph))
-                Spacer(modifier = Modifier
-                    .weight(1f)
-                    .widthIn(min = 50.dp))
+            }, trailingIcon = {
                 Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
-            }
+            })
         }
     }
 }
@@ -299,12 +296,13 @@ fun CalendarView(dateStream: MutableStateFlow<LocalDate>) {
     val dateState = dateStream.collectAsState().value
     val millis = localDateToMillis(dateState)
 
-    Box(modifier = Modifier
-        .wrapContentSize(Alignment.BottomCenter)
-        .padding(end = 14.dp)) {
-        Button(
-            onClick = { showingDatePicker = true },
-            contentPadding = PaddingValues(horizontal = 12.dp)
+    Box(
+        modifier = Modifier
+            .wrapContentSize(Alignment.BottomCenter)
+            .padding(end = 14.dp)
+    ) {
+        SlimButton(
+            onClick = { showingDatePicker = true }
         ) {
             Text(dateState.toString())
         }
@@ -351,6 +349,8 @@ fun millisToLocalDate(millis: Long): LocalDate {
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerView(viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))),
-        graphShowingState = MutableStateFlow(false))
+    StatsDatePickerView(
+        viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))),
+        graphShowingState = MutableStateFlow(false)
+    )
 }

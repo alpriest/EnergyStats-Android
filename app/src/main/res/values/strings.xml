@@ -367,4 +367,5 @@
     <string name="i_am_paid_for">I am paid for</string>
     <string name="exporting">exporting</string>
     <string name="generating">generating</string>
+    <string name="custom_range">Custom range</string>
 </resources>

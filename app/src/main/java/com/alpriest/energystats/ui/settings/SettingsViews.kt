@@ -407,3 +407,13 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
 fun SettingsBottomSpace() {
     Spacer(Modifier.height(SettingsPadding.CONTENT_BOTTOM))
 }
+
+@Composable
+fun SlimButton(onClick: () -> Unit, content: @Composable () -> Unit) {
+    Button(
+        onClick = onClick,
+        contentPadding = PaddingValues(horizontal = 12.dp)
+    ) {
+        content()
+    }
+}

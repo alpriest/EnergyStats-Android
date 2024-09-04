@@ -105,7 +105,8 @@ fun TabbedView(
             HorizontalPager(
                 modifier = Modifier.padding(padding),
                 count = titles.size,
-                state = pagerState
+                state = pagerState,
+                userScrollEnabled = false
             ) { page ->
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
