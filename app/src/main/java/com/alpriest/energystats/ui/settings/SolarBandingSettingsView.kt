@@ -178,6 +178,8 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             }) {
                 Text(stringResource(R.string.restore_defaults))
             }
+
+            SettingsBottomSpace()
         }
     }, modifier)
 }

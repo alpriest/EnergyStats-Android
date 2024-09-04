@@ -60,7 +60,7 @@ class SettingsPaddingValues {
     companion object {
         fun default(): PaddingValues {
             return PaddingValues(
-                start = 4.dp,
+                start = 0.dp,
                 end = 0.dp,
                 top = 0.dp,
                 bottom = 0.dp
@@ -69,8 +69,8 @@ class SettingsPaddingValues {
 
         fun withVertical(): PaddingValues {
             return PaddingValues(
-                start = 10.dp,
-                end = 10.dp,
+                start = 0.dp,
+                end = 0.dp,
                 top = 10.dp,
                 bottom = 10.dp
             )
@@ -135,7 +135,7 @@ fun SettingsColumnWithChild(
                 .background(colorScheme.surface)
                 .padding(padding)
         ) {
-            Column(modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)) {
+            Column(Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)) {
                 content()
 
                 ErrorTextView(error)

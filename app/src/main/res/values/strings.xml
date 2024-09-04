@@ -368,4 +368,5 @@
     <string name="exporting">exporting</string>
     <string name="generating">generating</string>
     <string name="custom_range">Custom range</string>
+    <string name="show_self_sufficiency_percentage_on_stats_graph">Show self sufficiency percentage on stats graph</string>
 </resources>

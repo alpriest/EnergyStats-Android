@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.settings.battery
 import android.app.TimePickerDialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,9 +40,10 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
+import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -82,13 +82,17 @@ class BatteryChargeScheduleSettingsView(
                         BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
                         BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 
-                        Column {
-                            SettingsTitleView(stringResource(R.string.schedule_summary))
+                        SettingsColumn(
+                            header = stringResource(R.string.schedule_summary),
+                            padding = SettingsPaddingValues.withVertical()
+                        ) {
                             Text(
                                 chargeSummary,
-                                color = colorScheme.onSecondary,
+                                color = colorScheme.onSecondary
                             )
                         }
+
+                        SettingsBottomSpace()
                     }
                 }, modifier)
         }
@@ -103,7 +107,9 @@ class BatteryChargeScheduleSettingsView(
             header = periodTitle
         ) {
             Row(
-                verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
+                verticalAlignment = CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     stringResource(R.string.enable_charge_from_grid),

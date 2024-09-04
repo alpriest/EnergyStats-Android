@@ -1,18 +1,21 @@
 package com.alpriest.energystats.ui.paramsgraph.editing
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +38,7 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PaleWhite
@@ -62,7 +68,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
             ) {
                 Text(
                     stringResource(R.string.choose_group_to_edit),
-                    color = colors.onSecondary
+                    color = colorScheme.onSecondary
                 )
 
                 Box(contentAlignment = Alignment.TopEnd) {
@@ -70,12 +76,12 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                         Text(
                             selectedGroup.title,
                             fontSize = 12.sp,
-                            color = colors.onPrimary,
+                            color = colorScheme.onPrimary,
                         )
                         Icon(
                             imageVector = Icons.Filled.ArrowDropDown,
                             contentDescription = null,
-                            tint = colors.onPrimary
+                            tint = colorScheme.onPrimary
                         )
                     }
 
@@ -87,12 +93,9 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                             DropdownMenuItem(onClick = {
                                 expanded = false
                                 viewModel.select(group)
-                            }) {
-                                Text(
-                                    group.title,
-                                    color = colors.onSecondary
-                                )
-                            }
+                            }, text = {
+                                Text(group.title)
+                            })
                         }
                     }
                 }
@@ -100,7 +103,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(
@@ -111,7 +114,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
             ) {
                 Text(
                     stringResource(R.string.rename),
-                    color = colors.onPrimary
+                    color = colorScheme.onPrimary
                 )
             }
 
@@ -120,7 +123,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
             }) {
                 Text(
                     stringResource(R.string.create_new),
-                    color = colors.onPrimary
+                    color = colorScheme.onPrimary
                 )
             }
 
@@ -129,14 +132,15 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                     viewModel.delete()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = PowerFlowNegative,
+                    containerColor = PowerFlowNegative,
                     contentColor = PaleWhite
                 ),
                 enabled = canDelete
             ) {
-                Text(
-                    stringResource(R.string.delete),
-                    color = colors.onPrimary
+                Image(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete",
+                    colorFilter = ColorFilter.tint(Color.White)
                 )
             }
         }
