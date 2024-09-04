@@ -364,4 +364,6 @@
     <string name="i_am_paid_for">Ich werde bezahlt für</string>
     <string name="exporting">exportieren</string>
     <string name="generating">erzeugen</string>
+    <string name="custom_range">Benutzerdefinierter Bereich</string>
+    <string name="show_self_sufficiency_percentage_on_stats_graph">Zeige den Selbstversorgungsprozentsatz im Statistikdiagramm an</string>
 </resources>

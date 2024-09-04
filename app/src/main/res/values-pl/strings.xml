@@ -365,4 +365,6 @@
     <string name="i_am_paid_for">Jestem opłacany za</string>
     <string name="exporting">eksportowanie</string>
     <string name="generating">generowanie</string>
+    <string name="custom_range">Zakres niestandardowy</string>
+    <string name="show_self_sufficiency_percentage_on_stats_graph">Pokaż procent samowystarczalności na wykresie statystyk</string>
 </resources>
