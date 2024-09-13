@@ -1,8 +1,10 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.graphics.RectF
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,8 +42,12 @@ import com.patrykandpatrick.vico.core.chart.composed.plus
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
+import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
+import com.patrykandpatrick.vico.core.component.shape.LineComponent
+import com.patrykandpatrick.vico.core.context.DrawContext
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.composed.plus
+import com.patrykandpatrick.vico.core.marker.Marker
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -90,7 +96,13 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                             valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
                             guideline = null
                         ),
-                        horizontalLayout = HorizontalLayout.fullWidth()
+                        horizontalLayout = HorizontalLayout.fullWidth(),
+                        marker = StatsVerticalLineMarker(
+                            lineComponent(
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                                thickness = 10.dp
+                            )
+                        ),
                     )
                 }
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
@@ -146,5 +158,33 @@ fun selfSufficiencyLineColor(isDarkMode: Boolean): Color {
         IconColorInDarkTheme
     } else {
         IconColorInLightTheme
+    }
+}
+
+class StatsVerticalLineMarker(
+    private val guideline: LineComponent?
+) : Marker {
+    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
+        val values = chartValuesProvider.getChartValues(axisPosition = AxisPosition.Vertical.Start)
+
+        drawGuideline(context, bounds, markedEntries.first(), values.xStep)
+    }
+
+    private fun drawGuideline(
+        context: DrawContext,
+        bounds: RectF,
+        chartEntry: Marker.EntryModel,
+        xStep: Float,
+    ) {
+        val columnCount = 6f
+        val xModifier = (xStep * columnCount)
+        val x = chartEntry.entry.x * xModifier
+
+        guideline?.drawVertical(
+            context,
+            bounds.top,
+            bounds.bottom,
+            x,
+        )
     }
 }

@@ -45,7 +45,7 @@ class StatsTabViewModel(
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
-    val selfSufficiencyProducer: ChartEntryModelProducer = ChartEntryModelProducer()
+    var valuesAtTimeStream = MutableStateFlow<List<StatsChartEntry>>(listOf())
     val selfSufficiencyGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val statsGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
@@ -334,6 +334,15 @@ class StatsTabViewModel(
         }
 
         return entries
+    }
+
+    fun dataForIndex(statsGraphData: ChartEntryModel, time: StatsChartEntry): List<StatsChartEntry> {
+        val results: List<StatsChartEntry> = statsGraphData.entries
+            .map { modelEntries -> modelEntries.filter { it.x == time.x } }
+            .flatten()
+            .mapNotNull { it as? StatsChartEntry }
+
+        return results
     }
 }
 
