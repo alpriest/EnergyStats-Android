@@ -188,7 +188,7 @@
     <string name="foxess_community">Comunità FoxESS</string>
     <string name="foxess_cloud_status">Stato della nuvola FoxESS</string>
     <string name="show_last_update_timestamp">Mostra l\'ultimo timestamp di aggiornamento</string>
-    <string name="sun_display_variation_thresholds">Soglie di variazione della visualizzazione del sole</string>
+    <string name="sun_display_thresholds">Soglie di variazione della visualizzazione del sole</string>
     <string name="tap_the_icon_for_further_detail">Tocca l\'icona per ulteriori dettagli</string>
     <string name="kilowatts">Kilowatt</string>
     <string name="watts">Watt</string>
@@ -207,7 +207,7 @@
     <string name="grid_import_description">Spesa approssimativa evitata generando la tua energia solare.</string>
     <string name="grid_import_formula">(SolarGeneration kWh - Feed-In kWh) * ImportUnitPrice</string>
     <string name="total_formula_description">Beneficio totale approssimativo di avere la tua installazione solare/batteria.</string>
-    <string name="feed_in_unit_price">Prezzo unitario di immissione in rete</string>
+    <string name="unit_price">Prezzo unitario</string>
     <string name="grid_import_unit_price">Prezzo unitario dell\'importazione dalla rete</string>
     <string name="energy_stats_earnings_calculation_description">Mostra stime finanziarie solo per oggi sulla pagina di flusso e per il periodo di tempo selezionato sulla pagina delle statistiche.</string>
     <string name="foxess_earnings_calculation_description">Questo prezzo unitario è gestito sulla FoxESS Cloud.</string>
@@ -350,8 +350,6 @@
     <string name="edit_phase">Modifica fase</string>
     <string name="settings_data">Dati</string>
     <string name="choose_group_to_edit">Scegli il gruppo da modificare</string>
-    <string name="slow_performance">Prestazioni lente</string>
-    <string name="slow_performance_message">Probabilmente hai visto il caricamento più frequentemente. Energy Stats utilizza server pubblici (OpenAPI) forniti da FoxESS che stanno funzionando male. FoxESS è stata informata all\'inizio di maggio e si è impegnata a risolvere il problema, ma non è stato fornito alcun tempo di risoluzione. Questi server sono diversi da quelli utilizzati dalle app FoxCloud, motivo per cui le app FoxCloud si caricano spesso.\n\nVedi il grafico sotto che mostra i tempi di risposta su un periodo di 48 ore.</string>
     <string name="always_loading_tap_for_details">Sempre in caricamento? Tocca per i dettagli</string>
     <string name="workmode_self_use_description">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carico della casa\n2. Carica della batteria\n3. Esportazione</string>
     <string name="workmode_feed_in_first_description">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la casa\n2. Exportar\n3. Carga de batería</string>
@@ -359,4 +357,14 @@
     <string name="workmode_force_charge_description">Carica la batteria dalla rete</string>
     <string name="workmode_force_discharge_description">Scarica la batteria nella rete</string>
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">Questa fase del programma contiene fasi non valide. Correggi e riprova.</string>
+    <string name="battery_soc">SOC de la batería</string>
+    <string name="battery_charge_schedule">Programma di ricarica della batteria</string>
+    <string name="earnings_generated_description">Inserisci il prezzo unitario che ti viene pagato per kWh per generare elettricità</string>
+    <string name="earnings_exported_description">Inserisci il prezzo unitario che ti viene pagato per kWh per esportare elettricità</string>
+    <string name="earnings_imported_description">Inserisci il prezzo che paghi per kWh per importare elettricità</string>
+    <string name="i_am_paid_for">Sono pagato per</string>
+    <string name="exporting">esportazione</string>
+    <string name="generating">generando</string>
+    <string name="custom_range">Intervallo personalizzato</string>
+    <string name="show_self_sufficiency_percentage_on_stats_graph">Mostra la percentuale di autosufficienza sul grafico delle statistiche</string>
 </resources>

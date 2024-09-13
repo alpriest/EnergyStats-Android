@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +37,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
+import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -58,20 +59,21 @@ class SolcastSettingsView(
                 configManager = configManager,
                 solarForecastingProvider = solarForecastingProvider
             )
-        )
+        ),
+        modifier: Modifier
     ) {
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val sites = viewModel.sitesStream.collectAsState().value
 
         MonitorAlertDialog(viewModel, userManager)
 
-        ContentWithBottomButtonPair(navController, onSave = { viewModel.save() }, content = { modifier ->
-            SettingsPage(modifier) {
+        ContentWithBottomButtonPair(navController, onSave = { viewModel.save() }, content = { innerModifier ->
+            SettingsPage(innerModifier) {
                 SettingsColumn(padding = SettingsPaddingValues.withVertical()) {
                     ClickableUrlText(
                         text = stringResource(R.string.solcast_how_to_find_keys),
                         modifier = Modifier.padding(bottom = 8.dp),
-                        textStyle = TextStyle(colors.onSecondary),
+                        textStyle = TextStyle(colorScheme.onSecondary),
                         themeStream = configManager.themeStream
                     )
 
@@ -82,7 +84,7 @@ class SolcastSettingsView(
                         label = { Text(stringResource(R.string.api_key)) },
                         visualTransformation = PasswordVisualTransformation(),
                         singleLine = true,
-                        textStyle = TextStyle(colors.onSecondary),
+                        textStyle = TextStyle(colorScheme.onSecondary),
                     )
                 }
 
@@ -92,15 +94,17 @@ class SolcastSettingsView(
 
                 Button(
                     onClick = { viewModel.removeKey() },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = colors.primary)
+                    colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary)
                 ) {
                     Text(
                         stringResource(R.string.remove_key),
-                        color = colors.onPrimary,
+                        color = colorScheme.onPrimary,
                     )
                 }
+
+                SettingsBottomSpace()
             }
-        })
+        }, modifier)
     }
 }
 
@@ -112,7 +116,7 @@ fun SolcastSiteView(site: SolcastSite) {
     ) {
         Text(
             site.name,
-            style = TextStyle.Default.copy(fontWeight = FontWeight.Bold, color = colors.onSecondary),
+            style = TextStyle.Default.copy(fontWeight = FontWeight.Bold, color = colorScheme.onSecondary),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -177,12 +181,12 @@ private fun Row(title: String, value: String) {
             title,
             modifier = Modifier.weight(1.0f),
             style = MaterialTheme.typography.bodySmall,
-            color = colors.onSecondary
+            color = colorScheme.onSecondary
         )
         Text(
             value,
             style = MaterialTheme.typography.bodySmall,
-            color = colors.onSecondary
+            color = colorScheme.onSecondary
         )
     }
 }
@@ -196,6 +200,6 @@ fun SolcastSettingsViewPreview() {
             FakeConfigManager(),
             FakeUserManager(),
             { DemoSolarForecasting() }
-        ).Content()
+        ).Content(modifier = Modifier)
     }
 }

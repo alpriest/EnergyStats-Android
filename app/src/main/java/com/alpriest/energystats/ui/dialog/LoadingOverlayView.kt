@@ -2,9 +2,9 @@ package com.alpriest.energystats.ui.dialog
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +24,7 @@ fun LoadingOverlayView() {
     ) {
         Text(
             stringResource(R.string.loading),
-            color = colors.onSecondary,
+            color = colorScheme.onSecondary,
             modifier = Modifier.padding(8.dp)
         )
     }

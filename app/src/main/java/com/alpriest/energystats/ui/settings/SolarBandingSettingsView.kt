@@ -3,11 +3,11 @@ package com.alpriest.energystats.ui.settings
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -51,11 +51,11 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
                 modifier = Modifier.weight(1.0f),
                 steps = 48,
                 colors = SliderDefaults.colors(
-                    activeTickColor = colors.primary,
-                    inactiveTickColor = colors.background,
-                    activeTrackColor = colors.primary,
-                    inactiveTrackColor = colors.background,
-                    thumbColor = colors.primary
+                    activeTickColor = colorScheme.primary,
+                    inactiveTickColor = colorScheme.background,
+                    activeTrackColor = colorScheme.primary,
+                    inactiveTrackColor = colorScheme.background,
+                    thumbColor = colorScheme.primary
                 )
             )
 
@@ -63,19 +63,19 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
                 value.toDouble().kWh(3),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(0.2f),
-                color = colors.onSecondary
+                color = colorScheme.onSecondary
             )
         }
 
         Text(
             description,
-            color = colors.onSecondary
+            color = colorScheme.onSecondary
         )
     }
 }
 
 @Composable
-fun SolarBandingSettingsView(navController: NavHostController, configManager: ConfigManaging) {
+fun SolarBandingSettingsView(navController: NavHostController, configManager: ConfigManaging, modifier: Modifier) {
     val amount = remember { mutableFloatStateOf(2.0f) }
     val threshold1 = remember { mutableFloatStateOf(configManager.themeStream.value.solarRangeDefinitions.threshold1.toFloat()) }
     val threshold2 = remember { mutableFloatStateOf(configManager.themeStream.value.solarRangeDefinitions.threshold2.toFloat()) }
@@ -118,8 +118,8 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             threshold3 = threshold3.floatValue.toDouble()
         )
         Toast.makeText(context, context.getString(R.string.thresholds_were_saved), Toast.LENGTH_LONG).show()
-    }, { modifier ->
-        SettingsPage(modifier) {
+    }, { innerModifier ->
+        SettingsPage(innerModifier) {
             ThresholdView(
                 mutableStateValue = threshold1,
                 title = stringResource(R.string.low_threshold),
@@ -142,7 +142,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     SolarPowerFlow(
-                        amount = amount.value.toDouble(),
+                        amount = amount.floatValue.toDouble(),
                         modifier = Modifier
                             .width(100.dp)
                             .height(100.dp),
@@ -151,38 +151,37 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                     )
 
                     Slider(
-                        value = amount.value,
-                        onValueChange = { amount.value = it },
-                        valueRange = 0.0f..threshold3.value + 0.5f,
+                        value = amount.floatValue,
+                        onValueChange = { amount.floatValue = it },
+                        valueRange = 0.0f..threshold3.floatValue + 0.5f,
                         colors = SliderDefaults.colors(
-                            activeTickColor = colors.primary,
-                            inactiveTickColor = colors.background,
-                            activeTrackColor = colors.primary,
-                            inactiveTrackColor = colors.background,
-                            thumbColor = colors.primary
+                            activeTickColor = colorScheme.primary,
+                            inactiveTickColor = colorScheme.background,
+                            activeTrackColor = colorScheme.primary,
+                            inactiveTrackColor = colorScheme.background,
+                            thumbColor = colorScheme.primary
                         )
                     )
                 }
 
                 Text(
                     stringResource(R.string.drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power),
-                    color = colors.onSecondary,
+                    color = colorScheme.onSecondary,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
 
-            SettingsNavButton(
-                stringResource(R.string.restore_defaults),
-                disclosureIcon = null
-            ) {
-                threshold1.value = 1.0f
-                threshold2.value = 2.0f
-                threshold3.value = 3.0f
+            Button({
+                threshold1.floatValue = 1.0f
+                threshold2.floatValue = 2.0f
+                threshold3.floatValue = 3.0f
+            }) {
+                Text(stringResource(R.string.restore_defaults))
             }
 
-            Spacer(modifier = Modifier.height(60.dp))
+            SettingsBottomSpace()
         }
-    }, Modifier)
+    }, modifier)
 }
 
 fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTheme {
@@ -197,13 +196,14 @@ fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTh
         )
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 400)
+@Preview(showBackground = true, widthDp = 400, heightDp = 1000)
 @Composable
 fun SolarBandingSettingsPreview() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SolarBandingSettingsView(
             NavHostController(LocalContext.current),
-            configManager = FakeConfigManager()
+            configManager = FakeConfigManager(),
+ Modifier
         )
     }
 }

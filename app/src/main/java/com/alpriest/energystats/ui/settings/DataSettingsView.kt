@@ -1,9 +1,10 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
@@ -17,13 +18,13 @@ import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun DataSettingsView(config: ConfigManaging) {
+fun DataSettingsView(config: ConfigManaging, modifier: Modifier) {
     val displayUnitState = rememberSaveable { mutableStateOf(config.displayUnit) }
     val dataCeilingState = rememberSaveable { mutableStateOf(config.dataCeiling) }
     val useTraditionalLoadFormulaState = rememberSaveable { mutableStateOf(config.useTraditionalLoadFormula) }
     val context = LocalContext.current
 
-    SettingsPage {
+    SettingsPage(modifier) {
         SettingsColumn {
             SettingsSegmentedControl(
                 title = stringResource(R.string.units),
@@ -36,7 +37,7 @@ fun DataSettingsView(config: ConfigManaging) {
                     SegmentedControl(
                         items = items.map { it.title(context) },
                         defaultSelectedItemIndex = items.indexOf(displayUnitState.value),
-                        color = MaterialTheme.colors.primary
+                        color = colorScheme.primary
                     ) {
                         displayUnitState.value = items[it]
                         config.displayUnit = items[it]
@@ -67,7 +68,7 @@ fun DataSettingsView(config: ConfigManaging) {
                     SegmentedControl(
                         items = items.map { it.title(context) },
                         defaultSelectedItemIndex = items.indexOf(dataCeilingState.value),
-                        color = MaterialTheme.colors.primary
+                        color = colorScheme.primary
                     ) {
                         dataCeilingState.value = items[it]
                         config.dataCeiling = items[it]
@@ -102,9 +103,10 @@ fun DataSettingsView(config: ConfigManaging) {
 @Composable
 fun DataSettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        SettingsPage {
+        SettingsPage(Modifier) {
             DataSettingsView(
-                config = FakeConfigManager()
+                config = FakeConfigManager(),
+                Modifier
             )
         }
     }

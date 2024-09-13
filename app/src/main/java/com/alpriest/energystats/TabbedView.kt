@@ -8,22 +8,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Insights
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +62,6 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -87,7 +88,7 @@ fun TabbedView(
     credentialStore: CredentialStore,
     solarForecastingProvider: () -> SolarForecasting
 ) {
-    val state = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
     val titles = listOf(
@@ -99,12 +100,13 @@ fun TabbedView(
     )
 
     Scaffold(
-        scaffoldState = state,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         content = { padding ->
             HorizontalPager(
-                modifier = Modifier.padding(bottom = 54.dp),
+                modifier = Modifier.padding(padding),
                 count = titles.size,
-                state = pagerState
+                state = pagerState,
+                userScrollEnabled = false
             ) { page ->
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
@@ -129,13 +131,7 @@ fun TabbedView(
             Column(modifier = Modifier.fillMaxWidth()) {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    backgroundColor = darkenColor(colors.background, 0.02f),
-                    indicator = { tabPositions ->
-                        TabRowDefaults.Indicator(
-                            Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                            color = colors.primary,
-                        )
-                    }
+                    containerColor = darkenColor(colorScheme.background, 0.04f)
                 ) {
                     titles.forEachIndexed { index, item ->
                         Tab(
@@ -162,7 +158,7 @@ fun TabbedView(
 
                                     if (configManager.isDemoUser && item.isSettings) {
                                         Card(
-                                            backgroundColor = Color.Red,
+                                            colors = CardDefaults.cardColors(containerColor = Color.Red),
                                             shape = RoundedCornerShape(6.dp),
                                             modifier = Modifier
                                                 .padding(2.dp)
@@ -181,7 +177,7 @@ fun TabbedView(
                                     }
                                 }
                             },
-                            selectedContentColor = colors.primary,
+                            selectedContentColor = colorScheme.primary,
                             unselectedContentColor = DimmedTextColor,
                         )
                     }

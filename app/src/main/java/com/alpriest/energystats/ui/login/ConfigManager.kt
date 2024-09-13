@@ -12,6 +12,7 @@ import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -448,6 +449,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.truncatedYAxisOnParameterGraphs = value
             themeStream.value = themeStream.value.copy(truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs)
+        }
+
+    override var earningsModel: EarningsModel
+        get() = EarningsModel.fromInt(config.earningsModel)
+        set(value) {
+            config.earningsModel = value.value
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

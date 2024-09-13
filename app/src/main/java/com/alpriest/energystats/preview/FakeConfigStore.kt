@@ -7,6 +7,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -59,7 +60,8 @@ class FakeConfigStore(
     override var powerStationDetail: PowerStationDetail? = null,
     override var showBatteryTimeEstimateOnWidget: Boolean = true,
     override var showSelfSufficiencyStatsGraphOverlay: Boolean = true,
-    override var truncatedYAxisOnParameterGraphs: Boolean = false
+    override var truncatedYAxisOnParameterGraphs: Boolean = false,
+    override var earningsModel: Int = EarningsModel.Exported.value
 
     ) : ConfigInterface {
     override fun clearDisplaySettings() {}

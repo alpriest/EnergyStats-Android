@@ -2,14 +2,13 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
@@ -31,27 +30,26 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
 
     SettingsColumn(
         modifier = modifier.fillMaxWidth(),
-        padding = PaddingValues(10.dp)
+        padding = PaddingValues(10.dp),
+        footer = description
     ) {
         SettingsSegmentedControl(title = null, segmentedControl = {
             val items = listOf(SelfSufficiencyEstimateMode.Off, SelfSufficiencyEstimateMode.Net, SelfSufficiencyEstimateMode.Absolute)
             SegmentedControl(
                 items = items.map { it.title(context) },
                 defaultSelectedItemIndex = items.indexOf(selfSufficiencyEstimateModeState.value),
-                color = colors.primary
+                color = colorScheme.primary
             ) {
                 selfSufficiencyEstimateModeState.value = items[it]
                 config.selfSufficiencyEstimateMode = items[it]
             }
-        }, footer = buildAnnotatedString {
-            description?.let {
-                append(it)
-            }
         })
+    }
 
-        if (selfSufficiencyEstimateModeState.value != SelfSufficiencyEstimateMode.Off) {
+    if (selfSufficiencyEstimateModeState.value != SelfSufficiencyEstimateMode.Off) {
+        SettingsColumn {
             SettingsCheckbox(
-                title = "Show self sufficiency percentage on stats graph",
+                title = stringResource(R.string.show_self_sufficiency_percentage_on_stats_graph),
                 state = showSelfSufficiencyStatsGraphOverlayState,
                 onUpdate = {
                     config.showSelfSufficiencyStatsGraphOverlay = it

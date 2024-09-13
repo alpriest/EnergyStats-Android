@@ -3,17 +3,16 @@ package com.alpriest.energystats.ui.settings.dataloggers
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +36,7 @@ import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.SettingsRow
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -82,6 +82,7 @@ class DataLoggerViewModel(
                         status = it.status
                     )
                 }
+                activityStream.value = null
             } catch (ex: Exception) {
                 alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
             }
@@ -97,7 +98,7 @@ class DataLoggerViewContainer(
     private val navController: NavController
 ) {
     @Composable
-    fun Content(viewModel: DataLoggerViewModel = viewModel(factory = DataLoggerViewModelFactory(network, configManager, navController))) {
+    fun Content(viewModel: DataLoggerViewModel = viewModel(factory = DataLoggerViewModelFactory(network, configManager, navController)), modifier: Modifier) {
         val isActive = viewModel.activityStream.collectAsState().value
         val context = LocalContext.current
 
@@ -110,7 +111,7 @@ class DataLoggerViewContainer(
         isActive?.let {
             LoadingView(it)
         } ?: run {
-            Column(modifier = Modifier.padding(12.dp)) {
+            SettingsPage(modifier) {
                 items.value.map {
                     DataLoggerView(it)
                 }
@@ -142,7 +143,7 @@ fun SignalStrengthView(amount: Int) {
     ) {
         listOf(5, 10, 15, 20).forEachIndexed { index, height ->
             Rectangle(
-                color = if (index < amount) colors.onSurface else colors.primaryVariant,
+                color = if (index < amount) colorScheme.onSurface else colorScheme.surfaceVariant,
                 modifier = Modifier
                     .width(4.dp)
                     .height(height.dp)

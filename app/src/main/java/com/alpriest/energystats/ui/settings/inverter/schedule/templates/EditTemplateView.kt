@@ -5,14 +5,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -42,6 +43,8 @@ import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.LoadedScaffold
+import com.alpriest.energystats.ui.settings.SettingsBottomSpace
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
@@ -58,10 +61,9 @@ class EditTemplateView(
     private val templateStore: TemplateStoring
 ) {
     @Composable
-    fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController, templateStore))) {
+    fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController, templateStore)), modifier: Modifier) {
         val template = viewModel.templateStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
-        val context = LocalContext.current
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -72,16 +74,16 @@ class EditTemplateView(
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
-            is LoadState.Inactive -> template?.let {
-                LoadedScaffold(stringResource(R.string.edit_template), navController) {
-                    Loaded(it, viewModel)
+            is LoadState.Inactive -> template?.let { it ->
+                LoadedScaffold(stringResource(R.string.edit_template), navController) {modifier ->
+                    Loaded(it, viewModel, modifier)
                 }
             }
         }
     }
 
     @Composable
-    fun Loaded(template: ScheduleTemplate, viewModel: EditTemplateViewModel) {
+    fun Loaded(template: ScheduleTemplate, viewModel: EditTemplateViewModel, modifier: Modifier) {
         val context = LocalContext.current
         val presentDuplicateAlert = remember { mutableStateOf(false) }
         val presentRenameAlert = remember { mutableStateOf(false) }
@@ -89,11 +91,11 @@ class EditTemplateView(
         ContentWithBottomButtonPair(
             navController = navController,
             onSave = { viewModel.saveTemplate(context) },
-            { modifier ->
-                SettingsPage {
-                    ScheduleDetailView("", viewModel.navController, template.asSchedule())
+            { innerModifier ->
+                SettingsPage(innerModifier) {
+                    ScheduleDetailView(viewModel.navController, template.asSchedule())
 
-                    Column(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = SettingsPadding.PANEL_OUTER_HORIZONTAL)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -152,7 +154,7 @@ class EditTemplateView(
                             Button(
                                 onClick = { viewModel.delete(context) },
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = PowerFlowNegative,
+                                    containerColor = PowerFlowNegative,
                                     contentColor = PaleWhite
                                 ),
                                 modifier = Modifier.weight(1f)
@@ -165,6 +167,8 @@ class EditTemplateView(
                             }
                         }
                     }
+
+                    SettingsBottomSpace()
                 }
 
                 if (presentDuplicateAlert.value) {
@@ -185,7 +189,8 @@ class EditTemplateView(
                     }
                 }
             },
-            labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save))
+            labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save)),
+            modifier = modifier
         )
     }
 }
@@ -203,7 +208,7 @@ fun EditTemplateViewPreview() {
         ).Loaded(
             template = ScheduleTemplate(
                 id = "123",
-                name = "foo",
+                name = "Winter routine",
                 phases = listOf()
             ),
             viewModel = EditTemplateViewModel(
@@ -211,7 +216,8 @@ fun EditTemplateViewPreview() {
                 DemoNetworking(),
                 NavHostController(LocalContext.current),
                 PreviewTemplateStore()
-            )
+            ),
+            Modifier
         )
     }
 }

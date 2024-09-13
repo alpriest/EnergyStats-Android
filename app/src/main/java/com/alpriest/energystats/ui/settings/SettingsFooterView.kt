@@ -5,15 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,8 +36,8 @@ fun SettingsFooterRowView(imageContent: @Composable () -> Unit, text: String, on
         Button(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(
-                contentColor = colors.primary,
-                backgroundColor = Color.Transparent
+                contentColor = colorScheme.primary,
+                containerColor = Color.Transparent
             ),
             elevation = null
         ) {
@@ -73,22 +73,12 @@ fun SettingsFooterView(
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SettingsColumnWithChild(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                SettingsNavButton(
-                    title = stringResource(R.string.logout),
-                    disclosureIcon = null,
-                    onClick = onLogout,
-                )
-            }
-        }
+        SettingsNavButton(
+            title = stringResource(R.string.logout),
+            disclosureIcon = null,
+            onClick = onLogout,
+            modifier = Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)
+        )
 
         SettingsFooterRowView(Icons.Default.Email, "Get in touch", stringResource(R.string.get_in_touch)) {
             uriHandler.openUri("mailto:energystatsapp@gmail.com?subject=Android%20App%20${config.appVersion}")

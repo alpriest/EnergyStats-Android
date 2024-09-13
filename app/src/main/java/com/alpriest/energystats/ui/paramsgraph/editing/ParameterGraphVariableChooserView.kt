@@ -11,17 +11,17 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material3.Divider
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -76,9 +76,9 @@ class ParameterGraphVariableChooserView(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
+                    .verticalScroll(scrollState)
                     .padding(horizontal = 12.dp)
-                    .padding(bottom = 24.dp)
-                    .verticalScroll(scrollState),
+                    .padding(bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 Box {
@@ -86,14 +86,14 @@ class ParameterGraphVariableChooserView(
                         modifier = Modifier.padding(top = 16.dp),
                         header = "Groups"
                     ) {
-                        listRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
-                        Divider()
-                        listRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
-                        Divider()
+                        ListRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
+                        HorizontalDivider()
+                        ListRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
+                        HorizontalDivider()
 
                         groups.forEachIndexed { index, item ->
                             Row {
-                                listRow(
+                                ListRow(
                                     onClick = { viewModel.select(item.parameterNames) },
                                     item.id == selectedGroupId
                                 ) {
@@ -105,7 +105,7 @@ class ParameterGraphVariableChooserView(
                             }
 
                             if (index < groups.lastIndex) {
-                                Divider()
+                                HorizontalDivider()
                             }
                         }
                     }
@@ -116,7 +116,7 @@ class ParameterGraphVariableChooserView(
                             Icon(
                                 imageVector = Icons.Filled.Edit,
                                 contentDescription = null,
-                                tint = colors.onSecondary,
+                                tint = colorScheme.onSecondary,
                             )
                         }
                     }
@@ -137,7 +137,8 @@ class ParameterGraphVariableChooserView(
                             uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Fox-ESS-Cloud#search-parameters")
                         },
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = colors.primary, backgroundColor = Color.Transparent
+                            contentColor = colorScheme.primary,
+                            containerColor = Color.Transparent
                         ),
                         elevation = null,
                     ) {
@@ -156,7 +157,7 @@ class ParameterGraphVariableChooserView(
 }
 
 @Composable
-fun listRow(onClick: () -> Unit, isSelected: Boolean, content: @Composable (Modifier) -> Unit) {
+private fun ListRow(onClick: () -> Unit, isSelected: Boolean, content: @Composable (Modifier) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

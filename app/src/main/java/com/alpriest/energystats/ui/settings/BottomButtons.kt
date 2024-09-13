@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -51,16 +51,16 @@ fun ContentWithBottomButtons(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(colorScheme.background)
     ) {
-        content(Modifier.padding(bottom = 90.dp))
+        content(Modifier.padding(bottom = 86.dp))
 
         Box(
             contentAlignment = Alignment.BottomCenter,
             modifier = Modifier.fillMaxSize()
         ) {
             Column {
-                Divider(
+                HorizontalDivider(
                     color = Color.LightGray,
                     modifier = modifier
                         .fillMaxWidth()
@@ -68,9 +68,9 @@ fun ContentWithBottomButtons(
                 )
 
                 BottomButtonsView(
-                    modifier = modifier
-                        .background(MaterialTheme.colors.surface)
-                        .padding(12.dp),
+                    modifier = Modifier
+                            .background(colorScheme.surface)
+                            .padding(12.dp),
                     footer = footer,
                     buttons = buttons
                 )

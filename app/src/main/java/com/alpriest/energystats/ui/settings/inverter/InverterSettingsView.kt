@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +24,7 @@ import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController, network: Networking) {
+fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController, network: Networking, modifier: Modifier) {
     val currentDevice = configManager.currentDevice.collectAsState()
     val showInverterTemperaturesState = rememberSaveable { mutableStateOf(configManager.showInverterTemperatures) }
     val showInverterIconState = rememberSaveable { mutableStateOf(configManager.showInverterIcon) }
@@ -33,7 +34,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val shouldCombineCT2WithPVPowerState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithPVPower) }
     val shouldCombineCT2WithPVLoadsState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithLoadsPower) }
 
-    SettingsPage {
+    SettingsPage(modifier) {
         InverterChoiceView(configManager)
 
         currentDevice.value?.let {
@@ -114,7 +115,8 @@ fun InverterSettingsViewPreview() {
         InverterSettingsView(
             FakeConfigManager(),
             NavHostController(LocalContext.current),
-            DemoNetworking()
+            DemoNetworking(),
+            Modifier
         )
     }
 }

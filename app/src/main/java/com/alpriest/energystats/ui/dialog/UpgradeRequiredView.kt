@@ -2,11 +2,8 @@ package com.alpriest.energystats.ui.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +16,7 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.BottomButtonConfiguration
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
@@ -47,7 +45,7 @@ fun UpgradeRequiredView(userManager: UserManaging) {
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)
                 ) {
                     Text("What's changed?", fontSize = 20.sp)
 

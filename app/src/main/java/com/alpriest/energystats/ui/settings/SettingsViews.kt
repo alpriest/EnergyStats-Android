@@ -10,23 +10,25 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -41,16 +43,25 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.dialog.AlertDialog
+
+object SettingsPadding {
+    val COLUMN_BOTTOM: Dp = 12.dp
+    val PANEL_OUTER_HORIZONTAL = 12.dp
+    val PANEL_INNER_HORIZONTAL = 12.dp
+    val CONTENT_BOTTOM = 24.dp
+}
 
 class SettingsPaddingValues {
     companion object {
         fun default(): PaddingValues {
             return PaddingValues(
-                start = 10.dp,
-                end = 10.dp,
+                start = 0.dp,
+                end = 0.dp,
                 top = 0.dp,
                 bottom = 0.dp
             )
@@ -58,8 +69,8 @@ class SettingsPaddingValues {
 
         fun withVertical(): PaddingValues {
             return PaddingValues(
-                start = 10.dp,
-                end = 10.dp,
+                start = 0.dp,
+                end = 0.dp,
                 top = 10.dp,
                 bottom = 10.dp
             )
@@ -84,7 +95,14 @@ fun SettingsColumn(
                 SettingsTitleView(
                     it,
                     modifier = Modifier
-                        .padding(PaddingValues(top = 10.dp, start = 22.dp, end = 10.dp, bottom = 8.dp))
+                        .padding(
+                            PaddingValues(
+                                top = 10.dp,
+                                start = padding.calculateLeftPadding(LayoutDirection.Ltr) + SettingsPadding.PANEL_OUTER_HORIZONTAL,
+                                end = padding.calculateRightPadding(LayoutDirection.Ltr) + SettingsPadding.PANEL_OUTER_HORIZONTAL,
+                                bottom = 8.dp
+                            )
+                        )
                         .fillMaxWidth()
                 )
             }
@@ -114,10 +132,10 @@ fun SettingsColumnWithChild(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(colors.surface)
+                .background(colorScheme.surface)
                 .padding(padding)
         ) {
-            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+            Column(Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)) {
                 content()
 
                 ErrorTextView(error)
@@ -133,8 +151,8 @@ fun SettingsColumnWithChild(
                 Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
                     Text(
                         it,
-                        style = MaterialTheme.typography.caption,
-                        color = colors.onSecondary.copy(alpha = 0.7f),
+                        style = typography.bodySmall,
+                        color = colorScheme.onSecondary.copy(alpha = 0.7f),
                         modifier = footerModifier.padding(bottom = 8.dp)
                     )
                 }
@@ -150,8 +168,8 @@ fun SettingsColumnWithChild(
                 Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
                     Text(
                         it,
-                        style = MaterialTheme.typography.caption,
-                        color = colors.onSecondary.copy(alpha = 0.7f),
+                        style = typography.bodySmall,
+                        color = colorScheme.onSecondary.copy(alpha = 0.7f),
                         modifier = footerModifier.padding(bottom = 8.dp)
                     )
                 }
@@ -165,8 +183,8 @@ fun ErrorTextView(text: String?) {
     text?.let {
         Text(
             it,
-            style = MaterialTheme.typography.caption,
-            color = colors.error,
+            style = typography.bodySmall,
+            color = colorScheme.error,
             modifier = Modifier.padding(bottom = 8.dp)
         )
     }
@@ -188,7 +206,7 @@ fun SettingsTitleView(title: String, modifier: Modifier = Modifier, extra: @Comp
     Row(modifier = modifier.fillMaxWidth()) {
         Text(
             text = title.uppercase(),
-            style = TextStyle.Default.copy(color = colors.onSecondary)
+            style = TextStyle.Default.copy(color = colorScheme.onSecondary)
         )
 
         extra()
@@ -196,14 +214,13 @@ fun SettingsTitleView(title: String, modifier: Modifier = Modifier, extra: @Comp
 }
 
 @Composable
-fun SettingsPage(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun SettingsPage(modifier: Modifier, content: @Composable () -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(colors.background)
-            .padding(12.dp)
+            .background(colorScheme.background)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -219,7 +236,7 @@ fun InfoButton(text: String) {
     Image(
         imageVector = Icons.Default.Info,
         contentDescription = "Click for info",
-        colorFilter = ColorFilter.tint(colors.primary),
+        colorFilter = ColorFilter.tint(colorScheme.primary),
         modifier = Modifier
             .padding(start = 4.dp)
             .clickable {
@@ -252,7 +269,7 @@ fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableStat
             ) {
                 Text(
                     title,
-                    color = colors.onSecondary
+                    color = colorScheme.onSecondary
                 )
 
                 infoText?.let {
@@ -266,15 +283,15 @@ fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableStat
                     state.value = it
                     onUpdate(it)
                 },
-                colors = CheckboxDefaults.colors(checkedColor = colors.primary)
+                colors = CheckboxDefaults.colors(checkedColor = colorScheme.primary)
             )
         }
 
         footer?.let {
             Text(
                 it,
-                style = MaterialTheme.typography.caption,
-                color = colors.onSecondary,
+                style = typography.bodySmall,
+                color = colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -290,7 +307,7 @@ fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composabl
             title?.let {
                 Text(
                     it,
-                    color = colors.onSecondary,
+                    color = colorScheme.onSecondary,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -301,8 +318,8 @@ fun SettingsSegmentedControl(title: String? = null, segmentedControl: @Composabl
         footer?.let {
             Text(
                 it,
-                style = MaterialTheme.typography.caption,
-                color = colors.onSecondary,
+                style = typography.bodySmall,
+                color = colorScheme.onSecondary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -325,7 +342,7 @@ fun InlineSettingsNavButton(
         modifier = modifier
             .fillMaxWidth()
             .indication(interactionSource, rememberRipple()),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         contentPadding = PaddingValues(all = 0.dp),
         border = null
     ) {
@@ -336,7 +353,7 @@ fun InlineSettingsNavButton(
         ) {
             Text(
                 title,
-                color = colors.onSecondary,
+                color = colorScheme.onSecondary,
                 style = TextStyle.Default
             )
 
@@ -345,7 +362,7 @@ fun InlineSettingsNavButton(
                     imageVector = it(),
                     contentDescription = "Tap for more",
                     modifier = Modifier.padding(end = 12.dp),
-                    tint = colors.onSecondary
+                    tint = colorScheme.onSecondary
                 )
             }
 
@@ -362,7 +379,8 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .indication(interactionSource, rememberRipple())
+            .indication(interactionSource, rememberRipple()),
+        colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary)
     ) {
         Row(
             modifier = if (disclosureIcon == null) Modifier else Modifier.fillMaxWidth(),
@@ -371,7 +389,7 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
         ) {
             Text(
                 title,
-                color = colors.onPrimary
+                color = colorScheme.onPrimary
             )
 
             disclosureIcon?.let {
@@ -382,5 +400,20 @@ fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIc
                 )
             }
         }
+    }
+}
+
+@Composable
+fun SettingsBottomSpace() {
+    Spacer(Modifier.height(SettingsPadding.CONTENT_BOTTOM))
+}
+
+@Composable
+fun SlimButton(onClick: () -> Unit, content: @Composable () -> Unit) {
+    Button(
+        onClick = onClick,
+        contentPadding = PaddingValues(horizontal = 12.dp)
+    ) {
+        content()
     }
 }

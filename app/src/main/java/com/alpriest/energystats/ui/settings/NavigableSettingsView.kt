@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,7 +39,6 @@ fun NavigableSettingsView(
     solarForecastingProvider: () -> SolarForecasting
 ) {
     val navController = rememberNavController()
-    val context = LocalContext.current
     val templateStore = TemplateStore(config) // TODO inject this
 
     NavHost(
@@ -48,122 +46,126 @@ fun NavigableSettingsView(
         startDestination = SettingsScreen.Settings.name
     ) {
         composable(SettingsScreen.Settings.name) {
-            LoadedScaffold(title = "Settings") {
+            LoadedScaffold(title = stringResource(R.string.settings_tab)) {
                 SettingsTabView(
                     navController,
                     config = config,
                     onLogout = onLogout,
                     onRateApp = onRateApp,
-                    onBuyMeCoffee = onBuyMeCoffee
+                    onBuyMeCoffee = onBuyMeCoffee,
+                    modifier = it
                 )
             }
         }
         composable(SettingsScreen.Battery.name) {
-            LoadedScaffold(title = "Battery", navController = navController) {
+            LoadedScaffold(title = stringResource(R.string.battery), navController = navController) {
                 BatterySettingsView(
                     navController = navController,
-                    config = config
+                    config = config,
+                    modifier = it
                 )
             }
         }
         composable(SettingsScreen.BatterySOC.name) {
-            LoadedScaffold(title = "Battery SOC", navController = navController) {
-                BatterySOCSettings(configManager = config, network = network, navController = navController, userManager = userManager).Content()
+            LoadedScaffold(title = stringResource(R.string.battery_soc), navController = navController) {
+                BatterySOCSettings(configManager = config, network = network, navController = navController, userManager = userManager).Content(modifier = it)
             }
         }
         composable(SettingsScreen.BatteryChargeTimes.name) {
-            LoadedScaffold(title = "Battery Charge Schedule", navController = navController) {
-                BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, userManager = userManager).Content()
+            LoadedScaffold(title = stringResource(R.string.battery_charge_schedule), navController = navController) {
+                BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, userManager = userManager).Content(modifier = it)
             }
         }
         composable(SettingsScreen.Inverter.name) {
-            LoadedScaffold(title = "Inverter", navController = navController) {
-                InverterSettingsView(configManager = config, network = network, navController = navController)
+            LoadedScaffold(title = stringResource(id = R.string.inverter), navController = navController) {
+                InverterSettingsView(configManager = config, network = network, navController = navController, modifier = it)
             }
         }
         composable(SettingsScreen.InverterSchedule.name) {
-            LoadedScaffold(title = "Schedules", navController = navController) {
-                ScheduleSummaryView(config, network, navController, userManager, templateStore).Content()
+            LoadedScaffold(title = stringResource(id = R.string.manage_schedules), navController = navController) {
+                ScheduleSummaryView(config, network, navController, userManager, templateStore).Content(modifier = it)
             }
         }
         composable(SettingsScreen.Dataloggers.name) {
             LoadedScaffold(title = stringResource(R.string.dataloggers), navController = navController) {
-                DataLoggerViewContainer(network = network, configManager = config, navController = navController).Content()
+                DataLoggerViewContainer(network = network, configManager = config, navController = navController).Content(modifier = it)
             }
         }
         composable(SettingsScreen.FinancialModel.name) {
             LoadedScaffold(title = stringResource(R.string.financial_model), navController = navController) {
-                SettingsPage {
+                SettingsPage(it) {
                     FinancialsSettingsView(config)
                 }
             }
         }
         composable(SettingsScreen.SelfSufficiencyEstimates.name) {
             LoadedScaffold(title = stringResource(R.string.self_sufficiency_estimates), navController = navController) {
-                SettingsPage {
+                SettingsPage(it) {
                     SelfSufficiencySettingsView(config)
                 }
             }
         }
         composable(SettingsScreen.SolarBandings.name) {
-            LoadedScaffold(title = stringResource(R.string.sun_display_variation_thresholds), navController = navController) {
-                SolarBandingSettingsView(navController, config)
+            LoadedScaffold(title = stringResource(R.string.sun_display_thresholds), navController = navController) {
+                SolarBandingSettingsView(navController, config, it)
             }
         }
         composable(SettingsScreen.FAQ.name) {
-            FAQView()
+            LoadedScaffold(title = stringResource(R.string.frequently_asked_questions), navController = navController) {
+                FAQView()
+            }
         }
         composable(SettingsScreen.SolcastSolarPrediction.name) {
             LoadedScaffold(title = stringResource(R.string.solcast_solar_prediction), navController = navController) {
-                SolcastSettingsView(navController, config, userManager, solarForecastingProvider).Content()
+                SolcastSettingsView(navController, config, userManager, solarForecastingProvider).Content(modifier = it)
             }
         }
-        composable(SettingsScreen.ScheduleSummary.name) {
-            ScheduleSummaryView(config, network, navController, userManager, templateStore).Content()
-        }
-
         composable(SettingsScreen.EditSchedule.name) {
-            EditScheduleView(
-                config,
-                network,
-                navController,
-                userManager
-            ).Content()
+            LoadedScaffold(title = stringResource(R.string.edit_schedule), navController = navController) {
+                EditScheduleView(
+                    config,
+                    network,
+                    navController,
+                    userManager
+                ).Content(modifier = it)
+            }
         }
 
         composable(SettingsScreen.EditPhase.name) {
             LoadedScaffold(title = stringResource(R.string.edit_phase), navController = navController) {
-                EditPhaseView(navController, userManager)
+                EditPhaseView(navController, userManager, modifier = it)
             }
         }
 
         composable(SettingsScreen.TemplateList.name) {
             LoadedScaffold(title = stringResource(R.string.templates), navController = navController) {
-                ScheduleTemplateListView(config, templateStore, navController, userManager).Content()
+                ScheduleTemplateListView(config, templateStore, navController, userManager).Content(modifier = it)
             }
         }
 
         composable(SettingsScreen.EditTemplate.name) {
-            EditTemplateView(config, network, navController, userManager, templateStore).Content()
+            LoadedScaffold(title = stringResource(R.string.edit_template), navController = navController) {
+                EditTemplateView(config, network, navController, userManager, templateStore).Content(modifier = it)
+            }
         }
 
         composable(SettingsScreen.APIKey.name) {
             LoadedScaffold(title = stringResource(R.string.edit_api_key), navController = navController) {
-                ConfigureAPIKeyView(userManager.store, navController, config.themeStream)
+                ConfigureAPIKeyView(userManager.store, navController, config.themeStream, it)
             }
         }
 
         composable(SettingsScreen.PowerStation.name) {
-            config.powerStationDetail?.let {
+            config.powerStationDetail?.let { powerStationDetail ->
                 LoadedScaffold(title = stringResource(R.string.settings_power_station), navController = navController) {
-                    PowerStationSettingsView(it)
+                    PowerStationSettingsView(powerStationDetail, it)
                 }
             }
         }
 
         composable(SettingsScreen.DataSettings.name) {
             LoadedScaffold(title = stringResource(R.string.settings_data), navController = navController) {
-                DataSettingsView(config)
+                DataSettingsView(config, it)
             }
         }
 

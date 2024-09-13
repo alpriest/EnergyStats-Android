@@ -1,5 +1,7 @@
 package com.alpriest.energystats.ui.summary
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,13 +69,12 @@ class SummaryView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp)
                 .verticalScroll(scrollState)
+                .padding(12.dp)
         ) {
             Text(
                 stringResource(R.string.lifetime_summary),
-                style = MaterialTheme.typography.h1,
-                fontWeight = FontWeight.Bold
+                style = typography.titleLarge
             )
 
             when (isLoading) {
@@ -101,28 +101,28 @@ class SummaryView(
 
     @Composable
     fun LoadedView(approximationsViewModel: ApproximationsViewModel, appTheme: AppTheme, oldestDataDate: String) {
-        energySummaryRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = MaterialTheme.typography.h2)
-        energySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = MaterialTheme.typography.h2)
+        EnergySummaryRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = typography.bodyMedium)
+        EnergySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = typography.bodyMedium)
 
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 
         approximationsViewModel.financialModel?.let { energyStatsModel ->
-            moneySummaryRow(
+            MoneySummaryRow(
                 title = stringResource(R.string.export_income),
                 amount = energyStatsModel.exportIncome,
-                textStyle = MaterialTheme.typography.h2,
+                textStyle = typography.bodyMedium,
                 currencySymbol = appTheme.currencySymbol
             )
-            moneySummaryRow(
+            MoneySummaryRow(
                 title = stringResource(R.string.grid_import_avoided),
                 amount = energyStatsModel.solarSaving,
-                textStyle = MaterialTheme.typography.h2,
+                textStyle = typography.bodyMedium,
                 currencySymbol = appTheme.currencySymbol
             )
-            moneySummaryRow(
+            MoneySummaryRow(
                 title = stringResource(R.string.total_benefit),
                 amount = energyStatsModel.total,
-                textStyle = MaterialTheme.typography.h2,
+                textStyle = typography.bodyMedium,
                 currencySymbol = appTheme.currencySymbol
             )
         }
@@ -139,7 +139,7 @@ class SummaryView(
     }
 
     @Composable
-    private fun energySummaryRow(title: String, amount: Double?, textStyle: TextStyle, modifier: Modifier = Modifier) {
+    private fun EnergySummaryRow(title: String, amount: Double?, textStyle: TextStyle, modifier: Modifier = Modifier) {
         amount?.let {
             Row {
                 Text(
@@ -157,7 +157,7 @@ class SummaryView(
     }
 
     @Composable
-    private fun moneySummaryRow(title: String, amount: FinanceAmount, textStyle: TextStyle, modifier: Modifier = Modifier, currencySymbol: String) {
+    private fun MoneySummaryRow(title: String, amount: FinanceAmount, textStyle: TextStyle, modifier: Modifier = Modifier, currencySymbol: String) {
         Row {
             Text(
                 title,
@@ -177,10 +177,16 @@ class SummaryView(
 @Composable
 fun SummaryViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+        PreviewContextHolder.context = LocalContext.current
         SummaryView(
             FakeConfigManager(),
             FakeUserManager(),
             DemoNetworking()
         ) { DemoSolarForecasting() }.Content(themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true)))
     }
+}
+
+@SuppressLint("StaticFieldLeak")
+object PreviewContextHolder {
+    var context: Context? = null
 }

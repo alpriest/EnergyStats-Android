@@ -187,7 +187,7 @@
     <string name="foxess_community">FoxESS Community</string>
     <string name="foxess_cloud_status">FoxESS Cloud Status</string>
     <string name="show_last_update_timestamp">Show timestamp of last update</string>
-    <string name="sun_display_variation_thresholds">Sun display variation thresholds</string>
+    <string name="sun_display_thresholds">Sun display thresholds</string>
     <string name="tap_the_icon_for_further_detail">Tap the icon for further detail</string>
     <string name="kilowatts">Kilowatts</string>
     <string name="watts">Watts</string>
@@ -208,7 +208,7 @@
     <string name="total_formula_description">Approximate total benefit of having your solar/battery installation.</string>
     <string name="energy_stats" translatable="false">Energy Stats</string>
     <string name="foxess" translatable="false">FoxESS</string>
-    <string name="feed_in_unit_price">Feed in Unit price</string>
+    <string name="unit_price">Unit price</string>
     <string name="grid_import_unit_price">Grid Import Unit price</string>
     <string name="energy_stats_earnings_calculation_description">Shows financial estimates for today only on the flow page, and for the selected time period on the stats page.</string>
     <string name="foxess_earnings_calculation_description">This unit price is managed on the FoxESS cloud.\n\nShows earnings today, this month, this year, and all -time based on a calculation of feed - in kWh * unit price.</string>
@@ -258,7 +258,7 @@
     <string name="manage_templates">Manage templates</string>
     <string name="activate">Activate</string>
     <string name="create_a_schedule">Create a schedule</string>
-    <string name="activating">Activating...</string>
+    <string name="activating">Activating…</string>
     <string name="no_schedule_time_periods">You have no time periods defined. Add a time period to define how you\'d like your inverter to behave during specific hours.</string>
     <string name="edit_template">Edit template</string>
     <string name="add_time_period">Add time period</string>
@@ -267,7 +267,7 @@
     <string name="activate_template">Activate template</string>
     <string name="delete_template">Delete template</string>
     <string name="your_template_was_deleted">Your template was deleted</string>
-    <string name="deleting">Deleting...</string>
+    <string name="deleting">Deleting…</string>
     <string name="your_template_was_saved">Your template was saved</string>
     <string name="your_template_was_activated">Your template was activated</string>
     <string name="new_template">New template</string>
@@ -352,8 +352,6 @@
     <string name="edit_phase">Edit Phase</string>
     <string name="settings_data">Data</string>
     <string name="choose_group_to_edit">Choose group to edit</string>
-    <string name="slow_performance">Slow performance</string>
-    <string name="slow_performance_message">You have probably seen the loading spinner more and more frequently. Energy Stats uses public servers (OpenAPI) provided by FoxESS which are performing poorly. FoxESS have were informed at the beginning of May and have committed to resolving the issue but no timescale has been provided. These servers are different from the ones that are used by the FoxCloud apps which is why the FoxCloud apps often load.\n\nSee graph below showing response times across a 48hr period.</string>
     <string name="always_loading_tap_for_details">Always loading? Tap for details</string>
     <string name="workmode_self_use_description">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Battery Charging\n3. Export</string>
     <string name="workmode_feed_in_first_description">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Export\n3. Battery Charging</string>
@@ -361,4 +359,14 @@
     <string name="workmode_force_charge_description">Charges the battery from the grid</string>
     <string name="workmode_force_discharge_description">Discharges the battery to the grid</string>
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">This schedule phase contains invalid phases. Please correct and try again.</string>
+    <string name="battery_soc">Battery SOC</string>
+    <string name="battery_charge_schedule">Battery Charge Schedule</string>
+    <string name="earnings_generated_description">Enter the unit price you are paid per kWh for generating electricity</string>
+    <string name="earnings_exported_description">Enter the unit price you are paid per kWh for exporting electricity</string>
+    <string name="earnings_imported_description">Enter the price you pay per kWh for importing electricity</string>
+    <string name="i_am_paid_for">I am paid for</string>
+    <string name="exporting">exporting</string>
+    <string name="generating">generating</string>
+    <string name="custom_range">Custom range</string>
+    <string name="show_self_sufficiency_percentage_on_stats_graph">Show self sufficiency percentage on stats graph</string>
 </resources>

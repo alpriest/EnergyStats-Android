@@ -21,15 +21,15 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -56,9 +56,11 @@ import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.inverter.InverterIconView
 import com.alpriest.energystats.ui.helpers.OptionalView
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -146,7 +148,7 @@ fun InverterView(
                             .width(43.dp)
                             .height(50.dp)
                             .padding(bottom = 4.dp)
-                            .background(colors.background)
+                            .background(colorScheme.background)
                             .clickable {
                                 if (viewModel.hasFault) {
                                     viewModel.showFaults(context)
@@ -155,15 +157,15 @@ fun InverterView(
                         themeStream
                     )
 
-                    panelView(themeStream, viewModel.hasFault)
+                    PanelView(themeStream, viewModel.hasFault)
                 }
             }
 
-            inverterPortraitTitles(themeStream, viewModel)
+            InverterPortraitTitles(themeStream, viewModel)
 
             if (appTheme.showInverterTemperatures) {
                 viewModel.temperatures?.let {
-                    Row(modifier = Modifier.background(colors.background)) {
+                    Row(modifier = Modifier.background(colorScheme.background)) {
                         InverterTemperatures(it)
                     }
                 }
@@ -178,20 +180,20 @@ fun InverterView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
-                modifier = Modifier.background(colors.background)
+                modifier = Modifier.background(colorScheme.background)
             ) {
                 viewModel.temperatures?.let {
                     InverterTemperatures(it)
                 }
 
-                inverterLandscapeTitles(themeStream, viewModel)
+                InverterLandscapeTitles(themeStream, viewModel)
             }
         }
     }
 }
 
 @Composable
-fun panelColor(hasFault: Boolean): Color {
+private fun PanelColor(hasFault: Boolean): Color {
     return when (hasFault) {
         true -> PowerFlowNegative
         false -> Color.Gray
@@ -199,12 +201,12 @@ fun panelColor(hasFault: Boolean): Color {
 }
 
 @Composable
-private fun panelView(themeStream: MutableStateFlow<AppTheme>, hasFault: Boolean) {
+private fun PanelView(themeStream: MutableStateFlow<AppTheme>, hasFault: Boolean) {
     val infiniteTransition = rememberInfiniteTransition(label = "inverter-panel")
 
     if (hasFault) {
         val color by infiniteTransition.animateColor(
-            initialValue = panelColor(hasFault),
+            initialValue = PanelColor(hasFault),
             targetValue = iconBackgroundColor(isDarkMode(themeStream)),
             animationSpec = infiniteRepeatable(
                 animation = tween(600, 200, easing = EaseInOut),
@@ -230,28 +232,28 @@ private fun panelView(themeStream: MutableStateFlow<AppTheme>, hasFault: Boolean
 }
 
 @Composable
-private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, viewModel: InverterViewModel) {
+private fun InverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, viewModel: InverterViewModel) {
     val appTheme = themeStream.collectAsState().value
     var expanded by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.background(colors.background),
+        modifier = Modifier.background(colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (viewModel.hasMultipleDevices) {
             Box(contentAlignment = Alignment.TopEnd) {
                 Button(
                     onClick = { expanded = !expanded },
-                    colors = ButtonDefaults.outlinedButtonColors(backgroundColor = colors.surface, contentColor = colors.onSecondary),
+                    colors = ButtonDefaults.outlinedButtonColors(containerColor = colorScheme.surface, contentColor = colorScheme.onSecondary),
                     contentPadding = PaddingValues(2.dp),
-                    elevation = ButtonDefaults.elevation(1.dp)
+                    elevation = ButtonDefaults.buttonElevation(1.dp)
                 ) {
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 viewModel.deviceDisplayName,
                                 fontSize = 12.sp,
-                                color = colors.onSurface
+                                color = colorScheme.onSurface
                             )
                             Icon(
                                 imageVector = Icons.Filled.ArrowDropDown,
@@ -283,9 +285,9 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
                         DropdownMenuItem(onClick = {
                             expanded = false
                             viewModel.select(device)
-                        }) {
+                        }, text = {
                             Text("${device.deviceDisplayName} (${device.deviceType})")
-                        }
+                        })
                     }
                 }
             }
@@ -305,14 +307,14 @@ private fun inverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
 }
 
 @Composable
-private fun inverterLandscapeTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
+private fun InverterLandscapeTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
     val appTheme = themeStream.collectAsState().value
 
     if (appTheme.showInverterStationNameOnPowerflow) {
         OptionalView(inverterTemperaturesViewModel.deviceStationName) {
             Text(
                 modifier = Modifier
-                    .background(colors.background)
+                    .background(colorScheme.background)
                     .padding(4.dp),
                 text = it
             )
@@ -351,15 +353,17 @@ private fun InverterTemperatures(viewModel: InverterTemperatures) {
 @Composable
 @Preview
 fun InverterViewPreview() {
-    Column {
-        Spacer(modifier = Modifier.height(50.dp))
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+        Column {
+            Spacer(modifier = Modifier.height(50.dp))
 
-        InverterView(
-            MutableStateFlow(
-                AppTheme.demo()
-            ),
-            InverterViewModel(configManager = FakeConfigManager(), temperatures = null, deviceState = DeviceState.Online, faults = listOf("abc", "def")),
-            orientation = Configuration.ORIENTATION_PORTRAIT
-        )
+            InverterView(
+                MutableStateFlow(
+                    AppTheme.demo()
+                ),
+                InverterViewModel(configManager = FakeConfigManager(), temperatures = null, deviceState = DeviceState.Online, faults = listOf("abc", "def")),
+                orientation = Configuration.ORIENTATION_PORTRAIT
+            )
+        }
     }
 }

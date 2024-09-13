@@ -3,13 +3,12 @@ package com.alpriest.energystats.ui.settings.battery
 import android.app.TimePickerDialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,9 +40,10 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsBottomSpace
+import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -60,7 +60,8 @@ class BatteryChargeScheduleSettingsView(
                 network = network,
                 configManager = configManager
             )
-        )
+        ),
+        modifier: Modifier
     ) {
         val chargeSummary = viewModel.summaryStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
@@ -76,20 +77,24 @@ class BatteryChargeScheduleSettingsView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
-                    SettingsPage(modifier) {
+                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { innerModifier ->
+                    SettingsPage(innerModifier) {
                         BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
                         BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 
-                        Column {
-                            SettingsTitleView(stringResource(R.string.schedule_summary))
+                        SettingsColumn(
+                            header = stringResource(R.string.schedule_summary),
+                            padding = SettingsPaddingValues.withVertical()
+                        ) {
                             Text(
                                 chargeSummary,
-                                color = colors.onSecondary,
+                                color = colorScheme.onSecondary
                             )
                         }
+
+                        SettingsBottomSpace()
                     }
-                }, Modifier)
+                }, modifier)
         }
     }
 
@@ -98,25 +103,24 @@ class BatteryChargeScheduleSettingsView(
         val timePeriod = timePeriodStream.collectAsState().value
         val textColor = remember { mutableStateOf(Color.Black) }
 
-        SettingsColumnWithChild {
-            SettingsTitleView(
-                periodTitle,
-                modifier = Modifier.padding(vertical = 6.dp)
-            )
-
+        SettingsColumn(
+            header = periodTitle
+        ) {
             Row(
-                verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
+                verticalAlignment = CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     stringResource(R.string.enable_charge_from_grid),
-                    color = colors.onSecondary,
+                    color = colorScheme.onSecondary,
                 )
                 Switch(checked = timePeriod.enabled, onCheckedChange = {
                     timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)
                 })
             }
 
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
             TimePeriodView(
                 timePeriod.start,
@@ -126,7 +130,7 @@ class BatteryChargeScheduleSettingsView(
                 timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
             }
 
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
             TimePeriodView(
                 timePeriod.end,
@@ -141,7 +145,7 @@ class BatteryChargeScheduleSettingsView(
             ) {
                 Text(
                     stringResource(R.string.reset_times),
-                    color = colors.onSecondary
+                    color = colorScheme.onSecondary
                 )
             }
         }
@@ -167,13 +171,13 @@ fun TimePeriodView(time: Time, title: String, labelStyle: TextStyle, textStyle: 
         Text(
             title,
             style = labelStyle,
-            color = colors.onSecondary,
+            color = colorScheme.onSecondary,
         )
 
         Text(
             "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}",
             style = textStyle,
-            color = colors.onSecondary,
+            color = colorScheme.onSecondary,
             modifier = Modifier.clickable {
                 dialog.show()
             })
@@ -189,6 +193,6 @@ fun BatteryForceChargeTimesViewPreview() {
             configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current),
             userManager = FakeUserManager()
-        ).Content()
+        ).Content(modifier = Modifier)
     }
 }

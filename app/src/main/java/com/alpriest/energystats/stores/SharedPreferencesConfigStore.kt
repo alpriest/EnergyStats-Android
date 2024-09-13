@@ -7,6 +7,7 @@ import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
+import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -66,7 +67,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         POWER_STATION_DETAIL,
         SHOW_ESTIMATED_TIME_ON_WIDGET,
         SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY,
-        TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS
+        TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS,
+        EARNINGS_MODEl
     }
 
     override fun clearDisplaySettings() {
@@ -532,6 +534,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, value)
+            editor.apply()
+        }
+
+    override var earningsModel: Int
+        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.EARNINGS_MODEl.name, EarningsModel.Exported.value)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(SharedPreferenceDisplayKey.EARNINGS_MODEl.name, value)
             editor.apply()
         }
 }

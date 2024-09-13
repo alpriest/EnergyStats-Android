@@ -187,7 +187,7 @@
     <string name="foxess_community">FoxESS-Community</string>
     <string name="foxess_cloud_status">FoxESS-Cloudstatus</string>
     <string name="show_last_update_timestamp">Letzten Aktualisierungszeitpunkt anzeigen</string>
-    <string name="sun_display_variation_thresholds">Schwellenwerte der Sonnenanzeigevielfalt</string>
+    <string name="sun_display_thresholds">Schwellenwerte der Sonnenanzeigevielfalt</string>
     <string name="tap_the_icon_for_further_detail">Tippen Sie auf das Symbol für weitere Details</string>
     <string name="kilowatts">Kilowatt</string>
     <string name="watts">Watt</string>
@@ -206,7 +206,7 @@
     <string name="grid_import_description">Ungefähre eingesparte Ausgaben durch die Erzeugung Ihrer eigenen Solarenergie.</string>
     <string name="grid_import_formula">(Solarenergie kWh - Einspeiseenergie kWh) * Netzbezugspreis</string>
     <string name="total_formula_description">Ungefährer Gesamtnutzen Ihrer Solar-/Batterieanlage.</string>
-    <string name="feed_in_unit_price">Einspeisevergütung</string>
+    <string name="unit_price">Stückpreis</string>
     <string name="grid_import_unit_price">Netzbezugspreis</string>
     <string name="energy_stats_earnings_calculation_description">Zeigt Finanzschätzungen nur für heute auf der Leistungsfluss-Seite und für den ausgewählten Zeitraum auf der Statistik-Seite.</string>
     <string name="foxess_earnings_calculation_description">Dieser Einheitspreis wird in der FoxESS Cloud verwaltet.</string>
@@ -349,8 +349,6 @@
     <string name="edit_phase">Phase bearbeiten</string>
     <string name="settings_data">Daten</string>
     <string name="choose_group_to_edit">Gruppe zum Bearbeiten auswählen</string>
-    <string name="slow_performance">Langsame Leistung</string>
-    <string name="slow_performance_message">Sie haben den Ladekreisel wahrscheinlich immer häufiger gesehen. Energy Stats nutzt öffentliche Server (OpenAPI), die von FoxESS bereitgestellt werden und schlecht funktionieren. FoxESS wurde Anfang Mai informiert und hat sich verpflichtet, das Problem zu lösen, aber es wurde kein Zeitrahmen angegeben. Diese Server unterscheiden sich von denen, die von den FoxCloud-Apps verwendet werden, weshalb die FoxCloud-Apps oft laden.\n\nSiehe untenstehendes Diagramm, das die Antwortzeiten über einen Zeitraum von 48 Stunden zeigt.</string>
     <string name="always_loading_tap_for_details">Immer am Laden? Tippen für Details</string>
     <string name="workmode_self_use_description">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Hauslast\n2. Batterieladung\n3. Einspeisung</string>
     <string name="workmode_feed_in_first_description">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Hauslast\n2. Einspeisung\n3. Batterieladung</string>
@@ -358,4 +356,14 @@
     <string name="workmode_force_charge_description">Lädt die Batterie aus dem Netz</string>
     <string name="workmode_force_discharge_description">Entlädt die Batterie ins Netz</string>
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">Diese Planungsphase enthält ungültige Phasen. Bitte korrigieren Sie dies und versuchen Sie es erneut.</string>
+    <string name="battery_soc">SOC der Batterie</string>
+    <string name="battery_charge_schedule">Ladezeitplan der Batterie</string>
+    <string name="earnings_generated_description">Geben Sie den Einheitspreis ein, den Sie pro kWh für die Erzeugung von Strom erhalten</string>
+    <string name="earnings_exported_description">Geben Sie den Einheitspreis ein, den Sie pro kWh für den Export von Strom erhalten</string>
+    <string name="earnings_imported_description">Geben Sie den Preis ein, den Sie pro kWh für den Import von Strom zahlen</string>
+    <string name="i_am_paid_for">Ich werde bezahlt für</string>
+    <string name="exporting">exportieren</string>
+    <string name="generating">erzeugen</string>
+    <string name="custom_range">Benutzerdefinierter Bereich</string>
+    <string name="show_self_sufficiency_percentage_on_stats_graph">Zeige den Selbstversorgungsprozentsatz im Statistikdiagramm an</string>
 </resources>

@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -23,57 +23,102 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.SegmentedControl
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.Locale
 
+enum class EarningsModel(val value: Int) {
+    Exported(0),
+    Generated(1);
+
+    companion object {
+        fun fromInt(value: Int) = EarningsModel.values().firstOrNull { it.value == value } ?: EarningsModel.Exported
+    }
+}
+
 @Composable
 fun FinancialsSettingsView(config: ConfigManaging) {
     val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
     val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(config.showFinancialSummaryOnFlowPage) }
-    val feedInUnitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
+    val unitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
     val currencySymbol = rememberSaveable { mutableStateOf(config.currencySymbol) }
+    val earningsModel = rememberSaveable { mutableStateOf(config.earningsModel) }
 
-    SettingsColumnWithChild {
+    SettingsColumn(content = {
         SettingsCheckbox(title = stringResource(R.string.show_financial_summary), state = showFinancialSummaryState, onUpdate = {
             config.showFinancialSummary = it
 
             if (!it) config.showFinancialSummaryOnFlowPage = false
         })
+    }, footer = stringResource(R.string.energy_stats_earnings_calculation_description))
 
-        if (showFinancialSummaryState.value) {
+    if (showFinancialSummaryState.value) {
+        SettingsColumn {
             SettingsCheckbox(title = stringResource(R.string.show_on_flow_page), state = showFinancialSummaryOnFlowPageState, onUpdate = {
                 config.showFinancialSummaryOnFlowPage = it
             })
 
-            makeCurrencySymbolField(config, currencySymbol)
-            makeTextField(config, feedInUnitPrice, stringResource(R.string.feed_in_unit_price)) {
-                feedInUnitPrice.value = it
-                config.feedInUnitPrice = it.safeToDouble()
+            MakeCurrencySymbolField(config, currencySymbol)
+        }
+
+        SettingsColumn(
+            content = {
+                MakeTextField(config, unitPrice, stringResource(R.string.unit_price)) {
+                    unitPrice.value = it
+                    config.feedInUnitPrice = it.safeToDouble()
+                }
+
+                SettingsSegmentedControl(
+                    title = stringResource(R.string.i_am_paid_for),
+                    segmentedControl = {
+                        val items = EarningsModel.values()
+                        val itemTitles = listOf(
+                            stringResource(R.string.exporting),
+                            stringResource(R.string.generating)
+                        )
+
+                        SegmentedControl(
+                            items = itemTitles,
+                            defaultSelectedItemIndex = items.indexOf(earningsModel.value),
+                            color = colorScheme.primary
+                        ) {
+                            earningsModel.value = items[it]
+                            config.earningsModel = items[it]
+                        }
+                    }
+                )
+            },
+            footer = if (earningsModel.value == EarningsModel.Generated) {
+                stringResource(R.string.earnings_generated_description)
+            } else {
+                stringResource(R.string.earnings_exported_description)
             }
-            makeTextField(config, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price)) {
+        )
+
+        SettingsColumn(content = {
+            MakeTextField(config, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price)) {
                 gridImportUnitPrice.value = it
                 config.gridImportUnitPrice = it.safeToDouble()
             }
-        }
+        }, footer = stringResource(R.string.earnings_imported_description))
     }
 
     if (showFinancialSummaryState.value) {
-        Text(
-            stringResource(R.string.energy_stats_earnings_calculation_description),
-            color = colors.onSecondary
-        )
-
         CalculationDescription(
             stringResource(R.string.exported_income_short_title), stringResource(R.string.exported_income_description), stringResource(R.string.exported_income_formula)
         )
@@ -92,7 +137,7 @@ fun FinancialsSettingsView(config: ConfigManaging) {
 
 private fun Double.toCurrency(): String {
     val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
-    val currencySymbol = currencyFormat.currency.symbol
+    val currencySymbol = currencyFormat.currency?.symbol ?: ""
     return currencyFormat.format(this).replace(currencySymbol, "").trim()
 }
 
@@ -111,19 +156,19 @@ private fun String.safeToDouble(): Double {
 }
 
 @Composable
-fun makeCurrencySymbolField(config: ConfigManaging, state: MutableState<String>) {
+fun MakeCurrencySymbolField(config: ConfigManaging, state: MutableState<String>) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .background(colors.surface)
+            .background(colorScheme.surface)
             .padding(vertical = 4.dp)
     ) {
         Text(
             stringResource(R.string.currency_symbol),
             Modifier.weight(1.0f),
-            style = MaterialTheme.typography.body2,
-            color = colors.onSecondary
+            style = MaterialTheme.typography.bodyMedium,
+            color = colorScheme.onSecondary
         )
 
         TextField(
@@ -140,31 +185,31 @@ fun makeCurrencySymbolField(config: ConfigManaging, state: MutableState<String>)
                 ),
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.End,
-                color = colors.onSecondary
+                color = colorScheme.onSecondary
             )
         )
     }
 }
 
 @Composable
-fun makeTextField(config: ConfigManaging, state: MutableState<String>, label: String, onValueChange: (String) -> Unit) {
+private fun MakeTextField(config: ConfigManaging, state: MutableState<String>, label: String, onValueChange: (String) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .background(colors.surface)
+            .background(colorScheme.surface)
             .padding(vertical = 4.dp)
     ) {
         Text(
             label,
             Modifier.weight(1.0f),
-            style = MaterialTheme.typography.body2,
-            color = colors.onSecondary
+            style = MaterialTheme.typography.bodyMedium,
+            color = colorScheme.onSecondary
         )
 
         Text(
             config.currencySymbol,
-            color = colors.onSecondary,
+            color = colorScheme.onSecondary,
             modifier = Modifier.padding(end = 8.dp)
         )
 
@@ -179,7 +224,7 @@ fun makeTextField(config: ConfigManaging, state: MutableState<String>, label: St
                 ),
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.End,
-                color = colors.onSecondary
+                color = colorScheme.onSecondary
             )
         )
     }
@@ -187,14 +232,14 @@ fun makeTextField(config: ConfigManaging, state: MutableState<String>, label: St
 
 @Composable
 fun CalculationDescription(title: String, description: String, formula: String) {
-    Column(modifier = Modifier.padding(top = 18.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 22.dp)) {
         Text(
             title,
-            style = TextStyle.Default.copy(color = colors.onSecondary)
+            style = TextStyle.Default.copy(color = colorScheme.onSecondary, fontWeight = FontWeight.Bold)
         )
         Text(
             description,
-            color = colors.onSecondary,
+            color = colorScheme.onSecondary,
         )
 
         Column(
@@ -204,7 +249,7 @@ fun CalculationDescription(title: String, description: String, formula: String) 
                 formula,
                 fontStyle = FontStyle.Italic,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                color = colors.onSecondary,
+                color = colorScheme.onSecondary,
             )
         }
     }
@@ -213,9 +258,11 @@ fun CalculationDescription(title: String, description: String, formula: String) 
 @Preview
 @Composable
 fun FinancialsSettingsViewPreview() {
-    EnergyStatsTheme {
-        FinancialsSettingsView(
-            config = FakeConfigManager()
-        )
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+        SettingsPage(Modifier.padding(12.dp)) {
+            FinancialsSettingsView(
+                config = FakeConfigManager()
+            )
+        }
     }
 }

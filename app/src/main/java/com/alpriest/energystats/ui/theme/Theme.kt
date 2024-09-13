@@ -1,14 +1,17 @@
 package com.alpriest.energystats.ui.theme
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 
-private val darkColorPalette = darkColors(
+private val darkColorPalette = darkColorScheme(
     primary = TintColor,
     secondary = DarkSecondaryBackground,
     background = DarkBackground,
@@ -16,11 +19,10 @@ private val darkColorPalette = darkColors(
     onPrimary = Color.White,
     onSecondary = Color.LightGray,
     surface = DarkHeader,
-    onSurface = Color.White,
-    primaryVariant = Color.DarkGray
+    onSurface = Color.White
 )
 
-private val lightColorPalette = lightColors(
+private val lightColorPalette = lightColorScheme(
     primary = TintColor,
     secondary = SecondaryBackground,
     background = PaleWhite,
@@ -29,7 +31,14 @@ private val lightColorPalette = lightColors(
     onSecondary = Color.DarkGray,
     surface = Color.White,
     onSurface = Color.Black,
-    primaryVariant = Color.LightGray
+)
+
+private val shapes = Shapes(
+    extraSmall = RoundedCornerShape(0.dp),
+    small = RoundedCornerShape(4.dp),
+    medium = RoundedCornerShape(4.dp),
+    large = RoundedCornerShape(0.dp),
+    extraLarge = RoundedCornerShape(0.dp)
 )
 
 @Composable
@@ -47,9 +56,9 @@ fun EnergyStatsTheme(useLargeDisplay: Boolean = false, colorThemeMode: ColorThem
     }
 
     MaterialTheme(
-        colors = colors,
+        colorScheme = colors,
         typography = typography,
-        shapes = Shapes,
-        content = content
+        content = content,
+        shapes = shapes
     )
 }

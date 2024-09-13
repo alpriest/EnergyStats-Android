@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +31,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsRow(title: String, value: String?) {
     SettingsRow(title) {
-        Text(value ?: "(unknown)", color = colors.onSecondary)
+        Text(
+            value ?: "(unknown)",
+            color = colorScheme.onSecondary,
+            modifier = Modifier.padding(end = 4.dp)
+        )
     }
 }
 
@@ -47,7 +51,7 @@ fun SettingsRow(title: String, content: @Composable () -> Unit) {
     ) {
         Text(
             title,
-            color = colors.onSecondary,
+            color = colorScheme.onSecondary,
             modifier = Modifier.padding(end = 8.dp)
         )
         content()

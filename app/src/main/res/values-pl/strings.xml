@@ -188,7 +188,7 @@
     <string name="foxess_community">Społeczność FoxESS</string>
     <string name="foxess_cloud_status">Stan chmury FoxESS</string>
     <string name="show_last_update_timestamp">Pokaż ostatni znacznik czasu aktualizacji</string>
-    <string name="sun_display_variation_thresholds">Progi zmienności wyświetlania słońca</string>
+    <string name="sun_display_thresholds">Progi zmienności wyświetlania słońca</string>
     <string name="tap_the_icon_for_further_detail">Dotknij ikony, aby uzyskać więcej informacji</string>
     <string name="kilowatts">Kilowaty</string>
     <string name="watts">Waty</string>
@@ -207,7 +207,7 @@
     <string name="grid_import_description">Przybliżone wydatki uniknięte dzięki własnemu wytwarzaniu energii słonecznej.</string>
     <string name="grid_import_formula">(SolarGeneration kWh - Feed-In kWh) * ImportUnitPrice</string>
     <string name="total_formula_description">Przybliżony ogólny korzyść z posiadania instalacji solarnej/baterii.</string>
-    <string name="feed_in_unit_price">Cena za oddawaną energię</string>
+    <string name="unit_price">Cena jednostkowa</string>
     <string name="grid_import_unit_price">Cena za import energii z sieci</string>
     <string name="energy_stats_earnings_calculation_description">Pokazuje szacunki finansowe tylko na stronie przepływu, a także dla wybranego okresu czasu na stronie statystyk.</string>
     <string name="foxess_earnings_calculation_description">Ta cena jednostkowa jest zarządzana w chmurze FoxESS.</string>
@@ -350,8 +350,6 @@
     <string name="edit_phase">Edytuj fazę</string>
     <string name="settings_data">Dane</string>
     <string name="choose_group_to_edit">Wybierz grupę do edycji</string>
-    <string name="slow_performance">Wolne działanie</string>
-    <string name="slow_performance_message">Prawdopodobnie coraz częściej widzisz kręcący się wskaźnik ładowania. Energy Stats korzysta z publicznych serwerów (OpenAPI) udostępnianych przez FoxESS, które działają słabo. FoxESS zostało poinformowane na początku maja i zobowiązało się do rozwiązania problemu, ale nie podano żadnego terminu. Te serwery są inne niż te używane przez aplikacje FoxCloud, dlatego aplikacje FoxCloud często się ładują.\n\nZobacz poniższy wykres pokazujący czasy odpowiedzi w okresie 48 godzin.</string>
     <string name="always_loading_tap_for_details">Zawsze ładuje? Dotknij, aby uzyskać szczegóły</string>
     <string name="workmode_self_use_description">W tym trybie inwerter priorytetowo alokuje moc zgodnie z następującym porządkiem:\n\n1. Obciążenie domu\n2. Ładowanie baterii\n3. Eksport</string>
     <string name="workmode_feed_in_first_description">W tym trybie inwerter priorytetowo alokuje moc zgodnie z następującym porządkiem:\n\n1. Obciążenie domu\n2. Eksport\n3. Ładowanie baterii</string>
@@ -359,4 +357,14 @@
     <string name="workmode_force_charge_description">Ładuje baterię z sieci</string>
     <string name="workmode_force_discharge_description">Rozładowuje baterię do sieci</string>
     <string name="this_schedule_phase_contains_invalid_phases_please_correct_and_try_again">Ta faza harmonogramu zawiera nieprawidłowe fazy. Popraw to i spróbuj ponownie.</string>
+    <string name="battery_soc">SOC baterii</string>
+    <string name="battery_charge_schedule">Harmonogram ładowania baterii</string>
+    <string name="earnings_generated_description">Wprowadź cenę jednostkową, którą otrzymujesz za kWh za generowanie energii elektrycznej</string>
+    <string name="earnings_exported_description">Wprowadź cenę jednostkową, którą otrzymujesz za kWh za eksport energii elektrycznej</string>
+    <string name="earnings_imported_description">Wprowadź cenę, którą płacisz za kWh za import energii elektrycznej</string>
+    <string name="i_am_paid_for">Jestem opłacany za</string>
+    <string name="exporting">eksportowanie</string>
+    <string name="generating">generowanie</string>
+    <string name="custom_range">Zakres niestandardowy</string>
+    <string name="show_self_sufficiency_percentage_on_stats_graph">Pokaż procent samowystarczalności na wykresie statystyk</string>
 </resources>

@@ -25,6 +25,7 @@ import com.alpriest.energystats.models.OpenRealQueryResponseDeserializer
 import com.alpriest.energystats.models.OpenReportRequest
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseDeserializer
+import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.PagedPowerStationListResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
@@ -266,10 +267,10 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val request = Request.Builder().url(URLs.getOpenModuleList()).post(body).build()
 
-        val type = object : TypeToken<NetworkResponse<List<DataLoggerResponse>>>() {}.type
-        val response: NetworkTuple<NetworkResponse<List<DataLoggerResponse>>> = fetch(request, type)
+        val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetch(request, type)
         store.dataLoggerListResponse.value = NetworkOperation(description = "DataLoggerResponse", value = response.item, raw = response.text, request)
-        return response.item.result ?: throw MissingDataException()
+        return response.item.result?.data ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {

@@ -3,8 +3,9 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,6 +29,8 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.LoadedScaffold
+import com.alpriest.energystats.ui.settings.SettingsBottomSpace
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -38,7 +41,7 @@ class EditScheduleView(
     private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: EditScheduleViewModel = viewModel(factory = EditScheduleViewModelFactory(configManager, network, navController))) {
+    fun Content(viewModel: EditScheduleViewModel = viewModel(factory = EditScheduleViewModelFactory(configManager, network, navController)), modifier: Modifier) {
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 
@@ -53,7 +56,7 @@ class EditScheduleView(
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
             is LoadState.Inactive -> schedule?.let {
                 LoadedScaffold(stringResource(R.string.edit_schedule), navController) {
-                    Loaded(schedule, viewModel, navController)
+                    Loaded(schedule, viewModel, navController, modifier)
                 }
             }
         }
@@ -61,18 +64,19 @@ class EditScheduleView(
 }
 
 @Composable
-private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController) {
+private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController, modifier: Modifier) {
     val context = LocalContext.current
 
     ContentWithBottomButtonPair(
         navController = navController,
         onSave = { viewModel.saveSchedule(context) },
-        { modifier ->
-            SettingsPage {
-                ScheduleDetailView("", viewModel.navController, schedule)
+        { innerModifier ->
+            SettingsPage(innerModifier) {
+                ScheduleDetailView(viewModel.navController, schedule)
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
@@ -87,20 +91,17 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
                     ) {
                         Text(stringResource(R.string.autofill_gaps))
                     }
-
-//                    if (allowDeletion) {
-//                        Button(onClick = { viewModel.delete(context) }) {
-//                            Text(stringResource(R.string.delete_schedule))
-//                        }
-//                    }
                 }
+
+                SettingsBottomSpace()
             }
         },
-        labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save))
+        labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save)),
+        modifier = modifier
     )
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 600)
+@Preview(showBackground = true, widthDp = 400, heightDp = 400)
 @Composable
 fun EditScheduleViewPreview() {
     EnergyStatsTheme {
@@ -111,7 +112,8 @@ fun EditScheduleViewPreview() {
                 DemoNetworking(),
                 NavHostController(LocalContext.current)
             ),
-            NavHostController(LocalContext.current)
+            NavHostController(LocalContext.current),
+            Modifier
         )
     }
 }

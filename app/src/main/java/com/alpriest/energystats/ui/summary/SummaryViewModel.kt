@@ -87,7 +87,7 @@ class SummaryTabViewModel(
                 // Ignore as the user navigated away
             } catch (ex: Exception) {
                 hasFinished = true
-                alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
+                alertDialogMessage.value = MonitorAlertDialogData(ex, ex.toString())
             }
         }
 

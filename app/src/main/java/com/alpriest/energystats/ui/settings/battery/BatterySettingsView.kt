@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,10 +54,9 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
-    val minSOC = config.minSOC.collectAsState()
     val hasError = config.currentDevice.collectAsState().value?.battery?.hasError ?: false
 
-    SettingsPage {
+    SettingsPage(modifier) {
         if (hasError) {
             SettingsColumnWithChild(modifier = Modifier.border(width = 2.dp, color = Color.Red)) {
                 SettingsTitleView(stringResource(R.string.error))
@@ -69,6 +68,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             InlineSettingsNavButton(stringResource(R.string.minimum_charge_levels)) {
                 navController.navigate(SettingsScreen.BatterySOC.name)
             }
+
+            HorizontalDivider()
 
             InlineSettingsNavButton(stringResource(R.string.charge_times)) {
                 navController.navigate(SettingsScreen.BatteryChargeTimes.name)
@@ -86,7 +87,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             ) {
                 Text(
                     stringResource(R.string.capacity),
-                    color = colors.onSecondary,
+                    color = colorScheme.onSecondary,
                 )
                 Spacer(Modifier.weight(1f))
 
@@ -99,17 +100,17 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         label = {
                             Text(
                                 stringResource(R.string.total_wh_of_your_battery),
-                                color = colors.onSecondary
+                                color = colorScheme.onSecondary
                             )
                         },
-                        textStyle = TextStyle(colors.onSecondary),
+                        textStyle = TextStyle(colorScheme.onSecondary),
                         modifier = Modifier.weight(1f)
                     )
                 } else {
                     Text(
                         text = config.batteryCapacity.Wh(decimalPlaces),
                         modifier = Modifier.clickable { isEditingCapacity.value = true },
-                        color = colors.onSecondary,
+                        color = colorScheme.onSecondary,
                     )
                 }
             }
@@ -128,13 +129,13 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         ) {
                             Text(
                                 stringResource(R.string.ok),
-                                color = colors.onPrimary,
+                                color = colorScheme.onPrimary,
                             )
                         }
                         Button(onClick = { isEditingCapacity.value = false }) {
                             Text(
                                 stringResource(R.string.cancel),
-                                color = colors.onPrimary,
+                                color = colorScheme.onPrimary,
                             )
                         }
                     }
@@ -144,26 +145,26 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             Text(
                 buildAnnotatedString {
                     withStyle(
-                        style = SpanStyle(fontSize = MaterialTheme.typography.caption.fontSize)
+                        style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     ) {
                         append(stringResource(R.string.calculated_as))
                     }
                     withStyle(
-                        style = SpanStyle(fontStyle = FontStyle.Italic, fontSize = MaterialTheme.typography.caption.fontSize, color = colors.onSecondary)
+                        style = SpanStyle(fontStyle = FontStyle.Italic, fontSize = MaterialTheme.typography.bodySmall.fontSize, color = colorScheme.onSecondary)
                     ) {
                         append("residual / (Min SOC / 100)")
                     }
                     withStyle(
-                        style = SpanStyle(fontSize = MaterialTheme.typography.caption.fontSize)
+                        style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     ) {
                         append(stringResource(R.string.where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value))
                     }
                 },
-                color = colors.onSecondary,
+                color = colorScheme.onSecondary,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            Divider()
+            HorizontalDivider()
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_full_empty_estimate),
@@ -172,7 +173,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 footer = buildAnnotatedString { append(stringResource(R.string.empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant)) }
             )
 
-            Divider()
+            HorizontalDivider()
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_usable_battery_only),
@@ -181,7 +182,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 footer = buildAnnotatedString { append(stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining)) }
             )
 
-            Divider()
+            HorizontalDivider()
 
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_temperature),

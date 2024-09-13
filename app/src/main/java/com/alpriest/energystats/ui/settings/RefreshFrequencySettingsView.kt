@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -42,7 +42,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
                 SegmentedControl(
                     items = itemTitles,
                     defaultSelectedItemIndex = items.indexOf(refreshFrequency.value),
-                    color = colors.primary
+                    color = colorScheme.primary
                 ) {
                     refreshFrequency.value = items[it]
                     config.refreshFrequency = items[it]

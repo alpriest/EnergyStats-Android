@@ -9,17 +9,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -71,29 +71,29 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
         ) { showing ->
             DropdownMenuItem(onClick = {
                 navController.navigate(ParametersScreen.ParameterChooser.name)
-            }) {
+            }, text ={
                 Text("Parameters...")
-            }
+            })
 
-            Divider(thickness = 5.dp)
+            HorizontalDivider(thickness = 5.dp)
 
             HourPickerItems(hours, showing, onHoursChanged = {
                 hours = it
                 viewModel.displayModeStream.value = ParametersDisplayMode(candidateQueryDate.value, hours)
             })
 
-            Divider(thickness = 5.dp)
+            HorizontalDivider(thickness = 5.dp)
 
             DropdownMenuItem(onClick = {
                 configManager.truncatedYAxisOnParameterGraphs = !configManager.truncatedYAxisOnParameterGraphs
                 showing.value = false
-            }) {
+            }, text = {
                 Text(stringResource(R.string.display_truncated_y_axis))
+            }, trailingIcon = {
                 if (configManager.truncatedYAxisOnParameterGraphs) {
-                    Spacer(modifier = Modifier.weight(1f))
                     Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                 }
-            }
+            })
         }
 
         CalendarView(dateStream = candidateQueryDate)
@@ -160,37 +160,37 @@ private fun HourPickerItems(hours: Int, showing: MutableState<Boolean>, onHoursC
     DropdownMenuItem(onClick = {
         onHoursChanged(6)
         showing.value = false
-    }) {
+    }, text = {
         Text("6 hours")
+    }, trailingIcon = {
         if (hours == 6) {
-            Spacer(modifier = Modifier.weight(1f))
             Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
         }
-    }
-    Divider()
+    })
+    HorizontalDivider()
 
     DropdownMenuItem(onClick = {
         onHoursChanged(12)
         showing.value = false
-    }) {
+    }, text = {
         Text("12 hours")
+    }, trailingIcon = {
         if (hours == 12) {
-            Spacer(modifier = Modifier.weight(1f))
             Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
         }
-    }
-    Divider()
+    })
+    HorizontalDivider()
 
     DropdownMenuItem(onClick = {
         onHoursChanged(24)
         showing.value = false
-    }) {
+    }, text = {
         Text("24 hours")
+    }, trailingIcon = {
         if (hours == 24) {
-            Spacer(modifier = Modifier.weight(1f))
             Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
         }
-    }
+    })
 }
 
 @Composable

@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -105,8 +105,8 @@ class StatsTabView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp)
                 .verticalScroll(scrollState)
+                .padding(12.dp)
         ) {
             StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), viewModel.showingGraphStream, modifier = Modifier.padding(bottom = 24.dp))
 
@@ -153,9 +153,12 @@ class StatsTabView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(modifier = Modifier.clickable {
-                    showExportMethodSelection(context, viewModel.exportFileName, filePathChooser, viewModel)
-                }) {
+                Row(
+                    modifier = Modifier.clickable {
+                        showExportMethodSelection(context, viewModel.exportFileName, filePathChooser, viewModel)
+                    },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
                     Text(stringResource(R.string.export_csv_data))
                 }

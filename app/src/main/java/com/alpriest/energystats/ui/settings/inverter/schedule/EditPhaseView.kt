@@ -7,18 +7,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,8 +43,10 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.ErrorTextView
+import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
@@ -60,34 +62,46 @@ data class EditPhaseErrorData(
 )
 
 @Composable
-fun EditPhaseView(navController: NavHostController, userManager: UserManaging, viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController))) {
+fun EditPhaseView(
+    navController: NavHostController,
+    userManager: UserManaging,
+    viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController)),
+    modifier: Modifier
+) {
     val context = LocalContext.current
 
     LaunchedEffect(null) {
         viewModel.load(context)
     }
 
-    ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
-        SettingsPage(modifier) {
-            TimeAndWorkModeView(viewModel, userManager)
+    ContentWithBottomButtonPair(
+        navController,
+        onSave = { viewModel.save(context) }, { innerModifier ->
+            SettingsPage(innerModifier) {
+                TimeAndWorkModeView(viewModel, userManager)
 
-            MinSOCView(viewModel)
+                MinSOCView(viewModel)
 
-            ForceDischargeSOCView(viewModel)
+                ForceDischargeSOCView(viewModel)
 
-            ForceDischargePowerView(viewModel)
+                ForceDischargePowerView(viewModel)
 
-            Button(
-                onClick = { viewModel.deletePhase() },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = PowerFlowNegative,
-                    contentColor = PaleWhite
-                ),
-            ) {
-                Text(stringResource(R.string.delete_time_period))
+                Button(
+                    onClick = { viewModel.deletePhase() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = PowerFlowNegative,
+                        contentColor = PaleWhite
+                    ),
+                ) {
+                    Text(stringResource(R.string.delete_time_period))
+                }
+
+                SettingsBottomSpace()
             }
-        }
-    }, labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply)))
+        },
+        modifier = modifier,
+        labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply))
+    )
 }
 
 @Composable
@@ -116,20 +130,20 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging
         TimePeriodView(
             startTime, stringResource(R.string.start_time), labelStyle = TextStyle.Default,
             modifier = Modifier
-                .background(MaterialTheme.colors.surface)
+                .background(colorScheme.surface)
                 .padding(vertical = 14.dp)
         ) { hour, minute -> viewModel.startTimeStream.value = Time(hour, minute) }
 
         TimePeriodView(
             endTime, stringResource(R.string.end_time), labelStyle = TextStyle.Default,
             modifier = Modifier
-                .background(MaterialTheme.colors.surface)
+                .background(colorScheme.surface)
                 .padding(vertical = 14.dp)
         ) { hour, minute -> viewModel.endTimeStream.value = Time(hour, minute) }
 
         ErrorTextView(errorText.timeError)
 
-        Divider()
+        HorizontalDivider()
 
         WorkModeView(viewModel)
     }
@@ -152,20 +166,20 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(MaterialTheme.colors.surface)
+                .background(colorScheme.surface)
                 .padding(vertical = 4.dp)
         ) {
             Text(
                 stringResource(R.string.min_soc),
                 Modifier.weight(1.0f),
-                color = MaterialTheme.colors.onSecondary
+                color = colorScheme.onSecondary
             )
             OutlinedTextField(
                 value = minSOC,
                 onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
                 modifier = Modifier.width(100.dp),
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) },
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                trailingIcon = { Text("%", color = colorScheme.onSecondary) },
                 singleLine = true
             )
         }
@@ -187,20 +201,20 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .background(MaterialTheme.colors.surface)
+                    .background(colorScheme.surface)
                     .padding(vertical = 4.dp)
             ) {
                 Text(
                     stringResource(R.string.force_discharge_soc),
                     Modifier.weight(1.0f),
-                    color = MaterialTheme.colors.onSecondary
+                    color = colorScheme.onSecondary
                 )
                 OutlinedTextField(
                     value = fdSOC,
                     onValueChange = { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } },
                     modifier = Modifier.width(100.dp),
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                    trailingIcon = { Text("%", color = MaterialTheme.colors.onSecondary) },
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                    trailingIcon = { Text("%", color = colorScheme.onSecondary) },
                     singleLine = true
                 )
             }
@@ -225,20 +239,20 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .background(MaterialTheme.colors.surface)
+                    .background(colorScheme.surface)
                     .padding(vertical = 4.dp)
             ) {
                 Text(
                     stringResource(R.string.force_discharge_power),
                     Modifier.weight(1.0f),
-                    color = MaterialTheme.colors.onSecondary
+                    color = colorScheme.onSecondary
                 )
                 OutlinedTextField(
                     value = fdPower,
                     onValueChange = { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } },
                     modifier = Modifier.width(100.dp),
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colors.onSecondary),
-                    trailingIcon = { Text("W", color = MaterialTheme.colors.onSecondary) },
+                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                    trailingIcon = { Text("W", color = colorScheme.onSecondary) },
                     singleLine = true
                 )
             }
@@ -258,18 +272,18 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(stringResource(R.string.work_mode))
+        Text(stringResource(R.string.work_mode), color = colorScheme.onSecondary)
 
         Box(contentAlignment = Alignment.TopEnd) {
             Button(onClick = { expanded = !expanded }) {
                 Text(
                     workMode.title(),
-                    color = MaterialTheme.colors.onPrimary
+                    color = colorScheme.onPrimary
                 )
                 Icon(
                     imageVector = Icons.Filled.ArrowDropDown,
                     contentDescription = null,
-                    tint = MaterialTheme.colors.onPrimary
+                    tint = colorScheme.onPrimary
                 )
             }
 
@@ -281,22 +295,20 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
                     DropdownMenuItem(onClick = {
                         expanded = false
                         viewModel.workModeStream.value = it
-                    }) {
+                    }, text = {
                         Text(it.title())
-                    }
+                    })
                 }
             }
         }
-
-
     }
 }
 
-@Preview(heightDp = 600, widthDp = 400, locale = "DE")
+@Preview(heightDp = 600, widthDp = 400)
 @Composable
 fun EditPhaseViewPreview() {
-    EnergyStatsTheme {
-        EditPhaseView(NavHostController(LocalContext.current), FakeUserManager())
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+        EditPhaseView(NavHostController(LocalContext.current), FakeUserManager(), modifier = Modifier)
     }
 }
 

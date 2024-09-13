@@ -5,39 +5,39 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsColumn
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
-import com.alpriest.energystats.ui.settings.SettingsPaddingValues
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsScreen
-import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.demo
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun ScheduleDetailView(title: String, navController: NavHostController, schedule: Schedule) {
-    SettingsColumn(
-        padding = SettingsPaddingValues.default()
-    ) {
+fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
+    SettingsColumn(padding = PaddingValues()) {
         if (schedule.name.isNotEmpty()) {
             Column(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp))) {
-                Text(schedule.name, color = colors.onSecondary)
+                Text(
+                    schedule.name,
+                    color = colorScheme.onSecondary,
+                    fontWeight = FontWeight.Bold
+                )
             }
         } else {
             Spacer(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp)))
@@ -49,12 +49,15 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
     if (schedule.phases.isEmpty()) {
         Text(
             stringResource(R.string.no_schedule_time_periods),
-            color = colors.onSecondary
+            color = colorScheme.onSecondary,
+            modifier = Modifier.padding(
+                horizontal = SettingsPadding.PANEL_OUTER_HORIZONTAL
+            )
         )
     }
 
     if (schedule.phases.isNotEmpty()) {
-        SettingsColumnWithChild(modifier = Modifier.fillMaxWidth()) {
+        SettingsColumn(modifier = Modifier.fillMaxWidth(), padding = PaddingValues()) {
             schedule.phases.forEach {
                 OutlinedButton(
                     onClick = {
@@ -63,6 +66,7 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
                         navController.navigate(SettingsScreen.EditPhase.name)
                     },
                     border = null,
+                    shape = RectangleShape,
                     contentPadding = PaddingValues()
                 ) {
                     SchedulePhaseListItemView(
@@ -76,7 +80,7 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
                 }
 
                 if (schedule.phases.last() != it) {
-                    Divider()
+                    HorizontalDivider()
                 }
             }
         }
@@ -86,10 +90,8 @@ fun ScheduleDetailView(title: String, navController: NavHostController, schedule
 @Preview(showBackground = true)
 @Composable
 fun ScheduleDetailViewPreview() {
-    val themeStream = MutableStateFlow(AppTheme.demo())
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         ScheduleDetailView(
-            title = "Something",
             navController = NavHostController(LocalContext.current),
             schedule = Schedule.preview()
         )

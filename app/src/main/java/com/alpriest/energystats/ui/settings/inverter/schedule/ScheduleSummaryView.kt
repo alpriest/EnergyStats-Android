@@ -6,22 +6,23 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,9 +41,8 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsNavButton
-import com.alpriest.energystats.ui.settings.SettingsPaddingValues
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
@@ -58,7 +58,10 @@ class ScheduleSummaryView(
     private val templateStore: TemplateStoring
 ) {
     @Composable
-    fun Content(viewModel: ScheduleSummaryViewModel = viewModel(factory = ScheduleSummaryViewModelFactory(network, configManager, navController, templateStore))) {
+    fun Content(
+        viewModel: ScheduleSummaryViewModel = viewModel(factory = ScheduleSummaryViewModelFactory(network, configManager, navController, templateStore)),
+        modifier: Modifier
+    ) {
         val context = LocalContext.current
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
@@ -75,14 +78,14 @@ class ScheduleSummaryView(
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
             is LoadState.Inactive -> {
                 if (supportedError == null) {
-                    schedule?.let { Loaded(it, viewModel) }
+                    schedule?.let { Loaded(it, viewModel, modifier) }
                 } else {
-                    SettingsPage {
-                        SettingsColumnWithChild(padding = SettingsPaddingValues.withVertical()) {
+                    SettingsPage(modifier) {
+                        SettingsColumn {
                             SettingsTitleView(stringResource(R.string.unsupported))
                             Text(
                                 supportedError,
-                                color = colors.onSecondary
+                                color = colorScheme.onSecondary
                             )
                         }
                     }
@@ -92,13 +95,13 @@ class ScheduleSummaryView(
     }
 
     @Composable
-    fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel) {
+    fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel, modifier: Modifier) {
         val templates = viewModel.templateStream.collectAsState().value
         val context = LocalContext.current
         val schedulerEnabled = viewModel.schedulerEnabledStream.collectAsState().value
         val schedulerEnabledState = rememberSaveable { mutableStateOf(schedulerEnabled) }
 
-        SettingsPage {
+        SettingsPage(modifier.padding(bottom = 12.dp)) {
             SettingsColumn {
                 SettingsCheckbox(
                     title = stringResource(R.string.enable_scheduler),
@@ -110,7 +113,6 @@ class ScheduleSummaryView(
             }
 
             SettingsColumn(
-                padding = SettingsPaddingValues.withVertical(),
                 header = stringResource(R.string.schedule)
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -121,7 +123,8 @@ class ScheduleSummaryView(
                     OutlinedButton(
                         onClick = { viewModel.editSchedule() },
                         border = null,
-                        contentPadding = PaddingValues()
+                        contentPadding = PaddingValues(),
+                        shape = RectangleShape
                     ) {
                         ScheduleView(schedule, modifier = Modifier.weight(1.0f))
 
@@ -143,7 +146,8 @@ class ScheduleSummaryView(
                 ) {
                     Text(
                         text = it.name,
-                        style = TextStyle.Default.copy(color = colors.onSecondary),
+                        color = colorScheme.onSecondary,
+                        fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .padding(PaddingValues(top = 10.dp, bottom = 8.dp))
                             .fillMaxWidth()
@@ -152,7 +156,8 @@ class ScheduleSummaryView(
                     OutlinedButton(
                         onClick = { viewModel.editTemplate(it) },
                         border = null,
-                        contentPadding = PaddingValues()
+                        contentPadding = PaddingValues(),
+                        shape = RectangleShape
                     ) {
                         ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
 
@@ -169,19 +174,23 @@ class ScheduleSummaryView(
             }
 
             Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
-                Text(stringResource(R.string.manage_templates), color = colors.onPrimary)
+                Text(stringResource(R.string.manage_templates), color = colorScheme.onPrimary)
             }
 
-            Text(stringResource(R.string.templates_overview))
+            Text(stringResource(R.string.templates_overview),
+                color = colorScheme.onSecondary,
+                modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL))
         }
     }
 
     @Composable
     fun ActivateButton(onClick: () -> Unit) {
-        Button(onClick = onClick) {
+        Button(
+            onClick,
+            modifier = Modifier.padding(bottom = SettingsPadding.COLUMN_BOTTOM)
+        ) {
             Text(
-                stringResource(R.string.activate),
-                color = colors.onPrimary
+                stringResource(R.string.activate)
             )
         }
     }
@@ -210,7 +219,7 @@ fun ScheduleSummaryViewPreview() {
     val context = LocalContext.current
     LaunchedEffect(null) { viewModel.load(context) }
 
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ScheduleSummaryView(
             configManager = FakeConfigManager(),
             network = DemoNetworking(),
@@ -219,7 +228,8 @@ fun ScheduleSummaryViewPreview() {
             templateStore = PreviewTemplateStore()
         ).Loaded(
             Schedule.preview(),
-            viewModel
+            viewModel,
+            Modifier
         )
     }
 }

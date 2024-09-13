@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -17,14 +17,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
@@ -39,14 +42,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.debugGraph(
-    navController: NavController,
+    navController: NavHostController,
     networkStore: InMemoryLoggingNetworkStore,
     configManager: ConfigManaging,
     network: Networking,
     credentialStore: CredentialStore
 ) {
     navigation(startDestination = "debug", route = "login") {
-        composable("debug") { DebugDataSettingsView(navController, network) }
+        composable("debug") {
+            LoadedScaffold(title = stringResource(R.string.view_debug_data), navController = navController) {
+                DebugDataSettingsView(navController, network)
+            }
+        }
 
         composable("debugReport") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
         composable("debugQuery") { ResponseDebugView(networkStore, mapper = { networkStore.realQueryResponseStream }, fetcher = null) }

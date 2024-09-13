@@ -6,9 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,7 +45,7 @@ class BatterySOCSettings(
     private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager))) {
+    fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager)), modifier: Modifier) {
         val minSOC = viewModel.minSOCStream.collectAsState().value
         val minSOConGrid = viewModel.minSOConGridStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
@@ -62,33 +61,32 @@ class BatterySOCSettings(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = {userManager.logout()  })
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { modifier ->
-                    SettingsPage(modifier) {
+                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, modifier = modifier, content = { innerModifier ->
+                    SettingsPage(innerModifier) {
                         Column {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
-                                    .background(colors.surface)
+                                    .background(colorScheme.surface)
                                     .padding(horizontal = 12.dp, vertical = 4.dp)
                             ) {
                                 Text(
                                     stringResource(R.string.min_soc),
                                     Modifier.weight(1.0f),
-                                    style = MaterialTheme.typography.h4,
-                                    color = colors.onSecondary
+                                    color = colorScheme.onSecondary
                                 )
                                 OutlinedTextField(
                                     value = minSOC,
                                     onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
                                     modifier = Modifier.width(100.dp),
-                                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colors.onSecondary),
-                                    trailingIcon = { Text("%", color = colors.onSecondary) }
+                                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                                    trailingIcon = { Text("%", color = colorScheme.onSecondary) }
                                 )
                             }
 
                             Text(
                                 stringResource(R.string.minsoc_description),
-                                color = colors.onSecondary,
+                                color = colorScheme.onSecondary,
                                 modifier = Modifier
                                     .padding(horizontal = 12.dp)
                                     .padding(top = 4.dp)
@@ -100,21 +98,20 @@ class BatterySOCSettings(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier
-                                    .background(colors.surface)
+                                    .background(colorScheme.surface)
                                     .padding(horizontal = 12.dp, vertical = 4.dp)
                             ) {
                                 Text(
                                     stringResource(R.string.min_soc_on_grid),
                                     Modifier.weight(1.0f),
-                                    style = MaterialTheme.typography.h4,
-                                    color = colors.onSecondary
+                                    color = colorScheme.onSecondary
                                 )
                                 OutlinedTextField(
                                     value = minSOConGrid,
                                     onValueChange = { viewModel.minSOConGridStream.value = it.filter { it.isDigit() } },
                                     modifier = Modifier.width(100.dp),
-                                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colors.onSecondary),
-                                    trailingIcon = { Text("%", color = colors.onSecondary) }
+                                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                                    trailingIcon = { Text("%", color = colorScheme.onSecondary) }
                                 )
                             }
 
@@ -125,25 +122,25 @@ class BatterySOCSettings(
                             ) {
                                 Text(
                                     stringResource(R.string.minsocgrid_description),
-                                    color = colors.onSecondary,
+                                    color = colorScheme.onSecondary,
                                     modifier = Modifier.padding(bottom = 8.dp)
                                 )
 
                                 Text(
                                     stringResource(R.string.minsoc_detail),
-                                    color = colors.onSecondary,
+                                    color = colorScheme.onSecondary,
                                     modifier = Modifier.padding(bottom = 8.dp)
                                 )
 
                                 Text(
                                     stringResource(R.string.minsoc_notsure_footnote),
-                                    color = colors.onSecondary,
+                                    color = colorScheme.onSecondary,
                                     modifier = Modifier.padding(bottom = 8.dp)
                                 )
                             }
                         }
                     }
-                }, Modifier)
+                })
         }
     }
 }
@@ -157,6 +154,6 @@ fun BatterySOCSettingsViewPreview() {
             configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current),
             userManager = FakeUserManager()
-        ).Content()
+        ).Content(modifier = Modifier)
     }
 }
