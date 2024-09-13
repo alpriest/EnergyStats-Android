@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -33,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -335,13 +331,9 @@ fun InlineSettingsNavButton(
     disclosureView: (@Composable () -> Unit)? = null,
     onClick: () -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-
     TextButton(
         onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .indication(interactionSource, rememberRipple()),
+        modifier = modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         contentPadding = PaddingValues(all = 0.dp),
         border = null
@@ -373,13 +365,9 @@ fun InlineSettingsNavButton(
 
 @Composable
 fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIcon: (() -> ImageVector)? = { Icons.Default.ChevronRight }, onClick: () -> Unit) {
-    val interactionSource = remember { MutableInteractionSource() }
-
     Button(
         onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .indication(interactionSource, rememberRipple()),
+        modifier = modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary)
     ) {
         Row(

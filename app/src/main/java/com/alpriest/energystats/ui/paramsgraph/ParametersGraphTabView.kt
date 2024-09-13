@@ -174,12 +174,15 @@ class ParametersGraphTabView(
                 .fillMaxWidth()
         ) {
             selectedDateTime?.let {
-                androidx.compose.material3.Text(
+                Text(
                     text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
                     color = MaterialTheme.colors.onSecondary
                 )
             } ?: run {
-                Text(stringResource(R.string.touch_the_graph_to_see_values_at_that_time))
+                Text(
+                    stringResource(R.string.touch_the_graph_to_see_values_at_that_time),
+                    color = MaterialTheme.colors.onSecondary
+                )
             }
         }
 
