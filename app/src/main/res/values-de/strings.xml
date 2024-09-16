@@ -329,7 +329,7 @@
     <string name="invalid_token_logout_not_required">Ihr API-Token ist ungültig. Bitte folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
     <string name="solcast_solar_prediction">Solcast Solarprognose</string>
     <string name="settings_power_station">Kraftwerk</string>
-    <string name="automatic_time_advice">Bitte stellen Sie sicher, dass das Systemdatum/die Systemzeit auf Ihrem Gerät auf \'automatisch\' eingestellt ist, da Sie sonst möglicherweise nicht mit Ihrem API-Schlüssel anmelden können.</string>
+    <string name="automatic_time_advice">Bitte stellen Sie sicher, dass das Datum und die Uhrzeit auf Ihrem Telefon auf \'automatisch\' eingestellt sind, da Sie sich sonst möglicherweise nicht mit Ihrem API-Schlüssel anmelden können.</string>
     <string name="self_sufficiency_off">Es wird keine Selbsteinschätzung der Selbstständigkeit angezeigt</string>
     <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">Die Entladungskraft muss größer als 0 sein, um zu entladen</string>
     <string name="example">Beispiel</string>
@@ -366,4 +366,6 @@
     <string name="generating">erzeugen</string>
     <string name="custom_range">Benutzerdefinierter Bereich</string>
     <string name="show_self_sufficiency_percentage_on_stats_graph">Zeige den Selbstversorgungsprozentsatz im Statistikdiagramm an</string>
+    <string name="get_started">Loslegen</string>
+    <string name="energy_management_at_your_fingertips">Energiemanagement direkt zur Hand</string>
 </resources>

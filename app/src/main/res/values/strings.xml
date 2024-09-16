@@ -332,7 +332,7 @@
     <string name="invalid_token_logout_not_required">Your API token is invalid. Please follow the instructions to generate a new API token.</string>
     <string name="solcast_solar_prediction">Solcast solar prediction</string>
     <string name="settings_power_station">Power station</string>
-    <string name="automatic_time_advice">Please ensure the system date/time on your device is set to \'automatic\' otherwise you may be unable to login with your API key.</string>
+    <string name="automatic_time_advice">Please ensure the system date/time on your phone is set to \'automatic\' otherwise you may be unable to login with your API key.</string>
     <string name="self_sufficiency_off">No self sufficiency will be shown.</string>
     <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">Force Discharge power needs to be greater than 0 to discharge</string>
     <string name="example">Example</string>
@@ -369,4 +369,6 @@
     <string name="generating">generating</string>
     <string name="custom_range">Custom range</string>
     <string name="show_self_sufficiency_percentage_on_stats_graph">Show self sufficiency percentage on stats graph</string>
+    <string name="get_started">Get started</string>
+    <string name="energy_management_at_your_fingertips">Gestión de energía al alcance de tu mano</string>
 </resources>

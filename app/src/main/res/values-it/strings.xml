@@ -330,7 +330,7 @@
     <string name="invalid_token_logout_not_required">Il tuo token API non è valido. Per favore, segui le istruzioni per generare un nuovo token API.</string>
     <string name="solcast_solar_prediction">Previsione solare di Solcast</string>
     <string name="settings_power_station">Centrale elettrica</string>
-    <string name="automatic_time_advice">Assicurati che la data/l\'ora del sistema sul tuo dispositivo sia impostata su \'automatico\', altrimenti potresti non essere in grado di accedere con la tua chiave API.</string>
+    <string name="automatic_time_advice">Assicurati che la data e l\'ora del sistema sul tuo telefono siano impostate su \'automatico\', altrimenti potresti non riuscire ad accedere con la tua chiave API.</string>
     <string name="self_sufficiency_off">Nessuna stima di autosufficienza sarà mostrata</string>
     <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">La forza di scarica deve essere maggiore di 0 per scaricare</string>
     <string name="example">Esempio</string>
@@ -367,4 +367,6 @@
     <string name="generating">generando</string>
     <string name="custom_range">Intervallo personalizzato</string>
     <string name="show_self_sufficiency_percentage_on_stats_graph">Mostra la percentuale di autosufficienza sul grafico delle statistiche</string>
+    <string name="get_started">Inizia</string>
+    <string name="energy_management_at_your_fingertips">Gestione dell\'energia a portata di mano</string>
 </resources>
