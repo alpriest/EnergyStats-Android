@@ -1,15 +1,19 @@
 package com.alpriest.energystats.ui.login
 
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -34,14 +38,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -56,6 +58,7 @@ import com.alpriest.energystats.ui.helpers.EqualWidthButtonList
 import com.alpriest.energystats.ui.helpers.copyDebugData
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.Sunny
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -131,8 +134,8 @@ class APIKeyLoginView(private val userManager: UserManaging) {
 
                     val description = if (passwordVisible) "Hide password" else "Show password"
 
-                    IconButton(onClick = {passwordVisible = !passwordVisible}){
-                        Icon(imageVector  = image, description)
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = image, description)
                     }
                 }
             )
@@ -188,51 +191,76 @@ class APIKeyLoginView(private val userManager: UserManaging) {
     fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
         Column(
             horizontalAlignment = Alignment.Start,
-            modifier = modifier
-                .fillMaxWidth()
+            modifier = modifier.fillMaxWidth()
         ) {
-
             Text(
                 stringResource(R.string.how_to_get_api_key),
-                modifier = Modifier.padding(bottom = 8.dp),
-                color = colorScheme.onSecondary
+                color = colorScheme.onSecondary,
+                modifier = Modifier.padding(bottom = 4.dp)
             )
+            BulletPoint(1, stringResource(R.string.api_key_step_1), themeStream)
+            BulletPoint(2, stringResource(R.string.api_key_step_2), themeStream)
+            BulletPoint(3, stringResource(R.string.api_key_step_3), themeStream)
+            BulletPoint(4, stringResource(R.string.api_key_step_4), themeStream)
+            BulletPoint(5, stringResource(R.string.api_key_step_5), themeStream)
+            BulletPoint(6, stringResource(R.string.api_key_step_6), themeStream)
+            BulletPoint(7, stringResource(R.string.api_key_step_7), themeStream)
+
+//            val text = stringResource(R.string.api_key_step_8)
+//            val key = stringResource(R.string.example_api_key)
+//
+//            Text(
+//                buildAnnotatedString {
+//                    append(text)
+//
+//                    withStyle(style = SpanStyle(color = Color.Red)) {
+//                        append(key)
+//                    }
+//                },
+//                color = colorScheme.onSecondary
+//            )
+//
+//            Text(
+//                stringResource(R.string.automatic_time_advice),
+//                modifier = Modifier.padding(vertical = 12.dp)
+//            )
+//
+//            ClickableUrlText(
+//                text = stringResource(R.string.api_change_reason),
+//                modifier = Modifier.padding(vertical = 12.dp),
+//                textStyle = TextStyle(colorScheme.onSecondary),
+//                themeStream = themeStream
+//            )
+        }
+    }
+
+    @Composable
+    fun BulletPoint(number: Int, text: String, themeStream: MutableStateFlow<AppTheme>) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            // Circle with Text overlay
+            Box(
+                modifier = Modifier
+                    .size(18.dp)
+                    .background(Sunny, shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = number.toString(),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
             ClickableUrlText(
-                text = stringResource(R.string.api_key_step_1),
+                text = text,
                 textStyle = TextStyle(colorScheme.onSecondary),
-                themeStream = themeStream
-            )
-            Text(stringResource(R.string.api_key_step_2), color = colorScheme.onSecondary)
-            Text(stringResource(R.string.api_key_step_3), color = colorScheme.onSecondary)
-            Text(stringResource(R.string.api_key_step_4), color = colorScheme.onSecondary)
-            Text(stringResource(R.string.api_key_step_5), color = colorScheme.onSecondary)
-            Text(stringResource(R.string.api_key_step_6), color = colorScheme.onSecondary)
-            Text(stringResource(R.string.api_key_step_7), color = colorScheme.onSecondary)
-
-            val text = stringResource(R.string.api_key_step_8)
-            val key = stringResource(R.string.example_api_key)
-
-            Text(
-                buildAnnotatedString {
-                    append(text)
-
-                    withStyle(style = SpanStyle(color = Color.Red)) {
-                        append(key)
-                    }
-                },
-                color = colorScheme.onSecondary
-            )
-
-            Text(
-                stringResource(R.string.automatic_time_advice),
-                modifier = Modifier.padding(vertical = 12.dp)
-            )
-
-            ClickableUrlText(
-                text = stringResource(R.string.api_change_reason),
-                modifier = Modifier.padding(vertical = 12.dp),
-                textStyle = TextStyle(colorScheme.onSecondary),
-                themeStream = themeStream
+                themeStream = themeStream,
+                modifier = Modifier.align(Alignment.Top)
             )
         }
     }
