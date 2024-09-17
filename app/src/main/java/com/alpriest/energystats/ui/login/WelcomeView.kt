@@ -17,9 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -42,9 +39,12 @@ import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun WelcomeView(userManager: UserManaging, themeStream: MutableStateFlow<AppTheme>) {
-    var showingApiKey by remember { mutableStateOf(false) }
-
+fun WelcomeView(
+    showingApiKey: Boolean,
+    userManager: UserManaging,
+    themeStream: MutableStateFlow<AppTheme>,
+    onClick: () -> Unit
+) {
     Column(
         horizontalAlignment = CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -63,9 +63,7 @@ fun WelcomeView(userManager: UserManaging, themeStream: MutableStateFlow<AppThem
             )
 
             Button(
-                onClick = {
-                    showingApiKey = !showingApiKey
-                },
+                onClick = onClick,
                 modifier = Modifier
                     .padding(top = 44.dp)
                     .defaultMinSize(minWidth = 200.dp)
@@ -82,8 +80,8 @@ fun WelcomeLogoView(showingApiKey: Boolean) {
     val animationSpec: AnimationSpec<Dp> = tween(durationMillis = 200, easing = EaseIn)
     val aspectRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
     val animatedWidth: Dp by animateDpAsState(targetValue = if (showingApiKey) 160.dp else LocalConfiguration.current.screenWidthDp.dp, label = "logo width")
-    val animatedHeight: Dp by animateDpAsState(targetValue = animatedWidth / aspectRatio, animationSpec = animationSpec)
-    val animatedPadding: Dp by animateDpAsState(targetValue = if (showingApiKey) 12.dp else 0.dp, animationSpec = animationSpec)
+    val animatedHeight: Dp by animateDpAsState(targetValue = animatedWidth / aspectRatio, animationSpec = animationSpec, label = "logo height")
+    val animatedPadding: Dp by animateDpAsState(targetValue = if (showingApiKey) 12.dp else 0.dp, animationSpec = animationSpec, label = "logo padding")
 
     Box(
         modifier = Modifier
@@ -108,6 +106,6 @@ fun WelcomeLogoView(showingApiKey: Boolean) {
 @Composable
 fun WelcomeViewPreview() {
     EnergyStatsTheme {
-        WelcomeView(userManager = FakeUserManager(), MutableStateFlow(AppTheme.demo()))
+        WelcomeView(false, userManager = FakeUserManager(), MutableStateFlow(AppTheme.demo())) {}
     }
 }
