@@ -1,6 +1,9 @@
 package com.alpriest.energystats.ui.login
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -189,6 +193,8 @@ class APIKeyLoginView(private val userManager: UserManaging) {
 
     @Composable
     fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+        val showing = remember { mutableStateOf(true) }
+
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = modifier.fillMaxWidth()
@@ -196,7 +202,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
             Text(
                 stringResource(R.string.how_to_get_api_key),
                 color = colorScheme.onSecondary,
-                modifier = Modifier.padding(bottom = 4.dp)
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             BulletPoint(1, stringResource(R.string.api_key_step_1), themeStream)
             BulletPoint(2, stringResource(R.string.api_key_step_2), themeStream)
@@ -206,38 +212,49 @@ class APIKeyLoginView(private val userManager: UserManaging) {
             BulletPoint(6, stringResource(R.string.api_key_step_6), themeStream)
             BulletPoint(7, stringResource(R.string.api_key_step_7), themeStream)
 
-//            val text = stringResource(R.string.api_key_step_8)
-//            val key = stringResource(R.string.example_api_key)
-//
-//            Text(
-//                buildAnnotatedString {
-//                    append(text)
-//
-//                    withStyle(style = SpanStyle(color = Color.Red)) {
-//                        append(key)
-//                    }
-//                },
-//                color = colorScheme.onSecondary
-//            )
-//
-//            Text(
-//                stringResource(R.string.automatic_time_advice),
-//                modifier = Modifier.padding(vertical = 12.dp)
-//            )
-//
-//            ClickableUrlText(
-//                text = stringResource(R.string.api_change_reason),
-//                modifier = Modifier.padding(vertical = 12.dp),
-//                textStyle = TextStyle(colorScheme.onSecondary),
-//                themeStream = themeStream
-//            )
+            Button(
+                onClick = { showing.value = !showing.value },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorScheme.background,
+                    contentColor = colorScheme.onSecondary
+                ),
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text("What is my API key?")
+            }
+
+            AnimatedVisibility(
+                visible = showing.value,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+            ) {
+                Column {
+                    Paragraph(stringResource(R.string.what_is_api_key_1), themeStream = themeStream)
+                    Paragraph(stringResource(R.string.what_is_api_key_2), themeStream = themeStream)
+                    Paragraph(stringResource(R.string.what_is_api_key_3), themeStream = themeStream)
+                    Paragraph(stringResource(R.string.what_is_api_key_4), themeStream = themeStream)
+                    Paragraph(stringResource(R.string.what_is_api_key_5), themeStream = themeStream)
+                }
+            }
         }
+    }
+
+    @Composable
+    fun Paragraph(text: String, themeStream: MutableStateFlow<AppTheme>) {
+        ClickableUrlText(
+            text,
+            textStyle = TextStyle(colorScheme.onSecondary),
+            themeStream = themeStream,
+            modifier = Modifier.padding(vertical = 4.dp)
+        )
     }
 
     @Composable
     fun BulletPoint(number: Int, text: String, themeStream: MutableStateFlow<AppTheme>) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
             verticalAlignment = Alignment.Top
         ) {
             // Circle with Text overlay
