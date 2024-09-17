@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -11,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -22,7 +20,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.ui.ClickableUrlText
+import com.alpriest.energystats.ui.login.HowToObtainAPIKeyView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
@@ -54,65 +52,12 @@ fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, th
                         modifier = Modifier.padding(top = 4.dp)
                     )
 
-                    HowToObtainAPIKeyView(themeStream, modifier = Modifier.padding(top = 44.dp))
+                    HowToObtainAPIKeyView().Content(themeStream, modifier = Modifier.padding(top = 44.dp))
+                    SettingsBottomSpace()
                 }
             }
         }
     )
-}
-
-//TODO: Reuse APIKeyLoginView
-@Composable
-fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Text(
-            stringResource(R.string.how_to_get_api_key),
-            modifier = Modifier.padding(bottom = 8.dp),
-            color = colorScheme.onSecondary
-        )
-        ClickableUrlText(
-            text = stringResource(R.string.api_key_step_1),
-            textStyle = TextStyle(colorScheme.onSecondary),
-            themeStream = themeStream
-        )
-        Text(stringResource(R.string.api_key_step_2), color = colorScheme.onSecondary)
-        Text(stringResource(R.string.api_key_step_3), color = colorScheme.onSecondary)
-        Text(stringResource(R.string.api_key_step_4), color = colorScheme.onSecondary)
-        Text(stringResource(R.string.api_key_step_5), color = colorScheme.onSecondary)
-        Text(stringResource(R.string.api_key_step_6), color = colorScheme.onSecondary)
-        Text(stringResource(R.string.api_key_step_7), color = colorScheme.onSecondary)
-
-//        val text = stringResource(R.string.api_key_step_8)
-//        val key = stringResource(R.string.example_api_key)
-//
-//        Text(
-//            buildAnnotatedString {
-//                append(text)
-//
-//                withStyle(style = SpanStyle(color = Color.Red)) {
-//                    append(key)
-//                }
-//            },
-//            color = colorScheme.onSecondary
-//        )
-//
-//        Text(
-//            stringResource(R.string.automatic_time_advice),
-//            modifier = Modifier.padding(vertical = 12.dp),
-//            color = colorScheme.onSecondary
-//        )
-//
-//        ClickableUrlText(
-//            text = stringResource(R.string.api_change_reason),
-//            modifier = Modifier.padding(vertical = 12.dp),
-//            textStyle = TextStyle(colorScheme.onSecondary),
-//            themeStream = themeStream
-//        )
-    }
 }
 
 @Preview

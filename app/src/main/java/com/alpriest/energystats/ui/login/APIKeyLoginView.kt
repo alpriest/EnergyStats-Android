@@ -187,13 +187,15 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                 }
             }
 
-            HowToObtainAPIKeyView(themeStream, Modifier.padding(horizontal = 16.dp))
+            HowToObtainAPIKeyView().Content(themeStream, Modifier.padding(horizontal = 16.dp))
         }
     }
+}
 
+class HowToObtainAPIKeyView {
     @Composable
-    fun HowToObtainAPIKeyView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-        val showing = remember { mutableStateOf(true) }
+    fun Content(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+        val showing = remember { mutableStateOf(false) }
 
         Column(
             horizontalAlignment = Alignment.Start,
