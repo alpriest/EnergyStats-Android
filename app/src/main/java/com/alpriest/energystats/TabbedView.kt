@@ -112,7 +112,7 @@ fun TabbedView(
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
                     1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
                     2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
-                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).Content(themeStream = themeStream)
+                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(themeStream = themeStream)
                     4 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,

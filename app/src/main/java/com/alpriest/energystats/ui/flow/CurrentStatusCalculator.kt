@@ -45,7 +45,6 @@ class CurrentStatusCalculator(
     val currentCT2: Double
     val currentSolarPower: Double
     val currentSolarStringsPower: List<StringPower>
-    val currentFaults: List<String>
 
     init {
         val status = mapCurrentValues(response, hasPV)
@@ -56,13 +55,6 @@ class CurrentStatusCalculator(
         currentCT2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
         currentSolarPower = calculateSolarPower(status.hasPV, status, config.shouldCombineCT2WithPVPower)
         currentSolarStringsPower = calculateSolarStringsPower(status.hasPV, status)
-        currentFaults = currentFaults(response)
-    }
-
-    private fun currentFaults(response: OpenRealQueryResponse): List<String> {
-        response.datas.currentData("currentFault")?.valueString?.let {
-            return it.split(",").filter { it.isNotBlank() }
-        } ?: return listOf()
     }
 
     private fun loadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {

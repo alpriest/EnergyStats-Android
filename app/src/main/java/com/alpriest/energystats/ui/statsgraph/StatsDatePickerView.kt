@@ -64,6 +64,8 @@ sealed class DatePickerRange {
 @Composable
 fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: MutableStateFlow<Boolean>, modifier: Modifier = Modifier) {
     val range = viewModel.rangeStream.collectAsState().value
+    val month = viewModel.monthStream.collectAsState().value
+    val year = viewModel.yearStream.collectAsState().value
 
     Row(modifier = modifier) {
         DateRangePicker(viewModel, range, graphShowingState)
@@ -71,11 +73,11 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
         when (range) {
             is DatePickerRange.DAY -> CalendarView(viewModel.dateStream)
             is DatePickerRange.MONTH -> {
-                MonthPicker(viewModel)
-                YearPicker(viewModel)
+                MonthPicker(month) { viewModel.monthStream.value = it }
+                YearPicker(year) { viewModel.yearStream.value = it }
             }
 
-            is DatePickerRange.YEAR -> YearPicker(viewModel)
+            is DatePickerRange.YEAR -> YearPicker(year) { viewModel.yearStream.value = it }
             is DatePickerRange.CUSTOM -> CustomRangePicker(viewModel)
         }
 
@@ -107,9 +109,8 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
 }
 
 @Composable
-private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
+fun MonthPicker(month: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
-    val month = viewModel.monthStream.collectAsState().value
     val calendar = Calendar.getInstance()
     calendar.set(Calendar.DAY_OF_MONTH, 1)
     val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
@@ -120,6 +121,7 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
             .padding(end = 14.dp)
     ) {
         SlimButton(
+            enabled = enabled,
             onClick = { showing = true }
         ) {
             calendar.set(Calendar.MONTH, month)
@@ -131,7 +133,7 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
                 calendar.set(Calendar.MONTH, monthIndex)
                 val monthName = monthFormat.format(calendar.time)
                 DropdownMenuItem(onClick = {
-                    viewModel.monthStream.value = monthIndex
+                    onClick(monthIndex)
                     showing = false
                 }, text = {
                     Text(monthName)
@@ -149,9 +151,8 @@ private fun MonthPicker(viewModel: StatsDatePickerViewModel) {
 }
 
 @Composable
-private fun YearPicker(viewModel: StatsDatePickerViewModel) {
+fun YearPicker(year: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
-    val year = viewModel.yearStream.collectAsState().value
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
     Box(
@@ -160,6 +161,7 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
             .padding(end = 14.dp)
     ) {
         SlimButton(
+            enabled = enabled,
             onClick = { showing = true }
         ) {
             Text(year.toString())
@@ -168,7 +170,7 @@ private fun YearPicker(viewModel: StatsDatePickerViewModel) {
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
             for (yearIndex in 2021..currentYear) {
                 DropdownMenuItem(onClick = {
-                    viewModel.yearStream.value = yearIndex
+                    onClick(yearIndex)
                     showing = false
                 }, text = {
                     Text(yearIndex.toString())

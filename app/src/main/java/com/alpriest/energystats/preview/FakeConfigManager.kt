@@ -18,6 +18,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
 import com.alpriest.energystats.ui.settings.solcast.preview
+import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
@@ -73,6 +74,7 @@ class FakeConfigManager : ConfigManaging {
     override var scheduleTemplates: List<ScheduleTemplate> = listOf()
     override var truncatedYAxisOnParameterGraphs: Boolean = true
     override var earningsModel: EarningsModel = EarningsModel.Exported
+    override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic
 
     override var devices: List<Device>? = listOf(
         Device(

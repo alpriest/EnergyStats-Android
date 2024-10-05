@@ -15,6 +15,7 @@ import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
+import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
@@ -29,11 +30,15 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
     override var showBatteryTimeEstimateOnWidget: Boolean
         get() = config.showBatteryTimeEstimateOnWidget
-        set(value) { config.showBatteryTimeEstimateOnWidget = value }
+        set(value) {
+            config.showBatteryTimeEstimateOnWidget = value
+        }
 
     override var useTraditionalLoadFormula: Boolean
         get() = config.useTraditionalLoadFormula
-        set(value) { config.useTraditionalLoadFormula = value }
+        set(value) {
+            config.useTraditionalLoadFormula = value
+        }
 
     override var colorThemeMode: ColorThemeMode
         get() = ColorThemeMode.fromInt(config.colorTheme)
@@ -192,8 +197,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         }
 
     override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
-        config.clearDisplaySettings()
-        config.clearDeviceSettings()
+        if (clearDisplaySettings) {
+            config.clearDisplaySettings()
+        }
+        
+        if (clearDeviceSettings) {
+            config.clearDeviceSettings()
+        }
     }
 
     override var showUsableBatteryOnly: Boolean
@@ -455,6 +465,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = EarningsModel.fromInt(config.earningsModel)
         set(value) {
             config.earningsModel = value.value
+        }
+
+    override var summaryDateRange: SummaryDateRange
+        get() = config.summaryDateRange
+        set(value) {
+            config.summaryDateRange = value
         }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)

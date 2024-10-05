@@ -148,7 +148,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         val key = makeKey(currentFunctionName(), deviceSN)
 
         val cached = cache[key]
-        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && cached.item is DeviceDetailResponse) {
+        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && cached.item is DeviceDetailResponse) {
             cached.item
         } else {
             val fresh = api.openapi_fetchDevice(deviceSN)

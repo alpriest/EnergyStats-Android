@@ -25,7 +25,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.LoadState
-import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
 import com.alpriest.energystats.ui.statsgraph.chartStyle
@@ -82,7 +81,7 @@ class SolarForecastView(
                 ) {
                     Text(
                         stringResource(R.string.solar_forecasts),
-                        style = typography.titleLarge,
+                        style = typography.headlineLarge,
                         color = colorScheme.onSecondary,
                         modifier = Modifier.fillMaxWidth()
                     )

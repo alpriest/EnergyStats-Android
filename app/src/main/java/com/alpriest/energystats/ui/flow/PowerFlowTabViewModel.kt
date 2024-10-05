@@ -137,8 +137,7 @@ class PowerFlowTabViewModel(
             "SoC_1",
             "batTemperature",
             "ResidualEnergy",
-            "epsPower",
-            "currentFault"
+            "epsPower"
         )
 
         if (configManager.powerFlowStrings.enabled) {
@@ -183,7 +182,6 @@ class PowerFlowTabViewModel(
                     battery = battery,
                     configManager = configManager,
                     ct2 = currentViewModel.currentCT2,
-                    faults = currentViewModel.currentFaults,
                     currentDevice = currentDevice,
                     network = network
                 )

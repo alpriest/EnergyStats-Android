@@ -41,6 +41,7 @@ class SummaryTabViewModel(
     private val approximationsCalculator = ApproximationsCalculator(configManager, networking)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val loadStateStream = MutableStateFlow(UiLoadState(LoadState.Inactive))
+    val summaryDateRangeStream = MutableStateFlow<SummaryDateRange>(SummaryDateRange.Automatic)
 
     suspend fun load(context: Context) {
         if (approximationsViewModelStream.value != null) {
@@ -53,6 +54,13 @@ class SummaryTabViewModel(
             approximationsViewModelStream.value = makeApproximationsViewModel(totals = totals)
         }
         loadStateStream.value = UiLoadState(LoadState.Inactive)
+    }
+
+    suspend fun setDateRange(dateRange: SummaryDateRange, context: Context) {
+        configManager.summaryDateRange = dateRange
+        summaryDateRangeStream.value = dateRange
+        approximationsViewModelStream.value = null
+        load(context)
     }
 
     private suspend fun fetchAllYears(device: Device): Map<ReportVariable, Double> {

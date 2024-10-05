@@ -16,6 +16,7 @@ import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
+import com.alpriest.energystats.ui.flow.currentData
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +39,6 @@ class LoadedPowerFlowViewModel(
     val battery: BatteryViewModel,
     val configManager: ConfigManaging,
     val ct2: Double,
-    val faults: List<String>,
     val currentDevice: Device,
     val network: Networking
 ) : ViewModel() {
@@ -48,6 +48,7 @@ class LoadedPowerFlowViewModel(
     val gridExportTotal = MutableStateFlow<Double?>(null)
     val earnings = MutableStateFlow<EarningsViewModel?>(null)
     val todaysGeneration = MutableStateFlow<GenerationViewModel?>(null)
+    val faults = MutableStateFlow<List<String>>(listOf())
 
     init {
         loadDeviceStatus()
@@ -80,6 +81,14 @@ class LoadedPowerFlowViewModel(
     private fun loadDeviceStatus() {
         viewModelScope.launch {
             deviceState.value = loadDeviceStatus(currentDevice)
+
+            if (deviceState.value == DeviceState.Fault) {
+                val response = network.fetchRealData(currentDevice.deviceSN, variables = listOf("currentFault"))
+
+                faults.value = response.datas.currentData("currentFault")?.valueString?.let {
+                    return@let it.split(",").filter { it.isNotBlank() }
+                } ?: listOf()
+            }
         }
     }
 

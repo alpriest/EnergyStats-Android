@@ -91,6 +91,13 @@ class UserManager(
 
     override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
         store.logout()
+
+        if (configManager.isDemoUser) {
+            configManager.logout(clearDisplaySettings = true, clearDeviceSettings = true)
+        } else {
+            configManager.logout(clearDisplaySettings = clearDisplaySettings, clearDeviceSettings = clearDeviceSettings)
+        }
+
         configManager.logout(clearDisplaySettings, clearDeviceSettings)
         _loggedInState.value = LoginStateHolder(LoggedOut())
     }

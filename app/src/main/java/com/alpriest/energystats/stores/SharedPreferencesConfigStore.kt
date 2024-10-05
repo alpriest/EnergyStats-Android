@@ -10,6 +10,7 @@ import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
+import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -18,13 +19,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     ConfigInterface {
 
     private enum class SharedPreferenceDeviceKey {
-        SELECTED_DEVICE_SN,
+        IS_DEMO_USER,
         DEVICES,
+        SELECTED_DEVICE_SN,
+        POWER_STATION_DETAIL,
         BATTERY_CAPACITY_OVERRIDES,
     }
 
     private enum class SharedPreferenceDisplayKey {
-        IS_DEMO_USER,
         USE_LARGE_DISPLAY,
         USE_COLOURED_FLOW_LINES,
         SHOW_BATTERY_TEMPERATURE,
@@ -64,11 +66,12 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_BATTERY_SOC_AS_PERCENTAGE,
         USE_TRADITIONAL_LOAD_FORMULA,
         POWER_FLOW_STRINGS,
-        POWER_STATION_DETAIL,
         SHOW_ESTIMATED_TIME_ON_WIDGET,
         SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY,
         TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS,
-        EARNINGS_MODEl
+        EARNINGS_MODEl,
+        SUMMARY_DATE_RANGE,
+        SCHEDULE_TEMPLATES
     }
 
     override fun clearDisplaySettings() {
@@ -117,14 +120,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var powerStationDetail: PowerStationDetail?
         get() {
-            val data: String? = sharedPreferences.getString(SharedPreferenceDisplayKey.POWER_STATION_DETAIL.name, null) ?: return null
+            val data: String? = sharedPreferences.getString(SharedPreferenceDeviceKey.POWER_STATION_DETAIL.name, null) ?: return null
 
             return Gson().fromJson(data, object : TypeToken<PowerStationDetail>() {}.type)
         }
         set(value) {
             val editor = sharedPreferences.edit()
             val jsonString = Gson().toJson(value)
-            editor.putString(SharedPreferenceDisplayKey.POWER_STATION_DETAIL.name, jsonString)
+            editor.putString(SharedPreferenceDeviceKey.POWER_STATION_DETAIL.name, jsonString)
             editor.apply()
         }
 
@@ -281,10 +284,10 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         }
 
     override var isDemoUser: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.IS_DEMO_USER.name, false)
+        get() = sharedPreferences.getBoolean(SharedPreferenceDeviceKey.IS_DEMO_USER.name, false)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceDisplayKey.IS_DEMO_USER.name, value)
+            editor.putBoolean(SharedPreferenceDeviceKey.IS_DEMO_USER.name, value)
             editor.apply()
         }
 
@@ -514,7 +517,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var scheduleTemplates: List<ScheduleTemplate>
         get() {
-            var data = sharedPreferences.getString("SCHEDULE_TEMPLATES", null)
+            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, null)
             if (data == null) {
                 data = Gson().toJson(listOf<ScheduleTemplate>())
                 scheduleTemplates = listOf()
@@ -525,7 +528,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             val jsonString = Gson().toJson(value)
-            editor.putString("SCHEDULE_TEMPLATES", jsonString)
+            editor.putString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, jsonString)
             editor.apply()
         }
 
@@ -542,6 +545,23 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putInt(SharedPreferenceDisplayKey.EARNINGS_MODEl.name, value)
+            editor.apply()
+        }
+
+    override var summaryDateRange: SummaryDateRange
+        get() {
+            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SUMMARY_DATE_RANGE.name, null)
+            if (data == null) {
+                data = Gson().toJson(SummaryDateRange.Automatic)
+                summaryDateRange = SummaryDateRange.Automatic
+            }
+
+            return Gson().fromJson(data, object : TypeToken<SummaryDateRange>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceDisplayKey.SUMMARY_DATE_RANGE.name, jsonString)
             editor.apply()
         }
 }
