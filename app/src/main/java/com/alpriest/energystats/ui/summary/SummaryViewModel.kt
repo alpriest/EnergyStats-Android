@@ -63,13 +63,27 @@ class SummaryTabViewModel(
         load(context)
     }
 
+    private val fromYear: Int
+        get() {
+            return when (val dateRange = configManager.summaryDateRange) {
+                is SummaryDateRange.Automatic -> 2020
+                is SummaryDateRange.Manual -> dateRange.from.year
+            }
+        }
+
+    private val toYear: Int
+        get() {
+            return when (val dateRange = configManager.summaryDateRange) {
+                is SummaryDateRange.Automatic -> Calendar.getInstance().get(Calendar.YEAR)
+                is SummaryDateRange.Manual -> dateRange.to.year
+            }
+        }
+
     private suspend fun fetchAllYears(device: Device): Map<ReportVariable, Double> {
         val totals = mutableMapOf<ReportVariable, Double>()
-        val maxYears = 20
         var hasFinished = false
 
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        for (year in (currentYear - maxYears..currentYear).reversed()) {
+        for (year in (fromYear..toYear).reversed()) {
             if (hasFinished) {
                 break
             }
@@ -111,7 +125,8 @@ class SummaryTabViewModel(
             ReportVariable.GridConsumption,
             ReportVariable.Loads
         )
-        val reports = networking.fetchReport(deviceSN = device.deviceSN,
+        val reports = networking.fetchReport(
+            deviceSN = device.deviceSN,
             variables = reportVariables,
             queryDate = QueryDate(year, null, null),
             reportType = ReportType.year
@@ -159,10 +174,12 @@ class SummaryTabViewModel(
             return null
         }
 
-        return approximationsCalculator.calculateApproximations(grid = grid,
+        return approximationsCalculator.calculateApproximations(
+            grid = grid,
             feedIn = feedIn,
             loads = loads,
             batteryCharge = batteryCharge,
-            batteryDischarge = batteryDischarge)
+            batteryDischarge = batteryDischarge
+        )
     }
 }
