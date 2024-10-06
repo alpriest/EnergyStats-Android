@@ -82,7 +82,7 @@ class LoadedPowerFlowViewModel(
         viewModelScope.launch {
             deviceState.value = loadDeviceStatus(currentDevice)
 
-            if (deviceState.value == DeviceState.Fault) {
+            if (deviceState.value != DeviceState.Online) {
                 val response = network.fetchRealData(currentDevice.deviceSN, variables = listOf("currentFault"))
 
                 faults.value = response.datas.currentData("currentFault")?.valueString?.let {
