@@ -34,6 +34,19 @@ sealed class SummaryDateRange {
     data class Manual(val from: LocalDate, val to: LocalDate) : SummaryDateRange()
 }
 
+data class SummaryDateRangeSerialised(
+    var automatic: Boolean,
+    var from: DateMonth?,
+    var to: DateMonth?
+)
+
+data class DateMonth(
+    var month: Int,
+    var year: Int
+) {
+    constructor(date: LocalDate) : this(date.monthValue, date.year)
+}
+
 @Composable
 fun EditSummaryView(
     modifier: Modifier,

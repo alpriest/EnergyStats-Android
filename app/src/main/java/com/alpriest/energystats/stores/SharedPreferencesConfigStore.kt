@@ -10,10 +10,13 @@ import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
+import com.alpriest.energystats.ui.summary.DateMonth
 import com.alpriest.energystats.ui.summary.SummaryDateRange
+import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.time.LocalDate
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
     ConfigInterface {
@@ -552,15 +555,27 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         get() {
             var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SUMMARY_DATE_RANGE.name, null)
             if (data == null) {
-                data = Gson().toJson(SummaryDateRange.Automatic)
+                data = Gson().toJson(SummaryDateRangeSerialised(automatic = true, from = null, to = null))
                 summaryDateRange = SummaryDateRange.Automatic
             }
 
-            return Gson().fromJson(data, object : TypeToken<SummaryDateRange>() {}.type)
+            val deserialisedValue: SummaryDateRangeSerialised = Gson().fromJson(data, object : TypeToken<SummaryDateRangeSerialised>() {}.type)
+            return if (deserialisedValue.automatic || deserialisedValue.from == null || deserialisedValue.to == null) {
+                SummaryDateRange.Automatic
+            } else {
+                val from = deserialisedValue.from!!
+                val to = deserialisedValue.to!!
+                SummaryDateRange.Manual(LocalDate.of(from.year, from.month, 1), LocalDate.of(to.year, to.month, 1))
+            }
         }
         set(value) {
             val editor = sharedPreferences.edit()
-            val jsonString = Gson().toJson(value)
+            val serialisedValue = when (value) {
+                is SummaryDateRange.Automatic -> SummaryDateRangeSerialised(automatic = true, from = null, to = null)
+                is SummaryDateRange.Manual -> SummaryDateRangeSerialised(automatic = false, from = DateMonth(value.from), to = DateMonth(value.to))
+            }
+
+            val jsonString = Gson().toJson(serialisedValue)
             editor.putString(SharedPreferenceDisplayKey.SUMMARY_DATE_RANGE.name, jsonString)
             editor.apply()
         }

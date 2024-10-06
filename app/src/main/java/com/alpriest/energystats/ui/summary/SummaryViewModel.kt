@@ -105,8 +105,8 @@ class SummaryTabViewModel(
 
                 emptyMonth?.let { month ->
                     oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
-                        is SummaryDateRange.Automatic -> LocalDate.of(year, month - 1, 1).monthYear()
-                        is SummaryDateRange.Manual -> "$dateRange.from.year"
+                        is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).monthYear()
+                        is SummaryDateRange.Manual -> dateRange.from.monthYear()
                     }
                     hasFinished = true
                 }
