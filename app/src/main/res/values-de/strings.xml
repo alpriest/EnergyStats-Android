@@ -302,7 +302,7 @@
     <string name="display_options">Anzeigeoptionen</string>
     <string name="unsupported">Nicht unterstützt</string>
     <string name="currency_symbol">Währungssymbol</string>
-    <string name="includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Beinhaltet Daten von %1$s bis heute. Die Zahlen sind ungefähr und gehen davon aus, dass die Energiekauf-/verkaufspreise während des gesamten Besitzzeitraums konstant blieben.</string>
+    <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Einschließlich Daten von %1$s bis %2$s. Die Angaben sind ungefähr und gehen davon aus, dass die Energiepreise für den Kauf/Verkauf während des gesamten Eigentumszeitraums konstant blieben.</string>
     <string name="templates_not_yet_available">Zeitplanvorlagen sind über OpenAPI von FoxESS noch nicht verfügbar. Sie wurden angefordert und werden hinzugefügt, sobald sie verfügbar sind.</string>
     <string name="enable_scheduler">Zeitplaner aktivieren</string>
     <string name="deactivating">Deaktivierung</string>

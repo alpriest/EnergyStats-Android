@@ -10,13 +10,11 @@ import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
-import com.alpriest.energystats.ui.summary.DateMonth
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.time.LocalDate
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
     ConfigInterface {
@@ -565,14 +563,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             } else {
                 val from = deserialisedValue.from!!
                 val to = deserialisedValue.to!!
-                SummaryDateRange.Manual(LocalDate.of(from.year, from.month, 1), LocalDate.of(to.year, to.month, 1))
+                SummaryDateRange.Manual(from, to)
             }
         }
         set(value) {
             val editor = sharedPreferences.edit()
             val serialisedValue = when (value) {
                 is SummaryDateRange.Automatic -> SummaryDateRangeSerialised(automatic = true, from = null, to = null)
-                is SummaryDateRange.Manual -> SummaryDateRangeSerialised(automatic = false, from = DateMonth(value.from), to = DateMonth(value.to))
+                is SummaryDateRange.Manual -> SummaryDateRangeSerialised(automatic = false, from = value.from, to = value.to)
             }
 
             val jsonString = Gson().toJson(serialisedValue)

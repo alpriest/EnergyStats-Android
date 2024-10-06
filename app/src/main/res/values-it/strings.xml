@@ -303,7 +303,7 @@
     <string name="display_options">Opzioni di visualizzazione</string>
     <string name="unsupported">Non supportato</string>
     <string name="currency_symbol">Simbolo della valuta</string>
-    <string name="includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Include dati da %1$s a oggi. Le cifre sono approssimative e assumono che i prezzi di acquisto/vendita dell\'energia siano rimasti costanti per tutto il periodo di proprietà.</string>
+    <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Include dati da %1$s a oggi. Le cifre sono approssimative e assumono che i prezzi di acquisto/vendita dell\'energia siano rimasti costanti per tutto il periodo di proprietà.</string>
     <string name="templates_not_yet_available">I modelli di pianificazione non sono ancora disponibili tramite OpenAPI da FoxESS. Sono stati richiesti e verranno aggiunti quando disponibili.</string>
     <string name="enable_scheduler">Abilita pianificatore</string>
     <string name="deactivating">Disattivando</string>

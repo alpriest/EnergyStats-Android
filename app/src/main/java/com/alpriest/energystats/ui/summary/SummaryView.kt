@@ -37,6 +37,7 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.flow.LoadState
@@ -104,6 +105,7 @@ class SummaryView(
         val oldestDataDate = viewModel.oldestDataDate.collectAsState().value
         val isLoading = viewModel.loadStateStream.collectAsState().value.state
         val context = LocalContext.current
+        val latestDataDate = viewModel.latestDataDate.collectAsState().value
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -118,15 +120,14 @@ class SummaryView(
                 .padding(12.dp)
         ) {
             when (isLoading) {
-                is LoadState.Active ->
-                    Text(stringResource(R.string.loading))
-
+                is LoadState.Active -> LoadingView(title = "Loading...")
                 else -> {
                     approximations?.let {
                         LoadedView(
                             approximationsViewModel = it,
                             appTheme = appTheme,
-                            oldestDataDate = oldestDataDate
+                            oldestDataDate = oldestDataDate,
+                            latestDataDate = latestDataDate
                         )
                     }
 
@@ -140,7 +141,7 @@ class SummaryView(
     }
 
     @Composable
-    private fun LoadedView(approximationsViewModel: ApproximationsViewModel, appTheme: AppTheme, oldestDataDate: String) {
+    private fun LoadedView(approximationsViewModel: ApproximationsViewModel, appTheme: AppTheme, oldestDataDate: String, latestDataDate: String) {
         EnergySummaryRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = typography.titleLarge)
         EnergySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = typography.titleLarge)
 
@@ -170,8 +171,9 @@ class SummaryView(
         Text(
             modifier = Modifier.padding(top = 8.dp),
             text = stringResource(
-                R.string.includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership,
-                oldestDataDate
+                R.string.includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership,
+                oldestDataDate,
+                latestDataDate
             ),
             color = DimmedTextColor,
             fontSize = appTheme.smallFontSize()

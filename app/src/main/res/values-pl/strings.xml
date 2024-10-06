@@ -303,7 +303,7 @@
     <string name="display_options">Opcje wyświetlania</string>
     <string name="unsupported">Nieobsługiwane</string>
     <string name="currency_symbol">Symbol waluty</string>
-    <string name="includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Zawiera dane od %1$s do teraz. Liczby są przybliżone i zakładają, że ceny kupna/sprzedaży energii pozostały stałe przez cały okres posiadania.</string>
+    <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Zawiera dane od %1$s do teraz. Liczby są przybliżone i zakładają, że ceny kupna/sprzedaży energii pozostały stałe przez cały okres posiadania.</string>
     <string name="templates_not_yet_available">Szablony harmonogramów nie są jeszcze dostępne za pośrednictwem OpenAPI od FoxESS. Zostały zażądane i zostaną dodane, gdy będą dostępne.</string>
     <string name="enable_scheduler">Włącz harmonogram</string>
     <string name="deactivating">Dezaktywacja</string>

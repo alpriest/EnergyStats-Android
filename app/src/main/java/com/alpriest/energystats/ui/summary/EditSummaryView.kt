@@ -31,21 +31,19 @@ import java.time.LocalDate
 
 sealed class SummaryDateRange {
     object Automatic : SummaryDateRange()
-    data class Manual(val from: LocalDate, val to: LocalDate) : SummaryDateRange()
+    data class Manual(val from: MonthYear, val to: MonthYear) : SummaryDateRange()
 }
 
 data class SummaryDateRangeSerialised(
     var automatic: Boolean,
-    var from: DateMonth?,
-    var to: DateMonth?
+    var from: MonthYear?,
+    var to: MonthYear?
 )
 
-data class DateMonth(
-    var month: Int,
+data class MonthYear(
+    var month: Int, // zero-based
     var year: Int
-) {
-    constructor(date: LocalDate) : this(date.monthValue, date.year)
-}
+)
 
 @Composable
 fun EditSummaryView(
@@ -53,7 +51,7 @@ fun EditSummaryView(
     navController: NavController,
     viewModel: SummaryTabViewModel,
 ) {
-    val automatic = remember { mutableStateOf(true) }
+    val automatic = remember { mutableStateOf(viewModel.summaryDateRangeStream.value == SummaryDateRange.Automatic) }
     val fromMonth = remember { mutableIntStateOf(0) }
     val fromYear = remember { mutableIntStateOf(0) }
     val toMonth = remember { mutableIntStateOf(0) }
@@ -73,9 +71,9 @@ fun EditSummaryView(
 
             is SummaryDateRange.Manual -> {
                 automatic.value = false
-                fromMonth.intValue = summaryDateRange.from.monthValue
+                fromMonth.intValue = summaryDateRange.from.month
                 fromYear.intValue = summaryDateRange.from.year
-                toMonth.intValue = summaryDateRange.to.monthValue
+                toMonth.intValue = summaryDateRange.to.month
                 toYear.intValue = summaryDateRange.to.year
             }
         }
@@ -92,12 +90,12 @@ fun EditSummaryView(
             SummaryDateRange.Automatic
         } else {
             SummaryDateRange.Manual(
-                from = LocalDate.of(fromYear.intValue, fromMonth.intValue, 1),
-                to = LocalDate.of(toYear.intValue, toMonth.intValue, 1)
+                from = MonthYear(fromMonth.intValue, fromYear.intValue),
+                to = MonthYear(toMonth.intValue, toYear.intValue)
             )
         }
-        viewModel.setDateRange(updatedSummaryDateRange, context)
         navController.popBackStack()
+        viewModel.setDateRange(updatedSummaryDateRange, context)
     },
         content = { innerModifier ->
             SettingsPage(innerModifier) {
