@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.statsgraph
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -55,7 +56,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
     val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
 
     if (statsGraphData == null) {
-        Text("No data")
+        Text("No data",
+            color = MaterialTheme.colorScheme.onPrimary)
     } else {
         val columnChart = columnChart(
             columns = chartColors.map { lineComponent(color = it) }.toList(),

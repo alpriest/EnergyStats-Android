@@ -14,11 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -176,12 +176,12 @@ class ParametersGraphTabView(
             selectedDateTime?.let {
                 Text(
                     text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                    color = MaterialTheme.colors.onSecondary
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             } ?: run {
                 Text(
                     stringResource(R.string.touch_the_graph_to_see_values_at_that_time),
-                    color = MaterialTheme.colors.onSecondary
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
