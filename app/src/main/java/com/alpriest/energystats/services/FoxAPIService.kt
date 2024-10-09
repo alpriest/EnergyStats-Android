@@ -1,5 +1,6 @@
 package com.alpriest.energystats.services
 
+import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
@@ -40,6 +41,7 @@ import com.alpriest.energystats.models.SetSchedulerFlagRequest
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.solcast.UserAgent
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -88,10 +90,11 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                 val token = credentials.getApiKey() ?: ""
                 val timestamp = System.currentTimeMillis()
                 val signature = makeSignature(original.url.encodedPath, token, timestamp)
+                val buildVersion = BuildConfig.VERSION_NAME
 
                 val requestBuilder = original.newBuilder()
                     .header("token", credentials.getApiKey() ?: "")
-                    .header("User-Agent", "Energy-Stats")
+                    .header("User-Agent", UserAgent.description())
                     .header("Accept", "application/json, text/plain, */*")
                     .header("Accept-Language", "en-US;q=0.9,en;q=0.8,de;q=0.7,nl;q=0.6")
                     .header("Content-Type", "application/json")

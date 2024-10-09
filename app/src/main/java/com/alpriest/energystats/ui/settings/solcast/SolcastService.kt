@@ -1,10 +1,10 @@
 package com.alpriest.energystats.ui.settings.solcast
 
-import android.accounts.NetworkErrorException
+import com.alpriest.energystats.BuildConfig
+import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.alpriest.energystats.models.SolcastSiteResponseList
 import com.alpriest.energystats.services.InvalidConfigurationException
 import com.alpriest.energystats.services.TryLaterException
-import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
@@ -100,7 +100,6 @@ class Solcast : SolarForecasting {
                 }
             })
         }
-
     }
 
     private val okHttpClient by lazy {
@@ -109,6 +108,12 @@ class Solcast : SolarForecasting {
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .header("User-Agent", UserAgent.description())
+                    .build()
+                chain.proceed(request)
+            }
 
         builder.build()
     }
@@ -120,3 +125,13 @@ private data class ErrorApiResponse(
 )
 
 private data class ResponseStatus(val message: String)
+
+class UserAgent {
+    companion object {
+        fun description(): String {
+            val buildVersion = BuildConfig.VERSION_NAME
+
+            return "Energy-Stats/Android/$buildVersion"
+        }
+    }
+}
