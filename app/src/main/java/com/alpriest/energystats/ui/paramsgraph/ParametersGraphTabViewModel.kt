@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.paramsgraph
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,7 @@ import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -148,6 +150,8 @@ class ParametersGraphTabViewModel(
                 end = end
             )
 
+            yield()
+
             val rawData: List<ParametersGraphValue> = historyResponse.datas.flatMap { response ->
                 val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
 
@@ -167,6 +171,7 @@ class ParametersGraphTabViewModel(
             refresh()
             lastLoadState = LastLoadState(lastLoadTime = LocalDateTime.now(), ParametersGraphViewState(displayModeStream.value, graphVariablesStream.value))
         } catch (ex: CancellationException) {
+            Log.d("AWP", "CancellationException")
             // Ignore as the user navigated away
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)

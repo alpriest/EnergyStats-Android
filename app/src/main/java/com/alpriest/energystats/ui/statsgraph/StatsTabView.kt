@@ -49,7 +49,7 @@ import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
 sealed class StatsDisplayMode {
@@ -100,9 +100,7 @@ class StatsTabView(
         MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(viewModel.displayModeStream) {
-            viewModel.displayModeStream
-                .onEach { viewModel.load(context) }
-                .collect {}
+            viewModel.displayModeStream.collectLatest { viewModel.load(context) }
         }
 
         Column(

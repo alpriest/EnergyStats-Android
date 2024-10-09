@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.statsgraph
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -31,6 +32,7 @@ import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -45,7 +47,6 @@ class StatsTabViewModel(
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
-    val selfSufficiencyProducer: ChartEntryModelProducer = ChartEntryModelProducer()
     val selfSufficiencyGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val statsGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
@@ -139,6 +140,8 @@ class StatsTabViewModel(
                 totals = result.second
             }
 
+            yield()
+
             rawData = updatedData + generateSelfSufficiency(updatedData)
             totalsStream.value = totals
             refresh()
@@ -146,6 +149,7 @@ class StatsTabViewModel(
             uiState.value = UiLoadState(LoadState.Inactive)
             lastLoadState = LastLoadState(LocalDateTime.now(), displayMode)
         } catch (ex: CancellationException) {
+            Log.d("AWP", "CancellationException")
             // Ignore as the user navigated away
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
