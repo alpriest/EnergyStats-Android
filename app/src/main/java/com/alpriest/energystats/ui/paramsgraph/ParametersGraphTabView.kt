@@ -225,7 +225,8 @@ private fun SingleParameterGraph(
         producerAxisScalePairs.value.values.flatMap { it.first.getModel()?.entries ?: listOf() }
     }
     val yAxisScale = remember(producerAxisScalePairs.value) {
-        producerAxisScalePairs.value.values.map { it.second }.firstOrNull() ?: AxisScale(null, null)
+        val allAxisScales = producerAxisScalePairs.value.map { it.value.second }
+        AxisScale(min = allAxisScales.minOf { it.min ?: 10000.0f }, max = allAxisScales.maxOf { it.max ?: -10000.0f })
     }
     val producer = remember(allEntries) { ChartEntryModelProducer(allEntries) }
 
