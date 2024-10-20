@@ -22,6 +22,7 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 import java.net.SocketTimeoutException
+import java.util.Locale
 
 open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
     ConfigManaging {
@@ -142,7 +143,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             currentDevice.value?.let { device ->
                 device.battery?.let { battery ->
-                    val updatedDevice = device.copy(battery = battery.copy(minSOC = value.roundedToString(decimalPlaces = 2)))
+                    val updatedDevice = device.copy(battery = battery.copy(minSOC = value.roundedToString(decimalPlaces = 2, locale = Locale.UK)))
                     devices = devices?.map {
                         if (it.deviceSN == updatedDevice.deviceSN) updatedDevice else it
                     }

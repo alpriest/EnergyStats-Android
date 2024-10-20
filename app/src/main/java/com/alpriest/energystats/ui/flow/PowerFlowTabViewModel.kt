@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.Locale
 import java.util.concurrent.CancellationException
 import java.util.concurrent.locks.ReentrantLock
 
@@ -221,10 +222,10 @@ class PowerFlowTabViewModel(
     }
 }
 
-fun Double.roundedToString(decimalPlaces: Int, currencySymbol: String = ""): String {
+fun Double.roundedToString(decimalPlaces: Int, currencySymbol: String = "", locale: Locale = Locale.getDefault()): String {
     val roundedNumber = this.rounded(decimalPlaces)
 
-    val numberFormat = NumberFormat.getNumberInstance()
+    val numberFormat = NumberFormat.getNumberInstance(locale)
     numberFormat.maximumFractionDigits = decimalPlaces
     numberFormat.minimumFractionDigits = decimalPlaces
 
