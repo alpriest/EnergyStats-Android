@@ -43,7 +43,7 @@ class FakeConfigManager : ConfigManaging {
     override var showBatteryTemperature: Boolean = false
     override var showFinancialSummary: Boolean = true
     override var useLargeDisplay: Boolean = false
-    override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(20.0)
+    override var minSOC: Double = 20.0
     override var batteryCapacity: Int = 3000
     override var isDemoUser: Boolean = true
     override var useColouredFlowLines: Boolean = true

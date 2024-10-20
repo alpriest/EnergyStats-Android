@@ -173,13 +173,21 @@ fun duration(estimate: BatteryCapacityEstimate): String {
     val mins = stringResource(R.string.mins)
     val hour = stringResource(R.string.hour)
     val hours = stringResource(R.string.hours)
+    val day = stringResource(R.string.day)
+    val days = stringResource(R.string.days)
 
     return when (estimate.duration) {
         in 0..60 -> "$text ${estimate.duration} $mins"
         in 61..119 -> "$text ${estimate.duration / 60} $hour"
         in 120..1440 -> "$text ${Math.round(estimate.duration / 60.0)} $hours"
-        in 1441 .. 2880 -> "$text ${Math.round(estimate.duration / 1440.0)} day"
-        else -> "$text ${Math.round(estimate.duration / 1440.0)} days"
+        else -> {
+            val dayNumber = Math.round(estimate.duration / 1440.0)
+            if (dayNumber == 1L) {
+                "$text $dayNumber $day"
+            } else {
+                "$text $dayNumber $days"
+            }
+        }
     }
 }
 

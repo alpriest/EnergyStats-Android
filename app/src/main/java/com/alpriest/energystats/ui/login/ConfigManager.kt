@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -19,10 +20,7 @@ import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 
 open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
@@ -135,7 +133,22 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(displayUnit = displayUnit)
         }
 
-    override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(null)
+    override var minSOC: Double
+        get() {
+            return currentDevice.value?.battery?.let {
+                it.minSOC?.toDouble() ?: 0.0
+            } ?: 0.0
+        }
+        set(value) {
+            currentDevice.value?.let { device ->
+                device.battery?.let { battery ->
+                    val updatedDevice = device.copy(battery = battery.copy(minSOC = value.roundedToString(decimalPlaces = 2)))
+                    devices = devices?.map {
+                        if (it.deviceSN == updatedDevice.deviceSN) updatedDevice else it
+                    }
+                }
+            }
+        }
 
     override var batteryCapacity: Int
         get() {
@@ -473,15 +486,8 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.summaryDateRange = value
         }
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })
-        coroutineScope.launch {
-            currentDevice.collect {
-                minSOC.value = it?.battery?.minSOC?.toDouble()
-            }
-        }
     }
 }
 

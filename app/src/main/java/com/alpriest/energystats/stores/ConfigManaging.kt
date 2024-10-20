@@ -49,7 +49,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean
     var displayUnit: DisplayUnit
-    val minSOC: MutableStateFlow<Double?>
+    var minSOC: Double
     var batteryCapacity: Int
     var isDemoUser: Boolean
     var useColouredFlowLines: Boolean

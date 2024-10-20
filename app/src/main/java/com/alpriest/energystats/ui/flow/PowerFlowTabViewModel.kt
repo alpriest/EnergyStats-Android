@@ -171,6 +171,10 @@ class PowerFlowTabViewModel(
                 )
 
                 val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real)
+                if (battery.hasBattery) {
+                    val batterySettings = network.fetchBatterySettings(currentDevice.deviceSN)
+                    configManager.minSOC = batterySettings.minSocOnGridPercent()
+                }
 
                 val summary = LoadedPowerFlowViewModel(
                     solar = currentViewModel.currentSolarPower,
