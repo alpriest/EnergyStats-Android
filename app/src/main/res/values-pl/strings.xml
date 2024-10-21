@@ -298,7 +298,7 @@
     <string name="error">Błąd</string>
     <string name="battery_errors_description_1">Napotkaliśmy błąd podczas pobierania ustawień baterii z Fox Cloud, co może być spowodowane tymczasowym problemem z serwerami Fox. W rezultacie niektóre funkcje związane z baterią mogą nie działać zgodnie z oczekiwaniami.\n\nNie martw się, po ponownym uruchomieniu aplikacji spróbujemy ponownie pobrać Twoje ustawienia. Dziękujemy za cierpliwość.</string>
     <string name="separate_parameter_graphs_by_unit">Oddziel wykresy parametrów według jednostki</string>
-    <string name="unsupported_firmware">Harmonogramy nie są obsługiwane na twoim %1s z wersją oprogramowania układowego, którą masz %2s.</string>
+    <string name="unsupported_firmware">Harmonogramy nie są obsługiwane na twoim %1s z wersją oprogramowania układowego, którą masz v%2s.</string>
     <string name="manage_schedules">Zarządzaj harmonogramami</string>
     <string name="display_options">Opcje wyświetlania</string>
     <string name="unsupported">Nieobsługiwane</string>
@@ -314,7 +314,11 @@
     <string name="api_key_step_4">4. Kliknij Generuj klucz API</string>
     <string name="api_key_step_5">5. Skopiuj klucz API (zapisz go bezpiecznie)</string>
     <string name="api_key_step_6">6. Wklej klucz API powyżej</string>
-    <string name="api_change_reason">Ta zmiana klucza API była wymagana przez FoxESS na początku 2024 roku. Strona FoxESS nie działa dobrze na urządzeniach mobilnych. Prosimy nie kontaktować się z Energy Stats w sprawie problemów ze stroną FoxESS, tylko FoxESS będzie w stanie pomóc w jakichkolwiek problemach z ich stroną. service.uk@fox-ess.com</string>
+    <string name="what_is_api_key_1">Klucz API jest jak dodatkowe hasło do twojego konta, które możesz przekazać aplikacjom spoza Fox (na przykład Energy Stats!), aby mogły uzyskać dostęp do twojego konta.</string>
+    <string name="what_is_api_key_2">Jeśli chcesz, aby aplikacje przestały mieć dostęp do twojego konta, możesz wygenerować nowy klucz API. Wszystko, co korzysta ze starego klucza, natychmiast straci dostęp.</string>
+    <string name="what_is_api_key_3">Twój klucz API będzie miał 36 znaków i będzie wyglądał mniej więcej tak: abcde123\\-4567\\-8901\\-2345\\-6789abcdef01.</string>
+    <string name="what_is_api_key_4">Upewnij się, że data i godzina na twoim telefonie są ustawione na „automatyczne”, w przeciwnym razie możesz mieć problem z zalogowaniem się przy użyciu klucza API.</string>
+    <string name="what_is_api_key_5">Strona internetowa FoxESS może mieć problemy na urządzeniach mobilnych. Jeśli napotkasz problemy z uzyskaniem swojego klucza API, skontaktuj się z service.uk@fox-ess.com po pomoc.</string>
     <string name="how_to_get_api_key">Aby uzyskać swój klucz API:</string>
     <string name="on">Włącz</string>
     <string name="copy_debug_data">Kopiuj dane debugowania</string>
@@ -324,7 +328,6 @@
     <string name="show_pv_power_by_strings">Pokaż moc PV według ciągów</string>
     <string name="api_key_step_7">7. Twój klucz API będzie miał 36 znaków długości i będzie wyglądał mniej więcej tak</string>
     <string name="show_battery_percentage_remaining">Pokaż pozostały procent baterii</string>
-    <string name="api_key_step_8">8. Twój klucz API będzie miał 36 znaków długości i będzie wyglądał mniej więcej tak</string>
     <string name="invalid_api_token_needs_logout">Ihr API-Token ist ungültig. Bitte loggen Sie sich aus und folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
     <string name="wrong_credentials_try_again">Błędne dane uwierzytelniające, spróbuj ponownie.</string>
     <string name="invalid_token_logout_not_required">Twój token API jest nieprawidłowy. Proszę postępować zgodnie z instrukcjami, aby wygenerować nowy token API.</string>

@@ -17,7 +17,6 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
-import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -66,7 +65,7 @@ class ScheduleSummaryViewModel(
                         }
                         supportedErrorStream.value = String.format(
                             context.getString(R.string.unsupported_firmware),
-                            device.deviceDisplayName,
+                            device.deviceType,
                             firmwareVersion?.manager ?: ""
                         )
                         uiState.value = UiLoadState(LoadState.Inactive)

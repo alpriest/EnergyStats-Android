@@ -297,7 +297,7 @@
     <string name="error">Fehler</string>
     <string name="battery_errors_description_1">Wir sind auf einen Fehler beim Abrufen Ihrer Batterieeinstellungen von Fox Cloud gestoßen, was auf ein vorübergehendes Problem mit den Fox-Servern zurückzuführen sein könnte. Infolgedessen funktionieren einige batteriebezogene Funktionen möglicherweise nicht wie erwartet.\n\nKeine Sorge, wenn Sie die App neu starten, werden wir versuchen, Ihre Einstellungen erneut abzurufen. Vielen Dank für Ihre Geduld.</string>
     <string name="separate_parameter_graphs_by_unit">Trenne Parameterdiagramme nach Einheit</string>
-    <string name="unsupported_firmware">Zeitpläne werden auf deinem %1s mit der Firmware-Version, die du hast %2s, nicht unterstützt.</string>
+    <string name="unsupported_firmware">Zeitpläne werden auf deinem %1s mit der Firmware-Version, die du hast v%2s, nicht unterstützt.</string>
     <string name="manage_schedules">Zeitpläne verwalten</string>
     <string name="display_options">Anzeigeoptionen</string>
     <string name="unsupported">Nicht unterstützt</string>
@@ -313,7 +313,11 @@
     <string name="api_key_step_4">4. Klicke auf API-Schlüssel generieren</string>
     <string name="api_key_step_5">5. Kopiere den API-Schlüssel (notiere ihn sicher)</string>
     <string name="api_key_step_6">6. Füge den API-Schlüssel oben ein</string>
-    <string name="api_change_reason">Diese Änderung des API-Schlüssels wurde Anfang 2024 von FoxESS gefordert. Die FoxESS-Website funktioniert nicht gut auf mobilen Geräten. Bitte kontaktieren Sie Energy Stats nicht bei Problemen mit der FoxESS-Website, nur FoxESS kann Ihnen bei Problemen mit ihrer Website helfen. service.uk@fox-ess.com</string>
+    <string name="what_is_api_key_1">Ein API-Schlüssel ist wie ein zusätzliches Passwort für dein Konto, das du an Apps außerhalb von Fox (wie Energy Stats!) weitergeben kannst, damit diese auf dein Konto zugreifen können.</string>
+    <string name="what_is_api_key_2">If you want to stop apps from accessing your account you can regenerate your API key. Anything using the old key will immediately be denied access.</string>
+    <string name="what_is_api_key_3">Dein API-Schlüssel wird 36 Zeichen lang sein und etwa so aussehen: abcde123\\-4567\\-8901\\-2345\\-6789abcdef01.</string>
+    <string name="what_is_api_key_4">Bitte stelle sicher, dass das Datum und die Uhrzeit deines Telefons auf “automatisch” eingestellt sind, da du dich sonst möglicherweise nicht mit deinem API-Schlüssel einloggen kannst.</string>
+    <string name="what_is_api_key_5">Die FoxESS-Website kann auf mobilen Geräten Probleme verursachen. Wenn du Schwierigkeiten hast, deinen API-Schlüssel abzurufen, wende dich bitte an service.uk@fox-ess.com für Unterstützung.</string>
     <string name="how_to_get_api_key">Um deinen API-Schlüssel zu erhalten:</string>
     <string name="on">Ein</string>
     <string name="copy_debug_data">Debug-Daten kopieren</string>
@@ -323,7 +327,6 @@
     <string name="show_pv_power_by_strings">Zeigen Sie die PV-Leistung nach Strings an</string>
     <string name="api_key_step_7">7. Ihr API-Schlüssel wird 36 Zeichen lang sein und so etwas ähnlich aussehen wie</string>
     <string name="show_battery_percentage_remaining">Restprozentsatz der Batterie anzeigen</string>
-    <string name="api_key_step_8">8. Ihr API-Schlüssel wird 36 Zeichen lang sein und so aussehen wie</string>
     <string name="invalid_api_token_needs_logout">Ihr API-Token ist ungültig. Bitte loggen Sie sich aus und folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
     <string name="wrong_credentials_try_again">Falsche Anmeldeinformationen, versuchen Sie es erneut.</string>
     <string name="invalid_token_logout_not_required">Ihr API-Token ist ungültig. Bitte folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
