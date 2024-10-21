@@ -23,26 +23,16 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.IconColorInDarkTheme
 import com.alpriest.energystats.ui.theme.IconColorInLightTheme
 import com.alpriest.energystats.ui.theme.demo
-import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
-import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
-import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.line.lineSpec
-import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico.compose.component.lineComponent
-import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
-import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
-import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.composed.plus
-import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
-import com.patrykandpatrick.vico.core.entry.composed.plus
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -78,23 +68,23 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
 
         if (selfSufficiencyGraphData != null) {
             Column(modifier = modifier.fillMaxWidth()) {
-                ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                    Chart(
-                        chart = composedChart,
-                        model = statsGraphData + selfSufficiencyGraphData,
-                        chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                        endAxis = rememberEndAxis(
-                            itemPlacer = AxisItemPlacer.Vertical.default(5),
-                            valueFormatter = DecimalFormatAxisValueFormatter("0.0")
-                        ),
-                        bottomAxis = rememberBottomAxis(
-                            itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
-                            valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
-                            guideline = null
-                        ),
-                        horizontalLayout = HorizontalLayout.fullWidth()
-                    )
-                }
+//                ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+//                    Chart(
+//                        chart = composedChart,
+//                        model = statsGraphData + selfSufficiencyGraphData,
+//                        chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+//                        endAxis = rememberEndAxis(
+//                            itemPlacer = AxisItemPlacer.Vertical.default(5),
+//                            valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+//                        ),
+//                        bottomAxis = rememberBottomAxis(
+//                            itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
+//                            valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
+//                            guideline = null
+//                        ),
+//                        horizontalLayout = HorizontalLayout.fullWidth()
+//                    )
+//                }
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Text(
                         when (displayMode) {
