@@ -4,10 +4,7 @@ plugins {
 }
 
 def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localProperties.load(new FileInputStream(localPropertiesFile))
-}
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
     compileSdk 34
@@ -23,7 +20,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        buildConfigField "String", "GOOGLE_MAPS_APIKEY", localProperties['GOOGLE_MAPS_APIKEY']
+
+        buildConfigField "String", "GOOGLE_MAPS_APIKEY", localProperties.getProperty("GOOGLE_MAPS_APIKEY")
     }
 
     buildTypes {
