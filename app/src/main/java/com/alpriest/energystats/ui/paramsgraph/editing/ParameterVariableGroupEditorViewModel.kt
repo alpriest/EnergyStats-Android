@@ -72,11 +72,13 @@ class ParameterVariableGroupEditorViewModel(val configManager: ConfigManaging, v
         )
 
         configManager.parameterGroups = groups.value
+        select(groups.value.firstOrNull { it.title == title } ?: groups.value.first())
     }
 
     fun delete() {
         groups.value = groups.value.filter { it.id != selected.value.id }
         configManager.parameterGroups = groups.value
+        select(groups.value.first())
     }
 
     private fun updateVariables(group: ParameterGroup) {
