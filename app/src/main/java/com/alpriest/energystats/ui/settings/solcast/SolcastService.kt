@@ -76,11 +76,11 @@ class Solcast : SolarForecasting {
                         val text = response.body?.string()
                         when (response.code) {
                             404 -> {
-                                val type = object : TypeToken<ErrorApiResponse>() {}.type
+                                val errorApiResponseType = object : TypeToken<ErrorApiResponse>() {}.type
                                 val gson = GsonBuilder()
                                     .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
                                     .create()
-                                val body: ErrorApiResponse = gson.fromJson(text, type)
+                                val body: ErrorApiResponse = gson.fromJson(text, errorApiResponseType)
 
                                 continuation.resumeWithException(InvalidConfigurationException(body.responseStatus.message))
                             }

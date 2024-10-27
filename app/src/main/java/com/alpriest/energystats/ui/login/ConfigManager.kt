@@ -22,6 +22,7 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 import java.net.SocketTimeoutException
+import java.time.LocalDateTime
 import java.util.Locale
 
 open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
@@ -486,6 +487,10 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.summaryDateRange = value
         }
+
+    override var lastSolcastRefresh: LocalDateTime?
+        get() = config.lastSolcastRefresh
+        set(value) { config.lastSolcastRefresh = value }
 
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })

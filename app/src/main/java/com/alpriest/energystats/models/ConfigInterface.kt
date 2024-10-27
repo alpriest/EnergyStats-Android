@@ -6,8 +6,10 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import java.time.LocalDateTime
 
 interface ConfigInterface {
+    var lastSolcastRefresh: LocalDateTime?
     var scheduleTemplates: List<ScheduleTemplate>
     var showBatteryTimeEstimateOnWidget: Boolean
     var powerStationDetail: PowerStationDetail?

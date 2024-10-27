@@ -33,7 +33,9 @@ accompanist-pager = { group = "com.google.accompanist", name = "accompanist-page
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-compose-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-navigation = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationKtx" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationKtx" }
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }

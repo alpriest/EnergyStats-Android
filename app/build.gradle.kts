@@ -25,6 +25,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -51,7 +52,9 @@ dependencies {
     implementation(libs.material.icons)
     implementation(libs.compose.material3)
     implementation(libs.compose.activity)
-    implementation(libs.compose.preview)
+    implementation(libs.compose.ui)
+    debugImplementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.tooling)
     implementation(libs.compose.navigation)
     implementation(libs.compose.coil)
     implementation(libs.compose.markdown)

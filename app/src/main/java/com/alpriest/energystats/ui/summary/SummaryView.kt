@@ -45,7 +45,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.LoadedScaffold
-import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
@@ -57,7 +57,7 @@ class SummaryView(
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
     private val network: Networking,
-    private val solarForecastProvider: () -> SolarForecasting
+    private val solarForecastProvider: () -> SolcastCaching
 ) {
     @Composable
     fun NavigableContent(
@@ -134,6 +134,7 @@ class SummaryView(
                     SolarForecastView(
                         solarForecastProvider,
                         themeStream,
+                        configManager
                     ).Content(modifier = Modifier.padding(top = 44.dp))
                 }
             }

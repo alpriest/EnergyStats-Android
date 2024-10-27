@@ -1,10 +1,10 @@
 package com.alpriest.energystats.ui.summary
 
+import com.alpriest.energystats.models.SolcastForecastList
 import com.alpriest.energystats.models.SolcastForecastResponse
-import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.alpriest.energystats.models.SolcastSiteResponse
 import com.alpriest.energystats.models.SolcastSiteResponseList
-import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -12,7 +12,7 @@ import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
-class DemoSolarForecasting : SolarForecasting {
+class DemoSolarForecasting : SolcastCaching {
     override suspend fun fetchSites(apiKey: String): SolcastSiteResponseList {
         return SolcastSiteResponseList(
             listOf(
@@ -43,7 +43,7 @@ class DemoSolarForecasting : SolarForecasting {
         ))
     }
 
-    override suspend fun fetchForecast(site: SolcastSite, apiKey: String): SolcastForecastResponseList {
+    override suspend fun fetchForecast(site: SolcastSite, apiKey: String, ignoreCache: Boolean): SolcastForecastList {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         val now = LocalDate.now()
 
@@ -99,6 +99,6 @@ class DemoSolarForecasting : SolarForecasting {
             it.copy(periodEnd = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()))
         }
 
-        return SolcastForecastResponseList(today + tomorrow)
+        return SolcastForecastList(false, today + tomorrow)
     }
 }

@@ -1,9 +1,11 @@
 package com.alpriest.energystats.ui.settings.solcast
 
 import android.content.Context
+import com.alpriest.energystats.models.SolcastForecastList
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.alpriest.energystats.models.SolcastSiteResponseList
+import com.alpriest.energystats.services.TryLaterException
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -11,29 +13,41 @@ import java.nio.charset.Charset
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.Calendar
 import java.util.Date
+
+interface SolcastCaching {
+    suspend fun fetchSites(apiKey: String): SolcastSiteResponseList
+    suspend fun fetchForecast(site: SolcastSite, apiKey: String, ignoreCache: Boolean): SolcastForecastList
+}
 
 class SolcastCache(
     private val service: SolarForecasting,
     private val context: Context
-) : SolarForecasting {
+) : SolcastCaching {
 
     override suspend fun fetchSites(apiKey: String): SolcastSiteResponseList {
         return service.fetchSites(apiKey)
     }
 
-    override suspend fun fetchForecast(site: SolcastSite, apiKey: String): SolcastForecastResponseList {
-        val cachedData = getForecastIfCached(site.resourceId)
+    override suspend fun fetchForecast(site: SolcastSite, apiKey: String, ignoreCache: Boolean): SolcastForecastList {
+        val cachedData: String? = if (ignoreCache) null else getForecastIfCached(site.resourceId)
         return cachedData?.let {
             val type = object : TypeToken<SolcastForecastResponseList>() {}.type
-            return Gson().fromJson(it, type)
+            val responseList: SolcastForecastResponseList = Gson().fromJson(it, type)
+            return SolcastForecastList(tooManyRequests = false, forecasts = responseList.forecasts)
         } ?: fetchAndStore(site, apiKey)
     }
 
-    private suspend fun fetchAndStore(site: SolcastSite, apiKey: String, previous: SolcastForecastResponseList? = null): SolcastForecastResponseList {
-        val response = service.fetchForecast(site, apiKey)
-        val latest = response.forecasts.toMutableList()
+    private suspend fun fetchAndStore(site: SolcastSite, apiKey: String, previous: SolcastForecastResponseList? = null): SolcastForecastList {
+        var tooManyRequests = false
+        var latest: MutableList<SolcastForecastResponse>
+
+        try {
+            latest = service.fetchForecast(site, apiKey).forecasts.toMutableList()
+        } catch (ex: TryLaterException) {
+            latest = mutableListOf()
+            tooManyRequests = true
+        }
         val previousForecasts = previous?.forecasts ?: listOf()
         val todayStart = LocalDate.now().atStartOfDay()
 
@@ -53,14 +67,14 @@ class SolcastCache(
         val jsonText = Gson().toJson(result)
         saveForecast(site.resourceId, jsonText)
 
-        return result
+        return SolcastForecastList(tooManyRequests, result.forecasts)
     }
 
     private fun getForecastIfCached(resourceId: String): String? {
         val file = getFile(resourceId)
-        val twelveHoursInMillis = 12 * 60 * 60 * 1000
+        val eightHoursInMillis = 8 * 60 * 60 * 1000
         val currentTime = System.currentTimeMillis()
-        if (file.exists() && (currentTime - file.lastModified()) < twelveHoursInMillis) {
+        if (file.exists() && ((currentTime - file.lastModified()) < eightHoursInMillis)) {
             return file.readText(Charset.defaultCharset())
         }
         return null

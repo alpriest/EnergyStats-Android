@@ -23,6 +23,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDateTime
 
 class FakeConfigManager : ConfigManaging {
     override var colorThemeMode: ColorThemeMode = ColorThemeMode.Auto
@@ -75,6 +76,7 @@ class FakeConfigManager : ConfigManaging {
     override var truncatedYAxisOnParameterGraphs: Boolean = true
     override var earningsModel: EarningsModel = EarningsModel.Exported
     override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic
+    override var lastSolcastRefresh: LocalDateTime? = null
 
     override var devices: List<Device>? = listOf(
         Device(

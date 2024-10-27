@@ -15,6 +15,8 @@ import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
     ConfigInterface {
@@ -72,7 +74,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS,
         EARNINGS_MODEl,
         SUMMARY_DATE_RANGE,
-        SCHEDULE_TEMPLATES
+        SCHEDULE_TEMPLATES,
+        LAST_SOLCAST_REFRESH
     }
 
     override fun clearDisplaySettings() {
@@ -575,6 +578,26 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
             val jsonString = Gson().toJson(serialisedValue)
             editor.putString(SharedPreferenceDisplayKey.SUMMARY_DATE_RANGE.name, jsonString)
+            editor.apply()
+        }
+
+    override var lastSolcastRefresh: LocalDateTime?
+        get() {
+            val epochMillis = sharedPreferences.getLong(SharedPreferenceDisplayKey.LAST_SOLCAST_REFRESH.name, 0)
+            return if (epochMillis == 0L) {
+                null
+            } else {
+                LocalDateTime.ofEpochSecond(epochMillis / 1000, (epochMillis % 1000 * 1_000_000).toInt(), ZoneOffset.UTC)
+            }
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            if (value != null) {
+                val epochMillis = value.toInstant(ZoneOffset.UTC).toEpochMilli()
+                editor.putLong(SharedPreferenceDisplayKey.LAST_SOLCAST_REFRESH.name, epochMillis)
+            } else {
+                editor.remove(SharedPreferenceDisplayKey.LAST_SOLCAST_REFRESH.name)
+            }
             editor.apply()
         }
 }

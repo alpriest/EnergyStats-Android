@@ -18,6 +18,7 @@ import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDateTime
 
 interface ConfigManaging: ScheduleTemplateConfigManager {
     fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean)
@@ -79,6 +80,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var truncatedYAxisOnParameterGraphs: Boolean
     var earningsModel: EarningsModel
     var summaryDateRange: SummaryDateRange
+    var lastSolcastRefresh: LocalDateTime?
 }
 
 interface ScheduleTemplateConfigManager {

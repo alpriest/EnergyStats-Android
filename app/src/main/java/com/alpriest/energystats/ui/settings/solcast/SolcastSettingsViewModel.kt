@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class SolcastSettingsViewModelFactory(
     private val configManager: ConfigManaging,
-    private val solarForecastingProvider: () -> SolarForecasting
+    private val solarForecastingProvider: () -> SolcastCaching
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -19,7 +19,7 @@ class SolcastSettingsViewModelFactory(
 
 class SolcastSettingsViewModel(
     private val configManager: ConfigManaging,
-    private val solarForecastingProvider: () -> SolarForecasting
+    private val solarForecastingProvider: () -> SolcastCaching
 ) : ViewModel(), AlertDialogMessageProviding {
     val apiKeyStream = MutableStateFlow("")
     val sitesStream = MutableStateFlow<List<SolcastSite>>(listOf())
