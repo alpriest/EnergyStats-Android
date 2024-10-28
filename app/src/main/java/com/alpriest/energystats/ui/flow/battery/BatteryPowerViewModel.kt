@@ -10,14 +10,10 @@ class BatteryPowerViewModel(
     val temperature: Double,
     val residual: Int
 ) : ViewModel() {
-    private val calculator: BatteryCapacityCalculator
-
-    init {
-        calculator = BatteryCapacityCalculator(
-            capacityW = configManager.batteryCapacity.toDouble().toInt(),
-            minimumSOC = configManager.minSOC.value ?: 0.0
-        )
-    }
+    private val calculator: BatteryCapacityCalculator = BatteryCapacityCalculator(
+        capacityW = configManager.batteryCapacity.toDouble().toInt(),
+        minimumSOC = configManager.minSOC
+    )
 
     val batteryExtra: BatteryCapacityEstimate?
         get() {

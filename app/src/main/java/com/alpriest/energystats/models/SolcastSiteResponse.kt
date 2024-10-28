@@ -22,3 +22,8 @@ data class SolcastSiteResponse(
     @SerializedName("install_date")
     val installDate: String?
 )
+
+data class SolcastForecastList(
+    var tooManyRequests: Boolean,
+    var forecasts: List<SolcastForecastResponse>
+)

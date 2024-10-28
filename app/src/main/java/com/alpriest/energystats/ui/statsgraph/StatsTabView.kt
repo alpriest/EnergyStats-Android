@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,11 +43,13 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
+import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
 sealed class StatsDisplayMode {
@@ -97,9 +100,7 @@ class StatsTabView(
         MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(viewModel.displayModeStream) {
-            viewModel.displayModeStream
-                .onEach { viewModel.load(context) }
-                .collect {}
+            viewModel.displayModeStream.collectLatest { viewModel.load(context) }
         }
 
         Column(
@@ -159,8 +160,15 @@ class StatsTabView(
                     },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(imageVector = Icons.Default.Share, contentDescription = "Share")
-                    Text(stringResource(R.string.export_csv_data))
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = colorScheme.onSecondary
+                    )
+                    Text(
+                        stringResource(R.string.export_csv_data),
+                        color = colorScheme.onSecondary
+                    )
                 }
             }
         }
@@ -170,12 +178,14 @@ class StatsTabView(
 @Preview(widthDp = 400, heightDp = 800)
 @Composable
 fun StatsGraphTabViewPreview() {
-    StatsTabView(
-        FakeConfigManager(),
-        DemoNetworking(),
-        { _, _ -> null },
-        { _, _ -> },
-        MutableStateFlow(AppTheme.demo()),
-        FakeUserManager()
-    ).Content()
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+        StatsTabView(
+            FakeConfigManager(),
+            DemoNetworking(),
+            { _, _ -> null },
+            { _, _ -> },
+            MutableStateFlow(AppTheme.demo()),
+            FakeUserManager()
+        ).Content()
+    }
 }

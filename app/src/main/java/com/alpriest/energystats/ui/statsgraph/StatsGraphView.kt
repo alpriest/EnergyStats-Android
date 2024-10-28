@@ -61,7 +61,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
     val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
 
     if (statsGraphData == null) {
-        Text("No data")
+        Text("No data",
+            color = MaterialTheme.colorScheme.onPrimary)
     } else {
         val columnChart = columnChart(
             columns = chartColors.map { lineComponent(color = it) }.toList(),

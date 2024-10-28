@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,6 +21,7 @@ import androidx.navigation.NavHostController
 fun LoadedScaffold(
     title: String,
     navController: NavHostController? = null,
+    actions: @Composable RowScope.() -> Unit = {},
     content: @Composable (modifier: Modifier) -> Unit
 ) {
     Scaffold(
@@ -41,7 +43,8 @@ fun LoadedScaffold(
                 },
                 title = {
                     Text(title)
-                }
+                },
+                actions = actions
             )
         },
     ) { innerPadding ->

@@ -23,7 +23,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryVie
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.EditTemplateView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.ScheduleTemplateListView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
-import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 
 @Composable
@@ -36,7 +36,7 @@ fun NavigableSettingsView(
     onBuyMeCoffee: () -> Unit,
     network: Networking,
     credentialStore: CredentialStore,
-    solarForecastingProvider: () -> SolarForecasting
+    solarForecastingProvider: () -> SolcastCaching
 ) {
     val navController = rememberNavController()
     val templateStore = TemplateStore(config) // TODO inject this

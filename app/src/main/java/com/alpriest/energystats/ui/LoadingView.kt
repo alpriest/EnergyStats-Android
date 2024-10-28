@@ -13,15 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoadingView(title: String, modifier: Modifier = Modifier) {
+fun LoadingView(title: String, modifier: Modifier = Modifier.fillMaxSize()) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.padding(12.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             CircularProgressIndicator(
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(vertical = 4.dp).padding(end = 12.dp)
             )
 
             Text(title)

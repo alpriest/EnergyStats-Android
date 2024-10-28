@@ -4,9 +4,12 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
+import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import java.time.LocalDateTime
 
 interface ConfigInterface {
+    var lastSolcastRefresh: LocalDateTime?
     var scheduleTemplates: List<ScheduleTemplate>
     var showBatteryTimeEstimateOnWidget: Boolean
     var powerStationDetail: PowerStationDetail?
@@ -56,6 +59,7 @@ interface ConfigInterface {
     var showSelfSufficiencyStatsGraphOverlay: Boolean
     var truncatedYAxisOnParameterGraphs: Boolean
     var earningsModel: Int
+    var summaryDateRange: SummaryDateRange
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

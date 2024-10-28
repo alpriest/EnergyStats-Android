@@ -50,7 +50,7 @@ class SolcastSettingsView(
     private val navController: NavController,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
-    private val solarForecastingProvider: () -> SolarForecasting
+    private val solarForecastingProvider: () -> SolcastCaching
 ) {
     @Composable
     fun Content(

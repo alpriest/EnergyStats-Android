@@ -14,11 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -50,7 +50,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -97,9 +97,7 @@ class ParametersGraphTabView(
         MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(viewModel.displayModeStream) {
-            viewModel.displayModeStream
-                .onEach { viewModel.load(context) }
-                .collect {}
+            viewModel.displayModeStream.collectLatest { viewModel.load(context) }
         }
 
         Column(
@@ -174,12 +172,15 @@ class ParametersGraphTabView(
                 .fillMaxWidth()
         ) {
             selectedDateTime?.let {
-                androidx.compose.material3.Text(
+                Text(
                     text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                    color = MaterialTheme.colors.onSecondary
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             } ?: run {
-                Text(stringResource(R.string.touch_the_graph_to_see_values_at_that_time))
+                Text(
+                    stringResource(R.string.touch_the_graph_to_see_values_at_that_time),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
 
@@ -224,7 +225,8 @@ private fun SingleParameterGraph(
         producerAxisScalePairs.value.values.flatMap { it.first.getModel()?.entries ?: listOf() }
     }
     val yAxisScale = remember(producerAxisScalePairs.value) {
-        producerAxisScalePairs.value.values.map { it.second }.firstOrNull() ?: AxisScale(null, null)
+        val allAxisScales = producerAxisScalePairs.value.map { it.value.second }
+        AxisScale(min = allAxisScales.minOf { it.min ?: 10000.0f }, max = allAxisScales.maxOf { it.max ?: -10000.0f })
     }
     val producer = remember(allEntries) { ChartEntryModelProducer(allEntries) }
 

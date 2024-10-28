@@ -52,7 +52,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
-import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.StatsTabView
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.summary.SummaryView
@@ -86,7 +86,7 @@ fun TabbedView(
     onWriteTempFile: (String, String) -> Uri?,
     filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     credentialStore: CredentialStore,
-    solarForecastingProvider: () -> SolarForecasting
+    solarForecastingProvider: () -> SolcastCaching
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -112,7 +112,7 @@ fun TabbedView(
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream).Content(themeStream = themeStream)
                     1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
                     2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
-                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).Content(themeStream = themeStream)
+                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(themeStream = themeStream)
                     4 -> NavigableSettingsView(
                         config = configManager,
                         userManager = userManager,

@@ -70,7 +70,9 @@ class UserManager(
         try {
             store.store(apiKey)
             configManager.fetchDevices()
-            configManager.fetchPowerStationDetail()
+            try {
+                configManager.fetchPowerStationDetail()
+            } catch (_: Exception) {}
             _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: BadCredentialsException) {
             logout()
@@ -89,6 +91,13 @@ class UserManager(
 
     override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
         store.logout()
+
+        if (configManager.isDemoUser) {
+            configManager.logout(clearDisplaySettings = true, clearDeviceSettings = true)
+        } else {
+            configManager.logout(clearDisplaySettings = clearDisplaySettings, clearDeviceSettings = clearDeviceSettings)
+        }
+
         configManager.logout(clearDisplaySettings, clearDeviceSettings)
         _loggedInState.value = LoginStateHolder(LoggedOut())
     }

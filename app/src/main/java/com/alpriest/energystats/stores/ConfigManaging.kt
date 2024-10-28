@@ -14,9 +14,11 @@ import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
+import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDateTime
 
 interface ConfigManaging: ScheduleTemplateConfigManager {
     fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean)
@@ -48,7 +50,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var showBatteryTemperature: Boolean
     var useLargeDisplay: Boolean
     var displayUnit: DisplayUnit
-    val minSOC: MutableStateFlow<Double?>
+    var minSOC: Double
     var batteryCapacity: Int
     var isDemoUser: Boolean
     var useColouredFlowLines: Boolean
@@ -77,6 +79,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var showSelfSufficiencyStatsGraphOverlay: Boolean
     var truncatedYAxisOnParameterGraphs: Boolean
     var earningsModel: EarningsModel
+    var summaryDateRange: SummaryDateRange
+    var lastSolcastRefresh: LocalDateTime?
 }
 
 interface ScheduleTemplateConfigManager {

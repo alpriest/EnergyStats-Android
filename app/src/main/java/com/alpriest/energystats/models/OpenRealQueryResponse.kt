@@ -58,7 +58,11 @@ data class OpenReportResponseData(
 data class BatterySOCResponse(
     val minSocOnGrid: Int,
     val minSoc: Int
-)
+) {
+    fun minSocOnGridPercent(): Double {
+        return minSocOnGrid.toDouble() / 100.0
+    }
+}
 
 data class SetBatterySOCRequest(
     val minSocOnGrid: Int,

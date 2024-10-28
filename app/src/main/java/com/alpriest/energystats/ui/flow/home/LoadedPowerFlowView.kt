@@ -103,6 +103,7 @@ fun LoadedPowerFlowView(
     val earnings = loadedPowerFlowViewModel.earnings.collectAsState().value
     val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
     val solarTotal = loadedPowerFlowViewModel.todaysGeneration.collectAsState().value
+    val faults = loadedPowerFlowViewModel.faults.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -202,7 +203,7 @@ fun LoadedPowerFlowView(
                     configManager,
                     temperatures = loadedPowerFlowViewModel.inverterTemperatures,
                     deviceState = deviceState,
-                    faults = loadedPowerFlowViewModel.faults
+                    faults = faults
                 )
             )
         }
@@ -371,7 +372,6 @@ fun SummaryPowerFlowViewPreview() {
                 battery = BatteryViewModel(),
                 FakeConfigManager(),
                 ct2 = 0.4,
-                faults = listOf(),
                 currentDevice = Device.preview(),
                 network = DemoNetworking()
             ),

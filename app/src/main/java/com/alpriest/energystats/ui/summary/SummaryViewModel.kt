@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.OpenReportResponseData
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.parse
@@ -14,12 +16,12 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.paramsgraph.monthYear
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
-import java.util.Locale
 import java.util.concurrent.CancellationException
 
 class SummaryTabViewModelFactory(
@@ -38,9 +40,11 @@ class SummaryTabViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
     val oldestDataDate = MutableStateFlow("")
+    val latestDataDate = MutableStateFlow("")
     private val approximationsCalculator = ApproximationsCalculator(configManager, networking)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val loadStateStream = MutableStateFlow(UiLoadState(LoadState.Inactive))
+    val summaryDateRangeStream = MutableStateFlow(configManager.summaryDateRange)
 
     suspend fun load(context: Context) {
         if (approximationsViewModelStream.value != null) {
@@ -55,13 +59,44 @@ class SummaryTabViewModel(
         loadStateStream.value = UiLoadState(LoadState.Inactive)
     }
 
+    suspend fun setDateRange(dateRange: SummaryDateRange, context: Context) {
+        configManager.summaryDateRange = dateRange
+        summaryDateRangeStream.value = dateRange
+        approximationsViewModelStream.value = null
+        load(context)
+    }
+
+    private val fromYear: Int
+        get() {
+            return when (val dateRange = configManager.summaryDateRange) {
+                is SummaryDateRange.Automatic -> 2020
+                is SummaryDateRange.Manual -> dateRange.from.year
+            }
+        }
+
+    private val toYear: Int
+        get() {
+            return when (val dateRange = configManager.summaryDateRange) {
+                is SummaryDateRange.Automatic -> Calendar.getInstance().get(Calendar.YEAR)
+                is SummaryDateRange.Manual -> dateRange.to.year
+            }
+        }
+
+    private val toDateDescription: String
+        get() {
+            return when (val dateRange = configManager.summaryDateRange) {
+                is SummaryDateRange.Automatic -> "present"
+                is SummaryDateRange.Manual -> "${dateRange.to.monthYear()} (manually selected)"
+            }
+        }
+
     private suspend fun fetchAllYears(device: Device): Map<ReportVariable, Double> {
         val totals = mutableMapOf<ReportVariable, Double>()
-        val maxYears = 20
         var hasFinished = false
+        latestDataDate.value = toDateDescription
+        oldestDataDate.value = ""
 
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        for (year in (currentYear - maxYears..currentYear).reversed()) {
+        for (year in (fromYear..toYear).reversed()) {
             if (hasFinished) {
                 break
             }
@@ -70,13 +105,10 @@ class SummaryTabViewModel(
                 val (yearlyTotals, emptyMonth) = fetchYear(year, device)
 
                 emptyMonth?.let { month ->
-                    val calendar = Calendar.getInstance()
-                    calendar.set(Calendar.YEAR, year)
-                    calendar.set(Calendar.MONTH, month - 1)
-                    calendar.set(Calendar.DAY_OF_MONTH, 1)
-                    val date = calendar.time
-                    val dateFormatter = SimpleDateFormat("MMMM y", Locale.getDefault())
-                    oldestDataDate.value = dateFormatter.format(date)
+                    oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
+                        is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).monthYear()
+                        is SummaryDateRange.Manual -> dateRange.from.monthYear()
+                    }
                     hasFinished = true
                 }
 
@@ -88,6 +120,13 @@ class SummaryTabViewModel(
             } catch (ex: Exception) {
                 hasFinished = true
                 alertDialogMessage.value = MonitorAlertDialogData(ex, ex.toString())
+            }
+        }
+
+        if (oldestDataDate.value.isEmpty()) {
+            oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
+                is SummaryDateRange.Automatic -> "Present"
+                is SummaryDateRange.Manual -> dateRange.from.monthYear()
             }
         }
 
@@ -103,11 +142,13 @@ class SummaryTabViewModel(
             ReportVariable.GridConsumption,
             ReportVariable.Loads
         )
-        val reports = networking.fetchReport(deviceSN = device.deviceSN,
+        val rawReports = networking.fetchReport(
+            deviceSN = device.deviceSN,
             variables = reportVariables,
             queryDate = QueryDate(year, null, null),
             reportType = ReportType.year
         )
+        val reports = filterUnrequestedMonths(year, rawReports)
 
         val totals = mutableMapOf<ReportVariable, Double>()
         reports.forEach { reportResponse ->
@@ -138,6 +179,33 @@ class SummaryTabViewModel(
         return Pair(totals, emptyMonth)
     }
 
+    private fun filterUnrequestedMonths(year: Int, reports: List<OpenReportResponse>): List<OpenReportResponse> {
+        return when (val dateRange = configManager.summaryDateRange) {
+            is SummaryDateRange.Automatic -> reports
+            is SummaryDateRange.Manual -> {
+                reports.map { report ->
+                    OpenReportResponse(
+                        variable = report.variable,
+                        unit = report.unit,
+                        values = report.values.map { reportData ->
+                            when {
+                                year == dateRange.from.year && reportData.index < (dateRange.from.month + 1) -> {
+                                    OpenReportResponseData(index = reportData.index, value = 0.0)
+                                }
+                                year == dateRange.to.year && reportData.index > (dateRange.to.month + 1) -> {
+                                    OpenReportResponseData(index = reportData.index, value = 0.0)
+                                }
+                                else -> {
+                                    OpenReportResponseData(index = reportData.index, value = reportData.value)
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    }
+
     private fun makeApproximationsViewModel(
         totals: Map<ReportVariable, Double>
     ): ApproximationsViewModel? {
@@ -151,10 +219,16 @@ class SummaryTabViewModel(
             return null
         }
 
-        return approximationsCalculator.calculateApproximations(grid = grid,
+        return approximationsCalculator.calculateApproximations(
+            grid = grid,
             feedIn = feedIn,
             loads = loads,
             batteryCharge = batteryCharge,
-            batteryDischarge = batteryDischarge)
+            batteryDischarge = batteryDischarge
+        )
     }
+}
+
+private fun MonthYear.monthYear(): String {
+    return LocalDate.of(year, month + 1, 1).monthYear()
 }

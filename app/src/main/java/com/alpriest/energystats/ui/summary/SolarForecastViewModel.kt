@@ -1,21 +1,22 @@
 package com.alpriest.energystats.ui.summary
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.toHalfHourOfDay
 import com.alpriest.energystats.services.TryLaterException
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
-import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.ui.settings.solcast.SolarForecasting
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.util.Date
 
 data class SolarForecastViewData(
@@ -29,23 +30,28 @@ data class SolarForecastViewData(
 )
 
 class SolarForecastViewModelFactory(
-    private val solarForecastProvider: () -> SolarForecasting,
-    private val themeStream: MutableStateFlow<AppTheme>
+    private val solarForecastProvider: () -> SolcastCaching,
+    private val themeStream: MutableStateFlow<AppTheme>,
+    private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SolarForecastViewModel(solarForecastProvider, themeStream) as T
+        return SolarForecastViewModel(solarForecastProvider, themeStream, configManager) as T
     }
 }
 
 class SolarForecastViewModel(
-    private val solarForecastProvider: () -> SolarForecasting,
-    private val themeStream: MutableStateFlow<AppTheme>
+    private val solarForecastProvider: () -> SolcastCaching,
+    private val themeStream: MutableStateFlow<AppTheme>,
+    private val configManager: ConfigManaging
 ) : ViewModel() {
     val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())
     var loadStateStream= MutableStateFlow<LoadState>(LoadState.Inactive)
+    var tooManyRequestsStream = MutableStateFlow(false)
+    var canRefreshStream = MutableStateFlow(true)
 
-    suspend fun load(context: Context) {
+    suspend fun load(context: Context, ignoreCache: Boolean = false) {
+        updateCanRefresh()
         if (loadStateStream.value != LoadState.Inactive) { return }
         val settings = themeStream.value.solcastSettings
         if (settings.sites.isEmpty() || settings.apiKey == null) {
@@ -56,7 +62,7 @@ class SolarForecastViewModel(
 
         try {
             dataStream.value = settings.sites.map {
-                val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey).forecasts
+                val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey, ignoreCache).forecasts
                 val today = getToday()
                 val tomorrow = getTomorrow()
 
@@ -143,6 +149,22 @@ class SolarForecastViewModel(
     private fun getToday(): Date {
         val date = LocalDate.now()
         return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    }
+
+    suspend fun refetchSolcast(context: Context) {
+        configManager.lastSolcastRefresh = LocalDateTime.now()
+        load(context, ignoreCache = true)
+    }
+
+    private fun updateCanRefresh() {
+        val lastSolcastRefresh = configManager.lastSolcastRefresh
+
+        if (lastSolcastRefresh == null) {
+            canRefreshStream.value = false
+        } else {
+            val oneHourInMillis: Long = 1 * 60 * 60 * 1000
+            canRefreshStream.value = System.currentTimeMillis() - lastSolcastRefresh.toInstant(ZoneOffset.UTC).toEpochMilli() > oneHourInMillis
+        }
     }
 }
 

@@ -10,7 +10,9 @@ import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
+import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import java.time.LocalDateTime
 
 class FakeConfigStore(
     override var scheduleTemplates: List<ScheduleTemplate> = listOf(),
@@ -61,7 +63,9 @@ class FakeConfigStore(
     override var showBatteryTimeEstimateOnWidget: Boolean = true,
     override var showSelfSufficiencyStatsGraphOverlay: Boolean = true,
     override var truncatedYAxisOnParameterGraphs: Boolean = false,
-    override var earningsModel: Int = EarningsModel.Exported.value
+    override var earningsModel: Int = EarningsModel.Exported.value,
+    override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic,
+    override var lastSolcastRefresh: LocalDateTime? = null
 
     ) : ConfigInterface {
     override fun clearDisplaySettings() {}

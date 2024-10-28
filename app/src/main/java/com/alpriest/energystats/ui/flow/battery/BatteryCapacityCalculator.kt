@@ -32,18 +32,11 @@ class BatteryCapacityCalculator(
         val currentEstimatedChargeW = capacityW * batteryStateOfCharge
 
         if (batteryChargePowerkWH > 0) { // battery charging
-            if (batteryStateOfCharge >= percentageConsideredFull) {
-                return null
-            }
-
             val capacityRemainingW = capacityW - currentEstimatedChargeW
             val minsToFullCharge = (capacityRemainingW / (batteryChargePowerkWH * 1000.0)) * 60
 
             return BatteryCapacityEstimate(R.string.fullIn, minsToFullCharge.roundToInt())
-        } else { // battery emptying
-            if (batteryStateOfCharge <= (minimumSOC * 1.02)) {
-                return null
-            }
+        } else { // battery discharging
             val chargeRemaining = currentEstimatedChargeW - minimumCharge
             val minsUntilEmpty = (chargeRemaining / abs(batteryChargePowerkWH * 1000.0)) * 60
 

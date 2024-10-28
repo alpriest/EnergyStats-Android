@@ -223,7 +223,7 @@
     <string name="export_save_to_a_local_file">In einer lokalen Datei speichern</string>
     <string name="export_share_or_open_with_another_app">Mit einer anderen App teilen oder öffnen</string>
     <string name="choose_export_method">Exportmethode wählen</string>
-    <string name="lifetime_summary">Zusammenfassung</string>
+    <string name="summary">Zusammenfassung</string>
     <string name="financial_model">Ertrag</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">"Solcast bietet Solarprognosen basierend auf Ihrem Standort an. Um sich kostenlos anzumelden, besuchen Sie https://solcast.com/free-rooftop-solar-forecasting und registrieren Sie sich für den Hobby-Zugang.  Sobald Sie sich angemeldet und Ihre Website(s) erstellt haben, fügen Sie Ihren API-Schlüssel unten ein. Ihren API-Schlüssel finden Sie unter https://toolkit.solcast.com.au, indem Sie oben rechts auf der Seite auf das Menü klicken. "</string>
@@ -297,12 +297,12 @@
     <string name="error">Fehler</string>
     <string name="battery_errors_description_1">Wir sind auf einen Fehler beim Abrufen Ihrer Batterieeinstellungen von Fox Cloud gestoßen, was auf ein vorübergehendes Problem mit den Fox-Servern zurückzuführen sein könnte. Infolgedessen funktionieren einige batteriebezogene Funktionen möglicherweise nicht wie erwartet.\n\nKeine Sorge, wenn Sie die App neu starten, werden wir versuchen, Ihre Einstellungen erneut abzurufen. Vielen Dank für Ihre Geduld.</string>
     <string name="separate_parameter_graphs_by_unit">Trenne Parameterdiagramme nach Einheit</string>
-    <string name="unsupported_firmware">Zeitpläne werden auf deinem %1s mit der Firmware-Version, die du hast %2s, nicht unterstützt.</string>
+    <string name="unsupported_firmware">Zeitpläne werden auf deinem %1s mit der Firmware-Version, die du hast v%2s, nicht unterstützt.</string>
     <string name="manage_schedules">Zeitpläne verwalten</string>
     <string name="display_options">Anzeigeoptionen</string>
     <string name="unsupported">Nicht unterstützt</string>
     <string name="currency_symbol">Währungssymbol</string>
-    <string name="includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Beinhaltet Daten von %1$s bis heute. Die Zahlen sind ungefähr und gehen davon aus, dass die Energiekauf-/verkaufspreise während des gesamten Besitzzeitraums konstant blieben.</string>
+    <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Einschließlich Daten von %1$s bis %2$s. Die Angaben sind ungefähr und gehen davon aus, dass die Energiepreise für den Kauf/Verkauf während des gesamten Eigentumszeitraums konstant blieben.</string>
     <string name="templates_not_yet_available">Zeitplanvorlagen sind über OpenAPI von FoxESS noch nicht verfügbar. Sie wurden angefordert und werden hinzugefügt, sobald sie verfügbar sind.</string>
     <string name="enable_scheduler">Zeitplaner aktivieren</string>
     <string name="deactivating">Deaktivierung</string>
@@ -313,7 +313,11 @@
     <string name="api_key_step_4">4. Klicke auf API-Schlüssel generieren</string>
     <string name="api_key_step_5">5. Kopiere den API-Schlüssel (notiere ihn sicher)</string>
     <string name="api_key_step_6">6. Füge den API-Schlüssel oben ein</string>
-    <string name="api_change_reason">Diese Änderung des API-Schlüssels wurde Anfang 2024 von FoxESS gefordert. Die FoxESS-Website funktioniert nicht gut auf mobilen Geräten. Bitte kontaktieren Sie Energy Stats nicht bei Problemen mit der FoxESS-Website, nur FoxESS kann Ihnen bei Problemen mit ihrer Website helfen. service.uk@fox-ess.com</string>
+    <string name="what_is_api_key_1">Ein API-Schlüssel ist wie ein zusätzliches Passwort für dein Konto, das du an Apps außerhalb von Fox (wie Energy Stats!) weitergeben kannst, damit diese auf dein Konto zugreifen können.</string>
+    <string name="what_is_api_key_2">If you want to stop apps from accessing your account you can regenerate your API key. Anything using the old key will immediately be denied access.</string>
+    <string name="what_is_api_key_3">Dein API-Schlüssel wird 36 Zeichen lang sein und etwa so aussehen: abcde123\\-4567\\-8901\\-2345\\-6789abcdef01.</string>
+    <string name="what_is_api_key_4">Bitte stelle sicher, dass das Datum und die Uhrzeit deines Telefons auf “automatisch” eingestellt sind, da du dich sonst möglicherweise nicht mit deinem API-Schlüssel einloggen kannst.</string>
+    <string name="what_is_api_key_5">Die FoxESS-Website kann auf mobilen Geräten Probleme verursachen. Wenn du Schwierigkeiten hast, deinen API-Schlüssel abzurufen, wende dich bitte an service.uk@fox-ess.com für Unterstützung.</string>
     <string name="how_to_get_api_key">Um deinen API-Schlüssel zu erhalten:</string>
     <string name="on">Ein</string>
     <string name="copy_debug_data">Debug-Daten kopieren</string>
@@ -323,13 +327,12 @@
     <string name="show_pv_power_by_strings">Zeigen Sie die PV-Leistung nach Strings an</string>
     <string name="api_key_step_7">7. Ihr API-Schlüssel wird 36 Zeichen lang sein und so etwas ähnlich aussehen wie</string>
     <string name="show_battery_percentage_remaining">Restprozentsatz der Batterie anzeigen</string>
-    <string name="api_key_step_8">8. Ihr API-Schlüssel wird 36 Zeichen lang sein und so aussehen wie</string>
     <string name="invalid_api_token_needs_logout">Ihr API-Token ist ungültig. Bitte loggen Sie sich aus und folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
     <string name="wrong_credentials_try_again">Falsche Anmeldeinformationen, versuchen Sie es erneut.</string>
     <string name="invalid_token_logout_not_required">Ihr API-Token ist ungültig. Bitte folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
     <string name="solcast_solar_prediction">Solcast Solarprognose</string>
     <string name="settings_power_station">Kraftwerk</string>
-    <string name="automatic_time_advice">Bitte stellen Sie sicher, dass das Systemdatum/die Systemzeit auf Ihrem Gerät auf \'automatisch\' eingestellt ist, da Sie sonst möglicherweise nicht mit Ihrem API-Schlüssel anmelden können.</string>
+    <string name="automatic_time_advice">Bitte stellen Sie sicher, dass das Datum und die Uhrzeit auf Ihrem Telefon auf \'automatisch\' eingestellt sind, da Sie sich sonst möglicherweise nicht mit Ihrem API-Schlüssel anmelden können.</string>
     <string name="self_sufficiency_off">Es wird keine Selbsteinschätzung der Selbstständigkeit angezeigt</string>
     <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">Die Entladungskraft muss größer als 0 sein, um zu entladen</string>
     <string name="example">Beispiel</string>
@@ -366,4 +369,6 @@
     <string name="generating">erzeugen</string>
     <string name="custom_range">Benutzerdefinierter Bereich</string>
     <string name="show_self_sufficiency_percentage_on_stats_graph">Zeige den Selbstversorgungsprozentsatz im Statistikdiagramm an</string>
+    <string name="get_started">Loslegen</string>
+    <string name="energy_management_at_your_fingertips">Energiemanagement direkt zur Hand</string>
 </resources>

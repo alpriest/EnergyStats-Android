@@ -224,7 +224,7 @@
     <string name="export_save_to_a_local_file">Salva in un file locale</string>
     <string name="export_share_or_open_with_another_app">Condividi o apri con un\'altra app</string>
     <string name="choose_export_method">Scegli il metodo di esportazione</string>
-    <string name="lifetime_summary">Sommario</string>
+    <string name="summary">Riepilogo</string>
     <string name="financial_model">Modello Finanziario</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">"Solcast fornisce previsioni solari basate sulla tua posizione. Per iscriverti gratuitamente, visita https://solcast.com/free-rooftop-solar-forecasting e registrati per l'Accesso per Hobbisti.  Una volta che ti sei iscritto e hai creato il/i tuo/i sito/i, incolla la tua chiave API qui sotto. La tua chiave API può essere trovata su https://toolkit.solcast.com.au cliccando sul menu in alto a destra della pagina. "</string>
@@ -298,12 +298,12 @@
     <string name="error">Errore</string>
     <string name="battery_errors_description_1">Abbiamo riscontrato un errore nel recuperare le tue impostazioni della batteria da Fox Cloud, che potrebbe essere dovuto a un problema temporaneo con i server di Fox. Di conseguenza, alcune funzionalità relative alla batteria potrebbero non funzionare come previsto.\n\nNon preoccuparti, una volta che riavvii l\'app, proveremo a recuperare di nuovo le tue impostazioni. Grazie per la tua pazienza.</string>
     <string name="separate_parameter_graphs_by_unit">Separa i grafici dei parametri per unità</string>
-    <string name="unsupported_firmware">Gli orari non sono supportati sul tuo %1s con la versione del firmware che hai %2s.</string>
+    <string name="unsupported_firmware">Gli orari non sono supportati sul tuo %1s con la versione del firmware che hai v%2s.</string>
     <string name="manage_schedules">Gestire programmi</string>
     <string name="display_options">Opzioni di visualizzazione</string>
     <string name="unsupported">Non supportato</string>
     <string name="currency_symbol">Simbolo della valuta</string>
-    <string name="includes_data_from_to_present_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Include dati da %1$s a oggi. Le cifre sono approssimative e assumono che i prezzi di acquisto/vendita dell\'energia siano rimasti costanti per tutto il periodo di proprietà.</string>
+    <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Include dati da %1$s a oggi. Le cifre sono approssimative e assumono che i prezzi di acquisto/vendita dell\'energia siano rimasti costanti per tutto il periodo di proprietà.</string>
     <string name="templates_not_yet_available">I modelli di pianificazione non sono ancora disponibili tramite OpenAPI da FoxESS. Sono stati richiesti e verranno aggiunti quando disponibili.</string>
     <string name="enable_scheduler">Abilita pianificatore</string>
     <string name="deactivating">Disattivando</string>
@@ -314,7 +314,11 @@
     <string name="api_key_step_4">4. Clicca su Genera chiave API</string>
     <string name="api_key_step_5">5. Copia la chiave API (annotala in modo sicuro)</string>
     <string name="api_key_step_6">6. Incolla la chiave API sopra</string>
-    <string name="api_change_reason">Questa modifica alla chiave API è stata richiesta da FoxESS all\'inizio del 2024. Il sito FoxESS non funziona bene sui dispositivi mobili. Si prega di non contattare Energy Stats per problemi relativi al sito web FoxESS, solo FoxESS può assistervi per qualsiasi problema con il loro sito. service.uk@fox-ess.com</string>
+    <string name="what_is_api_key_1">Una chiave API è come una password aggiuntiva per il tuo account che puoi fornire ad app non Fox (come Energy Stats!) affinché possano accedere al tuo account.</string>
+    <string name="what_is_api_key_2">Se desideri impedire alle app di accedere al tuo account, puoi rigenerare la tua chiave API. Qualsiasi cosa utilizzi la vecchia chiave verrà immediatamente negata l’accesso.</string>
+    <string name="what_is_api_key_3">Dein API-Schlüssel wird 36 Zeichen lang sein und etwa so aussehen: abcde123\\-4567\\-8901\\-2345\\-6789abcdef01.</string>
+    <string name="what_is_api_key_4">Assicurati che la data e l’ora del tuo telefono siano impostate su “automatico”, altrimenti potresti non riuscire a effettuare l’accesso con la tua chiave API.</string>
+    <string name="what_is_api_key_5">Il sito web FoxESS potrebbe avere problemi sui dispositivi mobili. Se riscontri problemi nel recupero della tua chiave API, contatta service.uk@fox-ess.com per assistenza.</string>
     <string name="how_to_get_api_key">Per ottenere la tua chiave API:</string>
     <string name="on">Attivo</string>
     <string name="copy_debug_data">Copia dati di debug</string>
@@ -324,13 +328,12 @@
     <string name="show_pv_power_by_strings">Mostra la potenza del fotovoltaico per stringhe</string>
     <string name="api_key_step_7">7. La tua chiave API sarà lunga 36 caratteri e assomiglierà a qualcosa del genere</string>
     <string name="show_battery_percentage_remaining">Mostra la percentuale di batteria rimanente</string>
-    <string name="api_key_step_8">8. La tua chiave API sarà lunga 36 caratteri e assomiglierà a qualcosa del tipo</string>
     <string name="invalid_api_token_needs_logout">Il tuo token API non è valido. Per favore, esci e segui le istruzioni per generare un nuovo token API.</string>
     <string name="wrong_credentials_try_again">Credenziali errate, riprova.</string>
     <string name="invalid_token_logout_not_required">Il tuo token API non è valido. Per favore, segui le istruzioni per generare un nuovo token API.</string>
     <string name="solcast_solar_prediction">Previsione solare di Solcast</string>
     <string name="settings_power_station">Centrale elettrica</string>
-    <string name="automatic_time_advice">Assicurati che la data/l\'ora del sistema sul tuo dispositivo sia impostata su \'automatico\', altrimenti potresti non essere in grado di accedere con la tua chiave API.</string>
+    <string name="automatic_time_advice">Assicurati che la data e l\'ora del sistema sul tuo telefono siano impostate su \'automatico\', altrimenti potresti non riuscire ad accedere con la tua chiave API.</string>
     <string name="self_sufficiency_off">Nessuna stima di autosufficienza sarà mostrata</string>
     <string name="force_discharge_power_needs_to_be_greater_than_0_to_discharge">La forza di scarica deve essere maggiore di 0 per scaricare</string>
     <string name="example">Esempio</string>
@@ -367,4 +370,6 @@
     <string name="generating">generando</string>
     <string name="custom_range">Intervallo personalizzato</string>
     <string name="show_self_sufficiency_percentage_on_stats_graph">Mostra la percentuale di autosufficienza sul grafico delle statistiche</string>
+    <string name="get_started">Inizia</string>
+    <string name="energy_management_at_your_fingertips">Gestione dell\'energia a portata di mano</string>
 </resources>

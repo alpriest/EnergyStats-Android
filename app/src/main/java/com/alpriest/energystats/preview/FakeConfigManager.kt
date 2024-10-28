@@ -18,10 +18,12 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
 import com.alpriest.energystats.ui.settings.solcast.preview
+import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDateTime
 
 class FakeConfigManager : ConfigManaging {
     override var colorThemeMode: ColorThemeMode = ColorThemeMode.Auto
@@ -42,7 +44,7 @@ class FakeConfigManager : ConfigManaging {
     override var showBatteryTemperature: Boolean = false
     override var showFinancialSummary: Boolean = true
     override var useLargeDisplay: Boolean = false
-    override val minSOC: MutableStateFlow<Double?> = MutableStateFlow(20.0)
+    override var minSOC: Double = 20.0
     override var batteryCapacity: Int = 3000
     override var isDemoUser: Boolean = true
     override var useColouredFlowLines: Boolean = true
@@ -73,6 +75,8 @@ class FakeConfigManager : ConfigManaging {
     override var scheduleTemplates: List<ScheduleTemplate> = listOf()
     override var truncatedYAxisOnParameterGraphs: Boolean = true
     override var earningsModel: EarningsModel = EarningsModel.Exported
+    override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic
+    override var lastSolcastRefresh: LocalDateTime? = null
 
     override var devices: List<Device>? = listOf(
         Device(

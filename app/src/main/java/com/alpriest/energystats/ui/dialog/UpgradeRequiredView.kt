@@ -65,7 +65,7 @@ fun UpgradeRequiredView(userManager: UserManaging) {
                 }
             }
         }, buttons = listOf(
-            BottomButtonConfiguration("Continue", { userManager.logout() })
+            BottomButtonConfiguration("Continue") { userManager.logout(clearDisplaySettings = true, clearDeviceSettings = false) }
         )
     )
 }

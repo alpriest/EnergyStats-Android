@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.alpriest.energystats.ui.paramsgraph.editing
 
 import androidx.compose.foundation.Image
@@ -5,17 +7,26 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,6 +41,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
@@ -43,10 +55,6 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PaleWhite
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.MaterialDialogState
-import com.vanpra.composematerialdialogs.input
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -54,8 +62,8 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val selectedGroup = viewModel.selected.collectAsState().value
     val groups = viewModel.groups.collectAsState().value
-    val renameDialogState = rememberMaterialDialogState()
-    val createDialogState = rememberMaterialDialogState()
+    val renameDialogShowing = remember { mutableStateOf(false) }
+    val createDialogShowing = remember { mutableStateOf(false) }
     val dialogText = remember { mutableStateOf("") }
     val canDelete = viewModel.canDelete.collectAsState().value
 
@@ -109,7 +117,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
             Button(
                 onClick = {
                     dialogText.value = viewModel.selected.value.title
-                    renameDialogState.show()
+                    renameDialogShowing.value = true
                 }
             ) {
                 Text(
@@ -119,7 +127,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
             }
 
             Button(onClick = {
-                createDialogState.show()
+                createDialogShowing.value = true
             }) {
                 Text(
                     stringResource(R.string.create_new),
@@ -145,10 +153,12 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
             }
         }
 
-        TextEntryDialog(createDialogState, "") {
+        TextEntryDialog(stringResource(R.string.create_new), createDialogShowing.value, "", { createDialogShowing.value = false }) {
+            createDialogShowing.value = false
             viewModel.create(it)
         }
-        TextEntryDialog(renameDialogState, dialogText.value) {
+        TextEntryDialog(stringResource(R.string.rename), renameDialogShowing.value, dialogText.value, { renameDialogShowing.value = false }) {
+            renameDialogShowing.value = false
             viewModel.rename(it)
         }
     }
@@ -174,16 +184,52 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
     }, Modifier)
 }
 
+@ExperimentalMaterial3Api
 @Composable
-fun TextEntryDialog(dialogState: MaterialDialogState, text: String, onConfirm: (String) -> Unit) {
-    var dialogText by remember { mutableStateOf(text) }
+fun TextEntryDialog(
+    title: String,
+    isOpen: Boolean,
+    text: String,
+    onCancel: () -> Unit,
+    onConfirm: (String) -> Unit
+) {
+    if (isOpen) {
+        var dialogText by remember { mutableStateOf(text) }
 
-    MaterialDialog(dialogState = dialogState, buttons = {
-        positiveButton("Ok", onClick = { onConfirm(dialogText) })
-        negativeButton("Cancel")
-    }) {
-        input(label = "Name", prefill = text, placeholder = "Jon Smith") { inputString ->
-            dialogText = inputString
+        BasicAlertDialog(onDismissRequest = onCancel) {
+            Surface(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight(),
+                shape = MaterialTheme.shapes.large
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    OutlinedTextField(
+                        value = dialogText,
+                        onValueChange = { dialogText = it },
+                        label = { Text(title) },
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+
+                    Row {
+                        Button(
+                            onClick = onCancel,
+                            modifier = Modifier.weight(1.0f)
+                        ) {
+                            Text(stringResource(R.string.cancel))
+                        }
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Button(
+                            onClick = { onConfirm(dialogText) },
+                            modifier = Modifier.weight(1.0f)
+                        ) {
+                            Text(stringResource(R.string.ok))
+                        }
+                    }
+                }
+            }
         }
     }
 }
