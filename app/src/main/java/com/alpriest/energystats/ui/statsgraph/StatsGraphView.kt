@@ -38,6 +38,7 @@ import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.composed.ComposedChart
 import com.patrykandpatrick.vico.core.chart.composed.plus
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
@@ -61,8 +62,10 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
     val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
 
     if (statsGraphData == null) {
-        Text("No data",
-            color = MaterialTheme.colorScheme.onPrimary)
+        Text(
+            "No data",
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     } else {
         val columnChart = columnChart(
             columns = chartColors.map { lineComponent(color = it) }.toList(),
@@ -99,9 +102,10 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                         ),
                         horizontalLayout = HorizontalLayout.fullWidth(),
                         marker = StatsVerticalLineMarker(
+                            composedChart,
                             lineComponent(
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                                thickness = 10.dp
+                                thickness = 3.dp
                             )
                         ),
                     )
@@ -163,29 +167,35 @@ fun selfSufficiencyLineColor(isDarkMode: Boolean): Color {
 }
 
 class StatsVerticalLineMarker(
+    private val composedChart: ComposedChart<ChartEntryModel>,
     private val guideline: LineComponent?
 ) : Marker {
-    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
-        val values = chartValuesProvider.getChartValues(axisPosition = AxisPosition.Vertical.Start)
+    val additionalBarWidth = 2.0f
 
-        drawGuideline(context, bounds, markedEntries.first(), values.xStep)
+    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
+        val markedEntry = markedEntries.first()
+
+        drawGuideline(context, bounds, markedEntry.index)
     }
 
     private fun drawGuideline(
         context: DrawContext,
         bounds: RectF,
-        chartEntry: Marker.EntryModel,
-        xStep: Float,
+        index: Int
     ) {
-        val columnCount = 6f
-        val xModifier = (xStep * columnCount)
-        val x = chartEntry.entry.x * xModifier
+        val entries = composedChart.charts[0].entryLocationMap.flatMap { modelList ->
+            modelList.value.filter { it.index == index }
+        }
 
-        guideline?.drawVertical(
+        val left = entries.minOf { it.location.x } - additionalBarWidth
+        val right = entries.maxOf { it.location.x } + additionalBarWidth
+
+        guideline?.draw(
             context,
+            left,
             bounds.top,
-            bounds.bottom,
-            x,
+            right,
+            bounds.bottom
         )
     }
 }
