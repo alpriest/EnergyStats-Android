@@ -51,6 +51,7 @@ class StatsTabViewModel(
     val statsGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
+    var valuesAtTimeStream = MutableStateFlow<List<StatsChartEntry>>(listOf())
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null

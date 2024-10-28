@@ -10,6 +10,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
 import com.alpriest.energystats.models.energy
+import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
@@ -20,11 +21,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
+    val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val totals = viewModel.totalsStream.collectAsState()
-    val theme = themeStream.collectAsState().value
+    val appTheme = themeStream.collectAsState().value
 
     Column(modifier) {
         graphVariables.value.map { it ->
+            val selectedValue = selectedValues.firstOrNull { entry -> entry.type == it.type }
             val title = when (it.type) {
                 ReportVariable.FeedIn -> stringResource(R.string.feed_in) + title(ValueUsage.TOTAL)
                 ReportVariable.Generation -> stringResource(R.string.output) + title(ValueUsage.TOTAL)
@@ -46,8 +49,15 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
             }
 
             val total = totals.value[it.type]
-            val text = total?.energy(theme.displayUnit, theme.decimalPlaces)
-            ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, text, null)
+            val text = total?.energy(appTheme.displayUnit, appTheme.decimalPlaces)
+
+            if (selectedValue == null) {
+                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, text, null)
+            } else {
+                val value = selectedValue.y.toDouble().kWh(appTheme.decimalPlaces)
+                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
+            }
+
         }
     }
 }

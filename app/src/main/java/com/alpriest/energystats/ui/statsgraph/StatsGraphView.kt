@@ -49,6 +49,7 @@ import com.patrykandpatrick.vico.core.context.DrawContext
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.composed.plus
 import com.patrykandpatrick.vico.core.marker.Marker
+import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -60,6 +61,13 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
     val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour(themeStream) }
     val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsState().value
     val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
+    val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
+        override fun onMarkerHidden(marker: Marker) {
+            super.onMarkerHidden(marker)
+
+            viewModel.valuesAtTimeStream.value = listOf()
+        }
+    }
 
     if (statsGraphData == null) {
         Text(
@@ -102,12 +110,15 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                         ),
                         horizontalLayout = HorizontalLayout.fullWidth(),
                         marker = StatsVerticalLineMarker(
+                            viewModel.valuesAtTimeStream,
+                            viewModel.graphVariablesStream,
                             composedChart,
                             lineComponent(
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                                 thickness = 3.dp
                             )
                         ),
+                        markerVisibilityChangeListener = markerVisibilityChangeListener
                     )
                 }
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
@@ -167,28 +178,38 @@ fun selfSufficiencyLineColor(isDarkMode: Boolean): Color {
 }
 
 class StatsVerticalLineMarker(
+    private var valuesAtTimeStream: MutableStateFlow<List<StatsChartEntry>>,
+    private var graphVariablesStream: MutableStateFlow<List<StatsGraphVariable>>,
     private val composedChart: ComposedChart<ChartEntryModel>,
     private val guideline: LineComponent?
 ) : Marker {
-    val additionalBarWidth = 2.0f
+    private val additionalBarWidth = 3.0f
 
     override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
         val markedEntry = markedEntries.first()
+        val graphVariables = graphVariablesStream.value
 
-        drawGuideline(context, bounds, markedEntry.index)
+        val markedEntriesAtPosition = composedChart.charts[0].entryLocationMap.flatMap { modelList ->
+            modelList.value.filter { it.index == markedEntry.index }
+        }
+
+        val chartEntries = markedEntriesAtPosition.mapNotNull { it.entry as? StatsChartEntry }
+
+        valuesAtTimeStream.value = graphVariables.map {graphVariable ->
+            chartEntries.firstOrNull { it.type == graphVariable.type } ?:
+                StatsChartEntry(x = 0f, y = 0f, type = graphVariable.type)
+        }
+
+        drawGuideline(context, bounds, markedEntriesAtPosition)
     }
 
     private fun drawGuideline(
         context: DrawContext,
         bounds: RectF,
-        index: Int
+        markedEntries: List<Marker.EntryModel>
     ) {
-        val entries = composedChart.charts[0].entryLocationMap.flatMap { modelList ->
-            modelList.value.filter { it.index == index }
-        }
-
-        val left = entries.minOf { it.location.x } - additionalBarWidth
-        val right = entries.maxOf { it.location.x } + additionalBarWidth
+        val left = markedEntries.minOf { it.location.x } - additionalBarWidth
+        val right = markedEntries.maxOf { it.location.x } + additionalBarWidth
 
         guideline?.draw(
             context,
