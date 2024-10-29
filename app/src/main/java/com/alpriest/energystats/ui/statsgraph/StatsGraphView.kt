@@ -4,6 +4,7 @@ import android.graphics.RectF
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,6 +53,8 @@ import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Calendar
 import java.util.Locale
 
@@ -94,6 +97,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
 
         if (selfSufficiencyGraphData != null) {
             Column(modifier = modifier.fillMaxWidth()) {
+                TimeSelectionText(viewModel)
+
                 ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                     Chart(
                         chart = composedChart,
@@ -116,7 +121,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                             lineComponent(
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                                 thickness = 3.dp
-                            )
+                            ),
+                            viewModel
                         ),
                         markerVisibilityChangeListener = markerVisibilityChangeListener
                     )
@@ -132,6 +138,31 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun TimeSelectionText(viewModel: StatsTabViewModel) {
+    val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
+    val selectedDateTime = selectedValues.firstOrNull()?.periodDescription
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .fillMaxWidth()
+    ) {
+        selectedDateTime?.let {
+            Text(
+                text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        } ?: run {
+            Text(
+                stringResource(R.string.touch_the_graph_to_see_values_at_that_time),
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
     }
 }
@@ -181,7 +212,8 @@ class StatsVerticalLineMarker(
     private var valuesAtTimeStream: MutableStateFlow<List<StatsChartEntry>>,
     private var graphVariablesStream: MutableStateFlow<List<StatsGraphVariable>>,
     private val composedChart: ComposedChart<ChartEntryModel>,
-    private val guideline: LineComponent?
+    private val guideline: LineComponent?,
+    private val viewModel: StatsTabViewModel
 ) : Marker {
     private val additionalBarWidth = 3.0f
 
@@ -195,10 +227,11 @@ class StatsVerticalLineMarker(
 
         val chartEntries = markedEntriesAtPosition.mapNotNull { it.entry as? StatsChartEntry }
 
-        valuesAtTimeStream.value = graphVariables.map {graphVariable ->
+        valuesAtTimeStream.value = graphVariables.map { graphVariable ->
             chartEntries.firstOrNull { it.type == graphVariable.type } ?:
-                StatsChartEntry(x = 0f, y = 0f, type = graphVariable.type)
+             StatsChartEntry(periodDescription = chartEntries.firstOrNull()?.periodDescription ?: "", x = 0f, y = 0f, type = graphVariable.type)
         }
+        viewModel.updateApproximationsFromSelectedValues()
 
         drawGuideline(context, bounds, markedEntriesAtPosition)
     }

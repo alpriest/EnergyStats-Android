@@ -99,7 +99,7 @@ fun ParameterGraphView(
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
-                            marker = VerticalLineMarker(
+                            marker = ParameterGraphVerticalLineMarker(
                                 viewModel.valuesAtTimeStream,
                                 lineComponent(
                                     color = colorScheme.onSurface,
@@ -146,7 +146,7 @@ fun ParameterGraphView(
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
-                            marker = VerticalLineMarker(
+                            marker = ParameterGraphVerticalLineMarker(
                                 viewModel.valuesAtTimeStream,
                                 lineComponent(
                                     color = colorScheme.onSurface,
@@ -193,7 +193,7 @@ fun ParameterGraphView(
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
-                            marker = VerticalLineMarker(
+                            marker = ParameterGraphVerticalLineMarker(
                                 viewModel.valuesAtTimeStream,
                                 lineComponent(
                                     color = colorScheme.onSurface,
@@ -249,7 +249,7 @@ class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFo
     }
 }
 
-class VerticalLineMarker(
+private class ParameterGraphVerticalLineMarker(
     private var valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>> = MutableStateFlow(listOf()),
     private val guideline: LineComponent?,
     private val text: TextComponent,

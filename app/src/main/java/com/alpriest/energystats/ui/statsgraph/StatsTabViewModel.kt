@@ -36,10 +36,41 @@ import kotlinx.coroutines.yield
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import kotlin.coroutines.cancellation.CancellationException
 
-data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double)
+data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double) {
+    fun periodDescription(displayMode: StatsDisplayMode): String {
+        return when (displayMode) {
+            is StatsDisplayMode.Day -> {
+                val time = LocalTime.of(graphPoint, 0) // Assuming graphPoint represents the hour
+                val formatter = DateTimeFormatter.ofPattern("HH:mm") // 24-hour format
+                time.format(formatter)
+            }
+
+            is StatsDisplayMode.Month -> {
+                val dateFormatSymbols = DateFormatSymbols.getInstance()
+                val monthName = dateFormatSymbols.months.getOrNull(displayMode.month) ?: "${displayMode.month}"
+                "$graphPoint $monthName"
+            }
+
+            is StatsDisplayMode.Year -> {
+                val dateFormatSymbols = DateFormatSymbols.getInstance()
+                val monthName = dateFormatSymbols.months.getOrNull(graphPoint - 1) ?: "$graphPoint"
+                "$monthName ${displayMode.year}"
+            }
+
+            is StatsDisplayMode.Custom -> {
+                val start = displayMode.start
+                val end = displayMode.end
+
+                "${start.year}_${start.month}_$start.day_${end.year}_${end.month}_$end.day"
+            }
+        }
+    }
+}
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
@@ -238,6 +269,7 @@ class StatsTabViewModel(
             .map { group ->
                 group.value.map {
                     StatsChartEntry(
+                        periodDescription = it.periodDescription(displayModeStream.value),
                         x = it.graphPoint.toFloat(),
                         y = it.graphValue.toFloat(),
                         type = it.type,
@@ -253,6 +285,7 @@ class StatsTabViewModel(
             .filter { !hiddenVariables.contains(it.type) }
             .map {
                 StatsChartEntry(
+                    periodDescription = it.periodDescription(displayModeStream.value),
                     x = it.graphPoint.toFloat(),
                     y = it.graphValue.toFloat(),
                     type = it.type
@@ -341,13 +374,27 @@ class StatsTabViewModel(
         return entries
     }
 
-    fun dataForIndex(statsGraphData: ChartEntryModel, time: StatsChartEntry): List<StatsChartEntry> {
-        val results: List<StatsChartEntry> = statsGraphData.entries
-            .map { modelEntries -> modelEntries.filter { it.x == time.x } }
-            .flatten()
-            .mapNotNull { it as? StatsChartEntry }
+    fun updateApproximationsFromSelectedValues() {
+        val selectedValue = valuesAtTimeStream.value.firstOrNull() ?: return
+        val valuesAtTime = ValuesAtTime(values = rawData.filter { it.graphPoint == selectedValue.x.toInt() })
 
-        return results
+        val grid = valuesAtTime.values.firstOrNull { it.type == ReportVariable.GridConsumption }
+        val feedIn = valuesAtTime.values.firstOrNull { it.type == ReportVariable.FeedIn }
+        val loads = valuesAtTime.values.firstOrNull { it.type == ReportVariable.Loads }
+        val batteryCharge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.ChargeEnergyToTal }
+        val batteryDischarge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.DischargeEnergyToTal }
+
+        if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null) {
+            val approximations = approximationsCalculator.calculateApproximations(
+                grid = grid.graphValue,
+                feedIn = feedIn.graphValue,
+                loads = loads.graphValue,
+                batteryCharge = batteryCharge.graphValue,
+                batteryDischarge = batteryDischarge.graphValue,
+            )
+
+            approximationsViewModelStream.value = approximations
+        }
     }
 }
 
@@ -374,13 +421,14 @@ enum class ReportType {
     year,
 }
 
-data class StatsChartEntry(
+class StatsChartEntry(
+    val periodDescription: String,
     override val x: Float,
     override val y: Float,
     val type: ReportVariable
 ) : ChartEntry {
-
     override fun withY(y: Float): ChartEntry = StatsChartEntry(
+        periodDescription = periodDescription,
         x = x,
         y = y,
         type = type
