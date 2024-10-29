@@ -73,7 +73,7 @@ fun BatteryWidgetContent(amount: Float, chargeDescription: String?) {
     ) {
         Box(
             modifier = GlanceModifier.fillMaxWidth()
-                .padding(top = 8.dp),
+                .padding(top = 2.dp),
             contentAlignment = Alignment.Center
         ) {
             Box(contentAlignment = Alignment.BottomCenter) {
@@ -101,11 +101,12 @@ fun BatteryWidgetContent(amount: Float, chargeDescription: String?) {
         chargeDescription?.let {
             Text(
                 it,
-                GlanceModifier.fillMaxWidth().padding(top = 8.dp),
+                GlanceModifier.fillMaxWidth().padding(top = 2.dp),
                 style = TextStyle(
                     textAlign = TextAlign.Center,
+                    fontSize = 12.sp,
                     color = ColorProvider(Color.White)
-                )
+                ),
             )
         }
     }
