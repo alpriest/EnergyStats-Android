@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.content.Context
 import android.graphics.RectF
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,6 +73,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
             viewModel.valuesAtTimeStream.value = listOf()
         }
     }
+    val context = LocalContext.current
 
     if (statsGraphData == null) {
         Text(
@@ -122,7 +125,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                                 thickness = 3.dp
                             ),
-                            viewModel
+                            viewModel,
+                            context
                         ),
                         markerVisibilityChangeListener = markerVisibilityChangeListener
                     )
@@ -213,7 +217,8 @@ class StatsVerticalLineMarker(
     private var graphVariablesStream: MutableStateFlow<List<StatsGraphVariable>>,
     private val composedChart: ComposedChart<ChartEntryModel>,
     private val guideline: LineComponent?,
-    private val viewModel: StatsTabViewModel
+    private val viewModel: StatsTabViewModel,
+    private val context: Context
 ) : Marker {
     private val additionalBarWidth = 3.0f
 
@@ -231,7 +236,7 @@ class StatsVerticalLineMarker(
             chartEntries.firstOrNull { it.type == graphVariable.type } ?:
              StatsChartEntry(periodDescription = chartEntries.firstOrNull()?.periodDescription ?: "", x = 0f, y = 0f, type = graphVariable.type)
         }
-        viewModel.updateApproximationsFromSelectedValues()
+        viewModel.updateApproximationsFromSelectedValues(this.context)
 
         drawGuideline(context, bounds, markedEntriesAtPosition)
     }

@@ -2,6 +2,8 @@ package com.alpriest.energystats.ui.statsgraph
 
 import android.content.Context
 import android.net.Uri
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -95,6 +97,7 @@ class StatsTabViewModel(
     private val approximationsCalculator: ApproximationsCalculator = ApproximationsCalculator(configManager, networking)
     private val fetcher = StatsDataFetcher(networking, approximationsCalculator)
     private var lastLoadState: LastLoadState<StatsDisplayMode>? = null
+    private var maxIndex: Float? = null
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -292,6 +295,10 @@ class StatsTabViewModel(
                 )
             }).getModel()
 
+        maxIndex = entries.flatten()
+            .maxByOrNull { it.y }
+            ?.x
+
         prepareExport(rawData, displayModeStream.value)
     }
 
@@ -374,7 +381,7 @@ class StatsTabViewModel(
         return entries
     }
 
-    fun updateApproximationsFromSelectedValues() {
+    fun updateApproximationsFromSelectedValues(context: Context) {
         val selectedValue = valuesAtTimeStream.value.firstOrNull() ?: return
         val valuesAtTime = ValuesAtTime(values = rawData.filter { it.graphPoint == selectedValue.x.toInt() })
 
@@ -383,6 +390,12 @@ class StatsTabViewModel(
         val loads = valuesAtTime.values.firstOrNull { it.type == ReportVariable.Loads }
         val batteryCharge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.ChargeEnergyToTal }
         val batteryDischarge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.DischargeEnergyToTal }
+
+        if (maxIndex == selectedValue.x) {
+            val effect = VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(effect)
+        }
 
         if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null) {
             val approximations = approximationsCalculator.calculateApproximations(
