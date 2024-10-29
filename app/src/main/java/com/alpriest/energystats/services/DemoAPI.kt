@@ -117,15 +117,15 @@ class DemoAPI : FoxAPIServicing {
 
         fileContent = if (context != null) {
             when (reportType) {
-                ReportType.day -> context.resources.openRawResource(R.raw.report_day).bufferedReader().use { it.readText() }
-                ReportType.month -> context.resources.openRawResource(R.raw.report_month).bufferedReader().use { it.readText() }
-                ReportType.year -> context.resources.openRawResource(R.raw.report_year).bufferedReader().use { it.readText() }
+                ReportType.Day -> context.resources.openRawResource(R.raw.report_day).bufferedReader().use { it.readText() }
+                ReportType.Month -> context.resources.openRawResource(R.raw.report_month).bufferedReader().use { it.readText() }
+                ReportType.Year -> context.resources.openRawResource(R.raw.report_year).bufferedReader().use { it.readText() }
             }
         } else {
             when (reportType) {
-                ReportType.day -> this::class.java.classLoader?.getResource("res/raw/report_day.json")?.readText()
-                ReportType.month -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
-                ReportType.year -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
+                ReportType.Day -> this::class.java.classLoader?.getResource("res/raw/report_day.json")?.readText()
+                ReportType.Month -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
+                ReportType.Year -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
             }
         }
 

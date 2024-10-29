@@ -80,7 +80,7 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                 device.deviceSN,
                 variables = reportVariables,
                 queryDate = queryDate,
-                reportType = ReportType.month
+                reportType = ReportType.Month
             ).map { response ->
                 response.copy(values = response.values.filter {
                     val dataDate: LocalDate = LocalDate.of(year, month, it.index)
@@ -122,7 +122,7 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
             current = current.plusMonths(1)
         }
 
-        val totals = approximationsCalculator.generateTotals(device.deviceSN, accumulatedReportResponses, ReportType.month, queryDate = null, reportVariables)
+        val totals = approximationsCalculator.generateTotals(device.deviceSN, accumulatedReportResponses, ReportType.Month, queryDate = null, reportVariables)
 
         return Pair(accumulatedGraphValues, totals)
     }
@@ -154,10 +154,10 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
 
     private fun makeReportType(displayMode: StatsDisplayMode): ReportType {
         return when (displayMode) {
-            is StatsDisplayMode.Day -> ReportType.day
-            is StatsDisplayMode.Month -> ReportType.month
-            is StatsDisplayMode.Year -> ReportType.year
-            is StatsDisplayMode.Custom -> ReportType.month
+            is StatsDisplayMode.Day -> ReportType.Day
+            is StatsDisplayMode.Month -> ReportType.Month
+            is StatsDisplayMode.Year -> ReportType.Year
+            is StatsDisplayMode.Custom -> ReportType.Month
         }
     }
 }

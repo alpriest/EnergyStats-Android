@@ -119,7 +119,7 @@ class LoadedPowerFlowViewModel(
             curentDevice.deviceSN,
             reportVariables,
             QueryDate(),
-            ReportType.month
+            ReportType.Month
         )
     }
 

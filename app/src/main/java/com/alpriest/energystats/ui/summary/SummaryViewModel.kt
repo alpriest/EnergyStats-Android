@@ -146,7 +146,7 @@ class SummaryTabViewModel(
             deviceSN = device.deviceSN,
             variables = reportVariables,
             queryDate = QueryDate(year, null, null),
-            reportType = ReportType.year
+            reportType = ReportType.Year
         )
         val reports = filterUnrequestedMonths(year, rawReports)
 

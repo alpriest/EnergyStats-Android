@@ -98,6 +98,7 @@ class StatsTabViewModel(
     private val fetcher = StatsDataFetcher(networking, approximationsCalculator)
     private var lastLoadState: LastLoadState<StatsDisplayMode>? = null
     private var maxIndex: Float? = null
+    private var lastSelectedIndex: Float? = null
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -391,11 +392,13 @@ class StatsTabViewModel(
         val batteryCharge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.ChargeEnergyToTal }
         val batteryDischarge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.DischargeEnergyToTal }
 
-        if (maxIndex == selectedValue.x) {
-            val effect = VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
+        if (maxIndex == selectedValue.x && lastSelectedIndex != selectedValue.x) {
+            val effect = VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE)
             val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(effect)
         }
+
+        lastSelectedIndex = selectedValue.x
 
         if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null) {
             val approximations = approximationsCalculator.calculateApproximations(
@@ -429,9 +432,9 @@ fun title(usage: ValueUsage): String {
 }
 
 enum class ReportType {
-    day,
-    month,
-    year,
+    Day,
+    Month,
+    Year,
 }
 
 class StatsChartEntry(

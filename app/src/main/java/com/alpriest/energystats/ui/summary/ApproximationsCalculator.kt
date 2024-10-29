@@ -63,8 +63,8 @@ class ApproximationsCalculator(
     ): MutableMap<ReportVariable, Double> {
         val totals = mutableMapOf<ReportVariable, Double>()
 
-        if (reportType == ReportType.day && queryDate != null) {
-            val reports = networking.fetchReport(deviceSN, reportVariables, queryDate, ReportType.month)
+        if (reportType == ReportType.Day && queryDate != null) {
+            val reports = networking.fetchReport(deviceSN, reportVariables, queryDate, ReportType.Month)
             reports.forEach { response ->
                 ReportVariable.parse(response.variable).let {
                     totals[it] = response.values.first { it.index == queryDate.day }.value

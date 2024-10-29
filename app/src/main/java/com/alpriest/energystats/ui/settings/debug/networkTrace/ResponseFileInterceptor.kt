@@ -9,9 +9,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.services.FoxAPIService
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkFacade
-import com.alpriest.energystats.services.FoxAPIService
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -45,7 +45,7 @@ fun NetworkTraceDebugView(configManager: ConfigManaging, credentialStore: Creden
                 "meterPower2"
             )
             network.openapi_fetchRealData(it.deviceSN, rawVariables)
-            network.openapi_fetchReport(it.deviceSN, listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption), QueryDate(), ReportType.month)
+            network.openapi_fetchReport(it.deviceSN, listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption), QueryDate(), ReportType.Month)
             // TODO
 //            if (it.battery != null) {
 //                network.fetchBattery(it.deviceSN)

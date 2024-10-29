@@ -233,8 +233,12 @@ class StatsVerticalLineMarker(
         val chartEntries = markedEntriesAtPosition.mapNotNull { it.entry as? StatsChartEntry }
 
         valuesAtTimeStream.value = graphVariables.map { graphVariable ->
-            chartEntries.firstOrNull { it.type == graphVariable.type } ?:
-             StatsChartEntry(periodDescription = chartEntries.firstOrNull()?.periodDescription ?: "", x = 0f, y = 0f, type = graphVariable.type)
+            chartEntries.firstOrNull { it.type == graphVariable.type } ?: StatsChartEntry(
+                periodDescription = chartEntries.firstOrNull()?.periodDescription ?: "",
+                x = chartEntries.firstOrNull()?.x ?: 0f,
+                y = 0f,
+                type = graphVariable.type
+            )
         }
         viewModel.updateApproximationsFromSelectedValues(this.context)
 
