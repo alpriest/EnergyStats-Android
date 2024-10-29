@@ -431,10 +431,11 @@ fun title(usage: ValueUsage): String {
     }
 }
 
+@Suppress("EnumEntryName")
 enum class ReportType {
-    Day,
-    Month,
-    Year,
+    day,
+    month,
+    year,
 }
 
 class StatsChartEntry(

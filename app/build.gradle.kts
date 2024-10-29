@@ -18,8 +18,8 @@ android {
         applicationId = "com.alpriest.energystats"
         minSdk = 26
         targetSdk = 34
-        versionCode = 219
-        versionName = "2.73"
+        versionCode = 221
+        versionName = "2.75"
 
         buildConfigField(type = "String", name = "GOOGLE_MAPS_APIKEY", value = localProperties.getProperty("GOOGLE_MAPS_APIKEY"))
     }
@@ -53,8 +53,8 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.activity)
     implementation(libs.compose.ui)
-    debugImplementation(libs.compose.ui.tooling.preview)
-    debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.ui.tooling)
     implementation(libs.compose.navigation)
     implementation(libs.compose.coil)
     implementation(libs.compose.markdown)

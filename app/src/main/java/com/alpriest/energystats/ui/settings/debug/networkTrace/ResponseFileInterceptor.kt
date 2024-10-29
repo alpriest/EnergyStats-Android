@@ -45,7 +45,7 @@ fun NetworkTraceDebugView(configManager: ConfigManaging, credentialStore: Creden
                 "meterPower2"
             )
             network.openapi_fetchRealData(it.deviceSN, rawVariables)
-            network.openapi_fetchReport(it.deviceSN, listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption), QueryDate(), ReportType.Month)
+            network.openapi_fetchReport(it.deviceSN, listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption), QueryDate(), ReportType.month)
             // TODO
 //            if (it.battery != null) {
 //                network.fetchBattery(it.deviceSN)
