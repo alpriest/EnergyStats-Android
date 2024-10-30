@@ -2,6 +2,7 @@ package com.alpriest.energystats.widget
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -20,12 +21,13 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.action.ActionCallback
-import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
@@ -37,6 +39,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import com.alpriest.energystats.MainActivity
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red
 import com.alpriest.energystats.ui.theme.Sunny
@@ -66,10 +69,12 @@ class BatteryWidget : GlanceAppWidget() {
 
 @Composable
 fun BatteryWidgetContent(amount: Float, chargeDescription: String?) {
+    val launchIntent = Intent(LocalContext.current, MainActivity::class.java)
+
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .clickable(onClick = actionRunCallback<RefreshAction>())
+            .clickable(onClick = actionStartActivity(launchIntent))
     ) {
         Box(
             modifier = GlanceModifier.fillMaxWidth()
@@ -112,6 +117,7 @@ fun BatteryWidgetContent(amount: Float, chargeDescription: String?) {
     }
 }
 
+// Unused, but might make a comeback
 class RefreshAction : ActionCallback {
     override suspend fun onAction(
         context: Context,
