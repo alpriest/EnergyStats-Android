@@ -374,4 +374,5 @@
     <string name="show_self_sufficiency_percentage_on_stats_graph">Show self sufficiency percentage on stats graph</string>
     <string name="get_started">Get started</string>
     <string name="energy_management_at_your_fingertips">Energy management at your fingertips</string>
+    <string name="find_out_more_about_your_api_key">Find out more about your API key</string>
 </resources>

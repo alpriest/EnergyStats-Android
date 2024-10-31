@@ -32,6 +32,8 @@ class LatestDataRepository private constructor() {
                 "SoC",
                 "SoC_1",
                 "batTemperature",
+                "batTemperature_1",
+                "batTemperature_2",
                 "ResidualEnergy"
             )
 

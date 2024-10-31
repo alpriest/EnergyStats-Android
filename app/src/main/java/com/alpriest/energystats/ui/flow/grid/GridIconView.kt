@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -80,8 +79,7 @@ private fun GridTotals(
         ShimmerText(
             shimmering = gridImportTotal == null,
             text = (gridImportTotal ?: 0.0).energy(displayUnit, decimalPlaces),
-            fontSize = fontSize,
-            fontWeight = FontWeight.Bold
+            fontSize = fontSize
         )
         Text(
             stringResource(R.string.total_import),
@@ -92,8 +90,7 @@ private fun GridTotals(
         ShimmerText(
             shimmering = gridExportTotal == null,
             text = (gridExportTotal ?: 0.0).energy(displayUnit, decimalPlaces),
-            fontSize = fontSize,
-            fontWeight = FontWeight.Bold
+            fontSize = fontSize
         )
         Text(
             stringResource(R.string.total_export),

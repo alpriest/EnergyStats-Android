@@ -7,7 +7,7 @@ class BatteryPowerViewModel(
     private val configManager: ConfigManaging,
     private val actualStateOfCharge: Double,
     val chargePowerkWH: Double,
-    val temperature: Double,
+    val temperatures: List<Double>,
     val residual: Int
 ) : ViewModel() {
     private val calculator: BatteryCapacityCalculator = BatteryCapacityCalculator(

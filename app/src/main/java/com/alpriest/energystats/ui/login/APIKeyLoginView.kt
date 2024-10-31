@@ -222,7 +222,7 @@ class HowToObtainAPIKeyView {
                 ),
                 modifier = Modifier.padding(top = 16.dp)
             ) {
-                Text("What is my API key?")
+                Text(stringResource(R.string.find_out_more_about_your_api_key))
             }
 
             AnimatedVisibility(

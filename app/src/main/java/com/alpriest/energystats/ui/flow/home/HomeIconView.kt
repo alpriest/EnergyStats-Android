@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
@@ -44,7 +43,6 @@ fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateF
                     shimmering = homeTotal == null,
                     text = (homeTotal ?: 0.0).energy(displayUnit, decimalPlaces),
                     fontSize = fontSize,
-                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     context.getString(R.string.used_today),
