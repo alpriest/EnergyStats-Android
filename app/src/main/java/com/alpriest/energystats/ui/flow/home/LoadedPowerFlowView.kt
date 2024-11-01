@@ -38,8 +38,10 @@ import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.models.isFlowing
 import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
@@ -358,7 +360,9 @@ fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         LoadedPowerFlowView(
             FakeConfigManager(),
-            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)), LocalContext.current),
+            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)), LocalContext.current, WidgetDataSharer(
+                FakeConfigStore()
+            )),
             loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
                 solar = 1.0,
                 solarStrings = listOf(

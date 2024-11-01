@@ -12,6 +12,7 @@ import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
@@ -36,7 +37,8 @@ class PowerFlowTabViewModel(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
-    private val context: Context
+    private val context: Context,
+    private val widgetDataSharer: WidgetDataSharing
 ) : ViewModel() {
 
     private var launchIn: Job? = null
@@ -184,7 +186,7 @@ class PowerFlowTabViewModel(
                         // Ignore exceptions which can occur if the device is offline
                     }
                 }
-                configManager.batteryViewModel = battery // Store for consumption by the widget
+                widgetDataSharer.batteryViewModel = battery
                 BatteryWidget().updateAll(context)
 
                 val summary = LoadedPowerFlowViewModel(

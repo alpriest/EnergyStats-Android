@@ -46,7 +46,8 @@ fun MainAppView(appContainer: AppContainer) {
                         { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) },
                         { filename, action -> appContainer.showFileChooser(filename, action) },
                         credentialStore = appContainer.credentialStore,
-                        solarForecastingProvider = appContainer.solarForecastingProvider
+                        solarForecastingProvider = appContainer.solarForecastingProvider,
+                        appContainer.widgetDataSharer
                     )
                 }
 

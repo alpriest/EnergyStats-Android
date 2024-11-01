@@ -21,6 +21,8 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
+import com.alpriest.energystats.stores.WidgetDataSharer
+import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManager
 import com.alpriest.energystats.ui.login.UserManaging
@@ -111,6 +113,10 @@ class AppContainer(private val context: Context) {
             appVersion = getAppVersionName(context),
             themeStream
         )
+    }
+
+    val widgetDataSharer: WidgetDataSharing by lazy {
+        WidgetDataSharer(config)
     }
 
     val userManager: UserManaging by lazy {

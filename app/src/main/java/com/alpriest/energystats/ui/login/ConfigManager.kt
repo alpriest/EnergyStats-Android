@@ -501,12 +501,6 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.widgetTapAction = value.value
         }
 
-    override var batteryViewModel: BatteryViewModel?
-        get() = config.batteryViewModel
-        set(value) {
-            config.batteryViewModel = value
-        }
-
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })
     }

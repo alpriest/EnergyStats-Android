@@ -2,7 +2,6 @@ package com.alpriest.energystats.stores
 
 import android.content.Context
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
@@ -85,7 +84,6 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var summaryDateRange: SummaryDateRange
     var lastSolcastRefresh: LocalDateTime?
     var widgetTapAction: WidgetTapAction
-    var batteryViewModel: BatteryViewModel?
 }
 
 interface ScheduleTemplateConfigManager {

@@ -62,11 +62,11 @@ class LatestDataRepository private constructor() {
     // Consume viewModel and erase it so next time we fetch from network
     fun updateFromSharedConfig(context: Context) {
         val appContainer = AppContainer(context)
-        val batteryViewModel = appContainer.configManager.batteryViewModel
+        val batteryViewModel = appContainer.widgetDataSharer.batteryViewModel
 
         if (batteryViewModel != null) {
             this.update(batteryViewModel, appContainer.config.showBatteryTimeEstimateOnWidget)
-            appContainer.configManager.batteryViewModel = null
+            appContainer.widgetDataSharer.batteryViewModel = null
         }
     }
 

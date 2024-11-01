@@ -80,7 +80,6 @@ class FakeConfigManager : ConfigManaging {
     override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic
     override var lastSolcastRefresh: LocalDateTime? = null
     override var widgetTapAction: WidgetTapAction = WidgetTapAction.Launch
-    override var batteryViewModel: BatteryViewModel? = null
 
     override var devices: List<Device>? = listOf(
         Device(

@@ -29,10 +29,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.WidgetDataSharer
+import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
@@ -49,11 +52,12 @@ class PowerFlowTabViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
-    private val context: Context
+    private val context: Context,
+    private val widgetDataSharer: WidgetDataSharing
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PowerFlowTabViewModel(network, configManager, themeStream, context) as T
+        return PowerFlowTabViewModel(network, configManager, themeStream, context, widgetDataSharer) as T
     }
 }
 
@@ -69,7 +73,8 @@ class PowerFlowTabView(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
-    private val themeStream: MutableStateFlow<AppTheme>
+    private val themeStream: MutableStateFlow<AppTheme>,
+    private val widgetDataSharer: WidgetDataSharing
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -86,7 +91,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(network, configManager, this.themeStream, LocalContext.current)
+            factory = PowerFlowTabViewModelFactory(network, configManager, this.themeStream, LocalContext.current, widgetDataSharer)
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -151,11 +156,11 @@ fun LoadedView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo()), LocalContext.current)
+    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo()), LocalContext.current, WidgetDataSharer(FakeConfigStore()))
     val themeStream = MutableStateFlow(AppTheme.demo())
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        PowerFlowTabView(DemoNetworking(), FakeConfigManager(), FakeUserManager(), themeStream).Content(
+        PowerFlowTabView(DemoNetworking(), FakeConfigManager(), FakeUserManager(), themeStream, WidgetDataSharer(FakeConfigStore())).Content(
             viewModel = viewModel,
             themeStream = themeStream
         )
