@@ -372,4 +372,6 @@
     <string name="get_started">Comenzar</string>
     <string name="energy_management_at_your_fingertips">Gestión de energía al alcance de tu mano</string>
     <string name="find_out_more_about_your_api_key">Obtén más información sobre tu clave API</string>
+    <string name="launch">Lanzar</string>
+    <string name="refresh">Actualizar</string>
 </resources>
