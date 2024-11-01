@@ -22,11 +22,13 @@ import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.action.Action
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.action.ActionCallback
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.layout.Alignment
@@ -40,6 +42,7 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.alpriest.energystats.MainActivity
+import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red
 import com.alpriest.energystats.ui.theme.Sunny
@@ -59,22 +62,27 @@ class BatteryWidgetReceiver : GlanceAppWidgetReceiver() {
 
 class BatteryWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        provideContent {
-            val repository = LatestDataRepository.getInstance()
+        val repository = LatestDataRepository.getInstance()
+        repository.updateFromSharedConfig(context)
 
-            BatteryWidgetContent(repository.batteryPercentage, repository.chargeDescription)
+        provideContent {
+            BatteryWidgetContent(repository.batteryPercentage, repository.chargeDescription, repository.tapAction)
         }
     }
 }
 
 @Composable
-fun BatteryWidgetContent(amount: Float, chargeDescription: String?) {
+fun BatteryWidgetContent(amount: Float, chargeDescription: String?, tapAction: WidgetTapAction) {
     val launchIntent = Intent(LocalContext.current, MainActivity::class.java)
+    val action: Action = when (tapAction) {
+        WidgetTapAction.Launch -> actionStartActivity(launchIntent)
+        WidgetTapAction.Refresh -> actionRunCallback<RefreshAction>()
+    }
 
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .clickable(onClick = actionStartActivity(launchIntent))
+            .clickable(onClick = action)
     ) {
         Box(
             modifier = GlanceModifier.fillMaxWidth()
@@ -117,7 +125,6 @@ fun BatteryWidgetContent(amount: Float, chargeDescription: String?) {
     }
 }
 
-// Unused, but might make a comeback
 class RefreshAction : ActionCallback {
     override suspend fun onAction(
         context: Context,

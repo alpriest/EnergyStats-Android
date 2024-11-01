@@ -1,5 +1,8 @@
 package com.alpriest.energystats.stores
 
+import android.content.Context
+import com.alpriest.energystats.R
+import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
@@ -81,9 +84,26 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var earningsModel: EarningsModel
     var summaryDateRange: SummaryDateRange
     var lastSolcastRefresh: LocalDateTime?
+    var widgetTapAction: WidgetTapAction
+    var batteryViewModel: BatteryViewModel?
 }
 
 interface ScheduleTemplateConfigManager {
     var scheduleTemplates: List<ScheduleTemplate>
 }
 
+enum class WidgetTapAction(val value: Int) {
+    Launch(0),
+    Refresh(1);
+
+    fun title(context: Context): String {
+        return when (this) {
+            Launch -> context.getString(R.string.launch)
+            Refresh -> context.getString(R.string.refresh)
+        }
+    }
+
+    companion object {
+        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: Launch
+    }
+}

@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -33,6 +34,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val separateParameterGraphsByUnitState = rememberSaveable { mutableStateOf(config.separateParameterGraphsByUnit) }
     val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
     val showBatteryAsPercentageState = rememberSaveable { mutableStateOf(config.showBatteryAsPercentage) }
+    val widgetTapActionState = rememberSaveable { mutableStateOf(config.widgetTapAction) }
     val context = LocalContext.current
 
     SettingsColumn(
@@ -150,6 +152,9 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         SolarStringsSettingsView(config)
         HorizontalDivider()
 
+        InlineSettingsNavButton(stringResource(R.string.sun_display_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
+        HorizontalDivider()
+
         SettingsCheckbox(
             title = "Show battery estimate on widget",
             state = showBatteryTimeEstimateOnWidgetState,
@@ -157,7 +162,20 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         )
         HorizontalDivider()
 
-        InlineSettingsNavButton(stringResource(R.string.sun_display_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
+        SettingsSegmentedControl(
+            title = "Widget tap action",
+            segmentedControl = {
+                val items = listOf(WidgetTapAction.Launch, WidgetTapAction.Refresh)
+                SegmentedControl(
+                    items = items.map { it.title(context) },
+                    defaultSelectedItemIndex = items.indexOf(widgetTapActionState.value),
+                    color = colorScheme.primary
+                ) {
+                    widgetTapActionState.value = items[it]
+                    config.widgetTapAction = items[it]
+                }
+            }
+        )
     }
 }
 

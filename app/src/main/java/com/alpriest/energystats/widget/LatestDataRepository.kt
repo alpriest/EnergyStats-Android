@@ -2,23 +2,23 @@ package com.alpriest.energystats.widget
 
 import android.content.Context
 import androidx.glance.appwidget.updateAll
-import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.AppContainer
-import com.alpriest.energystats.ui.flow.battery.BatteryCapacityCalculator
-import com.alpriest.energystats.ui.flow.battery.BatteryCapacityEstimate
 
 class LatestDataRepository private constructor() {
     var batteryPercentage: Float = 0f
     var hasBattery = true
     var chargeDescription: String? = null
+    var tapAction: WidgetTapAction = WidgetTapAction.Launch
 
     suspend fun update(context: Context) {
         val appContainer = AppContainer(context)
 
         appContainer.configManager.currentDevice.value?.let {
             fetchData(context, appContainer, it)
+            tapAction = appContainer.configManager.widgetTapAction
         }
 
         BatteryWidget().updateAll(context)
@@ -42,33 +42,31 @@ class LatestDataRepository private constructor() {
                 variables
             )
 
-            val minSOC = device.battery?.minSOC?.toDouble() ?: 0.0
-            val calculator = BatteryCapacityCalculator(appContainer.configManager.batteryCapacity, minSOC)
-            val battery = BatteryViewModel.make(device, real)
-            if (appContainer.config.showBatteryTimeEstimateOnWidget) {
-                calculator.batteryPercentageRemaining(battery.chargePower, battery.chargeLevel)?.let {
-                    chargeDescription = duration(context, it)
-                }
-            }
-            batteryPercentage = battery.chargeLevel.toFloat()
-            hasBattery = true
+            val battery = BatteryViewModel.make(device, real, appContainer.configManager, context)
+            this.update(battery, appContainer.config.showBatteryTimeEstimateOnWidget)
         } else {
-            hasBattery = false
+            this.hasBattery = false
         }
     }
 
-    private fun duration(context: Context, estimate: BatteryCapacityEstimate): String {
-        val text = context.getString(estimate.stringId)
-        val mins = context.getString(R.string.mins)
-        val hour = context.getString(R.string.hour)
-        val hours = context.getString(R.string.hours)
+    private fun update(battery: BatteryViewModel, showBatteryTimeEstimateOnWidget: Boolean) {
+        if (showBatteryTimeEstimateOnWidget) {
+            this.chargeDescription = battery.chargeDescription
+        } else {
+            this.chargeDescription = null
+        }
+        this.batteryPercentage = battery.chargeLevel.toFloat()
+        this.hasBattery = true
+    }
 
-        return when (estimate.duration) {
-            in 0..60 -> "$text ${estimate.duration} $mins"
-            in 61..119 -> "$text ${estimate.duration / 60} $hour"
-            in 120..1440 -> "$text ${Math.round(estimate.duration / 60.0)} $hours"
-            in 1441 .. 2880 -> "$text ${Math.round(estimate.duration / 1440.0)} day"
-            else -> "$text ${Math.round(estimate.duration / 1440.0)} days"
+    // Consume viewModel and erase it so next time we fetch from network
+    fun updateFromSharedConfig(context: Context) {
+        val appContainer = AppContainer(context)
+        val batteryViewModel = appContainer.configManager.batteryViewModel
+
+        if (batteryViewModel != null) {
+            this.update(batteryViewModel, appContainer.config.showBatteryTimeEstimateOnWidget)
+            appContainer.configManager.batteryViewModel = null
         }
     }
 

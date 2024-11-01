@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -215,7 +216,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         if (clearDisplaySettings) {
             config.clearDisplaySettings()
         }
-        
+
         if (clearDeviceSettings) {
             config.clearDeviceSettings()
         }
@@ -490,7 +491,21 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
 
     override var lastSolcastRefresh: LocalDateTime?
         get() = config.lastSolcastRefresh
-        set(value) { config.lastSolcastRefresh = value }
+        set(value) {
+            config.lastSolcastRefresh = value
+        }
+
+    override var widgetTapAction: WidgetTapAction
+        get() = WidgetTapAction.fromInt(config.widgetTapAction)
+        set(value) {
+            config.widgetTapAction = value.value
+        }
+
+    override var batteryViewModel: BatteryViewModel?
+        get() = config.batteryViewModel
+        set(value) {
+            config.batteryViewModel = value
+        }
 
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })

@@ -9,6 +9,7 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import java.time.LocalDateTime
 
 interface ConfigInterface {
+    var widgetTapAction: Int
     var lastSolcastRefresh: LocalDateTime?
     var scheduleTemplates: List<ScheduleTemplate>
     var showBatteryTimeEstimateOnWidget: Boolean
@@ -60,6 +61,7 @@ interface ConfigInterface {
     var truncatedYAxisOnParameterGraphs: Boolean
     var earningsModel: Int
     var summaryDateRange: SummaryDateRange
+    var batteryViewModel: BatteryViewModel?
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

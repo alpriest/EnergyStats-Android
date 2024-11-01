@@ -1,8 +1,10 @@
 package com.alpriest.energystats.preview
 
+import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
@@ -65,9 +67,10 @@ class FakeConfigStore(
     override var truncatedYAxisOnParameterGraphs: Boolean = false,
     override var earningsModel: Int = EarningsModel.Exported.value,
     override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic,
-    override var lastSolcastRefresh: LocalDateTime? = null
-
-    ) : ConfigInterface {
+    override var lastSolcastRefresh: LocalDateTime? = null,
+    override var widgetTapAction: Int = WidgetTapAction.Launch.value,
+    override var batteryViewModel: BatteryViewModel? = null
+) : ConfigInterface {
     override fun clearDisplaySettings() {}
     override fun clearDeviceSettings() {}
 }

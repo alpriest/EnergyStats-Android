@@ -1,10 +1,12 @@
 package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.models.Battery
+import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -77,6 +79,8 @@ class FakeConfigManager : ConfigManaging {
     override var earningsModel: EarningsModel = EarningsModel.Exported
     override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic
     override var lastSolcastRefresh: LocalDateTime? = null
+    override var widgetTapAction: WidgetTapAction = WidgetTapAction.Launch
+    override var batteryViewModel: BatteryViewModel? = null
 
     override var devices: List<Device>? = listOf(
         Device(

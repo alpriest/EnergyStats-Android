@@ -1,6 +1,7 @@
 package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
+import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
@@ -75,7 +76,9 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         EARNINGS_MODEl,
         SUMMARY_DATE_RANGE,
         SCHEDULE_TEMPLATES,
-        LAST_SOLCAST_REFRESH
+        LAST_SOLCAST_REFRESH,
+        WIDGET_TAP_ACTION,
+        BATTERY_VIEW_MODEL
     }
 
     override fun clearDisplaySettings() {
@@ -598,6 +601,27 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             } else {
                 editor.remove(SharedPreferenceDisplayKey.LAST_SOLCAST_REFRESH.name)
             }
+            editor.apply()
+        }
+
+    override var batteryViewModel: BatteryViewModel?
+        get() {
+            val data: String = sharedPreferences.getString(SharedPreferenceDisplayKey.BATTERY_VIEW_MODEL.name, null) ?: return null
+
+            return Gson().fromJson(data, object : TypeToken<BatteryViewModel>() {}.type)
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val jsonString = Gson().toJson(value)
+            editor.putString(SharedPreferenceDisplayKey.BATTERY_VIEW_MODEL.name, jsonString)
+            editor.apply()
+        }
+
+    override var widgetTapAction: Int
+        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, WidgetTapAction.Launch.value)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, value)
             editor.apply()
         }
 }

@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.flow
 
 import android.content.Context
 import android.os.CountDownTimer
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
@@ -18,6 +19,7 @@ import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.widget.BatteryWidget
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -173,7 +175,7 @@ class PowerFlowTabViewModel(
                     configManager
                 )
 
-                val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real)
+                val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real, configManager, context)
                 if (battery.hasBattery) {
                     try {
                         val batterySettings = network.fetchBatterySettings(currentDevice.deviceSN)
@@ -182,6 +184,8 @@ class PowerFlowTabViewModel(
                         // Ignore exceptions which can occur if the device is offline
                     }
                 }
+                configManager.batteryViewModel = battery // Store for consumption by the widget
+                BatteryWidget().updateAll(context)
 
                 val summary = LoadedPowerFlowViewModel(
                     solar = currentViewModel.currentSolarPower,
