@@ -7,6 +7,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
@@ -499,6 +500,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = WidgetTapAction.fromInt(config.widgetTapAction)
         set(value) {
             config.widgetTapAction = value.value
+        }
+
+    override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode
+        get() = BatteryTemperatureDisplayMode.fromInt(config.batteryTemperatureDisplayMode)
+        set(value) {
+            config.batteryTemperatureDisplayMode = value.value
         }
 
     init {

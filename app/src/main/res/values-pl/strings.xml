@@ -375,4 +375,8 @@
     <string name="find_out_more_about_your_api_key">Dowiedz się więcej o swoim kluczu API</string>
     <string name="launch">Uruchom</string>
     <string name="refresh">Odśwież</string>
+    <string name="automatic">Automatyczny</string>
+    <string name="batteryTemperatureDisplayMode_automatic">Wszystkie temperatury baterii zostaną wyświetlone.</string>
+    <string name="batteryTemperatureDisplayMode_batteryN">Wyświetlana będzie tylko temperatura zestawu baterii %1$@ (np. H3 Pro). Jeśli nie zostanie znaleziona, nie zostanie wyświetlona żadna temperatura baterii.</string>
+    <string name="display_battery_stack">Wyświetl zestaw baterii</string>
 </resources>

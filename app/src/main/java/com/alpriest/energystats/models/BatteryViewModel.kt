@@ -13,12 +13,12 @@ data class BatteryViewModel(
     var hasBattery: Boolean = false,
     var chargeLevel: Double = 0.0,
     var chargePower: Double = 0.0,
-    var temperatures: List<Double> = listOf(0.0),
+    var temperatures: BatteryTemperatures = BatteryTemperatures(batTemperature = 0.0, batTemperature1 = null, batTemperature2 = null),
     var residual: Int = 0,
     var hasError: Boolean = false,
     var chargeDescription: String? = null
 ) {
-    constructor(power: Double, soc: Int, residual: Double, temperatures: List<Double>, configManager: ConfigManaging, context: Context) : this(
+    constructor(power: Double, soc: Int, residual: Double, temperatures: BatteryTemperatures, configManager: ConfigManaging, context: Context) : this(
         hasBattery = true,
         chargeLevel = soc / 100.0,
         chargePower = power,
@@ -33,7 +33,7 @@ data class BatteryViewModel(
 
     companion object {
         private fun noBattery(): BatteryViewModel {
-            return BatteryViewModel(false)
+            return BatteryViewModel(hasBattery = false)
         }
 
         private fun duration(context: Context, estimate: BatteryCapacityEstimate): String {
@@ -61,17 +61,17 @@ data class BatteryViewModel(
                 val chargePower = real.datas.currentValue("batChargePower")
                 val dischargePower = real.datas.currentValue("batDischargePower")
                 val power = chargePower.takeIf { it > 0 } ?: -dischargePower
-                val batteryTemperatures: List<Double> = listOf(
+                val temps = BatteryTemperatures(
                     real.datas.currentData("batTemperature")?.value,
                     real.datas.currentData("batTemperature_1")?.value,
                     real.datas.currentData("batTemperature_2")?.value,
-                ).mapNotNull { it }
+                )
 
                 BatteryViewModel(
                     power = power,
                     soc = real.datas.SoC().toInt(),
                     residual = real.datas.currentValue("ResidualEnergy") * 10.0,
-                    temperatures = batteryTemperatures,
+                    temperatures = temps,
                     configManager = configManager,
                     context
                 )
@@ -83,3 +83,9 @@ data class BatteryViewModel(
         }
     }
 }
+
+data class BatteryTemperatures(
+    val batTemperature: Double?,
+    val batTemperature1: Double?,
+    val batTemperature2: Double?
+)

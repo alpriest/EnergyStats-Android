@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.BatteryTemperatures
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -209,7 +210,7 @@ fun BatteryPowerFlowViewPreview() {
                 configManager,
                 actualStateOfCharge = 0.25,
                 chargePowerkWH = 0.5,
-                temperatures = listOf(13.6),
+                batteryTemperatures = BatteryTemperatures(13.6, null, null),
                 residual = 5678
             ),
             themeStream = MutableStateFlow(AppTheme.demo(showBatteryTemperature = true, showBatteryEstimate = true)),

@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -37,12 +38,15 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.SegmentedControl
+import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -55,6 +59,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
     val hasError = config.currentDevice.collectAsState().value?.battery?.hasError ?: false
+    val batteryTemperatureDisplayModeState = rememberSaveable { mutableStateOf(config.batteryTemperatureDisplayMode) }
+    val context = LocalContext.current
 
     SettingsPage(modifier) {
         if (hasError) {
@@ -191,7 +197,34 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 state = showBatteryTemperatureState,
                 onUpdate = { config.showBatteryTemperature = it }
             )
+
+            SettingsSegmentedControl(
+                title = "Display battery stack",
+                segmentedControl = {
+                    val items = listOf(BatteryTemperatureDisplayMode.Automatic, BatteryTemperatureDisplayMode.Battery1, BatteryTemperatureDisplayMode.Battery2)
+                    SegmentedControl(
+                        items = items.map { it.title(context) },
+                        defaultSelectedItemIndex = items.indexOf(batteryTemperatureDisplayModeState.value),
+                        color = colorScheme.primary
+                    ) {
+                        batteryTemperatureDisplayModeState.value = items[it]
+                        config.batteryTemperatureDisplayMode = items[it]
+                    }
+                },
+                footer = batteryTemperateDisplayModeFooter(batteryTemperatureDisplayModeState.value)
+            )
         }
+    }
+}
+
+@Composable
+private fun batteryTemperateDisplayModeFooter(value: BatteryTemperatureDisplayMode): AnnotatedString {
+    val context = LocalContext.current
+
+    return when (value) {
+        BatteryTemperatureDisplayMode.Automatic -> AnnotatedString(context.getString(R.string.batteryTemperatureDisplayMode_automatic))
+        BatteryTemperatureDisplayMode.Battery1 -> AnnotatedString(String.format(stringResource(R.string.batteryTemperatureDisplayMode_batteryN), "1"))
+        BatteryTemperatureDisplayMode.Battery2 -> AnnotatedString(String.format(stringResource(R.string.batteryTemperatureDisplayMode_batteryN), "2"))
     }
 }
 

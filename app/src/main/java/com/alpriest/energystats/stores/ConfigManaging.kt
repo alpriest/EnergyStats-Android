@@ -6,6 +6,7 @@ import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
@@ -84,6 +85,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var summaryDateRange: SummaryDateRange
     var lastSolcastRefresh: LocalDateTime?
     var widgetTapAction: WidgetTapAction
+    var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode
 }
 
 interface ScheduleTemplateConfigManager {

@@ -17,6 +17,6 @@ enum class SelfSufficiencyEstimateMode(val value: Int) {
     }
 
     companion object {
-        fun fromInt(value: Int) = values().firstOrNull { it.value == value } ?: Off
+        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: Off
     }
 }

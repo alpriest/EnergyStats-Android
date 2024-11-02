@@ -374,4 +374,8 @@
     <string name="find_out_more_about_your_api_key">Erfahren Sie mehr über Ihren API-Schlüssel</string>
     <string name="launch">Starten</string>
     <string name="refresh">Aktualisieren</string>
+    <string name="automatic">Automatisch</string>
+    <string name="batteryTemperatureDisplayMode_automatic">Alle Batterietemperaturen werden angezeigt.</string>
+    <string name="batteryTemperatureDisplayMode_batteryN">Nur die Temperatur des Batteriestapels %1$@ wird angezeigt (z. B. H3 Pro). Falls nicht gefunden, wird keine Batterietemperatur angezeigt.</string>
+    <string name="display_battery_stack">Batteriestapel anzeigen</string>
 </resources>

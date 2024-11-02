@@ -6,6 +6,7 @@ import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
@@ -78,13 +79,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SCHEDULE_TEMPLATES,
         LAST_SOLCAST_REFRESH,
         WIDGET_TAP_ACTION,
-        BATTERY_VIEW_MODEL
+        BATTERY_VIEW_MODEL,
+        BATTERY_TEMPERATURE_DISPLAY_MODE;
     }
 
     override fun clearDisplaySettings() {
         val editor = sharedPreferences.edit()
 
-        SharedPreferenceDisplayKey.values().forEach {
+        SharedPreferenceDisplayKey.entries.forEach {
             editor.remove(it.name)
         }
 
@@ -94,7 +96,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override fun clearDeviceSettings() {
         val editor = sharedPreferences.edit()
 
-        SharedPreferenceDeviceKey.values().forEach {
+        SharedPreferenceDeviceKey.entries.forEach {
             editor.remove(it.name)
         }
 
@@ -622,6 +624,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putInt(SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, value)
+            editor.apply()
+        }
+
+    override var batteryTemperatureDisplayMode: Int
+        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, BatteryTemperatureDisplayMode.Automatic.value)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, value)
             editor.apply()
         }
 }
