@@ -377,6 +377,17 @@
     <string name="refresh">Aggiorna</string>
     <string name="automatic">Automatico</string>
     <string name="batteryTemperatureDisplayMode_automatic">Tutte le temperature della batteria saranno visualizzate.</string>
-    <string name="batteryTemperatureDisplayMode_batteryN">Verrà visualizzata solo la temperatura del gruppo di batterie %1$@ (ad es. H3 Pro). Se non trovata, non verrà visualizzata alcuna temperatura della batteria.</string>
+    <string name="batteryTemperatureDisplayMode_batteryN">Verrà visualizzata solo la temperatura del gruppo di batterie %1$s (ad es. H3 Pro). Se non trovata, non verrà visualizzata alcuna temperatura della batteria.</string>
+    <string name="watch">Guarda</string>
+    <string name="dismiss">Chiudi</string>
+    <string name="offline_device">Dispositivo offline</string>
+    <string name="wifi_changed_offline_message">Se hai recentemente aggiornato le impostazioni WiFi e hai bisogno di aiuto per ricollegare il tuo inverter, fai clic qui sotto per guardare un video tutorial passo dopo passo.</string>
+    <string name="you_can_also_find_this_video_link_in_the_settings_faq_section">Puoi trovare questo link al video anche nella sezione FAQ delle Impostazioni.</string>
+    <string name="unknown_error">Errore di rete sconosciuto</string>
+    <string name="fox_error_44098">Errore Fox Cloud 44098. Impossibile salvare il programma. Questo potrebbe essere dovuto al fatto che Fox non supporta MaxSOC su OpenAPI.</string>
     <string name="display_battery_stack">Mostra gruppo di batterie</string>
+    <string name="appearance">Aspetto</string>
+    <string name="show_battery_estimate_on_widget">Mostra la stima della batteria sul widget</string>
+    <string name="widget_tap_action">Azione di tocco sul widget</string>
+    <string name="reload_devices_from_foxess_cloud">Ricarica dispositivi da FoxESS Cloud</string>
 </resources>

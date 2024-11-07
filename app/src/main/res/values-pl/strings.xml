@@ -377,6 +377,17 @@
     <string name="refresh">Odśwież</string>
     <string name="automatic">Automatyczny</string>
     <string name="batteryTemperatureDisplayMode_automatic">Wszystkie temperatury baterii zostaną wyświetlone.</string>
-    <string name="batteryTemperatureDisplayMode_batteryN">Wyświetlana będzie tylko temperatura zestawu baterii %1$@ (np. H3 Pro). Jeśli nie zostanie znaleziona, nie zostanie wyświetlona żadna temperatura baterii.</string>
+    <string name="batteryTemperatureDisplayMode_batteryN">Wyświetlana będzie tylko temperatura zestawu baterii %1$s (np. H3 Pro). Jeśli nie zostanie znaleziona, nie zostanie wyświetlona żadna temperatura baterii.</string>
+    <string name="watch">Obejrzyj</string>
+    <string name="dismiss">Zamknij</string>
+    <string name="offline_device">Urządzenie offline</string>
+    <string name="wifi_changed_offline_message">Jeśli niedawno zaktualizowałeś ustawienia WiFi i potrzebujesz pomocy w ponownym połączeniu inwertera, kliknij poniżej, aby obejrzeć szczegółowy poradnik wideo.</string>
+    <string name="you_can_also_find_this_video_link_in_the_settings_faq_section">Ten link do wideo znajdziesz również w sekcji FAQ w Ustawieniach.</string>
+    <string name="unknown_error">Nieznany błąd sieciowy</string>
+    <string name="fox_error_44098">Błąd Fox Cloud 44098. Nie można zapisać harmonogramu. Może to być spowodowane brakiem obsługi MaxSOC przez Fox na OpenAPI.</string>
     <string name="display_battery_stack">Wyświetl zestaw baterii</string>
+    <string name="appearance">Wygląd</string>
+    <string name="show_battery_estimate_on_widget">Pokaż szacunkowy poziom baterii na widżecie</string>
+    <string name="widget_tap_action">Akcja dotknięcia widżetu</string>
+    <string name="reload_devices_from_foxess_cloud">Załaduj ponownie urządzenia z FoxESS Cloud</string>
 </resources>

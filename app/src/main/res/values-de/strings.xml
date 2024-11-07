@@ -376,6 +376,17 @@
     <string name="refresh">Aktualisieren</string>
     <string name="automatic">Automatisch</string>
     <string name="batteryTemperatureDisplayMode_automatic">Alle Batterietemperaturen werden angezeigt.</string>
-    <string name="batteryTemperatureDisplayMode_batteryN">Nur die Temperatur des Batteriestapels %1$@ wird angezeigt (z. B. H3 Pro). Falls nicht gefunden, wird keine Batterietemperatur angezeigt.</string>
+    <string name="batteryTemperatureDisplayMode_batteryN">Nur die Temperatur des Batteriestapels %1$s wird angezeigt (z. B. H3 Pro). Falls nicht gefunden, wird keine Batterietemperatur angezeigt.</string>
+    <string name="watch">Ansehen</string>
+    <string name="dismiss">Schließen</string>
+    <string name="offline_device">Offline-Gerät</string>
+    <string name="wifi_changed_offline_message">Wenn Sie kürzlich Ihre WLAN-Einstellungen aktualisiert haben und Hilfe bei der erneuten Verbindung Ihres Wechselrichters benötigen, klicken Sie unten, um ein Schritt-für-Schritt-Video-Tutorial anzusehen.</string>
+    <string name="you_can_also_find_this_video_link_in_the_settings_faq_section">Diesen Videolink finden Sie auch im FAQ-Bereich der Einstellungen.</string>
+    <string name="unknown_error">Unbekannter Netzwerkfehler</string>
+    <string name="fox_error_44098">Fox Cloud-Fehler 44098. Der Zeitplan konnte nicht gespeichert werden. Dies kann daran liegen, dass Fox MaxSOC auf OpenAPI nicht unterstützt.</string>
     <string name="display_battery_stack">Batteriestapel anzeigen</string>
+    <string name="appearance">Aussehen</string>
+    <string name="show_battery_estimate_on_widget">Batterieschätzung im Widget anzeigen</string>
+    <string name="widget_tap_action">Widget-Tippaktion</string>
+    <string name="reload_devices_from_foxess_cloud">Geräte vom FoxESS Cloud neu laden</string>
 </resources>

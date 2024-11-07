@@ -78,7 +78,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         HorizontalDivider()
 
         SettingsSegmentedControl(
-            title = "Appearance",
+            title = stringResource(R.string.appearance),
             segmentedControl = {
                 val items = listOf(
                     ColorThemeMode.Light,
@@ -156,14 +156,14 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         HorizontalDivider()
 
         SettingsCheckbox(
-            title = "Show battery estimate on widget",
+            title = stringResource(R.string.show_battery_estimate_on_widget),
             state = showBatteryTimeEstimateOnWidgetState,
             onUpdate = { config.showBatteryTimeEstimateOnWidget = it }
         )
         HorizontalDivider()
 
         SettingsSegmentedControl(
-            title = "Widget tap action",
+            title = stringResource(R.string.widget_tap_action),
             segmentedControl = {
                 val items = listOf(WidgetTapAction.Launch, WidgetTapAction.Refresh)
                 SegmentedControl(

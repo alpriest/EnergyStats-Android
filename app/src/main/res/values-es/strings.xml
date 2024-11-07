@@ -376,6 +376,17 @@
     <string name="refresh">Actualizar</string>
     <string name="automatic">Automático</string>
     <string name="batteryTemperatureDisplayMode_automatic">Se mostrarán todas las temperaturas de la batería.</string>
-    <string name="batteryTemperatureDisplayMode_batteryN">Solo se mostrará la temperatura del conjunto de baterías %1$@ (por ejemplo, H3 Pro). Si no se encuentra, no se mostrará ninguna temperatura de la batería.</string>
+    <string name="batteryTemperatureDisplayMode_batteryN">Solo se mostrará la temperatura del conjunto de baterías %1$s (por ejemplo, H3 Pro). Si no se encuentra, no se mostrará ninguna temperatura de la batería.</string>
+    <string name="watch">Ver</string>
+    <string name="dismiss">Cerrar</string>
+    <string name="offline_device">Dispositivo sin conexión</string>
+    <string name="wifi_changed_offline_message">Si has actualizado recientemente la configuración de WiFi y necesitas ayuda para volver a conectar tu inversor, haz clic abajo para ver un tutorial en video paso a paso.</string>
+    <string name="you_can_also_find_this_video_link_in_the_settings_faq_section">También puedes encontrar este enlace de video en la sección de preguntas frecuentes de Configuración.</string>
+    <string name="unknown_error">Error de red desconocido</string>
+    <string name="fox_error_44098">Error de Fox Cloud 44098. No se pudo guardar el horario. Esto puede deberse a que Fox no admite MaxSOC en OpenAPI.</string>
     <string name="display_battery_stack">Mostrar conjunto de baterías</string>
+    <string name="appearance">Apariencia</string>
+    <string name="show_battery_estimate_on_widget">Mostrar estimación de batería en el widget</string>
+    <string name="widget_tap_action">Acción de toque en el widget</string>
+    <string name="reload_devices_from_foxess_cloud">Recargar dispositivos desde FoxESS Cloud</string>
 </resources>

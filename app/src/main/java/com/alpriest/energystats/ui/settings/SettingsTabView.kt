@@ -127,7 +127,7 @@ fun ReloadDevicesButton(config: ConfigManaging) {
     var isLoading by remember { mutableStateOf(false) }
 
     InlineSettingsNavButton(
-        title = "Reload devices from FoxESS Cloud",
+        title = stringResource(R.string.reload_devices_from_foxess_cloud),
         disclosureIcon = null,
         disclosureView = {
             if (isLoading) {
