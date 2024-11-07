@@ -53,11 +53,12 @@ class PowerFlowTabViewModelFactory(
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
     private val context: Context,
-    private val widgetDataSharer: WidgetDataSharing
+    private val widgetDataSharer: WidgetDataSharing,
+    private val bannerAlertManager: BannerAlertManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PowerFlowTabViewModel(network, configManager, themeStream, context, widgetDataSharer) as T
+        return PowerFlowTabViewModel(network, configManager, themeStream, context, widgetDataSharer, bannerAlertManager) as T
     }
 }
 
@@ -74,7 +75,8 @@ class PowerFlowTabView(
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
-    private val widgetDataSharer: WidgetDataSharing
+    private val widgetDataSharer: WidgetDataSharing,
+    private val bannerAlertManager: BannerAlertManaging
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -91,7 +93,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(network, configManager, this.themeStream, LocalContext.current, widgetDataSharer)
+            factory = PowerFlowTabViewModelFactory(network, configManager, this.themeStream, LocalContext.current, widgetDataSharer, bannerAlertManager)
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -115,18 +117,18 @@ class PowerFlowTabView(
                 },
             contentAlignment = TopEnd
         ) {
-            Column {
-                when (uiState.state) {
-                    is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
-                    is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, (uiState.state as PowerFlowLoadState.Loaded).viewModel, themeStream)
-                    is PowerFlowLoadState.Error -> ErrorView(
-                        (uiState.state as PowerFlowLoadState.Error).ex,
-                        (uiState.state as PowerFlowLoadState.Error).reason,
-                        onRetry = { viewModel.timerFired() },
-                        onLogout = { userManager.logout() }
-                    )
-                }
+            when (uiState.state) {
+                is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
+                is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, (uiState.state as PowerFlowLoadState.Loaded).viewModel, themeStream)
+                is PowerFlowLoadState.Error -> ErrorView(
+                    (uiState.state as PowerFlowLoadState.Error).ex,
+                    (uiState.state as PowerFlowLoadState.Error).reason,
+                    onRetry = { viewModel.timerFired() },
+                    onLogout = { userManager.logout() }
+                )
             }
+
+            BannerView(viewModel.bannerAlertStream)
         }
     }
 }
@@ -156,11 +158,20 @@ fun LoadedView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo()), LocalContext.current, WidgetDataSharer(FakeConfigStore()))
+    val viewModel = PowerFlowTabViewModel(
+        DemoNetworking(),
+        FakeConfigManager(),
+        MutableStateFlow(AppTheme.demo()),
+        LocalContext.current,
+        WidgetDataSharer(FakeConfigStore()),
+        BannerAlertManager()
+    )
     val themeStream = MutableStateFlow(AppTheme.demo())
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        PowerFlowTabView(DemoNetworking(), FakeConfigManager(), FakeUserManager(), themeStream, WidgetDataSharer(FakeConfigStore())).Content(
+        PowerFlowTabView(
+            DemoNetworking(), FakeConfigManager(), FakeUserManager(), themeStream, WidgetDataSharer(FakeConfigStore()), BannerAlertManager()
+        ).Content(
             viewModel = viewModel,
             themeStream = themeStream
         )

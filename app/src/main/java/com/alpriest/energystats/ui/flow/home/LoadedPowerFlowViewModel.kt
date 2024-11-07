@@ -11,6 +11,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.StringPower
@@ -40,7 +41,8 @@ class LoadedPowerFlowViewModel(
     val configManager: ConfigManaging,
     val ct2: Double,
     val currentDevice: Device,
-    val network: Networking
+    val network: Networking,
+    private val bannerAlertManager: BannerAlertManaging
 ) : ViewModel() {
     val deviceState = MutableStateFlow<DeviceState>(DeviceState.Unknown)
     val homeTotal = MutableStateFlow<Double?>(null)
@@ -88,6 +90,14 @@ class LoadedPowerFlowViewModel(
                 faults.value = response.datas.currentData("currentFault")?.valueString?.let {
                     return@let it.split(",").filter { it.isNotBlank() }
                 } ?: listOf()
+
+                if (deviceState.value == DeviceState.Offline) {
+                    bannerAlertManager.deviceIsOffline()
+                } else {
+                    bannerAlertManager.clearDeviceBanner()
+                }
+            } else {
+                bannerAlertManager.clearDeviceBanner()
             }
         }
     }

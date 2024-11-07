@@ -15,23 +15,27 @@ import androidx.compose.ui.unit.dp
 data class ButtonDefinition(val title: String, val onClick: () -> Unit)
 
 @Composable
-fun EqualWidthButtonList(buttons: List<ButtonDefinition>) {
+fun EqualWidthButtonList(buttons: List<ButtonDefinition>, between: @Composable () -> Unit = { }) {
     val maxIntrinsicButtonWidth = remember {
         buttons.maxOf { it.title.length * 9 }
     }
 
-    buttons.forEach {
+    buttons.forEachIndexed { index, buttonDefinition ->
         Button(
-            onClick = it.onClick,
+            onClick = buttonDefinition.onClick,
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             modifier = Modifier.padding(top = 8.dp)
         ) {
             Text(
-                it.title,
+                buttonDefinition.title,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.width(maxIntrinsicButtonWidth.dp),
                 textAlign = TextAlign.Center
             )
+        }
+
+        if (index < buttons.count() - 1) {
+            between()
         }
     }
 }

@@ -48,6 +48,8 @@ import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.stores.WidgetDataSharing
+import com.alpriest.energystats.ui.flow.BannerAlertManager
+import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManaging
@@ -89,7 +91,8 @@ fun TabbedView(
     filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     credentialStore: CredentialStore,
     solarForecastingProvider: () -> SolcastCaching,
-    widgetDataSharer: WidgetDataSharing
+    widgetDataSharer: WidgetDataSharing,
+    bannerAlertManager: BannerAlertManaging
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -112,7 +115,7 @@ fun TabbedView(
                 userScrollEnabled = false
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer).Content(themeStream = themeStream)
+                    0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager).Content(themeStream = themeStream)
                     1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
                     2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
                     3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(themeStream = themeStream)
@@ -213,7 +216,8 @@ fun HomepagePreview() {
             { _, _ -> },
             SharedPreferencesCredentialStore(LocalContext.current.getSharedPreferences("com.alpriest.energystats", Context.MODE_PRIVATE)),
             { DemoSolarForecasting() },
-            WidgetDataSharer(FakeConfigStore())
+            WidgetDataSharer(FakeConfigStore()),
+            BannerAlertManager()
         )
     }
 }

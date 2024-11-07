@@ -23,6 +23,7 @@ import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.ShimmerText
@@ -117,7 +118,8 @@ fun GridIconViewPreview() {
         FakeConfigManager(),
         ct2 = 0.4,
         currentDevice = Device.preview(),
-        network = DemoNetworking()
+        network = DemoNetworking(),
+        BannerAlertManager()
     )
 
     EnergyStatsTheme {

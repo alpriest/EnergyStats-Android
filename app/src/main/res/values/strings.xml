@@ -382,4 +382,9 @@
     <string name="battery2" translatable="false">2</string>
     <string name="batteryTemperatureDisplayMode_automatic">All battery temperatures will be displayed.</string>
     <string name="batteryTemperatureDisplayMode_batteryN">Only the temperature of battery stack %1$s will be displayed (e.g H3 Pro). If not found, no battery temperature will be displayed.</string>
+    <string name="watch">Watch</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="offline_device">Offline Device</string>
+    <string name="wifi_changed_offline_message">If you’ve recently updated your WiFi settings and need help reconnecting your inverter, click below to watch a step-by-step video tutorial.</string>
+    <string name="you_can_also_find_this_video_link_in_the_settings_faq_section">You can also find this video link in the Settings FAQ section</string>
 </resources>

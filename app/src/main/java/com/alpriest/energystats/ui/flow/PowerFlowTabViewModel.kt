@@ -38,9 +38,11 @@ class PowerFlowTabViewModel(
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
     private val context: Context,
-    private val widgetDataSharer: WidgetDataSharing
+    private val widgetDataSharer: WidgetDataSharing,
+    private val bannerAlertManager: BannerAlertManaging
 ) : ViewModel() {
 
+    val bannerAlertStream: MutableStateFlow<BannerAlertType?> = bannerAlertManager.bannerAlertStream
     private var launchIn: Job? = null
     private var timer: CountDownTimer? = null
 
@@ -200,7 +202,8 @@ class PowerFlowTabViewModel(
                     configManager = configManager,
                     ct2 = currentViewModel.currentCT2,
                     currentDevice = currentDevice,
-                    network = network
+                    network = network,
+                    bannerAlertManager
                 )
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)

@@ -42,6 +42,7 @@ import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
+import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
@@ -360,9 +361,11 @@ fun SummaryPowerFlowViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         LoadedPowerFlowView(
             FakeConfigManager(),
-            PowerFlowTabViewModel(DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)), LocalContext.current, WidgetDataSharer(
-                FakeConfigStore()
-            )),
+            PowerFlowTabViewModel(
+                DemoNetworking(), FakeConfigManager(), MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)), LocalContext.current, WidgetDataSharer(
+                    FakeConfigStore()
+                ), BannerAlertManager()
+            ),
             loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
                 solar = 1.0,
                 solarStrings = listOf(
@@ -377,7 +380,8 @@ fun SummaryPowerFlowViewPreview() {
                 FakeConfigManager(),
                 ct2 = 0.4,
                 currentDevice = Device.preview(),
-                network = DemoNetworking()
+                network = DemoNetworking(),
+                BannerAlertManager()
             ),
             themeStream = MutableStateFlow(
                 AppTheme.demo(

@@ -47,7 +47,8 @@ fun MainAppView(appContainer: AppContainer) {
                         { filename, action -> appContainer.showFileChooser(filename, action) },
                         credentialStore = appContainer.credentialStore,
                         solarForecastingProvider = appContainer.solarForecastingProvider,
-                        appContainer.widgetDataSharer
+                        appContainer.widgetDataSharer,
+                        appContainer.bannerAlertManager
                     )
                 }
 

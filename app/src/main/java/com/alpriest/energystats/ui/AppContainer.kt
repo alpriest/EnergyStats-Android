@@ -23,6 +23,8 @@ import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.stores.WidgetDataSharing
+import com.alpriest.energystats.ui.flow.BannerAlertManager
+import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManager
 import com.alpriest.energystats.ui.login.UserManaging
@@ -121,6 +123,10 @@ class AppContainer(private val context: Context) {
 
     val userManager: UserManaging by lazy {
         UserManager(configManager, credentialStore)
+    }
+
+    val bannerAlertManager: BannerAlertManaging by lazy {
+        BannerAlertManager()
     }
 
     fun openAppInPlayStore() {
