@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.UnknownNetworkException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -58,7 +59,17 @@ class EditScheduleViewModel(
                 EditScheduleStore.shared.reset()
                 uiState.value = UiLoadState(LoadState.Inactive)
             } catch (ex: Exception) {
-                uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                val message = when (ex) {
+                    is UnknownNetworkException -> {
+                        if (ex.errno == 44098) {
+                            context.getString(R.string.fox_error_44098)
+                        } else {
+                            ex.localizedMessage ?: context.getString(R.string.unknown_error)
+                        }
+                    }
+                    else -> ex.localizedMessage ?: context.getString(R.string.unknown_error)
+                }
+                uiState.value = UiLoadState(LoadState.Error(ex, message))
             }
         }
     }
@@ -74,31 +85,6 @@ class EditScheduleViewModel(
 
         EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.appendPhasesInGaps(schedule, mode = mode, device = config.currentDevice.value)
     }
-
-//    fun delete(context: Context) {
-//        viewModelScope.launch {
-//            runCatching {
-//                config.currentDevice.value?.let { device ->
-//                    val deviceSN = device.deviceSN
-//
-//                    uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.deleting)))
-//
-//                    try {
-//                        network.deleteSchedule(deviceSN)
-//
-//                        shouldPopNavOnDismissal = true
-//                        alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_schedule_was_deleted))
-//                        EditScheduleStore.shared.reset()
-//                        uiState.value = UiLoadState(LoadState.Inactive)
-//                    } catch (ex: Exception) {
-//                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
-//                    }
-//                } ?: {
-//                    uiState.value = UiLoadState(LoadState.Inactive)
-//                }
-//            }
-//        }
-//    }
 
     override fun resetDialogMessage() {
         alertDialogMessage.value = null
