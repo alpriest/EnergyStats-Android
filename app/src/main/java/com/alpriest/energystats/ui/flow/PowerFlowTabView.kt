@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopEnd
@@ -101,9 +100,9 @@ class PowerFlowTabView(
         val loadedBackground = remember { largeRadialGradient(listOf(Sunny.copy(alpha = 0.7f), Color.Transparent)) }
         val errorBackground = remember { largeRadialGradient(listOf(Color.Red.copy(alpha = 0.7f), Color.Transparent)) }
 
-        val uiState by viewModel.uiState.collectAsState()
+        val uiState = viewModel.uiState.collectAsState().value.state
         val showSunnyBackground = themeStream.collectAsState().value.showSunnyBackground
-        val background = when (uiState.state) {
+        val background = when (uiState) {
             is PowerFlowLoadState.Active -> loadingBackground
             is PowerFlowLoadState.Loaded -> loadedBackground
             is PowerFlowLoadState.Error -> errorBackground
@@ -117,12 +116,13 @@ class PowerFlowTabView(
                 },
             contentAlignment = TopEnd
         ) {
-            when (uiState.state) {
+            when (uiState) {
                 is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
-                is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, (uiState.state as PowerFlowLoadState.Loaded).viewModel, themeStream)
+                is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, uiState.viewModel, themeStream)
                 is PowerFlowLoadState.Error -> ErrorView(
-                    (uiState.state as PowerFlowLoadState.Error).ex,
-                    (uiState.state as PowerFlowLoadState.Error).reason,
+                    uiState.ex,
+                    uiState.reason,
+                    true,
                     onRetry = { viewModel.timerFired() },
                     onLogout = { userManager.logout() }
                 )
@@ -197,8 +197,8 @@ data class UiLoadState(
 )
 
 sealed class LoadState {
-    object Inactive : LoadState()
-    data class Error(val ex: Exception?, val reason: String) : LoadState()
+    data object Inactive : LoadState()
+    data class Error(val ex: Exception?, val reason: String, val allowRetry: Boolean = true) : LoadState()
     data class Active(val value: String) : LoadState()
 
     companion object

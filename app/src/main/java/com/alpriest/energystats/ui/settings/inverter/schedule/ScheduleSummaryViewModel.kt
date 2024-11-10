@@ -73,7 +73,7 @@ class ScheduleSummaryViewModel(
                         uiState.value = UiLoadState(LoadState.Inactive)
                     }
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error)))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -82,8 +82,9 @@ class ScheduleSummaryViewModel(
     }
 
     suspend fun load(context: Context) {
-        if (uiState.value.state != LoadState.Inactive) {
-            return
+        when (uiState.value.state) {
+            is LoadState.Active -> return
+            else -> {}
         }
 
         if (!hasPreloaded) {
@@ -109,7 +110,7 @@ class ScheduleSummaryViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error)))
                 }
             }
         }
@@ -156,7 +157,7 @@ class ScheduleSummaryViewModel(
                         schedulerEnabledStream.value = schedulerEnabled
                         uiState.value = UiLoadState(LoadState.Inactive)
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error)))
                     }
                 }
             }
@@ -192,11 +193,15 @@ class ScheduleSummaryViewModel(
                         uiState.value = UiLoadState(LoadState.Inactive)
                         load(context)
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), false))
                     }
                 }
             }
         }
+    }
+
+    fun clearError() {
+        uiState.value = UiLoadState(LoadState.Inactive)
     }
 }
 

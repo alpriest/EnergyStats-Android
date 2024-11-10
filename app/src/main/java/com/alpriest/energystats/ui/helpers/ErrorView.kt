@@ -10,10 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ErrorOutline
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -55,7 +56,7 @@ private fun detailedErrorMessage(cause: Exception?, message: String, context: Co
 }
 
 @Composable
-fun ErrorView(cause: Exception?, reason: String, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
+fun ErrorView(cause: Exception?, reason: String, allowRetry: Boolean, onRetry: suspend () -> Unit, onLogout: () -> Unit) {
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
@@ -82,17 +83,22 @@ fun ErrorView(cause: Exception?, reason: String, onRetry: suspend () -> Unit, on
             text = stringResource(R.string.something_went_wrong_fetching_data_from_foxess_cloud),
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp),
-            fontSize = 16.sp
+            fontSize = 16.sp,
+            color = colorScheme.onSecondary
         )
 
         Text(
             detailedMessage,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = colorScheme.onSecondary
         )
 
         EqualWidthButtonList(
-            listOf(
-                ButtonDefinition(stringResource(R.string.retry)) { scope.launch { onRetry() } },
+            listOfNotNull(
+                if (allowRetry)
+                    ButtonDefinition(stringResource(R.string.retry)) { scope.launch { onRetry() } }
+                else
+                    ButtonDefinition(stringResource(R.string.ok)) { scope.launch { onRetry() } },
                 ButtonDefinition(stringResource(R.string.copy_debug_data)) {
                     scope.launch {
                         copyDebugData(context)
@@ -132,6 +138,7 @@ fun ErrorPreview() {
         ErrorView(
             cause = MissingDataException(),
             reason = "BEGIN_OBJECT was expected but got something else instead. Will try again because something else went wrong too.",
+            allowRetry = false,
             onRetry = {},
             onLogout = {}
         )

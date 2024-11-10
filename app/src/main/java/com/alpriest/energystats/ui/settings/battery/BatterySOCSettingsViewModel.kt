@@ -45,7 +45,7 @@ class BatterySOCSettingsViewModel(
                     minSOConGridStream.value = result.minSocOnGrid.toString()
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error)))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -74,7 +74,7 @@ class BatterySOCSettingsViewModel(
                     alertDialogMessage.value = MonitorAlertDialogData(ex, "Cannot save settings because you have an active schedule. You need to delete your schedule and try again.")
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud."))
+                    uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud.", true))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)

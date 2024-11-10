@@ -69,7 +69,7 @@ class BatteryChargeScheduleSettingsViewModel(
                     generateSummary(timePeriod1Stream.value, timePeriod2Stream.value, context)
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), true))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
@@ -150,7 +150,7 @@ class BatteryChargeScheduleSettingsViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex,"Something went wrong fetching data from FoxESS cloud."))
+                    uiState.value = UiLoadState(LoadState.Error(ex,"Something went wrong fetching data from FoxESS cloud.", false))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)

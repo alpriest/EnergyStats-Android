@@ -59,7 +59,13 @@ class BatterySOCSettings(
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = {userManager.logout()  })
+            is LoadState.Error -> ErrorView(
+                loadState.ex,
+                loadState.reason,
+                loadState.allowRetry,
+                onRetry = { viewModel.load(context) },
+                onLogout = { userManager.logout() }
+            )
             is LoadState.Inactive ->
                 ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, modifier = modifier, content = { innerModifier ->
                     SettingsPage(innerModifier) {

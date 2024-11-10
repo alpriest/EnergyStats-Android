@@ -75,7 +75,20 @@ class ScheduleSummaryView(
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
+            is LoadState.Error -> ErrorView(
+                loadState.ex,
+                loadState.reason,
+                loadState.allowRetry,
+                onRetry = {
+                    if (loadState.allowRetry) {
+                        viewModel.load(context)
+                    } else {
+                        viewModel.clearError()
+                    }
+                },
+                onLogout = { userManager.logout() }
+            )
+
             is LoadState.Inactive -> {
                 if (supportedError == null) {
                     schedule?.let { Loaded(it, viewModel, modifier) }
@@ -177,9 +190,11 @@ class ScheduleSummaryView(
                 Text(stringResource(R.string.manage_templates), color = colorScheme.onPrimary)
             }
 
-            Text(stringResource(R.string.templates_overview),
+            Text(
+                stringResource(R.string.templates_overview),
                 color = colorScheme.onSecondary,
-                modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL))
+                modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)
+            )
         }
     }
 

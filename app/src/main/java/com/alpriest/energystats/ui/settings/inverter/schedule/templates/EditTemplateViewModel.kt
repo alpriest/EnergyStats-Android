@@ -56,6 +56,8 @@ class EditTemplateViewModel(
         } else if (sharedSchedule != null && sharedTemplate != null) {
             EditScheduleStore.shared.templateStream.value = ScheduleTemplate(templateID, sharedTemplate.name, sharedSchedule.phases)
         }
+
+        uiState.value = UiLoadState(LoadState.Inactive)
     }
 
     fun addTimePeriod() {
@@ -137,7 +139,7 @@ class EditTemplateViewModel(
                         EditScheduleStore.shared.reset()
                         alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_activated))
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), allowRetry = false))
                     }
                 }
             }
@@ -166,5 +168,9 @@ class EditTemplateViewModel(
         EditScheduleStore.shared.reset()
         uiState.value = UiLoadState(LoadState.Inactive)
         navController.popBackStack()
+    }
+
+    fun clearError() {
+        uiState.value = UiLoadState(LoadState.Inactive)
     }
 }

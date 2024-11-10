@@ -73,9 +73,21 @@ class EditTemplateView(
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
+            is LoadState.Error -> ErrorView(
+                loadState.ex,
+                loadState.reason,
+                loadState.allowRetry,
+                onRetry = {
+                    if (loadState.allowRetry) {
+                        viewModel.load()
+                    } else {
+                        viewModel.clearError()
+                    }
+                },
+                onLogout = { userManager.logout() }
+            )
             is LoadState.Inactive -> template?.let { it ->
-                LoadedScaffold(stringResource(R.string.edit_template), navController) {modifier ->
+                LoadedScaffold(stringResource(R.string.edit_template), navController) { modifier ->
                     Loaded(it, viewModel, modifier)
                 }
             }
@@ -95,7 +107,11 @@ class EditTemplateView(
                 SettingsPage(innerModifier) {
                     ScheduleDetailView(viewModel.navController, template.asSchedule())
 
-                    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = SettingsPadding.PANEL_OUTER_HORIZONTAL)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = SettingsPadding.PANEL_OUTER_HORIZONTAL)
+                    ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
