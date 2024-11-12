@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "438707059847",
+    "project_id": "energy-stats-9f227",
+    "storage_bucket": "energy-stats-9f227.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438707059847:android:dc7ccd98f1d0c5c94e8c22",
+        "android_client_info": {
+          "package_name": "com.alpriest.energystats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5VxeHoO6tpM0nqUkx4gb4Pou6O9P47yI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

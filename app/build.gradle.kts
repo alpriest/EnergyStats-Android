@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 val localProperties = Properties()
@@ -71,4 +72,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodelCompose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.inappmessaging.display)
 }
