@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.HowToObtainAPIKeyView
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier) {
     var apiKey by rememberSaveable { mutableStateOf(store.getApiKey() ?: "") }
+    trackScreenView("API Key", "ConfigureAPIKeyView")
 
     ContentWithBottomButtonPair(navController, modifier = modifier, onSave = {
         store.store(apiKey)

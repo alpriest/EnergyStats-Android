@@ -383,7 +383,7 @@
     <string name="wifi_changed_offline_message">Si has actualizado recientemente la configuración de WiFi y necesitas ayuda para volver a conectar tu inversor, haz clic abajo para ver un tutorial en video paso a paso.</string>
     <string name="you_can_also_find_this_video_link_in_the_settings_faq_section">También puedes encontrar este enlace de video en la sección de preguntas frecuentes de Configuración.</string>
     <string name="unknown_error">Error de red desconocido</string>
-    <string name="fox_error_44098">Error de Fox Cloud 44098. No se pudo guardar el horario. Esto puede deberse a que Fox no admite MaxSOC en OpenAPI.</string>
+    <string name="fox_error_44098">Error de Fox Cloud 44098. No se pudo guardar el horario. Esto puede deberse a que el firmware de su inversor espera un valor MaxSOC, pero Fox aún no admite MaxSOC en su sistema OpenAPI, que es utilizado por Energy Stats. Deberá usar FoxCloud 2.0 para gestionar sus horarios por ahora.</string>
     <string name="display_battery_stack">Mostrar conjunto de baterías</string>
     <string name="appearance">Apariencia</string>
     <string name="show_battery_estimate_on_widget">Mostrar estimación de batería en el widget</string>

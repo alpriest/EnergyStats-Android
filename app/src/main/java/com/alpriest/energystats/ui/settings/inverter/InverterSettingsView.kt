@@ -14,6 +14,7 @@ import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
@@ -33,6 +34,8 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val showInverterStationNameState = rememberSaveable { mutableStateOf(configManager.showInverterStationNameOnPowerflow) }
     val shouldCombineCT2WithPVPowerState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithPVPower) }
     val shouldCombineCT2WithPVLoadsState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithLoadsPower) }
+
+    trackScreenView("Inverter", "InverterSettingsView")
 
     SettingsPage(modifier) {
         InverterChoiceView(configManager)

@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.SolarPowerFlow
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -82,6 +83,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
     val threshold3 = remember { mutableFloatStateOf(configManager.themeStream.value.solarRangeDefinitions.threshold3.toFloat()) }
     val mutatedAppTheme = remember { MutableStateFlow(configManager.themeStream.value) }
     val context = LocalContext.current
+    trackScreenView("Sun display variation thresholds", "SolarBandingSettingsView")
 
     LaunchedEffect(threshold1.floatValue) {
         if (threshold1.floatValue > threshold2.floatValue) {

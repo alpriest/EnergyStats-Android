@@ -37,6 +37,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
@@ -61,6 +62,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val hasError = config.currentDevice.collectAsState().value?.battery?.hasError ?: false
     val batteryTemperatureDisplayModeState = rememberSaveable { mutableStateOf(config.batteryTemperatureDisplayMode) }
     val context = LocalContext.current
+
+    trackScreenView("Battery", "BatterySettingsView")
 
     SettingsPage(modifier) {
         if (hasError) {

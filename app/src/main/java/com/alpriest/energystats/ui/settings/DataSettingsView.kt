@@ -13,6 +13,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.w
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -23,6 +24,7 @@ fun DataSettingsView(config: ConfigManaging, modifier: Modifier) {
     val dataCeilingState = rememberSaveable { mutableStateOf(config.dataCeiling) }
     val useTraditionalLoadFormulaState = rememberSaveable { mutableStateOf(config.useTraditionalLoadFormula) }
     val context = LocalContext.current
+    trackScreenView("Data", "DataSettingsView")
 
     SettingsPage(modifier) {
         SettingsColumn {

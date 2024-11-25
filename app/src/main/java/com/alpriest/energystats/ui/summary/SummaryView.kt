@@ -36,6 +36,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -65,6 +66,7 @@ class SummaryView(
         themeStream: MutableStateFlow<AppTheme>
     ) {
         val navController = rememberNavController()
+        trackScreenView("Summary", "SummaryView")
 
         NavHost(
             navController = navController,

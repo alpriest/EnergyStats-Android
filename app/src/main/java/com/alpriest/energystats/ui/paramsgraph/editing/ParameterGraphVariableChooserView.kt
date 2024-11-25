@@ -40,6 +40,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
@@ -62,6 +63,7 @@ class ParameterGraphVariableChooserView(
         val uriHandler = LocalUriHandler.current
         val groups = configManager.themeStream.collectAsState().value.parameterGroups
         val selectedGroupId = viewModel.selectedIdState.collectAsState().value
+        trackScreenView("Parameters", "ParameterGraphVariableChooserView")
 
         ContentWithBottomButtonPair(navController, onSave = {
             viewModel.apply()

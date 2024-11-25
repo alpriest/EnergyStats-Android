@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
@@ -40,6 +41,7 @@ fun SettingsTabView(
 ) {
     val currentDevice = config.currentDevice.collectAsState()
     val uriHandler = LocalUriHandler.current
+    trackScreenView("Settings", "SettingsTabView")
 
     SettingsPage(modifier) {
         SettingsColumn {

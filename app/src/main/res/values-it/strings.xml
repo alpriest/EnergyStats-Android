@@ -384,7 +384,7 @@
     <string name="wifi_changed_offline_message">Se hai recentemente aggiornato le impostazioni WiFi e hai bisogno di aiuto per ricollegare il tuo inverter, fai clic qui sotto per guardare un video tutorial passo dopo passo.</string>
     <string name="you_can_also_find_this_video_link_in_the_settings_faq_section">Puoi trovare questo link al video anche nella sezione FAQ delle Impostazioni.</string>
     <string name="unknown_error">Errore di rete sconosciuto</string>
-    <string name="fox_error_44098">Errore Fox Cloud 44098. Impossibile salvare il programma. Questo potrebbe essere dovuto al fatto che Fox non supporta MaxSOC su OpenAPI.</string>
+    <string name="fox_error_44098">Errore Fox Cloud 44098. Impossibile salvare il programma. Ciò potrebbe essere dovuto al fatto che il firmware del tuo inverter si aspetta un valore MaxSOC, ma Fox non supporta ancora MaxSOC nel loro sistema OpenAPI utilizzato da Energy Stats. Dovrai utilizzare FoxCloud 2.0 per gestire i tuoi programmi per il momento.</string>
     <string name="display_battery_stack">Mostra gruppo di batterie</string>
     <string name="appearance">Aspetto</string>
     <string name="show_battery_estimate_on_widget">Mostra la stima della batteria sul widget</string>

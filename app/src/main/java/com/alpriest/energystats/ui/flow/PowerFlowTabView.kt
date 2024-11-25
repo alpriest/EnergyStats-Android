@@ -32,6 +32,7 @@ import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.stores.WidgetDataSharing
@@ -96,6 +97,7 @@ class PowerFlowTabView(
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
+        trackScreenView("Power Flow Tab", "PowerFlowTabView")
         val loadingBackground = remember { largeRadialGradient(listOf(Color.White, Color.Transparent)) }
         val loadedBackground = remember { largeRadialGradient(listOf(Sunny.copy(alpha = 0.7f), Color.Transparent)) }
         val errorBackground = remember { largeRadialGradient(listOf(Color.Red.copy(alpha = 0.7f), Color.Transparent)) }

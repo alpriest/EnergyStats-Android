@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.login
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.animateDpAsState
@@ -11,8 +12,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,11 +49,19 @@ fun WelcomeView(
     themeStream: MutableStateFlow<AppTheme>,
     onClick: () -> Unit
 ) {
+    val scrollState = rememberScrollState()
+    val maxHeight: Dp = if (isLandscape()) 200.dp else 800.dp
+
     Column(
         horizontalAlignment = CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
     ) {
-        WelcomeLogoView(showingApiKey)
+        WelcomeLogoView(
+            showingApiKey,
+            modifier = Modifier.heightIn(100.dp, maxHeight)
+        )
 
         if (showingApiKey) {
             APIKeyLoginView(userManager = userManager).Content(themeStream = themeStream)
@@ -75,7 +87,7 @@ fun WelcomeView(
 }
 
 @Composable
-fun WelcomeLogoView(showingApiKey: Boolean) {
+fun WelcomeLogoView(showingApiKey: Boolean, modifier: Modifier = Modifier) {
     val painter = painterResource(id = R.drawable.es_icon)
     val animationSpec: AnimationSpec<Dp> = tween(durationMillis = 200, easing = EaseIn)
     val aspectRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
@@ -84,7 +96,7 @@ fun WelcomeLogoView(showingApiKey: Boolean) {
     val animatedPadding: Dp by animateDpAsState(targetValue = if (showingApiKey) 12.dp else 0.dp, animationSpec = animationSpec, label = "logo padding")
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.Yellow.copy(alpha = 0.2f))
             .padding(vertical = animatedPadding),
@@ -100,6 +112,12 @@ fun WelcomeLogoView(showingApiKey: Boolean) {
             contentScale = ContentScale.Fit
         )
     }
+}
+
+@Composable
+fun isLandscape(): Boolean {
+    val configuration = LocalConfiguration.current
+    return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }
 
 @Preview(showBackground = true, heightDp = 790, widthDp = 380)

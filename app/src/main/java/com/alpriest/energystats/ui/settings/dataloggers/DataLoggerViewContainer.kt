@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -105,6 +106,7 @@ class DataLoggerViewContainer(
         LaunchedEffect(null) {
             viewModel.load(context)
         }
+        trackScreenView("Datalogger", "DataLoggerViewContainer")
 
         val items = viewModel.itemStream.collectAsState()
 

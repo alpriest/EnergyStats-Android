@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
@@ -76,6 +77,7 @@ class NavigableParametersGraphTabView(
     @Composable
     fun Content(viewModel: NavigableParametersGraphTabViewModel = viewModel(factory = NavigableParametersGraphTabViewModelFactory(configManager))) {
         val navController = rememberNavController()
+        trackScreenView("Parameters Tab", "NavigableParametersGraphTabView")
 
         NavHost(
             navController = navController,

@@ -40,6 +40,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.preview.FakeUserManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
@@ -73,6 +74,7 @@ fun EditPhaseView(
     LaunchedEffect(null) {
         viewModel.load(context)
     }
+    trackScreenView("Edit phase", "EditPhaseView")
 
     ContentWithBottomButtonPair(
         navController,

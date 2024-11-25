@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -27,6 +28,7 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
         else -> stringResource(R.string.self_sufficiency_off)
     }
     val context = LocalContext.current
+    trackScreenView("Self sufficiency estimates", "SelfSufficiencySettingsView")
 
     SettingsColumn(
         modifier = modifier.fillMaxWidth(),

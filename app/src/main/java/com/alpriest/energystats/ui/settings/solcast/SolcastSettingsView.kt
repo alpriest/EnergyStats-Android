@@ -31,6 +31,7 @@ import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.ClickableUrlText
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -64,6 +65,7 @@ class SolcastSettingsView(
     ) {
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val sites = viewModel.sitesStream.collectAsState().value
+        trackScreenView("Solar Prediction", "SolcastSettingsView")
 
         MonitorAlertDialog(viewModel, userManager)
 

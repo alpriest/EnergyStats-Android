@@ -29,6 +29,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -69,6 +70,7 @@ class ScheduleTemplateListView(
         val context = LocalContext.current
         val loadState = viewModel.uiState.collectAsState().value.state
         val templates = viewModel.templateStream.collectAsState().value
+        trackScreenView("Templates", "ScheduleTemplateListView")
 
         MonitorAlertDialog(viewModel, userManager)
 

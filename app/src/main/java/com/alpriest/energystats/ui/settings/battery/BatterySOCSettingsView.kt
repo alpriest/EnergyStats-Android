@@ -28,6 +28,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -56,6 +57,7 @@ class BatterySOCSettings(
         LaunchedEffect(null) {
             viewModel.load(context)
         }
+        trackScreenView("Battery Charge Levels", "BatterySOCSettings")
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)

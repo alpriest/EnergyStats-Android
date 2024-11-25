@@ -388,7 +388,7 @@
     <string name="wifi_changed_offline_message">If you’ve recently updated your WiFi settings and need help reconnecting your inverter, click below to watch a step-by-step video tutorial.</string>
     <string name="you_can_also_find_this_video_link_in_the_settings_faq_section">You can also find this video link in the Settings FAQ section</string>
     <string name="unknown_error">Unknown error</string>
-    <string name="fox_error_44098">Fox Cloud error 44098. Could not save schedule. This may be because Fox do not support MaxSOC on OpenAPI.</string>
+    <string name="fox_error_44098">Fox Cloud error 44098. Could not save schedule. This may be because your inverter firmware expects a MaxSOC value, but Fox do not yet support MaxSOC on their OpenAPI system which is used by Energy Stats. You will need to use FoxCloud 2.0 to manage your schedules for now.</string>
     <string name="display_battery_stack">Display battery stack</string>
     <string name="appearance">Appearance</string>
     <string name="show_battery_estimate_on_widget">Show battery estimate on widget</string>

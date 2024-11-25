@@ -32,6 +32,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.dialog.AlertDialog
@@ -96,6 +97,7 @@ fun NavGraphBuilder.debugGraph(
 fun DebugDataSettingsView(navController: NavController, network: Networking) {
     val scope = rememberCoroutineScope()
     val alertDialogMessage = remember { mutableStateOf(null as String?) }
+    trackScreenView("Debug", "DebugDataSettingsView")
 
     alertDialogMessage.value?.let {
         AlertDialog(message = it, onDismiss = {

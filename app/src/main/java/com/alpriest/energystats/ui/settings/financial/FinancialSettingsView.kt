@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -58,6 +59,7 @@ fun FinancialsSettingsView(config: ConfigManaging) {
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
     val currencySymbol = rememberSaveable { mutableStateOf(config.currencySymbol) }
     val earningsModel = rememberSaveable { mutableStateOf(config.earningsModel) }
+    trackScreenView("Financial Model", "FinancialsSettingsView")
 
     SettingsColumn(content = {
         SettingsCheckbox(title = stringResource(R.string.show_financial_summary), state = showFinancialSummaryState, onUpdate = {

@@ -37,6 +37,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -102,6 +103,7 @@ class StatsTabView(
         LaunchedEffect(viewModel.displayModeStream) {
             viewModel.displayModeStream.collectLatest { viewModel.load(context) }
         }
+        trackScreenView("Stats Tab", "StatsTabView")
 
         Column(
             modifier = Modifier
