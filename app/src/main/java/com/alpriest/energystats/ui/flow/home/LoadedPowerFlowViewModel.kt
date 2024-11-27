@@ -10,7 +10,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.services.UnknownNetworkException
+import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.flow.EarningsViewModel
@@ -68,7 +68,7 @@ class LoadedPowerFlowViewModel(
                         includeCT2 = configManager.shouldCombineCT2WithPVPower,
                         invertCT2 = configManager.shouldInvertCT2
                     )
-                } catch (ex: UnknownNetworkException) {
+                } catch (ex: FoxServerError) {
                     bannerAlertManager.showToast("Failed to load generation: ${ex.message}")
                 }
             }
@@ -105,7 +105,7 @@ class LoadedPowerFlowViewModel(
                 } else {
                     bannerAlertManager.clearDeviceBanner()
                 }
-            } catch (ex: UnknownNetworkException) {
+            } catch (ex: FoxServerError) {
                 bannerAlertManager.showToast("Failed to load device status: ${ex.message}")
             }
         }
@@ -125,7 +125,7 @@ class LoadedPowerFlowViewModel(
                     homeTotal.value = totals.loads
                     gridImportTotal.value = totals.grid
                     gridExportTotal.value = totals.feedIn
-                } catch (ex: UnknownNetworkException) {
+                } catch (ex: FoxServerError) {
                     bannerAlertManager.showToast("Failed to load totals: ${ex.message}")
                 }
             }

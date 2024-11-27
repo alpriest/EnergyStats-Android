@@ -437,7 +437,7 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         }
 
         if (item.errno > 0) {
-            return Result.failure(UnknownNetworkException(item.errno, errorMessages[item.errno.toString()]))
+            return Result.failure(FoxServerError(item.errno, errorMessages[item.errno.toString()]))
         }
 
         return Result.success(item)

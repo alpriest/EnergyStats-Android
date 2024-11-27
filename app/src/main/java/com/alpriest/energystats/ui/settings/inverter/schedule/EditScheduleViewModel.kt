@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.services.UnknownNetworkException
+import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
@@ -60,7 +60,7 @@ class EditScheduleViewModel(
                 uiState.value = UiLoadState(LoadState.Inactive)
             } catch (ex: Exception) {
                 val message = when (ex) {
-                    is UnknownNetworkException -> {
+                    is FoxServerError -> {
                         if (ex.errno == 44098) {
                             context.getString(R.string.fox_error_44098)
                         } else {
