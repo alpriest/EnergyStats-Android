@@ -6,10 +6,12 @@ interface BannerAlertManaging {
     var bannerAlertStream: MutableStateFlow<BannerAlertType?>
     fun clearDeviceBanner()
     fun deviceIsOffline()
+    fun showToast(message: String?)
 }
 
-enum class BannerAlertType {
-    Offline
+sealed class BannerAlertType {
+    data object Offline : BannerAlertType()
+    data class Toast(val message: String) : BannerAlertType()
 }
 
 class BannerAlertManager : BannerAlertManaging {
@@ -25,5 +27,9 @@ class BannerAlertManager : BannerAlertManaging {
 
     override fun clearDeviceBanner() {
         bannerAlertStream.value = null
+    }
+
+    override fun showToast(message: String?) {
+        bannerAlertStream.value = BannerAlertType.Toast(message ?: "Something went wrong. Please try again.")
     }
 }

@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.flow
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -33,18 +34,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun BannerView(bannerAlertStream: MutableStateFlow<BannerAlertType?>) {
     val bannerAlertType = bannerAlertStream.collectAsState().value
+    val context = LocalContext.current
 
     bannerAlertType?.let {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            when (it) {
-                BannerAlertType.Offline -> OfflineDeviceBannerView {
-                    bannerAlertStream.value = null
+        when (it) {
+            is BannerAlertType.Offline -> {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    OfflineDeviceBannerView {
+                        bannerAlertStream.value = null
+                    }
                 }
             }
+
+            is BannerAlertType.Toast -> Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
         }
     }
 }

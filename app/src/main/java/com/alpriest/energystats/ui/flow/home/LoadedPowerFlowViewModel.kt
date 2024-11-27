@@ -10,6 +10,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.services.UnknownNetworkException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.flow.EarningsViewModel
@@ -61,11 +62,15 @@ class LoadedPowerFlowViewModel(
     private fun loadGeneration() {
         if (configManager.totalYieldModel != TotalYieldModel.Off) {
             viewModelScope.launch {
-                todaysGeneration.value = GenerationViewModel(
-                    loadHistoryData(currentDevice),
-                    includeCT2 = configManager.shouldCombineCT2WithPVPower,
-                    invertCT2 = configManager.shouldInvertCT2
-                )
+                try {
+                    todaysGeneration.value = GenerationViewModel(
+                        loadHistoryData(currentDevice),
+                        includeCT2 = configManager.shouldCombineCT2WithPVPower,
+                        invertCT2 = configManager.shouldInvertCT2
+                    )
+                } catch (ex: UnknownNetworkException) {
+                    bannerAlertManager.showToast("Failed to load generation: ${ex.message}")
+                }
             }
         }
     }
@@ -82,22 +87,26 @@ class LoadedPowerFlowViewModel(
 
     private fun loadDeviceStatus() {
         viewModelScope.launch {
-            deviceState.value = loadDeviceStatus(currentDevice)
+            try {
+                deviceState.value = loadDeviceStatus(currentDevice)
 
-            if (deviceState.value != DeviceState.Online) {
-                val response = network.fetchRealData(currentDevice.deviceSN, variables = listOf("currentFault"))
+                if (deviceState.value != DeviceState.Online) {
+                    val response = network.fetchRealData(currentDevice.deviceSN, variables = listOf("currentFault"))
 
-                faults.value = response.datas.currentData("currentFault")?.valueString?.let {
-                    return@let it.split(",").filter { it.isNotBlank() }
-                } ?: listOf()
+                    faults.value = response.datas.currentData("currentFault")?.valueString?.let {
+                        return@let it.split(",").filter { it.isNotBlank() }
+                    } ?: listOf()
 
-                if (deviceState.value == DeviceState.Offline) {
-                    bannerAlertManager.deviceIsOffline()
+                    if (deviceState.value == DeviceState.Offline) {
+                        bannerAlertManager.deviceIsOffline()
+                    } else {
+                        bannerAlertManager.clearDeviceBanner()
+                    }
                 } else {
                     bannerAlertManager.clearDeviceBanner()
                 }
-            } else {
-                bannerAlertManager.clearDeviceBanner()
+            } catch (ex: UnknownNetworkException) {
+                bannerAlertManager.showToast("Failed to load device status: ${ex.message}")
             }
         }
     }
@@ -110,23 +119,27 @@ class LoadedPowerFlowViewModel(
     private fun loadTotals() {
         if (configManager.showHomeTotal || configManager.showGridTotals || configManager.showFinancialSummary) {
             viewModelScope.launch {
-                val totals = TotalsViewModel(loadReportData(currentDevice))
-                earnings.value = EarningsViewModel(EnergyStatsFinancialModel(totals, configManager))
-                homeTotal.value = totals.loads
-                gridImportTotal.value = totals.grid
-                gridExportTotal.value = totals.feedIn
+                try {
+                    val totals = TotalsViewModel(loadReportData(currentDevice))
+                    earnings.value = EarningsViewModel(EnergyStatsFinancialModel(totals, configManager))
+                    homeTotal.value = totals.loads
+                    gridImportTotal.value = totals.grid
+                    gridExportTotal.value = totals.feedIn
+                } catch (ex: UnknownNetworkException) {
+                    bannerAlertManager.showToast("Failed to load totals: ${ex.message}")
+                }
             }
         }
     }
 
-    private suspend fun loadReportData(curentDevice: Device): List<OpenReportResponse> {
+    private suspend fun loadReportData(currentDevice: Device): List<OpenReportResponse> {
         var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption)
-        if (curentDevice.hasBattery) {
+        if (currentDevice.hasBattery) {
             reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
         }
 
         return network.fetchReport(
-            curentDevice.deviceSN,
+            currentDevice.deviceSN,
             reportVariables,
             QueryDate(),
             ReportType.month
