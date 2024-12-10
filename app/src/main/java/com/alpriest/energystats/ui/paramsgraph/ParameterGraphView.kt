@@ -83,6 +83,8 @@ fun ParameterGraphView(
                             runInitialAnimation = truncatedYAxisOnParameterGraphs,
                             chart = lineChart(
                                 axisValuesOverrider = AxisValuesOverrider.fixed(
+                                    minX = 0.0f,
+                                    maxX = 288.0f,
                                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
                                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
                                 )
@@ -242,7 +244,7 @@ class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFo
                 if (this.type.unit == "%") {
                     String.format(Locale.getDefault(), "%d %s", value.toInt(), type.unit)
                 } else {
-                    String.format(Locale.getDefault(), "%.02f %s", value, type.unit)
+                    String.format(Locale.getDefault(), "%.0f %s", value, type.unit)
                 }
             }
             .orEmpty()
