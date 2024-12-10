@@ -87,7 +87,8 @@ fun ParameterGraphView(
                                     maxX = 288.0f,
                                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
                                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
-                                )
+                                ),
+                                targetVerticalAxisPosition = AxisPosition.Vertical.Start
                             ),
                             chartModelProducer = producer,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
@@ -96,9 +97,8 @@ fun ParameterGraphView(
                                 valueFormatter = endAxisFormatter
                             ),
                             bottomAxis = rememberBottomAxis(
-                                itemPlacer = AxisItemPlacer.Horizontal.default((dataPointCount / 9.0).toInt(), addExtremeLabelPadding = true),
+                                itemPlacer = AxisItemPlacer.Horizontal.default(24, addExtremeLabelPadding = true),
                                 valueFormatter = formatter,
-                                tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
                             marker = ParameterGraphVerticalLineMarker(
@@ -231,7 +231,7 @@ class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValu
         return (chartValues.chartEntryModel.entries.first().firstOrNull { it.x == value } as? DateTimeFloatEntry)
             ?.localDateTime?.toLocalTime()
             ?.run {
-                String.format(Locale.getDefault(),"%d:%02d", hour, minute)
+                String.format(Locale.getDefault(),"%02d", hour)
             }
             .orEmpty()
     }
