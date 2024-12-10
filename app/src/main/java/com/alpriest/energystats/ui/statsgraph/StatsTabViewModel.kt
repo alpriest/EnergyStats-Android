@@ -161,8 +161,7 @@ class StatsTabViewModel(
                     device,
                     displayMode.start,
                     displayMode.end,
-                    reportVariables,
-                    displayMode
+                    reportVariables
                 )
                 updatedData = result.first
                 totals = result.second

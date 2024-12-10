@@ -65,11 +65,10 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
         device: Device,
         start: LocalDate,
         end: LocalDate,
-        reportVariables: List<ReportVariable>,
-        displayMode: StatsDisplayMode
+        reportVariables: List<ReportVariable>
     ): Pair<List<StatsGraphValue>, MutableMap<ReportVariable, Double>> {
         var current = start
-        var accumulatedGraphValues: MutableList<StatsGraphValue> = mutableListOf()
+        val accumulatedGraphValues: MutableList<StatsGraphValue> = mutableListOf()
         var accumulatedReportResponses: MutableList<OpenReportResponse> = mutableListOf()
 
         while (current.month <= end.month || current.year < end.year) {
