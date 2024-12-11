@@ -79,7 +79,6 @@ class ParametersGraphTabViewModel(
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    val xDataPointCount: MutableStateFlow<Float> = MutableStateFlow(360f)
     private var lastLoadState: LastLoadState<ParametersGraphViewState>? = null
 
     private val appLifecycleObserver = AppLifecycleObserver(
@@ -101,6 +100,7 @@ class ParametersGraphTabViewModel(
                     }
                     if (it.hours != previousHours) {
                         hours = it.hours
+
                         refresh()
                     }
                 }
@@ -203,7 +203,6 @@ class ParametersGraphTabViewModel(
                 }
             }
 
-        xDataPointCount.value = calculateDataPointCount()
         boundsStream.value = entries.map { entryList ->
             val max = (entryList.maxBy { it.y }.y)
             val min = (entryList.minBy { it.y }.y)
@@ -260,20 +259,6 @@ class ParametersGraphTabViewModel(
 
         prepareExport(rawData, displayModeStream.value)
         storeVariables()
-    }
-
-    private fun calculateDataPointCount(): Float {
-        val reportingIntervalMinutes: Float = if (rawData.count() > 1) {
-            val firstTime = rawData[0]
-            val secondTime = rawData[1]
-
-            val duration = Duration.between(firstTime.time, secondTime.time)
-            duration.toMinutes().toFloat()
-        } else {
-            5f
-        }
-
-        return (60 / reportingIntervalMinutes) * 24
     }
 
     private fun prepareExport(rawData: List<ParametersGraphValue>, displayMode: ParametersDisplayMode) {

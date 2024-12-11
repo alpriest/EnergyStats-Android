@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import android.graphics.RectF
+import android.util.Log
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -68,7 +69,6 @@ fun ParameterGraphView(
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>() else DecimalFormatAxisValueFormatter("0.0")
-    val dataPointCount = viewModel.xDataPointCount.collectAsState().value
     val seriesCount = producer.getModel()?.entries?.count() ?: 0
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
 
