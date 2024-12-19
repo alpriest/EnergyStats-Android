@@ -71,7 +71,7 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
         val accumulatedGraphValues: MutableList<StatsGraphValue> = mutableListOf()
         var accumulatedReportResponses: MutableList<OpenReportResponse> = mutableListOf()
 
-        while (current.month <= end.month || current.year < end.year) {
+        while (current.year < end.year || (current.year == end.year && current.month <= end.month)) {
             val month: Int = current.monthValue
             val year: Int = current.year
             val queryDate = QueryDate(year = year, month = month, day = null)
