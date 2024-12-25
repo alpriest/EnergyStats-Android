@@ -250,15 +250,17 @@ class StatsVerticalLineMarker(
         bounds: RectF,
         markedEntries: List<Marker.EntryModel>
     ) {
-        val left = markedEntries.minOf { it.location.x } - additionalBarWidth
-        val right = markedEntries.maxOf { it.location.x } + additionalBarWidth
+        if (markedEntries.isNotEmpty()) {
+            val left = markedEntries.minOf { it.location.x } - additionalBarWidth
+            val right = markedEntries.maxOf { it.location.x } + additionalBarWidth
 
-        guideline?.draw(
-            context,
-            left,
-            bounds.top,
-            right,
-            bounds.bottom
-        )
+            guideline?.draw(
+                context,
+                left,
+                bounds.top,
+                right,
+                bounds.bottom
+            )
+        }
     }
 }

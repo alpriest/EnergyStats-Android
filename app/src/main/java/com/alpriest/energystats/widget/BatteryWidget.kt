@@ -46,7 +46,9 @@ import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red
 import com.alpriest.energystats.ui.theme.Sunny
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class BatteryWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = BatteryWidget()
@@ -54,8 +56,11 @@ class BatteryWidgetReceiver : GlanceAppWidgetReceiver() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
 
-        runBlocking {
-            LatestDataRepository.getInstance().update(context)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                LatestDataRepository.getInstance().update(context)
+            } catch (_: Exception) {
+            }
         }
     }
 }
