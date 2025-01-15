@@ -86,6 +86,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var lastSolcastRefresh: LocalDateTime?
     var widgetTapAction: WidgetTapAction
     var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode
+    var showInverterScheduleQuickLink: Boolean
 }
 
 interface ScheduleTemplateConfigManager {

@@ -390,4 +390,5 @@
     <string name="show_battery_estimate_on_widget">Pokaż szacunkowy poziom baterii na widżecie</string>
     <string name="widget_tap_action">Akcja dotknięcia widżetu</string>
     <string name="reload_devices_from_foxess_cloud">Załaduj ponownie urządzenia z FoxESS Cloud</string>
+    <string name="show_schedule_quick_link">Pokaż szybki link do harmonogramu</string>
 </resources>

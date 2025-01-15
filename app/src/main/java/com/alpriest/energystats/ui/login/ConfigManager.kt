@@ -508,6 +508,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.batteryTemperatureDisplayMode = value.value
         }
 
+    override var showInverterScheduleQuickLink: Boolean
+        get() = config.showInverterScheduleQuickLink
+        set(value) {
+            config.showInverterScheduleQuickLink = value
+            themeStream.value = themeStream.value.copy(showInverterScheduleQuickLink = showInverterScheduleQuickLink)
+        }
+
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })
     }

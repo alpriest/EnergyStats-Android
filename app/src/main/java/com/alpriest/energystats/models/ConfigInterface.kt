@@ -9,6 +9,7 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import java.time.LocalDateTime
 
 interface ConfigInterface {
+    var showInverterScheduleQuickLink: Boolean
     var batteryTemperatureDisplayMode: Int
     var widgetTapAction: Int
     var lastSolcastRefresh: LocalDateTime?

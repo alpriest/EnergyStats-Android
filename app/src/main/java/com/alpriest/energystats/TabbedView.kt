@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -56,6 +57,8 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.StatsTabView
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
@@ -92,7 +95,8 @@ fun TabbedView(
     credentialStore: CredentialStore,
     solarForecastingProvider: () -> SolcastCaching,
     widgetDataSharer: WidgetDataSharing,
-    bannerAlertManager: BannerAlertManaging
+    bannerAlertManager: BannerAlertManaging,
+    templateStore: TemplateStoring
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -115,7 +119,7 @@ fun TabbedView(
                 userScrollEnabled = false
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager).Content(themeStream = themeStream)
+                    0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager, templateStore).Content(themeStream = themeStream,)
                     1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
                     2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
                     3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(themeStream = themeStream)
@@ -128,7 +132,8 @@ fun TabbedView(
                         onRateApp = onRateApp,
                         onBuyMeCoffee = onBuyMeCoffee,
                         credentialStore = credentialStore,
-                        solarForecastingProvider = solarForecastingProvider
+                        solarForecastingProvider = solarForecastingProvider,
+                        templateStore = templateStore
                     )
                 }
             }
@@ -217,7 +222,8 @@ fun HomepagePreview() {
             SharedPreferencesCredentialStore(LocalContext.current.getSharedPreferences("com.alpriest.energystats", Context.MODE_PRIVATE)),
             { DemoSolarForecasting() },
             WidgetDataSharer(FakeConfigStore()),
-            BannerAlertManager()
+            BannerAlertManager(),
+            TemplateStore(FakeConfigManager())
         )
     }
 }

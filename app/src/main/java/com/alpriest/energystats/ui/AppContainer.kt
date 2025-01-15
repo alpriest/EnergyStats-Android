@@ -33,6 +33,8 @@ import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.Solcast
 import com.alpriest.energystats.ui.settings.solcast.SolcastCache
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
@@ -41,6 +43,9 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class AppContainer(private val context: Context) {
+    val templateStore: TemplateStoring by lazy {
+        TemplateStore(configManager)
+    }
     val solarForecastingProvider: () -> SolcastCaching = {
         if (config.isDemoUser) {
             DemoSolarForecasting()
@@ -92,7 +97,8 @@ class AppContainer(private val context: Context) {
             showBatterySOCAsPercentage = config.showBatterySOCAsPercentage,
             shouldCombineCT2WithLoadsPower = config.shouldCombineCT2WithLoadsPower,
             powerFlowStrings = config.powerFlowStrings,
-            truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs
+            truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
+            showInverterScheduleQuickLink = config.showInverterScheduleQuickLink
         )
     )
 

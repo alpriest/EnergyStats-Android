@@ -80,7 +80,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         LAST_SOLCAST_REFRESH,
         WIDGET_TAP_ACTION,
         BATTERY_VIEW_MODEL,
-        BATTERY_TEMPERATURE_DISPLAY_MODE;
+        BATTERY_TEMPERATURE_DISPLAY_MODE,
+        SHOW_INVERTER_SCHEDULE_QUICK_LINK;
     }
 
     override fun clearDisplaySettings() {
@@ -632,6 +633,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putInt(SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, value)
+            editor.apply()
+        }
+
+    override var showInverterScheduleQuickLink: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_SCHEDULE_QUICK_LINK.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_SCHEDULE_QUICK_LINK.name, value)
             editor.apply()
         }
 }

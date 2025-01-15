@@ -1,14 +1,31 @@
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+
 package com.alpriest.energystats.ui.flow
 
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
@@ -25,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -42,6 +60,9 @@ import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
@@ -76,7 +97,8 @@ class PowerFlowTabView(
     private val userManager: UserManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
     private val widgetDataSharer: WidgetDataSharing,
-    private val bannerAlertManager: BannerAlertManaging
+    private val bannerAlertManager: BannerAlertManaging,
+    private val templateStore: TemplateStoring
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -120,7 +142,7 @@ class PowerFlowTabView(
         ) {
             when (uiState) {
                 is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
-                is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, uiState.viewModel, themeStream)
+                is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, uiState.viewModel, themeStream, network, userManager, templateStore)
                 is PowerFlowLoadState.Error -> ErrorView(
                     uiState.ex,
                     uiState.reason,
@@ -140,20 +162,56 @@ fun LoadedView(
     viewModel: PowerFlowTabViewModel,
     configManager: ConfigManaging,
     loadedPowerFlowViewModel: LoadedPowerFlowViewModel,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppTheme>,
+    network: Networking,
+    userManager: UserManaging,
+    templateStore: TemplateStoring
 ) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val navController = NavHostController(LocalContext.current)
+    val appSettings = themeStream.collectAsState().value
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        LoadedPowerFlowView(
-            configManager = configManager,
-            powerFlowViewModel = viewModel,
-            loadedPowerFlowViewModel = loadedPowerFlowViewModel,
-            themeStream = themeStream
-        )
+        Box {
+            if (appSettings.showInverterScheduleQuickLink) {
+                Icon(
+                    Icons.Default.CalendarMonth,
+                    contentDescription = "Inverter schedule",
+                    modifier = Modifier
+                        .clickable {
+                            showBottomSheet = true
+                        }
+                        .align(TopEnd)
+                )
+            }
+
+            LoadedPowerFlowView(
+                configManager = configManager,
+                powerFlowViewModel = viewModel,
+                loadedPowerFlowViewModel = loadedPowerFlowViewModel,
+                themeStream = themeStream
+            )
+
+            if (showBottomSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    sheetState = sheetState,
+                    contentWindowInsets = { WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom) }
+                ) {
+                    Column(modifier = Modifier.fillMaxHeight()) {
+                        ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -172,10 +230,16 @@ fun PowerFlowTabViewPreview() {
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         PowerFlowTabView(
-            DemoNetworking(), FakeConfigManager(), FakeUserManager(), themeStream, WidgetDataSharer(FakeConfigStore()), BannerAlertManager()
+            DemoNetworking(),
+            FakeConfigManager(),
+            FakeUserManager(),
+            themeStream,
+            WidgetDataSharer(FakeConfigStore()),
+            BannerAlertManager(),
+            TemplateStore(FakeConfigManager())
         ).Content(
             viewModel = viewModel,
-            themeStream = themeStream
+            themeStream = themeStream,
         )
     }
 }

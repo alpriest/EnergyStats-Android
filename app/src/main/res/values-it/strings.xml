@@ -390,4 +390,5 @@
     <string name="show_battery_estimate_on_widget">Mostra la stima della batteria sul widget</string>
     <string name="widget_tap_action">Azione di tocco sul widget</string>
     <string name="reload_devices_from_foxess_cloud">Ricarica dispositivi da FoxESS Cloud</string>
+    <string name="show_schedule_quick_link">Mostra collegamento rapido al programma</string>
 </resources>

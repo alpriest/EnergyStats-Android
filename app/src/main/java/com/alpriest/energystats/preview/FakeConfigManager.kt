@@ -81,6 +81,7 @@ class FakeConfigManager : ConfigManaging {
     override var lastSolcastRefresh: LocalDateTime? = null
     override var widgetTapAction: WidgetTapAction = WidgetTapAction.Launch
     override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode = BatteryTemperatureDisplayMode.Automatic
+    override var showInverterScheduleQuickLink: Boolean = false
 
     override var devices: List<Device>? = listOf(
         Device(

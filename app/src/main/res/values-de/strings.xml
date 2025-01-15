@@ -389,4 +389,5 @@
     <string name="show_battery_estimate_on_widget">Batterieschätzung im Widget anzeigen</string>
     <string name="widget_tap_action">Widget-Tippaktion</string>
     <string name="reload_devices_from_foxess_cloud">Geräte vom FoxESS Cloud neu laden</string>
+    <string name="show_schedule_quick_link">Schnellzugriff auf Zeitplan anzeigen</string>
 </resources>

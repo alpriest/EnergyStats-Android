@@ -48,7 +48,8 @@ fun MainAppView(appContainer: AppContainer) {
                         credentialStore = appContainer.credentialStore,
                         solarForecastingProvider = appContainer.solarForecastingProvider,
                         appContainer.widgetDataSharer,
-                        appContainer.bannerAlertManager
+                        appContainer.bannerAlertManager,
+                        appContainer.templateStore
                     )
                 }
 
@@ -68,4 +69,3 @@ fun MainAppView(appContainer: AppContainer) {
         }
     }
 }
-

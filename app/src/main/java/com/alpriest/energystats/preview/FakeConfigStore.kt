@@ -70,7 +70,8 @@ class FakeConfigStore(
     override var lastSolcastRefresh: LocalDateTime? = null,
     override var widgetTapAction: Int = WidgetTapAction.Launch.value,
     override var batteryViewModel: BatteryViewModel? = null,
-    override var batteryTemperatureDisplayMode: Int = 0
+    override var batteryTemperatureDisplayMode: Int = 0,
+    override var showInverterScheduleQuickLink: Boolean = false
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}
     override fun clearDeviceSettings() {}
