@@ -10,6 +10,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.SchedulePhaseResponse
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -193,7 +194,8 @@ class ScheduleSummaryViewModel(
                         uiState.value = UiLoadState(LoadState.Inactive)
                         load(context)
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), false))
+                        val message = errorMessage(ex, context)
+                        uiState.value = UiLoadState(LoadState.Error(ex, message, allowRetry = false))
                     }
                 }
             }
@@ -202,6 +204,19 @@ class ScheduleSummaryViewModel(
 
     fun clearError() {
         uiState.value = UiLoadState(LoadState.Inactive)
+    }
+}
+
+fun errorMessage(exception: Exception, context: Context): String {
+    return when (exception) {
+        is FoxServerError -> {
+            if (exception.errno == 44098) {
+                context.getString(R.string.fox_error_44098)
+            } else {
+                exception.localizedMessage ?: context.getString(R.string.unknown_error)
+            }
+        }
+        else -> exception.localizedMessage ?: context.getString(R.string.unknown_error)
     }
 }
 

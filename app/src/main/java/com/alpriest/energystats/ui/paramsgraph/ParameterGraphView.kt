@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import android.graphics.RectF
-import android.util.Log
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,6 +45,7 @@ import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
+import kotlin.math.max
 
 @Composable
 fun ParameterGraphView(
@@ -84,7 +84,7 @@ fun ParameterGraphView(
                             chart = lineChart(
                                 axisValuesOverrider = AxisValuesOverrider.fixed(
                                     minX = 0.0f,
-                                    maxX = 288.0f,
+                                    maxX = max(288.0f, entries.count().toFloat()),
                                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
                                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
                                 ),

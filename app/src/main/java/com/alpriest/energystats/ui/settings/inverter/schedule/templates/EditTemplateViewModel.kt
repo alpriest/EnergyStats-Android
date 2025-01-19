@@ -16,6 +16,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.errorMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -139,7 +140,8 @@ class EditTemplateViewModel(
                         EditScheduleStore.shared.reset()
                         alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.your_template_was_activated))
                     } catch (ex: Exception) {
-                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), allowRetry = false))
+                        val message = errorMessage(ex, context)
+                        uiState.value = UiLoadState(LoadState.Error(ex, message, allowRetry = false))
                     }
                 }
             }
