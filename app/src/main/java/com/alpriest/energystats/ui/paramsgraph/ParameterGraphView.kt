@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.paramsgraph
 
-import android.graphics.RectF
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,19 +31,13 @@ import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueForma
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
-import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
-import com.patrykandpatrick.vico.core.component.shape.LineComponent
-import com.patrykandpatrick.vico.core.component.shape.ShapeComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
-import com.patrykandpatrick.vico.core.component.text.HorizontalPosition
-import com.patrykandpatrick.vico.core.component.text.TextComponent
-import com.patrykandpatrick.vico.core.component.text.VerticalPosition
-import com.patrykandpatrick.vico.core.context.DrawContext
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
+import kotlin.math.abs
 import kotlin.math.max
 
 @Composable
@@ -68,7 +61,12 @@ fun ParameterGraphView(
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
-    val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>() else DecimalFormatAxisValueFormatter("0.0")
+    val bounds = viewModel.boundsStream.collectAsState().value
+
+    val max = (bounds.maxByOrNull { it.max }?.max) ?: 0f
+    val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
+    val range = max - min
+    val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>(range) else DecimalFormatAxisValueFormatter("0.0")
     val seriesCount = producer.getModel()?.entries?.count() ?: 0
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
 
@@ -237,95 +235,20 @@ class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValu
     }
 }
 
-class ParameterGraphEndAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
+class ParameterGraphEndAxisValueFormatter<Position : AxisPosition>(private val range: Float) : AxisValueFormatter<Position> {
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
         return (chartValues.chartEntryModel.entries.first().firstOrNull() as? DateTimeFloatEntry)
             ?.run {
                 if (this.type.unit == "%") {
                     String.format(Locale.getDefault(), "%d %s", value.toInt(), type.unit)
                 } else {
-                    String.format(Locale.getDefault(), "%.0f %s", value, type.unit)
+                    if (abs(range.toDouble()) < 1.0) {
+                        String.format(Locale.getDefault(), "%.2f %s", value, type.unit)
+                    } else {
+                        String.format(Locale.getDefault(), "%.1f %s", value, type.unit)
+                    }
                 }
             }
             .orEmpty()
-    }
-}
-
-private class ParameterGraphVerticalLineMarker(
-    private var valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>> = MutableStateFlow(listOf()),
-    private val guideline: LineComponent?,
-    private val text: TextComponent,
-    private val background: ShapeComponent
-) : Marker {
-    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
-        drawGuideline(context, bounds, markedEntries, background)
-
-        valuesAtTimeStream.value = markedEntries.mapNotNull { it.entry as? DateTimeFloatEntry }
-    }
-
-    private fun drawGuideline(
-        context: DrawContext,
-        bounds: RectF,
-        markedEntries: List<Marker.EntryModel>,
-        background: ShapeComponent,
-    ) {
-        val backgroundPadding = 10f
-        val labelToValueSpacing = 20f
-        val entries = markedEntries.mapNotNull {
-            it.entry as? DateTimeFloatEntry
-        }
-
-        markedEntries
-            .map { it.location.x }
-            .toSet()
-            .forEach { x ->
-                guideline?.drawVertical(
-                    context,
-                    bounds.top,
-                    bounds.bottom,
-                    x,
-                )
-
-                val labelMaxWidth = entries.maxOf {
-                    text.getTextBounds(context, it.type.name).width()
-                }
-                val valueMaxWidth = entries.maxOf {
-                    text.getTextBounds(context, it.y.toString()).width()
-                }
-
-                var currentHeight = 20f
-                val backgroundWidth = labelMaxWidth + labelToValueSpacing + valueMaxWidth + (2 * backgroundPadding)
-                val startX = if (x > bounds.right - backgroundWidth + (2 * backgroundPadding)) x - backgroundWidth - backgroundPadding else x + backgroundPadding
-
-                entries.forEach {
-                    text.drawText(
-                        context,
-                        it.type.name,
-                        startX + backgroundPadding,
-                        currentHeight,
-                        verticalPosition = VerticalPosition.Bottom,
-                        horizontalPosition = HorizontalPosition.End
-                    )
-
-                    text.drawText(
-                        context,
-                        it.y.toString(),
-                        startX + backgroundPadding + labelMaxWidth + labelToValueSpacing,
-                        currentHeight,
-                        verticalPosition = VerticalPosition.Bottom,
-                        horizontalPosition = HorizontalPosition.End
-                    )
-
-                    currentHeight += maxOf(text.getTextBounds(context, it.type.name).height(), text.getTextBounds(context, it.y.toString()).height())
-                }
-
-                background.draw(
-                    context,
-                    left = startX,
-                    right = startX + backgroundWidth,
-                    top = 20f,
-                    bottom = currentHeight
-                )
-            }
     }
 }
