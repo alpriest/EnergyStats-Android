@@ -82,6 +82,7 @@ class FakeConfigManager : ConfigManaging {
     override var widgetTapAction: WidgetTapAction = WidgetTapAction.Launch
     override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode = BatteryTemperatureDisplayMode.Automatic
     override var showInverterScheduleQuickLink: Boolean = false
+    override var fetchSolcastOnAppLaunch: Boolean = false
 
     override var devices: List<Device>? = listOf(
         Device(

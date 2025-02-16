@@ -81,7 +81,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         WIDGET_TAP_ACTION,
         BATTERY_VIEW_MODEL,
         BATTERY_TEMPERATURE_DISPLAY_MODE,
-        SHOW_INVERTER_SCHEDULE_QUICK_LINK;
+        SHOW_INVERTER_SCHEDULE_QUICK_LINK,
+        FETCH_SOLCAST_ON_APP_LAUNCH;
     }
 
     override fun clearDisplaySettings() {
@@ -641,6 +642,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_SCHEDULE_QUICK_LINK.name, value)
+            editor.apply()
+        }
+
+    override var fetchSolcastOnAppLaunch: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.FETCH_SOLCAST_ON_APP_LAUNCH.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.FETCH_SOLCAST_ON_APP_LAUNCH.name, value)
             editor.apply()
         }
 }

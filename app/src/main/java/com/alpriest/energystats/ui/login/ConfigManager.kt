@@ -515,6 +515,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(showInverterScheduleQuickLink = showInverterScheduleQuickLink)
         }
 
+    override var fetchSolcastOnAppLaunch: Boolean
+        get() = config.fetchSolcastOnAppLaunch
+        set(value) {
+            config.fetchSolcastOnAppLaunch = value
+        }
+
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })
     }

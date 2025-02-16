@@ -14,6 +14,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -39,6 +41,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
+import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -66,6 +69,7 @@ class SolcastSettingsView(
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val sites = viewModel.sitesStream.collectAsState().value
         trackScreenView("Solar Prediction", "SolcastSettingsView")
+        val fetchSolcastOnAppLaunch = rememberSaveable { mutableStateOf(configManager.fetchSolcastOnAppLaunch) }
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -87,6 +91,17 @@ class SolcastSettingsView(
                         visualTransformation = PasswordVisualTransformation(),
                         singleLine = true,
                         textStyle = TextStyle(colorScheme.onSecondary),
+                    )
+                }
+
+                SettingsColumn(
+                    padding = SettingsPaddingValues.withVertical(),
+                    footer = stringResource(R.string.solcast_fetch_on_launch)
+                ) {
+                    SettingsCheckbox(
+                        title = stringResource(R.string.fetch_solar_forecast_on_app_launch),
+                        state = fetchSolcastOnAppLaunch,
+                        onUpdate = { configManager.fetchSolcastOnAppLaunch = it }
                     )
                 }
 
