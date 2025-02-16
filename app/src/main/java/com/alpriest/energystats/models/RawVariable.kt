@@ -14,10 +14,11 @@ class Variable(
             "batChargePower" -> Color(125, 208, 130)
             "batDischargePower" -> Color(80, 147, 248)
             "gridConsumptionPower" -> Color(236, 109, 96)
-            "loadsPower" -> Color(209,207,83)
+            "loadsPower" -> Color(209, 207, 83)
             else ->
                 this.variable.md5()?.let {
-                    Color(android.graphics.Color.parseColor("#" + it.subSequence(0, 6).toString())) } ?: Color.Black
+                    Color(android.graphics.Color.parseColor("#" + it.subSequence(0, 6).toString()))
+                } ?: Color.Black
         }
     }
 
@@ -29,4 +30,20 @@ class Variable(
 
         return variable == other.variable
     }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + variable.hashCode()
+        result = 31 * result + unit.hashCode()
+        return result
+    }
+
+    companion object
 }
+
+val Variable.Companion.solcastPrediction: Variable
+    get() = Variable(
+        name = "Solcast solar prediction",
+        variable = "solcast-prediction",
+        unit = "kW"
+    )

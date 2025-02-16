@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
@@ -32,19 +33,27 @@ class NavigableParametersGraphTabViewModel(val configManager: ConfigManaging) : 
             configManager.currentDevice
                 .collect { it ->
                     it?.let { _ ->
-                        graphVariablesStream.value = configManager.variables.mapNotNull { variable: Variable ->
-                            val variable = configManager.variables.firstOrNull { it.variable == variable.variable }
+                        var variables = configManager.variables.mapNotNull { variable: Variable ->
+                            val configVariable = configManager.variables.firstOrNull { it.variable == variable.variable }
 
-                            if (variable != null) {
+                            if (configVariable != null) {
                                 return@mapNotNull ParameterGraphVariable(
-                                    variable,
-                                    isSelected = selectedGraphVariables().contains(variable.variable),
-                                    enabled = selectedGraphVariables().contains(variable.variable),
+                                    configVariable,
+                                    isSelected = selectedGraphVariables().contains(configVariable.variable),
+                                    enabled = selectedGraphVariables().contains(configVariable.variable),
                                 )
                             } else {
                                 return@mapNotNull null
                             }
                         }
+
+                        variables = variables.plus(ParameterGraphVariable(
+                            type = Variable.solcastPrediction,
+                            isSelected = selectedGraphVariables().contains(Variable.solcastPrediction.variable),
+                            enabled = true
+                        ))
+
+                        graphVariablesStream.value = variables
                     }
                 }
         }
@@ -86,7 +95,15 @@ class NavigableParametersGraphTabView(
             exitTransition = { ExitTransition.None }
         ) {
             composable(ParametersScreen.Graph.name) {
-                ParametersGraphTabView(network, configManager, userManager, onWriteTempFile, viewModel.graphVariablesStream, navController, filePathChooser).Content(themeStream = themeStream)
+                ParametersGraphTabView(
+                    network,
+                    configManager,
+                    userManager,
+                    onWriteTempFile,
+                    viewModel.graphVariablesStream,
+                    navController,
+                    filePathChooser
+                ).Content(themeStream = themeStream)
             }
 
             composable(ParametersScreen.ParameterChooser.name) {
