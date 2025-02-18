@@ -21,6 +21,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableCho
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -82,6 +83,7 @@ class NavigableParametersGraphTabView(
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     val themeStream: MutableStateFlow<AppTheme>,
+    private val solarForecastProvider: () -> SolcastCaching
 ) {
     @Composable
     fun Content(viewModel: NavigableParametersGraphTabViewModel = viewModel(factory = NavigableParametersGraphTabViewModelFactory(configManager))) {
@@ -102,7 +104,8 @@ class NavigableParametersGraphTabView(
                     onWriteTempFile,
                     viewModel.graphVariablesStream,
                     navController,
-                    filePathChooser
+                    filePathChooser,
+                    solarForecastProvider
                 ).Content(themeStream = themeStream)
             }
 

@@ -121,7 +121,7 @@ fun TabbedView(
                 when (page) {
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager, templateStore).Content(themeStream = themeStream,)
                     1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
-                    2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream).Content()
+                    2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream, solarForecastingProvider).Content()
                     3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(themeStream = themeStream)
                     4 -> NavigableSettingsView(
                         config = configManager,

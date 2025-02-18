@@ -226,10 +226,14 @@ fun ParameterGraphView(
 
 class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
-        return (chartValues.chartEntryModel.entries.first().firstOrNull { it.x == value } as? DateTimeFloatEntry)
+        return chartValues.chartEntryModel.entries
+            .asSequence()
+            .flatMap { it.asSequence() }
+            .firstOrNull { it.x == value }
+            ?.let { it as? DateTimeFloatEntry }
             ?.localDateTime?.toLocalTime()
             ?.run {
-                String.format(Locale.getDefault(),"%02d", hour)
+                String.format(Locale.getDefault(), "%02d", hour)
             }
             .orEmpty()
     }

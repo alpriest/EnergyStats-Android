@@ -10,7 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.EnergyStatsApplication
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.services.Networking
@@ -19,6 +21,8 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
+import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +35,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.concurrent.CancellationException
 
@@ -62,7 +67,8 @@ class ParametersGraphTabViewModel(
     val networking: Networking,
     val configManager: ConfigManaging,
     val onWriteTempFile: (String, String) -> Uri?,
-    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
+    val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>,
+    private val solarForecastProvider: () -> SolcastCaching
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     private var exportText: String = ""
     var exportFileName: String = ""
@@ -136,7 +142,11 @@ class ParametersGraphTabViewModel(
         if (!requiresLoad()) {
             return
         }
-        val rawGraphVariables = graphVariablesStream.value.filter { it.isSelected }.map { it.type.variable }.toList()
+        val rawGraphVariables = graphVariablesStream.value
+            .filter { it.isSelected }
+            .filter { it.type.variable != Variable.solcastPrediction.variable }
+            .map { it.type.variable }
+            .toList()
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
         try {
@@ -166,8 +176,9 @@ class ParametersGraphTabViewModel(
                     )
                 }
             }
+            val solarData: List<ParametersGraphValue> = if (configManager.fetchSolcastOnAppLaunch) fetchSolarForecasts() else listOf()
 
-            this.rawData = rawData
+            this.rawData = rawData + solarData
             refresh()
             lastLoadState = LastLoadState(lastLoadTime = LocalDateTime.now(), ParametersGraphViewState(displayModeStream.value, graphVariablesStream.value))
         } catch (ex: CancellationException) {
@@ -302,6 +313,111 @@ class ParametersGraphTabViewModel(
 
     override fun exportTo(context: Context, uri: Uri) {
         writeContentToUri(context, uri, exportText)
+    }
+
+    private suspend fun fetchSolarForecasts(): List<ParametersGraphValue> {
+        val settings = configManager.solcastSettings
+        if (settings.sites.isEmpty() || settings.apiKey == null) {
+            return listOf()
+        }
+
+        val today = getToday()
+
+        try {
+            val sites = settings.sites
+            val data = sites.flatMap {
+                val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey, false).forecasts
+                return@flatMap forecasts.filter { response ->
+                    isSameDay(response.periodEnd, today)
+                }
+            }
+
+            val groupedForecasts = aggregateAndIntegrateForecasts(data)
+
+            return groupedForecasts.map { response ->
+                val dateTime = response.periodEnd.toLocalDateTime() // Convert Date to LocalDateTime
+                val minutesSinceMidnight = dateTime.hour * 60 + dateTime.minute
+                val graphPoint = (minutesSinceMidnight / (24.0 * 60.0) * 288).toInt() // Scale between 0 and 288
+
+                ParametersGraphValue(
+                    graphPoint = graphPoint,
+                    time = dateTime,
+                    value = response.pvEstimate,
+                    type = Variable.solcastPrediction
+                )
+            }.sortedBy { it.time }
+        } catch (ex: Exception) {
+            return listOf()
+        }
+    }
+
+    private fun aggregateAndIntegrateForecasts(forecasts: List<SolcastForecastResponse>): List<SolcastForecastResponse> {
+        // Step 1: Sum duplicate periodEnds
+        val summedForecasts = forecasts.groupBy { it.periodEnd }
+            .map { (periodEnd, entries) ->
+                SolcastForecastResponse(
+                    pvEstimate = entries.sumOf { it.pvEstimate },
+                    pvEstimate10 = entries.sumOf { it.pvEstimate10 },
+                    pvEstimate90 = entries.sumOf { it.pvEstimate90 },
+                    periodEnd = periodEnd,
+                    period = entries.firstOrNull()?.period ?: ""
+                )
+            }
+
+        // Step 2: Group by hour (setting minutes to 0)
+        val hourlyGrouped = summedForecasts.groupBy { forecast ->
+            truncateToHour(forecast.periodEnd)
+        }
+
+        // Step 3: Perform Riemann sum integration for each hour
+        return hourlyGrouped.map { (periodStart, forecastsInHour) ->
+            val sorted = forecastsInHour.sortedBy { it.periodEnd }
+
+            var totalPvEstimate = 0.0
+            var totalPvEstimate10 = 0.0
+            var totalPvEstimate90 = 0.0
+
+            for (i in 0 until sorted.size - 1) {
+                val left = sorted[i]
+                val right = sorted[i + 1]
+
+                val timeDiff = (right.periodEnd.time - left.periodEnd.time) / (1000.0 * 3600.0) // Convert ms to hours
+
+                // Trapezoidal Riemann sum integration
+                totalPvEstimate += 0.5 * timeDiff * (left.pvEstimate + right.pvEstimate)
+                totalPvEstimate10 += 0.5 * timeDiff * (left.pvEstimate10 + right.pvEstimate10)
+                totalPvEstimate90 += 0.5 * timeDiff * (left.pvEstimate90 + right.pvEstimate90)
+            }
+
+            SolcastForecastResponse(
+                pvEstimate = totalPvEstimate,
+                pvEstimate10 = totalPvEstimate10,
+                pvEstimate90 = totalPvEstimate90,
+                periodEnd = periodStart, // Use the start of the hour as reference
+                period = "1h"
+            )
+        }.sortedBy { it.periodEnd } // Ensure chronological order
+    }
+
+    private fun isSameDay(date1: Date, date2: Date): Boolean {
+        val localDate1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val localDate2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+
+        return localDate1 == localDate2
+    }
+
+    private fun getToday(): Date {
+        val date = LocalDate.now()
+        return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    }
+
+    private fun truncateToHour(date: Date): Date {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar.time
     }
 }
 

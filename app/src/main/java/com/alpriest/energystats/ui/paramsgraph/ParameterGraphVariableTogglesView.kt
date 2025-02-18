@@ -17,6 +17,7 @@ import com.alpriest.energystats.ui.GraphBounds
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.title
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,7 +73,13 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
 @Preview(widthDp = 340)
 fun ParameterGraphVariableTogglesViewPreview() {
     ParameterGraphVariableTogglesView(
-        ParametersGraphTabViewModel(DemoNetworking(), FakeConfigManager(), onWriteTempFile = { _, _ -> null }, MutableStateFlow(previewParameterGraphVariables())),
+        ParametersGraphTabViewModel(
+            DemoNetworking(),
+            FakeConfigManager(),
+            onWriteTempFile = { _, _ -> null },
+            MutableStateFlow(previewParameterGraphVariables()),
+            solarForecastProvider = { DemoSolarForecasting() }
+        ),
         themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = false))
     )
 }

@@ -46,6 +46,8 @@ import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -64,11 +66,12 @@ class ParametersGraphTabViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val onWriteTempFile: (String, String) -> Uri?,
-    private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>
+    private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>,
+    private val solarForecastProvider: () -> SolcastCaching
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ParametersGraphTabViewModel(network, configManager, onWriteTempFile, graphVariablesStream) as T
+        return ParametersGraphTabViewModel(network, configManager, onWriteTempFile, graphVariablesStream, solarForecastProvider) as T
     }
 }
 
@@ -79,11 +82,12 @@ class ParametersGraphTabView(
     private val onWriteTempFile: (String, String) -> Uri?,
     private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>,
     private val navController: NavController,
-    private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?
+    private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
+    private val solarForecastProvider: () -> SolcastCaching
 ) {
     @Composable
     fun Content(
-        viewModel: ParametersGraphTabViewModel = viewModel(factory = ParametersGraphTabViewModelFactory(network, configManager, onWriteTempFile, graphVariablesStream)),
+        viewModel: ParametersGraphTabViewModel = viewModel(factory = ParametersGraphTabViewModelFactory(network, configManager, onWriteTempFile, graphVariablesStream, solarForecastProvider)),
         themeStream: MutableStateFlow<AppTheme>
     ) {
         val scrollState = rememberScrollState()
@@ -314,6 +318,7 @@ fun PreviewParameterGraphHeaderView() {
             networking = DemoNetworking(),
             onWriteTempFile = { _, _ -> null },
             graphVariablesStream = MutableStateFlow(listOf()),
+            solarForecastProvider = { DemoSolarForecasting() }
         ),
         navController = NavHostController(LocalContext.current),
         configManager = FakeConfigManager()

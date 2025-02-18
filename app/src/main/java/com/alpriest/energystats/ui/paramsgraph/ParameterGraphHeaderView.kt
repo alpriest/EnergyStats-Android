@@ -42,6 +42,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.CalendarView
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
@@ -71,7 +72,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
         ) { showing ->
             DropdownMenuItem(onClick = {
                 navController.navigate(ParametersScreen.ParameterChooser.name)
-            }, text ={
+            }, text = {
                 Text("Parameters...")
             })
 
@@ -194,11 +195,17 @@ private fun HourPickerItems(hours: Int, showing: MutableState<Boolean>, onHoursC
 }
 
 @Composable
-@Preview(heightDp=400)
+@Preview(heightDp = 400)
 fun ParameterGraphHeaderViewPreview() {
     ParameterGraphHeaderView(
-        ParametersGraphTabViewModel(DemoNetworking(), FakeConfigManager(), onWriteTempFile = { _, _ -> null }, MutableStateFlow(previewParameterGraphVariables())),
+        ParametersGraphTabViewModel(
+            DemoNetworking(),
+            FakeConfigManager(),
+            onWriteTempFile = { _, _ -> null },
+            MutableStateFlow(previewParameterGraphVariables()),
+            solarForecastProvider = { DemoSolarForecasting() }
+        ),
         navController = NavHostController(LocalContext.current),
-        configManager = FakeConfigManager()
+        configManager = FakeConfigManager(),
     )
 }
