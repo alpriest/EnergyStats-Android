@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 import java.util.Calendar
+import java.util.Date
 import java.util.TimeZone
 
 data class RawRequest(
@@ -63,6 +64,18 @@ fun QueryDate.toUtcMillis(): Long {
         set(Calendar.MILLISECOND, 0)
     }
     return calendar.timeInMillis
+}
+
+fun QueryDate.toDate(): Date {
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.YEAR, year)
+    calendar.set(Calendar.MONTH, (month ?: 1) - 1) // Month is 0-based in Calendar
+    calendar.set(Calendar.DAY_OF_MONTH, day ?: 1) // Default to 1st if null
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.time
 }
 
 data class RawResponse(

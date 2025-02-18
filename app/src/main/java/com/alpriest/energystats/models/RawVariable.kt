@@ -15,6 +15,7 @@ class Variable(
             "batDischargePower" -> Color(80, 147, 248)
             "gridConsumptionPower" -> Color(236, 109, 96)
             "loadsPower" -> Color(209, 207, 83)
+            Variable.solcastPrediction.variable -> Color.Black
             else ->
                 this.variable.md5()?.let {
                     Color(android.graphics.Color.parseColor("#" + it.subSequence(0, 6).toString()))
@@ -44,6 +45,6 @@ class Variable(
 val Variable.Companion.solcastPrediction: Variable
     get() = Variable(
         name = "Solcast solar prediction",
-        variable = "solcast-prediction",
+        variable = "solcast_prediction",
         unit = "kW"
     )

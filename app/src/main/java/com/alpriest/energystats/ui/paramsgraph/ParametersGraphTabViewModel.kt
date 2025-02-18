@@ -12,7 +12,9 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.solcastPrediction
+import com.alpriest.energystats.models.toDate
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.services.Networking
@@ -176,7 +178,7 @@ class ParametersGraphTabViewModel(
                     )
                 }
             }
-            val solarData: List<ParametersGraphValue> = if (configManager.fetchSolcastOnAppLaunch) fetchSolarForecasts() else listOf()
+            val solarData: List<ParametersGraphValue> = if (graphVariablesStream.value.filter { it.isSelected }.any { it.type.variable == Variable.solcastPrediction.variable }) fetchSolarForecasts() else listOf()
 
             this.rawData = rawData + solarData
             refresh()
@@ -321,28 +323,28 @@ class ParametersGraphTabViewModel(
             return listOf()
         }
 
-        val today = getToday()
+        val queryDate = getQueryDate()
 
         try {
             val sites = settings.sites
             val data = sites.flatMap {
                 val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey, false).forecasts
                 return@flatMap forecasts.filter { response ->
-                    isSameDay(response.periodEnd, today)
+                    isSameDay(response.periodEnd, queryDate)
                 }
             }
 
-            val groupedForecasts = aggregateAndIntegrateForecasts(data)
+            val groupedForecasts = aggregateForecasts(data)
 
             return groupedForecasts.map { response ->
-                val dateTime = response.periodEnd.toLocalDateTime() // Convert Date to LocalDateTime
+                val dateTime = response.periodEnd.toLocalDateTime()
                 val minutesSinceMidnight = dateTime.hour * 60 + dateTime.minute
                 val graphPoint = (minutesSinceMidnight / (24.0 * 60.0) * 288).toInt() // Scale between 0 and 288
 
                 ParametersGraphValue(
                     graphPoint = graphPoint,
                     time = dateTime,
-                    value = response.pvEstimate,
+                    value = response.pvEstimate.rounded(configManager.decimalPlaces),
                     type = Variable.solcastPrediction
                 )
             }.sortedBy { it.time }
@@ -351,8 +353,7 @@ class ParametersGraphTabViewModel(
         }
     }
 
-    private fun aggregateAndIntegrateForecasts(forecasts: List<SolcastForecastResponse>): List<SolcastForecastResponse> {
-        // Step 1: Sum duplicate periodEnds
+    private fun aggregateForecasts(forecasts: List<SolcastForecastResponse>): List<SolcastForecastResponse> {
         val summedForecasts = forecasts.groupBy { it.periodEnd }
             .map { (periodEnd, entries) ->
                 SolcastForecastResponse(
@@ -362,41 +363,9 @@ class ParametersGraphTabViewModel(
                     periodEnd = periodEnd,
                     period = entries.firstOrNull()?.period ?: ""
                 )
-            }
+            }.sortedBy { it.periodEnd } // Ensure chronological order
 
-        // Step 2: Group by hour (setting minutes to 0)
-        val hourlyGrouped = summedForecasts.groupBy { forecast ->
-            truncateToHour(forecast.periodEnd)
-        }
-
-        // Step 3: Perform Riemann sum integration for each hour
-        return hourlyGrouped.map { (periodStart, forecastsInHour) ->
-            val sorted = forecastsInHour.sortedBy { it.periodEnd }
-
-            var totalPvEstimate = 0.0
-            var totalPvEstimate10 = 0.0
-            var totalPvEstimate90 = 0.0
-
-            for (i in 0 until sorted.size - 1) {
-                val left = sorted[i]
-                val right = sorted[i + 1]
-
-                val timeDiff = (right.periodEnd.time - left.periodEnd.time) / (1000.0 * 3600.0) // Convert ms to hours
-
-                // Trapezoidal Riemann sum integration
-                totalPvEstimate += 0.5 * timeDiff * (left.pvEstimate + right.pvEstimate)
-                totalPvEstimate10 += 0.5 * timeDiff * (left.pvEstimate10 + right.pvEstimate10)
-                totalPvEstimate90 += 0.5 * timeDiff * (left.pvEstimate90 + right.pvEstimate90)
-            }
-
-            SolcastForecastResponse(
-                pvEstimate = totalPvEstimate,
-                pvEstimate10 = totalPvEstimate10,
-                pvEstimate90 = totalPvEstimate90,
-                periodEnd = periodStart, // Use the start of the hour as reference
-                period = "1h"
-            )
-        }.sortedBy { it.periodEnd } // Ensure chronological order
+        return summedForecasts
     }
 
     private fun isSameDay(date1: Date, date2: Date): Boolean {
@@ -406,18 +375,8 @@ class ParametersGraphTabViewModel(
         return localDate1 == localDate2
     }
 
-    private fun getToday(): Date {
-        val date = LocalDate.now()
-        return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
-    }
-
-    private fun truncateToHour(date: Date): Date {
-        val calendar = Calendar.getInstance()
-        calendar.time = date
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        return calendar.time
+    private fun getQueryDate(): Date {
+        return queryDate.toDate()
     }
 }
 

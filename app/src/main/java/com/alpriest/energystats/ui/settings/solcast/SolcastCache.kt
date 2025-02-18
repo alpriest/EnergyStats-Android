@@ -49,7 +49,7 @@ class SolcastCache(
             tooManyRequests = true
         }
         val previousForecasts = previous?.forecasts ?: listOf()
-        val todayStart = LocalDate.now().atStartOfDay()
+        val todayStart = LocalDate.now().minusDays(7).atStartOfDay()
 
         var merged = previousForecasts.map { p ->
             val indexOfLatestForecastPeriod = latest.indexOfFirst { it.periodEnd == p.periodEnd }

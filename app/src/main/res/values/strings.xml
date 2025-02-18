@@ -72,6 +72,7 @@
     <string name="temperatures">Temperatures</string>
     <string name="none">None</string>
     <string name="find_out_more_about_these_variables">Find out more about these variables</string>
+    <string name="rawvariable_solcast_prediction">Total solar energy generation predicted by Solcast</string>
     <string name="rawvariable_generationpower">Solar / Battery power coming through the inverter</string>
     <string name="rawvariable_feedinpower">Power being exported back to the grid</string>
     <string name="rawvariable_batchargepower">Power charging the battery</string>
