@@ -6,8 +6,8 @@ import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.alpriest.energystats.models.SolcastSiteResponseList
 import com.alpriest.energystats.services.TryLaterException
+import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.nio.charset.Charset
 import java.time.LocalDate
@@ -35,7 +35,8 @@ class SolcastCache(
             val type = object : TypeToken<SolcastForecastResponseList>() {}.type
             val responseList: SolcastForecastResponseList = Gson().fromJson(it, type)
             return SolcastForecastList(tooManyRequests = false, forecasts = responseList.forecasts)
-        } ?: fetchAndStore(site, apiKey)
+        } ?:
+        return fetchAndStore(site, apiKey)
     }
 
     private suspend fun fetchAndStore(site: SolcastSite, apiKey: String, previous: SolcastForecastResponseList? = null): SolcastForecastList {
@@ -49,8 +50,9 @@ class SolcastCache(
             tooManyRequests = true
         }
         val previousForecasts = previous?.forecasts ?: listOf()
-        val todayStart = LocalDate.now().minusDays(7).atStartOfDay()
+        val oldestCacheData = LocalDate.now().minusDays(7).atStartOfDay()
 
+        // Remove periods duplicated in the cached version and newly fetched data
         var merged = previousForecasts.map { p ->
             val indexOfLatestForecastPeriod = latest.indexOfFirst { it.periodEnd == p.periodEnd }
             if (indexOfLatestForecastPeriod > -1) {
@@ -61,7 +63,7 @@ class SolcastCache(
         }.toMutableList()
 
         merged.addAll(latest)
-        merged = merged.filter { it.periodEnd.toLocalDateTime() >= todayStart }.toMutableList()
+        merged = merged.filter { it.periodEnd.toLocalDateTime() >= oldestCacheData }.toMutableList()
 
         val result = SolcastForecastResponseList(merged)
         val jsonText = Gson().toJson(result)
