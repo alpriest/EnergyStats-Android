@@ -73,6 +73,7 @@
     <string name="temperatures">Temperature</string>
     <string name="none">Nessuna</string>
     <string name="find_out_more_about_these_variables">Per saperne di più su queste variabili</string>
+    <string name="rawvariable_solcast_prediction">Produzione totale di energia solare prevista da Solcast</string>
     <string name="rawvariable_generationpower">Potenza solare/batteria proveniente dall\'inverter</string>
     <string name="rawvariable_feedinpower">Potenza esportata nella rete</string>
     <string name="rawvariable_batchargepower">Potenza di carica della batteria</string>
@@ -391,4 +392,5 @@
     <string name="widget_tap_action">Azione di tocco sul widget</string>
     <string name="reload_devices_from_foxess_cloud">Ricarica dispositivi da FoxESS Cloud</string>
     <string name="show_schedule_quick_link">Mostra collegamento rapido al programma</string>
+    <string name="solcast_fetch_on_launch">Recupera la previsione solare all’avvio dell’app</string>
 </resources>

@@ -178,7 +178,8 @@ class ParametersGraphTabViewModel(
                     )
                 }
             }
-            val solarData: List<ParametersGraphValue> = if (graphVariablesStream.value.filter { it.isSelected }.any { it.type.variable == Variable.solcastPrediction.variable }) fetchSolarForecasts() else listOf()
+            val solarData: List<ParametersGraphValue> =
+                if (graphVariablesStream.value.filter { it.isSelected }.any { it.type.variable == Variable.solcastPrediction.variable }) fetchSolarForecasts() else listOf()
 
             this.rawData = rawData + solarData
             refresh()
@@ -354,7 +355,7 @@ class ParametersGraphTabViewModel(
     }
 
     private fun aggregateForecasts(forecasts: List<SolcastForecastResponse>): List<SolcastForecastResponse> {
-        val summedForecasts = forecasts.groupBy { it.periodEnd }
+        return forecasts.groupBy { it.periodEnd }
             .map { (periodEnd, entries) ->
                 SolcastForecastResponse(
                     pvEstimate = entries.sumOf { it.pvEstimate },
@@ -364,8 +365,6 @@ class ParametersGraphTabViewModel(
                     period = entries.firstOrNull()?.period ?: ""
                 )
             }.sortedBy { it.periodEnd } // Ensure chronological order
-
-        return summedForecasts
     }
 
     private fun isSameDay(date1: Date, date2: Date): Boolean {
