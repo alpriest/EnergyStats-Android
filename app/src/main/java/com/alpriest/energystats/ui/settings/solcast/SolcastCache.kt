@@ -30,12 +30,22 @@ class SolcastCache(
     }
 
     override suspend fun fetchForecast(site: SolcastSite, apiKey: String, ignoreCache: Boolean): SolcastForecastList {
-        val cachedData: String? = if (ignoreCache) null else getForecastIfCached(site.resourceId)
-        return cachedData?.let {
+        return getCachedData(site.resourceId)?.let { cachedData ->
             val type = object : TypeToken<SolcastForecastResponseList>() {}.type
-            val responseList: SolcastForecastResponseList = Gson().fromJson(it, type)
-            return SolcastForecastList(tooManyRequests = false, forecasts = responseList.forecasts)
+            val cachedResponseList: SolcastForecastResponseList = Gson().fromJson(cachedData, type)
+
+            val eightHoursInMillis = 8 * 60 * 60 * 1000
+            val currentTime = System.currentTimeMillis()
+            val file = getFile(site.resourceId)
+            if ((currentTime - file.lastModified()) > eightHoursInMillis || ignoreCache) {
+                // Fetch new data
+                return fetchAndStore(site, apiKey, previous = cachedResponseList)
+            } else {
+                // Return cached data
+                return SolcastForecastList(tooManyRequests = false, forecasts = cachedResponseList.forecasts)
+            }
         } ?:
+        // Fetch new data
         return fetchAndStore(site, apiKey)
     }
 
@@ -72,11 +82,9 @@ class SolcastCache(
         return SolcastForecastList(tooManyRequests, result.forecasts)
     }
 
-    private fun getForecastIfCached(resourceId: String): String? {
+    private fun getCachedData(resourceId: String): String? {
         val file = getFile(resourceId)
-        val eightHoursInMillis = 8 * 60 * 60 * 1000
-        val currentTime = System.currentTimeMillis()
-        if (file.exists() && ((currentTime - file.lastModified()) < eightHoursInMillis)) {
+        if (file.exists()) {
             return file.readText(Charset.defaultCharset())
         }
         return null
