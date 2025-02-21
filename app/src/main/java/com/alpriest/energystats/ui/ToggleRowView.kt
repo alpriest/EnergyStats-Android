@@ -36,7 +36,7 @@ fun <T : GraphVariable> ToggleRowView(
     themeStream: MutableStateFlow<AppTheme>,
     toggleVisibility: (T) -> Unit,
     title: String,
-    description: String,
+    description: String?,
     value: String?,
     boundsValue: GraphBounds?
 ) {
@@ -80,11 +80,13 @@ fun <T : GraphVariable> ToggleRowView(
                     )
 
                     if (appTheme.showGraphValueDescriptions) {
-                        Text(
-                            description,
-                            color = DimmedTextColor,
-                            fontSize = appTheme.smallFontSize()
-                        )
+                        description?.let {
+                            Text(
+                                it,
+                                color = DimmedTextColor,
+                                fontSize = appTheme.smallFontSize()
+                            )
+                        }
                     }
                 }
 

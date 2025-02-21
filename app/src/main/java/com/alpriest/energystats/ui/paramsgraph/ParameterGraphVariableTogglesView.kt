@@ -48,10 +48,10 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
                 }
 
                 val id = LocalContext.current.resources.getIdentifier("rawvariable_${it.type.variable.lowercase()}", "string", LocalContext.current.applicationInfo.packageName)
-                val description: String = if (id > 0) {
+                val description: String? = if (id > 0) {
                     stringResource(id)
                 } else {
-                    it.type.variable
+                    null
                 }
 
                 if (selectedValue == null) {

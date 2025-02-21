@@ -25,7 +25,11 @@ class MainActivity : ComponentActivity() {
                 appContainer.filePathChooserCallback?.invoke(it)
             }
         }
-        val preHomeViewModel = PreHomeViewModel(appContainer.networking)
+        val preHomeViewModel = PreHomeViewModel(
+            appContainer.networking,
+            appContainer.configManager,
+            appContainer.solarForecastingProvider
+        )
 
         setContent {
             val systemUiController = rememberSystemUiController()
