@@ -393,4 +393,5 @@
     <string name="reload_devices_from_foxess_cloud">Ricarica dispositivi da FoxESS Cloud</string>
     <string name="show_schedule_quick_link">Mostra collegamento rapido al programma</string>
     <string name="solcast_fetch_on_launch">Recupera la previsione solare all’avvio dell’app</string>
+    <string name="fetch_solar_forecast_on_app_launch">Recupera la previsione solare all’avvio dell’app</string>
 </resources>
