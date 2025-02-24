@@ -106,7 +106,7 @@ class SummaryTabViewModel(
 
                 emptyMonth?.let { month ->
                     oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
-                        is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).monthYear()
+                        is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).plusMonths(1).monthYear()
                         is SummaryDateRange.Manual -> dateRange.from.monthYear()
                     }
                     hasFinished = true
@@ -171,7 +171,7 @@ class SummaryTabViewModel(
             }
 
             if (monthlyTotal == 0.0 && (month < currentMonth || year < currentYear)) {
-                emptyMonth = month + 1
+                emptyMonth = month
                 break
             }
         }
