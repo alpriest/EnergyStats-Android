@@ -56,6 +56,7 @@ fun ParameterGraphView(
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
     val bounds = viewModel.boundsStream.collectAsState().value
+    val producers = viewModel.producers.collectAsState().value
 
     val max = (bounds.maxByOrNull { it.max }?.max) ?: 0f
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
@@ -64,6 +65,7 @@ fun ParameterGraphView(
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
     var lastOffset by remember { mutableStateOf<Offset?>(null) }
     val marker = ParameterGraphVerticalLineMarker(
+        producers,
         viewModel.valuesAtTimeStream,
         viewModel.lastMarkerModelStream
     )
@@ -123,7 +125,7 @@ fun ParameterGraphView(
 
                         lastMarkerModel?.let {
                             producer.getModel()?.let { model ->
-                                SelectedParameterValuesLineMarker(model.entries, it)
+                                SelectedParameterValuesLineMarker(model.entries, it, themeStream)
                             }
                         }
                     }

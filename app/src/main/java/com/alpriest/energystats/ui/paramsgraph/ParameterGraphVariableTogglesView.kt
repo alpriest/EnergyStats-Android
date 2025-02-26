@@ -33,7 +33,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
     Column(modifier) {
         graphVariables.value
             .filter { it.isSelected }
-            .filter { it.type.unit == unit }
+            .filter { unit == null || it.type.unit == unit }
             .map {
                 val selectedValue = selectedValues.firstOrNull { entry -> entry.type == it.type }
                 val titleType = if (selectedValue == null) ValueUsage.TOTAL else ValueUsage.SNAPSHOT

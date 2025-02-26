@@ -12,6 +12,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.rounded
 import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.models.toDate
@@ -407,6 +408,13 @@ class DateTimeFloatEntry(
         y = y,
         type = type,
     )
+
+    fun formattedValue(decimalPlaces: Int): String {
+        return when (type.unit) {
+            "kW" -> y.toDouble().kW(decimalPlaces)
+            else -> "$y ${type.unit}"
+        }
+    }
 }
 
 fun LocalDateTime.timeUntilNow(): Long {
