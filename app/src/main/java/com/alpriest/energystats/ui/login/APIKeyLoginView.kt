@@ -91,7 +91,7 @@ class APIKeyLoginViewModel(
     }
 
     suspend fun onLogin(apiKey: String, context: Context) {
-        userManager.login(apiKey, context)
+        userManager.login(apiKey.trim(), context)
     }
 
     suspend fun onDemoLogin() {

@@ -87,7 +87,15 @@ class ParametersGraphTabView(
 ) {
     @Composable
     fun Content(
-        viewModel: ParametersGraphTabViewModel = viewModel(factory = ParametersGraphTabViewModelFactory(network, configManager, onWriteTempFile, graphVariablesStream, solarForecastProvider)),
+        viewModel: ParametersGraphTabViewModel = viewModel(
+            factory = ParametersGraphTabViewModelFactory(
+                network,
+                configManager,
+                onWriteTempFile,
+                graphVariablesStream,
+                solarForecastProvider
+            )
+        ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
         val scrollState = rememberScrollState()
@@ -174,11 +182,24 @@ class ParametersGraphTabView(
                 .padding(vertical = 8.dp)
                 .fillMaxWidth()
         ) {
-            selectedDateTime?.let {
-                Text(
-                    text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+            viewModel.lastMarkerModelStream.value?.let {
+                selectedDateTime?.let {
+                    Row(modifier = Modifier.clickable {
+                        viewModel.lastMarkerModelStream.value = null
+                        viewModel.valuesAtTimeStream.value = listOf()
+                    }) {
+                        Text(
+                            text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.padding(end = 6.dp)
+                        )
+
+                        Text(
+                            text = "Clear",
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             } ?: run {
                 Text(
                     stringResource(R.string.touch_the_graph_to_see_values_at_that_time),
@@ -199,6 +220,8 @@ class ParametersGraphTabView(
                         showYAxisUnit = true,
                         userManager
                     )
+
+                    ParameterGraphVariableTogglesView(viewModel = viewModel, unit, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
                 }
             }
         } else {
@@ -209,9 +232,9 @@ class ParametersGraphTabView(
                 userManager,
                 producerAxisScalePairs
             )
-        }
 
-        ParameterGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+            ParameterGraphVariableTogglesView(viewModel = viewModel, null, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+        }
     }
 }
 

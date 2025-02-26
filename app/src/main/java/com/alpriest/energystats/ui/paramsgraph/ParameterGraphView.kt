@@ -1,14 +1,21 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.animation.core.SnapSpec
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.input.pointer.pointerInput
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.statsgraph.chartStyle
@@ -20,9 +27,6 @@ import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollSpec
-import com.patrykandpatrick.vico.compose.component.lineComponent
-import com.patrykandpatrick.vico.compose.component.shapeComponent
-import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
@@ -31,10 +35,7 @@ import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueForma
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
-import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.marker.Marker
-import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 import kotlin.math.abs
@@ -51,13 +52,6 @@ fun ParameterGraphView(
     showYAxisUnit: Boolean,
     userManager: UserManaging
 ) {
-    val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
-        override fun onMarkerHidden(marker: Marker) {
-            super.onMarkerHidden(marker)
-
-            viewModel.valuesAtTimeStream.value = listOf()
-        }
-    }
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
@@ -67,59 +61,71 @@ fun ParameterGraphView(
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
     val range = max - min
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>(range) else DecimalFormatAxisValueFormatter("0.0")
-    val seriesCount = producer.getModel()?.entries?.count() ?: 0
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
+    var lastOffset by remember { mutableStateOf<Offset?>(null) }
+    val marker = ParameterGraphVerticalLineMarker(
+        viewModel.valuesAtTimeStream,
+        viewModel.lastMarkerModelStream
+    )
+    val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
 
     MonitorAlertDialog(viewModel, userManager)
 
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {
             24 ->
-                Column(modifier = modifier.fillMaxWidth()) {
-                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                        Chart(
-                            runInitialAnimation = truncatedYAxisOnParameterGraphs,
-                            chart = lineChart(
-                                axisValuesOverrider = AxisValuesOverrider.fixed(
-                                    minX = 0.0f,
-                                    maxX = max(288.0f, entries.count().toFloat()),
-                                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
-                                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                ) {
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = { offset ->
+                                    // Wait until the user lifts their finger (touch up)
+                                    tryAwaitRelease()
+
+                                    // Store the last known marker position when touch is released
+                                    lastOffset = offset
+                                }
+                            )
+                        }) {
+
+                        ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+                            Chart(
+                                runInitialAnimation = truncatedYAxisOnParameterGraphs,
+                                chart = lineChart(
+                                    axisValuesOverrider = AxisValuesOverrider.fixed(
+                                        minX = 0.0f,
+                                        maxX = max(288.0f, entries.count().toFloat()),
+                                        minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                                        maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
+                                    ),
+                                    targetVerticalAxisPosition = AxisPosition.Vertical.Start
                                 ),
-                                targetVerticalAxisPosition = AxisPosition.Vertical.Start
-                            ),
-                            chartModelProducer = producer,
-                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                            endAxis = rememberEndAxis(
-                                itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = endAxisFormatter
-                            ),
-                            bottomAxis = rememberBottomAxis(
-                                itemPlacer = AxisItemPlacer.Horizontal.default(24, addExtremeLabelPadding = true),
-                                valueFormatter = formatter,
-                                guideline = axisGuidelineComponent()
-                            ),
-                            marker = ParameterGraphVerticalLineMarker(
-                                viewModel.valuesAtTimeStream,
-                                lineComponent(
-                                    color = colorScheme.onSurface,
-                                    thickness = 1.dp
+                                chartModelProducer = producer,
+                                chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                                endAxis = rememberEndAxis(
+                                    itemPlacer = AxisItemPlacer.Vertical.default(5),
+                                    valueFormatter = endAxisFormatter
                                 ),
-                                textComponent(
-                                    colorScheme.onSecondary,
-                                    lineCount = seriesCount,
+                                bottomAxis = rememberBottomAxis(
+                                    itemPlacer = AxisItemPlacer.Horizontal.default(24, addExtremeLabelPadding = true),
+                                    valueFormatter = formatter,
+                                    guideline = axisGuidelineComponent()
                                 ),
-                                shapeComponent(
-                                    shape = Shapes.rectShape,
-                                    color = colorScheme.secondary.copy(alpha = 0.3f),
-                                    strokeColor = colorScheme.secondary,
-                                    strokeWidth = 1.dp
-                                )
-                            ),
-                            diffAnimationSpec = SnapSpec(),
-                            markerVisibilityChangeListener = markerVisibilityChangeListener,
-                            horizontalLayout = HorizontalLayout.fullWidth()
-                        )
+                                marker = marker,
+                                diffAnimationSpec = SnapSpec(),
+                                horizontalLayout = HorizontalLayout.fullWidth()
+                            )
+                        }
+
+                        lastMarkerModel?.let {
+                            producer.getModel()?.let { model ->
+                                SelectedParameterValuesLineMarker(model.entries, it)
+                            }
+                        }
                     }
                 }
 
@@ -146,25 +152,8 @@ fun ParameterGraphView(
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
-                            marker = ParameterGraphVerticalLineMarker(
-                                viewModel.valuesAtTimeStream,
-                                lineComponent(
-                                    color = colorScheme.onSurface,
-                                    thickness = 1.dp
-                                ),
-                                textComponent(
-                                    colorScheme.onSecondary,
-                                    lineCount = seriesCount
-                                ),
-                                background = shapeComponent(
-                                    shape = Shapes.rectShape,
-                                    color = colorScheme.secondary.copy(alpha = 0.3f),
-                                    strokeColor = colorScheme.secondary,
-                                    strokeWidth = 1.dp
-                                )
-                            ),
+                            marker = marker,
                             diffAnimationSpec = SnapSpec(),
-                            markerVisibilityChangeListener = markerVisibilityChangeListener,
                             horizontalLayout = HorizontalLayout.fullWidth()
                         )
                     }
@@ -193,29 +182,8 @@ fun ParameterGraphView(
                                 tick = null,
                                 guideline = axisGuidelineComponent()
                             ),
-                            marker = ParameterGraphVerticalLineMarker(
-                                viewModel.valuesAtTimeStream,
-                                lineComponent(
-                                    color = colorScheme.onSurface,
-                                    thickness = 1.dp
-                                ),
-                                textComponent(
-                                    colorScheme.onSecondary,
-                                    lineCount = seriesCount,
-                                    background = shapeComponent(
-                                        shape = Shapes.rectShape,
-                                        color = colorScheme.secondary,
-                                    )
-                                ),
-                                shapeComponent(
-                                    shape = Shapes.rectShape,
-                                    color = colorScheme.secondary.copy(alpha = 0.3f),
-                                    strokeColor = colorScheme.secondary,
-                                    strokeWidth = 1.dp
-                                )
-                            ),
+                            marker = marker,
                             diffAnimationSpec = SnapSpec(),
-                            markerVisibilityChangeListener = markerVisibilityChangeListener,
                             horizontalLayout = HorizontalLayout.fullWidth()
                         )
                     }

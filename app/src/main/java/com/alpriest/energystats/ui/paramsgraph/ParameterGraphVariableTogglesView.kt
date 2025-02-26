@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, unit: String?, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val boundsValues = viewModel.boundsStream.collectAsState().value
@@ -33,6 +33,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, th
     Column(modifier) {
         graphVariables.value
             .filter { it.isSelected }
+            .filter { it.type.unit == unit }
             .map {
                 val selectedValue = selectedValues.firstOrNull { entry -> entry.type == it.type }
                 val titleType = if (selectedValue == null) ValueUsage.TOTAL else ValueUsage.SNAPSHOT
@@ -80,6 +81,7 @@ fun ParameterGraphVariableTogglesViewPreview() {
             MutableStateFlow(previewParameterGraphVariables()),
             solarForecastProvider = { DemoSolarForecasting() }
         ),
+        null,
         themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = false))
     )
 }
