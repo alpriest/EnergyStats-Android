@@ -46,6 +46,10 @@ fun SelectedParameterValuesLineMarker(
     val entries = allEntries.flatMap { list -> list.mapNotNull { it as? DateTimeFloatEntry }.filter { it.localDateTime == time } }
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
 
+    if (entries.isEmpty()) {
+        return
+    }
+
     Canvas(
         modifier = Modifier
             .fillMaxSize()

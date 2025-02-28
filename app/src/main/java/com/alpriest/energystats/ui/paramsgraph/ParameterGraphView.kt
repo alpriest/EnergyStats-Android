@@ -1,21 +1,15 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.animation.core.SnapSpec
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.statsgraph.chartStyle
@@ -35,6 +29,7 @@ import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueForma
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
@@ -62,134 +57,121 @@ fun ParameterGraphView(
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
     val range = max - min
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>(range) else DecimalFormatAxisValueFormatter("0.0")
-    val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
-    var lastOffset by remember { mutableStateOf<Offset?>(null) }
     val marker = ParameterGraphVerticalLineMarker(
         producers,
         viewModel.valuesAtTimeStream,
         viewModel.lastMarkerModelStream
     )
     val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
+    val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
 
     MonitorAlertDialog(viewModel, userManager)
 
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {
-            24 ->
-                Column(
-                    modifier = modifier
-                        .fillMaxWidth()
-                ) {
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onPress = { offset ->
-                                    // Wait until the user lifts their finger (touch up)
-                                    tryAwaitRelease()
-
-                                    // Store the last known marker position when touch is released
-                                    lastOffset = offset
-                                }
-                            )
-                        }) {
-
-                        ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                            Chart(
-                                runInitialAnimation = truncatedYAxisOnParameterGraphs,
-                                chart = lineChart(
-                                    axisValuesOverrider = AxisValuesOverrider.fixed(
-                                        minX = 0.0f,
-                                        maxX = max(288.0f, entries.count().toFloat()),
-                                        minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
-                                        maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
-                                    ),
-                                    targetVerticalAxisPosition = AxisPosition.Vertical.Start
-                                ),
-                                chartModelProducer = producer,
-                                chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                                endAxis = rememberEndAxis(
-                                    itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                    valueFormatter = endAxisFormatter
-                                ),
-                                bottomAxis = rememberBottomAxis(
-                                    itemPlacer = AxisItemPlacer.Horizontal.default(24, addExtremeLabelPadding = true),
-                                    valueFormatter = formatter,
-                                    guideline = axisGuidelineComponent()
-                                ),
-                                marker = marker,
-                                diffAnimationSpec = SnapSpec(),
-                                horizontalLayout = HorizontalLayout.fullWidth()
-                            )
-                        }
-
-                        lastMarkerModel?.let {
-                            producer.getModel()?.let { model ->
-                                SelectedParameterValuesLineMarker(model.entries, it, themeStream)
-                            }
-                        }
-                    }
-                }
+            24 -> ParameterGraphViewWithOverlaidMarker(
+                producer,
+                Modifier,
+                chartColors,
+                themeStream,
+                endAxisFormatter,
+                marker,
+                lastMarkerModel,
+                24,
+                AxisValuesOverrider.fixed(
+                    minX = 0.0f,
+                    maxX = max(288.0f, entries.count().toFloat()),
+                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
+                )
+            )
 
             6 ->
-                Column(modifier = modifier.fillMaxWidth()) {
-                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                        Chart(
-                            runInitialAnimation = truncatedYAxisOnParameterGraphs,
-                            chart = lineChart(
-                                axisValuesOverrider = AxisValuesOverrider.fixed(
-                                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
-                                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
-                                )
-                            ),
-                            chartModelProducer = producer,
-                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                            endAxis = rememberEndAxis(
-                                itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = endAxisFormatter
-                            ),
-                            bottomAxis = rememberBottomAxis(
-                                itemPlacer = AxisItemPlacer.Horizontal.default(9, addExtremeLabelPadding = true),
-                                valueFormatter = ParameterGraphBottomAxisValueFormatter(),
-                                tick = null,
-                                guideline = axisGuidelineComponent()
-                            ),
-                            marker = marker,
-                            diffAnimationSpec = SnapSpec(),
-                            horizontalLayout = HorizontalLayout.fullWidth()
-                        )
-                    }
-                }
+                ParameterGraphViewWithOverlaidMarker(
+                    producer,
+                    Modifier,
+                    chartColors,
+                    themeStream,
+                    endAxisFormatter,
+                    marker,
+                    lastMarkerModel,
+                    9,
+                    AxisValuesOverrider.fixed(
+                        minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                        maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
+                    )
+                )
 
             else ->
-                Column(modifier = modifier.fillMaxWidth()) {
-                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                        Chart(
-                            runInitialAnimation = truncatedYAxisOnParameterGraphs,
-                            chart = lineChart(
-                                axisValuesOverrider = AxisValuesOverrider.fixed(
-                                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
-                                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
-                                )
-                            ),
-                            chartModelProducer = producer,
-                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                            endAxis = rememberEndAxis(
-                                itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = endAxisFormatter
-                            ),
-                            bottomAxis = rememberBottomAxis(
-                                itemPlacer = AxisItemPlacer.Horizontal.default(spacing = 18, addExtremeLabelPadding = true),
-                                valueFormatter = ParameterGraphBottomAxisValueFormatter(),
-                                tick = null,
-                                guideline = axisGuidelineComponent()
-                            ),
-                            marker = marker,
-                            diffAnimationSpec = SnapSpec(),
-                            horizontalLayout = HorizontalLayout.fullWidth()
-                        )
-                    }
+                ParameterGraphViewWithOverlaidMarker(
+                    producer,
+                    Modifier,
+                    chartColors,
+                    themeStream,
+                    endAxisFormatter,
+                    marker,
+                    lastMarkerModel,
+                    18,
+                    AxisValuesOverrider.fixed(
+                        minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                        maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
+                    )
+                )
+        }
+    }
+}
+
+@Composable
+fun ParameterGraphViewWithOverlaidMarker(
+    producer: ChartEntryModelProducer,
+    modifier: Modifier,
+    chartColors: List<Color>,
+    themeStream: MutableStateFlow<AppTheme>,
+    endAxisFormatter: AxisValueFormatter<AxisPosition.Vertical.End>,
+    marker: ParameterGraphVerticalLineMarker,
+    lastMarkerModel: ParameterGraphVerticalLineMarkerModel?,
+    horizontalAxisSpacing: Int,
+    axisValuesOverrider: AxisValuesOverrider<ChartEntryModel>
+) {
+    val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
+    val formatter = remember { ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>() }
+
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+                Chart(
+                    runInitialAnimation = truncatedYAxisOnParameterGraphs,
+                    chart = lineChart(
+                        axisValuesOverrider = axisValuesOverrider,
+                        targetVerticalAxisPosition = AxisPosition.Vertical.Start
+                    ),
+                    chartModelProducer = producer,
+                    chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                    endAxis = rememberEndAxis(
+                        itemPlacer = AxisItemPlacer.Vertical.default(5),
+                        valueFormatter = endAxisFormatter
+                    ),
+                    bottomAxis = rememberBottomAxis(
+                        itemPlacer = AxisItemPlacer.Horizontal.default(horizontalAxisSpacing, addExtremeLabelPadding = true),
+                        valueFormatter = formatter,
+                        guideline = axisGuidelineComponent()
+                    ),
+                    marker = marker,
+                    diffAnimationSpec = SnapSpec(),
+                    horizontalLayout = HorizontalLayout.fullWidth()
+                )
+            }
+
+            lastMarkerModel?.let {
+                producer.getModel()?.let { model ->
+                    SelectedParameterValuesLineMarker(model.entries, it, themeStream)
                 }
+            }
         }
     }
 }

@@ -58,13 +58,13 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
                 if (selectedValue == null) {
                     val boundsValue = boundsValues.firstOrNull { entry -> entry.type == it.type }
                     val graphBounds = boundsValue?.let { GraphBounds(it.min, it.max, it.now) }
-                    ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, null, graphBounds)
+                    ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it, unit) }, title, description, null, graphBounds)
                 } else {
                     val formattedValue = when (it.type.unit) {
                         "kW" -> selectedValue.y.toDouble().kW(appTheme.decimalPlaces)
                         else -> "${selectedValue.y} ${it.type.unit}"
                     }
-                    ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, formattedValue, null)
+                    ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it, unit) }, title, description, formattedValue, null)
                 }
             }
     }

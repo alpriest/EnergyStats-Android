@@ -294,7 +294,7 @@ class ParametersGraphTabViewModel(
         exportFileName = "$baseExportFileName.csv"
     }
 
-    fun toggleVisibility(parameterGraphVariable: ParameterGraphVariable) {
+    fun toggleVisibility(parameterGraphVariable: ParameterGraphVariable, unit: String?) {
         val stream = graphVariablesStream.value
         val updated = stream.map {
             if (it.type == parameterGraphVariable.type) {
@@ -304,7 +304,7 @@ class ParametersGraphTabViewModel(
             }
         }
 
-        if (updated.count { it.enabled } == 0) {
+        if (updated.count { it.enabled && (unit == null || it.type.unit == unit) } == 0) {
             return
         }
 
