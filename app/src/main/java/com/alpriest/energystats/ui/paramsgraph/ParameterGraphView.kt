@@ -43,13 +43,11 @@ fun ParameterGraphView(
     chartColors: List<Color>,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
-    modifier: Modifier = Modifier,
     showYAxisUnit: Boolean,
     userManager: UserManaging
 ) {
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
     val displayMode = viewModel.displayModeStream.collectAsState().value
-    val formatter = ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>()
     val bounds = viewModel.boundsStream.collectAsState().value
     val producers = viewModel.producers.collectAsState().value
 
@@ -69,7 +67,7 @@ fun ParameterGraphView(
 
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {
-            24 -> ParameterGraphViewWithOverlaidMarker(
+            24 -> ParameterGraphViewWithCustomMarker(
                 producer,
                 Modifier,
                 chartColors,
@@ -86,43 +84,41 @@ fun ParameterGraphView(
                 )
             )
 
-            6 ->
-                ParameterGraphViewWithOverlaidMarker(
-                    producer,
-                    Modifier,
-                    chartColors,
-                    themeStream,
-                    endAxisFormatter,
-                    marker,
-                    lastMarkerModel,
-                    9,
-                    AxisValuesOverrider.fixed(
-                        minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
-                        maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
-                    )
+            6 -> ParameterGraphViewWithCustomMarker(
+                producer,
+                Modifier,
+                chartColors,
+                themeStream,
+                endAxisFormatter,
+                marker,
+                lastMarkerModel,
+                9,
+                AxisValuesOverrider.fixed(
+                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
                 )
+            )
 
-            else ->
-                ParameterGraphViewWithOverlaidMarker(
-                    producer,
-                    Modifier,
-                    chartColors,
-                    themeStream,
-                    endAxisFormatter,
-                    marker,
-                    lastMarkerModel,
-                    18,
-                    AxisValuesOverrider.fixed(
-                        minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
-                        maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
-                    )
+            else -> ParameterGraphViewWithCustomMarker(
+                producer,
+                Modifier,
+                chartColors,
+                themeStream,
+                endAxisFormatter,
+                marker,
+                lastMarkerModel,
+                18,
+                AxisValuesOverrider.fixed(
+                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min else null,
+                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max else null
                 )
+            )
         }
     }
 }
 
 @Composable
-fun ParameterGraphViewWithOverlaidMarker(
+fun ParameterGraphViewWithCustomMarker(
     producer: ChartEntryModelProducer,
     modifier: Modifier,
     chartColors: List<Color>,

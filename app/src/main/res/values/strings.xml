@@ -398,4 +398,6 @@
     <string name="show_schedule_quick_link">Show schedule quick link</string>
     <string name="solcast_fetch_on_launch">Your Solcast predictions are fetched when Energy Stats loads (at most once every 8 hours). Add the \'Solcast solar prediction\' parameter on the parameters graph variable selector. Since Solcast only provides future data, you must have opened the app yesterday to view today’s prediction.</string>
     <string name="fetch_solar_forecast_on_app_launch">Fetch solar forecast on app launch</string>
+    <string name="clear">Clear</string>
+    <string name="no_data">No data</string>
 </resources>

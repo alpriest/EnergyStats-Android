@@ -99,6 +99,7 @@ class StatsTabViewModel(
     private var lastLoadState: LastLoadState<StatsDisplayMode>? = null
     private var maxIndex: Float? = null
     private var lastSelectedIndex: Float? = null
+    var lastMarkerModelStream = MutableStateFlow<StatsGraphVerticalLineMarkerModel?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },

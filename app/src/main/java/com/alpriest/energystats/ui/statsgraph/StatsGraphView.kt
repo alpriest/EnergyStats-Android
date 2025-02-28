@@ -1,7 +1,10 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -45,8 +48,6 @@ import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.composed.plus
-import com.patrykandpatrick.vico.core.marker.Marker
-import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
@@ -60,18 +61,11 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
     val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour(themeStream) }
     val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsState().value
     val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
-    val markerVisibilityChangeListener = object : MarkerVisibilityChangeListener {
-        override fun onMarkerHidden(marker: Marker) {
-            super.onMarkerHidden(marker)
-
-            viewModel.valuesAtTimeStream.value = listOf()
-        }
-    }
     val context = LocalContext.current
 
     if (statsGraphData == null) {
         Text(
-            "No data",
+            stringResource(R.string.no_data),
             color = MaterialTheme.colorScheme.onPrimary
         )
     } else {
@@ -91,40 +85,44 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
             targetVerticalAxisPosition = AxisPosition.Vertical.Start
         )
         val composedChart = remember(columnChart, lineChart) { columnChart + lineChart }
+        val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
 
         if (selfSufficiencyGraphData != null) {
             Column(modifier = modifier.fillMaxWidth()) {
                 TimeSelectionText(viewModel)
 
-                ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                    Chart(
-                        chart = composedChart,
-                        model = statsGraphData + selfSufficiencyGraphData,
-                        chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                        endAxis = rememberEndAxis(
-                            itemPlacer = AxisItemPlacer.Vertical.default(5),
-                            valueFormatter = DecimalFormatAxisValueFormatter("0.0")
-                        ),
-                        bottomAxis = rememberBottomAxis(
-                            itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
-                            valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
-                            guideline = null
-                        ),
-                        horizontalLayout = HorizontalLayout.fullWidth(),
-                        marker = StatsVerticalLineMarker(
-                            viewModel.valuesAtTimeStream,
-                            viewModel.graphVariablesStream,
-                            composedChart,
-                            lineComponent(
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                                thickness = 3.dp
+                Box(modifier = Modifier.fillMaxSize()) {
+                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+                        Chart(
+                            chart = composedChart,
+                            model = statsGraphData + selfSufficiencyGraphData,
+                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                            endAxis = rememberEndAxis(
+                                itemPlacer = AxisItemPlacer.Vertical.default(5),
+                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
                             ),
-                            viewModel,
-                            context
-                        ),
-                        markerVisibilityChangeListener = markerVisibilityChangeListener
-                    )
+                            bottomAxis = rememberBottomAxis(
+                                itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
+                                valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
+                                guideline = null
+                            ),
+                            horizontalLayout = HorizontalLayout.fullWidth(),
+                            marker = StatsVerticalLineMarker(
+                                viewModel.valuesAtTimeStream,
+                                viewModel.graphVariablesStream,
+                                composedChart,
+                                viewModel,
+                                context,
+                                viewModel.lastMarkerModelStream
+                            )
+                        )
+                    }
+
+                    lastMarkerModel?.let {
+                        SelectedStatsValuesLineMarker(it)
+                    }
                 }
+
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Text(
                         when (displayMode) {
@@ -150,12 +148,26 @@ fun TimeSelectionText(viewModel: StatsTabViewModel) {
         modifier = Modifier
             .padding(vertical = 8.dp)
             .fillMaxWidth()
+
     ) {
-        selectedDateTime?.let {
-            Text(
-                text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                color = MaterialTheme.colorScheme.onBackground
-            )
+        viewModel.lastMarkerModelStream.value?.let {
+            selectedDateTime?.let {
+                Row(modifier = Modifier.clickable {
+                    viewModel.lastMarkerModelStream.value = null
+                    viewModel.valuesAtTimeStream.value = listOf()
+                }) {
+                    Text(
+                        text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(end = 6.dp)
+                    )
+
+                    Text(
+                        text = stringResource(R.string.clear),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         } ?: run {
             Text(
                 stringResource(R.string.touch_the_graph_to_see_values_at_that_time),

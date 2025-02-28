@@ -394,4 +394,6 @@
     <string name="show_schedule_quick_link">Pokaż szybki link do harmonogramu</string>
     <string name="solcast_fetch_on_launch">Pobierz prognozę słoneczną przy uruchomieniu aplikacji</string>
     <string name="fetch_solar_forecast_on_app_launch">Pobierz prognozę słoneczną przy uruchomieniu aplikacji</string>
+    <string name="clear">Czyste</string>
+    <string name="no_data">Brak danych</string>
 </resources>

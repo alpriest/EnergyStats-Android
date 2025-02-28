@@ -393,4 +393,6 @@
     <string name="show_schedule_quick_link">Schnellzugriff auf Zeitplan anzeigen</string>
     <string name="solcast_fetch_on_launch">Rufe die Solarprognose beim Start der App ab</string>
     <string name="fetch_solar_forecast_on_app_launch">Rufe die Solarprognose beim Start der App ab</string>
+    <string name="clear">Klar</string>
+    <string name="no_data">Keine Daten</string>
 </resources>

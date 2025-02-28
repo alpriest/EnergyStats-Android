@@ -393,4 +393,6 @@
     <string name="show_schedule_quick_link">Mostrar enlace rápido al horario</string>
     <string name="solcast_fetch_on_launch">Obtener la previsión solar al iniciar la aplicación</string>
     <string name="fetch_solar_forecast_on_app_launch">Obtener la previsión solar al iniciar la aplicación</string>
+    <string name="clear">Despejado</string>
+    <string name="no_data">Sin datos</string>
 </resources>

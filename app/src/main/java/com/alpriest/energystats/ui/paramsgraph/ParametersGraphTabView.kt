@@ -195,7 +195,7 @@ class ParametersGraphTabView(
                         )
 
                         Text(
-                            text = "Clear",
+                            text = stringResource(R.string.clear),
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -286,7 +286,6 @@ private fun ParameterGraph(
             chartColors = chartColors,
             viewModel = viewModel,
             themeStream,
-            modifier = Modifier.padding(bottom = 24.dp),
             showYAxisUnit = showYAxisUnit,
             userManager
         )
