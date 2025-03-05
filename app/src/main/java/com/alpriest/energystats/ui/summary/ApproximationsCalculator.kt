@@ -67,7 +67,7 @@ class ApproximationsCalculator(
             val reports = networking.fetchReport(deviceSN, reportVariables, queryDate, ReportType.month)
             reports.forEach { response ->
                 ReportVariable.parse(response.variable).let {
-                    totals[it] = response.values.first { it.index == queryDate.day }.value
+                    totals[it] = response.values.firstOrNull { it.index == queryDate.day }?.value ?: 0.0
                 }
             }
         } else {

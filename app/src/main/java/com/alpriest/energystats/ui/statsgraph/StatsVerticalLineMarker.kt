@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import com.patrykandpatrick.vico.core.chart.composed.ComposedChart
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.context.DrawContext
@@ -31,11 +30,7 @@ fun SelectedStatsValuesLineMarker(
     val left = model.markedEntries.minOf { it.location.x } - additionalBarWidth
     val right = model.markedEntries.maxOf { it.location.x } + additionalBarWidth
 
-    Canvas(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {}  // Prevents additional gestures from interfering
-    ) {
+    Canvas(modifier = Modifier.fillMaxSize()) {
         drawRect(
             Color.Red.copy(alpha = 0.4f),
             topLeft = Offset(left, 24f),
