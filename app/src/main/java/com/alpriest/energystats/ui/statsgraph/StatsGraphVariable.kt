@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 data class StatsGraphVariable(
     val type: ReportVariable,
     override var enabled: Boolean,
-): GraphVariable {
+) : GraphVariable {
     @Composable
     override fun colour(themeStream: MutableStateFlow<AppTheme>): Color {
         return type.colour(themeStream)

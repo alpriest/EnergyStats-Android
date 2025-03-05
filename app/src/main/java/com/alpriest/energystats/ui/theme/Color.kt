@@ -27,3 +27,5 @@ val IconColorInLightTheme = Color(0xFF000000)
 val WebLinkColorInDarkTheme = Color(0xFFAAAAFF)
 val WebLinkColorInLightTheme = TintColor
 val Orange = Color(0xFFFFA500)
+val MarkerLineInDarkTheme = Color(0xffffffff)
+val MarkerLineInLightTheme = Color(0xFFF44336)

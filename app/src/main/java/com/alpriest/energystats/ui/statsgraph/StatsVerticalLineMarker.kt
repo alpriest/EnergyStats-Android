@@ -8,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.paramsgraph.LineMarkerColor
+import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.chart.composed.ComposedChart
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.context.DrawContext
@@ -19,7 +21,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun SelectedStatsValuesLineMarker(
-    model: StatsGraphVerticalLineMarkerModel
+    model: StatsGraphVerticalLineMarkerModel,
+    themeStream: MutableStateFlow<AppTheme>
 ) {
     val additionalBarWidth = 3.0f
 
@@ -29,10 +32,11 @@ fun SelectedStatsValuesLineMarker(
 
     val left = model.markedEntries.minOf { it.location.x } - additionalBarWidth
     val right = model.markedEntries.maxOf { it.location.x } + additionalBarWidth
+    val color = LineMarkerColor(isDarkMode(themeStream))
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawRect(
-            Color.Red.copy(alpha = 0.4f),
+            color.copy(alpha = 0.4f),
             topLeft = Offset(left, 24f),
             size = Size(width = right - left, model.bounds.height() + 4f)
         )

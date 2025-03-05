@@ -14,7 +14,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.MarkerLineInDarkTheme
+import com.alpriest.energystats.ui.theme.MarkerLineInLightTheme
 import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico.core.context.DrawContext
 import com.patrykandpatrick.vico.core.entry.ChartEntry
@@ -44,6 +47,7 @@ fun SelectedParameterValuesLineMarker(
     val textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
     val entries = allEntries.flatMap { list -> list.mapNotNull { it as? DateTimeFloatEntry }.filter { it.localDateTime == time } }
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
+    val color = LineMarkerColor(isDarkMode(themeStream))
 
     if (entries.isEmpty()) {
         return
@@ -52,7 +56,7 @@ fun SelectedParameterValuesLineMarker(
     Canvas(modifier = Modifier.fillMaxSize()) {
         val x = model.location.x
         drawLine(
-            color = Color.Red,
+            color = color,
             start = Offset(x, model.bounds.top),
             end = Offset(x, model.bounds.bottom),
             strokeWidth = 2.0f
@@ -141,5 +145,14 @@ class ParameterGraphVerticalLineMarker(
 
             valuesAtTimeStream.value = allMarkedEntries.mapNotNull { it as? DateTimeFloatEntry }
         }
+    }
+}
+
+@Composable
+fun LineMarkerColor(isDarkMode: Boolean): Color {
+    return if (isDarkMode) {
+        MarkerLineInDarkTheme
+    } else {
+        MarkerLineInLightTheme
     }
 }

@@ -119,7 +119,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                     }
 
                     lastMarkerModel?.let {
-                        SelectedStatsValuesLineMarker(it)
+                        SelectedStatsValuesLineMarker(it, themeStream)
                     }
                 }
 
