@@ -397,4 +397,5 @@
     <string name="clear">Sereno</string>
     <string name="no_data">Nessun dato</string>
     <string name="parameters">"Parametri...  "</string>
+    <string name="reportvariable_pvenergytotal">Energia generata da PV</string>
 </resources>

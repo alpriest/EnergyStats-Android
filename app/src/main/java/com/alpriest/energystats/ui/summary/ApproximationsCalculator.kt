@@ -24,7 +24,7 @@ class ApproximationsCalculator(
         batteryCharge: Double,
         batteryDischarge: Double
     ): ApproximationsViewModel {
-        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, batteryCharge, batteryDischarge)
+        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, batteryDischarge)
 
         val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager)
 

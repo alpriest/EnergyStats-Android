@@ -396,4 +396,5 @@
     <string name="clear">Despejado</string>
     <string name="no_data">Sin datos</string>
     <string name="parameters">"Parámetros...  "</string>
+    <string name="reportvariable_pvenergytotal">Energía generada a partir de PV</string>
 </resources>

@@ -19,7 +19,8 @@ enum class ReportVariable {
     ChargeEnergyToTal,
     DischargeEnergyToTal,
     Loads,
-    SelfSufficiency;
+    SelfSufficiency,
+    PvEnergyToTal;
 
     fun networkTitle(): String {
         return when (this) {
@@ -30,6 +31,7 @@ enum class ReportVariable {
             DischargeEnergyToTal -> "dischargeEnergyToTal"
             Loads -> "loads"
             SelfSufficiency -> "selfSufficiency"
+            PvEnergyToTal -> "PVEnergyTotal"
         }
     }
 
@@ -43,6 +45,7 @@ enum class ReportVariable {
             GridConsumption -> Color(236, 109, 96)
             Loads -> Color(209,207,83)
             SelfSufficiency -> selfSufficiencyLineColor(isDarkMode(themeStream))
+            PvEnergyToTal -> Color.Yellow
         }
     }
 
@@ -51,12 +54,12 @@ enum class ReportVariable {
 
 fun ReportVariable.Companion.parse(variable: String): ReportVariable {
     return when (variable.lowercase()) {
-        "feedin" -> ReportVariable.FeedIn
         "generation" -> ReportVariable.Generation
         "gridconsumption" -> ReportVariable.GridConsumption
         "chargeenergytotal" -> ReportVariable.ChargeEnergyToTal
         "dischargeenergytotal" -> ReportVariable.DischargeEnergyToTal
         "loads" -> ReportVariable.Loads
+        "pvenergytotal" -> ReportVariable.PvEnergyToTal
         else -> {
             ReportVariable.FeedIn
         }

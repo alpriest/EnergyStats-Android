@@ -130,7 +130,8 @@ class StatsTabViewModel(
             if (device.hasBattery) ReportVariable.ChargeEnergyToTal else null,
             if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
             ReportVariable.Loads,
-            if (configManager.showSelfSufficiencyStatsGraphOverlay && configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off) ReportVariable.SelfSufficiency else null
+            if (configManager.showSelfSufficiencyStatsGraphOverlay && configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off) ReportVariable.SelfSufficiency else null,
+            ReportVariable.PvEnergyToTal
         ).mapNotNull { it }.map {
             StatsGraphVariable(it, true)
         }
@@ -150,7 +151,8 @@ class StatsTabViewModel(
             ReportVariable.ChargeEnergyToTal,
             ReportVariable.DischargeEnergyToTal,
             ReportVariable.GridConsumption,
-            ReportVariable.Loads
+            ReportVariable.Loads,
+            ReportVariable.PvEnergyToTal
         )
 
         try {

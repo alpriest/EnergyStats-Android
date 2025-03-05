@@ -14,11 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -130,24 +130,6 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
                     }
                 }
 
-                viewModel.totalsViewModel?.let {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            stringResource(R.string.solar_generated),
-                            fontSize = fontSize
-                        )
-                        Text(
-                            it.solar.energy(appTheme.displayUnit, appTheme.decimalPlaces),
-                            fontSize = fontSize
-                        )
-                    }
-
-                    CalculationBreakdownView(showingApproximations.value, it.solarBreakdown, themeStream)
-                }
-
                 viewModel.financialModel?.let {
                     Row(
                         Modifier.fillMaxWidth(),
@@ -249,8 +231,7 @@ fun StatsApproximationViewPreview() {
                     grid = 1.0,
                     feedIn = 2.0,
                     loads = 5.0,
-                    batteryCharge = 2.3,
-                    batteryDischarge = 1.2
+                    solar = 0.9
                 )
             ),
             showingApproximations = showingApproximations
