@@ -22,9 +22,10 @@ class ApproximationsCalculator(
         feedIn: Double,
         loads: Double,
         batteryCharge: Double,
-        batteryDischarge: Double
+        batteryDischarge: Double,
+        solar: Double
     ): ApproximationsViewModel {
-        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, batteryDischarge)
+        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, solar)
 
         val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager)
 

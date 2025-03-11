@@ -19,8 +19,8 @@ android {
         applicationId = "com.alpriest.energystats"
         minSdk = 26
         targetSdk = 34
-        versionCode = 255
-        versionName = "2.100"
+        versionCode = 256
+        versionName = "2.101"
 
         buildConfigField(type = "String", name = "GOOGLE_MAPS_APIKEY", value = localProperties.getProperty("GOOGLE_MAPS_APIKEY"))
     }

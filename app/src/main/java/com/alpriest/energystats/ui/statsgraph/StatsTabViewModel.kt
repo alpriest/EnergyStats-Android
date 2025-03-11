@@ -329,6 +329,7 @@ class StatsTabViewModel(
         val batteryCharge = totals[ReportVariable.ChargeEnergyToTal] ?: 0.0
         val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal] ?: 0.0
         val loads = totals[ReportVariable.Loads] ?: 0.0
+        val solar = totals[ReportVariable.PvEnergyToTal] ?: 0.0
 
         approximationsViewModelStream.value = approximationsCalculator.calculateApproximations(
             grid = grid,
@@ -336,6 +337,7 @@ class StatsTabViewModel(
             loads = loads,
             batteryCharge = batteryCharge,
             batteryDischarge = batteryDischarge,
+            solar = solar
         )
     }
 
@@ -359,14 +361,16 @@ class StatsTabViewModel(
             val loads = valuesAtTime.values.firstOrNull { it.type == ReportVariable.Loads }
             val batteryCharge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.ChargeEnergyToTal }
             val batteryDischarge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.DischargeEnergyToTal }
+            val solar = valuesAtTime.values.firstOrNull { it.type == ReportVariable.PvEnergyToTal }
 
-            if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null) {
+            if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null && solar != null) {
                 val approximations = approximationsCalculator.calculateApproximations(
                     grid = grid.graphValue,
                     feedIn = feedIn.graphValue,
                     loads = loads.graphValue,
                     batteryCharge = batteryCharge.graphValue,
                     batteryDischarge = batteryDischarge.graphValue,
+                    solar = solar.graphValue
                 )
 
                 approximations.netSelfSufficiencyEstimateValue?.let {
@@ -393,6 +397,7 @@ class StatsTabViewModel(
         val loads = valuesAtTime.values.firstOrNull { it.type == ReportVariable.Loads }
         val batteryCharge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.ChargeEnergyToTal }
         val batteryDischarge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.DischargeEnergyToTal }
+        val solar = valuesAtTime.values.firstOrNull { it.type == ReportVariable.PvEnergyToTal }
 
         if (maxIndex == selectedValue.x && lastSelectedIndex != selectedValue.x) {
             val effect = VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE)
@@ -402,13 +407,14 @@ class StatsTabViewModel(
 
         lastSelectedIndex = selectedValue.x
 
-        if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null) {
+        if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null && solar != null) {
             val approximations = approximationsCalculator.calculateApproximations(
                 grid = grid.graphValue,
                 feedIn = feedIn.graphValue,
                 loads = loads.graphValue,
                 batteryCharge = batteryCharge.graphValue,
                 batteryDischarge = batteryDischarge.graphValue,
+                solar = solar.graphValue
             )
 
             approximationsViewModelStream.value = approximations

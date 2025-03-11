@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.flow
+    package com.alpriest.energystats.ui.flow
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -22,8 +22,9 @@ import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.lang.Double.max
 
-@Composable
+    @Composable
 fun SubLabelledView(value: String, label: String, alignment: Alignment.Horizontal) {
     Column(
         horizontalAlignment = alignment,
@@ -96,11 +97,11 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
 
         solarSaving = FinanceAmount(
             shortTitleResId = R.string.grid_import_avoided_short_title,
-            amount = (totalsViewModel.solar - totalsViewModel.feedIn) * configManager.gridImportUnitPrice
+            amount = max(0.0, totalsViewModel.solar - totalsViewModel.feedIn) * configManager.gridImportUnitPrice
         )
         solarSavingBreakdown = CalculationBreakdown(
-            formula = "(solar - gridExport) * gridImportUnitPrice",
-            calculation = { "(${totalsViewModel.solar.roundedToString(it)} - ${totalsViewModel.feedIn.roundedToString(it)}) * ${configManager.gridImportUnitPrice}" }
+            formula = "max(0, solar - gridExport) * gridImportUnitPrice",
+            calculation = { "max(0, ${totalsViewModel.solar.roundedToString(it)} - ${totalsViewModel.feedIn.roundedToString(it)}) * ${configManager.gridImportUnitPrice}" }
         )
 
         total = FinanceAmount(

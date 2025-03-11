@@ -214,8 +214,9 @@ class SummaryTabViewModel(
         val loads = totals[ReportVariable.Loads]
         val batteryCharge = totals[ReportVariable.ChargeEnergyToTal]
         val batteryDischarge = totals[ReportVariable.DischargeEnergyToTal]
+        val solar = totals[ReportVariable.PvEnergyToTal]
 
-        if (grid == null || feedIn == null || loads == null || batteryCharge == null || batteryDischarge == null) {
+        if (grid == null || feedIn == null || loads == null || batteryCharge == null || batteryDischarge == null || solar == null) {
             return null
         }
 
@@ -224,7 +225,8 @@ class SummaryTabViewModel(
             feedIn = feedIn,
             loads = loads,
             batteryCharge = batteryCharge,
-            batteryDischarge = batteryDischarge
+            batteryDischarge = batteryDischarge,
+            solar = solar
         )
     }
 }

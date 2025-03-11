@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.Calendar
 
 class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
     var rangeStream = MutableStateFlow<DatePickerRange>(DatePickerRange.DAY)
@@ -15,6 +16,8 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
     var isInitialised = false
     var customStartDate = MutableStateFlow<LocalDate>(LocalDate.now().minusDays(30))
     var customEndDate = MutableStateFlow<LocalDate>(LocalDate.now())
+    var canDecreaseStream = MutableStateFlow(false)
+    var canIncreaseStream = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {
@@ -36,23 +39,37 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
                 is StatsDisplayMode.Day -> {
                     dateStream.value = displayMode.date
                     rangeStream.value = DatePickerRange.DAY
+                    canIncreaseStream.value = displayMode.date.atStartOfDay() < LocalDate.now().atStartOfDay()
+                    canDecreaseStream.value = true
                 }
 
                 is StatsDisplayMode.Month -> {
                     monthStream.value = displayMode.month
                     yearStream.value = displayMode.year
                     rangeStream.value = DatePickerRange.MONTH
+
+                    val calendar = Calendar.getInstance()
+                    val currentMonth = calendar.get(Calendar.MONTH) // Calendar.MONTH is zero-based
+                    val currentYear = calendar.get(Calendar.YEAR)
+                    canIncreaseStream.value = (displayMode.year < currentYear) || (displayMode.month < currentMonth && displayMode.year <= currentYear)
+                    canDecreaseStream.value = true
                 }
 
                 is StatsDisplayMode.Year -> {
                     yearStream.value = displayMode.year
                     rangeStream.value = DatePickerRange.YEAR
+
+                    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+                    canIncreaseStream.value = displayMode.year < currentYear
+                    canDecreaseStream.value = true
                 }
 
                 is StatsDisplayMode.Custom -> {
                     customStartDate.value = displayMode.start
                     customEndDate.value = displayMode.end
                     rangeStream.value = DatePickerRange.CUSTOM(displayMode.start, displayMode.end)
+                    canIncreaseStream.value = false
+                    canDecreaseStream.value = true
                 }
             }
 

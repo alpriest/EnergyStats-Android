@@ -66,7 +66,8 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
     val range = viewModel.rangeStream.collectAsState().value
     val month = viewModel.monthStream.collectAsState().value
     val year = viewModel.yearStream.collectAsState().value
-    val date = viewModel.dateStream.collectAsState().value
+    val canIncrease = viewModel.canIncreaseStream.collectAsState().value
+    val canDecrease = viewModel.canDecreaseStream.collectAsState().value
 
     Row(modifier = modifier) {
         DateRangePicker(viewModel, range, graphShowingState)
@@ -91,7 +92,8 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
                     .padding(vertical = 6.dp)
                     .size(36.dp),
                 onClick = { viewModel.decrease() },
-                contentPadding = PaddingValues(0.dp)
+                contentPadding = PaddingValues(0.dp),
+                enabled = canDecrease
             ) {
                 Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
             }
@@ -102,7 +104,7 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
                     .size(36.dp),
                 onClick = { viewModel.increase() },
                 contentPadding = PaddingValues(0.dp),
-                enabled = date.atStartOfDay() < LocalDate.now().atStartOfDay()
+                enabled = canIncrease
             ) {
                 Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
             }
