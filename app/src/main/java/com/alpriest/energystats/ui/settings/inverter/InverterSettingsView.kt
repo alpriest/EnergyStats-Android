@@ -35,6 +35,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val shouldCombineCT2WithPVPowerState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithPVPower) }
     val shouldCombineCT2WithPVLoadsState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithLoadsPower) }
     val showInverterScheduleQuickLinkState = rememberSaveable { mutableStateOf(configManager.showInverterScheduleQuickLink) }
+    val showCT2ValueAsString = rememberSaveable { mutableStateOf(configManager.showCT2ValueAsString) }
 
     trackScreenView("Inverter", "InverterSettingsView")
 
@@ -98,6 +99,13 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                     title = stringResource(R.string.combine_ct2_with_loads_power),
                     state = shouldCombineCT2WithPVLoadsState,
                     onUpdate = { configManager.shouldCombineCT2WithLoadsPower = it }
+                )
+
+                SettingsCheckbox(
+                    title = "Show CT2 value",
+                    state = showCT2ValueAsString,
+                    enabled = shouldCombineCT2WithPVPowerState.value,
+                    onUpdate = { configManager.showCT2ValueAsString = it }
                 )
             }
 

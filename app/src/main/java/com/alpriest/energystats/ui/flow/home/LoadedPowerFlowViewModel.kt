@@ -9,8 +9,8 @@ import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.toUtcMillis
-import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.FoxServerError
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.flow.EarningsViewModel
@@ -33,7 +33,7 @@ data class InverterTemperatures(
 
 class LoadedPowerFlowViewModel(
     val solar: Double,
-    val solarStrings: List<StringPower>,
+    private val solarStrings: List<StringPower>,
     val home: Double,
     val grid: Double,
     val inverterTemperatures: InverterTemperatures?,
@@ -52,11 +52,24 @@ class LoadedPowerFlowViewModel(
     val earnings = MutableStateFlow<EarningsViewModel?>(null)
     val todaysGeneration = MutableStateFlow<GenerationViewModel?>(null)
     val faults = MutableStateFlow<List<String>>(listOf())
+    val displayStrings = MutableStateFlow<List<StringPower>>(listOf())
 
     init {
         loadDeviceStatus()
         loadTotals()
         loadGeneration()
+
+        viewModelScope.launch {
+            configManager.themeStream.collect { it ->
+                displayStrings.value = listOf()
+
+                if (it.shouldCombineCT2WithPVPower && it.showCT2ValueAsString) {
+                    displayStrings.value = displayStrings.value.plus(StringPower("CT2", ct2))
+                }
+
+                displayStrings.value = displayStrings.value.plus(solarStrings)
+            }
+        }
     }
 
     private fun loadGeneration() {
@@ -133,7 +146,7 @@ class LoadedPowerFlowViewModel(
     }
 
     private suspend fun loadReportData(currentDevice: Device): List<OpenReportResponse> {
-        var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption)
+        var reportVariables = listOf(ReportVariable.Loads, ReportVariable.FeedIn, ReportVariable.GridConsumption, ReportVariable.PvEnergyToTal)
         if (currentDevice.hasBattery) {
             reportVariables = reportVariables.plus(listOf(ReportVariable.ChargeEnergyToTal, ReportVariable.DischargeEnergyToTal))
         }

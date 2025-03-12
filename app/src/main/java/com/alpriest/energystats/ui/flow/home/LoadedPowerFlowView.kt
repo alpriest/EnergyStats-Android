@@ -38,7 +38,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.energy
-import com.alpriest.energystats.models.isFlowing
 import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
@@ -51,6 +50,7 @@ import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowTabViewModel
 import com.alpriest.energystats.ui.flow.PowerFlowView
+import com.alpriest.energystats.ui.flow.PowerText
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
@@ -110,6 +110,7 @@ fun LoadedPowerFlowView(
     val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
     val solarTotal = loadedPowerFlowViewModel.todaysGeneration.collectAsState().value
     val faults = loadedPowerFlowViewModel.faults.collectAsState().value
+    val displayStrings = loadedPowerFlowViewModel.displayStrings.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -139,19 +140,32 @@ fun LoadedPowerFlowView(
                 SolarPowerFlow(
                     loadedPowerFlowViewModel.solar,
                     modifier = Modifier
-                        .fillMaxHeight(0.4f),
+                        .fillMaxHeight(0.46f),
                     iconHeight = iconHeight * 1.1f,
                     themeStream = themeStream
                 )
 
-                if (theme.powerFlowStrings.enabled && loadedPowerFlowViewModel.solar.isFlowing()) {
+                if (!theme.shouldCombineCT2WithPVPower) {
+                    Column(
+                        modifier = Modifier.offset(y = 100.dp)
+                    ) {
+                        PowerText(
+                            loadedPowerFlowViewModel.solar + loadedPowerFlowViewModel.ct2,
+                            themeStream,
+                            Color.LightGray,
+                            PowerFlowNeutralText
+                        )
+                    }
+                }
+
+                if ((theme.showCT2ValueAsString || theme.powerFlowStrings.enabled) && displayStrings.isNotEmpty()) {
                     Column(
                         modifier = Modifier
                             .offset(y = (-20).dp)
                             .background(Color.LightGray)
                             .padding(2.dp),
                     ) {
-                        loadedPowerFlowViewModel.solarStrings.forEach {
+                        displayStrings.forEach {
                             Row {
                                 Text(
                                     it.displayName(theme.powerFlowStrings),
@@ -391,7 +405,8 @@ fun SummaryPowerFlowViewPreview() {
                     showInverterTemperatures = true,
                     showHomeTotal = true,
                     decimalPlaces = 3,
-                    powerFlowStrings = PowerFlowStringsSettings.defaults
+                    showCT2ValueAsString = true,
+                    powerFlowStrings = PowerFlowStringsSettings(enabled = true, pv1Enabled = true, pv2Enabled = true)
                 )
             ),
         )

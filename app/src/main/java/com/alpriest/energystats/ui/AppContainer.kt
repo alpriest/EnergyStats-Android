@@ -98,7 +98,8 @@ class AppContainer(private val context: Context) {
             shouldCombineCT2WithLoadsPower = config.shouldCombineCT2WithLoadsPower,
             powerFlowStrings = config.powerFlowStrings,
             truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
-            showInverterScheduleQuickLink = config.showInverterScheduleQuickLink
+            showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
+            showCT2ValueAsString = config.showCT2ValueAsString
         )
     )
 

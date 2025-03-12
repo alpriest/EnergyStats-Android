@@ -65,6 +65,7 @@ interface ConfigInterface {
     var earningsModel: Int
     var summaryDateRange: SummaryDateRange
     var batteryViewModel: BatteryViewModel?
+    var showCT2ValueAsString: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

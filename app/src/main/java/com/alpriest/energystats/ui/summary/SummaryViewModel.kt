@@ -140,7 +140,8 @@ class SummaryTabViewModel(
             ReportVariable.ChargeEnergyToTal,
             ReportVariable.DischargeEnergyToTal,
             ReportVariable.GridConsumption,
-            ReportVariable.Loads
+            ReportVariable.Loads,
+            ReportVariable.PvEnergyToTal
         )
         val rawReports = networking.fetchReport(
             deviceSN = device.deviceSN,

@@ -27,6 +27,9 @@ data class StringPower(val name: String, val amount: Double) {
             "PV5" ->
                 return settings.pv5Name
 
+            "CT2" ->
+                return "CT2"
+
             else ->
                 return settings.pv6Name
         }
@@ -49,7 +52,7 @@ class CurrentStatusCalculator(
     init {
         val status = mapCurrentValues(response, hasPV)
         currentGrid = status.feedinPower - status.gridConsumptionPower
-        currentHomeConsumption = if (config.useTraditionalLoadFormula) calculateLoadsPower(status) else loadsPower(status, config.shouldCombineCT2WithLoadsPower)
+        currentHomeConsumption = loadsPower(status, config.shouldCombineCT2WithLoadsPower)
         currentTemperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
         lastUpdate = parseToLocalDate(status.lastUpdate)
         currentCT2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2

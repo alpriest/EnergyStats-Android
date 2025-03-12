@@ -81,8 +81,10 @@ class DemoAPI : FoxAPIServicing {
                 OpenQueryResponseData(unit = "kW", variable = "gridConsumptionPower", value = 2.634, valueString = null),
                 OpenQueryResponseData(unit = "kW", variable = "loadsPower", value = 2.708, valueString = null),
                 OpenQueryResponseData(unit = "kW", variable = "generationPower", value = 0.071, valueString = null),
-                OpenQueryResponseData(unit = "kW", variable = "pvPower", value = 0.111, valueString = null),
-                OpenQueryResponseData(unit = "kW", variable = "meterPower2", value = 0.0, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "pvPower", value = 0.222, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "pv1Power", value = 0.111, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "pv2Power", value = 0.111, valueString = null),
+                OpenQueryResponseData(unit = "kW", variable = "meterPower2", value = 0.222, valueString = null),
                 OpenQueryResponseData(unit = "℃", variable = "ambientTemperation", value = 32.5, valueString = null),
                 OpenQueryResponseData(unit = "℃", variable = "invTemperation", value = 23.2, valueString = null)
             )

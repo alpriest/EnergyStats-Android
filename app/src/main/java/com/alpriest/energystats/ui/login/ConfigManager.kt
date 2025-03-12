@@ -21,6 +21,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import com.alpriest.energystats.ui.theme.demo
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 import java.net.SocketTimeoutException
@@ -177,6 +178,21 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.isDemoUser
         set(value) {
             config.isDemoUser = value
+            if (value) {
+                val demoTheme = AppTheme.demo()
+                useColouredFlowLines = demoTheme.useColouredLines
+                showBatteryTemperature = demoTheme.showBatteryTemperature
+                showBatteryEstimate = demoTheme.showBatteryEstimate
+                showSunnyBackground = demoTheme.showSunnyBackground
+                decimalPlaces = demoTheme.decimalPlaces
+                showFinancialSummary = demoTheme.showFinancialSummary
+                showInverterIcon = demoTheme.showInverterIcon
+                shouldCombineCT2WithPVPower = demoTheme.shouldCombineCT2WithPVPower
+                showFinancialSummaryOnFlowPage = demoTheme.showFinancialSummaryOnFlowPage
+                separateParameterGraphsByUnit = demoTheme.separateParameterGraphsByUnit
+                powerFlowStrings = demoTheme.powerFlowStrings
+                showCT2ValueAsString = demoTheme.showCT2ValueAsString
+            }
         }
 
     override var useColouredFlowLines: Boolean
@@ -519,6 +535,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         get() = config.fetchSolcastOnAppLaunch
         set(value) {
             config.fetchSolcastOnAppLaunch = value
+        }
+
+    override var showCT2ValueAsString: Boolean
+        get() = config.showCT2ValueAsString
+        set(value) {
+            config.showCT2ValueAsString = value
+            themeStream.value = themeStream.value.copy(showCT2ValueAsString = showCT2ValueAsString)
         }
 
     init {

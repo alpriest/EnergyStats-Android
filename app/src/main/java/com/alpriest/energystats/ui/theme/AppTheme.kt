@@ -47,7 +47,8 @@ data class AppTheme(
     val shouldCombineCT2WithLoadsPower: Boolean,
     val powerFlowStrings: PowerFlowStringsSettings,
     val truncatedYAxisOnParameterGraphs: Boolean,
-    val showInverterScheduleQuickLink: Boolean
+    val showInverterScheduleQuickLink: Boolean,
+    val showCT2ValueAsString: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -109,9 +110,10 @@ fun AppTheme.Companion.demo(
     currencySymbol: String = "£",
     showBatterySOCAsPercentage: Boolean = false,
     shouldCombineCT2WithLoadsPower: Boolean = false,
-    powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults,
+    powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults.copy(enabled = true, pv1Enabled = true, pv2Enabled = true),
     truncatedYAxisOnParameterGraphs: Boolean = false,
-    showInverterScheduleQuickLink: Boolean = false
+    showInverterScheduleQuickLink: Boolean = false,
+    showCT2ValueAsString: Boolean = true
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -147,6 +149,7 @@ fun AppTheme.Companion.demo(
         shouldCombineCT2WithLoadsPower = shouldCombineCT2WithLoadsPower,
         powerFlowStrings = powerFlowStrings,
         truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs,
-        showInverterScheduleQuickLink = showInverterScheduleQuickLink
+        showInverterScheduleQuickLink = showInverterScheduleQuickLink,
+        showCT2ValueAsString = showCT2ValueAsString
     )
 }

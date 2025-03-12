@@ -82,7 +82,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         BATTERY_VIEW_MODEL,
         BATTERY_TEMPERATURE_DISPLAY_MODE,
         SHOW_INVERTER_SCHEDULE_QUICK_LINK,
-        FETCH_SOLCAST_ON_APP_LAUNCH;
+        FETCH_SOLCAST_ON_APP_LAUNCH,
+        SHOW_CT2_VALUE_AS_STRING;
     }
 
     override fun clearDisplaySettings() {
@@ -650,6 +651,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putBoolean(SharedPreferenceDisplayKey.FETCH_SOLCAST_ON_APP_LAUNCH.name, value)
+            editor.apply()
+        }
+
+    override var showCT2ValueAsString: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_CT2_VALUE_AS_STRING.name, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SharedPreferenceDisplayKey.SHOW_CT2_VALUE_AS_STRING.name, value)
             editor.apply()
         }
 }

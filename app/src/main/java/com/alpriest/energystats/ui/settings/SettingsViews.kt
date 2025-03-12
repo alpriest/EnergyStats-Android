@@ -248,12 +248,19 @@ fun InfoButton(text: String) {
 }
 
 @Composable
-fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableState<Boolean>, onUpdate: (Boolean) -> Unit, footer: AnnotatedString? = null) {
+fun SettingsCheckbox(
+    title: String,
+    infoText: String? = null,
+    state: MutableState<Boolean>,
+    enabled: Boolean = true,
+    onUpdate: (Boolean) -> Unit,
+    footer: AnnotatedString? = null
+) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable {
+                .clickable(enabled) {
                     state.value = !state.value
                     onUpdate(state.value)
                 }
@@ -265,7 +272,7 @@ fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableStat
             ) {
                 Text(
                     title,
-                    color = colorScheme.onSecondary
+                    color = colorScheme.onSecondary.copy(alpha = if (enabled) 1.0f else 0.5f)
                 )
 
                 infoText?.let {
@@ -279,7 +286,8 @@ fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableStat
                     state.value = it
                     onUpdate(it)
                 },
-                colors = CheckboxDefaults.colors(checkedColor = colorScheme.primary)
+                enabled = enabled,
+                colors = CheckboxDefaults.colors(checkedColor = colorScheme.primary.copy(alpha = if (enabled) 1.0f else 0.5f))
             )
         }
 
@@ -287,7 +295,7 @@ fun SettingsCheckbox(title: String, infoText: String? = null, state: MutableStat
             Text(
                 it,
                 style = typography.bodySmall,
-                color = colorScheme.onSecondary,
+                color = colorScheme.onSecondary.copy(alpha = if (enabled) 1.0f else 0.5f),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
