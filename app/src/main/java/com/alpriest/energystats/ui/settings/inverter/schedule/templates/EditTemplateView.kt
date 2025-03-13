@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +48,7 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PaleWhite
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
@@ -116,14 +116,14 @@ class EditTemplateView(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Button(
+                            ESButton(
                                 onClick = { viewModel.addTimePeriod() },
                                 modifier = Modifier.weight(1.0f)
                             ) {
                                 Text(stringResource(R.string.add_time_period))
                             }
 
-                            Button(
+                            ESButton(
                                 onClick = { viewModel.autoFillScheduleGaps() },
                                 modifier = Modifier.weight(1.0f)
                             ) {
@@ -134,7 +134,7 @@ class EditTemplateView(
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Button(
+                            ESButton(
                                 onClick = { viewModel.activate(context) },
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -145,7 +145,7 @@ class EditTemplateView(
                                 )
                             }
 
-                            Button(
+                            ESButton(
                                 onClick = { presentDuplicateAlert.value = true },
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -156,7 +156,7 @@ class EditTemplateView(
                                 )
                             }
 
-                            Button(
+                            ESButton(
                                 onClick = { presentRenameAlert.value = true },
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -167,7 +167,7 @@ class EditTemplateView(
                                 )
                             }
 
-                            Button(
+                            ESButton(
                                 onClick = { viewModel.delete(context) },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = PowerFlowNegative,

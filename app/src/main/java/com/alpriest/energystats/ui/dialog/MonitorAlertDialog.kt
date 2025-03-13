@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import com.alpriest.energystats.services.UnacceptableException
 import com.alpriest.energystats.ui.helpers.UnsupportedErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.theme.ESButton
 
 data class MonitorAlertDialogData(
     val ex: Exception?,
@@ -68,7 +68,7 @@ fun AlertDialog(message: String, onDismiss: () -> Unit) {
             ) {
                 Text(message)
                 Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = onDismiss) {
+                ESButton(onClick = onDismiss) {
                     Text(context.getString(R.string.ok))
                 }
             }

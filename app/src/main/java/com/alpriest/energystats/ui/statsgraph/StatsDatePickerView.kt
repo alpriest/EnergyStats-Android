@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -40,6 +39,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.settings.SlimButton
+import com.alpriest.energystats.ui.theme.ESButton
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -86,7 +86,7 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
         Spacer(modifier = Modifier.weight(1.0f))
 
         if (!range.isCustom()) {
-            Button(
+            ESButton(
                 modifier = Modifier
                     .padding(end = 14.dp)
                     .padding(vertical = 6.dp)
@@ -98,7 +98,7 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
                 Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
             }
 
-            Button(
+            ESButton(
                 modifier = Modifier
                     .padding(vertical = 6.dp)
                     .size(36.dp),
@@ -205,7 +205,7 @@ private fun DateRangePicker(
             .wrapContentSize(Alignment.TopStart)
             .padding(end = 14.dp)
     ) {
-        Button(
+        ESButton(
             onClick = { showing = true },
             modifier = Modifier
                 .padding(vertical = 6.dp)

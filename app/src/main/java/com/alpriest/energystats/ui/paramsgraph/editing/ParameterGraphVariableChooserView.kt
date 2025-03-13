@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -46,6 +45,7 @@ import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -134,7 +134,7 @@ class ParameterGraphVariableChooserView(
                 Column(
                     modifier = Modifier.fillMaxWidth(), horizontalAlignment = CenterHorizontally
                 ) {
-                    Button(
+                    ESButton(
                         onClick = {
                             uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Fox-ESS-Cloud#search-parameters")
                         },

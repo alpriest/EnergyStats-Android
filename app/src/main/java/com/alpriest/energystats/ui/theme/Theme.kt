@@ -1,11 +1,20 @@
 package com.alpriest.energystats.ui.theme
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
@@ -33,10 +42,12 @@ private val lightColorPalette = lightColorScheme(
     onSurface = Color.Black,
 )
 
+val themeCornerRadius = 4.dp
+
 private val shapes = Shapes(
     extraSmall = RoundedCornerShape(0.dp),
-    small = RoundedCornerShape(4.dp),
-    medium = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(themeCornerRadius),
+    medium = RoundedCornerShape(themeCornerRadius),
     large = RoundedCornerShape(0.dp),
     extraLarge = RoundedCornerShape(0.dp)
 )
@@ -58,7 +69,34 @@ fun EnergyStatsTheme(useLargeDisplay: Boolean = false, colorThemeMode: ColorThem
     MaterialTheme(
         colorScheme = colors,
         typography = typography,
-        content = content,
-        shapes = shapes
+        shapes = shapes,
+        content = content
     )
+}
+
+@Composable
+fun ESButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    border: BorderStroke? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    interactionSource: MutableInteractionSource? = null,
+    content: @Composable RowScope.() -> Unit
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        shape = MaterialTheme.shapes.medium,
+        colors = colors,
+        elevation = elevation,
+        border = border,
+        contentPadding = contentPadding,
+        interactionSource = interactionSource
+    ) {
+        content()
+    }
 }

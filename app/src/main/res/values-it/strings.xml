@@ -398,4 +398,6 @@
     <string name="no_data">Nessun dato</string>
     <string name="parameters">"Parametri...  "</string>
     <string name="reportvariable_pvenergytotal">Energia generata da PV</string>
+    <string name="logout_from_demo">Esci dalla demo</string>
+    <string name="show_ct2_value">Mostra il valore CT2</string>
 </resources>

@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -28,12 +27,13 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun SettingsFooterRowView(imageContent: @Composable () -> Unit, text: String, onClick: () -> Unit) {
     Row {
-        Button(
+        ESButton(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(
                 contentColor = colorScheme.primary,
@@ -67,6 +67,10 @@ fun SettingsFooterView(
     onBuyMeCoffee: () -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
+    val logoutButtonTitle = when (config.isDemoUser) {
+        true -> stringResource(R.string.logout_from_demo)
+        false -> stringResource(R.string.logout)
+    }
 
     Column(
         Modifier
@@ -74,7 +78,7 @@ fun SettingsFooterView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SettingsNavButton(
-            title = stringResource(R.string.logout),
+            title = logoutButtonTitle,
             disclosureIcon = null,
             onClick = onLogout,
             modifier = Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)

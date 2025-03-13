@@ -22,7 +22,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,6 +60,7 @@ import com.alpriest.energystats.ui.helpers.ButtonDefinition
 import com.alpriest.energystats.ui.helpers.EqualWidthButtonList
 import com.alpriest.energystats.ui.helpers.copyDebugData
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Sunny
 import com.alpriest.energystats.ui.theme.demo
@@ -165,7 +165,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                     .align(Alignment.CenterHorizontally)
                     .padding(vertical = 24.dp)
             ) {
-                Button(
+                ESButton(
                     colors = ButtonDefaults.buttonColors(containerColor = colorScheme.background),
                     onClick = { scope.launch { viewModel.onDemoLogin() } }
                 ) {
@@ -177,7 +177,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
 
                 Spacer(modifier = Modifier.width(24.dp))
 
-                Button(onClick = {
+                ESButton(onClick = {
                     scope.launch { viewModel.onLogin(apiKey, context) }
                 }) {
                     Text(
@@ -214,7 +214,7 @@ class HowToObtainAPIKeyView {
             BulletPoint(6, stringResource(R.string.api_key_step_6), themeStream)
             BulletPoint(7, stringResource(R.string.api_key_step_7), themeStream)
 
-            Button(
+            ESButton(
                 onClick = { showing.value = !showing.value },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorScheme.background,

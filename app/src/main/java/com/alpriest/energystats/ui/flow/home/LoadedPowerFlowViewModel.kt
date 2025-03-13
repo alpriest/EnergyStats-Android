@@ -67,7 +67,9 @@ class LoadedPowerFlowViewModel(
                     displayStrings.value = displayStrings.value.plus(StringPower("CT2", ct2))
                 }
 
-                displayStrings.value = displayStrings.value.plus(solarStrings)
+                if (it.powerFlowStrings.enabled) {
+                    displayStrings.value = displayStrings.value.plus(solarStrings)
+                }
             }
         }
     }

@@ -17,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -44,6 +43,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.dialog.AlertDialog
+import com.alpriest.energystats.ui.theme.ESButton
 
 object SettingsPadding {
     val COLUMN_BOTTOM: Dp = 12.dp
@@ -373,7 +373,7 @@ fun InlineSettingsNavButton(
 
 @Composable
 fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIcon: (() -> ImageVector)? = { Icons.Default.ChevronRight }, onClick: () -> Unit) {
-    Button(
+    ESButton(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary)
@@ -406,7 +406,7 @@ fun SettingsBottomSpace() {
 
 @Composable
 fun SlimButton(enabled: Boolean = true, onClick: () -> Unit, content: @Composable () -> Unit) {
-    Button(
+    ESButton(
         onClick = onClick,
         enabled = enabled,
         contentPadding = PaddingValues(horizontal = 12.dp)

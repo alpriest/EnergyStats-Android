@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
@@ -34,6 +33,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.chartStyle
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red
@@ -195,7 +195,7 @@ class SolarForecastView(
             if (tooManyRequests) {
                 Text("You have exceeded your free daily limit of requests. Please try tomorrow.")
             } else {
-                Button(
+                ESButton(
                     enabled = canRefresh,
                     onClick = {
                         scope.launch {

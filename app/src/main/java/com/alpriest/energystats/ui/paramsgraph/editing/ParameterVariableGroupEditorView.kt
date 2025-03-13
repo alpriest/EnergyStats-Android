@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -52,6 +51,7 @@ import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PaleWhite
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
@@ -80,7 +80,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                 )
 
                 Box(contentAlignment = Alignment.TopEnd) {
-                    Button(onClick = { expanded = !expanded }) {
+                    ESButton(onClick = { expanded = !expanded }) {
                         Text(
                             selectedGroup.title,
                             fontSize = 12.sp,
@@ -114,7 +114,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
             modifier = Modifier.fillMaxWidth().padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(
+            ESButton(
                 onClick = {
                     dialogText.value = viewModel.selected.value.title
                     renameDialogShowing.value = true
@@ -126,7 +126,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                 )
             }
 
-            Button(onClick = {
+            ESButton(onClick = {
                 createDialogShowing.value = true
             }) {
                 Text(
@@ -135,7 +135,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                 )
             }
 
-            Button(
+            ESButton(
                 onClick = {
                     viewModel.delete()
                 },
@@ -212,7 +212,7 @@ fun TextEntryDialog(
                     )
 
                     Row {
-                        Button(
+                        ESButton(
                             onClick = onCancel,
                             modifier = Modifier.weight(1.0f)
                         ) {
@@ -221,7 +221,7 @@ fun TextEntryDialog(
 
                         Spacer(modifier = Modifier.width(12.dp))
 
-                        Button(
+                        ESButton(
                             onClick = { onConfirm(dialogText) },
                             modifier = Modifier.weight(1.0f)
                         ) {

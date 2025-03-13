@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,13 +19,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
+import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.theme.ESButton
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -82,7 +87,7 @@ fun FirmwareVersionView(device: Device, network: Networking) {
         if (isLoading) {
             LoadingView(title = stringResource(R.string.loading))
         } else {
-            Button(
+            ESButton(
                 onClick = {
                     scope.launch {
                         try {
@@ -94,9 +99,20 @@ fun FirmwareVersionView(device: Device, network: Networking) {
                             isLoading = false
                         }
                     }
-                }) {
+                }
+            ) {
                 Text("Tap to load firmware versions")
             }
+        }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun StatsGraphViewPreview() {
+    EnergyStatsTheme {
+        Surface {
+            FirmwareVersionView(device = Device.preview(), network = DemoNetworking())
         }
     }
 }

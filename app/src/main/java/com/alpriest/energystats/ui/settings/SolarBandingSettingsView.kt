@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -31,6 +30,7 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.SolarPowerFlow
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
@@ -173,7 +173,7 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
                 )
             }
 
-            Button({
+            ESButton({
                 threshold1.floatValue = 1.0f
                 threshold2.floatValue = 2.0f
                 threshold3.floatValue = 3.0f

@@ -33,6 +33,7 @@ import com.alpriest.energystats.ui.settings.LoadedScaffold
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class EditScheduleView(
@@ -81,13 +82,13 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
                         .padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Button(
+                    ESButton(
                         onClick = { viewModel.addTimePeriod() },
                         modifier = Modifier.weight(1.0f)
                     ) {
                         Text(stringResource(R.string.add_time_period))
                     }
-                    Button(
+                    ESButton(
                         onClick = { viewModel.autoFillScheduleGaps() },
                         modifier = Modifier.weight(1.0f)
                     ) {

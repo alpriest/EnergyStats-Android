@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,6 +36,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.settings.debug.networkTrace.NetworkTraceDebugView
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -108,39 +108,39 @@ fun DebugDataSettingsView(navController: NavController, network: Networking) {
     SettingsColumnWithChild {
         SettingsTitleView("Debug")
 
-        Button(onClick = { navController.navigate("debugReport") }) {
+        ESButton(onClick = { navController.navigate("debugReport") }) {
             Text("device/report/Query")
         }
 
-        Button(onClick = { navController.navigate("debugQuery") }) {
+        ESButton(onClick = { navController.navigate("debugQuery") }) {
             Text("device/real/Query")
         }
 
-        Button(onClick = { navController.navigate("debugDeviceList") }) {
+        ESButton(onClick = { navController.navigate("debugDeviceList") }) {
             Text("device/list")
         }
 
-        Button(onClick = { navController.navigate("debugVariables") }) {
+        ESButton(onClick = { navController.navigate("debugVariables") }) {
             Text("device/variable/get")
         }
 
-        Button(onClick = { navController.navigate("debugBatterySOC") }) {
+        ESButton(onClick = { navController.navigate("debugBatterySOC") }) {
             Text("device/battery/soc/get")
         }
 
-        Button(onClick = { navController.navigate("debugBatteryTimes") }) {
+        ESButton(onClick = { navController.navigate("debugBatteryTimes") }) {
             Text("device/battery/forceChargeTime/get")
         }
 
-        Button(onClick = { navController.navigate("debugDataLoggers") }) {
+        ESButton(onClick = { navController.navigate("debugDataLoggers") }) {
             Text("Dataloggers")
         }
 
-        Button(onClick = { navController.navigate("debugNetworkTrace") }) {
+        ESButton(onClick = { navController.navigate("debugNetworkTrace") }) {
             Text("Network trace")
         }
 
-        Button(onClick = {
+        ESButton(onClick = {
             scope.launch {
                 try {
                     val counts = network.fetchRequestCount()
@@ -172,7 +172,7 @@ private fun <T> ResponseDebugView(
     ) {
         stream.value?.let {
             SettingsTitleView(it.description)
-            Button(
+            ESButton(
                 onClick = {
                     copyToClipboard(it, context)
                 }
@@ -194,7 +194,7 @@ private fun <T> ResponseDebugView(
         }
 
         fetcher?.let {
-            Button(onClick = {
+            ESButton(onClick = {
                 scope.launch {
                     it()
                 }

@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.settings.debug.networkTrace
 
 import android.content.Intent
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -15,6 +14,7 @@ import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.statsgraph.ReportType
+import com.alpriest.energystats.ui.theme.ESButton
 import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -57,7 +57,7 @@ fun NetworkTraceDebugView(configManager: ConfigManaging, credentialStore: Creden
     val zipFileName = FileProvider.getUriForFile(LocalContext.current, "com.alpriest.energystats.ui.statsgraph.ExportFileProvider", zipFile);
     val coroutineScope = rememberCoroutineScope()
 
-    Button(onClick = {
+    ESButton(onClick = {
         coroutineScope.launch {
             downloadFiles()
             createZipFile(cacheDirectory, zipFile)

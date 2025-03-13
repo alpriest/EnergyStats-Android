@@ -17,13 +17,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -60,6 +60,7 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.alpriest.energystats.ui.theme.demo
@@ -242,14 +243,15 @@ private fun InverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
     ) {
         if (viewModel.hasMultipleDevices) {
             Box(contentAlignment = Alignment.TopEnd) {
-                Button(
+                ESButton(
                     onClick = { expanded = !expanded },
                     colors = ButtonDefaults.outlinedButtonColors(containerColor = colorScheme.surface, contentColor = colorScheme.onSecondary),
-                    contentPadding = PaddingValues(2.dp),
-                    elevation = ButtonDefaults.buttonElevation(1.dp)
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                    elevation = ButtonDefaults.buttonElevation(1.dp),
+                    modifier = Modifier.heightIn(min = 28.dp)
                 ) {
                     Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(all = 0.dp)) {
                             Text(
                                 viewModel.deviceDisplayName,
                                 fontSize = 12.sp,
@@ -282,12 +284,14 @@ private fun InverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
                     onDismissRequest = { expanded = false }
                 ) {
                     viewModel.devices.forEach { device ->
-                        DropdownMenuItem(onClick = {
-                            expanded = false
-                            viewModel.select(device)
-                        }, text = {
-                            Text("${device.deviceDisplayName} (${device.deviceType})")
-                        })
+                        DropdownMenuItem(
+                            onClick = {
+                                expanded = false
+                                viewModel.select(device)
+                            }, text = {
+                                Text("${device.deviceDisplayName} (${device.deviceType})")
+                            }
+                        )
                     }
                 }
             }
@@ -358,9 +362,7 @@ fun InverterViewPreview() {
             Spacer(modifier = Modifier.height(50.dp))
 
             InverterView(
-                MutableStateFlow(
-                    AppTheme.demo()
-                ),
+                MutableStateFlow(AppTheme.demo()),
                 InverterViewModel(configManager = FakeConfigManager(), temperatures = null, deviceState = DeviceState.Online, faults = listOf("abc", "def")),
                 orientation = Configuration.ORIENTATION_PORTRAIT
             )

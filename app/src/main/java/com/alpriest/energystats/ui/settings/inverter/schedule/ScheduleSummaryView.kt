@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
@@ -49,6 +48,7 @@ import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.PreviewTemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleSummaryView(
@@ -188,7 +188,7 @@ class ScheduleSummaryView(
                 }
             }
 
-            Button(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
+            ESButton(onClick = { navController.navigate(SettingsScreen.TemplateList.name) }) {
                 Text(stringResource(R.string.manage_templates), color = colorScheme.onPrimary)
             }
 
@@ -202,7 +202,7 @@ class ScheduleSummaryView(
 
     @Composable
     fun ActivateButton(onClick: () -> Unit) {
-        Button(
+        ESButton(
             onClick,
             modifier = Modifier.padding(bottom = SettingsPadding.COLUMN_BOTTOM)
         ) {

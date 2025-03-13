@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -51,6 +50,7 @@ import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PaleWhite
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
@@ -88,7 +88,7 @@ fun EditPhaseView(
 
                 ForceDischargePowerView(viewModel)
 
-                Button(
+                ESButton(
                     onClick = { viewModel.deletePhase() },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = PowerFlowNegative,
@@ -277,7 +277,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
         Text(stringResource(R.string.work_mode), color = colorScheme.onSecondary)
 
         Box(contentAlignment = Alignment.TopEnd) {
-            Button(onClick = { expanded = !expanded }) {
+            ESButton(onClick = { expanded = !expanded }) {
                 Text(
                     workMode.title(),
                     color = colorScheme.onPrimary

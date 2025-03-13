@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -49,6 +48,7 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.settings.SettingsTitleView
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -130,7 +130,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         horizontalArrangement = Arrangement.spacedBy(5.dp),
                         modifier = Modifier.align(Alignment.End)
                     ) {
-                        Button(
+                        ESButton(
                             onClick = {
                                 try {
                                     config.batteryCapacity = editingCapacity.toInt()
@@ -143,7 +143,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                                 color = colorScheme.onPrimary,
                             )
                         }
-                        Button(onClick = { isEditingCapacity.value = false }) {
+                        ESButton(onClick = { isEditingCapacity.value = false }) {
                             Text(
                                 stringResource(R.string.cancel),
                                 color = colorScheme.onPrimary,
@@ -200,6 +200,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 state = showBatteryTemperatureState,
                 onUpdate = { config.showBatteryTemperature = it }
             )
+
+            HorizontalDivider()
 
             SettingsSegmentedControl(
                 title = "Display battery stack",

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -43,6 +42,7 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class ScheduleTemplateListViewModelFactory(
@@ -128,7 +128,7 @@ fun CreateTemplateView(viewModel: ScheduleTemplateListViewModel) {
     val context = LocalContext.current
     val presentCreateAlert = remember { mutableStateOf(false) }
 
-    Button(
+    ESButton(
         onClick = { presentCreateAlert.value = true }
     ) {
         Text(

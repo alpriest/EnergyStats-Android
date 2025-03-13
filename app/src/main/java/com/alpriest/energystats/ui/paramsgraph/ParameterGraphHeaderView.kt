@@ -14,7 +14,6 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -43,6 +42,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.CalendarView
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
+import com.alpriest.energystats.ui.theme.ESButton
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
@@ -101,7 +101,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
 
         Spacer(modifier = Modifier.weight(2.0f))
 
-        Button(
+        ESButton(
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .padding(end = 14.dp)
@@ -116,7 +116,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
         }
 
         val date = candidateQueryDate.collectAsState().value
-        Button(
+        ESButton(
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .size(36.dp),
@@ -137,7 +137,7 @@ private fun MenuWithButton(modifier: Modifier = Modifier, icon: ImageVector, con
     val showing = remember { mutableStateOf(false) }
 
     Box(modifier) {
-        Button(
+        ESButton(
             onClick = { showing.value = true },
             modifier = Modifier
                 .padding(vertical = 6.dp)

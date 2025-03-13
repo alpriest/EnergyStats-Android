@@ -102,7 +102,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 )
 
                 SettingsCheckbox(
-                    title = "Show CT2 value",
+                    title = stringResource(R.string.show_ct2_value),
                     state = showCT2ValueAsString,
                     enabled = shouldCombineCT2WithPVPowerState.value,
                     onUpdate = { configManager.showCT2ValueAsString = it }

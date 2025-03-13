@@ -12,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +49,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,7 +75,7 @@ class SummaryView(
             composable("Summary") {
                 LoadedScaffold(title = "Summary",
                     actions = {
-                        Button(onClick = { navController.navigate("EditSummaryDateRanges") }) {
+                        ESButton(onClick = { navController.navigate("EditSummaryDateRanges") }) {
                             Image(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit",

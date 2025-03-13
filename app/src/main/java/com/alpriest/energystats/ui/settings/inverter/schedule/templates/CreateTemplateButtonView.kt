@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 enum class AlertConfiguration {
@@ -57,10 +57,10 @@ fun TemplateNameAlertDialog(configuration: AlertConfiguration, onDismiss: (Strin
                 OutlinedTextField(value = name.value, onValueChange = { name.value = it })
 
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Button(onClick = { onDismiss(null) }) {
+                    ESButton(onClick = { onDismiss(null) }) {
                         Text(context.getString(R.string.cancel))
                     }
-                    Button(onClick = { onDismiss(name.value) }) {
+                    ESButton(onClick = { onDismiss(name.value) }) {
                         Text(configuration.actionButton)
                     }
                 }

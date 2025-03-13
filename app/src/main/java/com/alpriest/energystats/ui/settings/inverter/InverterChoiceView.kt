@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -26,6 +25,7 @@ import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -49,7 +49,9 @@ fun InverterChoiceView(
                     )
 
                     Box(contentAlignment = Alignment.TopEnd) {
-                        Button(onClick = { expanded = !expanded }) {
+                        ESButton(
+                            onClick = { expanded = !expanded }
+                        ) {
                             Text(
                                 it.deviceDisplayName,
                                 fontSize = 12.sp,

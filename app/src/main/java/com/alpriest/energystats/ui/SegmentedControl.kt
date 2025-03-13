@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -27,7 +26,7 @@ fun SegmentedControl(
     defaultSelectedItemIndex: Int = 0,
     useFixedWidth: Boolean = false,
     itemWidth: Dp = 120.dp,
-    cornerRadius: Int = 10,
+    cornerRadius: Int = 8,
     color: Color = Color.Red,
     contentPadding: PaddingValues = PaddingValues(
         start = 12.dp,
