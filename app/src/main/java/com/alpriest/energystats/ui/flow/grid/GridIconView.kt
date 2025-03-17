@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.flow.grid
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -52,11 +53,15 @@ fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStrea
 
         if (showGridTotals) {
             if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                Row {
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     GridTotals(viewModel, decimalPlaces, themeStream)
                 }
             } else {
-                GridTotals(viewModel, decimalPlaces, themeStream)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    GridTotals(viewModel, decimalPlaces, themeStream)
+                }
             }
         }
     }
@@ -87,7 +92,11 @@ private fun GridTotals(
             fontSize = smallFontSize,
             color = Color.Gray,
         )
+    }
 
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         ShimmerText(
             shimmering = gridExportTotal == null,
             text = (gridExportTotal ?: 0.0).energy(displayUnit, decimalPlaces),

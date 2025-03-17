@@ -57,7 +57,6 @@ class LoadedPowerFlowViewModel(
     init {
         loadDeviceStatus()
         loadTotals()
-        loadGeneration()
 
         viewModelScope.launch {
             configManager.themeStream.collect { it ->
@@ -74,18 +73,21 @@ class LoadedPowerFlowViewModel(
         }
     }
 
-    private fun loadGeneration() {
-        if (configManager.totalYieldModel != TotalYieldModel.Off) {
-            viewModelScope.launch {
-                try {
-                    todaysGeneration.value = GenerationViewModel(
-                        loadHistoryData(currentDevice),
-                        includeCT2 = configManager.shouldCombineCT2WithPVPower,
-                        invertCT2 = configManager.shouldInvertCT2
-                    )
-                } catch (ex: FoxServerError) {
-                    bannerAlertManager.showToast("Failed to load generation: ${ex.message}")
-                }
+    private fun loadGeneration(solar: Double) {
+        if (configManager.totalYieldModel == TotalYieldModel.Off) {
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                todaysGeneration.value = GenerationViewModel(
+                    solar,
+                    loadHistoryData(currentDevice),
+                    includeCT2 = configManager.shouldCombineCT2WithPVPower,
+                    invertCT2 = configManager.shouldInvertCT2
+                )
+            } catch (ex: FoxServerError) {
+                bannerAlertManager.showToast("Failed to load generation: ${ex.message}")
             }
         }
     }
@@ -132,7 +134,7 @@ class LoadedPowerFlowViewModel(
     }
 
     private fun loadTotals() {
-        if (configManager.showHomeTotal || configManager.showGridTotals || configManager.showFinancialSummary) {
+        if (configManager.showHomeTotal || configManager.showGridTotals || configManager.showFinancialSummary || configManager.totalYieldModel != TotalYieldModel.Off) {
             viewModelScope.launch {
                 try {
                     val totals = TotalsViewModel(loadReportData(currentDevice))
@@ -140,6 +142,8 @@ class LoadedPowerFlowViewModel(
                     homeTotal.value = totals.loads
                     gridImportTotal.value = totals.grid
                     gridExportTotal.value = totals.feedIn
+
+                    loadGeneration(totals.solar)
                 } catch (ex: FoxServerError) {
                     bannerAlertManager.showToast("Failed to load totals: ${ex.message}")
                 }

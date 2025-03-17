@@ -292,7 +292,6 @@
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">No se pudo cargar el pronóstico - Ha superado su límite diario gratuito</string>
     <string name="pv_only">Solo PV</string>
     <string name="solar">Rendimiento Solar</string>
-    <string name="energystats_total_yield_description">Calculado como una aproximación de la suma de Riemann de la integración de pvPower. Esto será razonablemente preciso, pero solo para hoy.</string>
     <string name="foxess_total_yield_description">Utiliza el valor suministrado por FoxESS, que contiene la salida de la batería y la salida solar.</string>
     <string name="show_on_flow_page">Mostrar en la página de flujo</string>
     <string name="error">Error</string>

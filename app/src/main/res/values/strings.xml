@@ -112,7 +112,7 @@
     <string name="absolute_self_sufficiency">Assumes any amount taken from the grid reduces your self-sufficiency.\n\nSufficiency = grid / houseUsage</string>
     <string name="approximations">Approximations</string>
     <string name="self_sufficiency">Self sufficiency</string>
-        <string name="home_usage">Home usage</string>
+    <string name="home_usage">Home usage</string>
     <string name="export_csv_data">Export graph data</string>
     <string name="output">"Output "</string>
     <string name="parameters_update_description">Parameters are updated every 5 minutes by FoxESS and only available for a single day at a time. Tap the graph to view data at a specific time.</string>
@@ -294,7 +294,6 @@
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Could not load forecast - You have exceeded your free daily limit</string>
     <string name="pv_only">PV Only</string>
     <string name="solar">Show solar yield</string>
-    <string name="energystats_total_yield_description">Calculated as a Riemann sum approximation integration of pvPower. This will be reasonably accurate but is only calculated for today.</string>
     <string name="foxess_total_yield_description">Uses the FoxESS supplied value which contains battery and solar output.</string>
     <string name="show_on_flow_page">Show on power flow page</string>
     <string name="error">Error</string>

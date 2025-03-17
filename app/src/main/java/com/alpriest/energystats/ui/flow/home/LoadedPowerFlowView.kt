@@ -2,6 +2,7 @@
 
 package com.alpriest.energystats.ui.flow.home
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -103,7 +105,12 @@ fun LoadedPowerFlowView(
     loadedPowerFlowViewModel: LoadedPowerFlowViewModel = viewModel(),
     themeStream: MutableStateFlow<AppTheme>,
 ) {
-    val iconHeight = themeStream.collectAsState().value.iconHeight()
+    val rawIconHeight = themeStream.collectAsState().value.iconHeight()
+    val iconHeight = when (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        true -> rawIconHeight * 0.85f
+        false -> rawIconHeight * 1.0f
+    }
+
     val theme by themeStream.collectAsState()
     val deviceState = loadedPowerFlowViewModel.deviceState.collectAsState().value
     val earnings = loadedPowerFlowViewModel.earnings.collectAsState().value
@@ -161,7 +168,7 @@ fun LoadedPowerFlowView(
                 if ((theme.showCT2ValueAsString || theme.powerFlowStrings.enabled) && displayStrings.isNotEmpty()) {
                     Column(
                         modifier = Modifier
-                            .offset(y = (-20).dp)
+                            .offset(y = -(displayStrings.count() * 10).dp)
                             .background(Color.LightGray)
                             .padding(2.dp),
                     ) {
