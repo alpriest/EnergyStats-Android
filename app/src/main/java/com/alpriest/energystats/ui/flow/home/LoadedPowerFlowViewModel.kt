@@ -96,7 +96,7 @@ class LoadedPowerFlowViewModel(
         val start = QueryDate().toUtcMillis()
         return network.fetchHistory(
             deviceSN = device.deviceSN,
-            variables = listOf("pvPower", "meterPower2"),
+            variables = listOf("meterPower2"),
             start = start,
             end = start + (86400 * 1000)
         )

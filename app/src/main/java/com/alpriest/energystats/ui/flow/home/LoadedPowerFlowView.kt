@@ -129,7 +129,7 @@ fun LoadedPowerFlowView(
                 shimmerInstance = shimmerInstance,
                 text = stringResource(
                     id = R.string.solarYieldToday,
-                    (solarTotal?.solarToday() ?: 0.0).energy(theme.displayUnit, theme.decimalPlaces)
+                    (solarTotal?.solarToday ?: 0.0).energy(theme.displayUnit, theme.decimalPlaces)
                 )
             )
         }

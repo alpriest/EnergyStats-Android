@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
@@ -31,13 +30,11 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.dialog.AlertDialog
-import com.alpriest.energystats.ui.settings.debug.networkTrace.NetworkTraceDebugView
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.chuckerteam.chucker.api.Chucker
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -46,58 +43,23 @@ fun NavGraphBuilder.debugGraph(
     navController: NavHostController,
     networkStore: InMemoryLoggingNetworkStore,
     configManager: ConfigManaging,
-    network: Networking,
-    credentialStore: CredentialStore
+    network: Networking
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") {
             LoadedScaffold(title = stringResource(R.string.view_debug_data), navController = navController) {
-                DebugDataSettingsView(navController, network)
+                DebugDataSettingsView(navController, network, it)
             }
-        }
-
-        composable("debugReport") { ResponseDebugView(networkStore, mapper = { networkStore.reportResponseStream }, fetcher = null) }
-        composable("debugQuery") { ResponseDebugView(networkStore, mapper = { networkStore.realQueryResponseStream }, fetcher = null) }
-        composable("debugDeviceList") {
-            ResponseDebugView(networkStore, mapper = { networkStore.deviceListResponseStream }, fetcher = {
-                network.fetchDeviceList()
-            })
-        }
-        composable("debugVariables") {
-            ResponseDebugView(networkStore, mapper = { networkStore.variablesResponseStream }, fetcher = {
-                network.fetchVariables()
-            })
-        }
-        composable("debugBatterySOC") {
-            ResponseDebugView(networkStore, mapper = { networkStore.batterySOCResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceSN?.let {
-                    network.fetchBatterySettings(it)
-                }
-            })
-        }
-        composable("debugBatteryTimes") {
-            ResponseDebugView(networkStore, mapper = { networkStore.batteryTimesResponseStream }, fetcher = {
-                configManager.currentDevice.value?.deviceSN?.let {
-                    network.fetchBatteryTimes(it)
-                }
-            })
-        }
-        composable("debugDataLoggers") {
-            ResponseDebugView(networkStore, mapper = { networkStore.dataLoggerListResponse }, fetcher = {
-                network.fetchDataLoggers()
-            })
-        }
-        composable("debugNetworkTrace") {
-            NetworkTraceDebugView(configManager, credentialStore)
         }
     }
 }
 
 @Composable
-fun DebugDataSettingsView(navController: NavController, network: Networking) {
+fun DebugDataSettingsView(navController: NavController, network: Networking, modifier: Modifier) {
     val scope = rememberCoroutineScope()
     val alertDialogMessage = remember { mutableStateOf(null as String?) }
-    trackScreenView("Debug", "DebugDataSettingsView")
+//    trackScreenView("Debug", "DebugDataSettingsView")
+    val context = LocalContext.current
 
     alertDialogMessage.value?.let {
         AlertDialog(message = it, onDismiss = {
@@ -105,53 +67,33 @@ fun DebugDataSettingsView(navController: NavController, network: Networking) {
         })
     }
 
-    SettingsColumnWithChild {
-        SettingsTitleView("Debug")
-
-        ESButton(onClick = { navController.navigate("debugReport") }) {
-            Text("device/report/Query")
-        }
-
-        ESButton(onClick = { navController.navigate("debugQuery") }) {
-            Text("device/real/Query")
-        }
-
-        ESButton(onClick = { navController.navigate("debugDeviceList") }) {
-            Text("device/list")
-        }
-
-        ESButton(onClick = { navController.navigate("debugVariables") }) {
-            Text("device/variable/get")
-        }
-
-        ESButton(onClick = { navController.navigate("debugBatterySOC") }) {
-            Text("device/battery/soc/get")
-        }
-
-        ESButton(onClick = { navController.navigate("debugBatteryTimes") }) {
-            Text("device/battery/forceChargeTime/get")
-        }
-
-        ESButton(onClick = { navController.navigate("debugDataLoggers") }) {
-            Text("Dataloggers")
-        }
-
-        ESButton(onClick = { navController.navigate("debugNetworkTrace") }) {
-            Text("Network trace")
-        }
-
-        ESButton(onClick = {
-            scope.launch {
-                try {
-                    val counts = network.fetchRequestCount()
-
-                    alertDialogMessage.value = "${counts.remaining} remaining out of ${counts.total} total"
-                } catch (ex: Exception) {
-                    alertDialogMessage.value = "API Timeout"
-                }
+    SettingsColumn(modifier) {
+        SettingsColumnWithChild {
+            ESButton(onClick = {
+                val intent = Chucker.getLaunchIntent(context)
+                context.startActivity(intent)
+            }) {
+                Text("Launch Chucker")
             }
-        }) {
-            Text("View request count")
+
+            Text("Chucker is a tool that lets developers see the app’s network activity, like what data it sends or receives. It helps identify and fix issues by showing this information in real time, but it doesn’t affect how you use the app.")
+
+        }
+
+        SettingsColumnWithChild(modifier) {
+            ESButton(onClick = {
+                scope.launch {
+                    try {
+                        val counts = network.fetchRequestCount()
+
+                        alertDialogMessage.value = "${counts.remaining} remaining out of ${counts.total} total"
+                    } catch (ex: Exception) {
+                        alertDialogMessage.value = "API Timeout"
+                    }
+                }
+            }) {
+                Text("View request count")
+            }
         }
     }
 }
@@ -221,21 +163,11 @@ fun prettyPrintJson(jsonString: String): String {
 @Preview(showBackground = true, heightDp = 640)
 @Composable
 fun DebugDataSettingsViewPreview() {
-    val networkStore = InMemoryLoggingNetworkStore.shared
     val navController = rememberNavController()
 
     EnergyStatsTheme {
-        NavHost(
-            navController = navController,
-            startDestination = "debug"
-        ) {
-            composable("debug") { DebugDataSettingsView(navController, DemoNetworking()) }
-            composable("debugQuery") { ResponseDebugView(networkStore, { networkStore.realQueryResponseStream }, null) }
-            composable("debugReport") { ResponseDebugView(networkStore, { networkStore.reportResponseStream }, null) }
-            composable("debugBatterySOC") { ResponseDebugView(networkStore, { networkStore.batterySOCResponseStream }, null) }
-            composable("debugBatteryTimes") { ResponseDebugView(networkStore, { networkStore.batteryTimesResponseStream }, null) }
-            composable("debugDeviceList") { ResponseDebugView(networkStore, { networkStore.deviceListResponseStream }, null) }
+        LoadedScaffold(title = stringResource(R.string.view_debug_data), navController = navController) {
+            DebugDataSettingsView(navController, DemoNetworking(), it)
         }
     }
 }
-

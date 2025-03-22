@@ -40,6 +40,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastCache
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class AppContainer(private val context: Context) {
@@ -104,10 +105,12 @@ class AppContainer(private val context: Context) {
     )
 
     val networking: Networking by lazy {
+        val chucker = ChuckerInterceptor.Builder(context).build()
+
         NetworkService(
             NetworkValueCleaner(
                 NetworkFacade(
-                    api = NetworkCache(api = FoxAPIService(credentialStore, networkStore)),
+                    api = NetworkCache(api = FoxAPIService(credentialStore, networkStore, chucker)),
                     isDemoUser = { config.isDemoUser }
                 ),
                 themeStream

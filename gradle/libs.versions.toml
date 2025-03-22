@@ -20,6 +20,7 @@ lifecycle = "2.8.7"
 okhttp = "4.12.0"
 composeActivity = "1.9.3"
 googleGmsGoogleServices = "4.4.1"
+chucker = "3.5.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,6 +51,7 @@ vico = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref =
 lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 lifecycle-runtimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-viewmodelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+chucker = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

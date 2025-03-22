@@ -7,7 +7,9 @@ import java.util.Locale
 import kotlin.math.abs
 
 class GenerationViewModel(private val pvTotal: Double, private val response: OpenHistoryResponse, private val includeCT2: Boolean, private val invertCT2: Boolean) {
-    fun solarToday(): Double {
+    val solarToday: Double
+
+    init {
         val ct2Total: Double
 
         if (includeCT2) {
@@ -44,6 +46,6 @@ class GenerationViewModel(private val pvTotal: Double, private val response: Ope
             ct2Total = 0.0
         }
 
-        return pvTotal + ct2Total
+        solarToday = pvTotal + ct2Total
     }
 }

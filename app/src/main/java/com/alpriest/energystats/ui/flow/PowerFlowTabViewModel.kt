@@ -9,7 +9,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenRealQueryResponse
-import com.alpriest.energystats.models.rounded
+import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharing
@@ -238,7 +238,7 @@ class PowerFlowTabViewModel(
 }
 
 fun Double.roundedToString(decimalPlaces: Int, currencySymbol: String = "", locale: Locale = Locale.getDefault()): String {
-    val roundedNumber = this.rounded(decimalPlaces)
+    val roundedNumber = this.truncated(decimalPlaces)
 
     val numberFormat = NumberFormat.getNumberInstance(locale)
     numberFormat.maximumFractionDigits = decimalPlaces

@@ -20,7 +20,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.UnitData
-import com.alpriest.energystats.models.rounded
+import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -151,7 +151,7 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
             if (masked == 0L) {
                 this
             } else {
-                (this - (masked.toDouble() / 10.0)).rounded(3)
+                (this - (masked.toDouble() / 10.0)).truncated(3)
             }
         } else {
             this

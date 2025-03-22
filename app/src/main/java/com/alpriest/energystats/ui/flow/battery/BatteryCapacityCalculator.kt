@@ -1,7 +1,7 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.rounded
+import com.alpriest.energystats.models.truncated
 import java.lang.Math.abs
 import kotlin.math.roundToInt
 
@@ -53,6 +53,6 @@ class BatteryCapacityCalculator(
         if (batteryStateOfCharge > percentageConsideredFull) return 0.99
 
         val deduction = if (includeUnusableCapacity) 0.0 else minimumSOC
-        return ((batteryStateOfCharge - deduction) / (1 - deduction)).rounded(decimalPlaces = 2)
+        return ((batteryStateOfCharge - deduction) / (1 - deduction)).truncated(decimalPlaces = 2)
     }
 }
