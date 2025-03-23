@@ -97,6 +97,8 @@ class StatsTabView(
         val graphShowing = viewModel.showingGraphStream.collectAsState().value
         val showingApproximations = remember { mutableStateOf(false) }
         val loadState = viewModel.uiState.collectAsState().value.state
+        val showTipDialog = remember { mutableStateOf(false) }
+        val tipKitManager = remember { TipKitManager() }
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -104,6 +106,16 @@ class StatsTabView(
             viewModel.displayModeStream.collectLatest { viewModel.load(context) }
         }
         trackScreenView("Stats Tab", "StatsTabView")
+
+        LaunchedEffect(Unit) {
+            tipKitManager.checkAndShow(TipType.statsGraphDecimalPlacesFixedTo1, context)
+        }
+
+        tipKitManager.activeTip.value?.let { tip ->
+            TipDialog(tip, context) {
+                tipKitManager.dismiss()
+            }
+        }
 
         Column(
             modifier = Modifier

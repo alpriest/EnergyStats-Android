@@ -36,7 +36,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
                 ReportVariable.DischargeEnergyToTal -> stringResource(R.string.discharge) + title(ValueUsage.TOTAL)
                 ReportVariable.Loads -> stringResource(R.string.loads) + title(ValueUsage.TOTAL)
                 ReportVariable.SelfSufficiency -> stringResource(R.string.self_sufficiency)
-                ReportVariable.PvEnergyToTal -> "Solar"
+                ReportVariable.PvEnergyToTal -> stringResource(R.string.solar)
             }
 
             val description = when (it.type) {
@@ -47,19 +47,18 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
                 ReportVariable.DischargeEnergyToTal -> stringResource(R.string.reportvariable_dischargeenergytotal)
                 ReportVariable.Loads -> stringResource(R.string.reportvariable_loads)
                 ReportVariable.SelfSufficiency -> ""
-                ReportVariable.PvEnergyToTal -> "PV energy generated"
+                ReportVariable.PvEnergyToTal -> stringResource(R.string.pv_energy_generated)
             }
 
             val total = totals.value[it.type]
-            val text = total?.energy(appTheme.displayUnit, appTheme.decimalPlaces)
+            val text = total?.energy(appTheme.displayUnit, 1)
 
             if (selectedValue == null) {
                 ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, text, null)
             } else {
-                val value = selectedValue.y.toDouble().kWh(appTheme.decimalPlaces)
+                val value = selectedValue.y.toDouble().kWh(1)
                 ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
             }
-
         }
     }
 }

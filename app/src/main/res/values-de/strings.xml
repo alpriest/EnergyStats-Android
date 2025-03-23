@@ -291,7 +291,7 @@
     <string name="reset_times">Reset-Zeiten</string>
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Vorhersage konnte nicht geladen werden - Sie haben Ihr kostenloses Tageslimit überschritten</string>
     <string name="pv_only">Nur PV</string>
-    <string name="solar">Solarertrag</string>
+    <string name="show_solar_yield">Solarertrag</string>
     <string name="foxess_total_yield_description">Verwendet den von FoxESS gelieferten Wert, der die Batterieausgabe und Solarleistung enthält.</string>
     <string name="show_on_flow_page">Auf Flussseite anzeigen</string>
     <string name="error">Fehler</string>
@@ -398,4 +398,8 @@
     <string name="reportvariable_pvenergytotal">Energie aus PV erzeugt</string>
     <string name="logout_from_demo">Abmelden von der Demo</string>
     <string name="show_ct2_value">CT2-Wert anzeigen</string>
+    <string name="pv_energy_generated">PV erzeugte Energie</string>
+    <string name="solar">Solar</string>
+    <string name="tipkit_statsGraphDecimalPlacesFixedTo1_body">Statistikwerte werden jetzt auf eine Nachkommastelle gerundet, da Fox-Systeme schon immer nur auf eine Nachkommastelle genau waren.</string>
+    <string name="tipkit_statsGraphDecimalPlacesFixedTo1_title">Nachkommastellen</string>
 </resources>

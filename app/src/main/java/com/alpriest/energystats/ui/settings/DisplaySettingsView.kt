@@ -142,7 +142,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         HorizontalDivider()
 
         SettingsCheckbox(
-            title = stringResource(R.string.solar),
+            title = stringResource(R.string.show_solar_yield),
             state = totalYieldModelState,
             onUpdate = { config.totalYieldModel = if (it) TotalYieldModel.EnergyStats else TotalYieldModel.Off }
         )

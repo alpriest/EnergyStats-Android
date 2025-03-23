@@ -6,7 +6,7 @@ import java.time.ZoneId
 import java.util.Locale
 import kotlin.math.abs
 
-class GenerationViewModel(private val pvTotal: Double, private val response: OpenHistoryResponse, private val includeCT2: Boolean, private val invertCT2: Boolean) {
+class GenerationViewModel(pvTotal: Double, response: OpenHistoryResponse, includeCT2: Boolean, private val invertCT2: Boolean) {
     val solarToday: Double
 
     init {

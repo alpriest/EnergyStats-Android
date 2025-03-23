@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -30,7 +29,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkOperation
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -41,24 +40,22 @@ import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.debugGraph(
     navController: NavHostController,
-    networkStore: InMemoryLoggingNetworkStore,
-    configManager: ConfigManaging,
     network: Networking
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") {
             LoadedScaffold(title = stringResource(R.string.view_debug_data), navController = navController) {
-                DebugDataSettingsView(navController, network, it)
+                DebugDataSettingsView(network, it)
             }
         }
     }
 }
 
 @Composable
-fun DebugDataSettingsView(navController: NavController, network: Networking, modifier: Modifier) {
+fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
     val scope = rememberCoroutineScope()
     val alertDialogMessage = remember { mutableStateOf(null as String?) }
-//    trackScreenView("Debug", "DebugDataSettingsView")
+    trackScreenView("Debug", "DebugDataSettingsView")
     val context = LocalContext.current
 
     alertDialogMessage.value?.let {
@@ -167,7 +164,7 @@ fun DebugDataSettingsViewPreview() {
 
     EnergyStatsTheme {
         LoadedScaffold(title = stringResource(R.string.view_debug_data), navController = navController) {
-            DebugDataSettingsView(navController, DemoNetworking(), it)
+            DebugDataSettingsView(DemoNetworking(), it)
         }
     }
 }

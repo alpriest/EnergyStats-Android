@@ -3,8 +3,8 @@ package com.alpriest.energystats.models
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import java.text.DecimalFormat
 import kotlin.math.abs
-import kotlin.math.floor
 import kotlin.math.pow
+import kotlin.math.roundToLong
 
 fun Double.asPercent(): String {
     return String.format("%.0f%%", (this * 100))
@@ -90,7 +90,7 @@ fun Double.w(): String {
 
 fun Double.truncated(decimalPlaces: Int): Double {
     val factor = 10.0.pow(decimalPlaces.toDouble())
-    return floor(this * factor) / factor
+    return (this * factor).roundToLong() / factor
 }
 
 fun Double.sameValueAs(other: Double): Boolean {

@@ -169,6 +169,6 @@ fun NavigableSettingsView(
             }
         }
 
-        debugGraph(navController, networkStore, config, network)
+        debugGraph(navController, network)
     }
 }

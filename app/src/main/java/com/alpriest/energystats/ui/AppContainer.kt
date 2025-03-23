@@ -40,7 +40,9 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastCache
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.chuckerteam.chucker.api.RetentionManager
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class AppContainer(private val context: Context) {
@@ -105,7 +107,15 @@ class AppContainer(private val context: Context) {
     )
 
     val networking: Networking by lazy {
-        val chucker = ChuckerInterceptor.Builder(context).build()
+        val chucker = ChuckerInterceptor.Builder(context)
+            .collector(
+                ChuckerCollector(
+                    context,
+                    showNotification = false,
+                    retentionPeriod = RetentionManager.Period.ONE_HOUR
+                )
+            )
+            .build()
 
         NetworkService(
             NetworkValueCleaner(

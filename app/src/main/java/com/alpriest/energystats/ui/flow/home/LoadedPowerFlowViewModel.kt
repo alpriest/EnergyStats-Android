@@ -80,9 +80,16 @@ class LoadedPowerFlowViewModel(
 
         viewModelScope.launch {
             try {
+                val historyData: OpenHistoryResponse
+                if (configManager.shouldCombineCT2WithPVPower) {
+                    historyData = loadHistoryData(currentDevice)
+                } else {
+                    historyData = OpenHistoryResponse(deviceSN = currentDevice.deviceSN, listOf())
+                }
+
                 todaysGeneration.value = GenerationViewModel(
                     solar,
-                    loadHistoryData(currentDevice),
+                    historyData,
                     includeCT2 = configManager.shouldCombineCT2WithPVPower,
                     invertCT2 = configManager.shouldInvertCT2
                 )

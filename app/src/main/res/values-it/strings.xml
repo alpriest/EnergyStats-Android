@@ -292,7 +292,7 @@
     <string name="reset_times">Resetta gli orari</string>
     <string name="could_not_load_forecast_you_have_exceeded_your_free_daily_limit">Impossibile caricare le previsioni - Hai superato il limite giornaliero gratuito</string>
     <string name="pv_only">Solo PV</string>
-    <string name="solar">Resa Solare</string>
+    <string name="show_solar_yield">Resa Solare</string>
     <string name="foxess_total_yield_description">Utilizza il valore fornito da FoxESS, che include l\'uscita della batteria e l\'uscita solare.</string>
     <string name="show_on_flow_page">Mostra sulla pagina del flusso</string>
     <string name="error">Errore</string>
@@ -399,4 +399,8 @@
     <string name="reportvariable_pvenergytotal">Energia generata da PV</string>
     <string name="logout_from_demo">Esci dalla demo</string>
     <string name="show_ct2_value">Mostra il valore CT2</string>
+    <string name="pv_energy_generated">Energia fotovoltaica generata</string>
+    <string name="solar">Solare</string>
+    <string name="tipkit_statsGraphDecimalPlacesFixedTo1_body">I numeri delle statistiche sono ora arrotondati a una sola cifra decimale, poiché i sistemi Fox sono sempre stati precisi solo a una cifra decimale.</string>
+    <string name="tipkit_statsGraphDecimalPlacesFixedTo1_title">Cifre decimali</string>
 </resources>

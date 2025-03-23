@@ -12,8 +12,7 @@ class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, v
                 feedIn = reports.todayValue(forKey = ReportVariable.FeedIn.networkTitle()),
                 loads = reports.todayValue(forKey = ReportVariable.Loads.networkTitle()),
                 solar = reports.todayValue(forKey = ReportVariable.PvEnergyToTal.networkTitle())
-            ) {
-    }
+            )
 }
 
 private fun List<OpenReportResponse>.todayValue(forKey: String): Double {
