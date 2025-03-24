@@ -33,6 +33,7 @@ import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.Solcast
@@ -102,7 +103,7 @@ class AppContainer(private val context: Context) {
             powerFlowStrings = config.powerFlowStrings,
             truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
             showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
-            showCT2ValueAsString = config.showCT2ValueAsString
+            ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode)
         )
     )
 

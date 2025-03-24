@@ -192,6 +192,7 @@ class PowerFlowTabViewModel(
                 BatteryWidget().updateAll(context)
 
                 val summary = LoadedPowerFlowViewModel(
+                    context,
                     solar = currentViewModel.currentSolarPower,
                     solarStrings = currentViewModel.currentSolarStringsPower,
                     home = currentViewModel.currentHomeConsumption,

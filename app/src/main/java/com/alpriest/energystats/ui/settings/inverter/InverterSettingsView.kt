@@ -1,5 +1,7 @@
 package com.alpriest.energystats.ui.settings.inverter
 
+import android.content.Context
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -16,13 +18,33 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.SegmentedControl
 import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+
+enum class CT2DisplayMode(val value: Int) {
+    Hidden(0),
+    SeparateIcon(1),
+    AsPowerString(2);
+
+    fun title(context: Context): String {
+        return when (this) {
+            Hidden -> "Hidden"
+            SeparateIcon -> "Separate icon"
+            AsPowerString -> "As power string"
+        }
+    }
+
+    companion object {
+        fun fromInt(value: Int) = CT2DisplayMode.values().firstOrNull { it.value == value } ?: CT2DisplayMode.Hidden
+    }
+}
 
 @Composable
 fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController, network: Networking, modifier: Modifier) {
@@ -35,14 +57,15 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val shouldCombineCT2WithPVPowerState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithPVPower) }
     val shouldCombineCT2WithPVLoadsState = rememberSaveable { mutableStateOf(configManager.shouldCombineCT2WithLoadsPower) }
     val showInverterScheduleQuickLinkState = rememberSaveable { mutableStateOf(configManager.showInverterScheduleQuickLink) }
-    val showCT2ValueAsString = rememberSaveable { mutableStateOf(configManager.showCT2ValueAsString) }
+    val ct2DisplayModeState = rememberSaveable { mutableStateOf(configManager.ct2DisplayMode) }
+    val context = LocalContext.current
 
     trackScreenView("Inverter", "InverterSettingsView")
 
     SettingsPage(modifier) {
         InverterChoiceView(configManager)
 
-        currentDevice.value?.let {
+        currentDevice.value?.let { device ->
             SettingsColumn {
                 InlineSettingsNavButton(stringResource(R.string.manage_schedules)) { navController.navigate(SettingsScreen.InverterSchedule.name) }
             }
@@ -80,7 +103,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
             }
 
             SettingsColumn(
-                header =stringResource(R.string.ct2_settings),
+                header = stringResource(R.string.ct2_settings),
                 footer = stringResource(R.string.if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this)
             ) {
                 SettingsCheckbox(
@@ -101,16 +124,27 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                     onUpdate = { configManager.shouldCombineCT2WithLoadsPower = it }
                 )
 
-                SettingsCheckbox(
-                    title = stringResource(R.string.show_ct2_value),
-                    state = showCT2ValueAsString,
-                    enabled = shouldCombineCT2WithPVPowerState.value,
-                    onUpdate = { configManager.showCT2ValueAsString = it }
-                )
+                SettingsSegmentedControl(
+                    title = "CT2 display",
+                    segmentedControl = {
+                        val items = listOf(
+                            CT2DisplayMode.Hidden,
+                            CT2DisplayMode.SeparateIcon,
+                            CT2DisplayMode.AsPowerString
+                        )
+                        SegmentedControl(
+                            items = items.map { it.title(context) },
+                            defaultSelectedItemIndex = items.indexOf(ct2DisplayModeState.value),
+                            color = MaterialTheme.colorScheme.primary
+                        ) {
+                            ct2DisplayModeState.value = items[it]
+                            configManager.ct2DisplayMode = items[it]
+                        }
+                    })
             }
 
-            FirmwareVersionView(it, network)
-            DeviceVersionView(it)
+            FirmwareVersionView(device, network)
+            DeviceVersionView(device)
         }
     }
 }

@@ -6,14 +6,14 @@ import java.time.ZoneId
 import java.util.Locale
 import kotlin.math.abs
 
-class GenerationViewModel(pvTotal: Double, response: OpenHistoryResponse, includeCT2: Boolean, private val invertCT2: Boolean) {
+class GenerationViewModel(pvTotal: Double, response: OpenHistoryResponse, includeCT2: Boolean, invertCT2: Boolean) {
     val solarToday: Double
 
     init {
-        val ct2Total: Double
-
         if (includeCT2) {
-            val ct2Variables = response.datas.filter { it.variable == "meterPower2" }
+            val dateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
+            val timeZone = ZoneId.systemDefault()
+            val ct2Total = response.datas.filter { it.variable == "meterPower2" }
                 .flatMap { it.data.toList() }
                 .mapNotNull {
                     if (invertCT2) {
@@ -30,22 +30,24 @@ class GenerationViewModel(pvTotal: Double, response: OpenHistoryResponse, includ
                         }
                     }
                 }
+                .zipWithNext()
+                .mapNotNull { (a, b) ->
+                    val timeA = dateFormat.parse(a.time)?.toInstant()?.atZone(timeZone)?.toEpochSecond()
+                    val timeB = dateFormat.parse(b.time)?.toInstant()?.atZone(timeZone)?.toEpochSecond()
 
-            val timeDifferenceInSeconds: Double = if (ct2Variables.size > 1) {
-                val dateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
-                val firstTime = dateFormat.parse(ct2Variables[0].time).toInstant().atZone(ZoneId.systemDefault()).toEpochSecond()
-                val secondTime = dateFormat.parse(ct2Variables[1].time).toInstant().atZone(ZoneId.systemDefault()).toEpochSecond()
+                    if (timeA != null && timeB != null) {
+                        val dt = timeB - timeA
+                        val averageValue = (a.value + b.value) / 2  // Trapezoidal rule; optional
+                        averageValue * dt / 3600.0  // Convert seconds to hours
+                    } else {
+                        null
+                    }
+                }
+                .sum()
 
-                (secondTime - firstTime).toDouble()
-            } else {
-                5.0 * 60.0
-            }
-
-            ct2Total = ct2Variables.sumOf { it.value } * (timeDifferenceInSeconds / 3600.0)
+            solarToday = pvTotal + ct2Total
         } else {
-            ct2Total = 0.0
+            solarToday = pvTotal
         }
-
-        solarToday = pvTotal + ct2Total
     }
 }

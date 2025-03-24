@@ -10,6 +10,7 @@ import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
@@ -83,7 +84,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         BATTERY_TEMPERATURE_DISPLAY_MODE,
         SHOW_INVERTER_SCHEDULE_QUICK_LINK,
         FETCH_SOLCAST_ON_APP_LAUNCH,
-        SHOW_CT2_VALUE_AS_STRING;
+        CT2_DISPLAY_MODE;
     }
 
     override fun clearDisplaySettings() {
@@ -654,11 +655,11 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             editor.apply()
         }
 
-    override var showCT2ValueAsString: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_CT2_VALUE_AS_STRING.name, false)
+    override var ct2DisplayMode: Int
+        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, CT2DisplayMode.Hidden.value)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putBoolean(SharedPreferenceDisplayKey.SHOW_CT2_VALUE_AS_STRING.name, value)
+            editor.putInt(SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, value)
             editor.apply()
         }
 }

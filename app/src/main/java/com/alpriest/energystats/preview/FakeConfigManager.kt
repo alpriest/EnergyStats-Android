@@ -16,6 +16,7 @@ import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
@@ -83,7 +84,7 @@ class FakeConfigManager : ConfigManaging {
     override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode = BatteryTemperatureDisplayMode.Automatic
     override var showInverterScheduleQuickLink: Boolean = false
     override var fetchSolcastOnAppLaunch: Boolean = false
-    override var showCT2ValueAsString: Boolean = false
+    override var ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden
 
     override var devices: List<Device>? = listOf(
         Device(

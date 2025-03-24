@@ -15,6 +15,7 @@ import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
@@ -88,7 +89,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode
     var showInverterScheduleQuickLink: Boolean
     var fetchSolcastOnAppLaunch: Boolean
-    var showCT2ValueAsString: Boolean
+    var ct2DisplayMode: CT2DisplayMode
 }
 
 interface ScheduleTemplateConfigManager {

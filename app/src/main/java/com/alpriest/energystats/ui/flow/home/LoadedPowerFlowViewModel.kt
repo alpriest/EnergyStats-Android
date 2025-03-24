@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.flow.home
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.BatteryViewModel
@@ -20,6 +21,7 @@ import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 import com.alpriest.energystats.ui.flow.currentData
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -32,6 +34,7 @@ data class InverterTemperatures(
 )
 
 class LoadedPowerFlowViewModel(
+    val context: Context,
     val solar: Double,
     private val solarStrings: List<StringPower>,
     val home: Double,
@@ -62,7 +65,7 @@ class LoadedPowerFlowViewModel(
             configManager.themeStream.collect { it ->
                 displayStrings.value = listOf()
 
-                if (it.shouldCombineCT2WithPVPower && it.showCT2ValueAsString) {
+                if (it.ct2DisplayMode == CT2DisplayMode.AsPowerString) {
                     displayStrings.value = displayStrings.value.plus(StringPower("CT2", ct2))
                 }
 
@@ -80,19 +83,22 @@ class LoadedPowerFlowViewModel(
 
         viewModelScope.launch {
             try {
-                val historyData: OpenHistoryResponse
-                if (configManager.shouldCombineCT2WithPVPower) {
-                    historyData = loadHistoryData(currentDevice)
+                val historyData: OpenHistoryResponse = if (configManager.ct2DisplayMode == CT2DisplayMode.SeparateIcon ||
+                    configManager.ct2DisplayMode == CT2DisplayMode.AsPowerString ||
+                    configManager.shouldCombineCT2WithPVPower) {
+                    loadHistoryData(currentDevice)
                 } else {
-                    historyData = OpenHistoryResponse(deviceSN = currentDevice.deviceSN, listOf())
+                    OpenHistoryResponse(deviceSN = currentDevice.deviceSN, listOf())
                 }
 
-                todaysGeneration.value = GenerationViewModel(
+                val model = GenerationViewModel(
                     solar,
                     historyData,
                     includeCT2 = configManager.shouldCombineCT2WithPVPower,
                     invertCT2 = configManager.shouldInvertCT2
                 )
+
+                todaysGeneration.value = model
             } catch (ex: FoxServerError) {
                 bannerAlertManager.showToast("Failed to load generation: ${ex.message}")
             }

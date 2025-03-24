@@ -11,6 +11,7 @@ import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 
 data class AppTheme(
@@ -48,7 +49,7 @@ data class AppTheme(
     val powerFlowStrings: PowerFlowStringsSettings,
     val truncatedYAxisOnParameterGraphs: Boolean,
     val showInverterScheduleQuickLink: Boolean,
-    val showCT2ValueAsString: Boolean
+    val ct2DisplayMode: CT2DisplayMode
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -113,7 +114,7 @@ fun AppTheme.Companion.demo(
     powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults.copy(enabled = true, pv1Enabled = true, pv2Enabled = true),
     truncatedYAxisOnParameterGraphs: Boolean = false,
     showInverterScheduleQuickLink: Boolean = false,
-    showCT2ValueAsString: Boolean = true
+    ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -150,6 +151,6 @@ fun AppTheme.Companion.demo(
         powerFlowStrings = powerFlowStrings,
         truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs,
         showInverterScheduleQuickLink = showInverterScheduleQuickLink,
-        showCT2ValueAsString = showCT2ValueAsString
+        ct2DisplayMode = ct2DisplayMode
     )
 }

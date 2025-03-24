@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -36,7 +37,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
     val showGridTotals = themeStream.collectAsState().value.showGridTotals
 
     Column(
@@ -54,13 +54,13 @@ fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStrea
         if (showGridTotals) {
             if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    GridTotals(viewModel, decimalPlaces, themeStream)
+                    GridTotals(viewModel, 1, themeStream)
                 }
             } else {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    GridTotals(viewModel, decimalPlaces, themeStream)
+                    GridTotals(viewModel, 1, themeStream)
                 }
             }
         }
@@ -114,6 +114,7 @@ private fun GridTotals(
 @Composable
 fun GridIconViewPreview() {
     val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
+        LocalContext.current,
         solar = 1.0,
         solarStrings = listOf(
             StringPower("pv1", 0.3),

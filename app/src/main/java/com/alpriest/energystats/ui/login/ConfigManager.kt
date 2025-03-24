@@ -16,6 +16,7 @@ import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
@@ -191,7 +192,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
                 showFinancialSummaryOnFlowPage = demoTheme.showFinancialSummaryOnFlowPage
                 separateParameterGraphsByUnit = demoTheme.separateParameterGraphsByUnit
                 powerFlowStrings = demoTheme.powerFlowStrings
-                showCT2ValueAsString = demoTheme.showCT2ValueAsString
+                ct2DisplayMode = demoTheme.ct2DisplayMode
             }
         }
 
@@ -537,11 +538,11 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.fetchSolcastOnAppLaunch = value
         }
 
-    override var showCT2ValueAsString: Boolean
-        get() = config.showCT2ValueAsString
+    override var ct2DisplayMode: CT2DisplayMode
+        get() = CT2DisplayMode.fromInt(config.ct2DisplayMode)
         set(value) {
-            config.showCT2ValueAsString = value
-            themeStream.value = themeStream.value.copy(showCT2ValueAsString = showCT2ValueAsString)
+            config.ct2DisplayMode = value.value
+            themeStream.value = themeStream.value.copy(ct2DisplayMode = ct2DisplayMode)
         }
 
     init {

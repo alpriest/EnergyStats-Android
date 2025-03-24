@@ -41,7 +41,7 @@ fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateF
             ) {
                 ShimmerText(
                     shimmering = homeTotal == null,
-                    text = (homeTotal ?: 0.0).energy(displayUnit, decimalPlaces),
+                    text = (homeTotal ?: 0.0).energy(displayUnit, 1),
                     fontSize = fontSize,
                 )
                 Text(

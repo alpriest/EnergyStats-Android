@@ -62,6 +62,7 @@ import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
@@ -129,7 +130,7 @@ fun LoadedPowerFlowView(
                 shimmerInstance = shimmerInstance,
                 text = stringResource(
                     id = R.string.solarYieldToday,
-                    (solarTotal?.solarToday ?: 0.0).energy(theme.displayUnit, theme.decimalPlaces)
+                    (solarTotal?.solarToday ?: 0.0).energy(theme.displayUnit, 1)
                 )
             )
         }
@@ -139,20 +140,19 @@ fun LoadedPowerFlowView(
         }
 
         Box(contentAlignment = Alignment.Center) {
-            if (!theme.shouldCombineCT2WithPVPower) {
+            if (theme.ct2DisplayMode == CT2DisplayMode.SeparateIcon) {
                 CT2FlowView(iconHeight, themeStream, loadedPowerFlowViewModel)
             }
 
             Box(contentAlignment = Alignment.Center) {
                 SolarPowerFlow(
                     loadedPowerFlowViewModel.solar,
-                    modifier = Modifier
-                        .fillMaxHeight(0.46f),
+                    modifier = Modifier.fillMaxHeight(0.46f),
                     iconHeight = iconHeight * 1.1f,
                     themeStream = themeStream
                 )
 
-                if (!theme.shouldCombineCT2WithPVPower) {
+                if (theme.ct2DisplayMode == CT2DisplayMode.SeparateIcon) {
                     Column(
                         modifier = Modifier.offset(y = 100.dp)
                     ) {
@@ -165,7 +165,7 @@ fun LoadedPowerFlowView(
                     }
                 }
 
-                if ((theme.showCT2ValueAsString || theme.powerFlowStrings.enabled) && displayStrings.isNotEmpty()) {
+                if ((theme.ct2DisplayMode == CT2DisplayMode.AsPowerString || theme.powerFlowStrings.enabled) && displayStrings.isNotEmpty()) {
                     Column(
                         modifier = Modifier
                             .offset(y = -(displayStrings.count() * 10).dp)
@@ -304,7 +304,7 @@ private fun CT2FlowView(
                 orientation = LineOrientation.VERTICAL,
                 modifier = Modifier
                     .padding(top = 2.dp)
-                    .fillMaxHeight(0.7f)
+                    .fillMaxHeight(0.73f)
             )
         }
 
@@ -391,6 +391,7 @@ fun SummaryPowerFlowViewPreview() {
                 ), BannerAlertManager()
             ),
             loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
+                LocalContext.current,
                 solar = 1.0,
                 solarStrings = listOf(
                     StringPower("PV1", 0.3),
@@ -412,7 +413,7 @@ fun SummaryPowerFlowViewPreview() {
                     showInverterTemperatures = true,
                     showHomeTotal = true,
                     decimalPlaces = 3,
-                    showCT2ValueAsString = true,
+                    ct2DisplayMode = CT2DisplayMode.AsPowerString,
                     powerFlowStrings = PowerFlowStringsSettings(enabled = true, pv1Enabled = true, pv2Enabled = true)
                 )
             ),

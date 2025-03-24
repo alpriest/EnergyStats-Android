@@ -2,6 +2,7 @@ package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
+import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
@@ -65,7 +66,7 @@ interface ConfigInterface {
     var earningsModel: Int
     var summaryDateRange: SummaryDateRange
     var batteryViewModel: BatteryViewModel?
-    var showCT2ValueAsString: Boolean
+    var ct2DisplayMode: Int
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()
