@@ -7,6 +7,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import java.time.LocalDateTime
+import kotlin.math.abs
 
 data class StringPower(val name: String, val amount: Double) {
     fun displayName(settings: PowerFlowStringsSettings): String {
@@ -70,7 +71,7 @@ class CurrentStatusCalculator(
         }
 
         return CurrentRawValues(
-            pvPower = response.datas.currentValue(forKey = "pvPower"),
+            pvPower = abs(response.datas.currentValue(forKey = "pvPower")),
             stringsPvPower = stringsPvPower,
             feedinPower = response.datas.currentValue(forKey = "feedinPower"),
             gridConsumptionPower = response.datas.currentValue(forKey = "gridConsumptionPower"),

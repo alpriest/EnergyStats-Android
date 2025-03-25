@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings
 import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.currentValue
+import kotlin.math.abs
 
 data class PowerFlowStringsSettings(
     val enabled: Boolean = false,
@@ -53,27 +54,27 @@ data class PowerFlowStringsSettings(
         val strings: MutableList<StringPower> = mutableListOf()
 
         if (pv1Enabled) {
-            strings.add(StringPower("PV1", response.datas.currentValue("pv1Power")))
+            strings.add(StringPower("PV1", abs(response.datas.currentValue("pv1Power"))))
         }
 
         if (pv2Enabled) {
-            strings.add(StringPower("PV2", response.datas.currentValue("pv2Power")))
+            strings.add(StringPower("PV2", abs(response.datas.currentValue("pv2Power"))))
         }
 
         if (pv3Enabled) {
-            strings.add(StringPower("PV3", response.datas.currentValue("pv3Power")))
+            strings.add(StringPower("PV3", abs(response.datas.currentValue("pv3Power"))))
         }
 
         if (pv4Enabled) {
-            strings.add(StringPower("PV4", response.datas.currentValue("pv4Power")))
+            strings.add(StringPower("PV4", abs(response.datas.currentValue("pv4Power"))))
         }
 
         if (pv5Enabled) {
-            strings.add(StringPower("PV5", response.datas.currentValue("pv5Power")))
+            strings.add(StringPower("PV5", abs(response.datas.currentValue("pv5Power"))))
         }
 
         if (pv6Enabled) {
-            strings.add(StringPower("PV6", response.datas.currentValue("pv6Power")))
+            strings.add(StringPower("PV6", abs(response.datas.currentValue("pv6Power"))))
         }
 
         return strings

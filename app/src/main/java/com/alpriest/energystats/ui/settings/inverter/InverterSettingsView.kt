@@ -35,14 +35,14 @@ enum class CT2DisplayMode(val value: Int) {
 
     fun title(context: Context): String {
         return when (this) {
-            Hidden -> "Hidden"
-            SeparateIcon -> "Separate icon"
-            AsPowerString -> "As power string"
+            Hidden -> context.getString(R.string.ct2displaymode_hidden)
+            SeparateIcon -> context.getString(R.string.ct2displaymode_separate_icon)
+            AsPowerString -> context.getString(R.string.ct2displaymode_as_power_string)
         }
     }
 
     companion object {
-        fun fromInt(value: Int) = CT2DisplayMode.values().firstOrNull { it.value == value } ?: CT2DisplayMode.Hidden
+        fun fromInt(value: Int) = CT2DisplayMode.values().firstOrNull { it.value == value } ?: Hidden
     }
 }
 

@@ -45,6 +45,7 @@ class SummaryTabViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val loadStateStream = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val summaryDateRangeStream = MutableStateFlow(configManager.summaryDateRange)
+    val hasPVStream = MutableStateFlow(false)
 
     suspend fun load(context: Context) {
         if (approximationsViewModelStream.value != null) {
@@ -55,6 +56,7 @@ class SummaryTabViewModel(
         configManager.currentDevice.value?.let {
             val totals = fetchAllYears(it)
             approximationsViewModelStream.value = makeApproximationsViewModel(totals = totals)
+            hasPVStream.value = it.hasPV
         }
         loadStateStream.value = UiLoadState(LoadState.Inactive)
     }

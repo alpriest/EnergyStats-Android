@@ -108,6 +108,7 @@ class SummaryView(
         val isLoading = viewModel.loadStateStream.collectAsState().value.state
         val context = LocalContext.current
         val latestDataDate = viewModel.latestDataDate.collectAsState().value
+        val hasPV = viewModel.hasPVStream.collectAsState().value
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -126,6 +127,7 @@ class SummaryView(
                 else -> {
                     approximations?.let {
                         LoadedView(
+                            hasPV = hasPV,
                             approximationsViewModel = it,
                             appTheme = appTheme,
                             oldestDataDate = oldestDataDate,
@@ -144,9 +146,17 @@ class SummaryView(
     }
 
     @Composable
-    private fun LoadedView(approximationsViewModel: ApproximationsViewModel, appTheme: AppTheme, oldestDataDate: String, latestDataDate: String) {
+    private fun LoadedView(approximationsViewModel: ApproximationsViewModel, hasPV: Boolean, appTheme: AppTheme, oldestDataDate: String, latestDataDate: String) {
         EnergySummaryRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = typography.titleLarge)
-        EnergySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = typography.titleLarge)
+        if (hasPV) {
+            EnergySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = typography.titleLarge)
+        } else {
+            Text(
+                stringResource(R.string.your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data),
+                color = DimmedTextColor,
+                fontSize = appTheme.smallFontSize()
+            )
+        }
 
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 

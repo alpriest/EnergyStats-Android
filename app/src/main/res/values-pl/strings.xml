@@ -403,4 +403,8 @@
     <string name="solar">Słoneczna</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_body">Liczby w statystykach są teraz zaokrąglane do jednego miejsca po przecinku, ponieważ systemy Fox od zawsze były dokładne tylko do jednej cyfry po przecinku.</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_title">Miejsca po przecinku</string>
+    <string name="your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data">Twój falownik nie zapisuje danych o produkcji energii z PV, więc nie możemy wyświetlić historycznych danych słonecznych.</string>
+    <string name="ct2displaymode_hidden">Ukryte</string>
+    <string name="ct2displaymode_separate_icon">Osobna ikona</string>
+    <string name="ct2displaymode_as_power_string">Jako ciąg mocy</string>
 </resources>

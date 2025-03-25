@@ -402,4 +402,8 @@
     <string name="solar">Solar</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_body">Statistikwerte werden jetzt auf eine Nachkommastelle gerundet, da Fox-Systeme schon immer nur auf eine Nachkommastelle genau waren.</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_title">Nachkommastellen</string>
+    <string name="your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data">Dein Wechselrichter speichert keine PV-Erzeugungsdaten, daher können wir keine historischen Solardaten anzeigen.</string>
+    <string name="ct2displaymode_hidden">Ausgeblendet</string>
+    <string name="ct2displaymode_separate_icon">Separates Symbol</string>
+    <string name="ct2displaymode_as_power_string">Als Leistungs-String</string>
 </resources>
