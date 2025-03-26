@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.SolcastFailure
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.toHalfHourOfDay
-import com.alpriest.energystats.services.TryLaterException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
@@ -46,13 +46,15 @@ class SolarForecastViewModel(
     private val configManager: ConfigManaging
 ) : ViewModel() {
     val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())
-    var loadStateStream= MutableStateFlow<LoadState>(LoadState.Inactive)
+    var loadStateStream = MutableStateFlow<LoadState>(LoadState.Inactive)
     var tooManyRequestsStream = MutableStateFlow(false)
     var canRefreshStream = MutableStateFlow(true)
 
     suspend fun load(context: Context, ignoreCache: Boolean = false) {
         updateCanRefresh()
-        if (loadStateStream.value != LoadState.Inactive) { return }
+        if (loadStateStream.value != LoadState.Inactive) {
+            return
+        }
         val settings = themeStream.value.solcastSettings
         if (settings.sites.isEmpty() || settings.apiKey == null) {
             return
@@ -60,9 +62,11 @@ class SolarForecastViewModel(
 
         loadStateStream.value = LoadState.Active("Loading...")
 
-        try {
-            dataStream.value = settings.sites.map {
-                val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey, ignoreCache).forecasts
+        dataStream.value = settings.sites.mapNotNull { site ->
+            val forecast = solarForecastProvider().fetchForecast(site, settings.apiKey, ignoreCache)
+
+            if (forecast.failure == null) {
+                val forecasts = forecast.forecasts
                 val today = getToday()
                 val tomorrow = getTomorrow()
 
@@ -80,14 +84,23 @@ class SolarForecastViewModel(
                     todayTotal = total(todayData),
                     tomorrow = asGraphData(tomorrowData),
                     tomorrowTotal = total(tomorrowData),
-                    name = it.name,
-                    resourceId = it.resourceId
+                    name = site.name,
+                    resourceId = site.resourceId
                 )
+            } else {
+                forecast.failure?.let {
+                    when (it) {
+                        SolcastFailure.TooManyRequests ->
+                            loadStateStream.value = LoadState.Error(null, context.getString(R.string.could_not_load_forecast_you_have_exceeded_your_free_daily_limit))
+
+                        is SolcastFailure.Unknown ->
+                            loadStateStream.value = LoadState.Error(it.error, context.getString(R.string.unknown_error))
+                    }
+                }
+                null
             }
-            loadStateStream.value = LoadState.Inactive
-        } catch (ex: TryLaterException) {
-            loadStateStream.value = LoadState.Error(ex, context.getString(R.string.could_not_load_forecast_you_have_exceeded_your_free_daily_limit))
         }
+        loadStateStream.value = LoadState.Inactive
     }
 
     private fun asGraphData(data: List<SolcastForecastResponse>): List<List<DateFloatEntry>> {

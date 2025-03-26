@@ -99,6 +99,6 @@ class DemoSolarForecasting : SolcastCaching {
             it.copy(periodEnd = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()))
         }
 
-        return SolcastForecastList(false, today + tomorrow)
+        return SolcastForecastList(null, today + tomorrow)
     }
 }

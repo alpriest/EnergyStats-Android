@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.solcast
 
 import android.content.Context
+import com.alpriest.energystats.models.SolcastFailure
 import com.alpriest.energystats.models.SolcastForecastList
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.SolcastForecastResponseList
@@ -42,7 +43,7 @@ class SolcastCache(
                 return fetchAndStore(site, apiKey, previous = cachedResponseList)
             } else {
                 // Return cached data
-                return SolcastForecastList(tooManyRequests = false, forecasts = cachedResponseList.forecasts)
+                return SolcastForecastList(failure = null, forecasts = cachedResponseList.forecasts)
             }
         } ?:
         // Fetch new data
@@ -50,14 +51,17 @@ class SolcastCache(
     }
 
     private suspend fun fetchAndStore(site: SolcastSite, apiKey: String, previous: SolcastForecastResponseList? = null): SolcastForecastList {
-        var tooManyRequests = false
         var latest: MutableList<SolcastForecastResponse>
+        var failure: SolcastFailure? = null
 
         try {
             latest = service.fetchForecast(site, apiKey).forecasts.toMutableList()
         } catch (ex: TryLaterException) {
             latest = mutableListOf()
-            tooManyRequests = true
+            failure = SolcastFailure.TooManyRequests
+        } catch (ex: Exception) {
+            latest = mutableListOf()
+            failure = SolcastFailure.Unknown(ex)
         }
         val previousForecasts = previous?.forecasts ?: listOf()
         val oldestCacheData = LocalDate.now().minusDays(7).atStartOfDay()
@@ -79,7 +83,7 @@ class SolcastCache(
         val jsonText = Gson().toJson(result)
         saveForecast(site.resourceId, jsonText)
 
-        return SolcastForecastList(tooManyRequests, result.forecasts)
+        return SolcastForecastList(failure, result.forecasts)
     }
 
     private fun getCachedData(resourceId: String): String? {

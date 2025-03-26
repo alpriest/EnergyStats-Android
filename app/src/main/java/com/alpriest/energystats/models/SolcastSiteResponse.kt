@@ -23,7 +23,12 @@ data class SolcastSiteResponse(
     val installDate: String?
 )
 
+sealed class SolcastFailure {
+    data object TooManyRequests : SolcastFailure()
+    data class Unknown(val error: Exception) : SolcastFailure()
+}
+
 data class SolcastForecastList(
-    var tooManyRequests: Boolean,
+    var failure: SolcastFailure?,
     var forecasts: List<SolcastForecastResponse>
 )
