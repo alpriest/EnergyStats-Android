@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
@@ -48,7 +48,7 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
             Slider(
                 value = value,
                 onValueChange = { mutableStateValue.value = it },
-                valueRange = 0.1f..5.0f,
+                valueRange = 0.1f..10.0f,
                 modifier = Modifier.weight(1.0f),
                 steps = 48,
                 colors = SliderDefaults.colors(
@@ -61,7 +61,7 @@ fun ThresholdView(mutableStateValue: MutableState<Float>, title: String, descrip
             )
 
             Text(
-                value.toDouble().kWh(3),
+                value.toDouble().kW(3),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(0.2f),
                 color = colorScheme.onSecondary
