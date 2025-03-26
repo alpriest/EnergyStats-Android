@@ -61,7 +61,7 @@ class CurrentStatusCalculator(
     }
 
     private fun loadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
-        return status.loadsPower + (if (shouldCombineCT2WithLoadsPower) status.meterPower2 else 0.0)
+        return status.gridConsumptionPower + status.generationPower + status.feedinPower + (if (shouldCombineCT2WithLoadsPower) status.meterPower2 else 0.0)
     }
 
     private fun mapCurrentValues(response: OpenRealQueryResponse, hasPV: Boolean): CurrentRawValues {

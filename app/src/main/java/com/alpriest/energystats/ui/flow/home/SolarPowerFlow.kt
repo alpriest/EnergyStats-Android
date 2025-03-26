@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -110,23 +111,31 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
                 modifier = Modifier
                     .requiredSize(width = iconHeight, height = iconHeight)
                     .fillMaxSize()
+                    .clipToBounds()
             ) {
+                val sunBarLength = iconHeight.value * 0.45f
+                val sunBarWidth = iconHeight.value * 0.2f
+                val sunBarOffsetX = iconHeight.value * 1f
+                val centreCircleRadius = iconHeight.value * 0.4f
+
                 if (glowing) {
+                    // Glow
                     this.drawIntoCanvas {
                         it.drawCircle(
                             center = center,
-                            radius = 28f,
+                            radius = centreCircleRadius,
                             paint = paint
                         )
 
                         for (degrees in 0 until 360 step 45) {
-                            val offset = center.minus(Offset(x = 51f, y = 5f))
+                            val offset = center.minus(Offset(x = sunBarOffsetX, y = 5f))
+
                             rotate(degrees = degrees.toFloat()) {
                                 it.drawRoundRect(
                                     left = offset.x,
                                     top = offset.y,
-                                    right = offset.x + 14f,
-                                    bottom = offset.y + 8f,
+                                    right = offset.x + sunBarLength,
+                                    bottom = offset.y + sunBarWidth,
                                     paint = paint,
                                     radiusX = 8f,
                                     radiusY = 8f
@@ -139,16 +148,16 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStre
                 drawCircle(
                     color = sunColor,
                     center = center,
-                    radius = 28f,
+                    radius = centreCircleRadius
                 )
 
-                for (degrees in 0 until 360 step 45) {
+                for (degrees in 44 until 360 step 45) {
                     rotate(degrees = degrees.toFloat()) {
                         drawRoundRect(
                             color = sunColor,
-                            size = Size(width = 14f, height = 8f),
-                            topLeft = center.minus(Offset(x = 51f, y = 5f)),
-                            cornerRadius = CornerRadius(x = 8f, y = 8f)
+                            size = Size(width = sunBarLength, height = sunBarWidth),
+                            topLeft = center.minus(Offset(x = sunBarOffsetX, y = 5f)),
+                            cornerRadius = CornerRadius(x = 4f, y = 4f)
                         )
                     }
                 }

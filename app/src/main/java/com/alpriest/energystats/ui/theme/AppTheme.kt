@@ -71,8 +71,8 @@ data class AppTheme(
 
     fun iconHeight(): Dp {
         return when (useLargeDisplay) {
-            false -> 40.dp
             true -> 60.dp
+            false -> 40.dp
         }
     }
 
