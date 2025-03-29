@@ -26,6 +26,7 @@ import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.BannerAlertManager
+import com.alpriest.energystats.ui.flow.CurrentValues
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.ShimmerText
@@ -115,18 +116,13 @@ private fun GridTotals(
 fun GridIconViewPreview() {
     val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
         LocalContext.current,
-        solar = 1.0,
-        solarStrings = listOf(
+        currentValuesStream = MutableStateFlow(CurrentValues(2.45, 2.45, null, 0.4, 1.0, listOf(
             StringPower("pv1", 0.3),
             StringPower("pv2", 0.7)
-        ),
-        home = 2.45,
-        grid = 2.45,
-        inverterTemperatures = null,
+        ))),
         hasBattery = true,
         battery = BatteryViewModel(),
         FakeConfigManager(),
-        ct2 = 0.4,
         currentDevice = Device.preview(),
         network = DemoNetworking(),
         BannerAlertManager()

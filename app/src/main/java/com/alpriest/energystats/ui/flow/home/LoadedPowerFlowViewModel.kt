@@ -14,6 +14,7 @@ import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
+import com.alpriest.energystats.ui.flow.CurrentValues
 import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.StringPower
@@ -24,6 +25,7 @@ import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -35,19 +37,20 @@ data class InverterTemperatures(
 
 class LoadedPowerFlowViewModel(
     val context: Context,
-    val solar: Double,
-    private val solarStrings: List<StringPower>,
-    val home: Double,
-    val grid: Double,
-    val inverterTemperatures: InverterTemperatures?,
+    currentValuesStream: StateFlow<CurrentValues>,
     val hasBattery: Boolean,
     val battery: BatteryViewModel,
     val configManager: ConfigManaging,
-    val ct2: Double,
     val currentDevice: Device,
     val network: Networking,
     private val bannerAlertManager: BannerAlertManaging
 ) : ViewModel() {
+    var solarStrings: List<StringPower> = listOf()
+    var inverterTemperatures: InverterTemperatures? = null
+    var solar: Double = 0.0
+    var home: Double = 0.0
+    var grid: Double = 0.0
+    var ct2: Double = 0.0
     val deviceState = MutableStateFlow<DeviceState>(DeviceState.Unknown)
     val homeTotal = MutableStateFlow<Double?>(null)
     val gridImportTotal = MutableStateFlow<Double?>(null)
@@ -72,6 +75,18 @@ class LoadedPowerFlowViewModel(
                 if (it.powerFlowStrings.enabled) {
                     displayStrings.value = displayStrings.value.plus(solarStrings)
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            currentValuesStream.collect {
+                solar = it.solarPower
+                home = it.homeConsumption
+                grid = it.grid
+                ct2 = it.ct2
+                solarStrings = it.solarStringsPower
+                solar = it.solarPower
+                inverterTemperatures = it.temperatures
             }
         }
     }

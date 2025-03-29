@@ -47,6 +47,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.ui.flow.BannerAlertManager
+import com.alpriest.energystats.ui.flow.CurrentValues
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
@@ -392,18 +393,14 @@ fun SummaryPowerFlowViewPreview() {
             ),
             loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
                 LocalContext.current,
-                solar = 1.0,
-                solarStrings = listOf(
-                    StringPower("PV1", 0.3),
-                    StringPower("PV2", 0.7)
-                ),
-                home = 2.454,
-                grid = 1.234,
-                inverterTemperatures = null,
+                currentValuesStream = MutableStateFlow(
+                    CurrentValues(2.45, 2.45, null, 0.4, 1.0, listOf(
+                    StringPower("pv1", 0.3),
+                    StringPower("pv2", 0.7)
+                ))),
                 hasBattery = true,
                 battery = BatteryViewModel(),
                 FakeConfigManager(),
-                ct2 = 0.4,
                 currentDevice = Device.preview(),
                 network = DemoNetworking(),
                 BannerAlertManager()

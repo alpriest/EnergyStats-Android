@@ -42,6 +42,7 @@ class PowerFlowTabViewModel(
     private val bannerAlertManager: BannerAlertManaging
 ) : ViewModel() {
 
+    private var currentViewModel: CurrentStatusCalculator? = null
     val bannerAlertStream: MutableStateFlow<BannerAlertType?> = bannerAlertManager.bannerAlertStream
     private var launchIn: Job? = null
     private var timer: CountDownTimer? = null
@@ -175,9 +176,11 @@ class PowerFlowTabViewModel(
 
                 val currentViewModel = CurrentStatusCalculator(
                     real,
-                    currentDevice.hasPV,
-                    configManager
+                    currentDevice,
+                    configManager,
+                    viewModelScope
                 )
+                this.currentViewModel = currentViewModel
 
                 val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real, configManager, context)
                 if (battery.hasBattery) {
@@ -193,15 +196,10 @@ class PowerFlowTabViewModel(
 
                 val summary = LoadedPowerFlowViewModel(
                     context,
-                    solar = currentViewModel.currentSolarPower,
-                    solarStrings = currentViewModel.currentSolarStringsPower,
-                    home = currentViewModel.currentHomeConsumption,
-                    grid = currentViewModel.currentGrid,
-                    inverterTemperatures = currentViewModel.currentTemperatures,
+                    currentValuesStream = currentViewModel.currentValuesStream,
                     hasBattery = battery.hasBattery,
                     battery = battery,
                     configManager = configManager,
-                    ct2 = currentViewModel.currentCT2,
                     currentDevice = currentDevice,
                     network = network,
                     bannerAlertManager

@@ -1,11 +1,17 @@
 package com.alpriest.energystats.ui.flow
 
+import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import kotlin.math.abs
 
@@ -36,32 +42,53 @@ data class StringPower(val name: String, val amount: Double) {
     }
 }
 
+data class CurrentValues(
+    val grid: Double,
+    val homeConsumption: Double,
+    val temperatures: InverterTemperatures?,
+    val ct2: Double,
+    val solarPower: Double,
+    val solarStringsPower: List<StringPower>
+)
+
 class CurrentStatusCalculator(
-    response: OpenRealQueryResponse,
-    hasPV: Boolean,
-    val config: ConfigManaging
+    val response: OpenRealQueryResponse,
+    val device: Device,
+    val config: ConfigManaging,
+    coroutineScope: CoroutineScope
 ) {
-    val currentGrid: Double
-    val currentHomeConsumption: Double
-    val currentTemperatures: InverterTemperatures
-    val lastUpdate: LocalDateTime
-    val currentCT2: Double
-    val currentSolarPower: Double
-    val currentSolarStringsPower: List<StringPower>
+    private val _currentValuesStream = MutableStateFlow(CurrentValues(solarPower = 0.0, solarStringsPower = listOf(), grid = 0.0, homeConsumption = 0.0, temperatures = null, ct2 = 0.0))
+    val currentValuesStream: StateFlow<CurrentValues> = _currentValuesStream.asStateFlow()
+    var lastUpdate: LocalDateTime = LocalDateTime.now()
 
     init {
-        val status = mapCurrentValues(response, hasPV)
-        currentGrid = status.feedinPower - status.gridConsumptionPower
-        currentHomeConsumption = loadsPower(status, config.shouldCombineCT2WithLoadsPower)
-        currentTemperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
-        lastUpdate = parseToLocalDate(status.lastUpdate)
-        currentCT2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
-        currentSolarPower = calculateSolarPower(status.hasPV, status, config.shouldCombineCT2WithPVPower)
-        currentSolarStringsPower = calculateSolarStringsPower(status.hasPV, status)
+        coroutineScope.launch {
+            config.themeStream.collect {
+                updateCurrentValues()
+            }
+        }
+
+        updateCurrentValues()
     }
 
-    private fun loadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
-        return status.gridConsumptionPower + status.generationPower - status.feedinPower + (if (shouldCombineCT2WithLoadsPower) abs(status.meterPower2) else 0.0)
+    private fun updateCurrentValues() {
+        val status = mapCurrentValues(response, device.hasPV)
+        val grid = status.feedinPower - status.gridConsumptionPower
+        val homeConsumption = loadsPower(status, config.shouldCombineCT2WithLoadsPower)
+        val temperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
+        lastUpdate = parseToLocalDate(status.lastUpdate)
+        val ct2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
+        val solarPower = calculateSolarPower(status.hasPV, status, config.shouldInvertCT2, config.shouldCombineCT2WithPVPower)
+        val solarStringsPower = calculateSolarStringsPower(status.hasPV, status)
+
+        _currentValuesStream.value = CurrentValues(
+            grid = grid,
+            homeConsumption = homeConsumption,
+            temperatures = temperatures,
+            ct2 = ct2,
+            solarPower = solarPower,
+            solarStringsPower = solarStringsPower
+        )
     }
 
     private fun mapCurrentValues(response: OpenRealQueryResponse, hasPV: Boolean): CurrentRawValues {
@@ -86,11 +113,17 @@ class CurrentStatusCalculator(
         )
     }
 
-    private fun calculateSolarPower(hasPV: Boolean, status: CurrentRawValues, shouldCombineCT2WithPVPower: Boolean): Double {
+    private fun loadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
+        return status.gridConsumptionPower + status.generationPower - status.feedinPower + (if (shouldCombineCT2WithLoadsPower) abs(status.meterPower2) else 0.0)
+    }
+
+    private fun calculateSolarPower(hasPV: Boolean, status: CurrentRawValues, shouldInvertCT2: Boolean, shouldCombineCT2WithPVPower: Boolean): Double {
+        val ct2 = if (shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
+
         return if (hasPV) {
-            status.pvPower + (if (shouldCombineCT2WithPVPower) currentCT2 else 0.0)
+            status.pvPower + (if (shouldCombineCT2WithPVPower) ct2 else 0.0)
         } else {
-            currentCT2
+            ct2
         }
     }
 
