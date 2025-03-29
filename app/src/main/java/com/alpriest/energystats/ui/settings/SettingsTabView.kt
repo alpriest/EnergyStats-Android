@@ -113,8 +113,13 @@ fun SettingsTabView(
                 title = stringResource(R.string.edit_api_key),
                 onClick = { navController.navigate(SettingsScreen.APIKey.name) }
             )
-
             HorizontalDivider()
+
+//            InlineSettingsNavButton(
+//                title = "Invert - automation made easy",
+//                onClick = { navController.navigate(SettingsScreen.InvertAutomation.name) }
+//            )
+//            HorizontalDivider()
 
             ReloadDevicesButton(config)
         }

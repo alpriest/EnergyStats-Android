@@ -6,10 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatteryChargeScheduleSettingsView
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
@@ -31,11 +29,9 @@ fun NavigableSettingsView(
     config: ConfigManaging,
     userManager: UserManaging,
     onLogout: () -> Unit,
-    networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
     network: Networking,
-    credentialStore: CredentialStore,
     solarForecastingProvider: () -> SolcastCaching,
     templateStore: TemplateStoring
 ) {
@@ -166,6 +162,12 @@ fun NavigableSettingsView(
         composable(SettingsScreen.DataSettings.name) {
             LoadedScaffold(title = stringResource(R.string.settings_data), navController = navController) {
                 DataSettingsView(config, it)
+            }
+        }
+
+        composable(SettingsScreen.InvertAutomation.name) {
+            LoadedScaffold(title = "Invert", navController = navController) {
+                InvertView(it)
             }
         }
 

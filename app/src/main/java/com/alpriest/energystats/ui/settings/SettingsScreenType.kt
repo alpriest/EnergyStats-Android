@@ -20,5 +20,6 @@ enum class SettingsScreen {
     EditTemplate,
     APIKey,
     PowerStation,
-    DataSettings
+    DataSettings,
+    InvertAutomation
 }

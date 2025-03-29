@@ -127,11 +127,9 @@ fun TabbedView(
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,
-                        network = network,
-                        networkStore = networkStore,
                         onRateApp = onRateApp,
                         onBuyMeCoffee = onBuyMeCoffee,
-                        credentialStore = credentialStore,
+                        network = network,
                         solarForecastingProvider = solarForecastingProvider,
                         templateStore = templateStore
                     )
