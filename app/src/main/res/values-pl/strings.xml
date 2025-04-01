@@ -407,4 +407,6 @@
     <string name="ct2displaymode_hidden">Ukryte</string>
     <string name="ct2displaymode_separate_icon">Osobna ikona</string>
     <string name="ct2displaymode_as_power_string">Jako ciąg mocy</string>
+    <string name="invert_energy_disclaimer">Energy Stats nie jest powiązany z Invert, ale ich usługa może zainteresować właścicieli falowników Fox ESS, którzy chcą zoptymalizować zużycie energii i zaoszczędzić pieniądze.</string>
+    <string name="visit_invert">Odwiedź Invert</string>
 </resources>

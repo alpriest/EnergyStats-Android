@@ -411,6 +411,6 @@
     <string name="ct2displaymode_hidden">Hidden</string>
     <string name="ct2displaymode_separate_icon">Separate icon</string>
     <string name="ct2displaymode_as_power_string">As power string</string>
-    <string name="invert_energy_disclaimer">Energy Stats is not affiliated with Invert, but we believe their service may help users of Fox ESS inverters optimise energy usage and save money.</string>
+    <string name="invert_energy_disclaimer">Energy Stats is not affiliated with Invert, but their service may be of interest to owners of Fox ESS inverters to optimise energy usage and save money.</string>
     <string name="visit_invert">Visit Invert</string>
 </resources>
