@@ -220,7 +220,8 @@ class DemoAPI : FoxAPIServicing {
             slaveVersion = "slave1",
             hardwareVersion = "hardware1",
             function = DeviceFunction(scheduler = true),
-            stationName = "my station"
+            stationName = "my station",
+            batteryList = null
         )
     }
 

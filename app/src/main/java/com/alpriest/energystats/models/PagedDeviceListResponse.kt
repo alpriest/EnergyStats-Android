@@ -33,7 +33,14 @@ class DeviceDetailResponse(
     val productType: String,
     val deviceType: String,
     val hasBattery: Boolean,
-    val hasPV: Boolean
+    val hasPV: Boolean,
+    val batteryList: List<DeviceBatteryResponse>?
+)
+
+data class DeviceBatteryResponse(
+    val batterySN: String,
+    val type: String,
+    val version: String
 )
 
 data class DeviceFunction(
@@ -95,4 +102,10 @@ data class PowerStationDetailResponse(
 data class ApiRequestCountResponse(
     val total: String,
     val remaining: String
+)
+
+data class DeviceBatteryModule(
+    val batterySN: String,
+    val type: String,
+    val version: String
 )

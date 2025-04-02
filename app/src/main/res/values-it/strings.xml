@@ -408,10 +408,9 @@
     <string name="ct2displaymode_separate_icon">Icona separata</string>
     <string name="ct2displaymode_as_power_string">Come stringa di potenza</string>
     <string name="invert_energy_disclaimer">Energy Stats non è affiliato con Invert, ma il loro servizio potrebbe interessare ai proprietari di inverter Fox ESS per ottimizzare l\'uso dell\'energia e risparmiare denaro.</string>
-    <string name="invert_energy_disclaimer">Energy Stats non è affiliato con Invert, ma il loro servizio potrebbe interessare ai proprietari di inverter Fox ESS per ottimizzare l\'uso dell\'energia e risparmiare denaro.</string>
-    <string name="invert_energy_disclaimer">Energy Stats non è affiliato con Invert, ma il loro servizio potrebbe interessare ai proprietari di inverter Fox ESS per ottimizzare l\'uso dell\'energia e risparmiare denaro.</string>
-    <string name="invert_energy_disclaimer">Energy Stats non è affiliato con Invert, ma il loro servizio potrebbe interessare ai proprietari di inverter Fox ESS per ottimizzare l\'uso dell\'energia e risparmiare denaro.</string>
-    <string name="invert_energy_disclaimer">Energy Stats non è affiliato con Invert, ma il loro servizio potrebbe interessare ai proprietari di inverter Fox ESS per ottimizzare l\'uso dell\'energia e risparmiare denaro.</string>
-    <string name="invert_energy_disclaimer">Energy Stats non è affiliato con Invert, ma il loro servizio potrebbe interessare ai proprietari di inverter Fox ESS per ottimizzare l\'uso dell\'energia e risparmiare denaro.</string>
     <string name="visit_invert">Visita Invert</string>
+    <string name="batteries">Batterie</string>
+    <string name="no_battery_information_available">Nessuna informazione sulla batteria disponibile</string>
+    <string name="type">Tipo: %1$s</string>
+    <string name="version">Versione: %1$s</string>
 </resources>

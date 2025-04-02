@@ -413,4 +413,8 @@
     <string name="ct2displaymode_as_power_string">As power string</string>
     <string name="invert_energy_disclaimer">Energy Stats is not affiliated with Invert, but their service may be of interest to owners of Fox ESS inverters to optimise energy usage and save money.</string>
     <string name="visit_invert">Visit Invert</string>
+    <string name="batteries">Batteries</string>
+    <string name="no_battery_information_available">No battery information available</string>
+    <string name="type">Type: %1$s</string>
+    <string name="version">Version: %1$s</string>
 </resources>

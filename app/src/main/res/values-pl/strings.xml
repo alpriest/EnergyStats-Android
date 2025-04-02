@@ -409,4 +409,8 @@
     <string name="ct2displaymode_as_power_string">Jako ciąg mocy</string>
     <string name="invert_energy_disclaimer">Energy Stats nie jest powiązany z Invert, ale ich usługa może zainteresować właścicieli falowników Fox ESS, którzy chcą zoptymalizować zużycie energii i zaoszczędzić pieniądze.</string>
     <string name="visit_invert">Odwiedź Invert</string>
+    <string name="batteries">Baterie</string>
+    <string name="no_battery_information_available">Brak dostępnych informacji o baterii</string>
+    <string name="type">Typ: %1$s</string>
+    <string name="version">Wersja: %1$s</string>
 </resources>

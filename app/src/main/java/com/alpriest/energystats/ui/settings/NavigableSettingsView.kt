@@ -171,6 +171,12 @@ fun NavigableSettingsView(
             }
         }
 
+        composable(SettingsScreen.BatteryVersions.name) {
+            LoadedScaffold(title = stringResource(R.string.batteries), navController = navController) {
+                BatteryFirmwareVersionsView(config, network).Content(it)
+            }
+        }
+
         debugGraph(navController, network)
     }
 }

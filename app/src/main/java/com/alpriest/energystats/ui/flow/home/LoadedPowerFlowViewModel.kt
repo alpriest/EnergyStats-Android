@@ -26,6 +26,7 @@ import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 const val dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -65,28 +66,26 @@ class LoadedPowerFlowViewModel(
         loadTotals()
 
         viewModelScope.launch {
-            configManager.themeStream.collect { it ->
+            combine(configManager.themeStream, currentValuesStream) { theme, currentValues ->
+                Pair(theme, currentValues)
+            }.collect { (theme, currentValues) ->
+                solar = currentValues.solarPower
+                home = currentValues.homeConsumption
+                grid = currentValues.grid
+                ct2 = currentValues.ct2
+                solarStrings = currentValues.solarStringsPower
+                solar = currentValues.solarPower
+                inverterTemperatures = currentValues.temperatures
+
                 displayStrings.value = listOf()
 
-                if (it.ct2DisplayMode == CT2DisplayMode.AsPowerString) {
+                if (theme.ct2DisplayMode == CT2DisplayMode.AsPowerString) {
                     displayStrings.value = displayStrings.value.plus(StringPower("CT2", ct2))
                 }
 
-                if (it.powerFlowStrings.enabled) {
+                if (theme.powerFlowStrings.enabled) {
                     displayStrings.value = displayStrings.value.plus(solarStrings)
                 }
-            }
-        }
-
-        viewModelScope.launch {
-            currentValuesStream.collect {
-                solar = it.solarPower
-                home = it.homeConsumption
-                grid = it.grid
-                ct2 = it.ct2
-                solarStrings = it.solarStringsPower
-                solar = it.solarPower
-                inverterTemperatures = it.temperatures
             }
         }
     }

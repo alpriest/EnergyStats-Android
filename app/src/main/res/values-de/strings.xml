@@ -407,12 +407,9 @@
     <string name="ct2displaymode_separate_icon">Separates Symbol</string>
     <string name="ct2displaymode_as_power_string">Als Leistungs-String</string>
     <string name="invert_energy_disclaimer">Energy Stats ist nicht mit Invert verbunden, aber deren Service könnte für Besitzer von Fox ESS-Wechselrichtern interessant sein, um den Energieverbrauch zu optimieren und Geld zu sparen.</string>
-    <string name="invert_energy_disclaimer">Energy Stats ist nicht mit Invert verbunden, aber deren Service könnte für Besitzer von Fox ESS-Wechselrichtern interessant sein, um den Energieverbrauch zu optimieren und Geld zu sparen.</string>
-    <string name="invert_energy_disclaimer">Energy Stats ist nicht mit Invert verbunden, aber deren Service könnte für Besitzer von Fox ESS-Wechselrichtern interessant sein, um den Energieverbrauch zu optimieren und Geld zu sparen.</string>
-    <string name="invert_energy_disclaimer">sdf</string>
-    <string name="invert_energy_disclaimer">sdf</string>
-    <string name="invert_energy_disclaimer">sdf</string>
-    <string name="invert_energy_disclaimer">sdf</string>
-    <string name="invert_energy_disclaimer">Energy Stats ist nicht mit Invert verbunden, aber deren Service könnte für Besitzer von Fox ESS-Wechselrichtern interessant sein, um den Energieverbrauch zu optimieren und Geld zu sparen.</string>
     <string name="visit_invert">Besuchen Invert</string>
+    <string name="batteries">Batterien</string>
+    <string name="no_battery_information_available">Keine Batterieinformationen verfügbar</string>
+    <string name="type">Typ: %1$s</string>
+    <string name="version">Version: %1$s</string>
 </resources>

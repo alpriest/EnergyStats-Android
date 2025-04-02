@@ -408,4 +408,8 @@
     <string name="ct2displaymode_as_power_string">Como cadena de potencia</string>
     <string name="invert_energy_disclaimer">Energy Stats no está afiliado con Invert, pero su servicio puede ser de interés para los propietarios de inversores Fox ESS que deseen optimizar el uso de energía y ahorrar dinero.</string>
     <string name="visit_invert">Visitar Invert</string>
+    <string name="batteries">Baterías</string>
+    <string name="no_battery_information_available">No hay información de batería disponible</string>
+    <string name="type">Tipo: %1$s</string>
+    <string name="version">Versión: %1$s</string>
 </resources>

@@ -219,6 +219,12 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 footer = batteryTemperateDisplayModeFooter(batteryTemperatureDisplayModeState.value)
             )
         }
+
+        SettingsColumn {
+            InlineSettingsNavButton("Battery versions") {
+                navController.navigate(SettingsScreen.BatteryVersions.name)
+            }
+        }
     }
 }
 
