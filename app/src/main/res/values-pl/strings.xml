@@ -413,4 +413,7 @@
     <string name="no_battery_information_available">Brak dostępnych informacji o baterii</string>
     <string name="type">Typ: %1$s</string>
     <string name="version">Wersja: %1$s</string>
+    <string name="chucker_description">Chucker jest zawarty w aplikacji, aby pomóc w rozwiązywaniu problemów. Umożliwia użytkownikom przeglądanie własnej aktywności sieciowej – takich jak dane wysyłane lub odbierane przez aplikację – oraz opcjonalnie eksportowanie tych informacji w celu udostępnienia zespołowi deweloperskiemu. To narzędzie służy wyłącznie do diagnozowania problemów i nie ma wpływu na korzystanie z aplikacji.</string>
+    <string name="launch_chucker">Uruchom Chucker</string>
+    <string name="view_request_count">Zobacz liczbę żądań</string>
 </resources>

@@ -70,10 +70,10 @@ fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
                 val intent = Chucker.getLaunchIntent(context)
                 context.startActivity(intent)
             }) {
-                Text("Launch Chucker")
+                Text(stringResource(R.string.launch_chucker))
             }
 
-            Text("Chucker is a tool that lets developers see the app’s network activity, like what data it sends or receives. It helps identify and fix issues by showing this information in real time, but it doesn’t affect how you use the app.")
+            Text(stringResource(R.string.chucker_description))
 
         }
 
@@ -89,7 +89,7 @@ fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
                     }
                 }
             }) {
-                Text("View request count")
+                Text(stringResource(R.string.view_request_count))
             }
         }
     }

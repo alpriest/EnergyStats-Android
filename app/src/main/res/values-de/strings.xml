@@ -412,4 +412,7 @@
     <string name="no_battery_information_available">Keine Batterieinformationen verfügbar</string>
     <string name="type">Typ: %1$s</string>
     <string name="version">Version: %1$s</string>
+    <string name="chucker_description">Chucker ist in der App enthalten, um bei Problemen zu helfen. Es ermöglicht Nutzern, ihre eigene Netzwerkaktivität – also welche Daten die App sendet oder empfängt – anzusehen und bei Bedarf zu exportieren, um sie dem Entwicklungsteam zur Verfügung zu stellen. Dieses Tool dient ausschließlich zur Fehlerbehebung und hat keinen Einfluss auf die Nutzung der App.</string>
+    <string name="launch_chucker">Chucker starten</string>
+    <string name="view_request_count">Anzahl der Anfragen anzeigen</string>
 </resources>
