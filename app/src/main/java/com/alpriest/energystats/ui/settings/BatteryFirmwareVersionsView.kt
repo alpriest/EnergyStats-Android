@@ -43,7 +43,7 @@ class BatteryFirmwareVersionsView(
 ) {
 
     @Composable
-    fun Content(it: Modifier, viewModel: BatteryFirmwareVersionsViewModel = viewModel(factory = BatteryFirmwareVersionsViewModelFactory(configManager, network)),) {
+    fun Content(modifier: Modifier, viewModel: BatteryFirmwareVersionsViewModel = viewModel(factory = BatteryFirmwareVersionsViewModelFactory(configManager, network))) {
         LaunchedEffect(null) {
             viewModel.load()
         }
@@ -55,7 +55,7 @@ class BatteryFirmwareVersionsView(
                 if (batteries.isEmpty()) {
                     Text(stringResource(R.string.no_battery_information_available))
                 } else {
-                    SettingsPage(it) {
+                    SettingsPage(modifier) {
                         SettingsColumn {
                             batteries.forEachIndexed { index, battery ->
                                 Column(

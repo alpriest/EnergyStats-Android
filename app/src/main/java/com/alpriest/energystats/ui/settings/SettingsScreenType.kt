@@ -22,5 +22,6 @@ enum class SettingsScreen {
     PowerStation,
     DataSettings,
     InvertAutomation,
-    BatteryVersions
+    BatteryVersions,
+    ConfigureExportLimit
 }

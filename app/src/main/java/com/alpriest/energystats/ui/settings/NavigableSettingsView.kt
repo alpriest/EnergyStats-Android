@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.login.UserManaging
@@ -174,6 +175,12 @@ fun NavigableSettingsView(
         composable(SettingsScreen.BatteryVersions.name) {
             LoadedScaffold(title = stringResource(R.string.batteries), navController = navController) {
                 BatteryFirmwareVersionsView(config, network).Content(it)
+            }
+        }
+
+        composable(SettingsScreen.ConfigureExportLimit.name) {
+            LoadedScaffold(title = stringResource(id = R.string.export_limit), navController = navController) {
+                DeviceSettingsItemView(config, network, DeviceSettingsItem.ExportLimit).Content(it)
             }
         }
 

@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
@@ -145,6 +146,12 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 
             FirmwareVersionView(device, network)
             DeviceVersionView(device)
+
+            SettingsColumn {
+                InlineSettingsNavButton(DeviceSettingsItem.ExportLimit.title(context)) {
+                    navController.navigate(SettingsScreen.ConfigureExportLimit.name)
+                }
+            }
         }
     }
 }

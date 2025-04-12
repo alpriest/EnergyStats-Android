@@ -420,4 +420,6 @@
     <string name="launch_chucker">Launch Chucker</string>
     <string name="view_request_count">View request count</string>
     <string name="chucker_description">Chucker is included in the app to help with issues. It allows users to view their own network activity — like what data the app sends or receives — and optionally export it to share with the development team. This tool is only for troubleshooting and has no effect on how you use the app.</string>
+    <string name="export_limit">Export Limit</string>
+    <string name="max_soc">Max SoC</string>
 </resources>

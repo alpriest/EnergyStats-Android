@@ -1,11 +1,22 @@
 package com.alpriest.energystats.models
 
+import android.content.Context
+import com.alpriest.energystats.R
+
 enum class DeviceSettingsItem(val rawValue: String) {
     ExportLimit("ExportLimit"),
     MinSoc("MinSoc"),
     MinSocOnGrid("MinSocOnGrid"),
     MaxSoc("MaxSoc"),
-    GridCode("GridCode")
+    GridCode("GridCode");
+
+    fun title(context: Context): String {
+        return when (this) {
+            ExportLimit -> context.getString(R.string.export_limit)
+            MaxSoc -> context.getString(R.string.max_soc)
+            else -> ""
+        }
+    }
 }
 
 data class FetchDeviceSettingsItemRequest(
