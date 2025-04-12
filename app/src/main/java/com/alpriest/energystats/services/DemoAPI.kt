@@ -9,7 +9,9 @@ import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.models.DataLoggerStatusDeserializer
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceFunction
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
+import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
@@ -237,9 +239,21 @@ class DemoAPI : FoxAPIServicing {
         return ApiRequestCountResponse("10", "5")
     }
 
+    override suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse {
+        return FetchDeviceSettingsItemResponse(
+            value = "1.0",
+            unit = "kWh",
+            precision = 1.0,
+            range = FetchDeviceSettingsItemResponse.Range(min = 0.0, max = 100.0)
+        )
+    }
+
+    override suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
+    }
+
     override suspend fun fetchErrorMessages() {}
 
-    fun makeGson(): Gson {
+    private fun makeGson(): Gson {
         return GsonBuilder()
             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
@@ -247,77 +261,4 @@ class DemoAPI : FoxAPIServicing {
             .registerTypeAdapter(OpenRealQueryResponseDeserializer::class.java, OpenRealQueryResponseDeserializer())
             .create()
     }
-
-//    override suspend fun createScheduleTemplate(name: String, description: String) {
-//        // Do nothing
-//    }
-//
-//    override suspend fun enableScheduleTemplate(deviceSN: String, templateID: String) {
-//        // Do nothing
-//    }
-//
-//    override suspend fun deleteSchedule(deviceSN: String) {
-//        // Do nothing
-//    }
-//
-//    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
-//        // Do nothing
-//    }
-//
-//    override suspend fun saveScheduleTemplate(deviceSN: String, scheduleTemplate: ScheduleTemplate) {
-//        // Do nothing
-//    }
-
-//    override suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleListResponse {
-//        return ScheduleListResponse(
-//            data = listOf(
-//                ScheduleTemplateSummaryResponse(templateName = "Winter charging", enable = false, templateID = "123"),
-//                ScheduleTemplateSummaryResponse(templateName = "", enable = true, templateID = "")
-//            ),
-//            enable = true,
-//            pollcy = listOf(
-//                SchedulePollcy(startH = 15, startM = 0, endH = 17, endM = 0, fdpwr = 0, workMode = "ForceCharge", fdsoc = 100, minsocongrid = 100),
-//                SchedulePollcy(startH = 17, startM = 0, endH = 18, endM = 30, fdpwr = 3500, workMode = "ForceDischarge", fdsoc = 20, minsocongrid = 20)
-//            )
-//        )
-//    }
-
-//    override suspend fun fetchSchedulerFlag(deviceSN: String): SchedulerFlagResponse {
-//        return SchedulerFlagResponse(enable = true, support = true)
-//    }
-
-//    override suspend fun fetchScheduleModes(deviceID: String): List<SchedulerModeResponse> {
-//        return listOf(
-//            SchedulerModeResponse(color = "#80F6BD16", name = "Back Up", key = "Backup"),
-//            SchedulerModeResponse(color = "#805B8FF9", name = "Feed-in Priority", key = "Feedin"),
-//            SchedulerModeResponse(color = "#80BBE9FB", name = "Force Charge", key = "ForceCharge"),
-//            SchedulerModeResponse(color = "#8065789B", name = "Force Discharge", key = "ForceDischarge"),
-//            SchedulerModeResponse(color = "#8061DDAA", name = "Self-Use", key = "SelfUse")
-//        )
-//    }
-//
-//    override suspend fun fetchScheduleTemplate(deviceSN: String, templateID: String): ScheduleTemplateResponse {
-//        return ScheduleTemplateResponse(
-//            templateName = "Template-1",
-//            enable = false,
-//            pollcy = listOf(
-//                SchedulePollcy(startH = 15, startM = 0, endH = 17, endM = 0, fdpwr = 0, workMode = "ForceCharge", fdsoc = 100, minsocongrid = 100),
-//                SchedulePollcy(startH = 17, startM = 0, endH = 18, endM = 30, fdpwr = 3500, workMode = "ForceDischarge", fdsoc = 20, minsocongrid = 20)
-//            ),
-//            content = "Description of template 1"
-//        )
-//    }
-
-//    override suspend fun deleteScheduleTemplate(templateID: String) {
-//    }
-//
-//    override suspend fun fetchScheduleTemplates(): ScheduleTemplateListResponse {
-//        return ScheduleTemplateListResponse(
-//            data = listOf(
-//                ScheduleTemplateSummaryResponse(templateName = "Winter charging", enable = false, templateID = "1"),
-//                ScheduleTemplateSummaryResponse(templateName = "Summer charging", enable = false, templateID = "2"),
-//                ScheduleTemplateSummaryResponse(templateName = "Saving session", enable = false, templateID = "3")
-//            )
-//        )
-//    }
 }

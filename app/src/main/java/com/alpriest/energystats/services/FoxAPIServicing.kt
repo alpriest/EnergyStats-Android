@@ -5,7 +5,9 @@ import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
+import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -51,6 +53,8 @@ interface FoxAPIServicing {
     suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse
     suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse
     suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse
+    suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse
+    suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

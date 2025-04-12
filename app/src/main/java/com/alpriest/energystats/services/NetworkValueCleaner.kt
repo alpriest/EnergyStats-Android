@@ -5,7 +5,9 @@ import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
+import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -132,6 +134,14 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
 
     override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
         return api.openapi_fetchRequestCount()
+    }
+
+    override suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse {
+        return api.openapi_fetchDeviceSettingsItem(deviceSN, item)
+    }
+
+    override suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
+        return api.openapi_setDeviceSettingsItem(deviceSN, item, value)
     }
 
     override suspend fun fetchErrorMessages() {

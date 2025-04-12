@@ -11,8 +11,11 @@ import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.models.DataLoggerStatusDeserializer
 import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceListRequest
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.ErrorMessagesResponse
+import com.alpriest.energystats.models.FetchDeviceSettingsItemRequest
+import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.models.GetSchedulerFlagRequest
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
@@ -37,6 +40,7 @@ import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.SetBatterySOCRequest
 import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetCurrentScheduleRequest
+import com.alpriest.energystats.models.SetDeviceSettingsItemRequest
 import com.alpriest.energystats.models.SetSchedulerFlagRequest
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
@@ -356,6 +360,32 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         val request = Request.Builder()
             .post(body)
             .url(URLs.setOpenCurrentSchedule())
+            .build()
+
+        executeWithoutResponse(request)
+    }
+
+    override suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse {
+        val body = Gson().toJson(FetchDeviceSettingsItemRequest(deviceSN, item.rawValue))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.fetchDeviceSettingsItem())
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<FetchDeviceSettingsItemResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<FetchDeviceSettingsItemResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
+        val body = Gson().toJson(SetDeviceSettingsItemRequest(deviceSN, item.rawValue, value))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.setDeviceSettingsItem())
             .build()
 
         executeWithoutResponse(request)

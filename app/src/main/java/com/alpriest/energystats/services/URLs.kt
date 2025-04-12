@@ -200,6 +200,14 @@ object URLs {
     fun getRequestCount(): HttpUrl {
         return "https://www.foxesscloud.com/op/v0/user/getAccessCount".toHttpUrl()
     }
+
+    fun fetchDeviceSettingsItem(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/setting/get".toHttpUrl()
+    }
+
+    fun setDeviceSettingsItem(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/setting/set".toHttpUrl()
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

@@ -5,7 +5,9 @@ import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
+import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -38,6 +40,8 @@ interface Networking {
     suspend fun fetchDevice(deviceSN: String): DeviceDetailResponse
     suspend fun fetchPowerStationDetail(): PowerStationDetail?
     suspend fun fetchRequestCount(): ApiRequestCountResponse
+    suspend fun fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse
+    suspend fun setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String)
 }
 
 open class NetworkService(val api: FoxAPIServicing) : Networking {
@@ -116,5 +120,13 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
 
     override suspend fun fetchRequestCount(): ApiRequestCountResponse {
         return api.openapi_fetchRequestCount()
+    }
+
+    override suspend fun fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse {
+        return api.openapi_fetchDeviceSettingsItem(deviceSN, item)
+    }
+
+    override suspend fun setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
+        return api.openapi_setDeviceSettingsItem(deviceSN, item, value)
     }
 }

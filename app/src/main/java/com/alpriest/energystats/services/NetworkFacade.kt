@@ -5,7 +5,9 @@ import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.ChargeTime
 import com.alpriest.energystats.models.DataLoggerResponse
 import com.alpriest.energystats.models.DeviceDetailResponse
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
+import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -217,6 +219,22 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
             demoAPI.openapi_fetchRequestCount()
         } else {
             api.openapi_fetchRequestCount()
+        }
+    }
+
+    override suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse {
+        return if (isDemoUser()) {
+            demoAPI.openapi_fetchDeviceSettingsItem(deviceSN, item)
+        } else {
+            api.openapi_fetchDeviceSettingsItem(deviceSN, item)
+        }
+    }
+
+    override suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
+        return if (isDemoUser()) {
+            demoAPI.openapi_setDeviceSettingsItem(deviceSN, item, value)
+        } else {
+            api.openapi_setDeviceSettingsItem(deviceSN, item, value)
         }
     }
 
