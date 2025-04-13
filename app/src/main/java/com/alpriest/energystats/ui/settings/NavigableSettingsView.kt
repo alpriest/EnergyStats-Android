@@ -181,7 +181,7 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.ConfigureExportLimit.name) {
             LoadedScaffold(title = stringResource(id = R.string.export_limit), navController = navController) {
-                DeviceSettingItemView(config, network, DeviceSettingsItem.ExportLimit).Content(it)
+                DeviceSettingItemView(config, network, DeviceSettingsItem.ExportLimit, navController).Content(it)
             }
         }
 

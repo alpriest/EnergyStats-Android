@@ -24,6 +24,22 @@ enum class DeviceSettingsItem(val rawValue: String) {
             else -> ""
         }
     }
+
+    fun description(context: Context): String {
+        return when(this) {
+            ExportLimit -> context.getString(R.string.export_limit_description)
+            MaxSoc -> context.getString(R.string.maxsoc_description)
+            else -> ""
+        }
+    }
+
+    fun behaviour(context: Context): String {
+        return when(this) {
+            ExportLimit -> context.getString(R.string.export_limit_behaviour)
+            MaxSoc -> context.getString(R.string.maxsoc_behaviour)
+            else -> ""
+        }
+    }
 }
 
 data class FetchDeviceSettingsItemRequest(
