@@ -17,6 +17,13 @@ enum class DeviceSettingsItem(val rawValue: String) {
             else -> ""
         }
     }
+
+    fun fallbackUnit(): String {
+        return when (this) {
+            MaxSoc -> "%"
+            else -> ""
+        }
+    }
 }
 
 data class FetchDeviceSettingsItemRequest(

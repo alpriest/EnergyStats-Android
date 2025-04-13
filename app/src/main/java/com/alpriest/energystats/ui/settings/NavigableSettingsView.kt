@@ -15,6 +15,7 @@ import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.financial.FinancialsSettingsView
+import com.alpriest.energystats.ui.settings.inverter.DeviceSettingItemView
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditPhaseView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleView
@@ -180,7 +181,7 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.ConfigureExportLimit.name) {
             LoadedScaffold(title = stringResource(id = R.string.export_limit), navController = navController) {
-                DeviceSettingsItemView(config, network, DeviceSettingsItem.ExportLimit).Content(it)
+                DeviceSettingItemView(config, network, DeviceSettingsItem.ExportLimit).Content(it)
             }
         }
 
