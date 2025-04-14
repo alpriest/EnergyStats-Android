@@ -34,7 +34,10 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.ui.dialog.AlertDialog
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -58,7 +61,9 @@ class DeviceSettingsItemViewViewModel(
     private val config: ConfigManaging,
     private val network: Networking,
     val item: DeviceSettingsItem
-) : ViewModel() {
+) : ViewModel(), AlertDialogMessageProviding {
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+
     private val _uiState = MutableStateFlow<LoadState>(LoadState.Inactive)
     val uiState: StateFlow<LoadState> = _uiState
 
@@ -68,8 +73,10 @@ class DeviceSettingsItemViewViewModel(
     val unitStream: StateFlow<String> = _unitStream
 
     fun load() {
+        if (_uiState.value != LoadState.Inactive) {
+            return
+        }
         val selectedDeviceSN = config.selectedDeviceSN ?: return
-
         _uiState.value = LoadState.Active("Loading")
 
         viewModelScope.launch {
@@ -77,15 +84,26 @@ class DeviceSettingsItemViewViewModel(
                 val response = network.fetchDeviceSettingsItem(selectedDeviceSN, item)
 
                 _unitStream.value = response.unit ?: item.fallbackUnit()
+                valueStream.value = response.value
                 _uiState.value = LoadState.Inactive
-//                device.batteryList?.let { batteryList ->
-//                    _modules.value = batteryList.map {
-//                        DeviceBatteryModule(it.batterySN, it.type, it.version)
-//                    }
-//                    _state.value = LoadState.Inactive
-//                } ?: run {
-//                    _state.value = LoadState.Error(null, "Failed to fetch battery information")
-//                }
+            } catch (e: Exception) {
+                _uiState.value = LoadState.Error(e, "Failed to fetch battery information")
+            }
+        }
+    }
+
+    fun save() {
+        if (_uiState.value != LoadState.Inactive) {
+            return
+        }
+        val selectedDeviceSN = config.selectedDeviceSN ?: return
+        _uiState.value = LoadState.Active("Loading")
+
+        viewModelScope.launch {
+            try {
+                network.setDeviceSettingsItem(selectedDeviceSN, item, valueStream.value)
+
+                _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
                 _uiState.value = LoadState.Error(e, "Failed to fetch battery information")
             }
@@ -101,8 +119,16 @@ class DeviceSettingItemView(
 ) {
     @Composable
     fun Content(modifier: Modifier, viewModel: DeviceSettingsItemViewViewModel = viewModel(factory = DeviceSettingsItemViewViewModelFactory(configManager, network, item))) {
+        val message = viewModel.alertDialogMessage.collectAsState().value
+
         LaunchedEffect(null) {
             viewModel.load()
+        }
+
+        message?.let {
+            AlertDialog(message = it.message ?: "Unknown error", onDismiss = {
+                viewModel.resetDialogMessage()
+            })
         }
 
         when (val loadState = viewModel.uiState.collectAsState().value) {
@@ -136,7 +162,9 @@ class DeviceSettingItemView(
             }
         }
 
-        ContentWithBottomButtonPair(navController, modifier = modifier, onSave = {}, content = { modifier ->
+        ContentWithBottomButtonPair(navController, modifier = modifier, onSave = {
+            viewModel.save()
+        }, content = { modifier ->
             SettingsPage(modifier) {
                 SettingsColumnWithChild(
                     footerAnnotatedString = annotatedString
@@ -155,7 +183,7 @@ class DeviceSettingItemView(
                         OutlinedTextField(
                             value = value,
                             onValueChange = { viewModel.valueStream.value = it.filter { it.isDigit() } },
-                            modifier = Modifier.width(100.dp),
+                            modifier = Modifier.width(130.dp),
                             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
                             trailingIcon = { Text(unit, color = MaterialTheme.colorScheme.onSecondary) }
                         )

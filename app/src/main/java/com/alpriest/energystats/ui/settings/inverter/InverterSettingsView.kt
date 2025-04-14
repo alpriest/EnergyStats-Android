@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.inverter
 
 import android.content.Context
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -69,6 +70,10 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
         currentDevice.value?.let { device ->
             SettingsColumn {
                 InlineSettingsNavButton(stringResource(R.string.manage_schedules)) { navController.navigate(SettingsScreen.InverterSchedule.name) }
+                HorizontalDivider()
+                InlineSettingsNavButton(DeviceSettingsItem.ExportLimit.title(context)) {
+                    navController.navigate(SettingsScreen.ConfigureExportLimit.name)
+                }
             }
 
             SettingsColumn(header = stringResource(R.string.display_options)) {
@@ -146,12 +151,6 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 
             FirmwareVersionView(device, network)
             DeviceVersionView(device)
-
-            SettingsColumn {
-                InlineSettingsNavButton(DeviceSettingsItem.ExportLimit.title(context)) {
-                    navController.navigate(SettingsScreen.ConfigureExportLimit.name)
-                }
-            }
         }
     }
 }
