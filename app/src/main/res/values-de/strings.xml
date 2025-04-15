@@ -415,4 +415,11 @@
     <string name="chucker_description">Chucker ist in der App enthalten, um bei Problemen zu helfen. Es ermöglicht Nutzern, ihre eigene Netzwerkaktivität – also welche Daten die App sendet oder empfängt – anzusehen und bei Bedarf zu exportieren, um sie dem Entwicklungsteam zur Verfügung zu stellen. Dieses Tool dient ausschließlich zur Fehlerbehebung und hat keinen Einfluss auf die Nutzung der App.</string>
     <string name="launch_chucker">Chucker starten</string>
     <string name="view_request_count">Anzahl der Anfragen anzeigen</string>
+    <string name="export_limit">Exportgrenze</string>
+    <string name="max_soc">Max SoC</string>
+    <string name="export_limit_description">Legt die maximale Leistung fest, die der Wechselrichter ins Netz einspeisen darf.</string>
+    <string name="maxsoc_description">"Legt den höchsten Ladezustand fest, den die Batterie erreichen darf, ausgedrückt in Prozent.  "</string>
+    <string name="export_limit_behaviour">"Durch die Konfiguration dieser Einstellung können Sie steuern, wie viel Energie ins Netz zurückgespeist wird, um lokale Vorschriften oder persönliche Vorlieben einzuhalten. Wenn beispielsweise lokale Vorschriften die Einspeiseleistung begrenzen, stellt dieser Wert sicher, dass der Wechselrichter das Limit nicht überschreitet.  "</string>
+    <string name="maxsoc_behaviour">"Das Laden stoppt, sobald die Batterie den Max SoC erreicht hat. Kann basierend auf dem Nutzungsverhalten oder zur Anpassung an Stromtarife und Solarnutzung eingestellt werden.  "</string>
+    <string name="device_settings_warning">Bitte seien Sie vorsichtig und ändern Sie diese Einstellung nur, wenn Sie wissen, was Sie tun.\\n\\nEnergy Stats kann für Schäden, die durch diese Änderung entstehen, keine Verantwortung übernehmen.</string>
 </resources>

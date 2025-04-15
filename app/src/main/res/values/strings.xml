@@ -426,4 +426,5 @@
     <string name="maxsoc_description">Sets the highest charge level the battery is allowed to reach, expressed as a percentage.</string>
     <string name="export_limit_behaviour">By configuring this setting, you can control the amount of energy sent back to the grid, ensuring compliance with local regulations or personal preferences. For example, if local regulations limit export capacity, setting this value ensures the inverter does not exceed the specified limit.</string>
     <string name="maxsoc_behaviour">Charging stops once the battery hits the Max SoC. Can be adjusted based on usage patterns or to align with energy tariffs and solar availability.</string>
+    <string name="device_settings_warning">Please be cautious and only change this setting if you know what you are doing.\n\nEnergy Stats cannot be held responsible for any damage caused by changing this.</string>
 </resources>

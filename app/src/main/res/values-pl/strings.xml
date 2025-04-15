@@ -416,4 +416,11 @@
     <string name="chucker_description">Chucker jest zawarty w aplikacji, aby pomóc w rozwiązywaniu problemów. Umożliwia użytkownikom przeglądanie własnej aktywności sieciowej – takich jak dane wysyłane lub odbierane przez aplikację – oraz opcjonalnie eksportowanie tych informacji w celu udostępnienia zespołowi deweloperskiemu. To narzędzie służy wyłącznie do diagnozowania problemów i nie ma wpływu na korzystanie z aplikacji.</string>
     <string name="launch_chucker">Uruchom Chucker</string>
     <string name="view_request_count">Zobacz liczbę żądań</string>
+    <string name="export_limit">"Limit eksportu  "</string>
+    <string name="max_soc">"Maksymalny SoC  "</string>
+    <string name="export_limit_description">"Ustawia maksymalną moc, jaką inwerter może eksportować do sieci.  "</string>
+    <string name="maxsoc_description">"Ustawia najwyższy poziom naładowania, jaki bateria może osiągnąć, wyrażony w procentach.  "</string>
+    <string name="export_limit_behaviour">"Konfigurując to ustawienie, możesz kontrolować ilość energii oddawanej do sieci, zapewniając zgodność z lokalnymi przepisami lub własnymi preferencjami. Na przykład, jeśli lokalne przepisy ograniczają moc eksportu, ustawienie tej wartości zapewnia, że inwerter nie przekroczy dozwolonego limitu.  "</string>
+    <string name="maxsoc_behaviour">"Ładowanie zatrzymuje się, gdy bateria osiągnie maksymalny SoC. Można dostosować w zależności od wzorców użytkowania lub w celu dopasowania do taryf energetycznych i dostępności energii słonecznej.  "</string>
+    <string name="device_settings_warning">Zachowaj ostrożność i zmieniaj to ustawienie tylko, jeśli wiesz, co robisz.\\n\\nEnergy Stats nie ponosi odpowiedzialności za jakiekolwiek szkody spowodowane tą zmianą.</string>
 </resources>
