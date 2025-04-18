@@ -45,7 +45,7 @@ internal fun Schedule.Companion.preview(): Schedule {
                 color = Color.scheduleColor(WorkMode.ForceCharge)
             ),
             SchedulePhase.create(
-                start = Time(hour = 10, minute = 30),
+                start = Time(hour = 8, minute = 0),
                 end = Time(hour = 14, minute = 30),
                 mode = WorkMode.ForceDischarge,
                 forceDischargePower = 3500,

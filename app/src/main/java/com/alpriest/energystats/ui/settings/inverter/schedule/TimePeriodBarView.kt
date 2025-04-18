@@ -57,7 +57,7 @@ fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier
             Text(text = "00:00", fontSize = 12.sp, color = colorScheme.onSecondary)
             Text(text = "08:00", fontSize = 12.sp, color = colorScheme.onSecondary)
             Text(text = "16:00", fontSize = 12.sp, color = colorScheme.onSecondary)
-            Text(text = "24:00", fontSize = 12.sp, color = colorScheme.onSecondary)
+            Text(text = "23:59", fontSize = 12.sp, color = colorScheme.onSecondary)
         }
 
     }
