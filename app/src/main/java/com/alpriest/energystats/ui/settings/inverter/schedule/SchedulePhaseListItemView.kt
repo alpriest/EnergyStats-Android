@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.ui.settings.battery.TimeType
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -45,9 +46,9 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifie
 
         Column {
             Row {
-                Text(phase.start.formatted(), color = colorScheme.onSecondary, fontWeight = FontWeight.Bold)
+                Text(phase.start.formatted(TimeType.START), color = colorScheme.onSecondary, fontWeight = FontWeight.Bold)
                 Text(" - ", color = colorScheme.onSecondary, fontWeight = FontWeight.Bold)
-                Text(phase.end.formatted(), color = colorScheme.onSecondary, fontWeight = FontWeight.Bold)
+                Text(phase.end.formatted(TimeType.END), color = colorScheme.onSecondary, fontWeight = FontWeight.Bold)
             }
 
             Row {

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.models
 
+import com.alpriest.energystats.ui.settings.battery.TimeType
 import java.time.LocalDateTime
 
 data class Time(
@@ -19,8 +20,8 @@ data class Time(
         }
     }
 
-    fun formatted(): String {
-        return "${"%02d".format(hour)}:${"%02d".format(minute)}"
+    fun formatted(timeType: TimeType): String {
+        return "${"%02d".format(hour)}:${"%02d".format(minute)}:${timeType.appendage()}"
     }
 
     override fun compareTo(other: Time): Int {

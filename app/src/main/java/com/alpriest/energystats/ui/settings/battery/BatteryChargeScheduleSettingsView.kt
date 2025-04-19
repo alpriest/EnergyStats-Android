@@ -48,6 +48,18 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
+enum class TimeType {
+    START,
+    END;
+
+    fun appendage(): String {
+        return when (this) {
+            START -> "00"
+            END -> "59"
+        }
+    }
+}
+
 class BatteryChargeScheduleSettingsView(
     private val network: Networking,
     private val configManager: ConfigManaging,
@@ -132,6 +144,7 @@ class BatteryChargeScheduleSettingsView(
 
             TimePeriodView(
                 timePeriod.start,
+                TimeType.START,
                 stringResource(R.string.start),
                 labelStyle = TextStyle(color = textColor.value)
             ) { hour, minute ->
@@ -142,6 +155,7 @@ class BatteryChargeScheduleSettingsView(
 
             TimePeriodView(
                 timePeriod.end,
+                TimeType.END,
                 stringResource(R.string.end),
                 labelStyle = TextStyle(color = textColor.value)
             ) { hour, minute ->
@@ -161,7 +175,15 @@ class BatteryChargeScheduleSettingsView(
 }
 
 @Composable
-fun TimePeriodView(time: Time, title: String, labelStyle: TextStyle, textStyle: TextStyle = TextStyle.Default, modifier: Modifier = Modifier, onChange: (Int, Int) -> Unit) {
+fun TimePeriodView(
+    time: Time,
+    timeType: TimeType,
+    title: String,
+    labelStyle: TextStyle,
+    textStyle: TextStyle = TextStyle.Default,
+    modifier: Modifier = Modifier,
+    onChange: (Int, Int) -> Unit
+) {
     val dialog = TimePickerDialog(
         LocalContext.current, { _, mHour: Int, mMinute: Int ->
             onChange(mHour, mMinute)
@@ -183,7 +205,7 @@ fun TimePeriodView(time: Time, title: String, labelStyle: TextStyle, textStyle: 
         )
 
         Text(
-            "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}",
+            "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}:" + timeType.appendage(),
             style = textStyle,
             color = colorScheme.onSecondary,
             modifier = Modifier.clickable {

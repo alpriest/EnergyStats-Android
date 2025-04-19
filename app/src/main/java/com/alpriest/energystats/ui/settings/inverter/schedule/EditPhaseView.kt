@@ -50,6 +50,7 @@ import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
+import com.alpriest.energystats.ui.settings.battery.TimeType
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PaleWhite
@@ -130,14 +131,20 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging
         }
     ) {
         TimePeriodView(
-            startTime, stringResource(R.string.start_time), labelStyle = TextStyle.Default,
+            startTime,
+            TimeType.START,
+            stringResource(R.string.start_time),
+            labelStyle = TextStyle.Default,
             modifier = Modifier
                 .background(colorScheme.surface)
                 .padding(vertical = 14.dp)
         ) { hour, minute -> viewModel.startTimeStream.value = Time(hour, minute) }
 
         TimePeriodView(
-            endTime, stringResource(R.string.end_time), labelStyle = TextStyle.Default,
+            endTime,
+            TimeType.END,
+            stringResource(R.string.end_time),
+            labelStyle = TextStyle.Default,
             modifier = Modifier
                 .background(colorScheme.surface)
                 .padding(vertical = 14.dp)
