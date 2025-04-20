@@ -13,10 +13,10 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.kW
-import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.models.toDate
 import com.alpriest.energystats.models.toUtcMillis
+import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -304,7 +304,7 @@ class ParametersGraphTabViewModel(
             }
         }
 
-        if (updated.count { it.enabled && (unit == null || it.type.unit == unit) } == 0) {
+        if (updated.count { it.isSelected && it.enabled && (unit == null || it.type.unit == unit) } == 0) {
             return
         }
 
