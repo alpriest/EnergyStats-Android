@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DeviceFirmwareVersion
-import com.alpriest.energystats.models.SchedulePhaseResponse
+import com.alpriest.energystats.models.SchedulePhaseNetworkModel
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.services.Networking
@@ -106,8 +106,12 @@ class ScheduleSummaryViewModel(
                 try {
                     val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
                     templateStream.value = templateStore.load()
-                    scheduleStream.value = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() })
+                    val schedule = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() })
+                    scheduleStream.value = schedule
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
+                    if (schedule.supportsMaxSOC()) {
+                        config.setDeviceSupportScheduleMaxSOC(deviceSN)
+                    }
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
@@ -207,6 +211,10 @@ class ScheduleSummaryViewModel(
     }
 }
 
+private fun Schedule.supportsMaxSOC(): Boolean {
+    return phases.any { it.maxSoc != null }
+}
+
 fun errorMessage(exception: Exception, context: Context): String {
     return when (exception) {
         is FoxServerError -> {
@@ -220,7 +228,7 @@ fun errorMessage(exception: Exception, context: Context): String {
     }
 }
 
-internal fun SchedulePhaseResponse.toSchedulePhase(): SchedulePhase? {
+internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
     if (workMode == WorkMode.Invalid) { return null }
     if (enable == 0) { return null }
 
@@ -231,7 +239,8 @@ internal fun SchedulePhaseResponse.toSchedulePhase(): SchedulePhase? {
         forceDischargePower = fdPwr ?: 0,
         forceDischargeSOC = fdSoc,
         batterySOC = minSocOnGrid,
-        color = Color.scheduleColor(workMode)
+        color = Color.scheduleColor(workMode),
+        maxSoc = maxSoc
     )
 }
 

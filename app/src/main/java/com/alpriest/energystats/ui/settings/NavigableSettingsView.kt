@@ -167,12 +167,6 @@ fun NavigableSettingsView(
             }
         }
 
-        composable(SettingsScreen.InvertAutomation.name) {
-            LoadedScaffold(title = "Invert", navController = navController) {
-                InvertView(it)
-            }
-        }
-
         composable(SettingsScreen.BatteryVersions.name) {
             LoadedScaffold(title = stringResource(R.string.batteries), navController = navController) {
                 BatteryFirmwareVersionsView(config, network).Content(it)

@@ -85,6 +85,8 @@ class FakeConfigManager : ConfigManaging {
     override var showInverterScheduleQuickLink: Boolean = false
     override var fetchSolcastOnAppLaunch: Boolean = false
     override var ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden
+    override fun getDeviceSupportScheduleMaxSOC(deviceSN: String): Boolean { return false }
+    override fun setDeviceSupportScheduleMaxSOC(deviceSN: String) {}
 
     override var devices: List<Device>? = listOf(
         Device(

@@ -24,9 +24,18 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 @Composable
 fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifier) {
     val extra = when (phase.mode) {
-        WorkMode.ForceDischarge -> " down to ${phase.forceDischargeSOC}% at ${phase.forceDischargePower}W"
-        WorkMode.ForceCharge -> ""
-        WorkMode.SelfUse -> " with ${phase.minSocOnGrid}% min SOC"
+        WorkMode.ForceDischarge -> " at ${phase.forceDischargePower}W down to ${phase.forceDischargeSOC}%"
+        WorkMode.ForceCharge, WorkMode.Backup ->
+            phase.maxSoc?.let {
+                " with max SOC ${it}%"
+            } ?: ""
+        WorkMode.SelfUse -> {
+            var result = " with ${phase.minSocOnGrid}% min SOC"
+            phase.maxSoc?.let {
+                result += " with max SOC ${it}%"
+            }
+            result
+        }
         else -> ""
     }
 

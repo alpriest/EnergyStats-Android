@@ -90,6 +90,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var showInverterScheduleQuickLink: Boolean
     var fetchSolcastOnAppLaunch: Boolean
     var ct2DisplayMode: CT2DisplayMode
+    fun getDeviceSupportScheduleMaxSOC(deviceSN: String): Boolean
+    fun setDeviceSupportScheduleMaxSOC(deviceSN: String)
 }
 
 interface ScheduleTemplateConfigManager {

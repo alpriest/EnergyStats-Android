@@ -406,8 +406,6 @@
     <string name="ct2displaymode_hidden">Oculto</string>
     <string name="ct2displaymode_separate_icon">Icono separado</string>
     <string name="ct2displaymode_as_power_string">Como cadena de potencia</string>
-    <string name="invert_energy_disclaimer">Energy Stats no está afiliado con Invert, pero su servicio puede ser de interés para los propietarios de inversores Fox ESS que deseen optimizar el uso de energía y ahorrar dinero.</string>
-    <string name="visit_invert">Visitar Invert</string>
     <string name="batteries">Baterías</string>
     <string name="no_battery_information_available">No hay información de batería disponible</string>
     <string name="type">Tipo: %1$s</string>
@@ -422,4 +420,5 @@
     <string name="export_limit_behaviour">"Al configurar esta opción, puedes controlar la cantidad de energía enviada a la red, asegurando el cumplimiento de normativas locales o preferencias personales. Por ejemplo, si las normativas locales limitan la capacidad de exportación, establecer este valor garantiza que el inversor no supere el límite especificado.  "</string>
     <string name="maxsoc_behaviour">"La carga se detiene cuando la batería alcanza el Max SoC. Puede ajustarse según los patrones de uso o para alinearse con las tarifas energéticas y la disponibilidad solar.  "</string>
     <string name="device_settings_warning">Por favor, ten cuidado y cambia esta configuración solo si sabes lo que estás haciendo.\\n\\nEnergy Stats no se hace responsable de los daños ocasionados por este cambio.</string>
+    <string name="about_59_seconds">Los 59 segundos están determinados por el funcionamiento del firmware del inversor. Esto se debe a que las horas de finalización incluyen el minuto que configures, por lo que tu intervalo de tiempo se ejecutará hasta el segundo 59 de ese minuto.\\n\\nEjemplo: si deseas que el intervalo termine a las 05:30, debes establecerlo en 05:29:59. Si lo configuras en 05:30, el inversor continuará hasta las 05:30:59 y tendrás un minuto en el que el uso de energía no será el esperado.</string>
 </resources>

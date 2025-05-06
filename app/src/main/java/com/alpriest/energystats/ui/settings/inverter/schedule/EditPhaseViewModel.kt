@@ -28,9 +28,11 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel(), Al
     val forceDischargePowerStream = MutableStateFlow("0")
     val forceDischargeSOCStream = MutableStateFlow("0")
     val minSOCStream = MutableStateFlow("0")
-    val errorStream = MutableStateFlow(EditPhaseErrorData(minSOCError = null, fdSOCError = null, timeError = null, forceDischargePowerError = null))
+    val errorStream = MutableStateFlow(EditPhaseErrorData(minSOCError = null, fdSOCError = null, timeError = null, forceDischargePowerError = null, maxSOCError = null))
     private var originalPhaseId: String? = null
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    val showMaxSocStream = MutableStateFlow(false)
+    val maxSocStream = MutableStateFlow("100")
 
     init {
         EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
@@ -42,6 +44,8 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel(), Al
             forceDischargePowerStream.value = originalPhase.forceDischargePower.toString()
             forceDischargeSOCStream.value = originalPhase.forceDischargeSOC.toString()
             minSOCStream.value = originalPhase.minSocOnGrid.toString()
+            showMaxSocStream.value = originalPhase.maxSoc != null
+            originalPhase.maxSoc?.let { maxSocStream.value = it.toString() }
         }
     }
 
@@ -83,6 +87,7 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel(), Al
         var fdSOCError: String? = null
         var timeError: String? = null
         var forceDischargePowerError: String? = null
+        var maxSOCError: String? = null
 
         minSOCStream.value.toIntOrNull()?.let {
             if (it < 10 || it > 100) {
@@ -112,7 +117,14 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel(), Al
             forceDischargePowerError = context.getString(R.string.force_discharge_power_needs_to_be_greater_than_0_to_discharge)
         }
 
-        errorStream.value = EditPhaseErrorData(minSOCError, fdSOCError, timeError, forceDischargePowerError)
+        maxSocStream.value.toIntOrNull()?.let {maxSoc ->
+            minSOCStream.value.toIntOrNull()?.let { minSoc ->
+                if (maxSoc < minSoc || maxSoc > 100) {
+                    maxSOCError = context.getString(R.string.please_enter_a_number_between_10_and_100)
+                }
+            }
+        }
+        errorStream.value = EditPhaseErrorData(minSOCError, fdSOCError, timeError, forceDischargePowerError, maxSOCError)
     }
 
     fun save(context: Context) {
@@ -126,7 +138,8 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel(), Al
             forceDischargePower = forceDischargePowerStream.value.toIntOrNull() ?: 0,
             forceDischargeSOC = forceDischargeSOCStream.value.toIntOrNull() ?: 0,
             batterySOC = minSOCStream.value.toIntOrNull() ?: 0,
-            color = Color.scheduleColor(workModeStream.value)
+            color = Color.scheduleColor(workModeStream.value),
+            maxSoc = if (showMaxSocStream.value) maxSocStream.value.toIntOrNull() else null
         )
 
         validate(context)

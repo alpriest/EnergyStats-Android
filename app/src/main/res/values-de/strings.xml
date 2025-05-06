@@ -406,8 +406,6 @@
     <string name="ct2displaymode_hidden">Ausgeblendet</string>
     <string name="ct2displaymode_separate_icon">Separates Symbol</string>
     <string name="ct2displaymode_as_power_string">Als Leistungs-String</string>
-    <string name="invert_energy_disclaimer">Energy Stats ist nicht mit Invert verbunden, aber deren Service könnte für Besitzer von Fox ESS-Wechselrichtern interessant sein, um den Energieverbrauch zu optimieren und Geld zu sparen.</string>
-    <string name="visit_invert">Besuchen Invert</string>
     <string name="batteries">Batterien</string>
     <string name="no_battery_information_available">Keine Batterieinformationen verfügbar</string>
     <string name="type">Typ: %1$s</string>
@@ -422,4 +420,5 @@
     <string name="export_limit_behaviour">"Durch die Konfiguration dieser Einstellung können Sie steuern, wie viel Energie ins Netz zurückgespeist wird, um lokale Vorschriften oder persönliche Vorlieben einzuhalten. Wenn beispielsweise lokale Vorschriften die Einspeiseleistung begrenzen, stellt dieser Wert sicher, dass der Wechselrichter das Limit nicht überschreitet.  "</string>
     <string name="maxsoc_behaviour">"Das Laden stoppt, sobald die Batterie den Max SoC erreicht hat. Kann basierend auf dem Nutzungsverhalten oder zur Anpassung an Stromtarife und Solarnutzung eingestellt werden.  "</string>
     <string name="device_settings_warning">Bitte seien Sie vorsichtig und ändern Sie diese Einstellung nur, wenn Sie wissen, was Sie tun.\\n\\nEnergy Stats kann für Schäden, die durch diese Änderung entstehen, keine Verantwortung übernehmen.</string>
+    <string name="about_59_seconds">Die 59 Sekunden sind durch die Funktionsweise der Wechselrichter-Firmware bedingt. Dies liegt daran, dass die Endzeiten die eingestellte Minute einschließen, sodass Ihr Zeitfenster bis zur 59. Sekunde dieser Minute läuft.\\n\\nz. B. Wenn das Zeitfenster um 05:30 enden soll, müssen Sie 05:29:59 einstellen. Wenn Sie 05:30 einstellen, läuft der Wechselrichter bis 05:30:59 weiter, was eine Minute unerwarteter Energienutzung bedeutet.</string>
 </resources>

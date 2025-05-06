@@ -60,7 +60,8 @@ data class EditPhaseErrorData(
     val minSOCError: String?,
     val fdSOCError: String?,
     val timeError: String?,
-    val forceDischargePowerError: String?
+    val forceDischargePowerError: String?,
+    val maxSOCError: String?
 )
 
 @Composable
@@ -71,6 +72,7 @@ fun EditPhaseView(
     modifier: Modifier
 ) {
     val context = LocalContext.current
+    val showMaxSoc = viewModel.showMaxSocStream.collectAsState().value
 
     LaunchedEffect(null) {
         viewModel.load(context)
@@ -84,6 +86,10 @@ fun EditPhaseView(
                 TimeAndWorkModeView(viewModel, userManager)
 
                 MinSOCView(viewModel)
+
+                if (showMaxSoc) {
+                    MaxSOCView(viewModel)
+                }
 
                 ForceDischargeSOCView(viewModel)
 
@@ -186,6 +192,37 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
             OutlinedTextField(
                 value = minSOC,
                 onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
+                modifier = Modifier.width(100.dp),
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                trailingIcon = { Text("%", color = colorScheme.onSecondary) },
+                singleLine = true
+            )
+        }
+    }
+}
+
+@Composable
+fun MaxSOCView(viewModel: EditPhaseViewModel) {
+    val maxSOC = viewModel.maxSocStream.collectAsState().value
+    val errorText = viewModel.errorStream.collectAsState().value
+
+    SettingsColumnWithChild(
+        error = errorText.maxSOCError
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .background(colorScheme.surface)
+                .padding(vertical = 4.dp)
+        ) {
+            Text(
+                stringResource(R.string.max_soc),
+                Modifier.weight(1.0f),
+                color = colorScheme.onSecondary
+            )
+            OutlinedTextField(
+                value = maxSOC,
+                onValueChange = { viewModel.maxSocStream.value = it.filter { it.isDigit() } },
                 modifier = Modifier.width(100.dp),
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
                 trailingIcon = { Text("%", color = colorScheme.onSecondary) },

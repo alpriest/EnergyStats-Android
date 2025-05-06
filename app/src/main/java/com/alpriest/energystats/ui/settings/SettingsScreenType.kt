@@ -21,7 +21,6 @@ enum class SettingsScreen {
     APIKey,
     PowerStation,
     DataSettings,
-    InvertAutomation,
     BatteryVersions,
     ConfigureExportLimit,
     ConfigureMaxSoc

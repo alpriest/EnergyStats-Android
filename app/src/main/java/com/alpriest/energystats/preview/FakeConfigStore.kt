@@ -78,7 +78,7 @@ class FakeConfigStore(
     override var batteryTemperatureDisplayMode: Int = BatteryTemperatureDisplayMode.Automatic.value,
     override var showInverterScheduleQuickLink: Boolean = false,
     override var fetchSolcastOnAppLaunch: Boolean = false,
-    override var ct2DisplayMode: Int = CT2DisplayMode.Hidden.value
+    override var ct2DisplayMode: Int = CT2DisplayMode.Hidden.value,
 
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}

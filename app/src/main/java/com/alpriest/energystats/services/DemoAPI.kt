@@ -26,7 +26,7 @@ import com.alpriest.energystats.models.PagedPowerStationListResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.SchedulePhaseResponse
+import com.alpriest.energystats.models.SchedulePhaseNetworkModel
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.ui.flow.home.dateFormat
@@ -179,7 +179,7 @@ class DemoAPI : FoxAPIServicing {
         return ScheduleResponse(
             1,
             listOf(
-                SchedulePhaseResponse(
+                SchedulePhaseNetworkModel(
                     enable = 1,
                     startHour = 15,
                     startMinute = 0,
@@ -188,9 +188,10 @@ class DemoAPI : FoxAPIServicing {
                     workMode = WorkMode.ForceCharge,
                     minSocOnGrid = 20,
                     fdSoc = 100,
-                    fdPwr = 0
+                    fdPwr = 0,
+                    maxSoc = 100
                 ),
-                SchedulePhaseResponse(
+                SchedulePhaseNetworkModel(
                     enable = 1,
                     startHour = 7,
                     startMinute = 0,
@@ -199,7 +200,8 @@ class DemoAPI : FoxAPIServicing {
                     workMode = WorkMode.ForceDischarge,
                     minSocOnGrid = 20,
                     fdSoc = 20,
-                    fdPwr = 3500
+                    fdPwr = 3500,
+                    maxSoc = 100
                 )
             )
         )

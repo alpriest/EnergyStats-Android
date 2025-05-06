@@ -41,10 +41,10 @@ data class SetSchedulerFlagRequest(
 
 data class ScheduleResponse(
     val enable: Int,
-    val groups: List<SchedulePhaseResponse>
+    val groups: List<SchedulePhaseNetworkModel>
 )
 
-data class SchedulePhaseResponse(
+data class SchedulePhaseNetworkModel(
     val enable: Int,
     val startHour: Int,
     val startMinute: Int,
@@ -53,10 +53,11 @@ data class SchedulePhaseResponse(
     val workMode: WorkMode,
     val minSocOnGrid: Int,
     val fdSoc: Int,
-    val fdPwr: Int?
+    val fdPwr: Int?,
+    val maxSoc: Int?
 )
 
 data class SetCurrentScheduleRequest(
     val deviceSN: String,
-    val groups: List<SchedulePhaseResponse>
+    val groups: List<SchedulePhaseNetworkModel>
 )

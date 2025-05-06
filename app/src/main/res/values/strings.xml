@@ -411,8 +411,6 @@
     <string name="ct2displaymode_hidden">Hidden</string>
     <string name="ct2displaymode_separate_icon">Separate icon</string>
     <string name="ct2displaymode_as_power_string">As power string</string>
-    <string name="invert_energy_disclaimer">Energy Stats is not affiliated with Invert, but their service may be of interest to owners of Fox ESS inverters to optimise energy usage and save money.</string>
-    <string name="visit_invert">Visit Invert</string>
     <string name="batteries">Batteries</string>
     <string name="no_battery_information_available">No battery information available</string>
     <string name="type">Type: %1$s</string>
@@ -427,4 +425,5 @@
     <string name="export_limit_behaviour">By configuring this setting, you can control the amount of energy sent back to the grid, ensuring compliance with local regulations or personal preferences. For example, if local regulations limit export capacity, setting this value ensures the inverter does not exceed the specified limit.</string>
     <string name="maxsoc_behaviour">Charging stops once the battery hits the Max SoC. Can be adjusted based on usage patterns or to align with energy tariffs and solar availability.</string>
     <string name="device_settings_warning">Please be cautious and only change this setting if you know what you are doing.\n\nEnergy Stats cannot be held responsible for any damage caused by changing this.</string>
+    <string name="about_59_seconds">The 59 seconds is set by the way the inverter firmware works. This is because the end times include the minute that you set so your time slot will run up to 59th second of the minute.\n\ne.g. If you want the time slot to end by 05:30, you have to set 05:29:59. If you set 05:30, the inverter will continue up to 05:30:59 and you will get 1 minute where your energy use is not as expected.</string>
 </resources>

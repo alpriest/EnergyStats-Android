@@ -165,22 +165,22 @@ object URLs {
     }
 
     fun getOpenSchedulerFlag(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/scheduler/get/flag"
+        return "https://www.foxesscloud.com/op/v1/device/scheduler/get/flag"
             .toHttpUrl()
     }
 
     fun getOpenCurrentSchedule(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/scheduler/get"
+        return "https://www.foxesscloud.com/op/v1/device/scheduler/get"
             .toHttpUrl()
     }
 
     fun setOpenSchedulerFlag(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/scheduler/set/flag"
+        return "https://www.foxesscloud.com/op/v1/device/scheduler/set/flag"
             .toHttpUrl()
     }
 
     fun setOpenCurrentSchedule(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/scheduler/enable"
+        return "https://www.foxesscloud.com/op/v1/device/scheduler/enable"
             .toHttpUrl()
     }
 

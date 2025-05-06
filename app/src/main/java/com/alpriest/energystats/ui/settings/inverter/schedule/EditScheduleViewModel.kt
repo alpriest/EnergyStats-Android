@@ -66,14 +66,27 @@ class EditScheduleViewModel(
 
     fun addTimePeriod() {
         val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
-        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(schedule, modes = modes, device = config.currentDevice.value)
+        val device = config.currentDevice.value ?: return
+
+        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(
+            schedule,
+            modes,
+            device,
+            initialiseMaxSOC = config.getDeviceSupportScheduleMaxSOC(device.deviceSN)
+        )
     }
 
     fun autoFillScheduleGaps() {
         val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
         val mode = modes.firstOrNull() ?: return
+        val device = config.currentDevice.value ?: return
 
-        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.appendPhasesInGaps(schedule, mode = mode, device = config.currentDevice.value)
+        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.appendPhasesInGaps(
+            schedule,
+            mode,
+            device,
+            initialiseMaxSOC = config.getDeviceSupportScheduleMaxSOC(device.deviceSN)
+        )
     }
 
     override fun resetDialogMessage() {

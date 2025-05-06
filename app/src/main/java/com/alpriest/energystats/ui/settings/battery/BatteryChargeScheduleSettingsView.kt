@@ -104,6 +104,7 @@ class BatteryChargeScheduleSettingsView(
 
                         SettingsColumn(
                             header = stringResource(R.string.schedule_summary),
+                            footer = stringResource(R.string.about_59_seconds),
                             padding = SettingsPaddingValues.withVertical()
                         ) {
                             Text(

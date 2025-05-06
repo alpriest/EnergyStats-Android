@@ -407,8 +407,6 @@
     <string name="ct2displaymode_hidden">Nascosto</string>
     <string name="ct2displaymode_separate_icon">Icona separata</string>
     <string name="ct2displaymode_as_power_string">Come stringa di potenza</string>
-    <string name="invert_energy_disclaimer">Energy Stats non è affiliato con Invert, ma il loro servizio potrebbe interessare ai proprietari di inverter Fox ESS per ottimizzare l\'uso dell\'energia e risparmiare denaro.</string>
-    <string name="visit_invert">Visita Invert</string>
     <string name="batteries">Batterie</string>
     <string name="no_battery_information_available">Nessuna informazione sulla batteria disponibile</string>
     <string name="type">Tipo: %1$s</string>
@@ -423,4 +421,5 @@
     <string name="export_limit_behaviour">"Configurando questa impostazione, puoi controllare la quantità di energia inviata alla rete, garantendo la conformità alle normative locali o alle preferenze personali. Ad esempio, se le normative locali limitano la capacità di esportazione, questa impostazione assicura che l'inverter non superi il limite specificato.  "</string>
     <string name="maxsoc_behaviour">"La ricarica si interrompe una volta raggiunto il Max SoC. Può essere regolato in base ai modelli di utilizzo o per adattarsi alle tariffe energetiche e alla disponibilità solare.  "</string>
     <string name="device_settings_warning">Si prega di fare attenzione e modificare questa impostazione solo se si sa cosa si sta facendo.\\n\\nEnergy Stats non può essere ritenuta responsabile per eventuali danni causati da questa modifica.</string>
+    <string name="about_59_seconds">I 59 secondi sono impostati dal funzionamento del firmware dell’inverter. Questo perché gli orari di fine includono il minuto impostato, quindi la fascia oraria si estenderà fino al 59º secondo di quel minuto.\\n\\nAd es. se desideri che l’intervallo termini alle 05:30, devi impostarlo alle 05:29:59. Se imposti 05:30, l’inverter continuerà fino alle 05:30:59 e avrai un minuto in cui l’uso dell’energia non sarà come previsto.</string>
 </resources>

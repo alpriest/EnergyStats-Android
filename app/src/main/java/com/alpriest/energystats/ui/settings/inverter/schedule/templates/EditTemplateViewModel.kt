@@ -63,7 +63,13 @@ class EditTemplateViewModel(
 
     fun addTimePeriod() {
         val template = templateStream.value ?: return
-        val updatedSchedule = SchedulePhaseHelper.addNewTimePeriod(template.asSchedule(), modes = modes, device = config.currentDevice.value)
+        val device = config.currentDevice.value ?: return
+        val updatedSchedule = SchedulePhaseHelper.addNewTimePeriod(
+            template.asSchedule(),
+            modes,
+            device,
+            config.getDeviceSupportScheduleMaxSOC(device.deviceSN)
+        )
         val updatedTemplate = ScheduleTemplate(templateID, template.name, updatedSchedule.phases)
         EditScheduleStore.shared.templateStream.value = updatedTemplate
     }
@@ -71,7 +77,13 @@ class EditTemplateViewModel(
     fun autoFillScheduleGaps() {
         val template = templateStream.value ?: return
         val mode = modes.firstOrNull() ?: return
-        val updatedSchedule = SchedulePhaseHelper.appendPhasesInGaps(template.asSchedule(), mode = mode, device = config.currentDevice.value)
+        val device = config.currentDevice.value ?: return
+        val updatedSchedule = SchedulePhaseHelper.appendPhasesInGaps(
+            template.asSchedule(),
+            mode,
+            device,
+            config.getDeviceSupportScheduleMaxSOC(device.deviceSN)
+        )
         val updatedTemplate = ScheduleTemplate(templateID, template.name, updatedSchedule.phases)
         EditScheduleStore.shared.templateStream.value = updatedTemplate
     }

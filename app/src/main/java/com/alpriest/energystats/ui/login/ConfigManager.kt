@@ -31,6 +31,7 @@ import java.util.Locale
 
 open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
     ConfigManaging {
+    private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
 
     override var showBatteryTimeEstimateOnWidget: Boolean
         get() = config.showBatteryTimeEstimateOnWidget
@@ -544,6 +545,14 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             config.ct2DisplayMode = value.value
             themeStream.value = themeStream.value.copy(ct2DisplayMode = ct2DisplayMode)
         }
+
+    override fun getDeviceSupportScheduleMaxSOC(deviceSN: String): Boolean {
+        return deviceSupportsScheduleMaxSOC[deviceSN] ?: false
+    }
+
+    override fun setDeviceSupportScheduleMaxSOC(deviceSN: String) {
+        deviceSupportsScheduleMaxSOC[deviceSN] = true
+    }
 
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })

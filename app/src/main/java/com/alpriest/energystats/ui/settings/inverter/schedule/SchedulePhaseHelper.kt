@@ -6,9 +6,9 @@ import com.alpriest.energystats.models.Time
 
 class SchedulePhaseHelper {
     companion object {
-        fun addNewTimePeriod(schedule: Schedule, modes: List<WorkMode>, device: Device?): Schedule {
+        fun addNewTimePeriod(schedule: Schedule, modes: List<WorkMode>, device: Device?, initialiseMaxSOC: Boolean): Schedule {
             val mode = modes.firstOrNull() ?: return schedule
-            val newPhase = SchedulePhase.create(mode = mode, device = device)
+            val newPhase = SchedulePhase.create(mode = mode, device = device, initialiseMaxSOC)
             val sortedPhases = schedule.phases + newPhase
             sortedPhases.sortedBy { it.start }
 
@@ -18,9 +18,9 @@ class SchedulePhaseHelper {
             )
         }
 
-        fun appendPhasesInGaps(schedule: Schedule, mode: WorkMode, device: Device?): Schedule {
+        fun appendPhasesInGaps(schedule: Schedule, mode: WorkMode, device: Device?, initialiseMaxSOC: Boolean): Schedule {
             val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
-            val newPhases = schedule.phases + createPhasesInGaps(schedule, mode, minSOC)
+            val newPhases = schedule.phases + createPhasesInGaps(schedule, mode, minSOC, initialiseMaxSOC)
 
             return Schedule(
                 name = schedule.name,
@@ -28,7 +28,7 @@ class SchedulePhaseHelper {
             )
         }
 
-        private fun createPhasesInGaps(schedule: Schedule, mode: WorkMode, soc: Int): List<SchedulePhase> {
+        private fun createPhasesInGaps(schedule: Schedule, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): List<SchedulePhase> {
             val sortedPhases = schedule.phases.sortedBy { it.start }
 
             val scheduleStartTime = Time(0, 0)
@@ -42,14 +42,14 @@ class SchedulePhaseHelper {
                         val newPhaseStart = it.adding(minutes = 1)
                         val newPhaseEnd = phase.start.adding(minutes = -1)
 
-                        val newPhase = makePhase(newPhaseStart, newPhaseEnd, mode, soc)
+                        val newPhase = makePhase(newPhaseStart, newPhaseEnd, mode, soc, initialiseMaxSOC)
                         newPhases.add(newPhase)
                     }
                 } ?: run {
                     if (phase.start > scheduleStartTime) {
                         val newPhaseEnd = phase.start.adding(minutes = -1)
 
-                        val newPhase = makePhase(scheduleStartTime, newPhaseEnd, mode, soc)
+                        val newPhase = makePhase(scheduleStartTime, newPhaseEnd, mode, soc, initialiseMaxSOC)
                         newPhases.add(newPhase)
                     }
                 }
@@ -59,7 +59,7 @@ class SchedulePhaseHelper {
             lastEnd?.let {
                 if (it < scheduleEndTime) {
                     val finalPhaseStart = it.adding(minutes = 1)
-                    val finalPhase = makePhase(finalPhaseStart, scheduleEndTime, mode, soc)
+                    val finalPhase = makePhase(finalPhaseStart, scheduleEndTime, mode, soc, initialiseMaxSOC)
                     newPhases.add(finalPhase)
                 }
             }
@@ -67,7 +67,7 @@ class SchedulePhaseHelper {
             return newPhases
         }
 
-        private fun makePhase(start: Time, end: Time, mode: WorkMode, soc: Int): SchedulePhase {
+        private fun makePhase(start: Time, end: Time, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): SchedulePhase {
             return SchedulePhase(
                 start = start,
                 end = end,
@@ -75,7 +75,8 @@ class SchedulePhaseHelper {
                 forceDischargePower = 0,
                 forceDischargeSOC = soc,
                 minSocOnGrid = soc,
-                color = Color.scheduleColor(mode)
+                color = Color.scheduleColor(mode),
+                maxSoc = if (initialiseMaxSOC) 100 else null
             )
         }
 

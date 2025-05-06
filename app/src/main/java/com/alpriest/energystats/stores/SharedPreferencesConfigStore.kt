@@ -29,7 +29,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         DEVICES,
         SELECTED_DEVICE_SN,
         POWER_STATION_DETAIL,
-        BATTERY_CAPACITY_OVERRIDES,
+        BATTERY_CAPACITY_OVERRIDES
     }
 
     private enum class SharedPreferenceDisplayKey {
@@ -366,7 +366,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var deviceBatteryOverrides: Map<String, String>
         get() {
-            val variables = sharedPreferences.getString(SharedPreferenceDeviceKey.BATTERY_CAPACITY_OVERRIDES.name, Gson().toJson(listOf<String>()))
+            val variables = sharedPreferences.getString(SharedPreferenceDeviceKey.BATTERY_CAPACITY_OVERRIDES.name, Gson().toJson(mapOf<String, String>()))
             return Gson().fromJson(variables, object : TypeToken<Map<String, String>>() {}.type)
         }
         set(value) {
