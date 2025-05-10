@@ -40,6 +40,22 @@ data class StringPower(val name: String, val amount: Double) {
                 return settings.pv6Name
         }
     }
+
+    fun stringType(): StringType {
+        return when (name) {
+            "PV1" -> StringType.PV1
+            "PV2" -> StringType.PV2
+            "PV3" -> StringType.PV3
+            "PV4" -> StringType.PV4
+            "PV5" -> StringType.PV5
+            "CT2" -> StringType.CT2
+            else -> StringType.PV6
+        }
+    }
+}
+
+enum class StringType {
+    PV1, PV2, PV3, PV4, PV5, PV6, CT2
 }
 
 data class CurrentValues(
@@ -57,7 +73,8 @@ class CurrentStatusCalculator(
     val config: ConfigManaging,
     coroutineScope: CoroutineScope
 ) {
-    private val _currentValuesStream = MutableStateFlow(CurrentValues(solarPower = 0.0, solarStringsPower = listOf(), grid = 0.0, homeConsumption = 0.0, temperatures = null, ct2 = 0.0))
+    private val _currentValuesStream =
+        MutableStateFlow(CurrentValues(solarPower = 0.0, solarStringsPower = listOf(), grid = 0.0, homeConsumption = 0.0, temperatures = null, ct2 = 0.0))
     val currentValuesStream: StateFlow<CurrentValues> = _currentValuesStream.asStateFlow()
     var lastUpdate: LocalDateTime = LocalDateTime.now()
 

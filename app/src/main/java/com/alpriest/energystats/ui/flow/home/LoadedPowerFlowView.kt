@@ -34,13 +34,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.energy
-import com.alpriest.energystats.models.power
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.services.DemoNetworking
@@ -119,7 +117,6 @@ fun LoadedPowerFlowView(
     val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
     val solarTotal = loadedPowerFlowViewModel.todaysGeneration.collectAsState().value
     val faults = loadedPowerFlowViewModel.faults.collectAsState().value
-    val displayStrings = loadedPowerFlowViewModel.displayStrings.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -131,7 +128,7 @@ fun LoadedPowerFlowView(
                 shimmerInstance = shimmerInstance,
                 text = stringResource(
                     id = R.string.solarYieldToday,
-                    (solarTotal?.solarToday ?: 0.0).energy(theme.displayUnit, 1)
+                    (solarTotal?.todayGeneration ?: 0.0).energy(theme.displayUnit, 1)
                 )
             )
         }
@@ -166,30 +163,7 @@ fun LoadedPowerFlowView(
                     }
                 }
 
-                if ((theme.ct2DisplayMode == CT2DisplayMode.AsPowerString || theme.powerFlowStrings.enabled) && displayStrings.isNotEmpty()) {
-                    Column(
-                        modifier = Modifier
-                            .offset(y = -(displayStrings.count() * 10).dp)
-                            .background(Color.LightGray)
-                            .padding(2.dp),
-                    ) {
-                        displayStrings.forEach {
-                            Row {
-                                Text(
-                                    it.displayName(theme.powerFlowStrings),
-                                    Modifier.padding(end = 4.dp),
-                                    fontSize = 10.sp,
-                                    color = PowerFlowNeutralText
-                                )
-                                Text(
-                                    it.amount.power(theme.displayUnit, theme.decimalPlaces),
-                                    fontSize = 10.sp,
-                                    color = PowerFlowNeutralText
-                                )
-                            }
-                        }
-                    }
-                }
+                SolarStringsView(themeStream, loadedPowerFlowViewModel)
             }
         }
 
