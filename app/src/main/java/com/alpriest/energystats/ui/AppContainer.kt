@@ -103,7 +103,8 @@ class AppContainer(private val context: Context) {
             powerFlowStrings = config.powerFlowStrings,
             truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
             showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
-            ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode)
+            ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
+            showStringTotalsAsPercentage = config.showStringTotalsAsPercentage
         )
     )
 

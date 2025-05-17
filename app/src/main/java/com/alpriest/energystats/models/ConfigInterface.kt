@@ -66,6 +66,7 @@ interface ConfigInterface {
     var summaryDateRange: SummaryDateRange
     var batteryViewModel: BatteryViewModel?
     var ct2DisplayMode: Int
+    var showStringTotalsAsPercentage: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

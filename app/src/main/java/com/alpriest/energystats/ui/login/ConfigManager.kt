@@ -554,6 +554,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         deviceSupportsScheduleMaxSOC[deviceSN] = true
     }
 
+    override var showStringTotalsAsPercentage: Boolean
+        get() = config.showStringTotalsAsPercentage
+        set(value) {
+            config.showStringTotalsAsPercentage = value
+            themeStream.value = themeStream.value.copy(showStringTotalsAsPercentage = showStringTotalsAsPercentage)
+        }
+
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })
     }

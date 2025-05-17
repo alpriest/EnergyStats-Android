@@ -163,7 +163,7 @@ fun LoadedPowerFlowView(
                     }
                 }
 
-                SolarStringsView(themeStream, loadedPowerFlowViewModel)
+                SolarStringsView(configManager, themeStream, loadedPowerFlowViewModel)
             }
         }
 

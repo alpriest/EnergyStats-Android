@@ -49,7 +49,8 @@ data class AppTheme(
     val powerFlowStrings: PowerFlowStringsSettings,
     val truncatedYAxisOnParameterGraphs: Boolean,
     val showInverterScheduleQuickLink: Boolean,
-    val ct2DisplayMode: CT2DisplayMode
+    val ct2DisplayMode: CT2DisplayMode,
+    val showStringTotalsAsPercentage: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -114,7 +115,8 @@ fun AppTheme.Companion.demo(
     powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults.copy(enabled = true, pv1Enabled = true, pv2Enabled = true),
     truncatedYAxisOnParameterGraphs: Boolean = false,
     showInverterScheduleQuickLink: Boolean = false,
-    ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden
+    ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden,
+    showStringTotalsAsPercentage: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -151,6 +153,7 @@ fun AppTheme.Companion.demo(
         powerFlowStrings = powerFlowStrings,
         truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs,
         showInverterScheduleQuickLink = showInverterScheduleQuickLink,
-        ct2DisplayMode = ct2DisplayMode
+        ct2DisplayMode = ct2DisplayMode,
+        showStringTotalsAsPercentage = showStringTotalsAsPercentage
     )
 }

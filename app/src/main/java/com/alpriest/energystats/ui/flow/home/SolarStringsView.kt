@@ -11,8 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -21,6 +19,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.models.power
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -28,11 +27,14 @@ import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun SolarStringsView(themeStream: MutableStateFlow<AppTheme>, viewModel: LoadedPowerFlowViewModel) {
+fun SolarStringsView(
+    configManaging: ConfigManaging,
+    themeStream: MutableStateFlow<AppTheme>,
+    viewModel: LoadedPowerFlowViewModel
+) {
     val theme by themeStream.collectAsState()
     val displayStrings = viewModel.displayStrings.collectAsState().value
     val todaysGeneration = viewModel.todaysGeneration.collectAsState().value
-    val showPercentage = remember { mutableStateOf(false) }
 
     if ((theme.ct2DisplayMode == CT2DisplayMode.AsPowerString || theme.powerFlowStrings.enabled) && displayStrings.isNotEmpty()) {
         Column(
@@ -40,7 +42,7 @@ fun SolarStringsView(themeStream: MutableStateFlow<AppTheme>, viewModel: LoadedP
                 .offset(y = -(displayStrings.count() * 10).dp)
                 .background(Color.LightGray)
                 .padding(2.dp)
-                .clickable { showPercentage.value = !showPercentage.value }
+                .clickable { configManaging.showStringTotalsAsPercentage = !configManaging.showStringTotalsAsPercentage }
         ) {
             displayStrings.forEach {
                 Row {
@@ -58,7 +60,7 @@ fun SolarStringsView(themeStream: MutableStateFlow<AppTheme>, viewModel: LoadedP
 
                     if (theme.totalYieldModel != TotalYieldModel.Off) {
                         todaysGeneration?.let { viewModel ->
-                            val amount: String = if (showPercentage.value) {
+                            val amount: String = if (theme.showStringTotalsAsPercentage) {
                                 viewModel.estimatedTotalPercentage(it.stringType()).asPercent()
                             } else {
                                 viewModel.estimatedTotalEnergy(it.stringType()).energy(theme.displayUnit, 1)

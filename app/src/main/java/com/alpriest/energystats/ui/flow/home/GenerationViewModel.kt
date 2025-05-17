@@ -7,7 +7,12 @@ import java.time.ZoneId
 import java.util.Locale
 import kotlin.math.abs
 
-class GenerationViewModel(private val pvTotal: Double, response: OpenHistoryResponse, private val includeCT2: Boolean, private val invertCT2: Boolean) {
+class GenerationViewModel(
+    private val pvTotal: Double,
+    response: OpenHistoryResponse,
+    private val includeCT2: Boolean,
+    private val invertCT2: Boolean
+) {
     private val pv1Total: Double = response.trapezoidalAverage("pv1Power")
     private val pv2Total: Double = response.trapezoidalAverage("pv2Power")
     private val pv3Total: Double = response.trapezoidalAverage("pv3Power")

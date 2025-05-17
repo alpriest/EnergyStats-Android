@@ -87,6 +87,7 @@ class FakeConfigManager : ConfigManaging {
     override var ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden
     override fun getDeviceSupportScheduleMaxSOC(deviceSN: String): Boolean { return false }
     override fun setDeviceSupportScheduleMaxSOC(deviceSN: String) {}
+    override var showStringTotalsAsPercentage: Boolean = false
 
     override var devices: List<Device>? = listOf(
         Device(

@@ -79,6 +79,7 @@ class FakeConfigStore(
     override var showInverterScheduleQuickLink: Boolean = false,
     override var fetchSolcastOnAppLaunch: Boolean = false,
     override var ct2DisplayMode: Int = CT2DisplayMode.Hidden.value,
+    override var showStringTotalsAsPercentage: Boolean = false
 
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}

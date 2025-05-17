@@ -92,6 +92,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var ct2DisplayMode: CT2DisplayMode
     fun getDeviceSupportScheduleMaxSOC(deviceSN: String): Boolean
     fun setDeviceSupportScheduleMaxSOC(deviceSN: String)
+    var showStringTotalsAsPercentage: Boolean
 }
 
 interface ScheduleTemplateConfigManager {
