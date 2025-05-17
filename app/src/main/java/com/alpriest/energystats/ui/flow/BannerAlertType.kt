@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.helpers.ButtonDefinition
 import com.alpriest.energystats.ui.helpers.EqualWidthButtonList
@@ -108,7 +107,7 @@ private fun OfflineDeviceBannerView(onDismiss: () -> Unit) {
 
         Text(
             stringResource(R.string.you_can_also_find_this_video_link_in_the_settings_faq_section),
-            style = typography.bodySmall.copy(fontSize = 10.sp),
+            style = typography.bodySmall,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             color = colorScheme.onSecondary

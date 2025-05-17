@@ -121,7 +121,6 @@ class CurrentStatusCalculator(
             gridConsumptionPower = response.datas.currentValue(forKey = "gridConsumptionPower"),
             loadsPower = response.datas.currentValue(forKey = "loadsPower"),
             generationPower = response.datas.currentValue(forKey = "generationPower"),
-            epsPower = response.datas.currentValue(forKey = "epsPower"),
             ambientTemperation = response.datas.currentValue(forKey = "ambientTemperation"),
             invTemperation = response.datas.currentValue(forKey = "invTemperation"),
             meterPower2 = response.datas.currentValue(forKey = "meterPower2"),
@@ -131,7 +130,7 @@ class CurrentStatusCalculator(
     }
 
     private fun loadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
-        return status.gridConsumptionPower + status.generationPower - status.feedinPower + (if (shouldCombineCT2WithLoadsPower) abs(status.meterPower2) else 0.0)
+        return abs(status.gridConsumptionPower + status.generationPower - status.feedinPower + (if (shouldCombineCT2WithLoadsPower) abs(status.meterPower2) else 0.0))
     }
 
     private fun calculateSolarPower(hasPV: Boolean, status: CurrentRawValues, shouldInvertCT2: Boolean, shouldCombineCT2WithPVPower: Boolean): Double {
@@ -160,7 +159,6 @@ data class CurrentRawValues(
     val gridConsumptionPower: Double,
     val loadsPower: Double,
     val generationPower: Double,
-    val epsPower: Double,
     val ambientTemperation: Double,
     val invTemperation: Double,
     val meterPower2: Double,

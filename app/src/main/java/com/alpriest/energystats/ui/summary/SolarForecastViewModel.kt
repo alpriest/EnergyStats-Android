@@ -14,9 +14,9 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 data class SolarForecastViewData(
@@ -49,6 +49,7 @@ class SolarForecastViewModel(
     var loadStateStream = MutableStateFlow<LoadState>(LoadState.Inactive)
     var tooManyRequestsStream = MutableStateFlow(false)
     var canRefreshStream = MutableStateFlow(true)
+    var lastFetchedStream = MutableStateFlow<String?>(null)
 
     suspend fun load(context: Context, ignoreCache: Boolean = false) {
         updateCanRefresh()
@@ -61,9 +62,11 @@ class SolarForecastViewModel(
         }
 
         loadStateStream.value = LoadState.Active("Loading...")
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/y, HH:mm")
 
         dataStream.value = settings.sites.mapNotNull { site ->
             val forecast = solarForecastProvider().fetchForecast(site, settings.apiKey, ignoreCache)
+            lastFetchedStream.value = configManager.lastSolcastRefresh?.format(formatter)
 
             if (forecast.failure == null) {
                 val forecasts = forecast.forecasts
@@ -165,7 +168,6 @@ class SolarForecastViewModel(
     }
 
     suspend fun refetchSolcast(context: Context) {
-        configManager.lastSolcastRefresh = LocalDateTime.now()
         load(context, ignoreCache = true)
     }
 

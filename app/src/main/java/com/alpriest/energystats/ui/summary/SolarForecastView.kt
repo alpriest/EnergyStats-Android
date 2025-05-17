@@ -109,6 +109,8 @@ class SolarForecastView(
 
     @Composable
     fun LoadedView(modifier: Modifier, data: List<SolarForecastViewData>, viewModel: SolarForecastViewModel, appTheme: AppTheme) {
+        val lastUpdate = viewModel.lastFetchedStream.collectAsState().value
+
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -138,7 +140,10 @@ class SolarForecastView(
             } else {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(top = 44.dp)
+                    modifier = Modifier
+                        .padding(top = 44.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Rectangle(
                         color = predictionColor,
@@ -177,6 +182,21 @@ class SolarForecastView(
                     )
                 }
 
+                lastUpdate?.let {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            String.format(stringResource(R.string.last_update, it)),
+                            style = TextStyle(color = colorScheme.onSecondary)
+                        )
+                    }
+                }
+
                 RefreshSolcastButton(viewModel, appTheme)
             }
         }
@@ -189,9 +209,11 @@ class SolarForecastView(
         val canRefresh = viewModel.canRefreshStream.collectAsState().value
         val scope = rememberCoroutineScope()
 
-        Column(modifier = Modifier
-            .padding(top = 32.dp)
-            .fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .padding(top = 32.dp)
+                .fillMaxWidth()
+        ) {
             if (tooManyRequests) {
                 Text("You have exceeded your free daily limit of requests. Please try tomorrow.")
             } else {

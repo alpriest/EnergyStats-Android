@@ -146,8 +146,7 @@ class PowerFlowTabViewModel(
             "batTemperature",
             "batTemperature_1",
             "batTemperature_2",
-            "ResidualEnergy",
-            "epsPower"
+            "ResidualEnergy"
         )
 
         if (configManager.powerFlowStrings.enabled) {

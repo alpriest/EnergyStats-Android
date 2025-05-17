@@ -8,8 +8,8 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.alpriest.energystats.services.FoxAPIService
 import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkCache
@@ -54,7 +54,7 @@ class AppContainer(private val context: Context) {
         if (config.isDemoUser) {
             DemoSolarForecasting()
         } else {
-            SolcastCache(Solcast(), context)
+            SolcastCache(Solcast(configManager), context)
         }
     }
     val networkStore: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore.shared
@@ -151,30 +151,30 @@ class AppContainer(private val context: Context) {
     }
 
     fun openAppInPlayStore() {
-        val uri = Uri.parse("market://details?id=" + context.packageName)
+        val uri = ("market://details?id=" + context.packageName).toUri()
         val goToMarketIntent = Intent(Intent.ACTION_VIEW, uri)
 
         val flags = Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or FLAG_ACTIVITY_NEW_TASK
         goToMarketIntent.addFlags(flags)
 
         try {
-            startActivity(context, goToMarketIntent, null)
+            context.startActivity(goToMarketIntent)
         } catch (e: ActivityNotFoundException) {
             val intent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("http://play.google.com/store/apps/details?id=" + context.packageName)
+                ("http://play.google.com/store/apps/details?id=" + context.packageName).toUri()
             )
 
-            startActivity(context, intent, null)
+            context.startActivity(intent)
         }
     }
 
     fun buyMeACoffee() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.flags = FLAG_ACTIVITY_NEW_TASK
-        val data = Uri.parse("https://buymeacoffee.com/alpriest")
+        val data = "https://buymeacoffee.com/alpriest".toUri()
         intent.data = data
-        startActivity(context, intent, null)
+        context.startActivity(intent)
     }
 
     fun writeToTempFile(baseFilename: String, text: String): Uri? {
@@ -192,8 +192,7 @@ class AppContainer(private val context: Context) {
 fun getAppVersionName(context: Context): String {
     var appVersionName = ""
     try {
-        appVersionName =
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        appVersionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: ""
     } catch (e: PackageManager.NameNotFoundException) {
         e.printStackTrace()
     }

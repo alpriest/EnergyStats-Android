@@ -1,6 +1,5 @@
 package com.alpriest.energystats
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,9 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Insights
-import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Card
@@ -32,21 +31,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.BannerAlertManager
@@ -87,12 +81,10 @@ fun TabbedView(
     userManager: UserManaging,
     onLogout: () -> Unit,
     themeStream: MutableStateFlow<AppTheme>,
-    networkStore: InMemoryLoggingNetworkStore,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
     onWriteTempFile: (String, String) -> Uri?,
     filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
-    credentialStore: CredentialStore,
     solarForecastingProvider: () -> SolcastCaching,
     widgetDataSharer: WidgetDataSharing,
     bannerAlertManager: BannerAlertManaging,
@@ -105,7 +97,7 @@ fun TabbedView(
         TitleItem(stringResource(R.string.power_flow_tab), Icons.Default.SwapVert, false),
         TitleItem(stringResource(R.string.stats_tab), Icons.Default.BarChart, false),
         TitleItem("Parameters", Icons.Default.Insights, false),
-        TitleItem("Summary", Icons.Default.MenuBook, false),
+        TitleItem("Summary", Icons.AutoMirrored.Filled.MenuBook, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
 
@@ -119,7 +111,7 @@ fun TabbedView(
                 userScrollEnabled = false
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager, templateStore).Content(themeStream = themeStream,)
+                    0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager, templateStore).Content(themeStream = themeStream)
                     1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
                     2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream, solarForecastingProvider).Content()
                     3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(themeStream = themeStream)
@@ -161,7 +153,7 @@ fun TabbedView(
                                         Icon(imageVector = item.icon, contentDescription = null)
                                         Text(
                                             text = item.title,
-                                            fontSize = 10.sp
+                                            style = MaterialTheme.typography.bodySmall
                                         )
                                     }
 
@@ -178,9 +170,8 @@ fun TabbedView(
                                                 color = Color.White,
                                                 fontWeight = FontWeight.Bold,
                                                 modifier = Modifier
-                                                    .padding(horizontal = 2.dp)
-                                                    .padding(bottom = 2.dp),
-                                                fontSize = 10.sp
+                                                    .padding(horizontal = 2.dp),
+                                                style = MaterialTheme.typography.bodySmall
                                             )
                                         }
                                     }
@@ -212,12 +203,10 @@ fun HomepagePreview() {
             userManager = FakeUserManager(),
             {},
             themeStream = themeStream,
-            networkStore = InMemoryLoggingNetworkStore.shared,
             {},
             {},
             { _, _ -> null },
             { _, _ -> },
-            SharedPreferencesCredentialStore(LocalContext.current.getSharedPreferences("com.alpriest.energystats", Context.MODE_PRIVATE)),
             { DemoSolarForecasting() },
             WidgetDataSharer(FakeConfigStore()),
             BannerAlertManager(),

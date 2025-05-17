@@ -5,6 +5,7 @@ import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.alpriest.energystats.models.SolcastSiteResponseList
 import com.alpriest.energystats.services.InvalidConfigurationException
 import com.alpriest.energystats.services.TryLaterException
+import com.alpriest.energystats.stores.ConfigManaging
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
@@ -18,12 +19,13 @@ import okhttp3.Response
 import java.io.IOException
 import java.lang.reflect.Type
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class Solcast : SolarForecasting {
+class Solcast(private val configManager: ConfigManaging) : SolarForecasting {
     override suspend fun fetchForecast(site: SolcastSite, apiKey: String): SolcastForecastResponseList {
         val url = HttpUrl.Builder()
             .scheme("https")
@@ -40,6 +42,7 @@ class Solcast : SolarForecasting {
             .build()
 
         val type = object : TypeToken<SolcastForecastResponseList>() {}.type
+        configManager.lastSolcastRefresh = LocalDateTime.now()
         return fetch(request, type)
     }
 

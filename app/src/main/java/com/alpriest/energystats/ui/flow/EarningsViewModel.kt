@@ -124,7 +124,7 @@ class EarningsViewModel(val energyStatsFinancialModel: EnergyStatsFinancialModel
         fun preview(): EarningsViewModel {
             return EarningsViewModel(
                 energyStatsFinancialModel = EnergyStatsFinancialModel(
-                    totalsViewModel = TotalsViewModel(listOf(OpenReportResponse("raw", unit = "kW", listOf()))),
+                    totalsViewModel = TotalsViewModel(listOf(OpenReportResponse("raw", unit = "kW", listOf())), true),
                     configManager = FakeConfigManager()
                 )
             )

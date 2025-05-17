@@ -55,7 +55,7 @@ class GenerationViewModel(private val pvTotal: Double, response: OpenHistoryResp
     val todayGeneration: Double
         get() = pvTotal + (if (includeCT2) ct2Total else 0.0)
 
-    fun estimatedTotal(string: StringType): Double {
+    fun estimatedTotalEnergy(string: StringType): Double {
         return when (string) {
             StringType.PV1 -> pv1Total
             StringType.PV2 -> pv2Total
@@ -64,6 +64,24 @@ class GenerationViewModel(private val pvTotal: Double, response: OpenHistoryResp
             StringType.PV5 -> pv5Total
             StringType.PV6 -> pv6Total
             StringType.CT2 -> ct2Total
+        }
+    }
+
+    fun estimatedTotalPercentage(string: StringType): Double {
+        val totalSum = pv1Total + pv2Total + pv3Total + pv4Total + pv5Total + pv6Total
+
+        if (totalSum == 0.0) {
+            return 0.0
+        }
+
+        return when (string) {
+            StringType.PV1 -> pv1Total / totalSum
+            StringType.PV2 -> pv2Total / totalSum
+            StringType.PV3 -> pv3Total / totalSum
+            StringType.PV4 -> pv4Total / totalSum
+            StringType.PV5 -> pv5Total / totalSum
+            StringType.PV6 -> pv6Total / totalSum
+            StringType.CT2 -> ct2Total / totalSum
         }
     }
 }

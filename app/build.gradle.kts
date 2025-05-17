@@ -13,14 +13,14 @@ localProperties.load(FileInputStream(rootProject.file("local.properties")))
 
 android {
     namespace = "com.alpriest.energystats"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.alpriest.energystats"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 272
-        versionName = "2.117"
+        targetSdk = 35
+        versionCode = 273
+        versionName = "2.118"
 
         buildConfigField(type = "String", name = "GOOGLE_MAPS_APIKEY", value = localProperties.getProperty("GOOGLE_MAPS_APIKEY"))
     }

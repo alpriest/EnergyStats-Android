@@ -164,7 +164,7 @@ class LoadedPowerFlowViewModel(
         if (configManager.showHomeTotal || configManager.showGridTotals || configManager.showFinancialSummary || configManager.totalYieldModel != TotalYieldModel.Off) {
             viewModelScope.launch {
                 try {
-                    val totals = TotalsViewModel(loadReportData(currentDevice))
+                    val totals = TotalsViewModel(loadReportData(currentDevice), currentDevice.hasPV)
                     earnings.value = EarningsViewModel(EnergyStatsFinancialModel(totals, configManager))
                     homeTotal.value = totals.loads
                     gridImportTotal.value = totals.grid
