@@ -1,12 +1,18 @@
 package com.alpriest.energystats
 
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Insights
@@ -14,7 +20,9 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
@@ -23,7 +31,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -35,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
@@ -73,7 +85,7 @@ data class TitleItem(
     val isSettings: Boolean
 )
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TabbedView(
     configManager: ConfigManaging,
@@ -100,9 +112,38 @@ fun TabbedView(
         TitleItem("Summary", Icons.AutoMirrored.Filled.MenuBook, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
+    val navController = rememberNavController()
+    val settingsTitle = remember { mutableStateOf("Settings") }
+    val settingsTopBarBarActions = remember { mutableStateOf<@Composable RowScope.() -> Unit>({}) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            if (pagerState.currentPage == 3 || pagerState.currentPage == 4) {
+                TopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = colorScheme.primary,
+                        titleContentColor = colorScheme.onPrimary,
+                        navigationIconContentColor = colorScheme.onPrimary
+                    ),
+                    navigationIcon = {
+                        if (settingsTitle.value != "Settings") {
+                            navController.let {
+                                IconButton(onClick = {
+                                    it.popBackStack()
+                                }) {
+                                    Icon(Icons.AutoMirrored.Default.ArrowBack, "backIcon")
+                                }
+                            }
+                        }
+                    },
+                    title = {
+                        Text(settingsTitle.value)
+                    },
+                    actions = settingsTopBarBarActions.value
+                )
+            }
+        },
         content = { padding ->
             HorizontalPager(
                 modifier = Modifier.padding(padding),
@@ -114,8 +155,11 @@ fun TabbedView(
                     0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager, templateStore).Content(themeStream = themeStream)
                     1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
                     2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream, solarForecastingProvider).Content()
-                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(themeStream = themeStream)
+                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(settingsTitle, navController, settingsTopBarBarActions, themeStream = themeStream)
                     4 -> NavigableSettingsView(
+                        settingsTitle,
+                        navController,
+                        settingsTopBarBarActions,
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,
@@ -129,10 +173,11 @@ fun TabbedView(
             }
         },
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().background(darkenColor(colorScheme.background, 0.04f))) {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    containerColor = darkenColor(colorScheme.background, 0.04f)
+                    containerColor = darkenColor(colorScheme.background, 0.04f),
+                    modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
                 ) {
                     titles.forEachIndexed { index, item ->
                         Tab(

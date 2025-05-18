@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,7 +17,10 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -26,9 +30,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -44,7 +48,6 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.LoadedScaffold
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -62,10 +65,12 @@ class SummaryView(
 ) {
     @Composable
     fun NavigableContent(
+        topBarTitle: MutableState<String>,
+        navController: NavHostController,
+        actions: MutableState<@Composable() (RowScope.() -> Unit)>,
         viewModel: SummaryTabViewModel = viewModel(factory = SummaryTabViewModelFactory(network, configManager)),
         themeStream: MutableStateFlow<AppTheme>
     ) {
-        val navController = rememberNavController()
         trackScreenView("Summary", "SummaryView")
 
         NavHost(
@@ -73,24 +78,22 @@ class SummaryView(
             startDestination = "Summary"
         ) {
             composable("Summary") {
-                LoadedScaffold(title = "Summary",
-                    actions = {
-                        ESButton(onClick = { navController.navigate("EditSummaryDateRanges") }) {
-                            Image(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit",
-                                colorFilter = ColorFilter.tint(Color.White)
-                            )
-                        }
-                    }) {
-                    Content(viewModel, themeStream, it)
+                topBarTitle.value = "Summary"
+                actions.value = {
+                    ESButton(onClick = { navController.navigate("EditSummaryDateRanges") }) {
+                        Image(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            colorFilter = ColorFilter.tint(Color.White)
+                        )
+                    }
                 }
+                Content(viewModel, themeStream, Modifier)
             }
 
             composable("EditSummaryDateRanges") {
-                LoadedScaffold(title = "Summary Date Range", navController) {
-                    EditSummaryView(it, navController, viewModel)
-                }
+                topBarTitle.value = "Summary Date Range"
+                EditSummaryView(Modifier, navController, viewModel)
             }
         }
     }
@@ -233,11 +236,20 @@ class SummaryView(
 fun SummaryViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         PreviewContextHolder.context = LocalContext.current
+        val title = remember { mutableStateOf("Summary") }
+        val actions = remember { mutableStateOf<@Composable RowScope.() -> Unit>({}) }
+
         SummaryView(
             FakeConfigManager(),
             FakeUserManager(),
             DemoNetworking()
-        ) { DemoSolarForecasting() }.NavigableContent(themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true)))
+        ) { DemoSolarForecasting() }
+            .NavigableContent(
+                title,
+                navController = NavHostController(LocalContext.current),
+                actions = actions,
+                themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true))
+            )
     }
 }
 
