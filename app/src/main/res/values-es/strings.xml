@@ -423,4 +423,6 @@
     <string name="about_59_seconds">Los 59 segundos están determinados por el funcionamiento del firmware del inversor. Esto se debe a que las horas de finalización incluyen el minuto que configures, por lo que tu intervalo de tiempo se ejecutará hasta el segundo 59 de ese minuto.\\n\\nEjemplo: si deseas que el intervalo termine a las 05:30, debes establecerlo en 05:29:59. Si lo configuras en 05:30, el inversor continuará hasta las 05:30:59 y tendrás un minuto en el que el uso de energía no será el esperado.</string>
     <string name="solar_strings_description">Si tienes varios conjuntos de paneles solares, por ejemplo, en el frente/trasero de tu casa, esto te permitirá ver la energía generada por cada conjunto. La configuración tendrá efecto en la próxima obtención de datos.</string>
     <string name="solar_yield_description">Su generación diaria total se mostrará. Si tiene activada la opción \'Mostrar la potencia fotovoltaica por cadenas\', también se mostrará una estimación de la generación diaria por cadena.</string>
+    <string name="string_total_today_description">" (%1$s hoy)"</string>
+    <string name="summary_date_range">Rango de fechas del resumen</string>
 </resources>

@@ -424,4 +424,6 @@
     <string name="about_59_seconds">59 sekund wynika z działania oprogramowania falownika. Czas końcowy obejmuje pełną minutę, którą ustawisz, więc przedział czasowy będzie trwał do 59 sekundy tej minuty.\\n\\nNp. jeśli chcesz, aby przedział zakończył się o 05:30, ustaw 05:29:59. Jeśli ustawisz 05:30, falownik będzie działał do 05:30:59 i przez jedną minutę zużycie energii może być inne niż oczekiwano.</string>
     <string name="solar_strings_description">Jeśli masz kilka zestawów paneli słonecznych, np. na przodzie/tyłach domu, pozwoli Ci to zobaczyć moc generowaną przez każdy zestaw. Ustawienie zacznie obowiązywać przy następnym pobieraniu danych.</string>
     <string name="solar_yield_description">La tua produzione giornaliera totale verrà visualizzata. Se hai abilitato \'Mostra la potenza PV per stringhe\', verrà mostrata anche una stima della produzione giornaliera per stringa.</string>
+    <string name="string_total_today_description">" (%1$s dzisiaj)"</string>
+    <string name="summary_date_range">Zakres dat podsumowania</string>
 </resources>

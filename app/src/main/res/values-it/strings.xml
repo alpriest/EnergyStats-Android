@@ -424,4 +424,6 @@
     <string name="about_59_seconds">I 59 secondi sono impostati dal funzionamento del firmware dell’inverter. Questo perché gli orari di fine includono il minuto impostato, quindi la fascia oraria si estenderà fino al 59º secondo di quel minuto.\\n\\nAd es. se desideri che l’intervallo termini alle 05:30, devi impostarlo alle 05:29:59. Se imposti 05:30, l’inverter continuerà fino alle 05:30:59 e avrai un minuto in cui l’uso dell’energia non sarà come previsto.</string>
     <string name="solar_strings_description">Se hai più set di pannelli solari, ad esempio sul fronte/retro della tua casa, ciò ti permetterà di vedere l\'energia generata da ogni set. L\'impostazione avrà effetto al prossimo recupero dati.</string>
     <string name="solar_yield_description">La tua produzione giornaliera totale verrà visualizzata. Se hai abilitato \'Mostra la potenza PV per stringhe\', verrà mostrata anche una stima della produzione giornaliera per stringa.</string>
+    <string name="string_total_today_description">" (%1$s oggi)"</string>
+    <string name="summary_date_range">Intervallo di date del riepilogo</string>
 </resources>
