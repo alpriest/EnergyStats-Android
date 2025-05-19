@@ -102,7 +102,12 @@ class StatsTabView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val tipKitManager = remember { TipKitManager() }
 
-        topBarSettings.value = TopBarSettings(false, false, "", {})
+        topBarSettings.value = TopBarSettings(true, false, "Stats", {
+            StatsDatePickerView(
+                viewModel = StatsDatePickerViewModel(viewModel.displayModeStream),
+                viewModel.showingGraphStream
+            )
+        })
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -127,8 +132,6 @@ class StatsTabView(
                 .verticalScroll(scrollState)
                 .padding(12.dp)
         ) {
-            StatsDatePickerView(viewModel = StatsDatePickerViewModel(viewModel.displayModeStream), viewModel.showingGraphStream, modifier = Modifier.padding(bottom = 24.dp))
-
             Box(contentAlignment = Alignment.Center) {
                 if (graphShowing) {
                     StatsGraphView(viewModel = viewModel, themeStream, modifier = Modifier.padding(bottom = 24.dp))

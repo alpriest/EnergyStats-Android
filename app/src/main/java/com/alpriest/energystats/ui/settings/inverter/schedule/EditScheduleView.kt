@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,7 +28,6 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.LoadedScaffold
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage

@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -58,6 +57,11 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
+enum class SummaryScreen {
+    Overview,
+    EditSummaryDateRanges
+}
+
 class SummaryView(
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
@@ -75,10 +79,10 @@ class SummaryView(
 
         NavHost(
             navController = navController,
-            startDestination = "Summary"
+            startDestination = SummaryScreen.Overview.name
         ) {
-            composable("Summary") {
-                topBarSettings.value = TopBarSettings(true, false, "Summary", {
+            composable(SummaryScreen.Overview.name) {
+                topBarSettings.value = TopBarSettings(true, false, stringResource(R.string.summary), {
                     ESButton(onClick = { navController.navigate("EditSummaryDateRanges") }) {
                         Image(
                             imageVector = Icons.Default.Edit,
@@ -90,8 +94,8 @@ class SummaryView(
                 Content(viewModel, themeStream, Modifier)
             }
 
-            composable("EditSummaryDateRanges") {
-                topBarSettings.value = TopBarSettings(true, true, "Summary Date Range", {})
+            composable(SummaryScreen.EditSummaryDateRanges.name) {
+                topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.summary_date_range), {})
                 EditSummaryView(Modifier, navController, viewModel)
             }
         }

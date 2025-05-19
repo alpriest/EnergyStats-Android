@@ -9,12 +9,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,14 +52,14 @@ fun WelcomeView(
     themeStream: MutableStateFlow<AppTheme>,
     onClick: () -> Unit
 ) {
-//    val scrollState = rememberScrollState()
     val maxHeight: Dp = if (isLandscape()) 200.dp else 800.dp
+    val scrollState = rememberScrollState()
 
     Column(
         horizontalAlignment = CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-//            .verticalScroll(scrollState)
+            .verticalScroll(scrollState)
     ) {
         WelcomeLogoView(
             showingApiKey,
@@ -106,7 +111,8 @@ fun WelcomeLogoView(showingApiKey: Boolean, modifier: Modifier = Modifier) {
             modifier = Modifier
                 .height(animatedHeight)
                 .width(animatedWidth)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.statusBars),
             contentScale = ContentScale.Fit
         )
     }

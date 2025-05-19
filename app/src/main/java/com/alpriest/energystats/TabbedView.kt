@@ -134,12 +134,10 @@ fun TabbedView(
                     ),
                     navigationIcon = {
                         if (topBarSettings.value.backButtonVisible) {
-                            navController.let {
-                                IconButton(onClick = {
-                                    it.popBackStack()
-                                }) {
-                                    Icon(Icons.AutoMirrored.Default.ArrowBack, "backIcon")
-                                }
+                            IconButton(onClick = {
+                                navController.popBackStack()
+                            }) {
+                                Icon(Icons.AutoMirrored.Default.ArrowBack, "backIcon")
                             }
                         }
                     },
@@ -150,6 +148,7 @@ fun TabbedView(
                 )
             }
         },
+        contentWindowInsets = WindowInsets.navigationBars,
         content = { padding ->
             HorizontalPager(
                 modifier = Modifier.padding(padding),
@@ -158,9 +157,30 @@ fun TabbedView(
                 userScrollEnabled = false
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(topBarSettings, network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager, templateStore).Content(themeStream = themeStream)
+                    0 -> PowerFlowTabView(
+                        topBarSettings,
+                        network,
+                        configManager,
+                        userManager,
+                        themeStream,
+                        widgetDataSharer,
+                        bannerAlertManager,
+                        templateStore
+                    ).Content(themeStream = themeStream)
+
                     1 -> StatsTabView(topBarSettings, configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
-                    2 -> NavigableParametersGraphTabView(topBarSettings, configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream, solarForecastingProvider).Content()
+                    2 -> NavigableParametersGraphTabView(
+                        topBarSettings,
+                        navController,
+                        configManager,
+                        userManager,
+                        network,
+                        onWriteTempFile,
+                        filePathChooser,
+                        themeStream,
+                        solarForecastingProvider
+                    ).Content()
+
                     3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(topBarSettings, navController, themeStream = themeStream)
                     4 -> NavigableSettingsView(
                         topBarSettings,
@@ -178,7 +198,9 @@ fun TabbedView(
             }
         },
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth().background(darkenColor(colorScheme.background, 0.04f))) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .background(darkenColor(colorScheme.background, 0.04f))) {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
                     containerColor = darkenColor(colorScheme.background, 0.04f),

@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
@@ -33,7 +33,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -43,12 +42,13 @@ import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVari
 import com.alpriest.energystats.ui.statsgraph.CalendarView
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.ESButton
+import com.alpriest.energystats.ui.theme.Typography
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 
 @Composable
-fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier, navController: NavController, configManager: ConfigManaging) {
+fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier, navController: NavHostController, configManager: ConfigManaging) {
     var hours by remember { mutableStateOf(viewModel.displayModeStream.value.hours) }
     val candidateQueryDate = MutableStateFlow(viewModel.displayModeStream.collectAsState().value.date)
     var hoursButtonEnabled by remember { mutableStateOf(true) }
@@ -63,12 +63,12 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
     }
 
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(start = 4.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         MenuWithButton(
             modifier = Modifier.padding(end = 14.dp),
-            Icons.AutoMirrored.Filled.List
+            Icons.AutoMirrored.Filled.FormatListBulleted
         ) { showing ->
             DropdownMenuItem(onClick = {
                 navController.navigate(ParametersScreen.ParameterChooser.name)
@@ -97,7 +97,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
             })
         }
 
-        CalendarView(dateStream = candidateQueryDate)
+        CalendarView(dateStream = candidateQueryDate, style = Typography.headlineMedium)
 
         Spacer(modifier = Modifier.weight(2.0f))
 
@@ -112,7 +112,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
             },
             contentPadding = PaddingValues(0.dp),
         ) {
-            Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
+            Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left", modifier = Modifier.size(32.dp))
         }
 
         val date = candidateQueryDate.collectAsState().value
@@ -127,7 +127,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
             contentPadding = PaddingValues(0.dp),
             enabled = date.atStartOfDay() < LocalDate.now().atStartOfDay()
         ) {
-            Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
+            Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right", modifier = Modifier.size(32.dp))
         }
     }
 }
@@ -140,7 +140,7 @@ private fun MenuWithButton(modifier: Modifier = Modifier, icon: ImageVector, con
         ESButton(
             onClick = { showing.value = true },
             modifier = Modifier
-                .padding(vertical = 6.dp)
+                .padding(vertical = 4.dp)
                 .size(36.dp),
             contentPadding = PaddingValues(0.dp)
         ) {

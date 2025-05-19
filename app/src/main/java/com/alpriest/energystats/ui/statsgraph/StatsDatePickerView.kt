@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.CalendarMonth
@@ -23,6 +24,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -40,6 +43,7 @@ import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.settings.SlimButton
 import com.alpriest.energystats.ui.theme.ESButton
+import com.alpriest.energystats.ui.theme.Typography
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -73,7 +77,7 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
         DateRangePicker(viewModel, range, graphShowingState)
 
         when (range) {
-            is DatePickerRange.DAY -> CalendarView(viewModel.dateStream)
+            is DatePickerRange.DAY -> CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
             is DatePickerRange.MONTH -> {
                 MonthPicker(month) { viewModel.monthStream.value = it }
                 YearPicker(year) { viewModel.yearStream.value = it }
@@ -89,24 +93,31 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
             ESButton(
                 modifier = Modifier
                     .padding(end = 14.dp)
-                    .padding(vertical = 6.dp)
+                    .padding(vertical = 4.dp)
                     .size(36.dp),
                 onClick = { viewModel.decrease() },
                 contentPadding = PaddingValues(0.dp),
                 enabled = canDecrease
             ) {
-                Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Left")
+                Icon(
+                    imageVector = Icons.Default.ChevronLeft,
+                    contentDescription = "Left",
+                    modifier = Modifier.size(32.dp)
+                )
             }
 
             ESButton(
                 modifier = Modifier
-                    .padding(vertical = 6.dp)
+                    .padding(vertical = 4.dp)
                     .size(36.dp),
                 onClick = { viewModel.increase() },
                 contentPadding = PaddingValues(0.dp),
                 enabled = canIncrease
             ) {
-                Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right")
+                Icon(
+                    imageVector = Icons.Default.ChevronRight,
+                    contentDescription = "Right"
+                )
             }
         }
     }
@@ -129,7 +140,7 @@ fun MonthPicker(month: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
             onClick = { showing = true }
         ) {
             calendar.set(Calendar.MONTH, month)
-            Text(monthFormat.format(calendar.time))
+            Text(monthFormat.format(calendar.time), style = Typography.headlineMedium)
         }
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
@@ -168,7 +179,7 @@ fun YearPicker(year: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
             enabled = enabled,
             onClick = { showing = true }
         ) {
-            Text(year.toString())
+            Text(year.toString(), style = Typography.headlineMedium)
         }
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
@@ -204,11 +215,12 @@ private fun DateRangePicker(
         modifier = Modifier
             .wrapContentSize(Alignment.TopStart)
             .padding(end = 14.dp)
+            .padding(start = 4.dp)
     ) {
         ESButton(
             onClick = { showing = true },
             modifier = Modifier
-                .padding(vertical = 6.dp)
+                .padding(vertical = 4.dp)
                 .size(36.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
@@ -221,8 +233,7 @@ private fun DateRangePicker(
         DropdownMenu(
             expanded = showing,
             onDismissRequest = { showing = false }
-        )
-        {
+        ) {
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.DAY
                 showing = false
@@ -285,18 +296,19 @@ fun CustomRangePicker(viewModel: StatsDatePickerViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CalendarView(viewModel.customStartDate)
+        CalendarView(viewModel.customStartDate, style = Typography.bodyMedium)
         Icon(
-            imageVector = Icons.Filled.ArrowForward,
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp)
+            modifier = Modifier.padding(end = 14.dp),
+            tint = Color.White
         )
-        CalendarView(viewModel.customEndDate)
+        CalendarView(viewModel.customEndDate, style = Typography.bodyMedium)
     }
 }
 
 @Composable
-fun CalendarView(dateStream: MutableStateFlow<LocalDate>) {
+fun CalendarView(dateStream: MutableStateFlow<LocalDate>, style: TextStyle) {
     var showingDatePicker by remember { mutableStateOf(false) }
 
     val dateState = dateStream.collectAsState().value
@@ -310,7 +322,10 @@ fun CalendarView(dateStream: MutableStateFlow<LocalDate>) {
         SlimButton(
             onClick = { showingDatePicker = true }
         ) {
-            Text(dateState.toString())
+            Text(
+                dateState.toString(),
+                style = style
+            )
         }
         if (showingDatePicker) {
             Dialog(

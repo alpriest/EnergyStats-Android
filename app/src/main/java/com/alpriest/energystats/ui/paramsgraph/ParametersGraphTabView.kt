@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,6 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.TopBarSettings
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
@@ -76,12 +78,13 @@ class ParametersGraphTabViewModelFactory(
 }
 
 class ParametersGraphTabView(
+    private val topBarSettings: MutableState<TopBarSettings>,
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>,
-    private val navController: NavController,
+    private val navController: NavHostController,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     private val solarForecastProvider: () -> SolcastCaching
 ) {
@@ -104,6 +107,9 @@ class ParametersGraphTabView(
         val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
         val context = LocalContext.current
         val loadState = viewModel.uiState.collectAsState().value.state
+        topBarSettings.value = TopBarSettings(true, false, "Parameters", {
+            ParameterGraphHeaderView(viewModel = viewModel, navController = navController, configManager = configManager)
+        })
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -117,8 +123,6 @@ class ParametersGraphTabView(
                 .verticalScroll(scrollState)
                 .padding(12.dp)
         ) {
-            ParameterGraphHeaderView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp), navController, configManager)
-
             when (loadState) {
                 is LoadState.Error ->
                     Text(stringResource(R.string.error))

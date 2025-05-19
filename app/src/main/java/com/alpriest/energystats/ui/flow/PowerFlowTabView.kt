@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -85,7 +87,8 @@ class PowerFlowTabViewModelFactory(
     }
 }
 
-fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier): Modifier {
+@Composable
+fun Modifier.conditional(condition: Boolean, modifier: @Composable Modifier.() -> Modifier): Modifier {
     return if (condition) {
         then(modifier(Modifier))
     } else {
@@ -141,7 +144,8 @@ class PowerFlowTabView(
                 .fillMaxSize()
                 .conditional(showSunnyBackground) {
                     background(background)
-                },
+                }
+                .windowInsetsPadding(WindowInsets.statusBars),
             contentAlignment = TopEnd
         ) {
             when (uiState) {
