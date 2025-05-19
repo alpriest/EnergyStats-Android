@@ -34,6 +34,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.alpriest.energystats.R
+import com.alpriest.energystats.TopBarSettings
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
@@ -65,9 +66,8 @@ class SummaryView(
 ) {
     @Composable
     fun NavigableContent(
-        topBarTitle: MutableState<String>,
+        topBarSettings: MutableState<TopBarSettings>,
         navController: NavHostController,
-        actions: MutableState<@Composable() (RowScope.() -> Unit)>,
         viewModel: SummaryTabViewModel = viewModel(factory = SummaryTabViewModelFactory(network, configManager)),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -78,8 +78,7 @@ class SummaryView(
             startDestination = "Summary"
         ) {
             composable("Summary") {
-                topBarTitle.value = "Summary"
-                actions.value = {
+                topBarSettings.value = TopBarSettings(true, false, "Summary", {
                     ESButton(onClick = { navController.navigate("EditSummaryDateRanges") }) {
                         Image(
                             imageVector = Icons.Default.Edit,
@@ -87,12 +86,12 @@ class SummaryView(
                             colorFilter = ColorFilter.tint(Color.White)
                         )
                     }
-                }
+                })
                 Content(viewModel, themeStream, Modifier)
             }
 
             composable("EditSummaryDateRanges") {
-                topBarTitle.value = "Summary Date Range"
+                topBarSettings.value = TopBarSettings(true, true, "Summary Date Range", {})
                 EditSummaryView(Modifier, navController, viewModel)
             }
         }
@@ -236,8 +235,7 @@ class SummaryView(
 fun SummaryViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         PreviewContextHolder.context = LocalContext.current
-        val title = remember { mutableStateOf("Summary") }
-        val actions = remember { mutableStateOf<@Composable RowScope.() -> Unit>({}) }
+        val topBarSettings = remember { mutableStateOf(TopBarSettings(true, false, "Summary", { })) }
 
         SummaryView(
             FakeConfigManager(),
@@ -245,9 +243,8 @@ fun SummaryViewPreview() {
             DemoNetworking()
         ) { DemoSolarForecasting() }
             .NavigableContent(
-                title,
+                topBarSettings,
                 navController = NavHostController(LocalContext.current),
-                actions = actions,
                 themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true))
             )
     }

@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
+import com.alpriest.energystats.TopBarSettings
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -81,6 +83,7 @@ class StatsTabViewModelFactory(
 }
 
 class StatsTabView(
+    private val topBarSettings: MutableState<TopBarSettings>,
     private val configManager: ConfigManaging,
     private val network: Networking,
     private val onWriteTempFile: (String, String) -> Uri?,
@@ -97,8 +100,9 @@ class StatsTabView(
         val graphShowing = viewModel.showingGraphStream.collectAsState().value
         val showingApproximations = remember { mutableStateOf(false) }
         val loadState = viewModel.uiState.collectAsState().value.state
-        val showTipDialog = remember { mutableStateOf(false) }
         val tipKitManager = remember { TipKitManager() }
+
+        topBarSettings.value = TopBarSettings(false, false, "", {})
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -193,7 +197,10 @@ class StatsTabView(
 @Composable
 fun StatsGraphTabViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+        val topBarSettings = remember { mutableStateOf(TopBarSettings(false, false, "", {})) }
+
         StatsTabView(
+            topBarSettings,
             FakeConfigManager(),
             DemoNetworking(),
             { _, _ -> null },

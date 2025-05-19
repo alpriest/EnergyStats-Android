@@ -58,9 +58,7 @@ class EditScheduleView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, loadState.allowRetry, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
             is LoadState.Inactive -> schedule?.let {
-                LoadedScaffold(stringResource(R.string.edit_schedule), navController) {
-                    Loaded(schedule, viewModel, navController, modifier)
-                }
+                Loaded(schedule, viewModel, navController, Modifier)
             }
         }
     }

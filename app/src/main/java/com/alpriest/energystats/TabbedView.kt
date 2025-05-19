@@ -85,6 +85,13 @@ data class TitleItem(
     val isSettings: Boolean
 )
 
+data class TopBarSettings(
+    val topBarVisible: Boolean,
+    val backButtonVisible: Boolean,
+    val title: String,
+    val actions: @Composable RowScope.() -> Unit
+)
+
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TabbedView(
@@ -113,13 +120,12 @@ fun TabbedView(
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
     val navController = rememberNavController()
-    val settingsTitle = remember { mutableStateOf("Settings") }
-    val settingsTopBarBarActions = remember { mutableStateOf<@Composable RowScope.() -> Unit>({}) }
+    val topBarSettings = remember { mutableStateOf(TopBarSettings(false, false, "", {})) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            if (pagerState.currentPage == 3 || pagerState.currentPage == 4) {
+            if (topBarSettings.value.topBarVisible) {
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = colorScheme.primary,
@@ -127,7 +133,7 @@ fun TabbedView(
                         navigationIconContentColor = colorScheme.onPrimary
                     ),
                     navigationIcon = {
-                        if (settingsTitle.value != "Settings") {
+                        if (topBarSettings.value.backButtonVisible) {
                             navController.let {
                                 IconButton(onClick = {
                                     it.popBackStack()
@@ -138,9 +144,9 @@ fun TabbedView(
                         }
                     },
                     title = {
-                        Text(settingsTitle.value)
+                        Text(topBarSettings.value.title)
                     },
-                    actions = settingsTopBarBarActions.value
+                    actions = topBarSettings.value.actions
                 )
             }
         },
@@ -152,14 +158,13 @@ fun TabbedView(
                 userScrollEnabled = false
             ) { page ->
                 when (page) {
-                    0 -> PowerFlowTabView(network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager, templateStore).Content(themeStream = themeStream)
-                    1 -> StatsTabView(configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
-                    2 -> NavigableParametersGraphTabView(configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream, solarForecastingProvider).Content()
-                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(settingsTitle, navController, settingsTopBarBarActions, themeStream = themeStream)
+                    0 -> PowerFlowTabView(topBarSettings, network, configManager, userManager, themeStream, widgetDataSharer, bannerAlertManager, templateStore).Content(themeStream = themeStream)
+                    1 -> StatsTabView(topBarSettings, configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
+                    2 -> NavigableParametersGraphTabView(topBarSettings, configManager, userManager, network, onWriteTempFile, filePathChooser, themeStream, solarForecastingProvider).Content()
+                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(topBarSettings, navController, themeStream = themeStream)
                     4 -> NavigableSettingsView(
-                        settingsTitle,
+                        topBarSettings,
                         navController,
-                        settingsTopBarBarActions,
                         config = configManager,
                         userManager = userManager,
                         onLogout = onLogout,

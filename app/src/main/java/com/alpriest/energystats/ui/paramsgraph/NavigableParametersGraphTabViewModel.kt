@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.alpriest.energystats.TopBarSettings
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.services.Networking
@@ -77,6 +79,7 @@ class NavigableParametersGraphTabViewModelFactory(
 }
 
 class NavigableParametersGraphTabView(
+    val topBarSettings: MutableState<TopBarSettings>,
     val configManager: ConfigManaging,
     val userManager: UserManaging,
     val network: Networking,
@@ -97,6 +100,8 @@ class NavigableParametersGraphTabView(
             exitTransition = { ExitTransition.None }
         ) {
             composable(ParametersScreen.Graph.name) {
+                topBarSettings.value = TopBarSettings(false, false, "Parameters", {})
+
                 ParametersGraphTabView(
                     network,
                     configManager,
@@ -110,6 +115,8 @@ class NavigableParametersGraphTabView(
             }
 
             composable(ParametersScreen.ParameterChooser.name) {
+                topBarSettings.value = TopBarSettings(true, false, "Parameters", {})
+
                 ParameterGraphVariableChooserView(
                     configManager,
                     viewModel.graphVariablesStream,
@@ -118,6 +125,8 @@ class NavigableParametersGraphTabView(
             }
 
             composable(ParametersScreen.ParameterGroupEditor.name) {
+                topBarSettings.value = TopBarSettings(true, false, "Parameters", {})
+
                 ParameterVariableGroupEditorView(
                     ParameterVariableGroupEditorViewModel(configManager, viewModel.graphVariablesStream),
                     navController = navController

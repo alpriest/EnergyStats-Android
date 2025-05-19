@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.TopBarSettings
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
@@ -92,6 +94,7 @@ fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier):
 }
 
 class PowerFlowTabView(
+    private val topBarSettings: MutableState<TopBarSettings>,
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
@@ -123,6 +126,7 @@ class PowerFlowTabView(
         val loadingBackground = remember { largeRadialGradient(listOf(Color.White, Color.Transparent)) }
         val loadedBackground = remember { largeRadialGradient(listOf(Sunny.copy(alpha = 0.7f), Color.Transparent)) }
         val errorBackground = remember { largeRadialGradient(listOf(Color.Red.copy(alpha = 0.7f), Color.Transparent)) }
+        topBarSettings.value = TopBarSettings(false, false, "", {})
 
         val uiState = viewModel.uiState.collectAsState().value.state
         val showSunnyBackground = themeStream.collectAsState().value.showSunnyBackground
@@ -227,9 +231,11 @@ fun PowerFlowTabViewPreview() {
         BannerAlertManager()
     )
     val themeStream = MutableStateFlow(AppTheme.demo())
+    val topBarSettings = remember { mutableStateOf(TopBarSettings(false, false, "", {})) }
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         PowerFlowTabView(
+            topBarSettings,
             DemoNetworking(),
             FakeConfigManager(),
             FakeUserManager(),

@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -10,11 +11,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.TopBarSettings
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
@@ -25,14 +25,13 @@ import com.chuckerteam.chucker.api.Chucker
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.debugGraph(
-    navController: NavHostController,
+    topBarSettings: MutableState<TopBarSettings>,
     network: Networking
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") {
-            LoadedScaffold(title = stringResource(R.string.view_debug_data), navController = navController) {
-                DebugDataSettingsView(network, it)
-            }
+            topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.view_debug_data), {})
+            DebugDataSettingsView(network, Modifier)
         }
     }
 }
@@ -84,11 +83,7 @@ fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
 @Preview(showBackground = true, heightDp = 640)
 @Composable
 fun DebugDataSettingsViewPreview() {
-    val navController = rememberNavController()
-
     EnergyStatsTheme {
-        LoadedScaffold(title = stringResource(R.string.view_debug_data), navController = navController) {
-            DebugDataSettingsView(DemoNetworking(), it)
-        }
+        DebugDataSettingsView(DemoNetworking(), Modifier)
     }
 }

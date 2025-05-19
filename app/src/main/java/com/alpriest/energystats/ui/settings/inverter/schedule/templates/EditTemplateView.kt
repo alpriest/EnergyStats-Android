@@ -41,7 +41,6 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.LoadedScaffold
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -87,9 +86,7 @@ class EditTemplateView(
                 onLogout = { userManager.logout() }
             )
             is LoadState.Inactive -> template?.let { it ->
-                LoadedScaffold(stringResource(R.string.edit_template), navController) { modifier ->
-                    Loaded(it, viewModel, modifier)
-                }
+                Loaded(it, viewModel, modifier)
             }
         }
     }
