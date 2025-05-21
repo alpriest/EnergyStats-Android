@@ -15,9 +15,9 @@
     <string name="firmware_versions">Versioni firmware</string>
     <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Per ulteriori informazioni sulle versioni del firmware, visita il sito web foxesscommunity.com</string>
     <string name="battery">Batteria</string>
-    <string name="capacity">Capacità</string>
-    <string name="calculated_as">"Calcolato come "</string>
-    <string name="where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value">"dove il residuo è stimato dalla tua installazione e potrebbe non essere accurato. Tocca la capacità sopra per inserire un valore manuale."</string>
+    <string name="storage_capacity">Capacità di archiviazione</string>
+    <string name="battery_capacity_formula_explanation_prefix">"Calcolato come "</string>
+    <string name="battery_capacity_formula_explanation_suffix">"dove il residuo è stimato dalla tua installazione e potrebbe non essere accurato. Tocca la capacità sopra per inserire un valore manuale."</string>
     <string name="empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant">Le durate della batteria vuota/piena sono stime basate sulla capacità calcolata, assumendo che le condizioni solari e i tassi di carica della batteria rimangano costanti.</string>
     <string name="display">Visualizzazione</string>
     <string name="increase_sizes_for_large_display">Aumenta le dimensioni per un grande display</string>

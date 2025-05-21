@@ -15,9 +15,9 @@
     <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Obtén más información sobre las versiones de firmware en </string>
     <string name="battery">Batería</string>
     <string name="read_from_your_inverter_when_you_login">Leer desde tu inversor cuando inicies sesión.</string>
-    <string name="capacity">Capacidad</string>
-    <string name="calculated_as">Calculated as </string>
-    <string name="where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value"> donde el residual es una estimación realizada por tu instalación y puede no ser precisa. Toca la capacidad anterior para ingresar un valor manual.</string>
+    <string name="storage_capacity">Capacidad de almacenamiento</string>
+    <string name="battery_capacity_formula_explanation_prefix">Calculated as </string>
+    <string name="battery_capacity_formula_explanation_suffix"> donde el residual es una estimación realizada por tu instalación y puede no ser precisa. Toca la capacidad anterior para ingresar un valor manual.</string>
     <string name="empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant">Las duraciones de batería vacía/llena son estimaciones basadas en la capacidad calculada, asumiendo que las condiciones solares y las tasas de carga de la batería permanezcan constantes.</string>
     <string name="display">Pantalla</string>
     <string name="increase_sizes_for_large_display">Aumentar tamaños para pantallas grandes</string>

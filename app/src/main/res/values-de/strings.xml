@@ -14,11 +14,11 @@
     <string name="firmware_versions">Firmware-Versionen</string>
     <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Mehr Informationen über Firmware-Versionen gibt es auf der foxesscommunity.com Webseite</string>
     <string name="battery">Batterie</string>
-    <string name="calculated_as">Calculated as </string>
-    <string name="where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value"> wobei die Restladung durch Ihre Installation geschätzt wird und nicht akkurat sein könnte. Klicken Sie oben auf \'Kapazität\', um einen manuellen Wert einzugeben.</string>
+    <string name="battery_capacity_formula_explanation_prefix">Calculated as </string>
+    <string name="battery_capacity_formula_explanation_suffix"> wobei die Restladung durch Ihre Installation geschätzt wird und nicht akkurat sein könnte. Klicken Sie oben auf \'Kapazität\', um einen manuellen Wert einzugeben.</string>
     <string name="empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant">Die Zeitdauer für eine leere/volle Batterie ist eine Schätzung basierend auf der berechneten Kapazität unter der Annahme, dass die solaren Bedingungen und die (Ent-)Laderate der Batterie konstant bleiben.</string>
     <string name="read_from_your_inverter_when_you_login">Beim Einloggen vom Wechselrichter lesen.</string>
-    <string name="capacity">Kapazität</string>
+    <string name="storage_capacity">Speicherkapazität</string>
     <string name="display">Anzeige</string>
     <string name="increase_sizes_for_large_display">Größere Größen für große Bildschirme</string>
     <string name="show_coloured_flow_lines">Zeige farbige Leistungsfluss-Linien</string>

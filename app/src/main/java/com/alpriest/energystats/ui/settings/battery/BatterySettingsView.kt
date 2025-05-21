@@ -102,7 +102,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    stringResource(R.string.capacity),
+                    stringResource(R.string.storage_capacity),
                     color = colorScheme.onSecondary,
                 )
                 Spacer(Modifier.weight(1f))
@@ -165,7 +165,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     withStyle(
                         style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     ) {
-                        append(stringResource(R.string.calculated_as))
+                        append(stringResource(R.string.battery_capacity_formula_explanation_prefix))
                     }
                     withStyle(
                         style = SpanStyle(fontStyle = FontStyle.Italic, fontSize = MaterialTheme.typography.bodySmall.fontSize, color = colorScheme.onSecondary)
@@ -175,7 +175,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     withStyle(
                         style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     ) {
-                        append(stringResource(R.string.where_residual_is_estimated_by_your_installation_and_may_not_be_accurate_tap_the_capacity_above_to_enter_a_manual_value))
+                        append(stringResource(R.string.battery_capacity_formula_explanation_suffix))
                     }
                 },
                 color = colorScheme.onSecondary,
