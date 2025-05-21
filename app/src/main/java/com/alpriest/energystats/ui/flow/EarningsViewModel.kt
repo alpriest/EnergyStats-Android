@@ -77,7 +77,7 @@ class FinanceAmount(val shortTitleResId: Int, val amount: Double) {
     }
 }
 
-class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager: ConfigManaging) {
+class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, private val configManager: ConfigManaging) {
     val exportIncome: FinanceAmount
     val solarSaving: FinanceAmount
     val total: FinanceAmount
@@ -85,14 +85,13 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
     val solarSavingBreakdown: CalculationBreakdown
 
     init {
-        val amountForIncomeCalculation = if (configManager.earningsModel == EarningsModel.Exported) totalsViewModel.feedIn else totalsViewModel.solar
         exportIncome = FinanceAmount(
             shortTitleResId = R.string.exported_income_short_title,
             amount = amountForIncomeCalculation * configManager.feedInUnitPrice
         )
         exportBreakdown = CalculationBreakdown(
-            formula = "gridExport * feedInUnitPrice",
-            calculation = { "${totalsViewModel.feedIn.roundedToString(it)} * ${configManager.feedInUnitPrice.roundedToString(it)}" }
+            formula = "$nameForIncomeCalculation * feedInUnitPrice",
+            calculation = { "${amountForIncomeCalculation.roundedToString(it)} * ${configManager.feedInUnitPrice.roundedToString(it)}" }
         )
 
         solarSaving = FinanceAmount(
@@ -105,7 +104,7 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
         )
 
         total = FinanceAmount(
-            shortTitleResId =  R.string.total,
+            shortTitleResId = R.string.total,
             amount = exportIncome.amount + solarSaving.amount
         )
     }
@@ -113,6 +112,20 @@ class EnergyStatsFinancialModel(totalsViewModel: TotalsViewModel, configManager:
     fun amounts(): List<FinanceAmount> {
         return listOf(exportIncome, solarSaving, total)
     }
+
+    private val amountForIncomeCalculation: Double
+        get() = when (configManager.earningsModel) {
+            EarningsModel.Exported -> totalsViewModel.feedIn
+            EarningsModel.Generated -> totalsViewModel.solar
+            EarningsModel.CT2 -> totalsViewModel.ct2
+        }
+
+    private val nameForIncomeCalculation: String
+        get() = when (configManager.earningsModel) {
+            EarningsModel.Exported -> "exported"
+            EarningsModel.Generated -> "generated"
+            EarningsModel.CT2 -> "CT2"
+        }
 }
 
 class EarningsViewModel(val energyStatsFinancialModel: EnergyStatsFinancialModel) {
@@ -124,7 +137,7 @@ class EarningsViewModel(val energyStatsFinancialModel: EnergyStatsFinancialModel
         fun preview(): EarningsViewModel {
             return EarningsViewModel(
                 energyStatsFinancialModel = EnergyStatsFinancialModel(
-                    totalsViewModel = TotalsViewModel(listOf(OpenReportResponse("raw", unit = "kW", listOf())), true),
+                    totalsViewModel = TotalsViewModel(listOf(OpenReportResponse("raw", unit = "kW", listOf())), null),
                     configManager = FakeConfigManager()
                 )
             )

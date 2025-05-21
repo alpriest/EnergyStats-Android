@@ -8,23 +8,23 @@ import java.util.Locale
 import kotlin.math.abs
 
 class GenerationViewModel(
-    private val pvTotal: Double,
     response: OpenHistoryResponse,
     private val includeCT2: Boolean,
     private val invertCT2: Boolean
 ) {
+    private var pvTotal: Double = 0.0
     private val pv1Total: Double = response.trapezoidalAverage("pv1Power")
     private val pv2Total: Double = response.trapezoidalAverage("pv2Power")
     private val pv3Total: Double = response.trapezoidalAverage("pv3Power")
     private val pv4Total: Double = response.trapezoidalAverage("pv4Power")
     private val pv5Total: Double = response.trapezoidalAverage("pv5Power")
     private val pv6Total: Double = response.trapezoidalAverage("pv6Power")
-    private val ct2Total: Double
+    val ct2Total: Double
 
     init {
         val dateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
         val timeZone = ZoneId.systemDefault()
-        ct2Total = response.datas.filter { it.variable == "meterPower2" }
+        ct2Total = response.datas.asSequence().filter { it.variable == "meterPower2" }
             .flatMap { it.data.toList() }
             .mapNotNull {
                 if (invertCT2) {
@@ -88,6 +88,10 @@ class GenerationViewModel(
             StringType.PV6 -> pv6Total / totalSum
             StringType.CT2 -> ct2Total / totalSum
         }
+    }
+
+    fun updatePvTotal(amount: Double) {
+        pvTotal = amount
     }
 }
 

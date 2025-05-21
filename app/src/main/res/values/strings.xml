@@ -430,4 +430,5 @@
     <string name="solar_yield_description">Your total daily generation will be displayed. If you have ‘Show PV power by strings’ enabled, an estimate of daily generation by string will also be displayed.</string>
     <string name="string_total_today_description">" (%1$s today)"</string>
     <string name="summary_date_range">Summary Date Range</string>
+    <string name="earnings_ct2_description">Enter the unit price you are paid per kWh for exporting electricity via another inverter tracked via CT2. This will only show earnings data on the power flow page because Fox do not store historical CT2 statistics.</string>
 </resources>

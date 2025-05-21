@@ -25,7 +25,7 @@ class ApproximationsCalculator(
         batteryDischarge: Double,
         solar: Double
     ): ApproximationsViewModel {
-        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, solar)
+        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, solar, ct2 = 0.0) // ApproximationsCalculator is always called from places where we're looking at historical data, and ct2 isn't available)
 
         val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager)
 

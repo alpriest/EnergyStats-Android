@@ -3,34 +3,18 @@ package com.alpriest.energystats.ui.flow
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseData
 import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import java.util.Calendar
 
-class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, val solar: Double) {
-    constructor(reports: List<OpenReportResponse>, deviceHasPV: Boolean):
+class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, val solar: Double, val ct2: Double) {
+    constructor(reports: List<OpenReportResponse>, generationViewModel: GenerationViewModel?):
         this(
             grid = reports.todayValue(forKey = ReportVariable.GridConsumption.networkTitle()),
             feedIn = reports.todayValue(forKey = ReportVariable.FeedIn.networkTitle()),
             loads = reports.todayValue(forKey = ReportVariable.Loads.networkTitle()),
-            solar = calculateSolar(reports, deviceHasPV)
+            solar = reports.todayValue(forKey = ReportVariable.PvEnergyToTal.networkTitle()),
+            ct2 = generationViewModel?.ct2Total     ?: 0.0
         )
-
-    companion object {
-        private fun calculateSolar(reports: List<OpenReportResponse>, deviceHasPV: Boolean): Double {
-            val solar: Double
-            val home = reports.todayValue(forKey = ReportVariable.Loads.networkTitle())
-            val gridExport = reports.todayValue(forKey = ReportVariable.FeedIn.networkTitle())
-            val gridImport = reports.todayValue(forKey = ReportVariable.GridConsumption.networkTitle())
-            if (deviceHasPV) {
-                solar = reports.todayValue(forKey = ReportVariable.PvEnergyToTal.networkTitle())
-            } else {
-                val batteryCharge = reports.todayValue(forKey = ReportVariable.ChargeEnergyToTal.networkTitle())
-                val batteryDischarge = reports.todayValue(forKey = ReportVariable.DischargeEnergyToTal.networkTitle())
-                solar = maxOf(0.0, batteryCharge - batteryDischarge - gridImport + home + gridExport)
-            }
-
-            return solar
-        }
-    }
 }
 
 

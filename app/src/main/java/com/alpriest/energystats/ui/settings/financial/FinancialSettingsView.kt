@@ -44,10 +44,11 @@ import java.util.Locale
 
 enum class EarningsModel(val value: Int) {
     Exported(0),
-    Generated(1);
+    Generated(1),
+    CT2(2);
 
     companion object {
-        fun fromInt(value: Int) = EarningsModel.values().firstOrNull { it.value == value } ?: EarningsModel.Exported
+        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: Exported
     }
 }
 
@@ -88,10 +89,11 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                 SettingsSegmentedControl(
                     title = stringResource(R.string.i_am_paid_for),
                     segmentedControl = {
-                        val items = EarningsModel.values()
+                        val items = EarningsModel.entries.toTypedArray()
                         val itemTitles = listOf(
                             stringResource(R.string.exporting),
-                            stringResource(R.string.generating)
+                            stringResource(R.string.generating),
+                            "CT2"
                         )
 
                         SegmentedControl(
@@ -105,10 +107,10 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                     }
                 )
             },
-            footer = if (earningsModel.value == EarningsModel.Generated) {
-                stringResource(R.string.earnings_generated_description)
-            } else {
-                stringResource(R.string.earnings_exported_description)
+            footer = when (earningsModel.value) {
+                EarningsModel.Generated -> stringResource(R.string.earnings_generated_description)
+                EarningsModel.Exported -> stringResource(R.string.earnings_exported_description)
+                EarningsModel.CT2 -> stringResource(R.string.earnings_ct2_description)
             }
         )
 
@@ -122,11 +124,19 @@ fun FinancialsSettingsView(config: ConfigManaging) {
 
     if (showFinancialSummaryState.value) {
         CalculationDescription(
-            stringResource(R.string.exported_income_short_title), stringResource(R.string.exported_income_description), stringResource(R.string.exported_income_formula)
+            stringResource(R.string.exported_income_short_title),
+            when (earningsModel.value) {
+                EarningsModel.Generated -> "Approximate income received from generating electricity."
+                EarningsModel.Exported -> stringResource(R.string.exported_income_description)
+                EarningsModel.CT2 -> "Approximate income received from exporting energy to the grid via another inverter tracked by CT2."
+            },
+            stringResource(R.string.exported_income_formula)
         )
 
         CalculationDescription(
-            stringResource(R.string.grid_import_avoided_short_title), stringResource(R.string.grid_import_description), stringResource(R.string.grid_import_formula)
+            stringResource(R.string.grid_import_avoided_short_title),
+            stringResource(R.string.grid_import_description),
+            stringResource(R.string.grid_import_formula)
         )
 
         CalculationDescription(
