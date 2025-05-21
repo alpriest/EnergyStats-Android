@@ -425,4 +425,5 @@
     <string name="solar_yield_description">Ihre gesamte tägliche Erzeugung wird angezeigt. Wenn Sie „PV-Leistung nach Strings anzeigen“ aktiviert haben, wird auch eine Schätzung der täglichen Erzeugung pro String angezeigt.</string>
     <string name="string_total_today_description">" (%1$s heute)"</string>
     <string name="summary_date_range">Zusammenfassungszeitraum</string>
+    <string name="earnings_ct2_description">Geben Sie den Einheitspreis ein, den Sie pro kWh für den Export von Strom über einen anderen Wechselrichter erhalten, der über CT2 erfasst wird. Dies zeigt nur Ertragsdaten auf der Leistungsfluss-Seite an, da Fox keine historischen CT2-Statistiken speichert.</string>
 </resources>

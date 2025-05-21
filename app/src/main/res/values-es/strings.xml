@@ -425,4 +425,5 @@
     <string name="solar_yield_description">Su generación diaria total se mostrará. Si tiene activada la opción \'Mostrar la potencia fotovoltaica por cadenas\', también se mostrará una estimación de la generación diaria por cadena.</string>
     <string name="string_total_today_description">" (%1$s hoy)"</string>
     <string name="summary_date_range">Rango de fechas del resumen</string>
+    <string name="earnings_ct2_description">Introduce el precio unitario que recibes por kWh por exportar electricidad a través de otro inversor monitorizado mediante CT2. Esto solo mostrará los datos de ganancias en la página de flujo de energía, ya que Fox no almacena estadísticas históricas de CT2.</string>
 </resources>

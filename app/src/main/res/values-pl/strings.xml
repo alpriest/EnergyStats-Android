@@ -426,4 +426,5 @@
     <string name="solar_yield_description">La tua produzione giornaliera totale verrà visualizzata. Se hai abilitato \'Mostra la potenza PV per stringhe\', verrà mostrata anche una stima della produzione giornaliera per stringa.</string>
     <string name="string_total_today_description">" (%1$s dzisiaj)"</string>
     <string name="summary_date_range">Zakres dat podsumowania</string>
+    <string name="earnings_ct2_description">Wprowadź cenę jednostkową, jaką otrzymujesz za eksport energii elektrycznej (za kWh) za pośrednictwem innego inwertera monitorowanego przez CT2. Dane o zarobkach będą widoczne tylko na stronie przepływu energii, ponieważ Fox nie przechowuje historycznych statystyk CT2.</string>
 </resources>
