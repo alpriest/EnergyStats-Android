@@ -144,6 +144,10 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
         return api.openapi_setDeviceSettingsItem(deviceSN, item, value)
     }
 
+    override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
+        return api.openapi_fetchPeakShavingSettings(deviceSN)
+    }
+
     override suspend fun fetchErrorMessages() {
         api.fetchErrorMessages()
     }

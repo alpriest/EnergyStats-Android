@@ -201,6 +201,10 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         api.fetchErrorMessages()
     }
 
+    override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
+        return api.openapi_fetchPeakShavingSettings(deviceSN)
+    }
+
     private fun makeKey(base: String, vararg arguments: String): String {
         return listOf(base, *arguments).joinToString(separator = "_")
     }

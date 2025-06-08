@@ -245,6 +245,14 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
             api.fetchErrorMessages()
         }
     }
+
+    override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
+        if (isDemoUser()) {
+            return demoAPI.openapi_fetchPeakShavingSettings(deviceSN)
+        } else {
+            return api.openapi_fetchPeakShavingSettings(deviceSN)
+        }
+    }
 }
 
 class ThrottleManager {

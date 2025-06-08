@@ -42,6 +42,7 @@ interface Networking {
     suspend fun fetchRequestCount(): ApiRequestCountResponse
     suspend fun fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse
     suspend fun setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String)
+    suspend fun fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse
 }
 
 open class NetworkService(val api: FoxAPIServicing) : Networking {
@@ -127,6 +128,10 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
     }
 
     override suspend fun setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
-        return api.openapi_setDeviceSettingsItem(deviceSN, item, value)
+        return  api.openapi_setDeviceSettingsItem(deviceSN, item, value)
+    }
+
+    override suspend fun fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
+        return api.openapi_fetchPeakShavingSettings(deviceSN)
     }
 }

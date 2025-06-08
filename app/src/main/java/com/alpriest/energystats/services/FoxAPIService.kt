@@ -391,6 +391,20 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         executeWithoutResponse(request)
     }
 
+    override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
+        val body = Gson().toJson(FetchPeakShavingSettingsRequest(deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.getDevicePeakShavingSettings())
+            .build()
+
+        val type = object : TypeToken<NetworkResponse<FetchPeakShavingSettingsResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<FetchPeakShavingSettingsResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
     private suspend fun executeWithoutResponse(request: Request) {
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)

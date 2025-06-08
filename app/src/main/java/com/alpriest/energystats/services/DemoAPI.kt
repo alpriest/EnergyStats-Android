@@ -29,6 +29,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.SchedulePhaseNetworkModel
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
@@ -37,12 +38,9 @@ import com.alpriest.energystats.ui.summary.PreviewContextHolder
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class DemoNetworking : NetworkService(DemoAPI())
 
@@ -103,8 +101,8 @@ class DemoAPI : FoxAPIServicing {
         return data.result?.map { response ->
             response.copy(datas = response.datas.map { datas ->
                 datas.copy(data = datas.data.map {
-                    val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it.time)
-                    val localDateTime = simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                    val simpleDate = parseToLocalDate(it.time)
+                    val localDateTime = simpleDate
                         .withYear(now.year)
                         .withMonth(now.monthValue)
                         .withDayOfMonth(now.dayOfMonth)
@@ -251,6 +249,23 @@ class DemoAPI : FoxAPIServicing {
     }
 
     override suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
+    }
+
+    override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
+        return FetchPeakShavingSettingsResponse(
+            importLimit = SettingItem(
+                precision = 0.001,
+                range = SettingItem.Range(min = 0.0, max = 10000.0),
+                unit = "kW",
+                value = "1000.000"
+            ),
+            soc = SettingItem(
+                precision = 1.0,
+                range = SettingItem.Range(min = 10.0, max = 100.0),
+                unit = "%",
+                value = "40"
+            )
+        )
     }
 
     override suspend fun fetchErrorMessages() {}

@@ -208,6 +208,9 @@ object URLs {
     fun setDeviceSettingsItem(): HttpUrl {
         return "https://www.foxesscloud.com/op/v0/device/setting/set".toHttpUrl()
     }
+
+    fun getDevicePeakShavingSettings(): HttpUrl = "https://www.foxesscloud.com/op/v0/device/peakShaving/get".toHttpUrl()
+    fun setDevicePeakShavingSettings(): HttpUrl = "https://www.foxesscloud.com/op/v0/device/peakShaving/set".toHttpUrl()
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {
