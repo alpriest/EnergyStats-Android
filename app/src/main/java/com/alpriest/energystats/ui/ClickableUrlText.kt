@@ -12,24 +12,22 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.IconColorInLightTheme
 import com.alpriest.energystats.ui.theme.WebLinkColorInDarkTheme
 import com.alpriest.energystats.ui.theme.WebLinkColorInLightTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 fun makeUrlAnnotatedString(text: String, linkColor: Color): AnnotatedString {
-    val urlPattern = "(https?:\\/\\/[^ ]+)|(\\S+@\\S+)".toRegex()
+    val urlPattern = "(https?://[^ ]+)|(\\S+@\\S+)".toRegex()
     val emailPattern = "(\\S+@\\S+)".toRegex()
 
     val annotatedString = buildAnnotatedString {
         append(text)
 
         urlPattern.findAll(text).forEach { matchResult ->
-            val url: String
-            if (emailPattern.matches(matchResult.value)) {
-                url = "mailto:$matchResult.value"
+            val url: String = if (emailPattern.matches(matchResult.value)) {
+                "mailto:$matchResult.value"
             } else {
-                url = matchResult.value
+                matchResult.value
             }
             val start = matchResult.range.first
             val end = matchResult.range.last + 1

@@ -70,9 +70,17 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
         currentDevice.value?.let { device ->
             SettingsColumn {
                 InlineSettingsNavButton(stringResource(R.string.manage_schedules)) { navController.navigate(SettingsScreen.InverterSchedule.name) }
+
                 HorizontalDivider()
+
                 InlineSettingsNavButton(DeviceSettingsItem.ExportLimit.title(context)) {
                     navController.navigate(SettingsScreen.ConfigureExportLimit.name)
+                }
+
+                HorizontalDivider()
+
+                InlineSettingsNavButton("Peak Shaving") {
+                    navController.navigate(SettingsScreen.ConfigurePeakShaving.name)
                 }
             }
 

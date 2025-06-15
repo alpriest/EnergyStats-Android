@@ -166,6 +166,12 @@ fun NavigableSettingsView(
             DeviceSettingItemView(config, network, DeviceSettingsItem.MaxSoc, navController).Content(Modifier)
         }
 
+        composable(SettingsScreen.ConfigurePeakShaving.name) {
+            topBarSettings.value = TopBarSettings(true, true,  stringResource(id = R.string.peak_shaving), {})
+            PeakShavingSettingsView(config, network).Content(Modifier)
+        }
+
         debugGraph(topBarSettings, network)
     }
 }
+

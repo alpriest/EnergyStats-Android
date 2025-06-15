@@ -41,6 +41,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
 
         val cached = cache[key]
         return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && isListOf<DeviceSummaryResponse>(cached)) {
+            @Suppress("UNCHECKED_CAST")
             cached.item as List<DeviceSummaryResponse>
         } else {
             val fresh = api.openapi_fetchDeviceList()
@@ -80,6 +81,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
 
         val cached = cache[key]
         return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && isListOf<OpenApiVariable>(cached)) {
+            @Suppress("UNCHECKED_CAST")
             cached.item as List<OpenApiVariable>
         } else {
             val fresh = api.openapi_fetchVariables()
@@ -93,6 +95,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
 
         val cached = cache[key]
         return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && isListOf<OpenReportResponse>(cached.item)) {
+            @Suppress("UNCHECKED_CAST")
             cached.item as List<OpenReportResponse>
         } else {
             val fresh = api.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
@@ -114,6 +117,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
 
         val cached = cache[key]
         return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && isListOf<DataLoggerResponse>(cached.item)) {
+            @Suppress("UNCHECKED_CAST")
             cached.item as List<DataLoggerResponse>
         } else {
             val fresh = api.openapi_fetchDataLoggers()

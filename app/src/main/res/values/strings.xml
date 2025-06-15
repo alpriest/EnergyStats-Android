@@ -431,4 +431,7 @@
     <string name="string_total_today_description">" (%1$s today)"</string>
     <string name="summary_date_range">Summary Date Range</string>
     <string name="earnings_ct2_description">Enter the unit price you are paid per kWh for exporting electricity via another inverter tracked via CT2. This will only show earnings data on the power flow page because Fox do not store historical CT2 statistics.</string>
+    <string name="peak_shaving">Peak Shaving</string>
+    <string name="failed_to_load_settings">Failed to load settings</string>
+    <string name="peak_shaving_is_not_available">Peak shaving is not available. This could be due to your inverter firmware or model.\n\nPlease contact FoxESS for further information.</string>
 </resources>
