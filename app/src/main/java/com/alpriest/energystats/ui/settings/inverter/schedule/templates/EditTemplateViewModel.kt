@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
@@ -68,7 +69,7 @@ class EditTemplateViewModel(
             template.asSchedule(),
             modes,
             device,
-            config.getDeviceSupportScheduleMaxSOC(device.deviceSN)
+            config.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
         val updatedTemplate = ScheduleTemplate(templateID, template.name, updatedSchedule.phases)
         EditScheduleStore.shared.templateStream.value = updatedTemplate
@@ -82,7 +83,7 @@ class EditTemplateViewModel(
             template.asSchedule(),
             mode,
             device,
-            config.getDeviceSupportScheduleMaxSOC(device.deviceSN)
+            config.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
         val updatedTemplate = ScheduleTemplate(templateID, template.name, updatedSchedule.phases)
         EditScheduleStore.shared.templateStream.value = updatedTemplate

@@ -5,6 +5,7 @@ import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
@@ -85,8 +86,8 @@ class FakeConfigManager : ConfigManaging {
     override var showInverterScheduleQuickLink: Boolean = false
     override var fetchSolcastOnAppLaunch: Boolean = false
     override var ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden
-    override fun getDeviceSupportScheduleMaxSOC(deviceSN: String): Boolean { return false }
-    override fun setDeviceSupportScheduleMaxSOC(deviceSN: String) {}
+    override fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean { return false }
+    override fun setDeviceSupports(capability: DeviceCapability, deviceSN: String) { }
     override var showStringTotalsAsPercentage: Boolean = false
 
     override var devices: List<Device>? = listOf(

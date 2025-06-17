@@ -4,6 +4,7 @@ import com.alpriest.energystats.models.*
 import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
@@ -32,6 +33,7 @@ import java.util.Locale
 open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
     ConfigManaging {
     private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
+    private var deviceSupportsPeakShaving: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
 
     override var showBatteryTimeEstimateOnWidget: Boolean
         get() = config.showBatteryTimeEstimateOnWidget
@@ -546,12 +548,23 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(ct2DisplayMode = ct2DisplayMode)
         }
 
-    override fun getDeviceSupportScheduleMaxSOC(deviceSN: String): Boolean {
-        return deviceSupportsScheduleMaxSOC[deviceSN] ?: false
+    override fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean {
+        return when (capability) {
+            DeviceCapability.ScheduleMaxSOC ->
+                deviceSupportsScheduleMaxSOC[deviceSN] ?: false
+
+            DeviceCapability.PeakShaving ->
+                deviceSupportsPeakShaving[deviceSN] ?: false
+        }
     }
 
-    override fun setDeviceSupportScheduleMaxSOC(deviceSN: String) {
-        deviceSupportsScheduleMaxSOC[deviceSN] = true
+    override fun setDeviceSupports(capability: DeviceCapability, deviceSN: String) {
+        when (capability) {
+            DeviceCapability.ScheduleMaxSOC ->
+                deviceSupportsScheduleMaxSOC[deviceSN] = true
+            DeviceCapability.PeakShaving ->
+                deviceSupportsPeakShaving[deviceSN] = true
+        }
     }
 
     override var showStringTotalsAsPercentage: Boolean

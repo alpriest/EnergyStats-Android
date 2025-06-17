@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
@@ -72,7 +73,7 @@ class EditScheduleViewModel(
             schedule,
             modes,
             device,
-            initialiseMaxSOC = config.getDeviceSupportScheduleMaxSOC(device.deviceSN)
+            initialiseMaxSOC = config.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
     }
 
@@ -85,7 +86,7 @@ class EditScheduleViewModel(
             schedule,
             mode,
             device,
-            initialiseMaxSOC = config.getDeviceSupportScheduleMaxSOC(device.deviceSN)
+            initialiseMaxSOC = config.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
     }
 

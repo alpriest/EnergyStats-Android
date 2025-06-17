@@ -13,6 +13,7 @@ import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
@@ -110,7 +111,7 @@ class ScheduleSummaryViewModel(
                     scheduleStream.value = schedule
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
                     if (schedule.supportsMaxSOC()) {
-                        config.setDeviceSupportScheduleMaxSOC(deviceSN)
+                        config.setDeviceSupports(DeviceCapability.ScheduleMaxSOC, deviceSN)
                     }
 
                     uiState.value = UiLoadState(LoadState.Inactive)
