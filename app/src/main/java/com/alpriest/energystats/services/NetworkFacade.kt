@@ -8,6 +8,7 @@ import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.models.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -247,10 +248,18 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
     }
 
     override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
-        if (isDemoUser()) {
-            return demoAPI.openapi_fetchPeakShavingSettings(deviceSN)
+        return if (isDemoUser()) {
+            demoAPI.openapi_fetchPeakShavingSettings(deviceSN)
         } else {
-            return api.openapi_fetchPeakShavingSettings(deviceSN)
+            api.openapi_fetchPeakShavingSettings(deviceSN)
+        }
+    }
+
+    override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
+        if (isDemoUser()) {
+            demoAPI.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
+        } else {
+            api.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
         }
     }
 }

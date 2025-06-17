@@ -25,6 +25,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -38,8 +40,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class PeakShavingSettingsViewModelFactory(
-    private val configManager: ConfigManaging,
-    private val networking: Networking
+    private val configManager: ConfigManaging, private val networking: Networking
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -48,8 +49,7 @@ class PeakShavingSettingsViewModelFactory(
 }
 
 class PeakShavingSettingsViewModel(
-    private val configManager: ConfigManaging,
-    private val networking: Networking
+    private val configManager: ConfigManaging, private val networking: Networking
 ) : ViewModel() {
     private val _state = MutableStateFlow<LoadState>(LoadState.Inactive)
     val uiState: StateFlow<LoadState> = _state
@@ -93,11 +93,27 @@ class PeakShavingSettingsViewModel(
         }
     }
 
+    fun save(context: Context) {
+        if (_state.value != LoadState.Inactive) {
+            return
+        }
+        val selectedDeviceSN = configManager.selectedDeviceSN ?: return
+        _state.value = LoadState.Active(context.getString(R.string.saving))
+
+        viewModelScope.launch {
+            try {
+                networking.setPeakShavingSettings(selectedDeviceSN, importLimit.value.toDouble(), soc.value.toInt())
+
+                _state.value = LoadState.Inactive
+            } catch (e: Exception) {
+                _state.value = LoadState.Error(e, context.getString(R.string.failed_to_save_settings))
+            }
+        }
+    }
 }
 
 class PeakShavingSettingsView(
-    private val configManager: ConfigManaging,
-    private val network: Networking
+    private val configManager: ConfigManaging, private val network: Networking, val navController: NavController
 ) {
 
     @Composable
@@ -109,21 +125,25 @@ class PeakShavingSettingsView(
             viewModel.load(context)
         }
 
-        SettingsPage(modifier) {
-            when (val loadState = viewModel.uiState.collectAsState().value) {
-                is LoadState.Inactive -> {
-                    if (supported) {
-                        Loaded(viewModel)
-                    } else {
+        when (val loadState = viewModel.uiState.collectAsState().value) {
+            is LoadState.Inactive -> {
+                if (supported) {
+                    Loaded(viewModel, navController)
+                } else {
+                    SettingsPage(modifier) {
                         SettingsColumn(footer = stringResource(R.string.peak_shaving_is_not_available)) { }
                     }
                 }
+            }
 
-                is LoadState.Active -> {
+            is LoadState.Active -> {
+                SettingsPage(modifier) {
                     CircularProgressIndicator()
                 }
+            }
 
-                is LoadState.Error -> {
+            is LoadState.Error -> {
+                SettingsPage(modifier) {
                     Text("Error: $loadState")
                 }
             }
@@ -131,53 +151,56 @@ class PeakShavingSettingsView(
     }
 
     @Composable
-    fun Loaded(viewModel: PeakShavingSettingsViewModel) {
+    fun Loaded(viewModel: PeakShavingSettingsViewModel, navController: NavController) {
         val importLimit = viewModel.importLimit.collectAsState().value
         val soc = viewModel.soc.collectAsState().value
+        val explanation = stringResource(R.string.peak_shaving_explanation, importLimit, soc)
+        val context = LocalContext.current
 
-        SettingsColumnWithChild(
-//            footerAnnotatedString = annotatedString
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
+        ContentWithBottomButtonPair(navController, onSave = {
+            viewModel.save(context)
+        }, content = { modifier ->
+            SettingsColumnWithChild(
+                modifier = modifier,
+                footer = explanation
             ) {
-                Text(
-                    "Import limit",
-                    Modifier.weight(1.0f),
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
-                OutlinedTextField(
-                    value = importLimit,
-                    onValueChange = { viewModel.importLimit.value = it.filter { it.isDigit() } },
-                    modifier = Modifier.width(130.dp),
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
-                    trailingIcon = { Text("kW", color = MaterialTheme.colorScheme.onSecondary) }
-                )
-            }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(vertical = 4.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.import_limit),
+                        Modifier.weight(1.0f),
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                    OutlinedTextField(
+                        value = importLimit,
+                        onValueChange = { viewModel.importLimit.value = it.filter { it.isDigit() } },
+                        modifier = Modifier.width(130.dp),
+                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
+                        trailingIcon = { Text("kW", color = MaterialTheme.colorScheme.onSecondary) })
+                }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
-            ) {
-                Text(
-                    "Battery threshold SOC",
-                    Modifier.weight(1.0f),
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
-                OutlinedTextField(
-                    value = soc,
-                    onValueChange = { viewModel.soc.value = it.filter { it.isDigit() } },
-                    modifier = Modifier.width(130.dp),
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
-                    trailingIcon = { Text("%", color = MaterialTheme.colorScheme.onSecondary) }
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(vertical = 4.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.battery_threshold_soc),
+                        Modifier.weight(1.0f),
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                    OutlinedTextField(
+                        value = soc,
+                        onValueChange = { viewModel.soc.value = it.filter { it.isDigit() } },
+                        modifier = Modifier.width(130.dp),
+                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
+                        trailingIcon = { Text("%", color = MaterialTheme.colorScheme.onSecondary) })
+                }
             }
-        }
+        })
     }
 }
 
@@ -186,12 +209,13 @@ class PeakShavingSettingsView(
 @Composable
 fun PeakShavingSettingsViewPreview() {
     EnergyStatsTheme {
-        PeakShavingSettingsView(
-            FakeConfigManager(),
-            DemoNetworking()
-        ).Loaded(
-            viewModel = PeakShavingSettingsViewModel(FakeConfigManager(), DemoNetworking())
-        )
+        SettingsPage(Modifier) {
+            PeakShavingSettingsView(
+                FakeConfigManager(), DemoNetworking(), NavHostController(LocalContext.current)
+            ).Loaded(
+                viewModel = PeakShavingSettingsViewModel(FakeConfigManager(), DemoNetworking()), NavHostController(LocalContext.current)
+            )
+        }
     }
 }
 

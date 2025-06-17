@@ -8,6 +8,7 @@ import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.models.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -56,6 +57,7 @@ interface FoxAPIServicing {
     suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse
     suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String)
     suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse
+    suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

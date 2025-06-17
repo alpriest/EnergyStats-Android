@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.settings.devicesettings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -102,7 +101,6 @@ class DeviceSettingItemView(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .background(MaterialTheme.colorScheme.surface)
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
                     ) {
                         Text(
                             viewModel.item.title(context),

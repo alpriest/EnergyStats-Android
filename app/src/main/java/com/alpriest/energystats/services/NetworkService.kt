@@ -8,6 +8,7 @@ import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.models.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -43,6 +44,7 @@ interface Networking {
     suspend fun fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse
     suspend fun setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String)
     suspend fun fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse
+    suspend fun setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int)
 }
 
 open class NetworkService(val api: FoxAPIServicing) : Networking {
@@ -133,5 +135,9 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
 
     override suspend fun fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
         return api.openapi_fetchPeakShavingSettings(deviceSN)
+    }
+
+    override suspend fun setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
+        return api.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
     }
 }

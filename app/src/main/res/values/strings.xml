@@ -434,4 +434,9 @@
     <string name="peak_shaving">Peak Shaving</string>
     <string name="failed_to_load_settings">Failed to load settings</string>
     <string name="peak_shaving_is_not_available">Peak shaving is not available. This could be due to your inverter firmware or model.\n\nPlease contact FoxESS for further information.</string>
+    <string name="import_limit">Import limit</string>
+    <string name="battery_threshold_soc">Battery threshold SOC</string>
+    <string name="peak_shaving_explanation">Your system monitors the power being imported from the grid. If the import exceeds your Import Limit of %1$s and your battery\'s state of charge (SOC) is above %2$s%%, the system discharges the battery to supply the excess demand, thereby “shaving” the peak load from the grid.\n\nThis operation continues as long as the battery’s state of charge (SOC) is above a certain threshold SOC.\n\nPeak shaving only operates when you have the Peak Shaving mode enabled from the Inverter scheduler.
+</string>
+    <string name="failed_to_save_settings">Failed to save settings</string>
 </resources>

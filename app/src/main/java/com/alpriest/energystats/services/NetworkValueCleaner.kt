@@ -8,6 +8,7 @@ import com.alpriest.energystats.models.DeviceDetailResponse
 import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.models.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
@@ -146,6 +147,10 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
 
     override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
         return api.openapi_fetchPeakShavingSettings(deviceSN)
+    }
+
+    override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
+        return api.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
     }
 
     override suspend fun fetchErrorMessages() {

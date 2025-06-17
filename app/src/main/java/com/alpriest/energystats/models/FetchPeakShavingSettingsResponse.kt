@@ -1,4 +1,4 @@
-package com.alpriest.energystats.services
+package com.alpriest.energystats.models
 
 data class FetchPeakShavingSettingsRequest(
     val sn: String

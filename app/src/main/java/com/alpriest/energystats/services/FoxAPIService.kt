@@ -16,6 +16,8 @@ import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.ErrorMessagesResponse
 import com.alpriest.energystats.models.FetchDeviceSettingsItemRequest
 import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.models.FetchPeakShavingSettingsRequest
+import com.alpriest.energystats.models.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.models.GetSchedulerFlagRequest
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
@@ -41,6 +43,7 @@ import com.alpriest.energystats.models.SetBatterySOCRequest
 import com.alpriest.energystats.models.SetBatteryTimesRequest
 import com.alpriest.energystats.models.SetCurrentScheduleRequest
 import com.alpriest.energystats.models.SetDeviceSettingsItemRequest
+import com.alpriest.energystats.models.SetPeakShavingSettingsRequest
 import com.alpriest.energystats.models.SetSchedulerFlagRequest
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
@@ -403,6 +406,18 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         val type = object : TypeToken<NetworkResponse<FetchPeakShavingSettingsResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<FetchPeakShavingSettingsResponse>> = fetch(request, type)
         return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
+        val body = Gson().toJson(SetPeakShavingSettingsRequest(deviceSN, importLimit, soc))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.getDevicePeakShavingSettings())
+            .build()
+
+        executeWithoutResponse(request)
     }
 
     private suspend fun executeWithoutResponse(request: Request) {

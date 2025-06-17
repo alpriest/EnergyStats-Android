@@ -12,6 +12,7 @@ import com.alpriest.energystats.models.DeviceFunction
 import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.models.DeviceSummaryResponse
 import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.models.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.models.GetSchedulerFlagResponse
 import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenApiVariableArray
@@ -28,6 +29,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.SchedulePhaseNetworkModel
 import com.alpriest.energystats.models.ScheduleResponse
+import com.alpriest.energystats.models.SettingItem
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.ui.flow.home.dateFormat
@@ -266,6 +268,10 @@ class DemoAPI : FoxAPIServicing {
                 value = "40"
             )
         )
+    }
+
+    override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
+        // do nothing
     }
 
     override suspend fun fetchErrorMessages() {}
