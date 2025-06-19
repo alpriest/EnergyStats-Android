@@ -162,24 +162,15 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 
             Text(
                 buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
-                    ) {
-                        append(stringResource(R.string.battery_capacity_formula_explanation_prefix))
-                    }
-                    withStyle(
-                        style = SpanStyle(fontStyle = FontStyle.Italic, fontSize = MaterialTheme.typography.bodySmall.fontSize, color = colorScheme.onSecondary)
-                    ) {
+                    append(stringResource(R.string.battery_capacity_formula_explanation_prefix))
+                    withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
                         append("residual / (Min SOC / 100)")
                     }
-                    withStyle(
-                        style = SpanStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
-                    ) {
-                        append(stringResource(R.string.battery_capacity_formula_explanation_suffix))
-                    }
+                    append(stringResource(R.string.battery_capacity_formula_explanation_suffix))
                 },
                 color = colorScheme.onSecondary,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(vertical = 8.dp),
+                style = MaterialTheme.typography.bodySmall
             )
 
             HorizontalDivider()
