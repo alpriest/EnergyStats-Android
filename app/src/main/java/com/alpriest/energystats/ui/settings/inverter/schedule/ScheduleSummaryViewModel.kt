@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.models.SchedulePhaseNetworkModel
+import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.services.Networking
@@ -113,6 +114,9 @@ class ScheduleSummaryViewModel(
                     if (schedule.supportsMaxSOC()) {
                         config.setDeviceSupports(DeviceCapability.ScheduleMaxSOC, deviceSN)
                     }
+                    if (scheduleResponse.supportsPeakShaving()) {
+                        config.setDeviceSupports(DeviceCapability.PeakShaving, deviceSN)
+                    }
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
@@ -210,6 +214,10 @@ class ScheduleSummaryViewModel(
     fun clearError() {
         uiState.value = UiLoadState(LoadState.Inactive)
     }
+}
+
+private fun ScheduleResponse.supportsPeakShaving(): Boolean {
+    return workModes.any { it == WorkMode.PeakShaving }
 }
 
 private fun Schedule.supportsMaxSOC(): Boolean {

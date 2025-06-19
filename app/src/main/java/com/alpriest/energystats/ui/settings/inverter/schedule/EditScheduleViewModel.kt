@@ -26,7 +26,7 @@ class EditScheduleViewModelFactory(
 }
 
 class EditScheduleViewModel(
-    val config: ConfigManaging,
+    val configManager: ConfigManaging,
     val network: Networking,
     val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
@@ -34,7 +34,7 @@ class EditScheduleViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val allowDeletionStream = MutableStateFlow(false)
-    private var modes = EditScheduleStore.shared.modes
+    private val modes: List<WorkMode> = EditScheduleStore.modes(configManager)
     private var shouldPopNavOnDismissal = false
 
     fun load() {
@@ -43,7 +43,7 @@ class EditScheduleViewModel(
 
     suspend fun saveSchedule(context: Context) {
         val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
-        val deviceSN = config.currentDevice.value?.deviceSN ?: return
+        val deviceSN = configManager.currentDevice.value?.deviceSN ?: return
         if (!schedule.isValid()) {
             alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_periods_overlap))
             return
@@ -67,26 +67,26 @@ class EditScheduleViewModel(
 
     fun addTimePeriod() {
         val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
-        val device = config.currentDevice.value ?: return
+        val device = configManager.currentDevice.value ?: return
 
         EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(
             schedule,
             modes,
             device,
-            initialiseMaxSOC = config.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
+            initialiseMaxSOC = configManager.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
     }
 
     fun autoFillScheduleGaps() {
         val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
         val mode = modes.firstOrNull() ?: return
-        val device = config.currentDevice.value ?: return
+        val device = configManager.currentDevice.value ?: return
 
         EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.appendPhasesInGaps(
             schedule,
             mode,
             device,
-            initialiseMaxSOC = config.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
+            initialiseMaxSOC = configManager.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
     }
 

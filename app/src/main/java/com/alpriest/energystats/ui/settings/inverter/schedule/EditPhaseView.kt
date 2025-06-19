@@ -38,8 +38,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ButtonLabels
@@ -68,7 +70,8 @@ data class EditPhaseErrorData(
 fun EditPhaseView(
     navController: NavHostController,
     userManager: UserManaging,
-    viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController)),
+    configManager: ConfigManaging,
+    viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController, configManager)),
     modifier: Modifier
 ) {
     val context = LocalContext.current
@@ -318,7 +321,10 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(stringResource(R.string.work_mode), color = colorScheme.onSecondary)
+        Text(
+            stringResource(R.string.work_mode),
+            color = colorScheme.onSecondary
+        )
 
         Box(contentAlignment = Alignment.TopEnd) {
             ESButton(onClick = { expanded = !expanded }) {
@@ -337,7 +343,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                viewModel.modes.forEach { it ->
+                viewModel.modes.forEach {
                     DropdownMenuItem(onClick = {
                         expanded = false
                         viewModel.workModeStream.value = it
@@ -354,7 +360,12 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
 @Composable
 fun EditPhaseViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-        EditPhaseView(NavHostController(LocalContext.current), FakeUserManager(), modifier = Modifier)
+        EditPhaseView(
+            NavHostController(LocalContext.current),
+            FakeUserManager(),
+            modifier = Modifier,
+            configManager = FakeConfigManager()
+        )
     }
 }
 

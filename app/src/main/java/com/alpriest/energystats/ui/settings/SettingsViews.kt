@@ -179,9 +179,9 @@ fun ErrorTextView(text: String?) {
     text?.let {
         Text(
             it,
-            style = typography.bodySmall,
+            style = typography.bodyMedium,
             color = colorScheme.error,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(8.dp)
         )
     }
 }

@@ -131,7 +131,7 @@ class PeakShavingSettingsView(
                     Loaded(viewModel, navController)
                 } else {
                     SettingsPage(modifier) {
-                        SettingsColumn(footer = stringResource(R.string.peak_shaving_is_not_available)) { }
+                        SettingsColumn(error = stringResource(R.string.peak_shaving_is_not_available)) { }
                     }
                 }
             }

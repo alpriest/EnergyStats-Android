@@ -456,6 +456,7 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
                             .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
                             .registerTypeAdapter(OpenRealQueryResponse::class.java, OpenRealQueryResponseDeserializer())
+                            .registerTypeAdapter(ScheduleResponse::class.java, ScheduleResponse.Deserializer())
                             .create()
                         val body: T = builder.fromJson(text, type)
                         val result: Result<T> = check(body)

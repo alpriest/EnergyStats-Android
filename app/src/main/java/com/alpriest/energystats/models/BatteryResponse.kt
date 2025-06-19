@@ -1,6 +1,11 @@
 package com.alpriest.energystats.models
 
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 data class BatteryResponse(
     val power: Double,
@@ -41,8 +46,26 @@ data class SetSchedulerFlagRequest(
 
 data class ScheduleResponse(
     val enable: Int,
-    val groups: List<SchedulePhaseNetworkModel>
-)
+    val groups: List<SchedulePhaseNetworkModel>,
+    val workModes: List<WorkMode>
+) {
+    class Deserializer : JsonDeserializer<ScheduleResponse> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ScheduleResponse {
+            val jsonObject = json.asJsonObject
+
+            val enable = jsonObject["enable"].asInt
+            val groups = context.deserialize<List<SchedulePhaseNetworkModel>>(jsonObject["groups"], object : TypeToken<List<SchedulePhaseNetworkModel>>() {}.type)
+
+            val enumList = jsonObject
+                .getAsJsonObject("properties")
+                .getAsJsonObject("workmode")
+                .getAsJsonArray("enumList")
+                .map { WorkMode.valueOf(it.asString) }
+
+            return ScheduleResponse(enable, groups, enumList)
+        }
+    }
+}
 
 data class SchedulePhaseNetworkModel(
     val enable: Int,

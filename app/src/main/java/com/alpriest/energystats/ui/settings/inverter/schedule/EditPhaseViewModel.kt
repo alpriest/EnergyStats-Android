@@ -8,23 +8,24 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class EditPhaseViewModelFactory(val navController: NavHostController) : ViewModelProvider.Factory {
+class EditPhaseViewModelFactory(val navController: NavHostController, val configManager: ConfigManaging) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return EditPhaseViewModel(navController) as T
+        return EditPhaseViewModel(navController, configManager) as T
     }
 }
 
-class EditPhaseViewModel(val navController: NavHostController) : ViewModel(), AlertDialogMessageProviding {
-    val modes = EditScheduleStore.shared.modes
+class EditPhaseViewModel(val navController: NavHostController, configManager: ConfigManaging) : ViewModel(), AlertDialogMessageProviding {
+    val modes: List<WorkMode>
     val startTimeStream = MutableStateFlow(Time.now())
     val endTimeStream = MutableStateFlow(Time.now())
-    val workModeStream: MutableStateFlow<WorkMode> = MutableStateFlow(modes.first())
+    val workModeStream: MutableStateFlow<WorkMode> = MutableStateFlow(WorkMode.entries.first())
     val forceDischargePowerStream = MutableStateFlow("0")
     val forceDischargeSOCStream = MutableStateFlow("0")
     val minSOCStream = MutableStateFlow("0")
@@ -47,6 +48,8 @@ class EditPhaseViewModel(val navController: NavHostController) : ViewModel(), Al
             showMaxSocStream.value = originalPhase.maxSoc != null
             originalPhase.maxSoc?.let { maxSocStream.value = it.toString() }
         }
+
+        modes = EditScheduleStore.modes(configManager)
     }
 
     fun load(context: Context) {

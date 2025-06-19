@@ -1,5 +1,7 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.stores.DeviceCapability
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EditScheduleStore(
@@ -17,9 +19,21 @@ class EditScheduleStore(
 
     companion object {
         val shared: EditScheduleStore = EditScheduleStore()
-    }
 
-    var modes: List<WorkMode> = WorkMode.values().filter { it.title() != "" }
+        fun modes(configManager: ConfigManaging): List<WorkMode> {
+            return WorkMode.entries.filter {
+                if (it == WorkMode.PeakShaving) {
+                    configManager.selectedDeviceSN?.let {
+                        configManager.getDeviceSupports(DeviceCapability.PeakShaving, it)
+                    } ?: false
+                } else {
+                    true
+                }
+            }.filter {
+                it.title() != ""
+            }
+        }
+    }
 }
 
 enum class WorkMode {
@@ -28,7 +42,8 @@ enum class WorkMode {
     Backup,
     ForceCharge,
     ForceDischarge,
-    Invalid;
+    Invalid,
+    PeakShaving;
 
     fun title(): String {
         return when (this) {
@@ -37,7 +52,9 @@ enum class WorkMode {
             Backup -> return "Backup"
             ForceCharge -> return "Force Charge"
             ForceDischarge -> return "Force Discharge"
+            PeakShaving -> return "Peak Shaving"
             Invalid -> return ""
         }
     }
 }
+

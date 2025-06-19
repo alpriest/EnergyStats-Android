@@ -33,7 +33,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 fun NavigableSettingsView(
     topBarSettings: MutableState<TopBarSettings>,
     navController: NavHostController,
-    config: ConfigManaging,
+    configManager: ConfigManaging,
     userManager: UserManaging,
     onLogout: () -> Unit,
     onRateApp: () -> Unit,
@@ -50,7 +50,7 @@ fun NavigableSettingsView(
             topBarSettings.value = TopBarSettings(true, false, stringResource(R.string.settings_tab), {})
             SettingsTabView(
                 navController,
-                config = config,
+                config = configManager,
                 onLogout = onLogout,
                 onRateApp = onRateApp,
                 onBuyMeCoffee = onBuyMeCoffee,
@@ -61,45 +61,45 @@ fun NavigableSettingsView(
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.battery), {})
             BatterySettingsView(
                 navController = navController,
-                config = config,
+                config = configManager,
                 modifier = Modifier
             )
         }
         composable(SettingsScreen.BatterySOC.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.battery_soc), {})
-            BatterySOCSettings(configManager = config, network = network, navController = navController, userManager = userManager).Content(modifier = Modifier)
+            BatterySOCSettings(configManager = configManager, network = network, navController = navController, userManager = userManager).Content(modifier = Modifier)
         }
         composable(SettingsScreen.BatteryChargeTimes.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.battery_charge_schedule), {})
-            BatteryChargeScheduleSettingsView(configManager = config, network = network, navController = navController, userManager = userManager).Content(modifier = Modifier)
+            BatteryChargeScheduleSettingsView(configManager = configManager, network = network, navController = navController, userManager = userManager).Content(modifier = Modifier)
         }
         composable(SettingsScreen.Inverter.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.inverter), {})
-            InverterSettingsView(configManager = config, network = network, navController = navController, modifier = Modifier)
+            InverterSettingsView(configManager = configManager, network = network, navController = navController, modifier = Modifier)
         }
         composable(SettingsScreen.InverterSchedule.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.manage_schedules), {})
-            ScheduleSummaryView(config, network, navController, userManager, templateStore).Content(modifier = Modifier)
+            ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
         }
         composable(SettingsScreen.Dataloggers.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.dataloggers), {})
-            DataLoggerViewContainer(network = network, configManager = config, navController = navController).Content(modifier = Modifier)
+            DataLoggerViewContainer(network = network, configManager = configManager, navController = navController).Content(modifier = Modifier)
         }
         composable(SettingsScreen.FinancialModel.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.financial_model), {})
             SettingsPage(Modifier) {
-                FinancialsSettingsView(config)
+                FinancialsSettingsView(configManager)
             }
         }
         composable(SettingsScreen.SelfSufficiencyEstimates.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.self_sufficiency_estimates), {})
             SettingsPage(Modifier) {
-                SelfSufficiencySettingsView(config)
+                SelfSufficiencySettingsView(configManager)
             }
         }
         composable(SettingsScreen.SolarBandings.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.sun_display_thresholds), {})
-            SolarBandingSettingsView(navController, config, Modifier)
+            SolarBandingSettingsView(navController, configManager, Modifier)
         }
         composable(SettingsScreen.FAQ.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.frequently_asked_questions), {})
@@ -107,12 +107,12 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.SolcastSolarPrediction.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.solcast_solar_prediction), {})
-            SolcastSettingsView(navController, config, userManager, solarForecastingProvider).Content(modifier = Modifier)
+            SolcastSettingsView(navController, configManager, userManager, solarForecastingProvider).Content(modifier = Modifier)
         }
         composable(SettingsScreen.EditSchedule.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(R.string.edit_schedule), {})
             EditScheduleView(
-                config,
+                configManager,
                 network,
                 navController,
                 userManager
@@ -121,26 +121,26 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.EditPhase.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(R.string.edit_phase), {})
-            EditPhaseView(navController, userManager, modifier = Modifier)
+            EditPhaseView(navController, userManager, configManager, modifier = Modifier)
         }
 
         composable(SettingsScreen.TemplateList.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(R.string.templates), {})
-            ScheduleTemplateListView(config, templateStore, navController, userManager).Content(modifier = Modifier)
+            ScheduleTemplateListView(configManager, templateStore, navController, userManager).Content(modifier = Modifier)
         }
 
         composable(SettingsScreen.EditTemplate.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.edit_template), {})
-            EditTemplateView(config, network, navController, userManager, templateStore).Content(modifier = Modifier)
+            EditTemplateView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
         }
 
         composable(SettingsScreen.APIKey.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(R.string.edit_api_key), {})
-            ConfigureAPIKeyView(userManager.store, navController, config.themeStream, Modifier)
+            ConfigureAPIKeyView(userManager.store, navController, configManager.themeStream, Modifier)
         }
 
         composable(SettingsScreen.PowerStation.name) {
-            config.powerStationDetail?.let { powerStationDetail ->
+            configManager.powerStationDetail?.let { powerStationDetail ->
                 topBarSettings.value = TopBarSettings(true, true,  stringResource(R.string.settings_power_station), {})
                 PowerStationSettingsView(powerStationDetail, Modifier)
             }
@@ -148,27 +148,27 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.DataSettings.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(R.string.settings_data), {})
-            DataSettingsView(config, Modifier)
+            DataSettingsView(configManager, Modifier)
         }
 
         composable(SettingsScreen.BatteryVersions.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(R.string.batteries), {})
-            BatteryFirmwareVersionsView(config, network).Content(Modifier)
+            BatteryFirmwareVersionsView(configManager, network).Content(Modifier)
         }
 
         composable(SettingsScreen.ConfigureExportLimit.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(id = R.string.export_limit), {})
-            DeviceSettingItemView(config, network, DeviceSettingsItem.ExportLimit, navController).Content(Modifier)
+            DeviceSettingItemView(configManager, network, DeviceSettingsItem.ExportLimit, navController).Content(Modifier)
         }
 
         composable(SettingsScreen.ConfigureMaxSoc.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(id = R.string.max_soc), {})
-            DeviceSettingItemView(config, network, DeviceSettingsItem.MaxSoc, navController).Content(Modifier)
+            DeviceSettingItemView(configManager, network, DeviceSettingsItem.MaxSoc, navController).Content(Modifier)
         }
 
         composable(SettingsScreen.ConfigurePeakShaving.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(id = R.string.peak_shaving), {})
-            PeakShavingSettingsView(config, network, navController).Content(Modifier)
+            PeakShavingSettingsView(configManager, network, navController).Content(Modifier)
         }
 
         debugGraph(topBarSettings, network)

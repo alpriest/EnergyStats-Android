@@ -203,6 +203,13 @@ class DemoAPI : FoxAPIServicing {
                     fdPwr = 3500,
                     maxSoc = 100
                 )
+            ),
+            workModes = listOf(
+                WorkMode.SelfUse,
+                WorkMode.Feedin,
+                WorkMode.Backup,
+                WorkMode.ForceCharge,
+                WorkMode.ForceDischarge
             )
         )
     }

@@ -185,7 +185,7 @@ fun TabbedView(
                     4 -> NavigableSettingsView(
                         topBarSettings,
                         navController,
-                        config = configManager,
+                        configManager = configManager,
                         userManager = userManager,
                         onLogout = onLogout,
                         onRateApp = onRateApp,
