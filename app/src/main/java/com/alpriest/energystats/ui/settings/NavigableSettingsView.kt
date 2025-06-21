@@ -28,6 +28,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.templates.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
+import com.example.energystats.FactoryResetAppSettingsView
 
 @Composable
 fun NavigableSettingsView(
@@ -169,6 +170,11 @@ fun NavigableSettingsView(
         composable(SettingsScreen.ConfigurePeakShaving.name) {
             topBarSettings.value = TopBarSettings(true, true,  stringResource(id = R.string.peak_shaving), {})
             PeakShavingSettingsView(configManager, network, navController).Content(Modifier)
+        }
+
+        composable(SettingsScreen.FactoryResetAppSettings.name) {
+            topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.reset_app_settings), {})
+            FactoryResetAppSettingsView(configManager, navController)
         }
 
         debugGraph(topBarSettings, network)

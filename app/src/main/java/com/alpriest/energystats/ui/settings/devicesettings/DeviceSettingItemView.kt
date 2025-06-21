@@ -90,7 +90,7 @@ class DeviceSettingItemView(
             }
         }
 
-        ContentWithBottomButtonPair(navController, modifier = modifier, onSave = {
+        ContentWithBottomButtonPair(navController, modifier = modifier, onConfirm = {
             viewModel.save()
         }, content = { modifier ->
             SettingsPage(modifier) {

@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ContentWithBottomButtonPair(
     navController: NavController,
-    onSave: suspend () -> Unit,
+    onConfirm: suspend () -> Unit,
     content: @Composable BoxScope.(modifier: Modifier) -> Unit,
     modifier: Modifier = Modifier,
     footer: @Composable ColumnScope.() -> Unit = {},
@@ -35,7 +35,7 @@ fun ContentWithBottomButtonPair(
 ) {
     val buttons = listOf(
         BottomButtonConfiguration(title = labels.left, onTap = { navController.popBackStack() }),
-        BottomButtonConfiguration(title = labels.right, onTap = onSave),
+        BottomButtonConfiguration(title = labels.right, onTap = onConfirm),
     )
 
     ContentWithBottomButtons(content, modifier, footer, buttons)

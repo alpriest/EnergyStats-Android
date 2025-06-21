@@ -68,7 +68,7 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
 
     ContentWithBottomButtonPair(
         navController = navController,
-        onSave = { viewModel.saveSchedule(context) },
+        onConfirm = { viewModel.saveSchedule(context) },
         { innerModifier ->
             SettingsPage(innerModifier) {
                 ScheduleDetailView(viewModel.navController, schedule)

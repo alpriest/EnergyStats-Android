@@ -84,7 +84,7 @@ fun EditPhaseView(
 
     ContentWithBottomButtonPair(
         navController,
-        onSave = { viewModel.save(context) }, { innerModifier ->
+        onConfirm = { viewModel.save(context) }, { innerModifier ->
             SettingsPage(innerModifier) {
                 TimeAndWorkModeView(viewModel, userManager)
 

@@ -157,7 +157,7 @@ class PeakShavingSettingsView(
         val explanation = stringResource(R.string.peak_shaving_explanation, importLimit, soc)
         val context = LocalContext.current
 
-        ContentWithBottomButtonPair(navController, onSave = {
+        ContentWithBottomButtonPair(navController, onConfirm = {
             viewModel.save(context)
         }, content = { modifier ->
             SettingsColumnWithChild(

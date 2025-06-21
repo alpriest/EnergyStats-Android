@@ -97,7 +97,7 @@ class BatteryChargeScheduleSettingsView(
                 onLogout = { userManager.logout() }
             )
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, { innerModifier ->
+                ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save(context) }, { innerModifier ->
                     SettingsPage(innerModifier) {
                         BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
                         BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))

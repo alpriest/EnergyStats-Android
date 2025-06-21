@@ -92,6 +92,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var ct2DisplayMode: CT2DisplayMode
     fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean
     fun setDeviceSupports(capability: DeviceCapability, deviceSN: String)
+    fun resetDisplaySettings()
+
     var showStringTotalsAsPercentage: Boolean
 }
 

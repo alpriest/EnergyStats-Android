@@ -24,5 +24,6 @@ enum class SettingsScreen {
     BatteryVersions,
     ConfigureExportLimit,
     ConfigureMaxSoc,
-    ConfigurePeakShaving
+    ConfigurePeakShaving,
+    FactoryResetAppSettings
 }

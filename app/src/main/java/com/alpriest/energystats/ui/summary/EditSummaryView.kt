@@ -85,7 +85,7 @@ fun EditSummaryView(
         MaterialTheme.colorScheme.onBackground
     }
 
-    ContentWithBottomButtonPair(navController, modifier = modifier, onSave = {
+    ContentWithBottomButtonPair(navController, modifier = modifier, onConfirm = {
         val updatedSummaryDateRange = if (automatic.value) {
             SummaryDateRange.Automatic
         } else {

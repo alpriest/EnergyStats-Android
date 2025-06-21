@@ -24,6 +24,7 @@ import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
+import com.alpriest.energystats.ui.theme.toAppTheme
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 import java.net.SocketTimeoutException
@@ -565,6 +566,11 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             DeviceCapability.PeakShaving ->
                 deviceSupportsPeakShaving[deviceSN] = true
         }
+    }
+
+    override fun resetDisplaySettings() {
+        config.clearDisplaySettings()
+        themeStream.value = AppTheme.toAppTheme(config)
     }
 
     override var showStringTotalsAsPercentage: Boolean

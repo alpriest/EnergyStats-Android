@@ -354,7 +354,7 @@ fun InlineSettingsNavButton(
             Text(
                 title,
                 color = colorScheme.onSecondary,
-                style = TextStyle.Default
+                style = typography.bodyLarge
             )
 
             disclosureIcon?.let {

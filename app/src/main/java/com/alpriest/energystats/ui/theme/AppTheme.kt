@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.models.ConfigInterface
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -155,5 +156,46 @@ fun AppTheme.Companion.demo(
         showInverterScheduleQuickLink = showInverterScheduleQuickLink,
         ct2DisplayMode = ct2DisplayMode,
         showStringTotalsAsPercentage = showStringTotalsAsPercentage
+    )
+}
+
+fun AppTheme.Companion.toAppTheme(config: ConfigInterface): AppTheme {
+    return AppTheme(
+        useLargeDisplay = config.useLargeDisplay,
+        useColouredLines = config.useColouredFlowLines,
+        showBatteryTemperature = config.showBatteryTemperature,
+        showBatteryEstimate = config.showBatteryEstimate,
+        decimalPlaces = config.decimalPlaces,
+        showSunnyBackground = config.showSunnyBackground,
+        showUsableBatteryOnly = config.showUsableBatteryOnly,
+        selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
+        showFinancialSummary = config.showFinancialSummary,
+        displayUnit = DisplayUnit.fromInt(config.displayUnit),
+        showInverterTemperatures = config.showInverterTemperatures,
+        showInverterIcon = config.showInverterIcon,
+        showHomeTotal = config.showHomeTotal,
+        shouldInvertCT2 = config.shouldInvertCT2,
+        showGridTotals = config.showGridTotals,
+        showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
+        showInverterStationNameOnPowerflow = config.showInverterStationNameOnPowerflow,
+        showLastUpdateTimestamp = config.showLastUpdateTimestamp,
+        solarRangeDefinitions = config.solarRangeDefinitions,
+        shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
+        showGraphValueDescriptions = config.showGraphValueDescriptions,
+        parameterGroups = config.parameterGroups,
+        colorTheme = ColorThemeMode.fromInt(config.colorTheme),
+        solcastSettings = config.solcastSettings,
+        dataCeiling = DataCeiling.fromInt(config.dataCeiling),
+        totalYieldModel = TotalYieldModel.fromInt(config.totalYieldModel),
+        showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage,
+        separateParameterGraphsByUnit = config.separateParameterGraphsByUnit,
+        currencySymbol = config.currencySymbol,
+        showBatterySOCAsPercentage = config.showBatterySOCAsPercentage,
+        shouldCombineCT2WithLoadsPower = config.shouldCombineCT2WithLoadsPower,
+        powerFlowStrings = config.powerFlowStrings,
+        truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
+        showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
+        ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
+        showStringTotalsAsPercentage = config.showStringTotalsAsPercentage
     )
 }

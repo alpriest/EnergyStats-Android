@@ -65,7 +65,7 @@ class ParameterGraphVariableChooserView(
         val selectedGroupId = viewModel.selectedIdState.collectAsState().value
         trackScreenView("Parameters", "ParameterGraphVariableChooserView")
 
-        ContentWithBottomButtonPair(navController, onSave = {
+        ContentWithBottomButtonPair(navController, onConfirm = {
             viewModel.apply()
             navController.popBackStack()
         }, footer = {

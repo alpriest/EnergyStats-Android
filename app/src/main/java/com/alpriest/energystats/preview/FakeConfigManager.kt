@@ -86,8 +86,11 @@ class FakeConfigManager : ConfigManaging {
     override var showInverterScheduleQuickLink: Boolean = false
     override var fetchSolcastOnAppLaunch: Boolean = false
     override var ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden
-    override fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean { return false }
-    override fun setDeviceSupports(capability: DeviceCapability, deviceSN: String) { }
+    override fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean {
+        return false
+    }
+
+    override fun setDeviceSupports(capability: DeviceCapability, deviceSN: String) {}
     override var showStringTotalsAsPercentage: Boolean = false
 
     override var devices: List<Device>? = listOf(
@@ -139,4 +142,6 @@ class FakeConfigManager : ConfigManaging {
     }
 
     override var appVersion: String = "1.29"
+
+    override fun resetDisplaySettings() {}
 }

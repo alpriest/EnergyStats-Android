@@ -439,4 +439,21 @@
     <string name="peak_shaving_explanation">Your system monitors the power being imported from the grid. If the import exceeds your Import Limit of %1$s and your battery\'s state of charge (SOC) is above %2$s%%, the system discharges the battery to supply the excess demand, thereby “shaving” the peak load from the grid.\n\nThis operation continues as long as the battery’s state of charge (SOC) is above a certain threshold SOC.\n\nPeak shaving only operates when you have the Peak Shaving mode enabled from the Inverter scheduler.
 </string>
     <string name="failed_to_save_settings">Failed to save settings</string>
+    <string name="reset_ellipsis">Reset...</string>
+    <string name="will_be_reset">Will be reset:</string>
+    <string name="will_not_be_reset">Will not be reset:</string>
+    <string name="display_settings">Display settings</string>
+    <string name="data_settings">Data settings</string>
+    <string name="earnings_settings">Earnings settings</string>
+    <string name="self_sufficiency_settings">Self sufficiency settings</string>
+    <string name="inverter_display_settings_ct2_settings">Inverter display settings, CT2 settings</string>
+    <string name="battery_display_settings">Battery display settings</string>
+    <string name="custom_parameter_groups">Custom parameter groups</string>
+    <string name="inverter_schedules">Inverter schedules</string>
+    <string name="battery_schedule">Battery schedule</string>
+    <string name="battery_charge_levels">Battery charge levels</string>
+    <string name="foxess_api_key">FoxESS API key</string>
+    <string name="solcast_api_key">Solcast API key</string>
+    <string name="you_cannot_undo_this_action">You cannot undo this action</string>
+    <string name="reset_app_settings">Reset app settings</string>
 </resources>

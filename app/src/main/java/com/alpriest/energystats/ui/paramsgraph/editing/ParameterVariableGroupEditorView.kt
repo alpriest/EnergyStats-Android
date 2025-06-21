@@ -168,7 +168,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
 fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorViewModel, navController: NavHostController) {
     val variables = viewModel.variables.collectAsState().value
 
-    ContentWithBottomButtonPair(navController = navController, onSave = {
+    ContentWithBottomButtonPair(navController = navController, onConfirm = {
         viewModel.save()
         navController.popBackStack()
     }, { modifier ->

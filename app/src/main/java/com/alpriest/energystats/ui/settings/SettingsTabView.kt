@@ -115,13 +115,13 @@ fun SettingsTabView(
             )
             HorizontalDivider()
 
-//            InlineSettingsNavButton(
-//                title = "Invert - automation made easy",
-//                onClick = { navController.navigate(SettingsScreen.InvertAutomation.name) }
-//            )
-//            HorizontalDivider()
-
             ReloadDevicesButton(config)
+            HorizontalDivider()
+
+            InlineSettingsNavButton(
+                title = "Reset app settings",
+                onClick = { navController.navigate(SettingsScreen.FactoryResetAppSettings.name) }
+            )
         }
 
         SettingsFooterView(config, onLogout, onRateApp, onBuyMeCoffee)

@@ -69,7 +69,7 @@ class BatterySOCSettings(
                 onLogout = { userManager.logout() }
             )
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onSave = { viewModel.save(context) }, modifier = modifier, content = { innerModifier ->
+                ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save(context) }, modifier = modifier, content = { innerModifier ->
                     SettingsPage(innerModifier) {
                         Column {
                             Row(

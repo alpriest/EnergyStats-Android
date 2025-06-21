@@ -73,7 +73,7 @@ class SolcastSettingsView(
 
         MonitorAlertDialog(viewModel, userManager)
 
-        ContentWithBottomButtonPair(navController, onSave = { viewModel.save() }, content = { innerModifier ->
+        ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save() }, content = { innerModifier ->
             SettingsPage(innerModifier) {
                 SettingsColumn(padding = SettingsPaddingValues.withVertical()) {
                     ClickableUrlText(
