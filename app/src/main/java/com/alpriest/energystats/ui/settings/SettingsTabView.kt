@@ -116,12 +116,12 @@ fun SettingsTabView(
             HorizontalDivider()
 
             ReloadDevicesButton(config)
-            HorizontalDivider()
-
-            InlineSettingsNavButton(
-                title = "Reset app settings",
-                onClick = { navController.navigate(SettingsScreen.FactoryResetAppSettings.name) }
-            )
+//            HorizontalDivider()
+//
+//            InlineSettingsNavButton(
+//                title = "Reset app settings",
+//                onClick = { navController.navigate(SettingsScreen.FactoryResetAppSettings.name) }
+//            )
         }
 
         SettingsFooterView(config, onLogout, onRateApp, onBuyMeCoffee)
