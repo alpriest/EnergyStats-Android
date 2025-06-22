@@ -2,6 +2,10 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -43,20 +47,24 @@ fun NavigableSettingsView(
     solarForecastingProvider: () -> SolcastCaching,
     templateStore: TemplateStoring
 ) {
+    val lastSettingsResetTimeViewKey by remember { mutableStateOf(configManager.lastSettingsResetTime) }
+
     NavHost(
         navController = navController,
         startDestination = SettingsScreen.Settings.name
     ) {
         composable(SettingsScreen.Settings.name) {
             topBarSettings.value = TopBarSettings(true, false, stringResource(R.string.settings_tab), {})
-            SettingsTabView(
-                navController,
-                config = configManager,
-                onLogout = onLogout,
-                onRateApp = onRateApp,
-                onBuyMeCoffee = onBuyMeCoffee,
-                modifier = Modifier
-            )
+            key(lastSettingsResetTimeViewKey) {
+                SettingsTabView(
+                    navController,
+                    config = configManager,
+                    onLogout = onLogout,
+                    onRateApp = onRateApp,
+                    onBuyMeCoffee = onBuyMeCoffee,
+                    modifier = Modifier
+                )
+            }
         }
         composable(SettingsScreen.Battery.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.battery), {})

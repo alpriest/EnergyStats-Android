@@ -30,6 +30,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     fun select(device: Device)
     suspend fun fetchPowerStationDetail()
 
+    val lastSettingsResetTime: LocalDateTime?
     val themeStream: MutableStateFlow<AppTheme>
 
     var shouldCombineCT2WithPVPower: Boolean

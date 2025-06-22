@@ -35,6 +35,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
     ConfigManaging {
     private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
     private var deviceSupportsPeakShaving: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
+    override var lastSettingsResetTime: LocalDateTime? = null
 
     override var showBatteryTimeEstimateOnWidget: Boolean
         get() = config.showBatteryTimeEstimateOnWidget
@@ -571,6 +572,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
     override fun resetDisplaySettings() {
         config.clearDisplaySettings()
         themeStream.value = AppTheme.toAppTheme(config)
+        lastSettingsResetTime = LocalDateTime.now()
     }
 
     override var showStringTotalsAsPercentage: Boolean

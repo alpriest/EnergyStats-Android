@@ -141,6 +141,8 @@ class FakeConfigManager : ConfigManaging {
     override suspend fun fetchPowerStationDetail() {
     }
 
+    override val lastSettingsResetTime: LocalDateTime? = null
+
     override var appVersion: String = "1.29"
 
     override fun resetDisplaySettings() {}
