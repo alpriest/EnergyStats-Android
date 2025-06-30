@@ -17,8 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -252,27 +255,30 @@ class SolarForecastView(
 
         Column {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                name?.let {
-                    Text(
-                        it,
-                        fontWeight = FontWeight.Bold,
-                        style = TextStyle(color = colorScheme.onSecondary)
-                    )
-                }
-
                 Text(
-                    title,
-                    style = TextStyle(color = colorScheme.onSecondary)
-                )
+                    buildAnnotatedString {
+                        name?.let {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(it)
+                                append(" ")
+                            }
+                        }
 
-                Text(
-                    todayTotal.energy(theme.displayUnit, theme.decimalPlaces),
+                        withStyle(style = SpanStyle()) {
+                            append(title)
+                            append(" ")
+                        }
+
+                        withStyle(style = SpanStyle()) {
+                            append(todayTotal.energy(theme.displayUnit, theme.decimalPlaces))
+                        }
+                    },
                     style = TextStyle(color = colorScheme.onSecondary)
                 )
             }
-
             ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                 Chart(
                     chart = lineChart(
