@@ -24,6 +24,7 @@ import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.devicesettings.DeviceSettingItemView
 import com.alpriest.energystats.ui.settings.financial.FinancialsSettingsView
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
+import com.alpriest.energystats.ui.settings.inverter.WorkModeSettingsView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditPhaseView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
@@ -183,6 +184,11 @@ fun NavigableSettingsView(
         composable(SettingsScreen.FactoryResetAppSettings.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.reset_app_settings), {})
             FactoryResetAppSettingsView(configManager, navController)
+        }
+
+        composable(SettingsScreen.ConfigureWorkMode.name) {
+            topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.work_mode), {})
+            WorkModeSettingsView(configManager, navController)
         }
 
         debugGraph(topBarSettings, network)

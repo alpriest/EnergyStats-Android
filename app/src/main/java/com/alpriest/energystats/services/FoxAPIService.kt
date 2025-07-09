@@ -97,7 +97,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                 val token = credentials.getApiKey() ?: ""
                 val timestamp = System.currentTimeMillis()
                 val signature = makeSignature(original.url.encodedPath, token, timestamp)
-                val buildVersion = BuildConfig.VERSION_NAME
 
                 val requestBuilder = original.newBuilder()
                     .header("token", credentials.getApiKey() ?: "")

@@ -25,5 +25,6 @@ enum class SettingsScreen {
     ConfigureExportLimit,
     ConfigureMaxSoc,
     ConfigurePeakShaving,
-    FactoryResetAppSettings
+    FactoryResetAppSettings,
+    ConfigureWorkMode
 }

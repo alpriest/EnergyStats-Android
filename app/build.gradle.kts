@@ -8,12 +8,6 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
 }
 
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
 val localProperties = Properties()
 localProperties.load(FileInputStream(rootProject.file("local.properties")))
 

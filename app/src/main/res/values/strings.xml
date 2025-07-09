@@ -456,4 +456,6 @@
     <string name="solcast_api_key">Solcast API key</string>
     <string name="you_cannot_undo_this_action">You cannot undo this action</string>
     <string name="reset_app_settings">Reset app settings</string>
+    <string name="force_charge">Force Charge</string>
+    <string name="force_discharge">Force Discharge</string>
 </resources>

@@ -82,6 +82,12 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 InlineSettingsNavButton("Peak Shaving") {
                     navController.navigate(SettingsScreen.ConfigurePeakShaving.name)
                 }
+
+                HorizontalDivider()
+
+                InlineSettingsNavButton("Work mode") {
+                    navController.navigate(SettingsScreen.ConfigureWorkMode.name)
+                }
             }
 
             SettingsColumn(header = stringResource(R.string.display_options)) {
