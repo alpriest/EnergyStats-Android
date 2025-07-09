@@ -1,6 +1,5 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.models.ApiRequestCountResponse
 import com.alpriest.energystats.models.BatterySOCResponse
 import com.alpriest.energystats.models.BatteryTimesResponse
@@ -437,6 +436,11 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                 override fun onResponse(call: Call, response: Response) {
                     if (response.code == 406) {
                         continuation.resumeWithException(UnacceptableException())
+                        return
+                    }
+
+                    if (response.code == 401) {
+                        continuation.resumeWithException(BadCredentialsException())
                         return
                     }
 
