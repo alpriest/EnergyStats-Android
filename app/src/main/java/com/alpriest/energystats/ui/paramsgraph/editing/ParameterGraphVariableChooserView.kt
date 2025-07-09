@@ -148,7 +148,7 @@ class ParameterGraphVariableChooserView(
                             Icons.Default.OpenInBrowser, contentDescription = "Open In Browser", modifier = Modifier.padding(end = 5.dp)
                         )
                         Text(
-                            stringResource(R.string.find_out_more_about_these_variables),
+                            stringResource(R.string.find_out_more),
                             fontSize = 12.sp,
                         )
                     }

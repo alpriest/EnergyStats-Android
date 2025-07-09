@@ -8,7 +8,8 @@ enum class DeviceSettingsItem(val rawValue: String) {
     MinSoc("MinSoc"),
     MinSocOnGrid("MinSocOnGrid"),
     MaxSoc("MaxSoc"),
-    GridCode("GridCode");
+    GridCode("GridCode"),
+    WorkMode("WorkMode");
 
     fun title(context: Context): String {
         return when (this) {

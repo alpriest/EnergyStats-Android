@@ -13,7 +13,6 @@
     <string name="stats_tab">Statistiche</string>
     <string name="settings_tab">Impostazioni</string>
     <string name="firmware_versions">Versioni firmware</string>
-    <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Per ulteriori informazioni sulle versioni del firmware, visita il sito web foxesscommunity.com</string>
     <string name="battery">Batteria</string>
     <string name="storage_capacity">Capacità di archiviazione</string>
     <string name="battery_capacity_formula_explanation_prefix">"Calcolato come "</string>
@@ -72,7 +71,6 @@
     <string name="compare_strings">Confronta stringhe</string>
     <string name="temperatures">Temperature</string>
     <string name="none">Nessuna</string>
-    <string name="find_out_more_about_these_variables">Per saperne di più su queste variabili</string>
     <string name="rawvariable_solcast_prediction">Produzione totale di energia solare prevista da Solcast</string>
     <string name="rawvariable_generationpower">Potenza solare/batteria proveniente dall\'inverter</string>
     <string name="rawvariable_feedinpower">Potenza esportata nella rete</string>
@@ -148,7 +146,7 @@
     <string name="self_use_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carico della casa\n2. Carica della batteria\n3. Esportazione</string>
     <string name="feed_in_first_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carico della casa\n2. Esportazione\n3. Carica della batteria</string>
     <string name="backup_mode">In questa modalità, l\'inverter assegna prioritariamente la potenza come segue:\n\n1. Carica della batteria\n2. Carico della casa\n3. Esportazione</string>
-    <string name="find_out_more_about_work_modes">Scopri di più sui modi di lavoro</string>
+    <string name="find_out_more">Scopri di più</string>
     <string name="inverter">Inverter</string>
     <string name="configure_work_mode">Configura modalità di lavoro</string>
     <string name="only_change_these_values_if_you_know_what_you_are_doing">Modificare questi valori solo se si sa cosa si sta facendo</string>

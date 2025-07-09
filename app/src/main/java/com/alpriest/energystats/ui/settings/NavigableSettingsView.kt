@@ -188,7 +188,7 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.ConfigureWorkMode.name) {
             topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.work_mode), {})
-            WorkModeSettingsView(configManager, navController)
+            WorkModeSettingsView(network, configManager, navController, userManager).Content()
         }
 
         debugGraph(topBarSettings, network)

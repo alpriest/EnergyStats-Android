@@ -12,7 +12,6 @@
     <string name="stats_tab">Stats</string>
     <string name="settings_tab">Configuración</string>
     <string name="firmware_versions">Versiones de firmware</string>
-    <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Obtén más información sobre las versiones de firmware en </string>
     <string name="battery">Batería</string>
     <string name="read_from_your_inverter_when_you_login">Leer desde tu inversor cuando inicies sesión.</string>
     <string name="storage_capacity">Capacidad de almacenamiento</string>
@@ -71,7 +70,6 @@
     <string name="compare_strings">Comparar cadenas</string>
     <string name="temperatures">Temperaturas</string>
     <string name="none">Ninguno</string>
-    <string name="find_out_more_about_these_variables">Obtenga más información sobre estas variables</string>
     <string name="rawvariable_solcast_prediction">Generación total de energía solar prevista por Solcast</string>
     <string name="rawvariable_generationpower">Potencia solar / de la batería que pasa a través del inversor</string>
     <string name="rawvariable_feedinpower">Potencia exportada de vuelta a la red</string>
@@ -147,7 +145,7 @@
     <string name="self_use_mode">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la casa\n2. Carga de batería\n3. Exportar</string>
     <string name="feed_in_first_mode">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de la casa\n2. Exportar\n3. Carga de batería</string>
     <string name="backup_mode">En este modo, el inversor prioriza la asignación de energía de la siguiente manera:\n\n1. Carga de batería\n2. Carga de la casa\n3. Exportar</string>
-    <string name="find_out_more_about_work_modes">Obtén más información sobre los modos de trabajo</string>
+    <string name="find_out_more">Más información</string>
     <string name="inverter">Inversor</string>
     <string name="configure_work_mode">Configurar modo de trabajo</string>
     <string name="only_change_these_values_if_you_know_what_you_are_doing">Cambie estos valores solo si sabe lo que está haciendo</string>

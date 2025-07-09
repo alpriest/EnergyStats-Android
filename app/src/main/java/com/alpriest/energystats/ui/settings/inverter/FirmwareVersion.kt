@@ -73,7 +73,7 @@ fun FirmwareVersionView(device: Device, network: Networking) {
     firmware?.let {
         SettingsColumn(
             header = stringResource(R.string.firmware_versions),
-            footer = stringResource(R.string.find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website),
+            footer = stringResource(R.string.find_out_more),
             footerModifier = Modifier
                 .clickable {
                     uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")

@@ -12,7 +12,6 @@
     <string name="stats_tab">Statistiken</string>
     <string name="settings_tab">Einstellungen</string>
     <string name="firmware_versions">Firmware-Versionen</string>
-    <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Mehr Informationen über Firmware-Versionen gibt es auf der foxesscommunity.com Webseite</string>
     <string name="battery">Batterie</string>
     <string name="battery_capacity_formula_explanation_prefix">Calculated as </string>
     <string name="battery_capacity_formula_explanation_suffix"> wobei die Restladung durch Ihre Installation geschätzt wird und nicht akkurat sein könnte. Klicken Sie oben auf \'Kapazität\', um einen manuellen Wert einzugeben.</string>
@@ -72,7 +71,6 @@
     <string name="compare_strings">Strings vergleichen</string>
     <string name="temperatures">Temperaturen</string>
     <string name="none">Nichts</string>
-    <string name="find_out_more_about_these_variables">Mehr Informationen über diese Variablen</string>
     <string name="rawvariable_solcast_prediction">Gesamte Solarenergieerzeugung, prognostiziert von Solcast</string>
     <string name="rawvariable_generationpower">Solar-/Batterieleistung, die vom Wechselrichter geliefert wird</string>
     <string name="rawvariable_feedinpower">Leistung, die zurück ins Netz eingespeist wird</string>
@@ -147,7 +145,7 @@
     <string name="self_use_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Hauslast\n2. Batterieladung\n3. Einspeisung</string>
     <string name="feed_in_first_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Hauslast\n2. Einspeisung\n3. Batterieladung</string>
     <string name="backup_mode">In diesem Modus priorisiert der Wechselrichter die Stromzuweisung wie folgt:\n\n1. Batterieladung\n2. Hauslast\n3. Einspeisung</string>
-    <string name="find_out_more_about_work_modes">Erfahren Sie mehr über Arbeitsmodi</string>
+    <string name="find_out_more">Erfahre mehr</string>
     <string name="inverter">Wechselrichter</string>
     <string name="configure_work_mode">Arbeitsmodus konfigurieren</string>
     <string name="only_change_these_values_if_you_know_what_you_are_doing">Ändern Sie diese Werte nur, wenn Sie wissen, was Sie tun</string>

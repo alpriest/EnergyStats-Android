@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -33,6 +34,7 @@ class WorkModeViewModel(
     var workModeStream = MutableStateFlow(WorkMode.SelfUse)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    val items = listOf(WorkMode.SelfUse, WorkMode.Feedin, WorkMode.Backup, WorkMode.ForceCharge, WorkMode.ForceDischarge)
 
     suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
@@ -42,8 +44,8 @@ class WorkModeViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    val result = network.fetchWorkMode(deviceSN) // TODO
-                    workModeStream.value = InverterWorkMode.from(result.values.operation_mode__work_mode).asWorkMode()
+                    val result = network.fetchDeviceSettingsItem(deviceSN, DeviceSettingsItem.WorkMode)
+                    workModeStream.value = WorkMode.from(result.value)
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
@@ -62,9 +64,10 @@ class WorkModeViewModel(
                 val deviceSN = device.deviceSN
 
                 try {
-                    network.setWorkMode(
-                        deviceID = deviceSN, // TODO
-                        workMode = workModeStream.value.asInverterWorkMode().text,
+                    network.setDeviceSettingsItem(
+                        deviceSN,
+                        DeviceSettingsItem.WorkMode,
+                        workModeStream.value.networkTitle()
                     )
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.inverter_work_mode_was_saved))

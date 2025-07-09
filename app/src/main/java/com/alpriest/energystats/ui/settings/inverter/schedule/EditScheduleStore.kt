@@ -83,6 +83,17 @@ enum class WorkMode {
         }
     }
 
+    fun networkTitle(): String {
+        return when(this) {
+            SelfUse -> "SelfUse"
+            Feedin -> "Feedin"
+            Backup -> "Backup"
+            ForceCharge -> "ForceCharge"
+            ForceDischarge -> "ForceDischarge"
+            else -> ""
+        }
+    }
+
     companion object {
         fun from(value: String): WorkMode {
             return when (value) {

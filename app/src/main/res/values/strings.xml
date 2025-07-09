@@ -12,7 +12,6 @@
     <string name="stats_tab">Stats</string>
     <string name="settings_tab">Settings</string>
     <string name="firmware_versions">Firmware versions</string>
-    <string name="find_out_more_about_firmware_versions_from_the_foxesscommunity_com_website">Tap to find out more about firmware versions from the foxesscommunity.com website</string>
     <string name="battery">Battery</string>
     <string name="storage_capacity">Storage capacity</string>
     <string name="battery_capacity_formula_explanation_prefix">"Calculated as "</string>
@@ -71,7 +70,6 @@
     <string name="compare_strings">Compare strings</string>
     <string name="temperatures">Temperatures</string>
     <string name="none">None</string>
-    <string name="find_out_more_about_these_variables">Find out more about these variables</string>
     <string name="rawvariable_solcast_prediction">Total solar energy generation predicted by Solcast</string>
     <string name="rawvariable_generationpower">Solar / Battery power coming through the inverter</string>
     <string name="rawvariable_feedinpower">Power being exported back to the grid</string>
@@ -147,7 +145,7 @@
     <string name="self_use_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Battery Charging\n3. Export</string>
     <string name="feed_in_first_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. House Load\n2. Export\n3. Battery Charging</string>
     <string name="backup_mode">In this mode, the inverter prioritises power allocation as follows:\n\n1. Battery Charging\n2. House Load\n3. Export</string>
-    <string name="find_out_more_about_work_modes">Find out more about work modes</string>
+    <string name="find_out_more">Find out more</string>
     <string name="inverter">Inverter</string>
     <string name="configure_work_mode">Configure Work Mode</string>
     <string name="only_change_these_values_if_you_know_what_you_are_doing">Only change these values if you know what you are doing</string>
@@ -283,7 +281,7 @@
     <string name="force_discharge_soc">Force Discharge SoC</string>
     <string name="force_discharge_timeperiod_power_description">The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported.</string>
     <string name="force_discharge_power">Force Discharge Power</string>
-    <string name="work_mode">Work mode</string>
+    <string name="work_mode">Work Mode</string>
     <string name="please_enter_a_number_between_10_and_100">Please enter a number between 10 and 100</string>
     <string name="min_soc_must_be_less_than_or_equal_to_force_discharge_soc">Min SoC must be less than or equal to Force Discharge SoC</string>
     <string name="end_time_must_be_after_start_time">End time must be after start time</string>
