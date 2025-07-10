@@ -46,6 +46,7 @@ import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
+import com.alpriest.energystats.ui.settings.inverter.schedule.UnusedSchedulePeriodWarning
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -178,6 +179,12 @@ class EditTemplateView(
                                     colorFilter = ColorFilter.tint(Color.White)
                                 )
                             }
+                        }
+
+                        if (template.phases.isNotEmpty()) {
+                            Text(stringResource(R.string.time_period_missing_warning))
+
+                            UnusedSchedulePeriodWarning(template.asSchedule())
                         }
                     }
 

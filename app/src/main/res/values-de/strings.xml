@@ -450,4 +450,5 @@
     <string name="peak_shaving_explanation">Ihr System überwacht den Strom, der aus dem Netz importiert wird. Wenn der Import Ihren Importgrenzwert von %1$@ überschreitet und der Ladezustand (SOC) Ihrer Batterie über %2$@%% liegt, entlädt das System die Batterie, um den zusätzlichen Bedarf zu decken und so die Spitzenlast vom Netz zu „kappen“.\\n\\nDieser Vorgang wird fortgesetzt, solange der Ladezustand (SOC) der Batterie über einem bestimmten Schwellenwert liegt.\\n\\nPeak Shaving funktioniert nur, wenn der Modus „Peak Shaving“ im Wechselrichter-Zeitplan aktiviert ist.</string>
     <string name="force_charge">Erzwungenes Laden</string>
     <string name="force_discharge">Erzwungene Entladung</string>
+    <string name="time_period_missing_warning">Alle oben nicht angegebenen Zeiträume werden standardmäßig im Eigenverbrauchsmodus betrieben, wobei der minimale SOC aus dem zuletzt aktiven Zeitraum verwendet wird.</string>
 </resources>

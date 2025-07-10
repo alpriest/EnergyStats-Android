@@ -450,4 +450,5 @@
     <string name="peak_shaving_explanation">Tu sistema monitorea la energía importada de la red. Si la importación supera tu Límite de Importación de %1$@ y el estado de carga (SOC) de la batería está por encima de %2$@%%, el sistema descarga la batería para suministrar la demanda adicional, reduciendo así el pico de carga desde la red.\\n\\nEsta operación continúa mientras el estado de carga (SOC) de la batería esté por encima de un umbral determinado.\\n\\nEl Peak Shaving solo funciona cuando el modo Peak Shaving está activado desde el programador del inversor.</string>
     <string name="force_charge">Carga forzada</string>
     <string name="force_discharge">Descarga forzada</string>
+    <string name="time_period_missing_warning">Cualquier periodo no especificado arriba se configurará por defecto en modo de autoconsumo, utilizando el SOC mínimo del periodo activo más reciente.</string>
 </resources>

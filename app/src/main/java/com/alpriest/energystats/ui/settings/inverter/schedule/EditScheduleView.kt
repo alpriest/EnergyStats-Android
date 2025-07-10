@@ -80,7 +80,8 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
                 ScheduleDetailView(viewModel.navController, schedule)
 
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
@@ -99,22 +100,9 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
                 }
 
                 Column(Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)) {
-                    Text("Any time periods not specified above will default to Self Use mode, using the min SOC from the most recent active period.")
+                    Text(stringResource(R.string.time_period_missing_warning))
 
-                    if (schedule.hasTooManyPhases) {
-                        Row(modifier = Modifier.padding(top = 16.dp)) {
-                            Box(modifier = Modifier
-                                .size(30.dp)
-                                .background(Color.White)
-                                .diagonalLinesIf(true)) {
-                            }
-
-                            Text(
-                                "Will not be used by FoxESS if this template is activated (max 8 periods).",
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
-                        }
-                    }
+                    UnusedSchedulePeriodWarning(schedule)
                 }
 
                 SettingsBottomSpace()
@@ -123,6 +111,26 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
         labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save)),
         modifier = modifier
     )
+}
+
+@Composable
+fun UnusedSchedulePeriodWarning(schedule: Schedule) {
+    if (schedule.hasTooManyPhases) {
+        Row(modifier = Modifier.padding(top = 16.dp)) {
+            Box(
+                modifier = Modifier
+                    .size(30.dp)
+                    .background(Color.White)
+                    .diagonalLinesIf(true)
+            ) {
+            }
+
+            Text(
+                "Will not be used by FoxESS if this template is activated (max 8 periods).",
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
 }
 
 @SuppressLint("ViewModelConstructorInComposable")
@@ -142,3 +150,4 @@ fun EditScheduleViewPreview() {
         )
     }
 }
+
