@@ -1,14 +1,20 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -92,6 +98,25 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
                     }
                 }
 
+                Column(Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)) {
+                    Text("Any time periods not specified above will default to Self Use mode, using the min SOC from the most recent active period.")
+
+                    if (schedule.hasTooManyPhases) {
+                        Row(modifier = Modifier.padding(top = 16.dp)) {
+                            Box(modifier = Modifier
+                                .size(30.dp)
+                                .background(Color.White)
+                                .diagonalLinesIf(true)) {
+                            }
+
+                            Text(
+                                "Will not be used by FoxESS if this template is activated (max 8 periods).",
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
+                    }
+                }
+
                 SettingsBottomSpace()
             }
         },
@@ -100,7 +125,8 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
     )
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 400)
+@SuppressLint("ViewModelConstructorInComposable")
+@Preview(showBackground = true, widthDp = 400, heightDp = 700)
 @Composable
 fun EditScheduleViewPreview() {
     EnergyStatsTheme {

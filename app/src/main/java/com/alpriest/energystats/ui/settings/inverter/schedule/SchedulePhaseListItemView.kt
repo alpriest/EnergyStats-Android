@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,8 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     val extra = when (phase.mode) {
         WorkMode.ForceDischarge -> " at ${phase.forceDischargePower}W down to ${phase.forceDischargeSOC}%"
         WorkMode.ForceCharge, WorkMode.Backup ->
@@ -61,7 +64,7 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifie
             }
 
             Row {
-                Text(phase.mode.title(), color = colorScheme.onSecondary.copy(alpha = 0.5f))
+                Text(phase.mode.title(context), color = colorScheme.onSecondary.copy(alpha = 0.5f))
                 Text(extra, color = colorScheme.onSecondary.copy(alpha = 0.5f))
             }
         }

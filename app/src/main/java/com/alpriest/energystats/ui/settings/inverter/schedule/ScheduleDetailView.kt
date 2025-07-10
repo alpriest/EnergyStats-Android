@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -58,28 +59,30 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
 
     if (schedule.phases.isNotEmpty()) {
         SettingsColumn(modifier = Modifier.fillMaxWidth(), padding = PaddingValues()) {
-            schedule.phases.forEach {
-                OutlinedButton(
-                    onClick = {
-                        EditScheduleStore.shared.scheduleStream.value = schedule
-                        EditScheduleStore.shared.phaseId = it.id
-                        navController.navigate(SettingsScreen.EditPhase.name)
-                    },
-                    border = null,
-                    shape = RectangleShape,
-                    contentPadding = PaddingValues()
-                ) {
-                    SchedulePhaseListItemView(
-                        it,
-                        modifier = Modifier
-                    )
+            schedule.phases.forEachIndexed { index, phase ->
+                Box(Modifier.diagonalLinesIf(index >= Schedule.MAX_PHASES_COUNT)) {
+                    OutlinedButton(
+                        onClick = {
+                            EditScheduleStore.shared.scheduleStream.value = schedule
+                            EditScheduleStore.shared.phaseId = phase.id
+                            navController.navigate(SettingsScreen.EditPhase.name)
+                        },
+                        border = null,
+                        shape = RectangleShape,
+                        contentPadding = PaddingValues()
+                    ) {
+                        SchedulePhaseListItemView(
+                            phase,
+                            modifier = Modifier
+                        )
 
-                    Spacer(modifier = Modifier.weight(0.1f))
+                        Spacer(modifier = Modifier.weight(0.1f))
 
-                    Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Edit")
+                        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Edit")
+                    }
                 }
 
-                if (schedule.phases.last() != it) {
+                if (index != schedule.phases.size - 1) {
                     HorizontalDivider()
                 }
             }

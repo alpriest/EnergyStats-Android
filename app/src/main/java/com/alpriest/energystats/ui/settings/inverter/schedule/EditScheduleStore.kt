@@ -32,7 +32,7 @@ class EditScheduleStore(
                     true
                 }
             }.filter {
-                it.title() != ""
+                it.showInUI()
             }
         }
     }
@@ -46,18 +46,6 @@ enum class WorkMode {
     ForceDischarge,
     Invalid,
     PeakShaving;
-
-    fun title(): String {
-        return when (this) {
-            SelfUse -> "Self Use"
-            Feedin -> return "Feed In First"
-            Backup -> return "Backup"
-            ForceCharge -> return "Force Charge"
-            ForceDischarge -> return "Force Discharge"
-            PeakShaving -> return "Peak Shaving"
-            Invalid -> return ""
-        }
-    }
 
     fun title(context: Context): String {
         return when (this) {
@@ -90,7 +78,20 @@ enum class WorkMode {
             Backup -> "Backup"
             ForceCharge -> "ForceCharge"
             ForceDischarge -> "ForceDischarge"
+            PeakShaving -> "PeakShaving"
             else -> ""
+        }
+    }
+
+    fun showInUI(): Boolean {
+        return when (this) {
+            SelfUse -> true
+            Feedin -> true
+            Backup -> true
+            ForceCharge -> true
+            ForceDischarge -> true
+            PeakShaving -> true
+            else -> false
         }
     }
 
@@ -102,6 +103,7 @@ enum class WorkMode {
                 "Backup" -> Backup
                 "ForceCharge" -> ForceCharge
                 "ForceDischarge" -> ForceDischarge
+                "PeakShaving" -> PeakShaving
                 else -> SelfUse
             }
         }

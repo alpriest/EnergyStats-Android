@@ -315,6 +315,7 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
 fun WorkModeView(viewModel: EditPhaseViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val workMode = viewModel.workModeStream.collectAsState().value
+    val context = LocalContext.current
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -329,7 +330,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
         Box(contentAlignment = Alignment.TopEnd) {
             ESButton(onClick = { expanded = !expanded }) {
                 Text(
-                    workMode.title(),
+                    workMode.title(context),
                     color = colorScheme.onPrimary
                 )
                 Icon(
@@ -348,7 +349,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
                         expanded = false
                         viewModel.workModeStream.value = it
                     }, text = {
-                        Text(it.title())
+                        Text(it.title(context))
                     })
                 }
             }

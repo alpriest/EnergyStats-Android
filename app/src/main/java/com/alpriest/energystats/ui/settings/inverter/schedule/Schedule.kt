@@ -42,10 +42,14 @@ data class Schedule(
         return true
     }
 
+    val hasTooManyPhases: Boolean = phases.size > MAX_PHASES_COUNT
+
     companion object {
         fun create(name: String? = null, phases: List<SchedulePhase>): Schedule {
             return Schedule(name ?: "Schedule", phases)
         }
+
+        const val MAX_PHASES_COUNT = 8
     }
 }
 
