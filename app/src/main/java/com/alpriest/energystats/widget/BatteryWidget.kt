@@ -58,7 +58,7 @@ class BatteryWidgetReceiver : GlanceAppWidgetReceiver() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                LatestDataRepository.getInstance().update(context)
+                BatteryDataRepository.getInstance().update(context)
             } catch (_: Exception) {
             }
         }
@@ -67,7 +67,7 @@ class BatteryWidgetReceiver : GlanceAppWidgetReceiver() {
 
 class BatteryWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val repository = LatestDataRepository.getInstance()
+        val repository = BatteryDataRepository.getInstance()
         repository.updateFromSharedConfig(context)
 
         provideContent {
@@ -136,7 +136,7 @@ class RefreshAction : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        LatestDataRepository.getInstance().update(context)
+        BatteryDataRepository.getInstance().update(context)
     }
 }
 

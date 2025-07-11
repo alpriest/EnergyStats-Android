@@ -6,6 +6,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import com.alpriest.energystats.widget.GenerationViewData
 import java.time.LocalDateTime
 
 interface ConfigInterface {
@@ -67,6 +68,7 @@ interface ConfigInterface {
     var batteryViewModel: BatteryViewModel?
     var ct2DisplayMode: Int
     var showStringTotalsAsPercentage: Boolean
+    var generationViewData: GenerationViewData?
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

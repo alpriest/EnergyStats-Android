@@ -211,6 +211,14 @@ object URLs {
 
     fun getDevicePeakShavingSettings(): HttpUrl = "https://www.foxesscloud.com/op/v0/device/peakShaving/get".toHttpUrl()
     fun setDevicePeakShavingSettings(): HttpUrl = "https://www.foxesscloud.com/op/v0/device/peakShaving/set".toHttpUrl()
+
+    fun fetchPowerGeneration(deviceSN: String): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/generation"
+            .toHttpUrl()
+            .newBuilder()
+            .addDeviceSN(deviceSN)
+            .build()
+    }
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

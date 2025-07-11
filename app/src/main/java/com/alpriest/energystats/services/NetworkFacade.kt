@@ -15,6 +15,7 @@ import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerGenerationResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
@@ -260,6 +261,14 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
             demoAPI.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
         } else {
             api.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
+        }
+    }
+
+    override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
+        return if (isDemoUser()) {
+            demoAPI.openapi_fetchPowerGeneration(deviceSN)
+        } else {
+            api.openapi_fetchPowerGeneration(deviceSN)
         }
     }
 }

@@ -18,6 +18,7 @@ import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseData
 import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerGenerationResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
@@ -155,6 +156,10 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
 
     override suspend fun fetchErrorMessages() {
         api.fetchErrorMessages()
+    }
+
+    override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
+        return api.openapi_fetchPowerGeneration(deviceSN)
     }
 
     private fun Double.capped(dataCeiling: DataCeiling): Double {

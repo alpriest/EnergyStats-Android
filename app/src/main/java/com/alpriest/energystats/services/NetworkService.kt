@@ -14,6 +14,7 @@ import com.alpriest.energystats.models.OpenApiVariable
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
+import com.alpriest.energystats.models.PowerGenerationResponse
 import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
@@ -45,6 +46,7 @@ interface Networking {
     suspend fun setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String)
     suspend fun fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse
     suspend fun setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int)
+    suspend fun fetchPowerGeneration(deviceSN: String): PowerGenerationResponse
 }
 
 open class NetworkService(val api: FoxAPIServicing) : Networking {
@@ -139,5 +141,9 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
 
     override suspend fun setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
         return api.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
+    }
+
+    override suspend fun fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
+        return api.openapi_fetchPowerGeneration(deviceSN)
     }
 }

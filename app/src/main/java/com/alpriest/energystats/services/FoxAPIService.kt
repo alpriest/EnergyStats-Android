@@ -33,6 +33,7 @@ import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedDataLoggerListResponse
 import com.alpriest.energystats.models.PagedDeviceListResponse
 import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerGenerationResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.PowerStationListRequest
 import com.alpriest.energystats.models.QueryDate
@@ -412,10 +413,18 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val request = Request.Builder()
             .post(body)
-            .url(URLs.getDevicePeakShavingSettings())
+            .url(URLs.setDevicePeakShavingSettings())
             .build()
 
         executeWithoutResponse(request)
+    }
+
+    override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
+        val request = Request.Builder().url(URLs.fetchPowerGeneration(deviceSN)).build()
+
+        val type = object : TypeToken<NetworkResponse<PowerGenerationResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<PowerGenerationResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
     }
 
     private suspend fun executeWithoutResponse(request: Request) {

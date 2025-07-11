@@ -17,6 +17,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import com.alpriest.energystats.widget.GenerationViewData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.LocalDateTime
@@ -86,7 +87,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_INVERTER_SCHEDULE_QUICK_LINK,
         FETCH_SOLCAST_ON_APP_LAUNCH,
         CT2_DISPLAY_MODE,
-        SHOW_STRING_TOTALS_AS_PERCENTAGE
+        SHOW_STRING_TOTALS_AS_PERCENTAGE,
+        GENERATION_VIEW_DATA
     }
 
     override fun clearDisplaySettings() {
@@ -610,9 +612,13 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var batteryViewModel: BatteryViewModel?
         get() {
-            val data: String = sharedPreferences.getString(SharedPreferenceDisplayKey.BATTERY_VIEW_MODEL.name, null) ?: return null
+            val data: String? = sharedPreferences.getString(SharedPreferenceDisplayKey.BATTERY_VIEW_MODEL.name, null) ?: return null
 
-            return Gson().fromJson(data, object : TypeToken<BatteryViewModel>() {}.type)
+            return if (data != null) {
+                return Gson().fromJson(data, object : TypeToken<BatteryViewModel>() {}.type)
+            } else {
+                return data
+            }
         }
         set(value) {
             sharedPreferences.edit {
@@ -668,4 +674,26 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
                 putBoolean(SharedPreferenceDisplayKey.SHOW_STRING_TOTALS_AS_PERCENTAGE.name, value)
             }
         }
+
+    override var generationViewData: GenerationViewData?
+        get() {
+            val data: String? = sharedPreferences.getString(SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name, null) ?: return null
+
+            return if (data != null) {
+                Gson().fromJson(data, object : TypeToken<GenerationViewData>() {}.type)
+            } else {
+                null
+            }
+        }
+        set(value) {
+            sharedPreferences.edit {
+                if (value == null) {
+                    remove(SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name)
+                } else {
+                    val jsonString = Gson().toJson(value)
+                    putString(SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name, jsonString)
+                }
+            }
+        }
+
 }

@@ -24,6 +24,7 @@ import com.alpriest.energystats.models.OpenRealQueryResponseDeserializer
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseDeserializer
 import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerGenerationResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
@@ -279,6 +280,14 @@ class DemoAPI : FoxAPIServicing {
 
     override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
         // do nothing
+    }
+
+    override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
+        return PowerGenerationResponse(
+            today = 2.0,
+            month = 12.0,
+            cumulative = 244.0
+        )
     }
 
     override suspend fun fetchErrorMessages() {}

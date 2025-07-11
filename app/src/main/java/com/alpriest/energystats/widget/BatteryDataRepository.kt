@@ -7,7 +7,7 @@ import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.AppContainer
 
-class LatestDataRepository private constructor() {
+class BatteryDataRepository private constructor() {
     var batteryPercentage: Float = 0f
     var hasBattery = true
     var chargeDescription: String? = null
@@ -71,11 +71,11 @@ class LatestDataRepository private constructor() {
     }
 
     companion object {
-        private var instance: LatestDataRepository? = null
+        private var instance: BatteryDataRepository? = null
 
-        fun getInstance(): LatestDataRepository {
+        fun getInstance(): BatteryDataRepository {
             if (instance == null) {
-                instance = LatestDataRepository()
+                instance = BatteryDataRepository()
             }
             return instance!!
         }

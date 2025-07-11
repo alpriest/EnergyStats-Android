@@ -15,6 +15,7 @@ import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenRealQueryResponse
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.PagedPowerStationListResponse
+import com.alpriest.energystats.models.PowerGenerationResponse
 import com.alpriest.energystats.models.PowerStationDetailResponse
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.ReportVariable
@@ -212,6 +213,10 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
 
     override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
         return api.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
+    }
+
+    override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
+        return api.openapi_fetchPowerGeneration(deviceSN)
     }
 
     private fun makeKey(base: String, vararg arguments: String): String {

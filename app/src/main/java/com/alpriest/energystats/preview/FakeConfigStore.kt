@@ -19,6 +19,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import com.alpriest.energystats.widget.GenerationViewData
 import java.time.LocalDateTime
 
 class FakeConfigStore(
@@ -79,7 +80,8 @@ class FakeConfigStore(
     override var showInverterScheduleQuickLink: Boolean = false,
     override var fetchSolcastOnAppLaunch: Boolean = false,
     override var ct2DisplayMode: Int = CT2DisplayMode.Hidden.value,
-    override var showStringTotalsAsPercentage: Boolean = false
+    override var showStringTotalsAsPercentage: Boolean = false,
+    override var generationViewData: GenerationViewData? = null
 
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}
