@@ -28,7 +28,7 @@ object URLs {
         return "https://www.foxesscloud.com/op/v0/device/battery/forceChargeTime/get"
             .toHttpUrl()
             .newBuilder()
-            .addQueryParameter("sn", deviceSN)
+            .addSN(deviceSN)
             .build()
     }
 
@@ -53,7 +53,7 @@ object URLs {
         return "https://www.foxesscloud.com/c/v0/device/battery/soc/get"
             .toHttpUrl()
             .newBuilder()
-            .addQueryParameter("sn", deviceSN)
+            .addSN(deviceSN)
             .build()
     }
 
@@ -142,7 +142,7 @@ object URLs {
         return "https://www.foxesscloud.com/op/v0/device/detail"
             .toHttpUrl()
             .newBuilder()
-            .addQueryParameter("sn", deviceSN)
+            .addSN(deviceSN)
             .build()
     }
 
@@ -150,7 +150,7 @@ object URLs {
         return "https://www.foxesscloud.com/op/v0/device/battery/soc/get"
             .toHttpUrl()
             .newBuilder()
-            .addQueryParameter("sn", deviceSN)
+            .addSN(deviceSN)
             .build()
     }
 
@@ -216,9 +216,14 @@ object URLs {
         return "https://www.foxesscloud.com/op/v0/device/generation"
             .toHttpUrl()
             .newBuilder()
-            .addDeviceSN(deviceSN)
+            .addSN(deviceSN)
             .build()
     }
+}
+
+private fun HttpUrl.Builder.addSN(deviceSN: String): HttpUrl.Builder {
+    addQueryParameter("sn", deviceSN)
+    return this
 }
 
 private fun HttpUrl.Builder.addDeviceSN(deviceSN: String): HttpUrl.Builder {

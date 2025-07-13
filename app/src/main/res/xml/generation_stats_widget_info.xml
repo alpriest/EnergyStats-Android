@@ -1,0 +1,11 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:resizeMode="none"
+    android:updatePeriodMillis="1800000"
+    android:minWidth="180dp"
+    android:minHeight="40dp"
+    android:maxWidth="180dp"
+    android:maxHeight="40dp"
+    android:background="@drawable/generation_stats_widget_background"
+    >
+</appwidget-provider>

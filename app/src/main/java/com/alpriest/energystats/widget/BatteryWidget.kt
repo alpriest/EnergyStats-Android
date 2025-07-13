@@ -81,7 +81,7 @@ fun BatteryWidgetContent(amount: Float, chargeDescription: String?, tapAction: W
     val launchIntent = Intent(LocalContext.current, MainActivity::class.java)
     val action: Action = when (tapAction) {
         WidgetTapAction.Launch -> actionStartActivity(launchIntent)
-        WidgetTapAction.Refresh -> actionRunCallback<RefreshAction>()
+        WidgetTapAction.Refresh -> actionRunCallback<BatteryRefreshAction>()
     }
 
     Column(
@@ -130,7 +130,7 @@ fun BatteryWidgetContent(amount: Float, chargeDescription: String?, tapAction: W
     }
 }
 
-class RefreshAction : ActionCallback {
+class BatteryRefreshAction : ActionCallback {
     override suspend fun onAction(
         context: Context,
         glanceId: GlanceId,

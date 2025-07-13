@@ -19,9 +19,8 @@ class BatteryDataRepository private constructor() {
         appContainer.configManager.currentDevice.value?.let {
             fetchData(context, appContainer, it)
             tapAction = appContainer.configManager.widgetTapAction
+            BatteryWidget().updateAll(context)
         }
-
-        BatteryWidget().updateAll(context)
     }
 
     private suspend fun fetchData(context: Context, appContainer: AppContainer, device: Device) {
