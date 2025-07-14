@@ -39,7 +39,7 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.alpriest.energystats.MainActivity
-import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.CoroutineScope
@@ -137,7 +137,7 @@ fun GenerationStatsWidgetContent(
             )
             Spacer(modifier = GlanceModifier.defaultWeight())
             Text(
-                today.kWh(1),
+                today.kW(1),
                 style = numberStyle
             )
         }
@@ -151,7 +151,7 @@ fun GenerationStatsWidgetContent(
             )
             Spacer(modifier = GlanceModifier.defaultWeight())
             Text(
-                month.kWh(1),
+                month.kW(1),
                 style = numberStyle
             )
         }
@@ -165,7 +165,7 @@ fun GenerationStatsWidgetContent(
             )
             Spacer(modifier = GlanceModifier.defaultWeight())
             Text(
-                cumulative.kWh(1),
+                cumulative.kW(1),
                 style = numberStyle
             )
         }

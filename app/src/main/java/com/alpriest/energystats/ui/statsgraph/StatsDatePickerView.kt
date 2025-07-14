@@ -116,7 +116,8 @@ fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: 
             ) {
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
-                    contentDescription = "Right"
+                    contentDescription = "Right",
+                    modifier = Modifier.size(32.dp)
                 )
             }
         }

@@ -43,6 +43,7 @@ import com.alpriest.energystats.ui.statsgraph.CalendarView
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.Typography
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
@@ -52,6 +53,14 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
     var hours by remember { mutableStateOf(viewModel.displayModeStream.value.hours) }
     val candidateQueryDate = MutableStateFlow(viewModel.displayModeStream.collectAsState().value.date)
     var hoursButtonEnabled by remember { mutableStateOf(true) }
+    val currentDate = remember { mutableStateOf(LocalDate.now()) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(60_000) // Check once per minute
+            currentDate.value = LocalDate.now()
+        }
+    }
 
     LaunchedEffect(candidateQueryDate) {
         candidateQueryDate
@@ -125,7 +134,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
                 candidateQueryDate.value = candidateQueryDate.value.plusDays(1)
             },
             contentPadding = PaddingValues(0.dp),
-            enabled = date.atStartOfDay() < LocalDate.now().atStartOfDay()
+            enabled = date.atStartOfDay() < currentDate.value.atStartOfDay()
         ) {
             Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Right", modifier = Modifier.size(32.dp))
         }

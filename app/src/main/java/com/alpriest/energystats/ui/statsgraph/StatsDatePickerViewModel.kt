@@ -39,40 +39,27 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
                 is StatsDisplayMode.Day -> {
                     dateStream.value = displayMode.date
                     rangeStream.value = DatePickerRange.DAY
-                    canIncreaseStream.value = displayMode.date.atStartOfDay() < LocalDate.now().atStartOfDay()
-                    canDecreaseStream.value = true
                 }
 
                 is StatsDisplayMode.Month -> {
                     monthStream.value = displayMode.month
                     yearStream.value = displayMode.year
                     rangeStream.value = DatePickerRange.MONTH
-
-                    val calendar = Calendar.getInstance()
-                    val currentMonth = calendar.get(Calendar.MONTH) // Calendar.MONTH is zero-based
-                    val currentYear = calendar.get(Calendar.YEAR)
-                    canIncreaseStream.value = (displayMode.year < currentYear) || (displayMode.month < currentMonth && displayMode.year <= currentYear)
-                    canDecreaseStream.value = true
                 }
 
                 is StatsDisplayMode.Year -> {
                     yearStream.value = displayMode.year
                     rangeStream.value = DatePickerRange.YEAR
-
-                    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-                    canIncreaseStream.value = displayMode.year < currentYear
-                    canDecreaseStream.value = true
                 }
 
                 is StatsDisplayMode.Custom -> {
                     customStartDate.value = displayMode.start
                     customEndDate.value = displayMode.end
                     rangeStream.value = DatePickerRange.CUSTOM(displayMode.start, displayMode.end)
-                    canIncreaseStream.value = false
-                    canDecreaseStream.value = true
                 }
             }
 
+            updateIncreaseDecreaseButtons()
             isInitialised = true
         }
     }
@@ -92,12 +79,42 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
         }
 
         displayModeStream.value = makeUpdatedDisplayMode(rangeStream.value)
+        updateIncreaseDecreaseButtons()
+    }
+
+    private fun updateIncreaseDecreaseButtons() {
+        when (val displayMode = displayModeStream.value) {
+            is StatsDisplayMode.Day -> {
+                canIncreaseStream.value = displayMode.date.atStartOfDay() < LocalDate.now().atStartOfDay()
+                canDecreaseStream.value = true
+            }
+
+            is StatsDisplayMode.Month -> {
+                val calendar = Calendar.getInstance()
+                val currentMonth = calendar.get(Calendar.MONTH) // Calendar.MONTH is zero-based
+                val currentYear = calendar.get(Calendar.YEAR)
+                canIncreaseStream.value = (displayMode.year < currentYear) || (displayMode.month < currentMonth && displayMode.year <= currentYear)
+                canDecreaseStream.value = true
+            }
+
+            is StatsDisplayMode.Year -> {
+                val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+                canIncreaseStream.value = displayMode.year < currentYear
+                canDecreaseStream.value = true
+            }
+
+            is StatsDisplayMode.Custom -> {
+                canIncreaseStream.value = false
+                canDecreaseStream.value = true
+            }
+        }
     }
 
     fun decrease() {
         when (rangeStream.value) {
             is DatePickerRange.DAY -> {
                 dateStream.value = dateStream.value.minusDays(1)
+                canIncreaseStream.value = dateStream.value.atStartOfDay() < LocalDate.now().atStartOfDay()
             }
 
             is DatePickerRange.MONTH -> {
@@ -120,6 +137,7 @@ class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisp
         when (rangeStream.value) {
             is DatePickerRange.DAY -> {
                 dateStream.value = dateStream.value.plusDays(1)
+                canIncreaseStream.value = dateStream.value.atStartOfDay() < LocalDate.now().atStartOfDay()
             }
 
             is DatePickerRange.MONTH -> {
