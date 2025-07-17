@@ -51,7 +51,8 @@ data class AppTheme(
     val truncatedYAxisOnParameterGraphs: Boolean,
     val showInverterScheduleQuickLink: Boolean,
     val ct2DisplayMode: CT2DisplayMode,
-    val showStringTotalsAsPercentage: Boolean
+    val showStringTotalsAsPercentage: Boolean,
+    val detectedActiveTemplate: String?
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -115,9 +116,10 @@ fun AppTheme.Companion.demo(
     shouldCombineCT2WithLoadsPower: Boolean = false,
     powerFlowStrings: PowerFlowStringsSettings = PowerFlowStringsSettings.defaults.copy(enabled = true, pv1Enabled = true, pv2Enabled = true),
     truncatedYAxisOnParameterGraphs: Boolean = false,
-    showInverterScheduleQuickLink: Boolean = false,
+    showInverterScheduleQuickLink: Boolean = true,
     ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden,
-    showStringTotalsAsPercentage: Boolean = false
+    showStringTotalsAsPercentage: Boolean = false,
+    detectedActiveTemplate: String? = "Football"
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -155,7 +157,8 @@ fun AppTheme.Companion.demo(
         truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs,
         showInverterScheduleQuickLink = showInverterScheduleQuickLink,
         ct2DisplayMode = ct2DisplayMode,
-        showStringTotalsAsPercentage = showStringTotalsAsPercentage
+        showStringTotalsAsPercentage = showStringTotalsAsPercentage,
+        detectedActiveTemplate = detectedActiveTemplate
     )
 }
 
@@ -196,6 +199,7 @@ fun AppTheme.Companion.toAppTheme(config: ConfigInterface): AppTheme {
         truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
         showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
         ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
-        showStringTotalsAsPercentage = config.showStringTotalsAsPercentage
+        showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
+        detectedActiveTemplate = null
     )
 }

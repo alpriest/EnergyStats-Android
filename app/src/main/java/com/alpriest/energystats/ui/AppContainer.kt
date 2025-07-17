@@ -104,7 +104,8 @@ class AppContainer(private val context: Context) {
             truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
             showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
             ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
-            showStringTotalsAsPercentage = config.showStringTotalsAsPercentage
+            showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
+            detectedActiveTemplate = null
         )
     )
 

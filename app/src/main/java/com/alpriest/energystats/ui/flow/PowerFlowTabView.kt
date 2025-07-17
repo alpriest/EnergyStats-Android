@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -48,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.TopBarSettings
+import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
@@ -188,15 +190,22 @@ fun LoadedView(
     ) {
         Box {
             if (appSettings.showInverterScheduleQuickLink) {
-                Icon(
-                    Icons.Default.CalendarMonth,
-                    contentDescription = "Inverter schedule",
-                    modifier = Modifier
-                        .clickable {
-                            showBottomSheet = true
-                        }
-                        .align(TopEnd)
-                )
+                Column(
+                    modifier = Modifier.align(TopEnd)
+                ) {
+                    Icon(
+                        Icons.Default.CalendarMonth,
+                        contentDescription = "Inverter schedule",
+                        modifier = Modifier
+                            .clickable {
+                                showBottomSheet = true
+                            }.align(Alignment.End)
+                    )
+
+                    appSettings.detectedActiveTemplate?.let {
+                        Text(it)
+                    }
+                }
             }
 
             LoadedPowerFlowView(
@@ -226,7 +235,7 @@ fun LoadedView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
-    val viewModel = PowerFlowTabViewModel(
+    val powerFlowTabViewModel = PowerFlowTabViewModel(
         DemoNetworking(),
         FakeConfigManager(),
         MutableStateFlow(AppTheme.demo()),
@@ -234,22 +243,30 @@ fun PowerFlowTabViewPreview() {
         WidgetDataSharer(FakeConfigStore()),
         BannerAlertManager()
     )
+    val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
+        LocalContext.current,
+        currentValuesStream = MutableStateFlow(CurrentValues(2.45, 2.45, null, 0.4, 1.0, listOf(
+            StringPower("pv1", 0.3),
+            StringPower("pv2", 0.7)
+        ))),
+        hasBattery = true,
+        battery = BatteryViewModel(),
+        FakeConfigManager(),
+        currentDevice = Device.preview(),
+        network = DemoNetworking(),
+        BannerAlertManager()
+    )
     val themeStream = MutableStateFlow(AppTheme.demo())
-    val topBarSettings = remember { mutableStateOf(TopBarSettings(false, false, "", {})) }
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        PowerFlowTabView(
-            topBarSettings,
-            DemoNetworking(),
+        LoadedView(
+            viewModel = powerFlowTabViewModel,
             FakeConfigManager(),
-            FakeUserManager(),
+            loadedPowerFlowViewModel,
             themeStream,
-            WidgetDataSharer(FakeConfigStore()),
-            BannerAlertManager(),
+            DemoNetworking(),
+            FakeUserManager(),
             TemplateStore(FakeConfigManager())
-        ).Content(
-            viewModel = viewModel,
-            themeStream = themeStream,
         )
     }
 }

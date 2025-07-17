@@ -20,7 +20,7 @@ class GenerationStatsDataRepository private constructor() {
             tapAction = appContainer.configManager.widgetTapAction
         }
 
-        BatteryWidget().updateAll(context)
+        GenerationStatsWidget().updateAll(context)
     }
 
     private suspend fun fetchData(context: Context, appContainer: AppContainer, device: Device) {

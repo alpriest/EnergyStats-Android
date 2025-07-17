@@ -10,6 +10,9 @@ import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhase
+import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -32,6 +35,10 @@ class PreHomeViewModel(
         viewModelScope.launch {
             refreshSolcast()
         }
+
+        viewModelScope.launch {
+            fetchCurrentInverterSchedule()
+        }
     }
 
     private suspend fun refreshSolcast() {
@@ -48,6 +55,35 @@ class PreHomeViewModel(
             // Ignore
         }
     }
+
+    private suspend fun fetchCurrentInverterSchedule() {
+        if (!configManager.showInverterScheduleQuickLink) return
+        val deviceSN = configManager.selectedDeviceSN ?: return
+        val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
+        val schedule = Schedule.create(scheduleResponse)
+
+        configManager.scheduleTemplates.forEach { template ->
+            val templatePhases = template.asSchedule().phases
+                .sortedWith { first, second -> first.start.compareTo(second.start) }
+            val match = templatePhases.zip(schedule.phases).all { (templatePhase, schedulePhase) ->
+                templatePhase.isEqualConfiguration(schedulePhase)
+            }
+            if (match) {
+                val appTheme = configManager.themeStream.value.copy(detectedActiveTemplate = template.name)
+                configManager.themeStream.value = appTheme
+            }
+        }
+    }
+}
+
+private fun SchedulePhase.isEqualConfiguration(other: SchedulePhase): Boolean {
+    return start == other.start &&
+            end == other.end &&
+            mode == other.mode &&
+            minSocOnGrid == other.minSocOnGrid &&
+            forceDischargePower == other.forceDischargePower &&
+            forceDischargeSOC == other.forceDischargeSOC &&
+            maxSoc == other.maxSoc
 }
 
 @Composable

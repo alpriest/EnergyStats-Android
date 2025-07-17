@@ -3,6 +3,7 @@ package com.alpriest.energystats.widget
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.LinearGradient
@@ -72,6 +73,7 @@ class GenerationStatsWidget : GlanceAppWidget() {
                 WidgetTapAction.Launch -> actionStartActivity(launchIntent)
                 WidgetTapAction.Refresh -> actionRunCallback<GenerationStatsRefreshAction>()
             }
+
             GenerationStatsWidgetContent(repository.today, repository.month, repository.cumulative, action)
         }
     }
@@ -100,13 +102,27 @@ private fun createGradientBitmap(
 }
 
 @Composable
+fun isGlanceDarkMode(): Boolean {
+    val context = LocalContext.current
+    return when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+        Configuration.UI_MODE_NIGHT_YES -> true
+        else -> false
+    }
+}
+
+@Composable
 fun GenerationStatsWidgetContent(
     today: Double,
     month: Double,
     cumulative: Double,
-    tapAction: Action,
-    color: ColorProvider = GlanceTheme.colors.onSurface
+    tapAction: Action
 ) {
+    val color: ColorProvider = if (isGlanceDarkMode()) {
+        GlanceTheme.colors.onPrimary
+    } else {
+        GlanceTheme.colors.onSurface
+    }
+
     val labelStyle = TextStyle(
         textAlign = TextAlign.Start,
         fontSize = 12.sp,

@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.SchedulePhaseNetworkModel
+import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.alpriest.energystats.ui.theme.PowerFlowPositive
@@ -47,6 +48,11 @@ data class Schedule(
     companion object {
         fun create(name: String? = null, phases: List<SchedulePhase>): Schedule {
             return Schedule(name ?: "Schedule", phases)
+        }
+
+        fun create(scheduleResponse: ScheduleResponse): Schedule {
+            val phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() }
+            return Schedule(name = "", phases = phases)
         }
 
         const val MAX_PHASES_COUNT = 8

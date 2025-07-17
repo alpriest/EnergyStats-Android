@@ -106,11 +106,13 @@ class ScheduleSummaryViewModel(
                 uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
 
                 try {
-                    val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
                     templateStream.value = templateStore.load()
-                    val schedule = Schedule(name = "", phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() })
+
+                    val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
+                    val schedule = Schedule.create(scheduleResponse)
                     scheduleStream.value = schedule
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
+
                     if (schedule.supportsMaxSOC()) {
                         config.setDeviceSupports(DeviceCapability.ScheduleMaxSOC, deviceSN)
                     }
@@ -252,4 +254,3 @@ internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
         maxSoc = maxSoc
     )
 }
-

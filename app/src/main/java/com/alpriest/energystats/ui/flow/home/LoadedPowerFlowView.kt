@@ -2,6 +2,7 @@
 
 package com.alpriest.energystats.ui.flow.home
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -354,6 +355,7 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: MutableStateFlo
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview(showBackground = true, widthDp = 380, heightDp = 640)
 @Composable
 fun SummaryPowerFlowViewPreview() {
@@ -387,7 +389,7 @@ fun SummaryPowerFlowViewPreview() {
                     ct2DisplayMode = CT2DisplayMode.AsPowerString,
                     powerFlowStrings = PowerFlowStringsSettings(enabled = true, pv1Enabled = true, pv2Enabled = true)
                 )
-            ),
+            )
         )
     }
 }
