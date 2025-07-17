@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.glance.appwidget)
     implementation(libs.glance.material3)
     implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.shimmer)

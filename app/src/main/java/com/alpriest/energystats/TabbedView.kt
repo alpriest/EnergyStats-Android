@@ -207,11 +207,13 @@ fun TabbedView(
         bottomBar = {
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .background(darkenColor(colorScheme.background, 0.04f))) {
+                .background(darkenColor(colorScheme.background, 0.04f))
+            ) {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
                     containerColor = darkenColor(colorScheme.background, 0.04f),
-                    modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
+                    modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars),
+                    contentColor = Color.Red
                 ) {
                     titles.forEachIndexed { index, item ->
                         Tab(

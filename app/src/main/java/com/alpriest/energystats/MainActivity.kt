@@ -5,11 +5,19 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Locale
+
+//import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +34,17 @@ class MainActivity : ComponentActivity() {
             appContainer.configManager,
             appContainer.solarForecastingProvider
         )
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = true
 
         setContent {
+            val systemUiController = rememberSystemUiController()
+            if (isDarkMode(appContainer.configManager.themeStream)) {
+                SideEffect {
+                    systemUiController.setSystemBarsColor(Color.Black, darkIcons = false)
+                }
+            }
+
             PreHomeView(appContainer = appContainer, viewModel = preHomeViewModel)
         }
     }
