@@ -91,25 +91,21 @@ class LoadedPowerFlowViewModel(
     }
 
     private suspend fun loadGeneration(): GenerationViewModel? {
-        if (configManager.totalYieldModel == TotalYieldModel.Off) {
+        if (configManager.totalYieldModel == TotalYieldModel.Off ||
+            configManager.powerFlowStrings.enabled == false ||
+            configManager.ct2DisplayMode == CT2DisplayMode.Hidden ||
+            configManager.shouldCombineCT2WithPVPower == false)
+        {
             return null
         }
 
         try {
-            val historyData: OpenHistoryResponse = if (configManager.ct2DisplayMode == CT2DisplayMode.SeparateIcon ||
-                configManager.ct2DisplayMode == CT2DisplayMode.AsPowerString ||
-                configManager.shouldCombineCT2WithPVPower) {
-                loadHistoryData(currentDevice)
-            } else {
-                OpenHistoryResponse(deviceSN = currentDevice.deviceSN, listOf())
-            }
-
             return GenerationViewModel(
-                historyData,
+                loadHistoryData(currentDevice),
                 includeCT2 = configManager.shouldCombineCT2WithPVPower,
                 invertCT2 = configManager.shouldInvertCT2
             )
-        } catch (ex: FoxServerError) {
+        } catch (_: FoxServerError) {
             return null
         }
     }
