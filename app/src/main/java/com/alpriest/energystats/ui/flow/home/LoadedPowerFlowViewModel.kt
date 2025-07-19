@@ -91,23 +91,25 @@ class LoadedPowerFlowViewModel(
     }
 
     private suspend fun loadGeneration(): GenerationViewModel? {
-        if (configManager.totalYieldModel == TotalYieldModel.Off ||
-            configManager.powerFlowStrings.enabled == false ||
-            configManager.ct2DisplayMode == CT2DisplayMode.Hidden ||
-            configManager.shouldCombineCT2WithPVPower == false)
-        {
+        if (!shouldLoadGeneration()) {
             return null
         }
 
-        try {
-            return GenerationViewModel(
+        return try {
+            GenerationViewModel(
                 loadHistoryData(currentDevice),
                 includeCT2 = configManager.shouldCombineCT2WithPVPower,
                 invertCT2 = configManager.shouldInvertCT2
             )
         } catch (_: FoxServerError) {
-            return null
+            null
         }
+    }
+
+    private fun shouldLoadGeneration(): Boolean {
+        return configManager.totalYieldModel == TotalYieldModel.EnergyStats ||
+                configManager.powerFlowStrings.enabled ||
+                configManager.ct2DisplayMode == CT2DisplayMode.AsPowerString
     }
 
     private suspend fun loadHistoryData(device: Device): OpenHistoryResponse {
