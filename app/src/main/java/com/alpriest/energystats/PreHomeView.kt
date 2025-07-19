@@ -59,31 +59,35 @@ class PreHomeViewModel(
     private suspend fun fetchCurrentInverterSchedule() {
         if (!configManager.showInverterScheduleQuickLink) return
         val deviceSN = configManager.selectedDeviceSN ?: return
-        val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-        val schedule = Schedule.create(scheduleResponse)
+        try {
+            val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
+            val schedule = Schedule.create(scheduleResponse)
 
-        configManager.scheduleTemplates.forEach { template ->
-            val templatePhases = template.asSchedule().phases
-                .sortedWith { first, second -> first.start.compareTo(second.start) }
-            val match = templatePhases.zip(schedule.phases).all { (templatePhase, schedulePhase) ->
-                templatePhase.isEqualConfiguration(schedulePhase)
+            configManager.scheduleTemplates.forEach { template ->
+                val templatePhases = template.asSchedule().phases
+                    .sortedWith { first, second -> first.start.compareTo(second.start) }
+                val match = templatePhases.zip(schedule.phases).all { (templatePhase, schedulePhase) ->
+                    templatePhase.isEqualConfiguration(schedulePhase)
+                }
+                if (match) {
+                    val appTheme = configManager.themeStream.value.copy(detectedActiveTemplate = template.name)
+                    configManager.themeStream.value = appTheme
+                }
             }
-            if (match) {
-                val appTheme = configManager.themeStream.value.copy(detectedActiveTemplate = template.name)
-                configManager.themeStream.value = appTheme
-            }
+        } catch (_: Exception) {
+            // Ignore
         }
     }
-}
 
-private fun SchedulePhase.isEqualConfiguration(other: SchedulePhase): Boolean {
-    return start == other.start &&
-            end == other.end &&
-            mode == other.mode &&
-            minSocOnGrid == other.minSocOnGrid &&
-            forceDischargePower == other.forceDischargePower &&
-            forceDischargeSOC == other.forceDischargeSOC &&
-            maxSoc == other.maxSoc
+    private fun SchedulePhase.isEqualConfiguration(other: SchedulePhase): Boolean {
+        return start == other.start &&
+                end == other.end &&
+                mode == other.mode &&
+                minSocOnGrid == other.minSocOnGrid &&
+                forceDischargePower == other.forceDischargePower &&
+                forceDischargeSOC == other.forceDischargeSOC &&
+                maxSoc == other.maxSoc
+    }
 }
 
 @Composable

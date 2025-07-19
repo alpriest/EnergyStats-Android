@@ -16,14 +16,14 @@ class GenerationStatsDataRepository private constructor() {
         val appContainer = AppContainer(context)
 
         appContainer.configManager.currentDevice.value?.let {
-            fetchData(context, appContainer, it)
+            fetchData(appContainer, it)
             tapAction = appContainer.configManager.widgetTapAction
         }
 
         GenerationStatsWidget().updateAll(context)
     }
 
-    private suspend fun fetchData(context: Context, appContainer: AppContainer, device: Device) {
+    private suspend fun fetchData(appContainer: AppContainer, device: Device) {
         val result = appContainer.networking.fetchPowerGeneration(
             deviceSN = device.deviceSN
         )

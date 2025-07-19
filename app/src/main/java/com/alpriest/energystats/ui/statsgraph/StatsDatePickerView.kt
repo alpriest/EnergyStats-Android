@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -24,7 +23,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,19 +38,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.settings.SlimButton
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.Typography
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Calendar
-import java.util.Locale
 
 sealed class DatePickerRange {
     object DAY : DatePickerRange()
@@ -65,101 +64,74 @@ sealed class DatePickerRange {
     }
 }
 
-@Composable
-fun StatsDatePickerView(viewModel: StatsDatePickerViewModel, graphShowingState: MutableStateFlow<Boolean>, modifier: Modifier = Modifier) {
-    val range = viewModel.rangeStream.collectAsState().value
-    val month = viewModel.monthStream.collectAsState().value
-    val year = viewModel.yearStream.collectAsState().value
-    val canIncrease = viewModel.canIncreaseStream.collectAsState().value
-    val canDecrease = viewModel.canDecreaseStream.collectAsState().value
-
-    Row(modifier = modifier) {
-        DateRangePicker(viewModel, range, graphShowingState)
-
-        when (range) {
-            is DatePickerRange.DAY -> CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
-            is DatePickerRange.MONTH -> {
-                MonthPicker(month) { viewModel.monthStream.value = it }
-                YearPicker(year) { viewModel.yearStream.value = it }
-            }
-
-            is DatePickerRange.YEAR -> YearPicker(year) { viewModel.yearStream.value = it }
-            is DatePickerRange.CUSTOM -> CustomRangePicker(viewModel)
-        }
-
-        Spacer(modifier = Modifier.weight(1.0f))
-
-        if (!range.isCustom()) {
-            ESButton(
-                modifier = Modifier
-                    .padding(end = 14.dp)
-                    .padding(vertical = 4.dp)
-                    .size(36.dp),
-                onClick = { viewModel.decrease() },
-                contentPadding = PaddingValues(0.dp),
-                enabled = canDecrease
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ChevronLeft,
-                    contentDescription = "Left",
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-
-            ESButton(
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .size(36.dp),
-                onClick = { viewModel.increase() },
-                contentPadding = PaddingValues(0.dp),
-                enabled = canIncrease
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ChevronRight,
-                    contentDescription = "Right",
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-        }
+class StatsDatePickerViewModelFactory(
+    private val displayModeStream: MutableStateFlow<StatsDisplayMode>
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return StatsDatePickerViewModel(displayModeStream) as T
     }
 }
 
-@Composable
-fun MonthPicker(month: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
-    var showing by remember { mutableStateOf(false) }
-    val calendar = Calendar.getInstance()
-    calendar.set(Calendar.DAY_OF_MONTH, 1)
-    val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
-
-    Box(
-        modifier = Modifier
-            .wrapContentSize(Alignment.TopStart)
-            .padding(end = 14.dp)
+class StatsDatePickerView(private val displayModeStream: MutableStateFlow<StatsDisplayMode>) {
+    @Composable
+    fun Content(
+        viewModel: StatsDatePickerViewModel = viewModel(factory = StatsDatePickerViewModelFactory(displayModeStream)),
+        graphShowingState: MutableStateFlow<Boolean>,
+        modifier: Modifier = Modifier
     ) {
-        SlimButton(
-            enabled = enabled,
-            onClick = { showing = true }
-        ) {
-            calendar.set(Calendar.MONTH, month)
-            Text(monthFormat.format(calendar.time), style = Typography.headlineMedium)
-        }
+        val range = viewModel.rangeStream.collectAsState().value
+        val month = viewModel.monthStream.collectAsState().value
+        val year = viewModel.yearStream.collectAsState().value
+        val canIncrease = viewModel.canIncreaseStream.collectAsState().value
+        val canDecrease = viewModel.canDecreaseStream.collectAsState().value
 
-        DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
-            for (monthIndex in 0 until 12) {
-                calendar.set(Calendar.MONTH, monthIndex)
-                val monthName = monthFormat.format(calendar.time)
-                DropdownMenuItem(onClick = {
-                    onClick(monthIndex)
-                    showing = false
-                }, text = {
-                    Text(monthName)
-                }, trailingIcon = {
-                    if (monthIndex == month) {
-                        Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                    }
-                })
-                if (monthIndex < 11) {
-                    HorizontalDivider()
+        Row(modifier = modifier) {
+            DateRangePicker(viewModel, range, graphShowingState)
+
+            when (range) {
+                is DatePickerRange.DAY -> CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
+                is DatePickerRange.MONTH -> {
+                    MonthPicker(month) { viewModel.monthStream.value = it }
+                    YearPicker(year) { viewModel.yearStream.value = it }
+                }
+
+                is DatePickerRange.YEAR -> YearPicker(year) { viewModel.yearStream.value = it }
+                is DatePickerRange.CUSTOM -> CustomRangePicker(viewModel)
+            }
+
+            Spacer(modifier = Modifier.weight(1.0f))
+
+            if (!range.isCustom()) {
+                ESButton(
+                    modifier = Modifier
+                        .padding(end = 14.dp)
+                        .padding(vertical = 4.dp)
+                        .size(36.dp),
+                    onClick = { viewModel.decrease() },
+                    contentPadding = PaddingValues(0.dp),
+                    enabled = canDecrease
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ChevronLeft,
+                        contentDescription = "Left",
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+
+                ESButton(
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .size(36.dp),
+                    onClick = { viewModel.increase() },
+                    contentPadding = PaddingValues(0.dp),
+                    enabled = canIncrease
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ChevronRight,
+                        contentDescription = "Right",
+                        modifier = Modifier.size(32.dp)
+                    )
                 }
             }
         }
@@ -371,8 +343,7 @@ fun millisToLocalDate(millis: Long): LocalDate {
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerView(
-        viewModel = StatsDatePickerViewModel(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))),
+    StatsDatePickerView(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))).Content(
         graphShowingState = MutableStateFlow(false)
     )
 }
