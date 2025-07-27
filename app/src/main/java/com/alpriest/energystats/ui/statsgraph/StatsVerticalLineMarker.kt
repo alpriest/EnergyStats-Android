@@ -62,11 +62,13 @@ class StatsVerticalLineMarker(
         val markedEntry = markedEntries.first()
         val graphVariables = graphVariablesStream.value
 
-        val markedEntriesAtPosition = composedChart.charts[0].entryLocationMap.flatMap { modelList ->
-            modelList.value.filter { it.index == markedEntry.index }
+        val chartMarkedEntriesAtPosition = composedChart.charts.flatMap {
+            it.entryLocationMap.flatMap { modelList ->
+                modelList.value.filter { it.index == markedEntry.index }
+            }
         }
 
-        val chartEntries = markedEntriesAtPosition.mapNotNull { it.entry as? StatsChartEntry }
+        val chartEntries = chartMarkedEntriesAtPosition.mapNotNull { it.entry as? StatsChartEntry }
 
         valuesAtTimeStream.value = graphVariables.map { graphVariable ->
             chartEntries.firstOrNull { it.type == graphVariable.type } ?: StatsChartEntry(
@@ -78,6 +80,6 @@ class StatsVerticalLineMarker(
         }
         viewModel.updateApproximationsFromSelectedValues(this.context)
 
-        lastMarkerModelStream.value = StatsGraphVerticalLineMarkerModel(context, bounds, markedEntry.location, markedEntriesAtPosition)
+        lastMarkerModelStream.value = StatsGraphVerticalLineMarkerModel(context, bounds, markedEntry.location, chartMarkedEntriesAtPosition)
     }
 }
