@@ -184,7 +184,7 @@ class StatsTabViewModel(
             yield()
 
             rawData = updatedData + generateSelfSufficiency(updatedData) + generateInverterConsumption(updatedData)
-            totalsStream.value = totals
+            totalsStream.value = totals.apply { putAll(totalsForInverterConsumption(rawData)) }
             refresh()
             calculateSelfSufficiencyEstimate()
             uiState.value = UiLoadState(LoadState.Inactive)
@@ -197,6 +197,14 @@ class StatsTabViewModel(
             uiState.value = UiLoadState(LoadState.Inactive)
             return
         }
+    }
+
+    private fun totalsForInverterConsumption(rawData: List<StatsGraphValue>): MutableMap<ReportVariable, Double> {
+        var result = mutableMapOf<ReportVariable, Double>()
+
+        result[ReportVariable.InverterConsumption] = rawData.sumOf { if (it.type == ReportVariable.InverterConsumption) it.graphValue else 0.0 }
+
+        return result
     }
 
     private fun requiresLoad(): Boolean {
@@ -289,13 +297,20 @@ class StatsTabViewModel(
 
         chartColorsStream.value = grouped.keys.toList()
         statsGraphDataStream.value = ChartEntryModelProducer(entries).getModel()
+        var now = LocalDateTime.now(ZoneId.systemDefault())
         val currentHour = LocalDateTime.now(ZoneId.systemDefault()).hour
-        val isDay = displayModeStream.value is StatsDisplayMode.Day
 
         selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(rawData
             .filter { it.type == ReportVariable.SelfSufficiency }
             .filter { !hiddenVariables.contains(it.type) }
-            .filter { isDay && it.graphPoint <= currentHour }
+            .filter {
+                when (displayModeStream.value) {
+                    is StatsDisplayMode.Day -> it.graphPoint <= now.hour
+                    is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
+                    is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
+                    else -> true
+                }
+            }
             .map {
                 StatsChartEntry(
                     periodDescription = it.periodDescription(displayModeStream.value),
@@ -308,7 +323,14 @@ class StatsTabViewModel(
         inverterConsumptionDataStream.value = ChartEntryModelProducer(rawData
             .filter { it.type == ReportVariable.InverterConsumption }
             .filter { !hiddenVariables.contains(it.type) }
-            .filter { isDay && it.graphPoint <= currentHour }
+            .filter {
+                when (displayModeStream.value) {
+                    is StatsDisplayMode.Day -> it.graphPoint <= now.hour
+                    is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
+                    is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
+                    else -> true
+                }
+            }
             .map {
                 StatsChartEntry(
                     periodDescription = it.periodDescription(displayModeStream.value),
@@ -395,6 +417,8 @@ class StatsTabViewModel(
                 )
             }
         }
+
+        totalsStream.value
 
         return entries
     }
