@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -174,7 +174,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifie
         )
 
         Icon(
-            imageVector = if (showingApproximations.value) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+            imageVector = if (showingApproximations.value) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
             contentDescription = null,
             tint = ApproximationHeaderText,
             modifier = Modifier

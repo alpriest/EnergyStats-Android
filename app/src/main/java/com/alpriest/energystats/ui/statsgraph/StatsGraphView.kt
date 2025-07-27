@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
@@ -42,11 +43,15 @@ import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.composed.ComposedChart
+import com.patrykandpatrick.vico.core.chart.composed.ComposedChartEntryModel
 import com.patrykandpatrick.vico.core.chart.composed.plus
 import com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout
+import com.patrykandpatrick.vico.core.chart.line.LineChartDrawingModel
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.chart.values.ChartValues
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.composed.plus
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
@@ -60,42 +65,52 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour(themeStream) }
     val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsState().value
+    val inverterConsumptionData = viewModel.inverterConsumptionDataStream.collectAsState().value
     val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
     val context = LocalContext.current
 
-    if (statsGraphData == null) {
+    if (statsGraphData == null && inverterConsumptionData == null && selfSufficiencyGraphData == null) {
         Text(
             stringResource(R.string.no_data),
             color = MaterialTheme.colorScheme.onSecondary
         )
     } else {
-        val columnChart = columnChart(
+        val normalDataChart = columnChart(
             columns = chartColors.map { lineComponent(color = it) }.toList(),
             axisValuesOverrider = ZeroValuesAxisOverrider(),
             targetVerticalAxisPosition = AxisPosition.Vertical.End
         )
-        val lineChart = lineChart(
+        val selfSufficiencyChart = lineChart(
             lines = listOf(
                 lineSpec(
                     lineColor = selfSufficiencyLineColor(isDarkMode(themeStream)),
-                    lineThickness = 1.dp,
+                    lineThickness = 2.dp,
                     lineBackgroundShader = null,
                 )
             ),
             targetVerticalAxisPosition = AxisPosition.Vertical.Start
         )
-        val composedChart = remember(columnChart, lineChart) { columnChart + lineChart }
-        val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
+        val inverterConsumptionChart = lineChart(
+            lines = listOf(
+                lineSpec(
+                    lineColor = ReportVariable.InverterConsumption.colour(themeStream),
+                    lineThickness = 2.dp,
+                    lineBackgroundShader = null,
+                )
+            )
+        )
+        val composedChart = remember(normalDataChart, selfSufficiencyChart, inverterConsumptionChart) { normalDataChart + selfSufficiencyChart + inverterConsumptionChart }
 
-        if (selfSufficiencyGraphData != null) {
+        if (statsGraphData != null && selfSufficiencyGraphData != null && inverterConsumptionData != null) {
             Column(modifier = modifier.fillMaxWidth()) {
+                val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
                 TimeSelectionText(viewModel)
 
                 Box(modifier = Modifier.fillMaxSize()) {
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                         Chart(
                             chart = composedChart,
-                            model = statsGraphData + selfSufficiencyGraphData,
+                            model = statsGraphData + selfSufficiencyGraphData + inverterConsumptionData,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),

@@ -398,7 +398,7 @@
     <string name="logout_from_demo">Esci dalla demo</string>
     <string name="show_ct2_value">Mostra il valore CT2</string>
     <string name="pv_energy_generated">Energia fotovoltaica generata</string>
-    <string name="solar">Solare</string>
+    <string name="solar">"Solare "</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_body">I numeri delle statistiche sono ora arrotondati a una sola cifra decimale, poiché i sistemi Fox sono sempre stati precisi solo a una cifra decimale.</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_title">Cifre decimali</string>
     <string name="your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data">Il tuo inverter non memorizza i dati di generazione fotovoltaica, quindi non possiamo mostrare i dati storici del solare.</string>

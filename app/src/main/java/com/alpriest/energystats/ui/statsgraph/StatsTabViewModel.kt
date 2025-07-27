@@ -42,6 +42,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.math.max
 
 data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double) {
     fun periodDescription(displayMode: StatsDisplayMode): String {
@@ -81,6 +82,7 @@ class StatsTabViewModel(
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
     val selfSufficiencyGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
+    val inverterConsumptionDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val statsGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
@@ -124,6 +126,7 @@ class StatsTabViewModel(
 
     private fun updateGraphVariables(device: Device) {
         graphVariablesStream.value = listOf(
+            if (device.hasPV) ReportVariable.PvEnergyToTal else null,
             ReportVariable.Generation,
             ReportVariable.FeedIn,
             ReportVariable.GridConsumption,
@@ -131,7 +134,7 @@ class StatsTabViewModel(
             if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
             ReportVariable.Loads,
             if (configManager.showSelfSufficiencyStatsGraphOverlay && configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off) ReportVariable.SelfSufficiency else null,
-            if (device.hasPV) ReportVariable.PvEnergyToTal else null
+            ReportVariable.InverterConsumption
         ).mapNotNull { it }.map {
             StatsGraphVariable(it, true)
         }
@@ -180,7 +183,7 @@ class StatsTabViewModel(
 
             yield()
 
-            rawData = updatedData + generateSelfSufficiency(updatedData)
+            rawData = updatedData + generateSelfSufficiency(updatedData) + generateInverterConsumption(updatedData)
             totalsStream.value = totals
             refresh()
             calculateSelfSufficiencyEstimate()
@@ -270,6 +273,7 @@ class StatsTabViewModel(
         val hiddenVariables = graphVariablesStream.value.filter { !it.enabled }.map { it.type }
         val grouped = rawData
             .filter { it.type != ReportVariable.SelfSufficiency }
+            .filter { it.type != ReportVariable.InverterConsumption }
             .filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
         val entries = grouped
             .map { group ->
@@ -285,10 +289,25 @@ class StatsTabViewModel(
 
         chartColorsStream.value = grouped.keys.toList()
         statsGraphDataStream.value = ChartEntryModelProducer(entries).getModel()
+        val currentHour = LocalDateTime.now(ZoneId.systemDefault()).hour
 
         selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(rawData
             .filter { it.type == ReportVariable.SelfSufficiency }
             .filter { !hiddenVariables.contains(it.type) }
+            .filter { it.graphPoint <= currentHour }
+            .map {
+                StatsChartEntry(
+                    periodDescription = it.periodDescription(displayModeStream.value),
+                    x = it.graphPoint.toFloat(),
+                    y = it.graphValue.toFloat(),
+                    type = it.type
+                )
+            }).getModel()
+
+        inverterConsumptionDataStream.value = ChartEntryModelProducer(rawData
+            .filter { it.type == ReportVariable.InverterConsumption }
+            .filter { !hiddenVariables.contains(it.type) }
+            .filter { it.graphPoint <= currentHour }
             .map {
                 StatsChartEntry(
                     periodDescription = it.periodDescription(displayModeStream.value),
@@ -339,6 +358,44 @@ class StatsTabViewModel(
             batteryDischarge = batteryDischarge,
             solar = solar
         )
+    }
+
+    private fun generateInverterConsumption(rawData: List<StatsGraphValue>): List<StatsGraphValue> {
+//        return if (configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && configManager.showSelfSufficiencyStatsGraphOverlay) {
+            return calculateInverterConsumptionAcrossTimePeriod(rawData)
+//        } else {
+//            listOf()
+//        }
+    }
+
+    private fun calculateInverterConsumptionAcrossTimePeriod(rawData: List<StatsGraphValue>): List<StatsGraphValue> {
+        val graphPoints = rawData.map { it.graphPoint }.distinct()
+        val entries: MutableList<StatsGraphValue> = mutableListOf()
+
+        for (graphPoint in graphPoints) {
+            val valuesAtTime = ValuesAtTime(values = rawData.filter { it.graphPoint == graphPoint })
+
+            val grid = valuesAtTime.values.firstOrNull { it.type == ReportVariable.GridConsumption }
+            val feedIn = valuesAtTime.values.firstOrNull { it.type == ReportVariable.FeedIn }
+            val loads = valuesAtTime.values.firstOrNull { it.type == ReportVariable.Loads }
+            val batteryCharge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.ChargeEnergyToTal }
+            val batteryDischarge = valuesAtTime.values.firstOrNull { it.type == ReportVariable.DischargeEnergyToTal }
+            val solar = valuesAtTime.values.firstOrNull { it.type == ReportVariable.PvEnergyToTal }
+
+            if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null && solar != null) {
+                val inverterConsumption = max((solar.graphValue + grid.graphValue + batteryDischarge.graphValue) - (feedIn.graphValue + batteryCharge.graphValue + loads.graphValue), 0.0)
+
+                entries.add(
+                    StatsGraphValue(
+                        type = ReportVariable.InverterConsumption,
+                        graphPoint = graphPoint,
+                        graphValue = inverterConsumption
+                    )
+                )
+            }
+        }
+
+        return entries
     }
 
     private fun generateSelfSufficiency(rawData: List<StatsGraphValue>): List<StatsGraphValue> {

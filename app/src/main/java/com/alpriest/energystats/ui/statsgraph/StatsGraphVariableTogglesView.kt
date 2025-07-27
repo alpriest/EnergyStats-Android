@@ -36,7 +36,8 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
                 ReportVariable.DischargeEnergyToTal -> stringResource(R.string.discharge) + title(ValueUsage.TOTAL)
                 ReportVariable.Loads -> stringResource(R.string.loads) + title(ValueUsage.TOTAL)
                 ReportVariable.SelfSufficiency -> stringResource(R.string.self_sufficiency)
-                ReportVariable.PvEnergyToTal -> stringResource(R.string.solar)
+                ReportVariable.PvEnergyToTal -> stringResource(R.string.solar) + title(ValueUsage.TOTAL)
+                ReportVariable.InverterConsumption -> "Inverter Consumption"
             }
 
             val description = when (it.type) {
@@ -48,6 +49,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
                 ReportVariable.Loads -> stringResource(R.string.reportvariable_loads)
                 ReportVariable.SelfSufficiency -> ""
                 ReportVariable.PvEnergyToTal -> stringResource(R.string.pv_energy_generated)
+                ReportVariable.InverterConsumption -> "Estimated energy used to power the inverter"
             }
 
             val total = totals.value[it.type]

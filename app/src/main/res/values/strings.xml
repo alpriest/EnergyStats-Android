@@ -402,7 +402,7 @@
     <string name="logout_from_demo">Logout from demo</string>
     <string name="show_ct2_value">Show CT2 value</string>
     <string name="pv_energy_generated">PV energy generated</string>
-    <string name="solar">Solar</string>
+    <string name="solar">"Solar "</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_body">Stats numbers are now rounded to a single decimal place as Fox systems have always only been accurate to a single decimal place.</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_title">Decimal places</string>
     <string name="your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data">Your inverter doesn\'t store PV generation data so we can\'t show historic solar data.</string>

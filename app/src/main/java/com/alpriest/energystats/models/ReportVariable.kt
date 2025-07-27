@@ -20,7 +20,8 @@ enum class ReportVariable {
     DischargeEnergyToTal,
     Loads,
     SelfSufficiency,
-    PvEnergyToTal;
+    PvEnergyToTal,
+    InverterConsumption;
 
     fun networkTitle(): String {
         return when (this) {
@@ -32,6 +33,7 @@ enum class ReportVariable {
             Loads -> "loads"
             SelfSufficiency -> "selfSufficiency"
             PvEnergyToTal -> "PVEnergyTotal"
+            InverterConsumption -> "InverterConsumption"
         }
     }
 
@@ -45,7 +47,8 @@ enum class ReportVariable {
             GridConsumption -> Color(236, 109, 96)
             Loads -> Color(209,207,83)
             SelfSufficiency -> selfSufficiencyLineColor(isDarkMode(themeStream))
-            PvEnergyToTal -> Color.Yellow
+            PvEnergyToTal -> Color(248, 216, 87)
+            InverterConsumption -> Color(0xFFFF007F)
         }
     }
 
