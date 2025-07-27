@@ -290,11 +290,12 @@ class StatsTabViewModel(
         chartColorsStream.value = grouped.keys.toList()
         statsGraphDataStream.value = ChartEntryModelProducer(entries).getModel()
         val currentHour = LocalDateTime.now(ZoneId.systemDefault()).hour
+        val isDay = displayModeStream.value is StatsDisplayMode.Day
 
         selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(rawData
             .filter { it.type == ReportVariable.SelfSufficiency }
             .filter { !hiddenVariables.contains(it.type) }
-            .filter { it.graphPoint <= currentHour }
+            .filter { isDay && it.graphPoint <= currentHour }
             .map {
                 StatsChartEntry(
                     periodDescription = it.periodDescription(displayModeStream.value),
@@ -307,7 +308,7 @@ class StatsTabViewModel(
         inverterConsumptionDataStream.value = ChartEntryModelProducer(rawData
             .filter { it.type == ReportVariable.InverterConsumption }
             .filter { !hiddenVariables.contains(it.type) }
-            .filter { it.graphPoint <= currentHour }
+            .filter { isDay && it.graphPoint <= currentHour }
             .map {
                 StatsChartEntry(
                     periodDescription = it.periodDescription(displayModeStream.value),
