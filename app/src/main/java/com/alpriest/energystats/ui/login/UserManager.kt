@@ -22,7 +22,6 @@ sealed class LoginState
 class LoggedOut(val reason: String? = null) : LoginState()
 object LoggingIn : LoginState()
 object LoggedIn : LoginState()
-object RequiresUpgrade : LoginState()
 
 interface UserManaging {
     val loggedInState: StateFlow<LoginStateHolder>
@@ -44,8 +43,6 @@ class UserManager(
     init {
         if (store.hasApiKey()) {
             _loggedInState.value = LoginStateHolder(LoggedIn)
-        } else if (store.hasCredentials()) {
-            _loggedInState.value = LoginStateHolder(RequiresUpgrade)
         }
     }
 

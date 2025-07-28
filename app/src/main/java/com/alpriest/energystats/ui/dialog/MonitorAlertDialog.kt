@@ -14,8 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.BadCredentialsException
-import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.services.UnacceptableException
 import com.alpriest.energystats.ui.helpers.UnsupportedErrorView
 import com.alpriest.energystats.ui.login.UserManaging
@@ -37,14 +35,6 @@ fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding, userManager: User
                 UnsupportedErrorView(onDismiss = {
                     viewModel.resetDialogMessage()
                 })
-            }
-
-            is BadCredentialsException -> {
-                UpgradeRequiredView(userManager)
-            }
-
-            is InvalidTokenException -> {
-                UpgradeRequiredView(userManager)
             }
 
             else -> {
