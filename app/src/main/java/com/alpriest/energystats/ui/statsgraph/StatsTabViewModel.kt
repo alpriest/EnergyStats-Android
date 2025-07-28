@@ -78,6 +78,7 @@ data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val gr
 class StatsTabViewModel(
     val configManager: ConfigManaging,
     networking: Networking,
+    val themeStream: MutableStateFlow<AppTheme>,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
@@ -118,6 +119,14 @@ class StatsTabViewModel(
                     }
                 }
         }
+
+        viewModelScope.launch {
+            themeStream.collect {
+                configManager.currentDevice.value?.let {
+                    updateGraphVariables(it)
+                }
+            }
+        }
     }
 
     fun finalize() {
@@ -134,7 +143,7 @@ class StatsTabViewModel(
             if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
             ReportVariable.Loads,
             if (configManager.showSelfSufficiencyStatsGraphOverlay && configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off) ReportVariable.SelfSufficiency else null,
-            ReportVariable.InverterConsumption
+            if (configManager.showInverterConsumption) ReportVariable.InverterConsumption else null
         ).mapNotNull { it }.map {
             StatsGraphVariable(it, true)
         }
@@ -384,11 +393,11 @@ class StatsTabViewModel(
     }
 
     private fun generateInverterConsumption(rawData: List<StatsGraphValue>): List<StatsGraphValue> {
-//        return if (configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && configManager.showSelfSufficiencyStatsGraphOverlay) {
+        return if (configManager.showInverterConsumption) {
             return calculateInverterConsumptionAcrossTimePeriod(rawData)
-//        } else {
-//            listOf()
-//        }
+        } else {
+            listOf()
+        }
     }
 
     private fun calculateInverterConsumptionAcrossTimePeriod(rawData: List<StatsGraphValue>): List<StatsGraphValue> {

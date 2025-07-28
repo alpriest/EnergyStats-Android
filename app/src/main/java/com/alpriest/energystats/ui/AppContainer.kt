@@ -105,7 +105,8 @@ class AppContainer(private val context: Context) {
             showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
             ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
             showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
-            detectedActiveTemplate = null
+            detectedActiveTemplate = null,
+            showInverterConsumption = config.showInverterConsumption
         )
     )
 

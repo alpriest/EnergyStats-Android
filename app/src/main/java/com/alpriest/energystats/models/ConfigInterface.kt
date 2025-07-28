@@ -69,6 +69,7 @@ interface ConfigInterface {
     var ct2DisplayMode: Int
     var showStringTotalsAsPercentage: Boolean
     var generationViewData: GenerationViewData?
+    var showInverterConsumption: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

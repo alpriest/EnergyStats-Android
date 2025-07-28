@@ -452,4 +452,6 @@
     <string name="force_charge">Wymuszone ładowanie</string>
     <string name="force_discharge">Wymuszone rozładowanie</string>
     <string name="time_period_missing_warning">Wszystkie okresy czasu niewymienione powyżej domyślnie przejdą w tryb własnego zużycia, używając minimalnego SOC z ostatniego aktywnego okresu.</string>
+    <string name="estimated_energy_used_to_power_the_inverter">Szacowana energia zużyta do zasilania falownika</string>
+    <string name="show_estimated_inverter_consumption">Pokaż szacowane zużycie falownika</string>
 </resources>

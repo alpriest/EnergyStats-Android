@@ -74,11 +74,12 @@ sealed class StatsDisplayMode {
 class StatsTabViewModelFactory(
     private val configManager: ConfigManaging,
     private val networking: Networking,
+    private val themeStream: MutableStateFlow<AppTheme>,
     private val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StatsTabViewModel(configManager, networking, onWriteTempFile) as T
+        return StatsTabViewModel(configManager, networking, themeStream, onWriteTempFile) as T
     }
 }
 
@@ -93,7 +94,7 @@ class StatsTabView(
 ) {
     @Composable
     fun Content(
-        viewModel: StatsTabViewModel = viewModel(factory = StatsTabViewModelFactory(configManager, network, onWriteTempFile)),
+        viewModel: StatsTabViewModel = viewModel(factory = StatsTabViewModelFactory(configManager, network, themeStream, onWriteTempFile)),
     ) {
         val scrollState = rememberScrollState()
         val context = LocalContext.current
@@ -133,7 +134,7 @@ class StatsTabView(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 if (graphShowing) {
-                    StatsGraphView(viewModel = viewModel, themeStream, modifier = Modifier.padding(bottom = 24.dp))
+                    StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
                 }
 
                 when (loadState) {
@@ -154,7 +155,7 @@ class StatsTabView(
                 }
             }
 
-            StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+            StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp))
 
             viewModel.approximationsViewModelStream.collectAsState().value?.let {
                 ApproximationView(viewModel = it, modifier = Modifier, themeStream = themeStream, showingApproximations = showingApproximations)

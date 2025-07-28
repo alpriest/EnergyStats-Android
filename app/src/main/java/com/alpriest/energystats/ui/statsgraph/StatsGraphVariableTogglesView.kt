@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.statsgraph
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,11 +21,11 @@ import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val totals = viewModel.totalsStream.collectAsState()
-    val appTheme = themeStream.collectAsState().value
+    val appTheme = viewModel.themeStream.collectAsState().value
 
     Column(modifier) {
         graphVariables.value.map { graphVariable ->
@@ -56,7 +57,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
             if (selectedValue == null) {
                 val total = totals.value[graphVariable.type]
                 val value = total?.energy(appTheme.displayUnit, 1)
-                ToggleRowView(graphVariable, themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
+                ToggleRowView(graphVariable, viewModel.themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
             } else {
                 val selectedValue = selectedValue.y.toDouble()
                 val value = when (graphVariable.type) {
@@ -64,7 +65,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
                     else -> selectedValue.kWh(1)
                 }
 
-                ToggleRowView(graphVariable, themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
+                ToggleRowView(graphVariable, viewModel.themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
             }
         }
     }
@@ -74,7 +75,11 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
 @Preview(widthDp = 340)
 fun StatsGraphVariableTogglesViewPreview() {
     StatsGraphVariableTogglesView(
-        StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
-        themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = false))
+        StatsTabViewModel(
+            FakeConfigManager(),
+            DemoNetworking(),
+            onWriteTempFile = { _, _ -> null },
+            themeStream = MutableStateFlow(AppTheme.demo())
+        )
     )
 }

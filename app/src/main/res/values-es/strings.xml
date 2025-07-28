@@ -451,4 +451,6 @@
     <string name="force_charge">Carga forzada</string>
     <string name="force_discharge">Descarga forzada</string>
     <string name="time_period_missing_warning">Cualquier periodo no especificado arriba se configurará por defecto en modo de autoconsumo, utilizando el SOC mínimo del periodo activo más reciente.</string>
+    <string name="estimated_energy_used_to_power_the_inverter">Energía estimada utilizada para alimentar el inversor</string>
+    <string name="show_estimated_inverter_consumption">Mostrar el consumo estimado del inversor</string>
 </resources>

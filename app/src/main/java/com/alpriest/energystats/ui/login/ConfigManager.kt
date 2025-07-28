@@ -582,6 +582,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(showStringTotalsAsPercentage = showStringTotalsAsPercentage)
         }
 
+    override var showInverterConsumption: Boolean
+        get() = config.showInverterConsumption
+        set(value) {
+            config.showInverterConsumption = value
+            themeStream.value = themeStream.value.copy(showInverterConsumption = showInverterConsumption)
+        }
+
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })
     }

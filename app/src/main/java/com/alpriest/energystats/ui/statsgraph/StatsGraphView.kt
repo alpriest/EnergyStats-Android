@@ -61,8 +61,9 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsState().value
+    val themeStream = viewModel.themeStream
     val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour(themeStream) }
     val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsState().value
     val inverterConsumptionData = viewModel.inverterConsumptionDataStream.collectAsState().value
@@ -197,8 +198,7 @@ fun TimeSelectionText(viewModel: StatsTabViewModel) {
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
     StatsGraphView(
-        StatsTabViewModel(FakeConfigManager(), DemoNetworking()) { _, _ -> null },
-        MutableStateFlow(AppTheme.demo())
+        StatsTabViewModel(FakeConfigManager(), DemoNetworking(), themeStream = MutableStateFlow(AppTheme.demo()), onWriteTempFile = { _, _ -> null })
     )
 }
 

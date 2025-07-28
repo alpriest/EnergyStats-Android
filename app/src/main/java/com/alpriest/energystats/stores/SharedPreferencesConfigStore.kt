@@ -88,7 +88,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         FETCH_SOLCAST_ON_APP_LAUNCH,
         CT2_DISPLAY_MODE,
         SHOW_STRING_TOTALS_AS_PERCENTAGE,
-        GENERATION_VIEW_DATA
+        GENERATION_VIEW_DATA,
+        SHOW_INVERTER_CONSUMPTION
     }
 
     override fun clearDisplaySettings() {
@@ -696,4 +697,11 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
+    override var showInverterConsumption: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, false)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, value)
+            }
+        }
 }

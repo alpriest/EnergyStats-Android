@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 
 class FakeConfigManager : ConfigManaging {
+    override var showInverterConsumption: Boolean = false
     override var colorThemeMode: ColorThemeMode = ColorThemeMode.Auto
     override var showGraphValueDescriptions: Boolean = true
     override var shouldCombineCT2WithPVPower: Boolean = true
