@@ -457,4 +457,5 @@
     <string name="force_charge">Force Charge</string>
     <string name="force_discharge">Force Discharge</string>
     <string name="time_period_missing_warning">Any times not covered by periods above will default to Self Use mode, using the min SOC from the most recent active period.</string>
+    <string name="estimated_energy_used_to_power_the_inverter">Estimated energy used to power the inverter</string>
 </resources>

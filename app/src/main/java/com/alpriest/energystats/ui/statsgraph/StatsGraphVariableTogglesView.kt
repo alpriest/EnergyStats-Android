@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.models.asPercent
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -26,9 +27,9 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
     val appTheme = themeStream.collectAsState().value
 
     Column(modifier) {
-        graphVariables.value.map { it ->
-            val selectedValue = selectedValues.firstOrNull { entry -> entry.type == it.type }
-            val title = when (it.type) {
+        graphVariables.value.map { graphVariable ->
+            val selectedValue = selectedValues.firstOrNull { entry -> entry.type == graphVariable.type }
+            val title = when (graphVariable.type) {
                 ReportVariable.FeedIn -> stringResource(R.string.feed_in) + title(ValueUsage.TOTAL)
                 ReportVariable.Generation -> stringResource(R.string.output) + title(ValueUsage.TOTAL)
                 ReportVariable.GridConsumption -> stringResource(R.string.grid_consumption) + title(ValueUsage.TOTAL)
@@ -40,7 +41,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
                 ReportVariable.InverterConsumption -> "Inverter Consumption"
             }
 
-            val description = when (it.type) {
+            val description = when (graphVariable.type) {
                 ReportVariable.FeedIn -> stringResource(R.string.reportvariable_feedin)
                 ReportVariable.GridConsumption -> stringResource(R.string.reportvariable_gridconsumption)
                 ReportVariable.Generation -> stringResource(R.string.reportvariable_generation)
@@ -49,17 +50,21 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, themeStream: Mut
                 ReportVariable.Loads -> stringResource(R.string.reportvariable_loads)
                 ReportVariable.SelfSufficiency -> ""
                 ReportVariable.PvEnergyToTal -> stringResource(R.string.pv_energy_generated)
-                ReportVariable.InverterConsumption -> "Estimated energy used to power the inverter"
+                ReportVariable.InverterConsumption -> stringResource(R.string.estimated_energy_used_to_power_the_inverter)
             }
 
-            val total = totals.value[it.type]
-            val text = total?.energy(appTheme.displayUnit, 1)
-
             if (selectedValue == null) {
-                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, text, null)
+                val total = totals.value[graphVariable.type]
+                val value = total?.energy(appTheme.displayUnit, 1)
+                ToggleRowView(graphVariable, themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
             } else {
-                val value = selectedValue.y.toDouble().kWh(1)
-                ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
+                val selectedValue = selectedValue.y.toDouble()
+                val value = when (graphVariable.type) {
+                    ReportVariable.SelfSufficiency -> (selectedValue / 100.0).asPercent()
+                    else -> selectedValue.kWh(1)
+                }
+
+                ToggleRowView(graphVariable, themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
             }
         }
     }

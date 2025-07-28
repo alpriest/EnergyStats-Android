@@ -1,7 +1,6 @@
 package com.alpriest.energystats
 
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -64,6 +63,8 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
+import com.alpriest.energystats.ui.settings.darkenedBackground
+import com.alpriest.energystats.ui.settings.darkenedBackgroundColor
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
@@ -207,13 +208,12 @@ fun TabbedView(
         bottomBar = {
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .background(darkenColor(colorScheme.background, 0.04f))
+                .darkenedBackground()
             ) {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    containerColor = darkenColor(colorScheme.background, 0.04f),
-                    modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars),
-                    contentColor = Color.Red
+                    containerColor = darkenedBackgroundColor(),
+                    modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
                 ) {
                     titles.forEachIndexed { index, item ->
                         Tab(

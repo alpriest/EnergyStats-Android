@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.darkenColor
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.theme.ESButton
 
@@ -216,13 +217,23 @@ fun SettingsPage(modifier: Modifier, content: @Composable () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(colorScheme.background)
+            .darkenedBackground()
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         content()
     }
+}
+
+@Composable
+fun Modifier.darkenedBackground(): Modifier = this.then(
+    Modifier.background(darkenedBackgroundColor())
+)
+
+@Composable
+fun darkenedBackgroundColor(): Color {
+    return darkenColor(colorScheme.background, 0.04f)
 }
 
 @Composable

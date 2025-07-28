@@ -97,7 +97,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, themeStream: MutableStateFlow<A
                     lineThickness = 2.dp,
                     lineBackgroundShader = null,
                 )
-            )
+            ),
+            targetVerticalAxisPosition = AxisPosition.Vertical.End
         )
         val composedChart = remember(normalDataChart, selfSufficiencyChart, inverterConsumptionChart) { normalDataChart + selfSufficiencyChart + inverterConsumptionChart }
 
