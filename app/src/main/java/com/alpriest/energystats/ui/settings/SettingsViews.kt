@@ -211,7 +211,7 @@ fun SettingsTitleView(title: String, modifier: Modifier = Modifier, extra: @Comp
 }
 
 @Composable
-fun SettingsPage(modifier: Modifier, content: @Composable () -> Unit) {
+fun SettingsPage(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(

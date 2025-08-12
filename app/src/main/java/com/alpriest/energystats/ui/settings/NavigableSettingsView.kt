@@ -152,7 +152,7 @@ fun NavigableSettingsView(
         composable(SettingsScreen.PowerStation.name) {
             configManager.powerStationDetail?.let { powerStationDetail ->
                 topBarSettings.value = TopBarSettings(true, true,  stringResource(R.string.settings_power_station), {})
-                PowerStationSettingsView(powerStationDetail, Modifier)
+                PowerStationSettingsView(powerStationDetail)
             }
         }
 
