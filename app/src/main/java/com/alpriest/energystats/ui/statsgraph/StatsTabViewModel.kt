@@ -15,6 +15,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.parseToLocalDate
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -27,6 +28,7 @@ import com.alpriest.energystats.ui.paramsgraph.LastLoadState
 import com.alpriest.energystats.ui.paramsgraph.isSameDay
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.core.entry.ChartEntry
@@ -77,11 +79,12 @@ data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val gr
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
-    networking: Networking,
+    private val networking: Networking,
     val themeStream: MutableStateFlow<AppTheme>,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
+    val batterySOCDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val selfSufficiencyGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val inverterConsumptionDataStream = MutableStateFlow<ChartEntryModel?>(null)
     val statsGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
@@ -143,7 +146,8 @@ class StatsTabViewModel(
             if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
             ReportVariable.Loads,
             if (configManager.showSelfSufficiencyStatsGraphOverlay && configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off) ReportVariable.SelfSufficiency else null,
-            if (configManager.showInverterConsumption) ReportVariable.InverterConsumption else null
+            if (configManager.showInverterConsumption) ReportVariable.InverterConsumption else null,
+            if (configManager.showBatterySOCOnDailyStats) ReportVariable.BatterySOC else null
         ).mapNotNull { it }.map {
             StatsGraphVariable(it, true)
         }
@@ -192,7 +196,9 @@ class StatsTabViewModel(
 
             yield()
 
-            rawData = updatedData + generateSelfSufficiency(updatedData) + generateInverterConsumption(updatedData)
+            val socGraphData = generateBatterySOC(device, displayMode)
+
+            rawData = updatedData + generateSelfSufficiency(updatedData) + generateInverterConsumption(updatedData) + socGraphData
             totalsStream.value = totals.apply { putAll(totalsForInverterConsumption(rawData)) }
             refresh()
             calculateSelfSufficiencyEstimate()
@@ -291,6 +297,7 @@ class StatsTabViewModel(
         val grouped = rawData
             .filter { it.type != ReportVariable.SelfSufficiency }
             .filter { it.type != ReportVariable.InverterConsumption }
+            .filter { it.type != ReportVariable.BatterySOC }
             .filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
         val entries = grouped
             .map { group ->
@@ -307,7 +314,6 @@ class StatsTabViewModel(
         chartColorsStream.value = grouped.keys.toList()
         statsGraphDataStream.value = ChartEntryModelProducer(entries).getModel()
         var now = LocalDateTime.now(ZoneId.systemDefault())
-        val currentHour = LocalDateTime.now(ZoneId.systemDefault()).hour
 
         selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(rawData
             .filter { it.type == ReportVariable.SelfSufficiency }
@@ -331,6 +337,26 @@ class StatsTabViewModel(
 
         inverterConsumptionDataStream.value = ChartEntryModelProducer(rawData
             .filter { it.type == ReportVariable.InverterConsumption }
+            .filter { !hiddenVariables.contains(it.type) }
+            .filter {
+                when (displayModeStream.value) {
+                    is StatsDisplayMode.Day -> it.graphPoint <= now.hour
+                    is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
+                    is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
+                    else -> true
+                }
+            }
+            .map {
+                StatsChartEntry(
+                    periodDescription = it.periodDescription(displayModeStream.value),
+                    x = it.graphPoint.toFloat(),
+                    y = it.graphValue.toFloat(),
+                    type = it.type
+                )
+            }).getModel()
+
+        batterySOCDataStream.value = ChartEntryModelProducer(rawData
+            .filter { it.type == ReportVariable.BatterySOC }
             .filter { !hiddenVariables.contains(it.type) }
             .filter {
                 when (displayModeStream.value) {
@@ -390,6 +416,61 @@ class StatsTabViewModel(
             batteryDischarge = batteryDischarge,
             solar = solar
         )
+    }
+
+    private suspend fun generateBatterySOC(device: Device, displayMode: StatsDisplayMode): List<StatsGraphValue> {
+        return if (configManager.showBatterySOCOnDailyStats) {
+            return fetchBatterySOC(device, displayMode)
+        } else {
+            listOf()
+        }
+    }
+
+    private suspend fun fetchBatterySOC(
+        device: Device,
+        mode: StatsDisplayMode
+    ): List<StatsGraphValue> {
+        return when (mode) {
+            is Day -> {
+                val zone = ZoneId.systemDefault()
+                val startOfDay = mode.date.atStartOfDay()
+                val endOfDay = startOfDay.plusDays(1)
+
+                try {
+                    // Fetch SoC history for the selected day
+                    val response = networking.fetchHistory(
+                        deviceSN = device.deviceSN,
+                        variables = listOf("SoC"),
+                        start = startOfDay.atZone(zone).toEpochSecond() * 1000,
+                        end = endOfDay.atZone(zone).toEpochSecond() * 1000
+                    )
+
+                    val now = LocalDateTime.now(zone)
+
+                    // Flatten and map to graph entries (x = hour of day, y = SoC value)
+                    response.datas
+                        .flatMap { it.data }
+                        .asSequence()
+                        .filter { parseToLocalDate(it.time) <= now }
+                        .sortedBy { it.time }
+                        .map { unit ->
+                            val hour = parseToLocalDate(unit.time).hour
+                            StatsGraphValue(
+                                type = ReportVariable.BatterySOC,
+                                graphPoint = hour,
+                                graphValue = unit.value.toDouble()
+                            )
+                        }
+                        .toList()
+                } catch (e: Exception) {
+                    Log.e("AWP", "fetchBatterySOC failed", e)
+                    emptyList()
+                }
+            }
+
+            else ->
+                listOf()
+        }
     }
 
     private fun generateInverterConsumption(rawData: List<StatsGraphValue>): List<StatsGraphValue> {

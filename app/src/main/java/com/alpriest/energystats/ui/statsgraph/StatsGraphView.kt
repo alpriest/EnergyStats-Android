@@ -68,6 +68,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsState().value
     val inverterConsumptionData = viewModel.inverterConsumptionDataStream.collectAsState().value
     val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
+    val batterySOCData = viewModel.batterySOCDataStream.collectAsState().value
     val context = LocalContext.current
 
     if (statsGraphData == null && inverterConsumptionData == null && selfSufficiencyGraphData == null) {
@@ -101,9 +102,19 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             ),
             targetVerticalAxisPosition = AxisPosition.Vertical.End
         )
-        val composedChart = remember(normalDataChart, selfSufficiencyChart, inverterConsumptionChart) { normalDataChart + selfSufficiencyChart + inverterConsumptionChart }
+        val batterySOCChart = lineChart(
+            lines = listOf(
+                lineSpec(
+                    lineColor = ReportVariable.BatterySOC.colour(themeStream),
+                    lineThickness = 2.dp,
+                    lineBackgroundShader = null,
+                )
+            ),
+            targetVerticalAxisPosition = AxisPosition.Vertical.Start
+        )
+        val composedChart = remember(normalDataChart, selfSufficiencyChart, inverterConsumptionChart) { normalDataChart + selfSufficiencyChart + inverterConsumptionChart + batterySOCChart }
 
-        if (statsGraphData != null && selfSufficiencyGraphData != null && inverterConsumptionData != null) {
+        if (statsGraphData != null && selfSufficiencyGraphData != null && inverterConsumptionData != null && batterySOCData != null) {
             Column(modifier = modifier.fillMaxWidth()) {
                 val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
                 TimeSelectionText(viewModel)
@@ -112,7 +123,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                     ProvideChartStyle(chartStyle(chartColors, themeStream)) {
                         Chart(
                             chart = composedChart,
-                            model = statsGraphData + selfSufficiencyGraphData + inverterConsumptionData,
+                            model = statsGraphData + selfSufficiencyGraphData + inverterConsumptionData + batterySOCData,
                             chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
                             endAxis = rememberEndAxis(
                                 itemPlacer = AxisItemPlacer.Vertical.default(5),
