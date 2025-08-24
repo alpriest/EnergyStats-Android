@@ -224,7 +224,7 @@
     <string name="export_save_to_a_local_file">Save to a local file</string>
     <string name="export_share_or_open_with_another_app">Share or open with another app</string>
     <string name="choose_export_method">Choose export method</string>
-    <string name="summary">Summary</string>
+    <string name="summary_title">Summary: Past Year</string>
     <string name="financial_model">Earnings</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">Solcast provide solar predictions based on your location. To sign up for free, visit https://solcast.com/free-rooftop-solar-forecasting and register for Hobbyist Access.\n\nOnce you\'ve signed up and have created your site(s) paste your API key below. Your API key can be found at https://toolkit.solcast.com.au by clicking the menu at the top right of the page.</string>
@@ -397,7 +397,7 @@
     <string name="fetch_solar_forecast_on_app_launch">Fetch solar forecast on app launch</string>
     <string name="clear">Clear</string>
     <string name="no_data">No data</string>
-    <string name="parameters">Parameters…</string>
+    <string name="parameters">Parameters</string>
     <string name="reportvariable_pvenergytotal">Energy generated from PV</string>
     <string name="logout_from_demo">Logout from demo</string>
     <string name="show_ct2_value">Show CT2 value</string>
@@ -458,4 +458,8 @@
     <string name="time_period_missing_warning">Any times not covered by periods above will default to Self Use mode, using the min SOC from the most recent active period.</string>
     <string name="estimated_energy_used_to_power_the_inverter">Estimated energy used to power the inverter</string>
     <string name="show_estimated_inverter_consumption">Show estimated inverter consumption</string>
+    <string name="summary_tab">Summary</string>
+    <string name="parameters_more">Parameters…</string>
+    <string name="inverter_consumption">Inverter Consumption</string>
+    <string name="battery_state_of_charge">Battery state of charge</string>
 </resources>

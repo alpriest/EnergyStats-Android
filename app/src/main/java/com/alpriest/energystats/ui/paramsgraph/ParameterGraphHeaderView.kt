@@ -82,7 +82,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
             DropdownMenuItem(onClick = {
                 navController.navigate(ParametersScreen.ParameterChooser.name)
             }, text = {
-                Text(stringResource(R.string.parameters))
+                Text(stringResource(R.string.parameters_more))
             })
 
             HorizontalDivider(thickness = 5.dp)

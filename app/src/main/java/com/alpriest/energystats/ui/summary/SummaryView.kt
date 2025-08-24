@@ -82,7 +82,7 @@ class SummaryView(
             startDestination = SummaryScreen.Overview.name
         ) {
             composable(SummaryScreen.Overview.name) {
-                topBarSettings.value = TopBarSettings(true, false, stringResource(R.string.summary), {
+                topBarSettings.value = TopBarSettings(true, false, stringResource(R.string.summary_title), {
                     ESButton(onClick = { navController.navigate("EditSummaryDateRanges") }) {
                         Image(
                             imageVector = Icons.Default.Edit,

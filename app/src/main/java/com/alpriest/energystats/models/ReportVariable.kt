@@ -21,7 +21,8 @@ enum class ReportVariable {
     Loads,
     SelfSufficiency,
     PvEnergyToTal,
-    InverterConsumption;
+    InverterConsumption,
+    BatterySOC;
 
     fun networkTitle(): String {
         return when (this) {
@@ -34,6 +35,7 @@ enum class ReportVariable {
             SelfSufficiency -> "selfSufficiency"
             PvEnergyToTal -> "PVEnergyTotal"
             InverterConsumption -> "InverterConsumption"
+            BatterySOC -> "BatterySOC"
         }
     }
 
@@ -49,14 +51,15 @@ enum class ReportVariable {
             SelfSufficiency -> selfSufficiencyLineColor(isDarkMode(themeStream))
             PvEnergyToTal -> Color(248, 216, 87)
             InverterConsumption -> Color(0xFFFF007F)
+            BatterySOC -> Color.Cyan
         }
     }
 
     companion object
 }
 
-fun ReportVariable.Companion.parse(variable: String): ReportVariable {
-    return when (variable.lowercase()) {
+fun ReportVariable.Companion.parse(networkVariable: String): ReportVariable {
+    return when (networkVariable.lowercase()) {
         "generation" -> ReportVariable.Generation
         "gridconsumption" -> ReportVariable.GridConsumption
         "chargeenergytotal" -> ReportVariable.ChargeEnergyToTal

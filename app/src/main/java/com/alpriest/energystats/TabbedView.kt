@@ -118,7 +118,7 @@ fun TabbedView(
         TitleItem(stringResource(R.string.power_flow_tab), Icons.Default.SwapVert, false),
         TitleItem(stringResource(R.string.stats_tab), Icons.Default.BarChart, false),
         TitleItem(stringResource(R.string.parameters), Icons.Default.Insights, false),
-        TitleItem(stringResource(R.string.summary), Icons.AutoMirrored.Filled.MenuBook, false),
+        TitleItem(stringResource(R.string.summary_tab), Icons.AutoMirrored.Filled.MenuBook, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
     val navController = rememberNavController()

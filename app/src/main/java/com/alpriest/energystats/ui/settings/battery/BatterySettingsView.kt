@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -24,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -93,7 +91,14 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumn(
-            header = "Display options"
+            header = "Display options",
+            footerAnnotatedString = buildAnnotatedString {
+                append(stringResource(R.string.battery_capacity_formula_explanation_prefix))
+                withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
+                    append("residual / (Min SOC / 100)")
+                }
+                append(stringResource(R.string.battery_capacity_formula_explanation_suffix))
+            },
         ) {
             Row(
                 modifier = Modifier
@@ -141,7 +146,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                             onClick = {
                                 try {
                                     config.batteryCapacity = editingCapacity.toInt()
-                                } catch (_: NumberFormatException) {}
+                                } catch (_: NumberFormatException) {
+                                }
                                 isEditingCapacity.value = false
                             }
                         ) {
@@ -159,40 +165,30 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     }
                 }
             }
-
-            Text(
-                buildAnnotatedString {
-                    append(stringResource(R.string.battery_capacity_formula_explanation_prefix))
-                    withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
-                        append("residual / (Min SOC / 100)")
-                    }
-                    append(stringResource(R.string.battery_capacity_formula_explanation_suffix))
-                },
-                color = colorScheme.onSecondary,
-                modifier = Modifier.padding(vertical = 8.dp),
-                style = MaterialTheme.typography.bodySmall
-            )
-
-            HorizontalDivider()
-
+        }
+        SettingsColumn(
+            footer = stringResource(R.string.empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant)
+        ) {
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_full_empty_estimate),
                 state = showBatteryEstimateState,
                 onUpdate = { config.showBatteryEstimate = it },
-                footer = buildAnnotatedString { append(stringResource(R.string.empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant)) }
             )
+        }
 
-            HorizontalDivider()
-
+        SettingsColumn(
+            footer = stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining)
+        ) {
             SettingsCheckbox(
                 title = stringResource(R.string.show_usable_battery_only),
                 state = showUsableBatteryOnlyState,
-                onUpdate = { config.showUsableBatteryOnly = it },
-                footer = buildAnnotatedString { append(stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining)) }
+                onUpdate = { config.showUsableBatteryOnly = it }
             )
+        }
 
-            HorizontalDivider()
-
+        SettingsColumn(
+            footer = batteryTemperateDisplayModeFooter(batteryTemperatureDisplayModeState.value)
+        ) {
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_temperature),
                 state = showBatteryTemperatureState,
@@ -213,8 +209,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         batteryTemperatureDisplayModeState.value = items[it]
                         config.batteryTemperatureDisplayMode = items[it]
                     }
-                },
-                footer = batteryTemperateDisplayModeFooter(batteryTemperatureDisplayModeState.value)
+                }
             )
         }
 
@@ -227,13 +222,13 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 }
 
 @Composable
-private fun batteryTemperateDisplayModeFooter(value: BatteryTemperatureDisplayMode): AnnotatedString {
+private fun batteryTemperateDisplayModeFooter(value: BatteryTemperatureDisplayMode): String {
     val context = LocalContext.current
 
     return when (value) {
-        BatteryTemperatureDisplayMode.Automatic -> AnnotatedString(context.getString(R.string.batteryTemperatureDisplayMode_automatic))
-        BatteryTemperatureDisplayMode.Battery1 -> AnnotatedString(String.format(stringResource(R.string.batteryTemperatureDisplayMode_batteryN), "1"))
-        BatteryTemperatureDisplayMode.Battery2 -> AnnotatedString(String.format(stringResource(R.string.batteryTemperatureDisplayMode_batteryN), "2"))
+        BatteryTemperatureDisplayMode.Automatic -> context.getString(R.string.batteryTemperatureDisplayMode_automatic)
+        BatteryTemperatureDisplayMode.Battery1 -> String.format(stringResource(R.string.batteryTemperatureDisplayMode_batteryN), "1")
+        BatteryTemperatureDisplayMode.Battery2 -> String.format(stringResource(R.string.batteryTemperatureDisplayMode_batteryN), "2")
     }
 }
 

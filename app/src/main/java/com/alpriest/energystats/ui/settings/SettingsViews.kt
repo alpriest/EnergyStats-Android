@@ -81,6 +81,7 @@ fun SettingsColumn(
     modifier: Modifier = Modifier,
     header: String? = null,
     footer: String? = null,
+    footerAnnotatedString: AnnotatedString? = null,
     footerModifier: Modifier = Modifier,
     error: String? = null,
     padding: PaddingValues = SettingsPaddingValues.default(),
@@ -106,6 +107,7 @@ fun SettingsColumn(
             }
         },
         footer = footer,
+        footerAnnotatedString = footerAnnotatedString,
         footerModifier = footerModifier,
         error = error,
         padding = padding,
