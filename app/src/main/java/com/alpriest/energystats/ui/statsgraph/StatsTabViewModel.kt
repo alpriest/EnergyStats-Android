@@ -314,13 +314,20 @@ class StatsTabViewModel(
         chartColorsStream.value = grouped.keys.toList()
         statsGraphDataStream.value = ChartEntryModelProducer(entries).getModel()
         var now = LocalDateTime.now(ZoneId.systemDefault())
+        val displayMode = displayModeStream.value
 
         selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(rawData
             .filter { it.type == ReportVariable.SelfSufficiency }
             .filter { !hiddenVariables.contains(it.type) }
             .filter {
-                when (displayModeStream.value) {
-                    is StatsDisplayMode.Day -> it.graphPoint <= now.hour
+                when (displayMode) {
+                    is StatsDisplayMode.Day -> {
+                        if (displayMode.date == LocalDate.now()) {
+                            it.graphPoint <= now.hour
+                        } else {
+                            true
+                        }
+                    }
                     is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
                     is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
                     else -> true
@@ -339,8 +346,14 @@ class StatsTabViewModel(
             .filter { it.type == ReportVariable.InverterConsumption }
             .filter { !hiddenVariables.contains(it.type) }
             .filter {
-                when (displayModeStream.value) {
-                    is StatsDisplayMode.Day -> it.graphPoint <= now.hour
+                when (displayMode) {
+                    is StatsDisplayMode.Day -> {
+                        if (displayMode.date == LocalDate.now()) {
+                            it.graphPoint <= now.hour
+                        } else {
+                            true
+                        }
+                    }
                     is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
                     is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
                     else -> true
@@ -359,8 +372,14 @@ class StatsTabViewModel(
             .filter { it.type == ReportVariable.BatterySOC }
             .filter { !hiddenVariables.contains(it.type) }
             .filter {
-                when (displayModeStream.value) {
-                    is StatsDisplayMode.Day -> it.graphPoint <= now.hour
+                when (displayMode) {
+                    is StatsDisplayMode.Day -> {
+                        if (displayMode.date == LocalDate.now()) {
+                            it.graphPoint <= now.hour
+                        } else {
+                            true
+                        }
+                    }
                     is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
                     is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
                     else -> true
