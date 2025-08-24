@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-fun parseToLocalDate(input: String): LocalDateTime {
+fun parseToLocalDateTime(input: String): LocalDateTime {
     val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(input)
     if (simpleDate != null) {
         return simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()

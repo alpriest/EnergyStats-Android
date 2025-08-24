@@ -17,7 +17,7 @@ import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.models.toDate
 import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.models.truncated
-import com.alpriest.energystats.parseToLocalDate
+import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -170,7 +170,7 @@ class ParametersGraphTabViewModel(
                 val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
 
                 response.data.mapIndexed { index, item ->
-                    val localDateTime = parseToLocalDate(item.time)
+                    val localDateTime = parseToLocalDateTime(item.time)
 
                     return@mapIndexed ParametersGraphValue(
                         graphPoint = index,

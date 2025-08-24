@@ -63,7 +63,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifi
             } else {
                 val selectedValue = selectedValue.y.toDouble()
                 val value = when (graphVariable.type) {
-                    ReportVariable.SelfSufficiency -> (selectedValue / 100.0).asPercent()
+                    ReportVariable.SelfSufficiency, ReportVariable.BatterySOC -> (selectedValue / 100.0).asPercent()
                     else -> selectedValue.kWh(1)
                 }
 

@@ -32,7 +32,7 @@ import com.alpriest.energystats.models.SchedulePhaseNetworkModel
 import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.SettingItem
 import com.alpriest.energystats.models.Time
-import com.alpriest.energystats.parseToLocalDate
+import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
@@ -104,7 +104,7 @@ class DemoAPI : FoxAPIServicing {
         return data.result?.map { response ->
             response.copy(datas = response.datas.map { datas ->
                 datas.copy(data = datas.data.map {
-                    val simpleDate = parseToLocalDate(it.time)
+                    val simpleDate = parseToLocalDateTime(it.time)
                     val localDateTime = simpleDate
                         .withYear(now.year)
                         .withMonth(now.monthValue)

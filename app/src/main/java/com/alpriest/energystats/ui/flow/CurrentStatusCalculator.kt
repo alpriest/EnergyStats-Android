@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.flow
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenQueryResponseData
 import com.alpriest.energystats.models.OpenRealQueryResponse
-import com.alpriest.energystats.parseToLocalDate
+import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
@@ -93,7 +93,7 @@ class CurrentStatusCalculator(
         val grid = status.feedinPower - status.gridConsumptionPower
         val homeConsumption = loadsPower(status, config.shouldCombineCT2WithLoadsPower)
         val temperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
-        lastUpdate = parseToLocalDate(status.lastUpdate)
+        lastUpdate = parseToLocalDateTime(status.lastUpdate)
         val ct2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
         val solarPower = calculateSolarPower(status.hasPV, status, config.shouldInvertCT2, config.shouldCombineCT2WithPVPower)
         val solarStringsPower = calculateSolarStringsPower(status.hasPV, status)

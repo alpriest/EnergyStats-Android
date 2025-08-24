@@ -15,7 +15,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
-import com.alpriest.energystats.parseToLocalDate
+import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -445,23 +445,19 @@ class StatsTabViewModel(
                         end = endOfDay.atZone(zone).toEpochSecond() * 1000
                     )
 
-                    val now = LocalDateTime.now(zone)
-
-                    // Flatten and map to graph entries (x = hour of day, y = SoC value)
+                    // Group by hour and average values for each hour
                     response.datas
                         .flatMap { it.data }
-                        .asSequence()
-                        .filter { parseToLocalDate(it.time) <= now }
-                        .sortedBy { it.time }
-                        .map { unit ->
-                            val hour = parseToLocalDate(unit.time).hour
+                        .groupBy { parseToLocalDateTime(it.time).hour }
+                        .map { (hour, entries) ->
+                            val avgValue = entries.map { it.value.toDouble() }.average()
                             StatsGraphValue(
                                 type = ReportVariable.BatterySOC,
                                 graphPoint = hour,
-                                graphValue = unit.value.toDouble()
+                                graphValue = avgValue
                             )
                         }
-                        .toList()
+                        .sortedBy { it.graphPoint }
                 } catch (e: Exception) {
                     Log.e("AWP", "fetchBatterySOC failed", e)
                     emptyList()
