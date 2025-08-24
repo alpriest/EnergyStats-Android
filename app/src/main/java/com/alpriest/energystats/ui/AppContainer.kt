@@ -106,7 +106,8 @@ class AppContainer(private val context: Context) {
             ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
             showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
             detectedActiveTemplate = null,
-            showInverterConsumption = config.showInverterConsumption
+            showInverterConsumption = config.showInverterConsumption,
+            showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats
         )
     )
 

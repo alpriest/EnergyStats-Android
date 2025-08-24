@@ -95,7 +95,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     fun setDeviceSupports(capability: DeviceCapability, deviceSN: String)
     fun resetDisplaySettings()
     var showInverterConsumption: Boolean
-
+    var showBatterySOCOnDailyStats: Boolean
     var showStringTotalsAsPercentage: Boolean
 }
 

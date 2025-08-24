@@ -53,7 +53,8 @@ data class AppTheme(
     val ct2DisplayMode: CT2DisplayMode,
     val showStringTotalsAsPercentage: Boolean,
     val detectedActiveTemplate: String?,
-    val showInverterConsumption: Boolean
+    val showInverterConsumption: Boolean,
+    val showBatterySOCOnDailyStats: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -121,7 +122,8 @@ fun AppTheme.Companion.demo(
     ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden,
     showStringTotalsAsPercentage: Boolean = false,
     detectedActiveTemplate: String? = "Football",
-    showInverterConsumption: Boolean = false
+    showInverterConsumption: Boolean = false,
+    showBatterySOCOnDailyStats: Boolean = false
 ): AppTheme {
     return AppTheme(
         useLargeDisplay = useLargeDisplay,
@@ -161,7 +163,8 @@ fun AppTheme.Companion.demo(
         ct2DisplayMode = ct2DisplayMode,
         showStringTotalsAsPercentage = showStringTotalsAsPercentage,
         detectedActiveTemplate = detectedActiveTemplate,
-        showInverterConsumption = showInverterConsumption
+        showInverterConsumption = showInverterConsumption,
+        showBatterySOCOnDailyStats = showBatterySOCOnDailyStats
     )
 }
 
@@ -204,6 +207,7 @@ fun AppTheme.Companion.toAppTheme(config: ConfigInterface): AppTheme {
         ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
         showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
         detectedActiveTemplate = null,
-        showInverterConsumption = config.showInverterConsumption
+        showInverterConsumption = config.showInverterConsumption,
+        showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats
     )
 }

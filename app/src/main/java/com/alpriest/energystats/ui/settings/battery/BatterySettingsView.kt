@@ -58,6 +58,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
+    val showBatterySOCOnDailyStatsState = rememberSaveable { mutableStateOf(config.showBatterySOCOnDailyStats) }
     val hasError = config.currentDevice.collectAsState().value?.battery?.hasError ?: false
     val batteryTemperatureDisplayModeState = rememberSaveable { mutableStateOf(config.batteryTemperatureDisplayMode) }
     val context = LocalContext.current
@@ -210,6 +211,16 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         config.batteryTemperatureDisplayMode = items[it]
                     }
                 }
+            )
+        }
+
+        SettingsColumn(
+            footer = stringResource(R.string.show_battery_soc_on_daily_stats_description)
+        ) {
+            SettingsCheckbox(
+                title = stringResource(R.string.show_battery_soc_on_daily_stats),
+                state = showBatterySOCOnDailyStatsState,
+                onUpdate = { config.showBatterySOCOnDailyStats = it }
             )
         }
 

@@ -462,4 +462,6 @@
     <string name="parameters_more">Parameters…</string>
     <string name="inverter_consumption">Inverter Consumption</string>
     <string name="battery_state_of_charge">Battery state of charge</string>
+    <string name="show_battery_soc_on_daily_stats_description">Shows the battery charge level when looking at the daily stats view.</string>
+    <string name="show_battery_soc_on_daily_stats">Show battery SOC on daily stats</string>
 </resources>

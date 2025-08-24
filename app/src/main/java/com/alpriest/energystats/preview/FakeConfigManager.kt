@@ -93,6 +93,7 @@ class FakeConfigManager : ConfigManaging {
 
     override fun setDeviceSupports(capability: DeviceCapability, deviceSN: String) {}
     override var showStringTotalsAsPercentage: Boolean = false
+    override var showBatterySOCOnDailyStats: Boolean = false
 
     override var devices: List<Device>? = listOf(
         Device(

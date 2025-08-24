@@ -89,7 +89,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         CT2_DISPLAY_MODE,
         SHOW_STRING_TOTALS_AS_PERCENTAGE,
         GENERATION_VIEW_DATA,
-        SHOW_INVERTER_CONSUMPTION
+        SHOW_INVERTER_CONSUMPTION,
+        SHOW_BATTERY_SOC_ON_DAILY_STATS
     }
 
     override fun clearDisplaySettings() {
@@ -702,6 +703,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, value)
+            }
+        }
+
+    override var showBatterySOCOnDailyStats: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, false)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, value)
             }
         }
 }

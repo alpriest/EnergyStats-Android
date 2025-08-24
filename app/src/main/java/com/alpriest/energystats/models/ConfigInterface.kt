@@ -70,6 +70,7 @@ interface ConfigInterface {
     var showStringTotalsAsPercentage: Boolean
     var generationViewData: GenerationViewData?
     var showInverterConsumption: Boolean
+    var showBatterySOCOnDailyStats: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

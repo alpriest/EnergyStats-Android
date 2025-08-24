@@ -82,7 +82,8 @@ class FakeConfigStore(
     override var ct2DisplayMode: Int = CT2DisplayMode.Hidden.value,
     override var showStringTotalsAsPercentage: Boolean = false,
     override var generationViewData: GenerationViewData? = null,
-    override var showInverterConsumption: Boolean = false
+    override var showInverterConsumption: Boolean = false,
+    override var showBatterySOCOnDailyStats: Boolean = false
 
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}

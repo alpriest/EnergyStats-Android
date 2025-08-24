@@ -1,6 +1,10 @@
 package com.alpriest.energystats.ui.login
 
-import com.alpriest.energystats.models.*
+import com.alpriest.energystats.models.Battery
+import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.models.Device
+import com.alpriest.energystats.models.PowerStationDetail
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.services.InvalidTokenException
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -26,7 +30,10 @@ import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
 import com.alpriest.energystats.ui.theme.toAppTheme
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 import java.util.Locale
@@ -587,6 +594,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showInverterConsumption = value
             themeStream.value = themeStream.value.copy(showInverterConsumption = showInverterConsumption)
+        }
+
+    override var showBatterySOCOnDailyStats: Boolean
+        get() = config.showBatterySOCOnDailyStats
+        set(value) {
+            config.showBatterySOCOnDailyStats = value
+            themeStream.value = themeStream.value.copy(showBatterySOCOnDailyStats = showBatterySOCOnDailyStats)
         }
 
     init {
