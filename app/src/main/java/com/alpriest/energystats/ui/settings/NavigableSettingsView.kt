@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.alpriest.energystats.R
-import com.alpriest.energystats.TopBarSettings
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging

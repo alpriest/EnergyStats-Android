@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.darkenColor
+import com.alpriest.energystats.ui.helpers.darkenColor
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.theme.ESButton
 

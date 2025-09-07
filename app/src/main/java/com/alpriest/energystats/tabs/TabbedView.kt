@@ -1,6 +1,5 @@
-package com.alpriest.energystats
+package com.alpriest.energystats.tabs
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -23,7 +22,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -40,37 +38,25 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
-import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.BannerAlertManager
-import com.alpriest.energystats.ui.flow.BannerAlertManaging
-import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.login.ConfigManager
-import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.NavigableSettingsView
 import com.alpriest.energystats.ui.settings.darkenedBackground
 import com.alpriest.energystats.ui.settings.darkenedBackgroundColor
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
-import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
-import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.ui.statsgraph.StatsTabView
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
-import com.alpriest.energystats.ui.summary.SummaryView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -96,21 +82,7 @@ data class TopBarSettings(
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun TabbedView(
-    configManager: ConfigManaging,
-    network: Networking,
-    userManager: UserManaging,
-    onLogout: () -> Unit,
-    themeStream: MutableStateFlow<AppTheme>,
-    onRateApp: () -> Unit,
-    onBuyMeCoffee: () -> Unit,
-    onWriteTempFile: (String, String) -> Uri?,
-    filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
-    solarForecastingProvider: () -> SolcastCaching,
-    widgetDataSharer: WidgetDataSharing,
-    bannerAlertManager: BannerAlertManaging,
-    templateStore: TemplateStoring
-) {
+fun TabbedView(dependencies: TabbedViewDependencies) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
@@ -124,7 +96,7 @@ fun TabbedView(
     val navController = rememberNavController()
     val topBarSettings = remember { mutableStateOf(TopBarSettings(false, false, "", {})) }
 
-    LaunchedEffect(configManager.lastSettingsResetTime) {
+    LaunchedEffect(dependencies.configManager.lastSettingsResetTime) {
         scope.launch {
             pagerState.scrollToPage(0)
         }
@@ -136,9 +108,9 @@ fun TabbedView(
             if (topBarSettings.value.topBarVisible) {
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = colorScheme.primary,
-                        titleContentColor = colorScheme.onPrimary,
-                        navigationIconContentColor = colorScheme.onPrimary
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     navigationIcon = {
                         if (topBarSettings.value.backButtonVisible) {
@@ -156,64 +128,28 @@ fun TabbedView(
                 )
             }
         },
-        contentWindowInsets = WindowInsets.navigationBars,
+        contentWindowInsets = WindowInsets.Companion.navigationBars,
         content = { padding ->
             HorizontalPager(
-                modifier = Modifier.padding(padding),
+                modifier = Modifier.Companion.padding(padding),
                 count = titles.size,
                 state = pagerState,
                 userScrollEnabled = false
             ) { page ->
-                when (page) {
-                    0 -> PowerFlowTabView(
-                        topBarSettings,
-                        network,
-                        configManager,
-                        userManager,
-                        themeStream,
-                        widgetDataSharer,
-                        bannerAlertManager,
-                        templateStore
-                    ).Content(themeStream = themeStream)
-
-                    1 -> StatsTabView(topBarSettings, configManager, network, onWriteTempFile, filePathChooser, themeStream, userManager).Content()
-                    2 -> NavigableParametersGraphTabView(
-                        topBarSettings,
-                        navController,
-                        configManager,
-                        userManager,
-                        network,
-                        onWriteTempFile,
-                        filePathChooser,
-                        themeStream,
-                        solarForecastingProvider
-                    ).Content()
-
-                    3 -> SummaryView(configManager, userManager, network, solarForecastingProvider).NavigableContent(topBarSettings, navController, themeStream = themeStream)
-                    4 -> NavigableSettingsView(
-                        topBarSettings,
-                        navController,
-                        configManager = configManager,
-                        userManager = userManager,
-                        onLogout = onLogout,
-                        onRateApp = onRateApp,
-                        onBuyMeCoffee = onBuyMeCoffee,
-                        network = network,
-                        solarForecastingProvider = solarForecastingProvider,
-                        templateStore = templateStore
-                    )
-                }
+                TabbedViewPages(page, dependencies, topBarSettings, navController)
             }
         },
         bottomBar = {
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .darkenedBackground()
+            Column(
+                modifier = Modifier.Companion
+                    .fillMaxWidth()
+                    .darkenedBackground()
             ) {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
                     containerColor = darkenedBackgroundColor(),
-                    modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
+                    divider = {},
+                    modifier = Modifier.Companion.windowInsetsPadding(WindowInsets.Companion.navigationBars)
                 ) {
                     titles.forEachIndexed { index, item ->
                         Tab(
@@ -226,10 +162,10 @@ fun TabbedView(
                                 }
                             },
                             content = {
-                                Box(contentAlignment = Alignment.TopEnd) {
+                                Box(contentAlignment = Alignment.Companion.TopEnd) {
                                     Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier.padding(vertical = 8.dp)
+                                        horizontalAlignment = Alignment.Companion.CenterHorizontally,
+                                        modifier = Modifier.Companion.padding(vertical = 8.dp)
                                     ) {
                                         Icon(imageVector = item.icon, contentDescription = null)
                                         Text(
@@ -238,19 +174,19 @@ fun TabbedView(
                                         )
                                     }
 
-                                    if (configManager.isDemoUser && item.isSettings) {
+                                    if (dependencies.configManager.isDemoUser && item.isSettings) {
                                         Card(
-                                            colors = CardDefaults.cardColors(containerColor = Color.Red),
+                                            colors = CardDefaults.cardColors(containerColor = Color.Companion.Red),
                                             shape = MaterialTheme.shapes.medium,
-                                            modifier = Modifier
+                                            modifier = Modifier.Companion
                                                 .padding(2.dp)
                                                 .offset(x = 16.dp, y = 2.dp)
                                         ) {
                                             Text(
                                                 "Demo",
-                                                color = Color.White,
-                                                fontWeight = FontWeight.Bold,
-                                                modifier = Modifier
+                                                color = Color.Companion.White,
+                                                fontWeight = FontWeight.Companion.Bold,
+                                                modifier = Modifier.Companion
                                                     .padding(horizontal = 2.dp),
                                                 style = MaterialTheme.typography.bodySmall
                                             )
@@ -258,7 +194,7 @@ fun TabbedView(
                                     }
                                 }
                             },
-                            selectedContentColor = colorScheme.primary,
+                            selectedContentColor = MaterialTheme.colorScheme.primary,
                             unselectedContentColor = DimmedTextColor,
                         )
                     }
@@ -268,44 +204,32 @@ fun TabbedView(
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun HomepagePreview() {
-    val themeStream = MutableStateFlow(AppTheme.demo())
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-        TabbedView(
-            ConfigManager(
-                config = FakeConfigStore(),
-                networking = DemoNetworking(),
-                appVersion = "1.19",
-                themeStream = themeStream
-            ),
-            network = DemoNetworking(),
-            userManager = FakeUserManager(),
-            {},
-            themeStream = themeStream,
-            {},
-            {},
-            { _, _ -> null },
-            { _, _ -> },
-            { DemoSolarForecasting() },
-            WidgetDataSharer(FakeConfigStore()),
-            BannerAlertManager(),
-            TemplateStore(FakeConfigManager())
-        )
+fun TabbedViewPreview() {
+    val themeStream = MutableStateFlow(AppTheme.Companion.demo())
+    val dependencies = TabbedViewDependencies(
+        ConfigManager(
+            config = FakeConfigStore(),
+            networking = DemoNetworking(),
+            appVersion = "1.19",
+            themeStream = themeStream
+        ),
+        network = DemoNetworking(),
+        userManager = FakeUserManager(),
+        {},
+        themeStream = themeStream,
+        {},
+        {},
+        { _, _ -> null },
+        { _, _ -> },
+        { DemoSolarForecasting() },
+        WidgetDataSharer(FakeConfigStore()),
+        BannerAlertManager(),
+        TemplateStore(FakeConfigManager())
+    )
+
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+        TabbedView(dependencies = dependencies)
     }
-}
-
-fun darkenColor(color: Color, percentage: Float): Color {
-    val argb = color.toArgb()
-    val alpha = argb ushr 24
-    val red = argb shr 16 and 0xFF
-    val green = argb shr 8 and 0xFF
-    val blue = argb and 0xFF
-
-    val darkenedRed = (red * (1 - percentage)).toInt()
-    val darkenedGreen = (green * (1 - percentage)).toInt()
-    val darkenedBlue = (blue * (1 - percentage)).toInt()
-
-    return Color(alpha = alpha, red = darkenedRed, green = darkenedGreen, blue = darkenedBlue)
 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.alpriest.energystats.tabs.TabbedView
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.login.LoggedIn

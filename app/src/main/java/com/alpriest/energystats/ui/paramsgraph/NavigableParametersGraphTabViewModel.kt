@@ -10,7 +10,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.alpriest.energystats.TopBarSettings
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.services.Networking
