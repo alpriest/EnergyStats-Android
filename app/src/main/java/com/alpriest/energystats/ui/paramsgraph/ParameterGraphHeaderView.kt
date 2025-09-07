@@ -76,14 +76,17 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
         horizontalArrangement = Arrangement.Center
     ) {
         MenuWithButton(
-            modifier = Modifier.padding(end = 14.dp),
+            modifier = Modifier.padding(end = 14.dp).padding(vertical = 2.dp),
             Icons.AutoMirrored.Filled.FormatListBulleted
         ) { showing ->
-            DropdownMenuItem(onClick = {
-                navController.navigate(ParametersScreen.ParameterChooser.name)
-            }, text = {
-                Text(stringResource(R.string.parameters_more))
-            })
+            DropdownMenuItem(
+                onClick = {
+                    navController.navigate(ParametersScreen.ParameterChooser.name)
+                },
+                text = {
+                    Text(stringResource(R.string.parameters_more))
+                }
+            )
 
             HorizontalDivider(thickness = 5.dp)
 

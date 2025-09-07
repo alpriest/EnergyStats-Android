@@ -106,7 +106,7 @@ class StatsDatePickerView(private val displayModeStream: MutableStateFlow<StatsD
                 ESButton(
                     modifier = Modifier
                         .padding(end = 14.dp)
-                        .padding(vertical = 4.dp)
+                        .padding(vertical = 6.dp)
                         .size(36.dp),
                     onClick = { viewModel.decrease() },
                     contentPadding = PaddingValues(0.dp),
@@ -121,7 +121,7 @@ class StatsDatePickerView(private val displayModeStream: MutableStateFlow<StatsD
 
                 ESButton(
                     modifier = Modifier
-                        .padding(vertical = 4.dp)
+                        .padding(vertical = 6.dp)
                         .size(36.dp),
                     onClick = { viewModel.increase() },
                     contentPadding = PaddingValues(0.dp),
