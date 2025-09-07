@@ -19,8 +19,8 @@ android {
         applicationId = "com.alpriest.energystats"
         minSdk = 26
         targetSdk = 35
-        versionCode = 288
-        versionName = "2.133"
+        versionCode = 290
+        versionName = "2.134"
 
         buildConfigField(type = "String", name = "GOOGLE_MAPS_APIKEY", value = localProperties.getProperty("GOOGLE_MAPS_APIKEY"))
     }
@@ -61,7 +61,6 @@ dependencies {
     implementation(libs.compose.markdown)
     implementation(libs.glance.appwidget)
     implementation(libs.glance.material3)
-    implementation(libs.accompanist.pager)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.gson)
     implementation(libs.okhttp)

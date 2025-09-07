@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -18,13 +19,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier, iconHeight: Dp) {
-    val showHomeTotal = themeStream.collectAsState().value.showHomeTotal
-    val fontSize = themeStream.collectAsState().value.fontSize()
-    val smallFontSize = themeStream.collectAsState().value.smallFontSize()
-    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
-    val displayUnit = themeStream.collectAsState().value.displayUnit
+    val showHomeTotal = themeStream.collectAsStateWithLifecycle().value.showHomeTotal
+    val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
+    val smallFontSize = themeStream.collectAsStateWithLifecycle().value.smallFontSize()
+    val displayUnit = themeStream.collectAsStateWithLifecycle().value.displayUnit
     val context = LocalContext.current
-    val homeTotal = viewModel.homeTotal.collectAsState().value
+    val homeTotal = viewModel.homeTotal.collectAsStateWithLifecycle().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

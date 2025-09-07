@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryTemperatures
 import com.alpriest.energystats.models.asPercent
@@ -61,7 +62,7 @@ fun BatteryPowerFlow(
 
 @Composable
 fun isDarkMode(themeStream: MutableStateFlow<AppTheme>): Boolean {
-    return isDarkMode(colorTheme = themeStream.collectAsState().value.colorTheme)
+    return isDarkMode(colorTheme = themeStream.collectAsStateWithLifecycle().value.colorTheme)
 }
 
 @Composable
@@ -80,12 +81,12 @@ fun BatteryIconView(
     iconHeight: Dp,
     modifier: Modifier = Modifier
 ) {
-    val percentage = themeStream.collectAsState().value.showBatterySOCAsPercentage
-    val fontSize = themeStream.collectAsState().value.fontSize()
-    val smallFontSize = themeStream.collectAsState().value.smallFontSize()
-    val showBatteryTemperature = themeStream.collectAsState().value.showBatteryTemperature
-    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
-    val showBatteryEstimate = themeStream.collectAsState().value.showBatteryEstimate
+    val percentage = themeStream.collectAsStateWithLifecycle().value.showBatterySOCAsPercentage
+    val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
+    val smallFontSize = themeStream.collectAsStateWithLifecycle().value.smallFontSize()
+    val showBatteryTemperature = themeStream.collectAsStateWithLifecycle().value.showBatteryTemperature
+    val decimalPlaces = themeStream.collectAsStateWithLifecycle().value.decimalPlaces
+    val showBatteryEstimate = themeStream.collectAsStateWithLifecycle().value.showBatteryEstimate
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

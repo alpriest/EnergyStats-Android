@@ -45,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
@@ -133,8 +134,8 @@ class PowerFlowTabView(
         val errorBackground = remember { largeRadialGradient(listOf(Color.Red.copy(alpha = 0.7f), Color.Transparent)) }
         topBarSettings.value = TopBarSettings(false, false, "", {})
 
-        val uiState = viewModel.uiState.collectAsState().value.state
-        val showSunnyBackground = themeStream.collectAsState().value.showSunnyBackground
+        val uiState = viewModel.uiState.collectAsStateWithLifecycle().value.state
+        val showSunnyBackground = themeStream.collectAsStateWithLifecycle().value.showSunnyBackground
         val background = when (uiState) {
             is PowerFlowLoadState.Active -> loadingBackground
             is PowerFlowLoadState.Loaded -> loadedBackground

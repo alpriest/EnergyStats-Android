@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -28,12 +27,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.alpriest.energystats.R
-import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
@@ -41,6 +40,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.FinanceAmount
@@ -108,13 +108,13 @@ class SummaryView(
         modifier: Modifier
     ) {
         val scrollState = rememberScrollState()
-        val appTheme = themeStream.collectAsState().value
-        val approximations = viewModel.approximationsViewModelStream.collectAsState().value
-        val oldestDataDate = viewModel.oldestDataDate.collectAsState().value
-        val isLoading = viewModel.loadStateStream.collectAsState().value.state
+        val appTheme = themeStream.collectAsStateWithLifecycle().value
+        val approximations = viewModel.approximationsViewModelStream.collectAsStateWithLifecycle().value
+        val oldestDataDate = viewModel.oldestDataDate.collectAsStateWithLifecycle().value
+        val isLoading = viewModel.loadStateStream.collectAsStateWithLifecycle().value.state
         val context = LocalContext.current
-        val latestDataDate = viewModel.latestDataDate.collectAsState().value
-        val hasPV = viewModel.hasPVStream.collectAsState().value
+        val latestDataDate = viewModel.latestDataDate.collectAsStateWithLifecycle().value
+        val hasPV = viewModel.hasPVStream.collectAsStateWithLifecycle().value
 
         MonitorAlertDialog(viewModel, userManager)
 

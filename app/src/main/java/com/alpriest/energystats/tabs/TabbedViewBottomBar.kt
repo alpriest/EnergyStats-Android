@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
@@ -21,11 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.settings.darkenedBackground
 import com.alpriest.energystats.ui.settings.darkenedBackgroundColor
 import com.alpriest.energystats.ui.theme.DimmedTextColor
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TabbedViewBottomBar(pagerState: PagerState, titles: List<TitleItem>, dependencies: TabbedViewDependencies) {
     val scope = rememberCoroutineScope()

@@ -12,6 +12,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -22,7 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun PylonView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
     val color = iconBackgroundColor(isDarkMode(themeStream))
-    val strokeWidth = themeStream.collectAsState().value.strokeWidth()
+    val strokeWidth = themeStream.collectAsStateWithLifecycle().value.strokeWidth()
 
     Canvas(
         modifier = modifier.padding(top = 2.dp)

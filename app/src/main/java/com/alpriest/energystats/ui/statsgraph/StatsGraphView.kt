@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -62,13 +63,13 @@ import java.util.Locale
 
 @Composable
 fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
-    val displayMode = viewModel.displayModeStream.collectAsState().value
+    val displayMode = viewModel.displayModeStream.collectAsStateWithLifecycle().value
     val themeStream = viewModel.themeStream
-    val chartColors = viewModel.chartColorsStream.collectAsState().value.map { it.colour(themeStream) }
-    val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsState().value
-    val inverterConsumptionData = viewModel.inverterConsumptionDataStream.collectAsState().value
-    val statsGraphData = viewModel.statsGraphDataStream.collectAsState().value
-    val batterySOCData = viewModel.batterySOCDataStream.collectAsState().value
+    val chartColors = viewModel.chartColorsStream.collectAsStateWithLifecycle().value.map { it.colour(themeStream) }
+    val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsStateWithLifecycle().value
+    val inverterConsumptionData = viewModel.inverterConsumptionDataStream.collectAsStateWithLifecycle().value
+    val statsGraphData = viewModel.statsGraphDataStream.collectAsStateWithLifecycle().value
+    val batterySOCData = viewModel.batterySOCDataStream.collectAsStateWithLifecycle().value
     val context = LocalContext.current
 
     if (statsGraphData == null && inverterConsumptionData == null && selfSufficiencyGraphData == null) {

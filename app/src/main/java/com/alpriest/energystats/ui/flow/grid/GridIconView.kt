@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Device
@@ -38,7 +39,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-    val showGridTotals = themeStream.collectAsState().value.showGridTotals
+    val showGridTotals = themeStream.collectAsStateWithLifecycle().value.showGridTotals
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -74,11 +75,11 @@ private fun GridTotals(
     decimalPlaces: Int,
     themeStream: MutableStateFlow<AppTheme>
 ) {
-    val displayUnit = themeStream.collectAsState().value.displayUnit
-    val fontSize = themeStream.collectAsState().value.fontSize()
-    val smallFontSize = themeStream.collectAsState().value.smallFontSize()
-    val gridImportTotal = viewModel.gridImportTotal.collectAsState().value
-    val gridExportTotal = viewModel.gridExportTotal.collectAsState().value
+    val displayUnit = themeStream.collectAsStateWithLifecycle().value.displayUnit
+    val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
+    val smallFontSize = themeStream.collectAsStateWithLifecycle().value.smallFontSize()
+    val gridImportTotal = viewModel.gridImportTotal.collectAsStateWithLifecycle().value
+    val gridExportTotal = viewModel.gridExportTotal.collectAsStateWithLifecycle().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally

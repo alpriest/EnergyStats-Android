@@ -3,6 +3,8 @@ package com.alpriest.energystats.tabs
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.MenuBook
@@ -43,18 +45,14 @@ import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TabbedView(dependencies: TabbedViewDependencies) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val pagerState = rememberPagerState()
     val titles = listOf(
         TitleItem(stringResource(R.string.power_flow_tab), Icons.Default.SwapVert, false),
         TitleItem(stringResource(R.string.stats_tab), Icons.Default.BarChart, false),
@@ -62,6 +60,7 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
         TitleItem(stringResource(R.string.summary_tab), Icons.AutoMirrored.Filled.MenuBook, false),
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
+    val pagerState = rememberPagerState(pageCount = { titles.size } )
     val navController = rememberNavController()
     val topBarSettings = remember { mutableStateOf(TopBarSettings(false, false, "", {})) }
 
@@ -101,7 +100,6 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
         content = { padding ->
             HorizontalPager(
                 modifier = Modifier.Companion.padding(padding),
-                count = titles.size,
                 state = pagerState,
                 userScrollEnabled = false
             ) { page ->
