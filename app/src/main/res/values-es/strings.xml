@@ -455,4 +455,8 @@
     <string name="show_estimated_inverter_consumption">Mostrar el consumo estimado del inversor</string>
     <string name="summary_tab">Resumen</string>
     <string name="parameters_more">Parámetros...</string>
+    <string name="inverter_consumption">Consumo del inversor</string>
+    <string name="battery_state_of_charge">Estado de carga de la batería</string>
+    <string name="show_battery_soc_on_daily_stats_description">Muestra el nivel de carga de la batería en la vista diaria de estadísticas.</string>
+    <string name="show_battery_soc_on_daily_stats">Mostrar el estado de carga de la batería en las estadísticas diarias</string>
 </resources>
