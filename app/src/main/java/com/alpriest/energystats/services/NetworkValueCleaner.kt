@@ -75,11 +75,11 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
         val original = api.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
-        return original.map {
+        return original.mapIndexed { index, original ->
             OpenReportResponse(
-                variable = it.variable,
-                unit = it.unit,
-                values = it.values.map { value ->
+                variable = variables[index].networkTitle(),
+                unit = original.unit,
+                values = original.values.map { value ->
                     OpenReportResponseData(value.index, value.value.capped(themeStream.value.dataCeiling))
                 }
             )

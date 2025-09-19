@@ -224,7 +224,7 @@
     <string name="export_save_to_a_local_file">Save to a local file</string>
     <string name="export_share_or_open_with_another_app">Share or open with another app</string>
     <string name="choose_export_method">Choose export method</string>
-    <string name="summary_title">Summary: Past Year</string>
+    <string name="summary_title">Summary</string>
     <string name="financial_model">Earnings</string>
     <string name="api_key">API Key</string>
     <string name="solcast_how_to_find_keys">Solcast provide solar predictions based on your location. To sign up for free, visit https://solcast.com/free-rooftop-solar-forecasting and register for Hobbyist Access.\n\nOnce you\'ve signed up and have created your site(s) paste your API key below. Your API key can be found at https://toolkit.solcast.com.au by clicking the menu at the top right of the page.</string>

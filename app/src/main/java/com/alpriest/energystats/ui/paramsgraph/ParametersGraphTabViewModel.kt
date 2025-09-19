@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.EnergyStatsApplication
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.OpenHistoryResponse
+import com.alpriest.energystats.models.OpenHistoryResponseData
 import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.SolcastForecastResponse
+import com.alpriest.energystats.models.UnitData
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.solcastPrediction
@@ -24,6 +27,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
 import com.patrykandpatrick.vico.core.entry.ChartEntry
@@ -37,6 +41,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -157,7 +162,7 @@ class ParametersGraphTabViewModel(
             val start = queryDate.toUtcMillis()
             val end = start + (86400 * 1000)
 
-            val historyResponse = networking.fetchHistory(
+            val serverSpecifiedHistoryResponse = networking.fetchHistory(
                 device.deviceSN,
                 variables = rawGraphVariables,
                 start = start,
@@ -166,7 +171,9 @@ class ParametersGraphTabViewModel(
 
             yield()
 
-            val rawData: List<ParametersGraphValue> = historyResponse.datas.flatMap { response ->
+            val backfilledHistoryResponse = backfillMissingTimes(serverSpecifiedHistoryResponse)
+
+            val rawData: List<ParametersGraphValue> = backfilledHistoryResponse.datas.flatMap { response ->
                 val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
 
                 response.data.mapIndexed { index, item ->
@@ -378,6 +385,40 @@ class ParametersGraphTabViewModel(
 
     private fun getQueryDate(): Date {
         return queryDate.toDate()
+    }
+
+    private fun backfillMissingTimes(historyResponse: OpenHistoryResponse): OpenHistoryResponse {
+        return OpenHistoryResponse(
+            deviceSN = historyResponse.deviceSN,
+            datas = historyResponse.datas.map { backfillMissingTimes(it) }
+        )
+    }
+
+    private fun backfillMissingTimes(openHistoryResponseData: OpenHistoryResponseData): OpenHistoryResponseData {
+        if (openHistoryResponseData.data.size < 2) return openHistoryResponseData
+
+        val first = parseToLocalDateTime(openHistoryResponseData.data[0].time)
+        val second = parseToLocalDateTime(openHistoryResponseData.data[1].time)
+        val interval = Duration.between(first, second) // assume constant interval
+        val formatter = DateTimeFormatter.ofPattern(dateFormat)
+
+        val midnight = first.toLocalDate().atStartOfDay()
+
+        val backfilled = mutableListOf<UnitData>()
+        var t = first
+        while (t.isAfter(midnight)) {
+            t = t.minus(interval)
+            if (t.isAfter(midnight) || t.isEqual(midnight)) {
+                backfilled.add(0, UnitData(t.format(formatter), 0.0))
+            }
+        }
+
+        return OpenHistoryResponseData(
+            unit = openHistoryResponseData.unit,
+            variable = openHistoryResponseData.variable,
+            name = openHistoryResponseData.name,
+            data = backfilled + openHistoryResponseData.data
+        )
     }
 }
 
