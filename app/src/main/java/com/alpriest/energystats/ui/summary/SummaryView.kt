@@ -29,9 +29,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -71,18 +71,18 @@ class SummaryView(
     @Composable
     fun NavigableContent(
         topBarSettings: MutableState<TopBarSettings>,
-        navController: NavHostController,
         viewModel: SummaryTabViewModel = viewModel(factory = SummaryTabViewModelFactory(network, configManager)),
         themeStream: MutableStateFlow<AppTheme>
     ) {
         trackScreenView("Summary", "SummaryView")
+        val navController = rememberNavController()
 
         NavHost(
             navController = navController,
             startDestination = SummaryScreen.Overview.name
         ) {
             composable(SummaryScreen.Overview.name) {
-                topBarSettings.value = TopBarSettings(true, false, stringResource(R.string.summary_title), {
+                topBarSettings.value = TopBarSettings(true, stringResource(R.string.summary_title), {
                     ESButton(onClick = { navController.navigate("EditSummaryDateRanges") }) {
                         Image(
                             imageVector = Icons.Default.Edit,
@@ -90,12 +90,12 @@ class SummaryView(
                             colorFilter = ColorFilter.tint(Color.White)
                         )
                     }
-                })
+                }, null)
                 Content(viewModel, themeStream, Modifier)
             }
 
             composable(SummaryScreen.EditSummaryDateRanges.name) {
-                topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.summary_date_range), {})
+                topBarSettings.value = TopBarSettings(true, stringResource(R.string.summary_date_range), {}, { navController.popBackStack() })
                 EditSummaryView(Modifier, navController, viewModel)
             }
         }
@@ -239,7 +239,7 @@ class SummaryView(
 fun SummaryViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         PreviewContextHolder.context = LocalContext.current
-        val topBarSettings = remember { mutableStateOf(TopBarSettings(true, false, "Summary", { })) }
+        val topBarSettings = remember { mutableStateOf(TopBarSettings(true, "Summary", {}, null)) }
 
         SummaryView(
             FakeConfigManager(),
@@ -248,7 +248,6 @@ fun SummaryViewPreview() {
         ) { DemoSolarForecasting() }
             .NavigableContent(
                 topBarSettings,
-                navController = NavHostController(LocalContext.current),
                 themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true))
             )
     }

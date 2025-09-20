@@ -14,10 +14,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.alpriest.energystats.R
-import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -30,7 +30,7 @@ fun NavGraphBuilder.debugGraph(
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") {
-            topBarSettings.value = TopBarSettings(true, true, stringResource(R.string.view_debug_data), {})
+            topBarSettings.value = TopBarSettings(true, stringResource(R.string.view_debug_data), {}, null)
             DebugDataSettingsView(network, Modifier)
         }
     }

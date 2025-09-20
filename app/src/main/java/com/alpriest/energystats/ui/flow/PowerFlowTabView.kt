@@ -132,7 +132,7 @@ class PowerFlowTabView(
         val loadingBackground = remember { largeRadialGradient(listOf(Color.White, Color.Transparent)) }
         val loadedBackground = remember { largeRadialGradient(listOf(Sunny.copy(alpha = 0.7f), Color.Transparent)) }
         val errorBackground = remember { largeRadialGradient(listOf(Color.Red.copy(alpha = 0.7f), Color.Transparent)) }
-        topBarSettings.value = TopBarSettings(false, false, "", {})
+        topBarSettings.value = TopBarSettings(false, "", {}, null)
 
         val uiState = viewModel.uiState.collectAsStateWithLifecycle().value.state
         val showSunnyBackground = themeStream.collectAsStateWithLifecycle().value.showSunnyBackground

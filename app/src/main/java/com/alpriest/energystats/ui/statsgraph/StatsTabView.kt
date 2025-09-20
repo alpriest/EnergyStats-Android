@@ -34,13 +34,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
@@ -103,11 +103,11 @@ class StatsTabView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val tipKitManager = remember { TipKitManager() }
 
-        topBarSettings.value = TopBarSettings(true, false, "Stats", {
+        topBarSettings.value = TopBarSettings(true, "Stats", {
             StatsDatePickerView(viewModel.displayModeStream).Content(
                 graphShowingState = viewModel.showingGraphStream
             )
-        })
+        }, null)
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -200,7 +200,7 @@ class StatsTabView(
 @Composable
 fun StatsGraphTabViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        val topBarSettings = remember { mutableStateOf(TopBarSettings(false, false, "", {})) }
+        val topBarSettings = remember { mutableStateOf(TopBarSettings(false, "", {}, null)) }
 
         StatsTabView(
             topBarSettings,

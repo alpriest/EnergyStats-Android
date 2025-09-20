@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 
 data class TopBarSettings(
     val topBarVisible: Boolean,
-    val backButtonVisible: Boolean,
     val title: String,
-    val actions: @Composable RowScope.() -> Unit
+    val actions: @Composable RowScope.() -> Unit,
+    val backButtonAction: (() -> Unit)?
 )

@@ -7,15 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.alpriest.energystats.tabs.TopBarSettings
+import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserViewModel
@@ -48,11 +48,13 @@ class NavigableParametersGraphTabViewModel(val configManager: ConfigManaging) : 
                             }
                         }
 
-                        variables = variables.plus(ParameterGraphVariable(
-                            type = Variable.solcastPrediction,
-                            isSelected = selectedGraphVariables().contains(Variable.solcastPrediction.variable),
-                            enabled = true
-                        ))
+                        variables = variables.plus(
+                            ParameterGraphVariable(
+                                type = Variable.solcastPrediction,
+                                isSelected = selectedGraphVariables().contains(Variable.solcastPrediction.variable),
+                                enabled = true
+                            )
+                        )
 
                         graphVariablesStream.value = variables
                     }
@@ -78,7 +80,6 @@ class NavigableParametersGraphTabViewModelFactory(
 
 class NavigableParametersGraphTabView(
     val topBarSettings: MutableState<TopBarSettings>,
-    val navController: NavHostController,
     val configManager: ConfigManaging,
     val userManager: UserManaging,
     val network: Networking,
@@ -90,6 +91,7 @@ class NavigableParametersGraphTabView(
     @Composable
     fun Content(viewModel: NavigableParametersGraphTabViewModel = viewModel(factory = NavigableParametersGraphTabViewModelFactory(configManager))) {
         trackScreenView("Parameters Tab", "NavigableParametersGraphTabView")
+        val navController = rememberNavController()
 
         NavHost(
             navController = navController,
@@ -110,7 +112,7 @@ class NavigableParametersGraphTabView(
             }
 
             composable(ParametersScreen.ParameterChooser.name) {
-                topBarSettings.value = TopBarSettings(true, true, "Choose Parameters", {})
+                topBarSettings.value = TopBarSettings(true, "Choose Parameters", {}, { navController.popBackStack() })
 
                 ParameterGraphVariableChooserView(
                     configManager,
@@ -120,7 +122,7 @@ class NavigableParametersGraphTabView(
             }
 
             composable(ParametersScreen.ParameterGroupEditor.name) {
-                topBarSettings.value = TopBarSettings(true, true, "Edit Parameter Group", {})
+                topBarSettings.value = TopBarSettings(true, "Edit Parameter Group", {}, { navController.popBackStack() })
 
                 ParameterVariableGroupEditorView(
                     ParameterVariableGroupEditorViewModel(configManager, viewModel.graphVariablesStream),

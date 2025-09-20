@@ -30,7 +30,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
@@ -61,8 +60,7 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
         TitleItem(stringResource(R.string.settings_tab), Icons.Default.Settings, true)
     )
     val pagerState = rememberPagerState(pageCount = { titles.size } )
-    val navController = rememberNavController()
-    val topBarSettings = remember { mutableStateOf(TopBarSettings(false, false, "", {})) }
+    val topBarSettings = remember { mutableStateOf(TopBarSettings(false, "", {}, null)) }
 
     LaunchedEffect(dependencies.configManager.lastSettingsResetTime) {
         scope.launch {
@@ -81,9 +79,9 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
                         navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     navigationIcon = {
-                        if (topBarSettings.value.backButtonVisible) {
+                        topBarSettings.value.backButtonAction?.let {
                             IconButton(onClick = {
-                                navController.popBackStack()
+                                it()
                             }) {
                                 Icon(Icons.AutoMirrored.Default.ArrowBack, "backIcon")
                             }
@@ -103,7 +101,7 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
                 state = pagerState,
                 userScrollEnabled = false
             ) { page ->
-                TabbedViewPages(page, dependencies, topBarSettings, navController)
+                TabbedViewPages(page, dependencies, topBarSettings)
             }
         },
         bottomBar = {

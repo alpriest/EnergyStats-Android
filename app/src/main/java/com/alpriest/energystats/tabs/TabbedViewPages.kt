@@ -2,7 +2,6 @@ package com.alpriest.energystats.tabs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.navigation.NavHostController
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
@@ -10,7 +9,7 @@ import com.alpriest.energystats.ui.statsgraph.StatsTabView
 import com.alpriest.energystats.ui.summary.SummaryView
 
 @Composable
-fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSettings: MutableState<TopBarSettings>, navController: NavHostController) {
+fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSettings: MutableState<TopBarSettings>) {
     when (page) {
         0 -> PowerFlowTabView(
             topBarSettings,
@@ -35,7 +34,6 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
 
         2 -> NavigableParametersGraphTabView(
             topBarSettings,
-            navController,
             dependencies.configManager,
             dependencies.userManager,
             dependencies.network,
@@ -50,11 +48,10 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.userManager,
             dependencies.network,
             dependencies.solarForecastingProvider
-        ).NavigableContent(topBarSettings, navController, themeStream = dependencies.themeStream)
+        ).NavigableContent(topBarSettings, themeStream = dependencies.themeStream)
 
         4 -> NavigableSettingsView(
             topBarSettings,
-            navController,
             dependencies.configManager,
             dependencies.userManager,
             dependencies.onLogout,
