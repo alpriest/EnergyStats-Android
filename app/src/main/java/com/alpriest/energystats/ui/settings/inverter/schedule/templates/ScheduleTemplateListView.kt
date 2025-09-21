@@ -1,21 +1,35 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -38,12 +52,14 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.SettingsFooterView
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.OutlinedESButton
 
 class ScheduleTemplateListViewModelFactory(
     private val configManager: ConfigManaging,
@@ -119,6 +135,80 @@ class ScheduleTemplateListView(
             SettingsBottomSpace()
 
             CreateTemplateView(viewModel)
+
+            ExportImageViews(viewModel)
+        }
+    }
+
+    @Composable
+    fun ExportImageViews(viewModel: ScheduleTemplateListViewModel) {
+        Column {
+            ExportButton(viewModel)
+            ImportButton(viewModel)
+        }
+    }
+}
+
+@Composable
+fun ExportButton(viewModel: ScheduleTemplateListViewModel) {
+    var selectedFile by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json"),
+        onResult = { uri: Uri? ->
+            selectedFile = uri
+        }
+    )
+
+    OutlinedESButton(
+        onClick = {
+            launcher.launch("schedule_templates.json")
+        }
+    ) {
+        Row {
+            Icon(
+                imageVector = Icons.Default.Upload,
+                contentDescription = "Export",
+                modifier = Modifier.padding(end = 8.dp)
+            )
+
+            Text(stringResource(R.string.export_templates))
+        }
+
+        selectedFile?.let { uri ->
+            viewModel.exportTo(uri, context)
+        }
+    }
+}
+
+@Composable
+fun ImportButton(viewModel: ScheduleTemplateListViewModel) {
+    var selectedFile by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri: Uri? ->
+            selectedFile = uri
+        }
+    )
+
+    OutlinedESButton(
+        onClick = { launcher.launch(arrayOf("application/json")) }
+    ) {
+        Row {
+            Icon(
+                imageVector = Icons.Default.Download,
+                contentDescription = "Import",
+                modifier = Modifier.padding(end = 8.dp)
+            )
+
+            Text(stringResource(R.string.import_templates))
+        }
+
+        selectedFile?.let { uri ->
+            viewModel.importFrom(uri, context, replaceExistingTemplates = true)
         }
     }
 }
@@ -133,7 +223,7 @@ fun CreateTemplateView(viewModel: ScheduleTemplateListViewModel) {
     ) {
         Text(
             stringResource(id = R.string.create_new_template),
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = colorScheme.onPrimary,
         )
     }
 
@@ -150,7 +240,7 @@ fun CreateTemplateView(viewModel: ScheduleTemplateListViewModel) {
 @Preview(heightDp = 600, widthDp = 400)
 @Composable
 fun EditPhaseViewPreview() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         ScheduleTemplateListView(
             configManager = FakeConfigManager(),
             templateStore = PreviewTemplateStore(),

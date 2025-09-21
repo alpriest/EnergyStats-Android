@@ -68,7 +68,7 @@ data class SchedulePhase(
     val forceDischargeSOC: Int,
     val minSocOnGrid: Int,
     val color: Color,
-    val maxSoc: Int?
+    val maxSOC: Int?
 ) {
     constructor(
         start: Time,
@@ -78,8 +78,8 @@ data class SchedulePhase(
         forceDischargeSOC: Int,
         minSocOnGrid: Int,
         color: Color,
-        maxSoc: Int?
-    ) : this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargeSOC, minSocOnGrid, color, maxSoc)
+        maxSOC: Int?
+    ) : this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargeSOC, minSocOnGrid, color, maxSOC)
 
     companion object {
         fun create(
@@ -91,7 +91,7 @@ data class SchedulePhase(
             forceDischargeSOC: Int,
             batterySOC: Int,
             color: Color,
-            maxSoc: Int?
+            maxSOC: Int?
         ): SchedulePhase? {
             mode ?: return null
 
@@ -104,7 +104,7 @@ data class SchedulePhase(
                 forceDischargeSOC,
                 batterySOC,
                 color,
-                maxSoc
+                maxSOC
             )
         }
 
@@ -121,7 +121,7 @@ data class SchedulePhase(
                 minSOC,
                 minSOC,
                 color = color,
-                maxSoc = if (initialiseMaxSOC) 100 else null
+                maxSOC = if (initialiseMaxSOC) 100 else null
             )
         }
 
@@ -134,7 +134,7 @@ data class SchedulePhase(
                 forceDischargeSOC = 20,
                 batterySOC = 20,
                 color = Color.scheduleColor(WorkMode.SelfUse),
-                maxSoc = 100
+                maxSOC = 100
             )!!
         }
     }
@@ -164,7 +164,7 @@ data class SchedulePhase(
             minSocOnGrid = minSocOnGrid,
             fdSoc = forceDischargeSOC,
             fdPwr = forceDischargePower,
-            maxSoc = maxSoc
+            maxSoc = maxSOC
         )
     }
 }

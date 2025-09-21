@@ -460,4 +460,6 @@
     <string name="battery_state_of_charge">Stan naładowania baterii</string>
     <string name="show_battery_soc_on_daily_stats_description">Pokazuje poziom naładowania baterii w widoku dziennych statystyk.</string>
     <string name="show_battery_soc_on_daily_stats">Pokaż stan naładowania baterii w dziennych statystykach</string>
+    <string name="export_templates">Eksportuj szablony</string>
+    <string name="import_templates">Importuj szablony</string>
 </resources>

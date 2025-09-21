@@ -459,4 +459,6 @@
     <string name="battery_state_of_charge">Estado de carga de la batería</string>
     <string name="show_battery_soc_on_daily_stats_description">Muestra el nivel de carga de la batería en la vista diaria de estadísticas.</string>
     <string name="show_battery_soc_on_daily_stats">Mostrar el estado de carga de la batería en las estadísticas diarias</string>
+    <string name="export_templates">Exportar plantillas</string>
+    <string name="import_templates">Importar plantillas</string>
 </resources>

@@ -460,4 +460,6 @@
     <string name="battery_state_of_charge">Stato di carica della batteria</string>
     <string name="show_battery_soc_on_daily_stats_description">Mostra il livello di carica della batteria nella visualizzazione giornaliera delle statistiche.</string>
     <string name="show_battery_soc_on_daily_stats">Mostra lo stato di carica della batteria nelle statistiche giornaliere</string>
+    <string name="export_templates">Esporta modelli</string>
+    <string name="import_templates">Importa modelli</string>
 </resources>

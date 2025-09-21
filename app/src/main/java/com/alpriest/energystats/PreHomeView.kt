@@ -86,7 +86,7 @@ class PreHomeViewModel(
                 minSocOnGrid == other.minSocOnGrid &&
                 forceDischargePower == other.forceDischargePower &&
                 forceDischargeSOC == other.forceDischargeSOC &&
-                maxSoc == other.maxSoc
+                maxSOC == other.maxSOC
     }
 }
 

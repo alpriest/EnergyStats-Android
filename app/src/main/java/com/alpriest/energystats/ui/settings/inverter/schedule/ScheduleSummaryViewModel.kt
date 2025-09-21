@@ -223,7 +223,7 @@ private fun ScheduleResponse.supportsPeakShaving(): Boolean {
 }
 
 private fun Schedule.supportsMaxSOC(): Boolean {
-    return phases.any { it.maxSoc != null }
+    return phases.any { it.maxSOC != null }
 }
 
 fun errorMessage(exception: Exception, context: Context): String {
@@ -251,6 +251,6 @@ internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
         forceDischargeSOC = fdSoc,
         batterySOC = minSocOnGrid,
         color = Color.scheduleColor(workMode),
-        maxSoc = maxSoc
+        maxSOC = maxSoc
     )
 }

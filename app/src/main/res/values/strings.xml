@@ -464,4 +464,6 @@
     <string name="battery_state_of_charge">Battery state of charge</string>
     <string name="show_battery_soc_on_daily_stats_description">Shows the battery charge level when looking at the daily stats view.</string>
     <string name="show_battery_soc_on_daily_stats">Show battery SOC on daily stats</string>
+    <string name="export_templates">Export templates</string>
+    <string name="import_templates">Import templates</string>
 </resources>

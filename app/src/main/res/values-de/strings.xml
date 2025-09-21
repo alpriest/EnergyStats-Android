@@ -459,4 +459,6 @@
     <string name="battery_state_of_charge">Batterieladezustand</string>
     <string name="show_battery_soc_on_daily_stats_description">Zeigt den Ladezustand der Batterie in der Tagesansicht der Statistiken an.</string>
     <string name="show_battery_soc_on_daily_stats">Batterie-Ladezustand in der Tagesstatistik anzeigen</string>
+    <string name="export_templates">Vorlagen exportieren</string>
+    <string name="import_templates">Vorlagen importieren</string>
 </resources>

@@ -76,7 +76,7 @@ class SchedulePhaseHelper {
                 forceDischargeSOC = soc,
                 minSocOnGrid = soc,
                 color = Color.scheduleColor(mode),
-                maxSoc = if (initialiseMaxSOC) 100 else null
+                maxSOC = if (initialiseMaxSOC) 100 else null
             )
         }
 

@@ -45,8 +45,8 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
             forceDischargePowerStream.value = originalPhase.forceDischargePower.toString()
             forceDischargeSOCStream.value = originalPhase.forceDischargeSOC.toString()
             minSOCStream.value = originalPhase.minSocOnGrid.toString()
-            showMaxSocStream.value = originalPhase.maxSoc != null
-            originalPhase.maxSoc?.let { maxSocStream.value = it.toString() }
+            showMaxSocStream.value = originalPhase.maxSOC != null
+            originalPhase.maxSOC?.let { maxSocStream.value = it.toString() }
         }
 
         modes = EditScheduleStore.modes(configManager)
@@ -142,7 +142,7 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
             forceDischargeSOC = forceDischargeSOCStream.value.toIntOrNull() ?: 0,
             batterySOC = minSOCStream.value.toIntOrNull() ?: 0,
             color = Color.scheduleColor(workModeStream.value),
-            maxSoc = if (showMaxSocStream.value) maxSocStream.value.toIntOrNull() else null
+            maxSOC = if (showMaxSocStream.value) maxSocStream.value.toIntOrNull() else null
         )
 
         validate(context)

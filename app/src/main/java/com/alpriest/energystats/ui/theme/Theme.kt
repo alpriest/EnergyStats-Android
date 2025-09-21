@@ -10,12 +10,14 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -99,4 +101,23 @@ fun ESButton(
     ) {
         content()
     }
+}
+
+@Composable
+fun OutlinedESButton(
+    onClick: () -> Unit,
+    content: @Composable RowScope.() -> Unit
+) {
+    ESButton(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors().copy(
+            containerColor = Color.Transparent,
+            contentColor = colorScheme.primary
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            brush = SolidColor(colorScheme.primary)
+        ),
+        content = content
+    )
 }

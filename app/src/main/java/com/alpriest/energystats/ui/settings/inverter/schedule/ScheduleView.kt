@@ -43,7 +43,7 @@ internal fun Schedule.Companion.preview(): Schedule {
                 forceDischargeSOC = 100,
                 batterySOC = 100,
                 color = Color.scheduleColor(WorkMode.ForceCharge),
-                maxSoc = 100
+                maxSOC = 100
             ),
             SchedulePhase.create(
                 start = Time(hour = 8, minute = 0),
@@ -53,7 +53,7 @@ internal fun Schedule.Companion.preview(): Schedule {
                 forceDischargeSOC = 20,
                 batterySOC = 20,
                 color = Color.scheduleColor(WorkMode.ForceDischarge),
-                maxSoc = 100
+                maxSOC = 100
             ),
             SchedulePhase.create(
                 start = Time(hour = 19, minute = 30),
@@ -63,7 +63,7 @@ internal fun Schedule.Companion.preview(): Schedule {
                 forceDischargeSOC = 20,
                 batterySOC = 20,
                 color = Color.scheduleColor(WorkMode.SelfUse),
-                maxSoc = 100
+                maxSOC = 100
             )
         )
     )
