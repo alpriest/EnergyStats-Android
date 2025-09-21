@@ -13,12 +13,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -184,18 +186,22 @@ fun ExportButton(viewModel: ScheduleTemplateListViewModel) {
 
 @Composable
 fun ImportButton(viewModel: ScheduleTemplateListViewModel) {
-    var selectedFile by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
+    var pendingImportUri by remember { mutableStateOf<Uri?>(null) }
+    var showConfirm by remember { mutableStateOf(false) }
+    var replaceExistingTemplates by remember { mutableStateOf(false) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
         onResult = { uri: Uri? ->
-            selectedFile = uri
+            if (uri != null) {
+                pendingImportUri = uri
+            }
         }
     )
 
     OutlinedESButton(
-        onClick = { launcher.launch(arrayOf("application/json")) }
+        onClick = { showConfirm = true }
     ) {
         Row {
             Icon(
@@ -206,10 +212,40 @@ fun ImportButton(viewModel: ScheduleTemplateListViewModel) {
 
             Text(stringResource(R.string.import_templates))
         }
+    }
 
-        selectedFile?.let { uri ->
-            viewModel.importFrom(uri, context, replaceExistingTemplates = true)
-        }
+    if (showConfirm) {
+        AlertDialog(
+            onDismissRequest = {
+                showConfirm = false
+                pendingImportUri = null
+            },
+            title = { Text(stringResource(R.string.import_templates)) },
+            text = { Text(stringResource(R.string.do_you_want_to_replace_your_existing_templates_with_the_imported_templates)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showConfirm = false
+                    replaceExistingTemplates = true
+                    launcher.launch(arrayOf("application/json"))
+                }) {
+                    Text(stringResource(R.string.yes))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showConfirm = false
+                    replaceExistingTemplates = false
+                    launcher.launch(arrayOf("application/json"))
+                }) {
+                    Text(stringResource(R.string.no))
+                }
+            }
+        )
+    }
+
+    pendingImportUri?.let {
+        pendingImportUri?.let { viewModel.importFrom(it, context, replaceExistingTemplates) }
+        pendingImportUri = null
     }
 }
 

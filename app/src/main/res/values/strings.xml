@@ -466,4 +466,7 @@
     <string name="show_battery_soc_on_daily_stats">Show battery SOC on daily stats</string>
     <string name="export_templates">Export templates</string>
     <string name="import_templates">Import templates</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="do_you_want_to_replace_your_existing_templates_with_the_imported_templates">Do you want to replace your existing templates with the imported templates?</string>
 </resources>
