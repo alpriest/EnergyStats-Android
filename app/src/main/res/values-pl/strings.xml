@@ -448,7 +448,7 @@
     <string name="self_sufficiency_settings">Ustawienia samowystarczalności</string>
     <string name="will_not_be_reset">Nie zostanie zresetowane:</string>
     <string name="display_settings">Ustawienia wyświetlania</string>
-    <string name="peak_shaving_explanation">Twój system monitoruje moc importowaną z sieci. Jeśli import przekracza Twój limit importu wynoszący %1$@, a poziom naładowania baterii (SOC) przekracza %2$@%%, system rozładowuje baterię, aby zaspokoić nadmiarowe zapotrzebowanie, tym samym „ścina” szczytowe obciążenie z sieci.\\n\\nTa operacja trwa, dopóki poziom naładowania baterii (SOC) pozostaje powyżej określonego progu.\\n\\nFunkcja Peak Shaving działa tylko wtedy, gdy tryb Peak Shaving jest włączony w harmonogramie falownika.</string>
+    <string name="peak_shaving_explanation">Twój system monitoruje moc importowaną z sieci. Jeśli import przekracza Twój limit importu wynoszący %1$s, a poziom naładowania baterii (SOC) przekracza %2$s%%, system rozładowuje baterię, aby zaspokoić nadmiarowe zapotrzebowanie, tym samym „ścina” szczytowe obciążenie z sieci.\\n\\nTa operacja trwa, dopóki poziom naładowania baterii (SOC) pozostaje powyżej określonego progu.\\n\\nFunkcja Peak Shaving działa tylko wtedy, gdy tryb Peak Shaving jest włączony w harmonogramie falownika.</string>
     <string name="force_charge">Wymuszone ładowanie</string>
     <string name="force_discharge">Wymuszone rozładowanie</string>
     <string name="time_period_missing_warning">Wszystkie okresy czasu niewymienione powyżej domyślnie przejdą w tryb własnego zużycia, używając minimalnego SOC z ostatniego aktywnego okresu.</string>

@@ -448,7 +448,7 @@
     <string name="self_sufficiency_settings">Impostazioni di autosufficienza</string>
     <string name="will_not_be_reset">Non verrà reimpostato:</string>
     <string name="display_settings">Impostazioni di visualizzazione</string>
-    <string name="peak_shaving_explanation">Il tuo sistema monitora l’energia importata dalla rete. Se l’importazione supera il tuo limite di importazione di %1$@ e lo stato di carica (SOC) della batteria è superiore a %2$@%%, il sistema scarica la batteria per soddisfare la domanda in eccesso, riducendo così il carico di picco dalla rete.\\n\\nQuesta operazione continua finché lo stato di carica (SOC) della batteria rimane sopra una certa soglia.\\n\\nIl Peak Shaving funziona solo quando la modalità Peak Shaving è attivata dal pianificatore dell’inverter.</string>
+    <string name="peak_shaving_explanation">Il tuo sistema monitora l’energia importata dalla rete. Se l’importazione supera il tuo limite di importazione di %1$s e lo stato di carica (SOC) della batteria è superiore a %2$s%%, il sistema scarica la batteria per soddisfare la domanda in eccesso, riducendo così il carico di picco dalla rete.\\n\\nQuesta operazione continua finché lo stato di carica (SOC) della batteria rimane sopra una certa soglia.\\n\\nIl Peak Shaving funziona solo quando la modalità Peak Shaving è attivata dal pianificatore dell’inverter.</string>
     <string name="force_charge">Carica forzata</string>
     <string name="force_discharge">Scarica forzata</string>
     <string name="time_period_missing_warning">Tutti i periodi non specificati sopra verranno impostati di default sulla modalità di autoconsumo, utilizzando il SOC minimo del periodo attivo più recente.</string>
