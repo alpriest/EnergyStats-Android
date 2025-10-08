@@ -462,4 +462,8 @@
     <string name="show_battery_soc_on_daily_stats">Mostra lo stato di carica della batteria nelle statistiche giornaliere</string>
     <string name="export_templates">Esporta modelli</string>
     <string name="import_templates">Importa modelli</string>
+    <string name="no">No</string>
+    <string name="do_you_want_to_replace_your_existing_templates_with_the_imported_templates">Vuoi sostituire i tuoi modelli esistenti con quelli importati?</string>
+    <string name="invalid_api_key_format">La tua chiave API sembra avere un formato errato.</string>
+    <string name="yes">Si</string>
 </resources>

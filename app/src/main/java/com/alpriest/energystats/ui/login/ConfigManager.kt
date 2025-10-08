@@ -423,7 +423,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         } catch (ex: SocketTimeoutException) {
             throw ex
         } catch (ex: Exception) {
-            throw DataFetchFailure("Failed to load Device or Battery Settings ($method)", ex)
+            throw ex
         }
     }
 

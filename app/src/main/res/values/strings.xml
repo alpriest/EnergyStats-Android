@@ -469,4 +469,5 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="do_you_want_to_replace_your_existing_templates_with_the_imported_templates">Do you want to replace your existing templates with the imported templates?</string>
+    <string name="invalid_api_key_format">Your API key appears to be in the wrong format.</string>
 </resources>

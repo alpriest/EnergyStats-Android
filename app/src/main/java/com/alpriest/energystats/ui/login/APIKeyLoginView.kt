@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.login
 
-import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -50,9 +49,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeUserManager
@@ -67,38 +63,6 @@ import com.alpriest.energystats.ui.theme.Sunny
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-
-class APIKeyLoginViewModelFactory(
-    private val userManager: UserManaging
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return APIKeyLoginViewModel(userManager) as T
-    }
-}
-
-class APIKeyLoginViewModel(
-    private val userManager: UserManaging
-) : ViewModel() {
-    var errorMessageStream = MutableStateFlow<String?>(null)
-    var apiKeyStream = MutableStateFlow<String>("")
-
-    init {
-        viewModelScope.launch {
-            userManager.loggedInState.collect {
-                if (it.loadState is LoggedOut) errorMessageStream.value = it.loadState.reason
-            }
-        }
-    }
-
-    suspend fun onLogin(apiKey: String, context: Context) {
-        userManager.login(apiKey.trim(), context)
-    }
-
-    suspend fun onDemoLogin() {
-        userManager.loginDemo()
-    }
-}
 
 class APIKeyLoginView(private val userManager: UserManaging) {
     @Composable
@@ -164,7 +128,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                     .padding(vertical = 24.dp)
             ) {
                 ESButton(
-                    colors = ButtonDefaults.buttonColors(containerColor = colorScheme.background),
+                    colors = ButtonDefaults.buttonColors(containerColor = colorScheme.surfaceContainer),
                     onClick = { scope.launch { viewModel.onDemoLogin() } }
                 ) {
                     Text(
@@ -215,7 +179,7 @@ class HowToObtainAPIKeyView {
             ESButton(
                 onClick = { showing.value = !showing.value },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = colorScheme.background,
+                    containerColor = colorScheme.surfaceContainer,
                     contentColor = colorScheme.onSecondary
                 ),
                 modifier = Modifier.padding(top = 16.dp)

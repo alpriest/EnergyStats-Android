@@ -461,4 +461,8 @@
     <string name="show_battery_soc_on_daily_stats">Mostrar el estado de carga de la batería en las estadísticas diarias</string>
     <string name="export_templates">Exportar plantillas</string>
     <string name="import_templates">Importar plantillas</string>
+    <string name="no">No</string>
+    <string name="do_you_want_to_replace_your_existing_templates_with_the_imported_templates">¿Quieres reemplazar tus plantillas existentes con las plantillas importadas?</string>
+    <string name="invalid_api_key_format">Tu clave API parece tener un formato incorrecto.</string>
+    <string name="yes">Si</string>
 </resources>

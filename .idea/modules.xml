@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Energy_Stats.iml" filepath="$PROJECT_DIR$/.idea/modules/Energy_Stats.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Energy_Stats.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Energy_Stats.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Energy_Stats.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Energy_Stats.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Energy_Stats.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Energy_Stats.app.main.iml" />

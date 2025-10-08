@@ -462,4 +462,8 @@
     <string name="show_battery_soc_on_daily_stats">Pokaż stan naładowania baterii w dziennych statystykach</string>
     <string name="export_templates">Eksportuj szablony</string>
     <string name="import_templates">Importuj szablony</string>
+    <string name="no">Nie</string>
+    <string name="do_you_want_to_replace_your_existing_templates_with_the_imported_templates">Czy chcesz zastąpić swoje istniejące szablony zaimportowanymi szablonami?</string>
+    <string name="invalid_api_key_format">Twój klucz API wydaje się mieć nieprawidłowy format.</string>
+    <string name="yes">Tak</string>
 </resources>

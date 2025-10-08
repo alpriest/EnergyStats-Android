@@ -73,7 +73,14 @@ class UserManager(
             _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: BadCredentialsException) {
             logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.wrong_credentials_try_again)))
+            if (apiKey.isValidApiKey) {
+                _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.wrong_credentials_try_again)))
+            } else {
+                _loggedInState.value = LoginStateHolder(LoggedOut(
+                    context.getString(R.string.invalid_api_key_format) + "\n\n" +
+                    context.getString(R.string.what_is_api_key_3)
+                ))
+            }
         } catch (e: InvalidTokenException) {
             logout()
             _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.invalid_token_logout_not_required)))
@@ -100,4 +107,7 @@ class UserManager(
     }
 }
 
+private val apiKeyRegex = Regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+val String.isValidApiKey: Boolean
+    get() = apiKeyRegex.matches(this)
