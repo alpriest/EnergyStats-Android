@@ -26,7 +26,7 @@ import kotlin.math.max
 @Composable
 fun Line(amount: Double, color: Color, modifier: Modifier, theme: AppTheme, orientation: LineOrientation, isFlowing: Boolean) {
     val phaseAnimation = rememberInfiniteTransition()
-    val strokeWidth: Float = theme.strokeWidth()
+    val strokeWidth = theme.strokeWidth()
     val initialValue = if (amount > 0) {
         40f
     } else {
@@ -76,7 +76,7 @@ fun Line(amount: Double, color: Color, modifier: Modifier, theme: AppTheme, orie
                             start = Offset(0f, size.height / 2.0f),
                             end = Offset(size.width, size.height / 2.0f),
                             pathEffect = if (isFlowing) dashedPathEffect else solidPathEffect,
-                            strokeWidth = 8.0f
+                            strokeWidth = strokeWidth
                         )
                 }
             }
