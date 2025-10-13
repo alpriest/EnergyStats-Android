@@ -67,7 +67,6 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import com.alpriest.energystats.ui.theme.demo
-import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
@@ -76,7 +75,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ShimmerText(
     shimmering: Boolean,
-    shimmerInstance: Shimmer? = null,
     text: String,
     color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
@@ -84,7 +82,7 @@ fun ShimmerText(
 ) {
     Box(modifier = Modifier.let {
         if (shimmering) {
-            it.shimmer(shimmerInstance)
+            it.shimmer()
         } else {
             it
         }
@@ -126,7 +124,6 @@ fun LoadedPowerFlowView(
         if (theme.totalYieldModel != TotalYieldModel.Off) {
             ShimmerText(
                 shimmering = solarTotal == null,
-                shimmerInstance = shimmerInstance,
                 text = stringResource(
                     id = R.string.solarYieldToday,
                     (solarTotal?.todayGeneration ?: 0.0).energy(theme.displayUnit, 1)

@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId = "com.alpriest.energystats"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 296
         versionName = "2.138"
 
@@ -29,7 +29,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.7.0"
     }
     buildTypes {
         release {
@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.compose.bom))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation)
@@ -61,7 +62,6 @@ dependencies {
     implementation(libs.compose.markdown)
     implementation(libs.glance.appwidget)
     implementation(libs.glance.material3)
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.shimmer)

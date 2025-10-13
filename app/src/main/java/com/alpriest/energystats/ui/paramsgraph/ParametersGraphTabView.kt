@@ -106,7 +106,7 @@ class ParametersGraphTabView(
         val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
         val context = LocalContext.current
         val loadState = viewModel.uiState.collectAsState().value.state
-        topBarSettings.value = TopBarSettings(true, "Parameters", {
+        topBarSettings.value = TopBarSettings(true, null, {
             ParameterGraphHeaderView(viewModel = viewModel, navController = navController, configManager = configManager)
         }, null)
 

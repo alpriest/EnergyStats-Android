@@ -3,15 +3,24 @@ package com.alpriest.energystats
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.alpriest.energystats.ui.summary.PreviewContextHolder.context
+import com.alpriest.energystats.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -36,13 +45,6 @@ class MainActivity : ComponentActivity() {
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = true
 
         setContent {
-            val systemUiController = rememberSystemUiController()
-            if (isDarkMode(appContainer.configManager.themeStream)) {
-                SideEffect {
-                    systemUiController.setSystemBarsColor(Color.Black, darkIcons = false)
-                }
-            }
-
             PreHomeView(appContainer = appContainer, viewModel = preHomeViewModel)
         }
     }
@@ -50,9 +52,33 @@ class MainActivity : ComponentActivity() {
 
 fun parseToLocalDateTime(input: String): LocalDateTime {
     val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(input)
-    if (simpleDate != null) {
-        return simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+    return if (simpleDate != null) {
+        simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
     } else {
-        return LocalDateTime.now()
+        LocalDateTime.now()
+    }
+}
+
+@Composable
+fun SystemBars(
+    statusBarDarkIcons: Boolean,
+    navigationBarDarkIcons: Boolean = false,
+    statusBarScrim: Color = Color.Transparent,
+    navigationBarScrim: Color = Color.Transparent
+) {
+    val activity = LocalContext.current as ComponentActivity
+    SideEffect {
+        activity.enableEdgeToEdge(
+            statusBarStyle =
+                if (statusBarDarkIcons)
+                    SystemBarStyle.light(statusBarScrim.toArgb(), statusBarScrim.toArgb()) // dark icons
+                else
+                    SystemBarStyle.dark(statusBarScrim.toArgb()), // light icons
+            navigationBarStyle =
+                if (navigationBarDarkIcons)
+                    SystemBarStyle.light(navigationBarScrim.toArgb(), navigationBarScrim.toArgb())
+                else
+                    SystemBarStyle.dark(navigationBarScrim.toArgb())
+        )
     }
 }

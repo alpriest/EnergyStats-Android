@@ -10,6 +10,8 @@ import com.alpriest.energystats.ui.summary.SummaryView
 
 @Composable
 fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSettings: MutableState<TopBarSettings>) {
+    ConfigureStatusBarColours(page, dependencies.themeStream)
+
     when (page) {
         0 -> PowerFlowTabView(
             topBarSettings,

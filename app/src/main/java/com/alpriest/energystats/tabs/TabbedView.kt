@@ -88,7 +88,9 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
                         }
                     },
                     title = {
-                        Text(topBarSettings.value.title)
+                        topBarSettings.value.title?.let {
+                            Text(it)
+                        }
                     },
                     actions = topBarSettings.value.actions
                 )

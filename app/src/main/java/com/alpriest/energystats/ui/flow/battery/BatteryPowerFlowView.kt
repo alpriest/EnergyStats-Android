@@ -38,6 +38,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BatteryPowerFlow(
@@ -61,7 +62,7 @@ fun BatteryPowerFlow(
 }
 
 @Composable
-fun isDarkMode(themeStream: MutableStateFlow<AppTheme>): Boolean {
+fun isDarkMode(themeStream: StateFlow<AppTheme>): Boolean {
     return isDarkMode(colorTheme = themeStream.collectAsStateWithLifecycle().value.colorTheme)
 }
 

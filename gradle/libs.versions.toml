@@ -1,26 +1,24 @@
 [versions]
 agp = "8.13.0"
-firebaseBom = "33.16.0"
-kotlin = "2.0.20"
-coreKtx = "1.16.0"
+firebaseBom = "34.4.0"
+composeBom = "2025.10.00"
+kotlin = "2.2.20"
+coreKtx = "1.17.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
+junitVersion = "1.3.0"
 appcompat = "1.7.1"
-material3 = "1.3.2"
 glance = "1.1.1"
-material-icons = "1.7.8"
-accompanist = "0.27.0"
-gson = "2.11.0"
-navigationKtx = "2.9.2"
-coil = "2.5.0"
+gson = "2.13.2"
+navigationKtx = "2.9.5"
+coil = "2.7.0"
 composeMarkdown = "0.3.5"
-shimmer = "1.3.0"
+shimmer = "1.3.3"
 vico = "1.14.0"
-lifecycle = "2.9.2"
-okhttp = "4.12.0"
-composeActivity = "1.10.1"
-googleGmsGoogleServices = "4.4.3"
-chucker = "3.5.2"
+lifecycle = "2.9.4"
+okhttp = "5.2.1"
+composeActivity = "1.11.0"
+googleGmsGoogleServices = "4.4.4"
+chucker = "4.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,22 +28,21 @@ firebase-inappmessaging-display = { module = "com.google.firebase:firebase-inapp
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons" }
-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref ="material3" }
-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "composeActivity" }
+material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
 glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
-accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
-accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "composeActivity" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-navigation = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationKtx" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationKtx" }
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 compose-markdown = { group = "com.github.jeziellago", name = "compose-markdown", version.ref = "composeMarkdown" }
+androidx-navigation = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationKtx" }
 shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version.ref = "shimmer" }
 vico = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }

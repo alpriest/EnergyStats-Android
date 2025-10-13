@@ -103,7 +103,7 @@ class StatsTabView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val tipKitManager = remember { TipKitManager() }
 
-        topBarSettings.value = TopBarSettings(true, "Stats", {
+        topBarSettings.value = TopBarSettings(true, null, {
             StatsDatePickerView(viewModel.displayModeStream).Content(
                 graphShowingState = viewModel.showingGraphStream
             )
