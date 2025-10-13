@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -334,6 +335,7 @@ fun showExportMethodSelection(context: Context, filename: String, filePathChoose
         .show()
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview
 @Composable
 fun PreviewParameterGraphHeaderView() {
