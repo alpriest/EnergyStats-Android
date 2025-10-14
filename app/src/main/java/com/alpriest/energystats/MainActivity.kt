@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
             appContainer.solarForecastingProvider
         )
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = true
 
         setContent {
             PreHomeView(appContainer = appContainer, viewModel = preHomeViewModel)
