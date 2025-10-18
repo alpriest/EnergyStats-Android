@@ -2,9 +2,11 @@ package com.alpriest.energystats.ui.settings.devicesettings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -13,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -35,7 +36,8 @@ import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -85,7 +87,7 @@ class DeviceSettingItemView(
             append(viewModel.item.behaviour(context))
             append("\n\n")
 
-            withStyle(style = SpanStyle(color = Color.Red)) {
+            withStyle(style = SpanStyle(color = colorScheme.error)) {
                 append(stringResource(R.string.device_settings_warning))
             }
         }
@@ -94,9 +96,7 @@ class DeviceSettingItemView(
             viewModel.save()
         }, content = { modifier ->
             SettingsPage(modifier) {
-                SettingsColumnWithChild(
-                    footerAnnotatedString = annotatedString
-                ) {
+                SettingsColumn {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -111,11 +111,17 @@ class DeviceSettingItemView(
                             value = value,
                             onValueChange = { viewModel.valueStream.value = it.filter { it.isDigit() } },
                             modifier = Modifier.width(130.dp),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
-                            trailingIcon = { Text(unit, color = MaterialTheme.colorScheme.onSecondary) }
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                            trailingIcon = { Text(unit, color = colorScheme.onSecondary) }
                         )
                     }
                 }
+
+                Text(
+                    annotatedString,
+                    color = colorScheme.onSecondary,
+                    modifier = Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)
+                )
             }
         })
     }

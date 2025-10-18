@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -73,7 +72,7 @@ fun ErrorView(cause: Exception?, reason: String, allowRetry: Boolean, onRetry: s
     ) {
         Icon(
             Icons.Rounded.ErrorOutline,
-            tint = Color.Red,
+            tint = colorScheme.error,
             contentDescription = "",
             modifier = Modifier
                 .size(128.dp)

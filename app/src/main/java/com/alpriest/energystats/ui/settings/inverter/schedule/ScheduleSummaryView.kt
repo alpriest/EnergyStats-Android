@@ -197,6 +197,12 @@ class ScheduleSummaryView(
                 color = colorScheme.onSecondary,
                 modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)
             )
+
+            Text(
+                stringResource(R.string.about_59_seconds),
+                color = colorScheme.onSecondary,
+                modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_INNER_HORIZONTAL)
+            )
         }
     }
 

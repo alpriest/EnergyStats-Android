@@ -1,7 +1,5 @@
 package com.alpriest.energystats.ui.settings.battery
 
-import android.app.TimePickerDialog
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -96,6 +94,7 @@ class BatteryChargeScheduleSettingsView(
                 onRetry = { viewModel.load(context) },
                 onLogout = { userManager.logout() }
             )
+
             is LoadState.Inactive ->
                 ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save(context) }, { innerModifier ->
                     SettingsPage(innerModifier) {
@@ -104,7 +103,6 @@ class BatteryChargeScheduleSettingsView(
 
                         SettingsColumn(
                             header = stringResource(R.string.schedule_summary),
-                            footer = stringResource(R.string.about_59_seconds),
                             padding = SettingsPaddingValues.withVertical()
                         ) {
                             Text(
@@ -147,7 +145,8 @@ class BatteryChargeScheduleSettingsView(
                 timePeriod.start,
                 TimeType.START,
                 stringResource(R.string.start),
-                labelStyle = TextStyle(color = textColor.value)
+                labelStyle = TextStyle(color = textColor.value),
+                includeSeconds = false
             ) { hour, minute ->
                 timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
             }
@@ -158,7 +157,8 @@ class BatteryChargeScheduleSettingsView(
                 timePeriod.end,
                 TimeType.END,
                 stringResource(R.string.end),
-                labelStyle = TextStyle(color = textColor.value)
+                labelStyle = TextStyle(color = textColor.value),
+                includeSeconds = false
             ) { hour, minute ->
                 timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
             }
@@ -172,46 +172,6 @@ class BatteryChargeScheduleSettingsView(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun TimePeriodView(
-    time: Time,
-    timeType: TimeType,
-    title: String,
-    labelStyle: TextStyle,
-    textStyle: TextStyle = TextStyle.Default,
-    modifier: Modifier = Modifier,
-    onChange: (Int, Int) -> Unit
-) {
-    val dialog = TimePickerDialog(
-        LocalContext.current, { _, mHour: Int, mMinute: Int ->
-            onChange(mHour, mMinute)
-        },
-        time.hour,
-        time.minute,
-        true
-    )
-
-    Row(
-        verticalAlignment = CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Text(
-            title,
-            style = labelStyle,
-            color = colorScheme.onSecondary,
-        )
-
-        Text(
-            "${"%02d".format(time.hour)}:${"%02d".format(time.minute)}:" + timeType.appendage(),
-            style = textStyle,
-            color = colorScheme.onSecondary,
-            modifier = Modifier.clickable {
-                dialog.show()
-            })
     }
 }
 

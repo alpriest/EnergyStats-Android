@@ -29,6 +29,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val boundsValues = viewModel.boundsStream.collectAsState().value
     val appTheme = themeStream.collectAsState().value
+    val context = LocalContext.current
 
     Column(modifier) {
         graphVariables.value
@@ -36,7 +37,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
             .filter { unit == null || it.type.unit == unit }
             .map {
                 val selectedValue = selectedValues.firstOrNull { entry -> entry.type == it.type }
-                val titleType = if (selectedValue == null) ValueUsage.TOTAL else ValueUsage.SNAPSHOT
+                val titleType = ValueUsage.SNAPSHOT
 
                 val title = when (it.type.variable) {
                     "generationPower" -> stringResource(R.string.output) + title(titleType)
@@ -48,7 +49,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
                     else -> it.type.name
                 }
 
-                val id = LocalContext.current.resources.getIdentifier("rawvariable_${it.type.variable.lowercase()}", "string", LocalContext.current.applicationInfo.packageName)
+                val id = context.resources.getIdentifier("rawvariable_${it.type.variable.lowercase()}", "string", LocalContext.current.applicationInfo.packageName)
                 val description: String? = if (id > 0) {
                     stringResource(id)
                 } else {

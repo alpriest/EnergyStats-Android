@@ -144,6 +144,7 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging
             TimeType.START,
             stringResource(R.string.start_time),
             labelStyle = TextStyle.Default,
+            includeSeconds = false,
             modifier = Modifier
                 .background(colorScheme.surface)
                 .padding(vertical = 14.dp)
@@ -154,6 +155,7 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging
             TimeType.END,
             stringResource(R.string.end_time),
             labelStyle = TextStyle.Default,
+            includeSeconds = false,
             modifier = Modifier
                 .background(colorScheme.surface)
                 .padding(vertical = 14.dp)
