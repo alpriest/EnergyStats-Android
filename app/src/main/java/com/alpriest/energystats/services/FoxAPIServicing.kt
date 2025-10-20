@@ -26,7 +26,7 @@ import com.alpriest.energystats.ui.statsgraph.ReportType
 class InvalidConfigurationException(message: String?) : Exception(message)
 class InvalidTokenException : Exception("Invalid Token")
 class BadCredentialsException : Exception("Bad Credentials")
-class TryLaterException : Exception("Try Later")
+class TryLaterException : Exception("You have exceeded your free daily limit of requests. Please try tomorrow.")
 class MaintenanceModeException : Exception("Fox servers are offline. Please try later.")
 class MissingDataException : Exception("Missing data")
 class FoxServerError(val errno: Int, message: String?) : Exception("Fox OpenAPI servers returned error code: $errno $message.")

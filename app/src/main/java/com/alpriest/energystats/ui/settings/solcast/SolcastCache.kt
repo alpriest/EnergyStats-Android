@@ -9,12 +9,15 @@ import com.alpriest.energystats.models.SolcastSiteResponseList
 import com.alpriest.energystats.services.TryLaterException
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.nio.charset.Charset
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
+import java.util.concurrent.ConcurrentHashMap
 
 interface SolcastCaching {
     suspend fun fetchSites(apiKey: String): SolcastSiteResponseList
@@ -26,28 +29,35 @@ class SolcastCache(
     private val context: Context
 ) : SolcastCaching {
 
+    private val sitesLock = Mutex()
+    private val siteLocks = ConcurrentHashMap<String, Mutex>()
+
+    private fun lockFor(resourceId: String): Mutex = siteLocks.getOrPut(resourceId) { Mutex() }
+
     override suspend fun fetchSites(apiKey: String): SolcastSiteResponseList {
-        return service.fetchSites(apiKey)
+        return sitesLock.withLock {
+            service.fetchSites(apiKey)
+        }
     }
 
     override suspend fun fetchForecast(site: SolcastSite, apiKey: String, ignoreCache: Boolean): SolcastForecastList {
-        return getCachedData(site.resourceId)?.let { cachedData ->
-            val type = object : TypeToken<SolcastForecastResponseList>() {}.type
-            val cachedResponseList: SolcastForecastResponseList = Gson().fromJson(cachedData, type)
+        return lockFor(site.resourceId).withLock {
+            getCachedData(site.resourceId)?.let { it ->
+                val type = object : TypeToken<SolcastForecastResponseList>() {}.type
+                val cachedResponseList: SolcastForecastResponseList = Gson().fromJson(it, type)
 
-            val eightHoursInMillis = 8 * 60 * 60 * 1000
-            val currentTime = System.currentTimeMillis()
-            val file = getFile(site.resourceId)
-            if ((currentTime - file.lastModified()) > eightHoursInMillis || ignoreCache) {
-                // Fetch new data
-                return fetchAndStore(site, apiKey, previous = cachedResponseList)
-            } else {
-                // Return cached data
-                return SolcastForecastList(failure = null, forecasts = cachedResponseList.forecasts)
-            }
-        } ?:
-        // Fetch new data
-        return fetchAndStore(site, apiKey)
+                val eightHoursInMillis = 8 * 60 * 60 * 1000
+                val currentTime = System.currentTimeMillis()
+                val file = getFile(site.resourceId)
+                if ((currentTime - file.lastModified()) > eightHoursInMillis || ignoreCache) {
+                    // Fetch new data
+                    fetchAndStore(site, apiKey, previous = cachedResponseList)
+                } else {
+                    // Return cached data
+                    SolcastForecastList(failure = null, forecasts = cachedResponseList.forecasts)
+                }
+            } ?: fetchAndStore(site, apiKey)
+        }
     }
 
     private suspend fun fetchAndStore(site: SolcastSite, apiKey: String, previous: SolcastForecastResponseList? = null): SolcastForecastList {
@@ -81,7 +91,7 @@ class SolcastCache(
 
         val result = SolcastForecastResponseList(merged)
         val jsonText = Gson().toJson(result)
-        saveForecast(site.resourceId, jsonText)
+        unsafe_saveForecast(site.resourceId, jsonText)
 
         return SolcastForecastList(failure, result.forecasts)
     }
@@ -99,7 +109,7 @@ class SolcastCache(
         return File(context.filesDir, fileName)
     }
 
-    private fun saveForecast(resourceId: String, data: String) {
+    private fun unsafe_saveForecast(resourceId: String, data: String) {
         val file = getFile(resourceId)
         file.writeText(data, Charset.defaultCharset())
     }

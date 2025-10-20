@@ -64,46 +64,51 @@ class SolarForecastViewModel(
         loadStateStream.value = LoadState.Active("Loading...")
         val formatter = DateTimeFormatter.ofPattern("dd/MM/y, HH:mm")
 
-        dataStream.value = settings.sites.mapNotNull { site ->
-            val forecast = solarForecastProvider().fetchForecast(site, settings.apiKey, ignoreCache)
-            lastFetchedStream.value = configManager.lastSolcastRefresh?.format(formatter)
+        try {
+            dataStream.value = settings.sites.mapNotNull { site ->
+                val forecast = solarForecastProvider().fetchForecast(site, settings.apiKey, ignoreCache)
+                lastFetchedStream.value = configManager.lastSolcastRefresh?.format(formatter)
 
-            if (forecast.failure == null) {
-                val forecasts = forecast.forecasts
-                val today = getToday()
-                val tomorrow = getTomorrow()
+                if (forecast.failure == null) {
+                    val forecasts = forecast.forecasts
+                    val today = getToday()
+                    val tomorrow = getTomorrow()
 
-                val todayData = forecasts.filter { response ->
-                    isSameDay(response.periodEnd, today)
-                }
-
-                val tomorrowData = forecasts.filter { response ->
-                    isSameDay(response.periodEnd, tomorrow)
-                }
-
-                SolarForecastViewData(
-                    error = null,
-                    today = asGraphData(todayData),
-                    todayTotal = total(todayData),
-                    tomorrow = asGraphData(tomorrowData),
-                    tomorrowTotal = total(tomorrowData),
-                    name = site.name,
-                    resourceId = site.resourceId
-                )
-            } else {
-                forecast.failure?.let {
-                    when (it) {
-                        SolcastFailure.TooManyRequests ->
-                            loadStateStream.value = LoadState.Error(null, context.getString(R.string.could_not_load_forecast_you_have_exceeded_your_free_daily_limit))
-
-                        is SolcastFailure.Unknown ->
-                            loadStateStream.value = LoadState.Error(it.error, context.getString(R.string.unknown_error))
+                    val todayData = forecasts.filter { response ->
+                        isSameDay(response.periodEnd, today)
                     }
+
+                    val tomorrowData = forecasts.filter { response ->
+                        isSameDay(response.periodEnd, tomorrow)
+                    }
+
+                    SolarForecastViewData(
+                        error = null,
+                        today = asGraphData(todayData),
+                        todayTotal = total(todayData),
+                        tomorrow = asGraphData(tomorrowData),
+                        tomorrowTotal = total(tomorrowData),
+                        name = site.name,
+                        resourceId = site.resourceId
+                    )
+                } else {
+                    forecast.failure?.let {
+                        when (it) {
+                            SolcastFailure.TooManyRequests ->
+                                loadStateStream.value = LoadState.Error(null, context.getString(R.string.could_not_load_forecast_you_have_exceeded_your_free_daily_limit))
+
+                            is SolcastFailure.Unknown ->
+                                loadStateStream.value = LoadState.Error(it.error, context.getString(R.string.unknown_error))
+                        }
+                    }
+                    null
                 }
-                null
             }
+            loadStateStream.value = LoadState.Inactive
+
+        } catch (ex: Exception) {
+            loadStateStream.value = LoadState.Error(ex, context.getString(R.string.unknown_error))
         }
-        loadStateStream.value = LoadState.Inactive
     }
 
     private fun asGraphData(data: List<SolcastForecastResponse>): List<List<DateFloatEntry>> {

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
@@ -45,8 +44,8 @@ import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
-import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.ui.theme.OutlinedESButton
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -109,14 +108,10 @@ class SolcastSettingsView(
                     SolcastSiteView(it)
                 }
 
-                ESButton(
-                    onClick = { viewModel.removeKey() },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary)
+                OutlinedESButton(
+                    onClick = { viewModel.removeKey() }
                 ) {
-                    Text(
-                        stringResource(R.string.remove_key),
-                        color = colorScheme.onPrimary,
-                    )
+                    Text(stringResource(R.string.remove_key))
                 }
 
                 SettingsBottomSpace()
