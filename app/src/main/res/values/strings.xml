@@ -77,6 +77,7 @@
     <string name="rawvariable_batdischargepower">Power discharging from the battery</string>
     <string name="rawvariable_gridconsumptionpower">Power being consumed from the grid</string>
     <string name="rawvariable_loadspower">The AC power flowing into the house load, in kilowatts (kW)</string>
+    <string name="rawvariable_pvpower">The total power from all PV strings, in kilowatts (kW)</string>
     <string name="rawvariable_pv1power">The power from PV string 1, in kilowatts (kW)</string>
     <string name="rawvariable_pv1volt">The DC voltage being presented by PV string 1, in volts (V)</string>
     <string name="rawvariable_pv1current">The DC current flowing through PV string 1, in Amps (A)</string>
@@ -96,6 +97,7 @@
     <string name="rawvariable_batvolt">The DC battery voltage, measured by the BMS, in volts (V)</string>
     <string name="rawvariable_invbatvolt">The DC battery voltage, measured by the inverter, in volts (V)</string>
     <string name="rawvariable_invbatcurrent">The DC current flowing from the battery, measured by inverter, in amps (A)</string>
+    <string name="rawvariable_invbatpower">The power flowing from (positive) or to (negative) the battery, measured by inverter, in kilowatts (kW)</string>
     <string name="rawvariable_meterpower">The power being read by the grid meter or current clamp CT1, in kilowatts (kW)</string>
     <string name="rawvariable_reactivepower">The reactive power being output by the inverter, in kilovolt-amps reactive (kVAR)</string>
     <string name="rawvariable_soc">State of Charge for the battery. The percentage of the battery capacity that is available</string>
@@ -470,4 +472,8 @@
     <string name="no">No</string>
     <string name="do_you_want_to_replace_your_existing_templates_with_the_imported_templates">Do you want to replace your existing templates with the imported templates?</string>
     <string name="invalid_api_key_format">Your API key appears to be in the wrong format.</string>
+    <string name="use_traditional_load_formula">Use traditional load formula</string>
+    <string name="use_traditional_load_formula_description">Uses the FoxESS loads value to show load which doesn\'t handle +ve/-ve CT2 very well. Changes only take effect on next data fetch.</string>
+    <string name="battery_versions">Battery versions</string>
+    <string name="device_selection">Device selection</string>
 </resources>

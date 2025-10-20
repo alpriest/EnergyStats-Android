@@ -19,8 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
@@ -36,7 +38,7 @@ fun InverterChoiceView(
     val currentDevice = configManager.currentDevice.collectAsState()
 
     if ((configManager.devices?.count() ?: 0) > 1) {
-        SettingsColumn(header = "Device selection") {
+        SettingsColumn(header = stringResource(R.string.device_selection)) {
             currentDevice.value?.let {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

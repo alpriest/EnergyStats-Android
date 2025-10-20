@@ -27,15 +27,15 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifie
     val context = LocalContext.current
 
     val extra = when (phase.mode) {
-        WorkMode.ForceDischarge -> " at ${phase.forceDischargePower}W down to ${phase.forceDischargeSOC}%"
+        WorkMode.ForceDischarge -> "; ${phase.forceDischargePower}W, min ${phase.forceDischargeSOC}%"
         WorkMode.ForceCharge, WorkMode.Backup ->
             phase.maxSOC?.let {
-                " with max SOC ${it}%"
+                "; max ${it}%"
             } ?: ""
         WorkMode.SelfUse -> {
-            var result = " with ${phase.minSocOnGrid}% min SOC"
+            var result = "; min ${phase.minSocOnGrid}%"
             phase.maxSOC?.let {
-                result += " with max SOC ${it}%"
+                result += ", max ${it}%"
             }
             result
         }
