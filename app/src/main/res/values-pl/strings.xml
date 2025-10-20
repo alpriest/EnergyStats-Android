@@ -78,6 +78,7 @@
     <string name="rawvariable_batdischargepower">Moc rozładowania z baterii</string>
     <string name="rawvariable_gridconsumptionpower">Moc pobierana z sieci</string>
     <string name="rawvariable_loadspower">Moc zasilająca obciążenie domu w kW</string>
+    <string name="rawvariable_pvpower">Całkowita moc wszystkich ciągów PV w kW</string>
     <string name="rawvariable_pv1power">Moc z przetwornicy PV 1 w kW</string>
     <string name="rawvariable_pv1volt">Napięcie stałe generowane przez przetwornicę PV 1 w V</string>
     <string name="rawvariable_pv1current">Prąd stały przepływający przez przetwornicę PV 1 w A</string>
@@ -97,6 +98,7 @@
     <string name="rawvariable_batvolt">Napięcie stałe baterii, mierzone przez BMS, w V</string>
     <string name="rawvariable_invbatvolt">Napięcie stałe baterii, mierzone przez przetwornicę, w V</string>
     <string name="rawvariable_invbatcurrent">Prąd stały płynący z baterii, mierzony przez przetwornicę, w A</string>
+    <string name="rawvariable_invbatpower">Moc płynąca z (dodatniego) lub do (ujemnego) baterii, mierzona przez przetwornicę, w kW</string>
     <string name="rawvariable_meterpower">Moc odczytywana przez licznik sieciowy lub cewkę prądową CT1, w kW</string>
     <string name="rawvariable_reactivepower">Moc reaktywna generowana przez przetwornicę, w kVAr</string>
     <string name="rawvariable_soc">Stan naładowania baterii. Procent pojemności baterii, który jest dostępny</string>
@@ -344,8 +346,8 @@
     <string name="reasons_reported">Zgłoszone powody:</string>
     <string name="no_reason_was_given_check_the_front_screen_of_your_inverter">Nie podano powodu. Sprawdź przedni ekran swojego inwertera.</string>
     <string name="some_settings_will_only_take_effect_on_the_next_data_refresh">Niektóre ustawienia zaczną obowiązywać dopiero po następnym odświeżeniu danych</string>
-    <string name="rename">Zmień nazwę...</string>
-    <string name="create_new">Utwórz nowe...</string>
+    <string name="rename">Zmień nazwę…</string>
+    <string name="create_new">Utwórz nowe…</string>
     <string name="delete">Usuń</string>
     <string name="dataloggers">Rejestratory danych</string>
     <string name="edit_phase">Edytuj fazę</string>
@@ -393,7 +395,7 @@
     <string name="fetch_solar_forecast_on_app_launch">Pobierz prognozę słoneczną przy uruchomieniu aplikacji</string>
     <string name="clear">Czyste</string>
     <string name="no_data">Brak danych</string>
-    <string name="parameters">"Parametry...  "</string>
+    <string name="parameters">"Parametry…  "</string>
     <string name="reportvariable_pvenergytotal">Energia wygenerowana z PV</string>
     <string name="logout_from_demo">Wyloguj się z demo</string>
     <string name="show_ct2_value">Pokaż wartość CT2</string>
@@ -418,8 +420,8 @@
     <string name="maxsoc_description">"Ustawia najwyższy poziom naładowania, jaki bateria może osiągnąć, wyrażony w procentach.  "</string>
     <string name="export_limit_behaviour">"Konfigurując to ustawienie, możesz kontrolować ilość energii oddawanej do sieci, zapewniając zgodność z lokalnymi przepisami lub własnymi preferencjami. Na przykład, jeśli lokalne przepisy ograniczają moc eksportu, ustawienie tej wartości zapewnia, że inwerter nie przekroczy dozwolonego limitu.  "</string>
     <string name="maxsoc_behaviour">"Ładowanie zatrzymuje się, gdy bateria osiągnie maksymalny SoC. Można dostosować w zależności od wzorców użytkowania lub w celu dopasowania do taryf energetycznych i dostępności energii słonecznej.  "</string>
-    <string name="device_settings_warning">Zachowaj ostrożność i zmieniaj to ustawienie tylko, jeśli wiesz, co robisz.\\n\\nEnergy Stats nie ponosi odpowiedzialności za jakiekolwiek szkody spowodowane tą zmianą.</string>
-    <string name="about_59_seconds">59 sekund wynika z działania oprogramowania falownika. Czas końcowy obejmuje pełną minutę, którą ustawisz, więc przedział czasowy będzie trwał do 59 sekundy tej minuty.\\n\\nNp. jeśli chcesz, aby przedział zakończył się o 05:30, ustaw 05:29:59. Jeśli ustawisz 05:30, falownik będzie działał do 05:30:59 i przez jedną minutę zużycie energii może być inne niż oczekiwano.</string>
+    <string name="device_settings_warning">Zachowaj ostrożność i zmieniaj to ustawienie tylko, jeśli wiesz, co robisz.\n\nEnergy Stats nie ponosi odpowiedzialności za jakiekolwiek szkody spowodowane tą zmianą.</string>
+    <string name="about_59_seconds">59 sekund wynika z działania oprogramowania falownika. Czas końcowy obejmuje pełną minutę, którą ustawisz, więc przedział czasowy będzie trwał do 59 sekundy tej minuty.\n\nNp. jeśli chcesz, aby przedział zakończył się o 05:30, ustaw 05:29:59. Jeśli ustawisz 05:30, falownik będzie działał do 05:30:59 i przez jedną minutę zużycie energii może być inne niż oczekiwano.</string>
     <string name="solar_strings_description">Jeśli masz kilka zestawów paneli słonecznych, np. na przodzie/tyłach domu, pozwoli Ci to zobaczyć moc generowaną przez każdy zestaw. Ustawienie zacznie obowiązywać przy następnym pobieraniu danych.</string>
     <string name="solar_yield_description">La tua produzione giornaliera totale verrà visualizzata. Se hai abilitato \'Mostra la potenza PV per stringhe\', verrà mostrata anche una stima della produzione giornaliera per stringa.</string>
     <string name="string_total_today_description">" (%1$s dzisiaj)"</string>
@@ -427,11 +429,11 @@
     <string name="earnings_ct2_description">Wprowadź cenę jednostkową, jaką otrzymujesz za eksport energii elektrycznej (za kWh) za pośrednictwem innego inwertera monitorowanego przez CT2. Dane o zarobkach będą widoczne tylko na stronie przepływu energii, ponieważ Fox nie przechowuje historycznych statystyk CT2.</string>
     <string name="peak_shaving">Ograniczanie szczytów zużycia</string>
     <string name="failed_to_load_settings">Nie udało się załadować ustawień</string>
-    <string name="peak_shaving_is_not_available">Ograniczanie szczytów zużycia jest niedostępne. Może to być spowodowane oprogramowaniem układowym lub modelem falownika.\\n\\nSkontaktuj się z FoxESS, aby uzyskać więcej informacji.</string>
+    <string name="peak_shaving_is_not_available">Ograniczanie szczytów zużycia jest niedostępne. Może to być spowodowane oprogramowaniem układowym lub modelem falownika.\n\nSkontaktuj się z FoxESS, aby uzyskać więcej informacji.</string>
     <string name="import_limit">Limit importu</string>
     <string name="battery_threshold_soc">Próg baterii SOC</string>
     <string name="failed_to_save_settings">Nie udało się zapisać ustawień</string>
-    <string name="reset_ellipsis">Resetuj...</string>
+    <string name="reset_ellipsis">Resetuj…</string>
     <string name="will_be_reset">Zostanie zresetowane:</string>
     <string name="inverter_display_settings_ct2_settings">Ustawienia wyświetlania falownika, ustawienia CT2</string>
     <string name="battery_display_settings">Ustawienia wyświetlania baterii</string>
@@ -448,14 +450,14 @@
     <string name="self_sufficiency_settings">Ustawienia samowystarczalności</string>
     <string name="will_not_be_reset">Nie zostanie zresetowane:</string>
     <string name="display_settings">Ustawienia wyświetlania</string>
-    <string name="peak_shaving_explanation">Twój system monitoruje moc importowaną z sieci. Jeśli import przekracza Twój limit importu wynoszący %1$s, a poziom naładowania baterii (SOC) przekracza %2$s%%, system rozładowuje baterię, aby zaspokoić nadmiarowe zapotrzebowanie, tym samym „ścina” szczytowe obciążenie z sieci.\\n\\nTa operacja trwa, dopóki poziom naładowania baterii (SOC) pozostaje powyżej określonego progu.\\n\\nFunkcja Peak Shaving działa tylko wtedy, gdy tryb Peak Shaving jest włączony w harmonogramie falownika.</string>
+    <string name="peak_shaving_explanation">Twój system monitoruje moc importowaną z sieci. Jeśli import przekracza Twój limit importu wynoszący %1$s, a poziom naładowania baterii (SOC) przekracza %2$s%%, system rozładowuje baterię, aby zaspokoić nadmiarowe zapotrzebowanie, tym samym „ścina” szczytowe obciążenie z sieci.\n\nTa operacja trwa, dopóki poziom naładowania baterii (SOC) pozostaje powyżej określonego progu.\n\nFunkcja Peak Shaving działa tylko wtedy, gdy tryb Peak Shaving jest włączony w harmonogramie falownika.</string>
     <string name="force_charge">Wymuszone ładowanie</string>
     <string name="force_discharge">Wymuszone rozładowanie</string>
     <string name="time_period_missing_warning">Wszystkie okresy czasu niewymienione powyżej domyślnie przejdą w tryb własnego zużycia, używając minimalnego SOC z ostatniego aktywnego okresu.</string>
     <string name="estimated_energy_used_to_power_the_inverter">Szacowana energia zużyta do zasilania falownika</string>
     <string name="show_estimated_inverter_consumption">Pokaż szacowane zużycie falownika</string>
     <string name="summary_tab">Zestaw</string>
-    <string name="parameters_more">Parametry...</string>
+    <string name="parameters_more">Parametry…</string>
     <string name="inverter_consumption">Zużycie falownika</string>
     <string name="battery_state_of_charge">Stan naładowania baterii</string>
     <string name="show_battery_soc_on_daily_stats_description">Pokazuje poziom naładowania baterii w widoku dziennych statystyk.</string>
@@ -466,4 +468,8 @@
     <string name="do_you_want_to_replace_your_existing_templates_with_the_imported_templates">Czy chcesz zastąpić swoje istniejące szablony zaimportowanymi szablonami?</string>
     <string name="invalid_api_key_format">Twój klucz API wydaje się mieć nieprawidłowy format.</string>
     <string name="yes">Tak</string>
+    <string name="use_traditional_load_formula">Użyj tradycyjnej formuły obciążenia</string>
+    <string name="use_traditional_load_formula_description">Wykorzystuje wartość obciążenia FoxESS do wyświetlenia obciążenia, które nie radzi sobie zbyt dobrze z +ve/-ve CT2. Zmiany zaczną obowiązywać dopiero przy następnym pobraniu danych.</string>
+    <string name="battery_versions">Wersje baterii</string>
+    <string name="device_selection">Wybór urządzenia</string>
 </resources>

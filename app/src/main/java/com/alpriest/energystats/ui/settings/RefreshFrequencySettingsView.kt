@@ -29,7 +29,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
 
     SettingsColumnWithChild {
         SettingsSegmentedControl(
-            title = "Refresh frequency",
+            title = stringResource(R.string.refresh_frequency),
             segmentedControl = {
                 val items = RefreshFrequency.values()
 
