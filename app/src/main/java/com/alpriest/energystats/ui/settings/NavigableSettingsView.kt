@@ -33,6 +33,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.templates.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
+import com.alpriest.energystats.ui.slideComposable
 import com.example.energystats.FactoryResetAppSettingsView
 
 @Composable
@@ -54,7 +55,7 @@ fun NavigableSettingsView(
         navController = navController,
         startDestination = SettingsScreen.Settings.name
     ) {
-        composable(SettingsScreen.Settings.name) {
+        slideComposable(SettingsScreen.Settings.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.settings_tab), {}, null)
             key(lastSettingsResetTimeViewKey) {
                 SettingsTabView(
@@ -67,7 +68,7 @@ fun NavigableSettingsView(
                 )
             }
         }
-        composable(SettingsScreen.Battery.name) {
+        slideComposable(SettingsScreen.Battery.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.battery), {}, { navController.popBackStack() })
             BatterySettingsView(
                 navController = navController,
@@ -75,11 +76,11 @@ fun NavigableSettingsView(
                 modifier = Modifier
             )
         }
-        composable(SettingsScreen.BatterySOC.name) {
+        slideComposable(SettingsScreen.BatterySOC.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.battery_soc), {}, { navController.popBackStack() })
             BatterySOCSettings(configManager = configManager, network = network, navController = navController, userManager = userManager).Content(modifier = Modifier)
         }
-        composable(SettingsScreen.BatteryChargeTimes.name) {
+        slideComposable(SettingsScreen.BatteryChargeTimes.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.battery_charge_schedule), {}, { navController.popBackStack() })
             BatteryChargeScheduleSettingsView(
                 configManager = configManager,
@@ -88,43 +89,43 @@ fun NavigableSettingsView(
                 userManager = userManager
             ).Content(modifier = Modifier)
         }
-        composable(SettingsScreen.Inverter.name) {
+        slideComposable(SettingsScreen.Inverter.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.inverter), {}, { navController.popBackStack() })
             InverterSettingsView(configManager = configManager, network = network, navController = navController, modifier = Modifier)
         }
-        composable(SettingsScreen.InverterSchedule.name) {
+        slideComposable(SettingsScreen.InverterSchedule.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.manage_schedules), {}, { navController.popBackStack() })
             ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
         }
-        composable(SettingsScreen.Dataloggers.name) {
+        slideComposable(SettingsScreen.Dataloggers.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.dataloggers), {}, { navController.popBackStack() })
             DataLoggerViewContainer(network = network, configManager = configManager, navController = navController).Content(modifier = Modifier)
         }
-        composable(SettingsScreen.FinancialModel.name) {
+        slideComposable(SettingsScreen.FinancialModel.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.financial_model), {}, { navController.popBackStack() })
             SettingsPage(Modifier) {
                 FinancialsSettingsView(configManager)
             }
         }
-        composable(SettingsScreen.SelfSufficiencyEstimates.name) {
+        slideComposable(SettingsScreen.SelfSufficiencyEstimates.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.self_sufficiency_estimates), {}, { navController.popBackStack() })
             SettingsPage(Modifier) {
                 SelfSufficiencySettingsView(configManager)
             }
         }
-        composable(SettingsScreen.SolarBandings.name) {
+        slideComposable(SettingsScreen.SolarBandings.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.sun_display_thresholds), {}, { navController.popBackStack() })
             SolarBandingSettingsView(navController, configManager, Modifier)
         }
-        composable(SettingsScreen.FAQ.name) {
+        slideComposable(SettingsScreen.FAQ.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.frequently_asked_questions), {}, { navController.popBackStack() })
             FAQView()
         }
-        composable(SettingsScreen.SolcastSolarPrediction.name) {
+        slideComposable(SettingsScreen.SolcastSolarPrediction.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.solcast_solar_prediction), {}, { navController.popBackStack() })
             SolcastSettingsView(navController, configManager, userManager, solarForecastingProvider).Content(modifier = Modifier)
         }
-        composable(SettingsScreen.EditSchedule.name) {
+        slideComposable(SettingsScreen.EditSchedule.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_schedule), {}, { navController.popBackStack() })
             EditScheduleView(
                 configManager,
@@ -134,64 +135,64 @@ fun NavigableSettingsView(
             ).Content(modifier = Modifier)
         }
 
-        composable(SettingsScreen.EditPhase.name) {
+        slideComposable(SettingsScreen.EditPhase.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_phase), {}, { navController.popBackStack() })
             EditPhaseView(navController, userManager, configManager, modifier = Modifier)
         }
 
-        composable(SettingsScreen.TemplateList.name) {
+        slideComposable(SettingsScreen.TemplateList.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.templates), {}, { navController.popBackStack() })
             ScheduleTemplateListView(configManager, templateStore, navController, userManager).Content(modifier = Modifier)
         }
 
-        composable(SettingsScreen.EditTemplate.name) {
+        slideComposable(SettingsScreen.EditTemplate.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_template), {}, { navController.popBackStack() })
             EditTemplateView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
         }
 
-        composable(SettingsScreen.APIKey.name) {
+        slideComposable(SettingsScreen.APIKey.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_api_key), {}, { navController.popBackStack() })
             ConfigureAPIKeyView(userManager.store, navController, configManager.themeStream, Modifier)
         }
 
-        composable(SettingsScreen.PowerStation.name) {
+        slideComposable(SettingsScreen.PowerStation.name) {
             configManager.powerStationDetail?.let { powerStationDetail ->
                 topBarSettings.value = TopBarSettings(true, stringResource(R.string.settings_power_station), {}, { navController.popBackStack() })
                 PowerStationSettingsView(configManager)
             }
         }
 
-        composable(SettingsScreen.DataSettings.name) {
+        slideComposable(SettingsScreen.DataSettings.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.settings_data), {}, { navController.popBackStack() })
             DataSettingsView(configManager, Modifier)
         }
 
-        composable(SettingsScreen.BatteryVersions.name) {
+        slideComposable(SettingsScreen.BatteryVersions.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.batteries), {}, { navController.popBackStack() })
             BatteryFirmwareVersionsView(configManager, network).Content(Modifier)
         }
 
-        composable(SettingsScreen.ConfigureExportLimit.name) {
+        slideComposable(SettingsScreen.ConfigureExportLimit.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(id = R.string.export_limit), {}, { navController.popBackStack() })
             DeviceSettingItemView(configManager, network, DeviceSettingsItem.ExportLimit, navController).Content(Modifier)
         }
 
-        composable(SettingsScreen.ConfigureMaxSoc.name) {
+        slideComposable(SettingsScreen.ConfigureMaxSoc.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(id = R.string.max_soc), {}, { navController.popBackStack() })
             DeviceSettingItemView(configManager, network, DeviceSettingsItem.MaxSoc, navController).Content(Modifier)
         }
 
-        composable(SettingsScreen.ConfigurePeakShaving.name) {
+        slideComposable(SettingsScreen.ConfigurePeakShaving.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(id = R.string.peak_shaving), {}, { navController.popBackStack() })
             PeakShavingSettingsView(configManager, network, navController).Content(Modifier)
         }
 
-        composable(SettingsScreen.FactoryResetAppSettings.name) {
+        slideComposable(SettingsScreen.FactoryResetAppSettings.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.reset_app_settings), {}, { navController.popBackStack() })
             FactoryResetAppSettingsView(configManager, navController)
         }
 
-        composable(SettingsScreen.ConfigureWorkMode.name) {
+        slideComposable(SettingsScreen.ConfigureWorkMode.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.work_mode), {}, { navController.popBackStack() })
             WorkModeSettingsView(network, configManager, navController, userManager).Content()
         }

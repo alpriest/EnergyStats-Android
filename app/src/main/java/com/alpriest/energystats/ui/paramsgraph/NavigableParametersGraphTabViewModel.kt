@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.solcastPrediction
@@ -22,6 +21,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableCho
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
+import com.alpriest.energystats.ui.slideComposable
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -97,7 +97,7 @@ class NavigableParametersGraphTabView(
             navController = navController,
             startDestination = ParametersScreen.Graph.name
         ) {
-            composable(ParametersScreen.Graph.name) {
+            slideComposable(ParametersScreen.Graph.name) {
                 ParametersGraphTabView(
                     topBarSettings,
                     network,
@@ -111,7 +111,7 @@ class NavigableParametersGraphTabView(
                 ).Content(themeStream = themeStream)
             }
 
-            composable(ParametersScreen.ParameterChooser.name) {
+            slideComposable(ParametersScreen.ParameterChooser.name) {
                 topBarSettings.value = TopBarSettings(true, "Choose Parameters", {}, { navController.popBackStack() })
 
                 ParameterGraphVariableChooserView(
@@ -121,7 +121,7 @@ class NavigableParametersGraphTabView(
                 ).Content()
             }
 
-            composable(ParametersScreen.ParameterGroupEditor.name) {
+            slideComposable(ParametersScreen.ParameterGroupEditor.name) {
                 topBarSettings.value = TopBarSettings(true, "Edit Parameter Group", {}, { navController.popBackStack() })
 
                 ParameterVariableGroupEditorView(

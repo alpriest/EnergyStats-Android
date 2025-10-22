@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.DemoNetworking
@@ -19,6 +18,7 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.AlertDialog
+import com.alpriest.energystats.ui.slideComposable
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.chuckerteam.chucker.api.Chucker
@@ -29,7 +29,7 @@ fun NavGraphBuilder.debugGraph(
     network: Networking
 ) {
     navigation(startDestination = "debug", route = "login") {
-        composable("debug") {
+        slideComposable("debug") {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.view_debug_data), {}, null)
             DebugDataSettingsView(network, Modifier)
         }
