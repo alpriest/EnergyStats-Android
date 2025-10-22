@@ -31,18 +31,23 @@ data class ScheduleResponse(
             val jsonObject = json.asJsonObject
 
             val enable = jsonObject["enable"].asInt
-            val groups = context.deserialize<List<SchedulePhaseNetworkModel>>(jsonObject["groups"], object : TypeToken<List<SchedulePhaseNetworkModel>>() {}.type)
+            val groups = context.deserialize<List<SchedulePhaseNetworkModel>>(
+                jsonObject["groups"],
+                object : TypeToken<List<SchedulePhaseNetworkModel>>() {}.type
+            )
 
-            val enumList = jsonObject
-                .getAsJsonObject("properties")
-                .getAsJsonObject("workmode")
-                .getAsJsonArray("enumList")
-                .map { WorkMode.valueOf(it.asString) }
+            // Use the registered WorkMode deserializer automatically
+            val workModes = context.deserialize<List<WorkMode>>(
+                jsonObject
+                    .getAsJsonObject("properties")
+                    .getAsJsonObject("workmode")
+                    .getAsJsonArray("enumList"),
+                object : TypeToken<List<WorkMode>>() {}.type
+            )
 
-            return ScheduleResponse(enable, groups, enumList)
+            return ScheduleResponse(enable, groups, workModes)
         }
-    }
-}
+    }}
 
 data class SchedulePhaseNetworkModel(
     val enable: Int,

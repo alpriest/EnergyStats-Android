@@ -48,6 +48,7 @@ import com.alpriest.energystats.models.SetSchedulerFlagRequest
 import com.alpriest.energystats.models.md5
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
+import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.settings.solcast.UserAgent
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.google.gson.Gson
@@ -461,7 +462,7 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                     InMemoryLoggingNetworkStore.shared.latestResponse = response.toString()
 
                     try {
-                        val text = response.body?.string()
+                        val text = response.body.string()
                         InMemoryLoggingNetworkStore.shared.latestResponseText = text
                         val builder = GsonBuilder()
                             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
@@ -469,6 +470,7 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                             .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
                             .registerTypeAdapter(OpenRealQueryResponse::class.java, OpenRealQueryResponseDeserializer())
                             .registerTypeAdapter(ScheduleResponse::class.java, ScheduleResponse.Deserializer())
+                            .registerTypeAdapter(WorkMode::class.java, WorkMode.Deserializer())
                             .create()
                         val body: T = builder.fromJson(text, type)
                         val result: Result<T> = check(body)

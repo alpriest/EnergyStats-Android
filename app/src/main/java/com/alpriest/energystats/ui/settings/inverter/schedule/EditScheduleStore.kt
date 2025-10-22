@@ -4,7 +4,11 @@ import android.content.Context
 import com.alpriest.energystats.R
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.DeviceCapability
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.lang.reflect.Type
 
 class EditScheduleStore(
     var scheduleStream: MutableStateFlow<Schedule?> = MutableStateFlow(null),
@@ -45,7 +49,8 @@ enum class WorkMode {
     ForceCharge,
     ForceDischarge,
     Invalid,
-    PeakShaving;
+    PeakShaving,
+    Unsupported;
 
     fun title(context: Context): String {
         return when (this) {
@@ -55,7 +60,7 @@ enum class WorkMode {
             ForceCharge -> context.getString(R.string.force_charge)
             ForceDischarge -> context.getString(R.string.force_discharge)
             PeakShaving -> context.getString(R.string.peak_shaving)
-            Invalid -> return ""
+            Invalid, Unsupported -> return ""
         }
     }
 
@@ -67,7 +72,7 @@ enum class WorkMode {
             ForceCharge -> context.getString(R.string.workmode_force_charge_description)
             ForceDischarge -> context.getString(R.string.workmode_force_discharge_description)
             PeakShaving -> context.getString(R.string.peak_shaving_explanation)
-            Invalid -> return ""
+            Invalid, Unsupported -> return ""
         }
     }
 
@@ -106,6 +111,17 @@ enum class WorkMode {
                 "PeakShaving" -> PeakShaving
                 else -> SelfUse
             }
+        }
+    }
+
+    class Deserializer : JsonDeserializer<WorkMode> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): WorkMode {
+            if (json.isJsonPrimitive && json.asJsonPrimitive.isString) {
+                val raw = json.asString
+                return WorkMode.entries.find { it.name == raw || it.networkTitle() == raw } ?: Unsupported
+            }
+
+            return Unsupported
         }
     }
 }
