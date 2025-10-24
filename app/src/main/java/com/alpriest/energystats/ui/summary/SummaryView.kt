@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
@@ -48,7 +49,6 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.ui.slideComposable
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
@@ -81,7 +81,7 @@ class SummaryView(
             navController = navController,
             startDestination = SummaryScreen.Overview.name
         ) {
-            slideComposable(SummaryScreen.Overview.name) {
+            composable(SummaryScreen.Overview.name) {
                 topBarSettings.value = TopBarSettings(true, stringResource(R.string.summary_title), {
                     ESButton(onClick = { navController.navigate("EditSummaryDateRanges") }) {
                         Image(
@@ -94,7 +94,7 @@ class SummaryView(
                 Content(viewModel, themeStream, Modifier)
             }
 
-            slideComposable(SummaryScreen.EditSummaryDateRanges.name) {
+            composable(SummaryScreen.EditSummaryDateRanges.name) {
                 topBarSettings.value = TopBarSettings(true, stringResource(R.string.summary_date_range), {}, { navController.popBackStack() })
                 EditSummaryView(Modifier, navController, viewModel)
             }
