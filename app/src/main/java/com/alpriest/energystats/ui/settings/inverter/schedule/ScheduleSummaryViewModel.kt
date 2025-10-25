@@ -219,7 +219,7 @@ class ScheduleSummaryViewModel(
 }
 
 private fun ScheduleResponse.supportsPeakShaving(): Boolean {
-    return workModes.any { it == WorkMode.PeakShaving }
+    return workModes.any { it == WorkModes.PeakShaving }
 }
 
 private fun Schedule.supportsMaxSOC(): Boolean {
@@ -240,7 +240,6 @@ fun errorMessage(exception: Exception, context: Context): String {
 }
 
 internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
-    if (workMode == WorkMode.Invalid) { return null }
     if (enable == 0) { return null }
 
     return SchedulePhase.create(

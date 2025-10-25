@@ -52,7 +52,7 @@ fun Double.Wh(decimalPlaces: Int): String {
     return "${numberFormatter.format(divided)} Wh"
 }
 
-fun Double.kWh(decimalPlaces: Int): String {
+fun Double.kWh(decimalPlaces: Int, suffix: String = " kWh"): String {
     val divided = this.truncated(decimalPlaces)
 
     val numberFormatter = DecimalFormat().apply {
@@ -61,7 +61,7 @@ fun Double.kWh(decimalPlaces: Int): String {
         isGroupingUsed = true
     }
 
-    return "${numberFormatter.format(divided)} kWh"
+    return "${numberFormatter.format(divided)}$suffix"
 }
 
 fun Double.kW(decimalPlaces: Int): String {

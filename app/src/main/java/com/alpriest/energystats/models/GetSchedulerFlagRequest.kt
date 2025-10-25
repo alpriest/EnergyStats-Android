@@ -1,6 +1,5 @@
 package com.alpriest.energystats.models
 
-import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -24,7 +23,7 @@ data class SetSchedulerFlagRequest(
 data class ScheduleResponse(
     val enable: Int,
     val groups: List<SchedulePhaseNetworkModel>,
-    val workModes: List<WorkMode>
+    val workModes: List<String>
 ) {
     class Deserializer : JsonDeserializer<ScheduleResponse> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ScheduleResponse {
@@ -37,12 +36,12 @@ data class ScheduleResponse(
             )
 
             // Use the registered WorkMode deserializer automatically
-            val workModes = context.deserialize<List<WorkMode>>(
+            val workModes = context.deserialize<List<String>>(
                 jsonObject
                     .getAsJsonObject("properties")
                     .getAsJsonObject("workmode")
                     .getAsJsonArray("enumList"),
-                object : TypeToken<List<WorkMode>>() {}.type
+                object : TypeToken<List<String>>() {}.type
             )
 
             return ScheduleResponse(enable, groups, workModes)
@@ -55,7 +54,7 @@ data class SchedulePhaseNetworkModel(
     val startMinute: Int,
     val endHour: Int,
     val endMinute: Int,
-    val workMode: WorkMode,
+    val workMode: String,
     val minSocOnGrid: Int,
     val fdSoc: Int,
     val fdPwr: Int?,

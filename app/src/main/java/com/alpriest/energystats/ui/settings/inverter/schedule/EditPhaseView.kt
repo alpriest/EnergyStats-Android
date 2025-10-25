@@ -122,11 +122,11 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging
     val endTime = viewModel.endTimeStream.collectAsState().value
     val errorText = viewModel.errorStream.collectAsState().value
     val footerText = when (viewModel.workModeStream.collectAsState().value) {
-        WorkMode.SelfUse -> stringResource(R.string.workmode_self_use_description)
-        WorkMode.Feedin -> stringResource(R.string.workmode_feed_in_first_description)
-        WorkMode.Backup -> stringResource(R.string.workmode_backup_description)
-        WorkMode.ForceCharge -> stringResource(R.string.workmode_force_charge_description)
-        WorkMode.ForceDischarge -> stringResource(R.string.workmode_force_discharge_description)
+        WorkModes.SelfUse -> stringResource(R.string.workmode_self_use_description)
+        WorkModes.Feedin -> stringResource(R.string.workmode_feed_in_first_description)
+        WorkModes.Backup -> stringResource(R.string.workmode_backup_description)
+        WorkModes.ForceCharge -> stringResource(R.string.workmode_force_charge_description)
+        WorkModes.ForceDischarge -> stringResource(R.string.workmode_force_discharge_description)
         else -> null
     }
 
@@ -174,7 +174,7 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
     val workMode = viewModel.workModeStream.collectAsState().value
     val minSOC = viewModel.minSOCStream.collectAsState().value
     val footerText = when (workMode) {
-        WorkMode.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_minsoc_description)
+        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_minsoc_description)
         else -> null
     }
     val errorText = viewModel.errorStream.collectAsState().value
@@ -242,7 +242,7 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
     val workMode = viewModel.workModeStream.collectAsState().value
     val fdSOC = viewModel.forceDischargeSOCStream.collectAsState().value
     val footerText = when (workMode) {
-        WorkMode.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_fdsoc_description)
+        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_fdsoc_description)
         else -> null
     }
     val errorText = viewModel.errorStream.collectAsState().value
@@ -280,7 +280,7 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
     val workMode = viewModel.workModeStream.collectAsState().value
     val fdPower = viewModel.forceDischargePowerStream.collectAsState().value
     val footerText = when (workMode) {
-        WorkMode.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_power_description)
+        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_power_description)
         else -> null
     }
     val errorText = viewModel.errorStream.collectAsState().value

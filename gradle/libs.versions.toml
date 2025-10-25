@@ -12,6 +12,7 @@ gson = "2.13.2"
 navigationKtx = "2.9.5"
 coil = "2.7.0"
 composeMarkdown = "0.3.5"
+rollingnumbers = "0.0.7"
 shimmer = "1.3.3"
 vico = "1.14.0"
 lifecycle = "2.9.4"
@@ -43,6 +44,7 @@ compose-navigation = { group = "androidx.navigation", name = "navigation-compose
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 compose-markdown = { group = "com.github.jeziellago", name = "compose-markdown", version.ref = "composeMarkdown" }
 androidx-navigation = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationKtx" }
+rollingnumbers = { module = "com.github.delacrixmorgan.rollingnumbers:lib", version.ref = "rollingnumbers" }
 shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version.ref = "shimmer" }
 vico = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }

@@ -75,4 +75,5 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.inappmessaging.display)
     implementation(libs.chucker)
+    implementation(libs.rollingnumbers)
 }

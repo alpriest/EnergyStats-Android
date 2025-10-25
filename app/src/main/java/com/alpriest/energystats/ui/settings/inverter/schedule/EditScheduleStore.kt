@@ -27,8 +27,8 @@ class EditScheduleStore(
         val shared: EditScheduleStore = EditScheduleStore()
 
         fun modes(configManager: ConfigManaging): List<WorkMode> {
-            return WorkMode.entries.filter {
-                if (it == WorkMode.PeakShaving) {
+            return WorkModes.allCases.filter {
+                if (it == WorkModes.PeakShaving) {
                     configManager.selectedDeviceSN?.let {
                         configManager.getDeviceSupports(DeviceCapability.PeakShaving, it)
                     } ?: false
@@ -42,7 +42,63 @@ class EditScheduleStore(
     }
 }
 
-enum class WorkMode {
+typealias WorkMode = String
+
+object WorkModes {
+    const val SelfUse = "SelfUse"
+    const val Feedin = "Feedin"
+    const val Backup = "Backup"
+    const val ForceCharge = "ForceCharge"
+    const val ForceDischarge = "ForceDischarge"
+    const val PeakShaving = "PeakShaving"
+
+    val allCases: List<WorkMode> = listOf(
+        SelfUse, Feedin, Backup, ForceCharge, ForceDischarge, PeakShaving
+    )
+}
+
+fun WorkMode.title(context: Context): String = when (this) {
+    WorkModes.SelfUse -> context.getString(R.string.self_use)
+    WorkModes.Feedin -> context.getString(R.string.feed_in)
+    WorkModes.Backup -> context.getString(R.string.backup)
+    WorkModes.ForceCharge -> context.getString(R.string.force_charge)
+    WorkModes.ForceDischarge -> context.getString(R.string.force_discharge)
+    WorkModes.PeakShaving -> context.getString(R.string.peak_shaving)
+    else -> ""
+}
+
+fun WorkMode.networkTitle(context: Context): String = when (this) {
+    WorkModes.SelfUse -> "SelfUse"
+    WorkModes.Feedin -> "Feedin"
+    WorkModes.Backup -> "Backup"
+    WorkModes.ForceCharge -> "ForceCharge"
+    WorkModes.ForceDischarge -> "ForceDischarge"
+    else -> this
+}
+
+fun WorkMode.subtitle(context: Context): String = when (this) {
+    WorkModes.SelfUse -> context.getString(R.string.self_use_mode)
+    WorkModes.Feedin -> context.getString(R.string.feed_in_first_mode)
+    WorkModes.Backup -> context.getString(R.string.backup_mode)
+    WorkModes.ForceCharge -> context.getString(R.string.workmode_force_charge_description)
+    WorkModes.ForceDischarge -> context.getString(R.string.workmode_force_discharge_description)
+    WorkModes.PeakShaving -> context.getString(R.string.peak_shaving_explanation)
+    else -> ""
+}
+
+fun WorkMode.showInUI(): Boolean {
+    return when (this) {
+        WorkModes.SelfUse -> true
+        WorkModes.Feedin -> true
+        WorkModes.Backup -> true
+        WorkModes.ForceCharge -> true
+        WorkModes.ForceDischarge -> true
+        WorkModes.PeakShaving -> true
+        else -> false
+    }
+}
+
+enum class WorkModeOLD {
     SelfUse,
     Feedin,
     Backup,
@@ -77,7 +133,7 @@ enum class WorkMode {
     }
 
     fun networkTitle(): String {
-        return when(this) {
+        return when (this) {
             SelfUse -> "SelfUse"
             Feedin -> "Feedin"
             Backup -> "Backup"
@@ -101,7 +157,7 @@ enum class WorkMode {
     }
 
     companion object {
-        fun from(value: String): WorkMode {
+        fun from(value: String): WorkModeOLD {
             return when (value) {
                 "SelfUse" -> SelfUse
                 "Feedin" -> Feedin
@@ -114,11 +170,11 @@ enum class WorkMode {
         }
     }
 
-    class Deserializer : JsonDeserializer<WorkMode> {
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): WorkMode {
+    class Deserializer : JsonDeserializer<WorkModeOLD> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): WorkModeOLD {
             if (json.isJsonPrimitive && json.asJsonPrimitive.isString) {
                 val raw = json.asString
-                return WorkMode.entries.find { it.name == raw || it.networkTitle() == raw } ?: Unsupported
+                return WorkModeOLD.entries.find { it.name == raw || it.networkTitle() == raw } ?: Unsupported
             }
 
             return Unsupported

@@ -38,31 +38,31 @@ internal fun Schedule.Companion.preview(): Schedule {
             SchedulePhase.create(
                 start = Time(hour = 1, minute = 0),
                 end = Time(hour = 2, minute = 0),
-                mode = WorkMode.ForceCharge,
+                mode = WorkModes.ForceCharge,
                 forceDischargePower = 0,
                 forceDischargeSOC = 100,
                 batterySOC = 100,
-                color = Color.scheduleColor(WorkMode.ForceCharge),
+                color = Color.scheduleColor(WorkModes.ForceCharge),
                 maxSOC = 100
             ),
             SchedulePhase.create(
                 start = Time(hour = 8, minute = 0),
                 end = Time(hour = 14, minute = 30),
-                mode = WorkMode.ForceDischarge,
+                mode = WorkModes.ForceDischarge,
                 forceDischargePower = 3500,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor(WorkMode.ForceDischarge),
+                color = Color.scheduleColor(WorkModes.ForceDischarge),
                 maxSOC = 100
             ),
             SchedulePhase.create(
                 start = Time(hour = 19, minute = 30),
                 end = Time(hour = 23, minute = 30),
-                mode = WorkMode.SelfUse,
+                mode = WorkModes.SelfUse,
                 forceDischargePower = 0,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor(WorkMode.SelfUse),
+                color = Color.scheduleColor(WorkModes.SelfUse),
                 maxSOC = 100
             )
         )

@@ -129,11 +129,11 @@ data class SchedulePhase(
             return create(
                 start = Time(hour = 19, minute = 30),
                 end = Time(hour = 23, minute = 30),
-                mode = WorkMode.SelfUse,
+                mode = WorkModes.SelfUse,
                 forceDischargePower = 0,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor(WorkMode.SelfUse),
+                color = Color.scheduleColor(WorkModes.SelfUse),
                 maxSOC = 100
             )!!
         }
@@ -171,10 +171,10 @@ data class SchedulePhase(
 
 fun Color.Companion.scheduleColor(mode: WorkMode): Color {
     return when (mode) {
-        WorkMode.Feedin -> PowerFlowPositive
-        WorkMode.ForceCharge -> PowerFlowNegative
-        WorkMode.ForceDischarge -> PowerFlowPositive
-        WorkMode.SelfUse -> LightGray
+        WorkModes.Feedin -> PowerFlowPositive
+        WorkModes.ForceCharge -> PowerFlowNegative
+        WorkModes.ForceDischarge -> PowerFlowPositive
+        WorkModes.SelfUse -> LightGray
         else -> Black
     }
 }

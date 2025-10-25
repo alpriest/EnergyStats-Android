@@ -17,8 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -33,7 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.energy
+import com.alpriest.energystats.models.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -47,7 +49,6 @@ import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -55,6 +56,9 @@ import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
+import io.dontsayboj.rollingnumbers.RollingNumbers
+import io.dontsayboj.rollingnumbers.model.DefaultAnimationDuration
+import io.dontsayboj.rollingnumbers.ui.Utils
 import kotlinx.coroutines.flow.MutableStateFlow
 
 enum class SummaryScreen {
@@ -201,35 +205,62 @@ class SummaryView(
 
     @Composable
     private fun EnergySummaryRow(title: String, amount: Double?, textStyle: TextStyle, modifier: Modifier = Modifier) {
+
         amount?.let {
+            var displayAmount by remember { mutableStateOf(
+                " ".repeat(amount.kWh(0, suffix = "").length)
+            ) }
+
+            LaunchedEffect(title) {
+                displayAmount = amount.kWh(decimalPlaces = 0, suffix = "")
+            }
+
             Row {
                 Text(
                     title,
                     modifier = modifier.weight(1.0f),
                     style = textStyle
                 )
-                Text(
-                    it.energy(displayUnit = DisplayUnit.Kilowatts, decimalPlaces = 0),
-                    modifier = modifier,
-                    style = textStyle
-                )
+
+                Row {
+                    RollingNumbers(
+                        displayAmount,
+                        characterLists = listOf(" ,." + Utils.provideNumberString()),
+                        animationDuration = DefaultAnimationDuration.Fast.duration,
+                        textStyle = textStyle
+                    )
+                    Text(" kWh", style = textStyle)
+                }
             }
         }
     }
 
     @Composable
     private fun MoneySummaryRow(title: String, amount: FinanceAmount, textStyle: TextStyle, modifier: Modifier = Modifier, currencySymbol: String) {
+        var displayAmount by remember { mutableStateOf(
+            " ".repeat(amount.formattedAmount("").length))
+        }
+
+        LaunchedEffect(title) {
+            displayAmount = amount.formattedAmount("")
+        }
+
         Row {
             Text(
                 title,
                 modifier = modifier.weight(1.0f),
                 style = textStyle
             )
-            Text(
-                amount.formattedAmount(currencySymbol),
-                modifier = modifier,
-                style = textStyle
-            )
+
+            Row {
+                Text(currencySymbol, style = textStyle)
+                RollingNumbers(
+                    displayAmount,
+                    characterLists = listOf(" ,." + Utils.provideNumberString()),
+                    animationDuration = DefaultAnimationDuration.Fast.duration,
+                    textStyle = textStyle
+                )
+            }
         }
     }
 }

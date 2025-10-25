@@ -25,7 +25,7 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
     val modes: List<WorkMode>
     val startTimeStream = MutableStateFlow(Time.now())
     val endTimeStream = MutableStateFlow(Time.now())
-    val workModeStream: MutableStateFlow<WorkMode> = MutableStateFlow(WorkMode.entries.first())
+    val workModeStream: MutableStateFlow<WorkMode> = MutableStateFlow(WorkModes.SelfUse)
     val forceDischargePowerStream = MutableStateFlow("0")
     val forceDischargeSOCStream = MutableStateFlow("0")
     val minSOCStream = MutableStateFlow("0")
@@ -116,7 +116,7 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
             timeError = context.getString(R.string.end_time_must_be_after_start_time)
         }
 
-        if (workModeStream.value == WorkMode.ForceDischarge && forceDischargePowerStream.value.toIntOrNull() == 0) {
+        if (workModeStream.value == WorkModes.ForceDischarge && forceDischargePowerStream.value.toIntOrNull() == 0) {
             forceDischargePowerError = context.getString(R.string.force_discharge_power_needs_to_be_greater_than_0_to_discharge)
         }
 

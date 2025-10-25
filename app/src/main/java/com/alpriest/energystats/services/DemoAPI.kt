@@ -35,7 +35,7 @@ import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
+import com.alpriest.energystats.ui.settings.inverter.schedule.WorkModes
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import com.alpriest.energystats.ui.summary.PreviewContextHolder
 import com.google.gson.Gson
@@ -186,7 +186,7 @@ class DemoAPI : FoxAPIServicing {
                     startMinute = 0,
                     endHour = 17,
                     endMinute = 0,
-                    workMode = WorkMode.ForceCharge,
+                    workMode = WorkModes.ForceCharge,
                     minSocOnGrid = 20,
                     fdSoc = 100,
                     fdPwr = 0,
@@ -198,7 +198,7 @@ class DemoAPI : FoxAPIServicing {
                     startMinute = 0,
                     endHour = 18,
                     endMinute = 30,
-                    workMode = WorkMode.ForceDischarge,
+                    workMode = WorkModes.ForceDischarge,
                     minSocOnGrid = 20,
                     fdSoc = 20,
                     fdPwr = 3500,
@@ -206,11 +206,11 @@ class DemoAPI : FoxAPIServicing {
                 )
             ),
             workModes = listOf(
-                WorkMode.SelfUse,
-                WorkMode.Feedin,
-                WorkMode.Backup,
-                WorkMode.ForceCharge,
-                WorkMode.ForceDischarge
+                WorkModes.SelfUse,
+                WorkModes.Feedin,
+                WorkModes.Backup,
+                WorkModes.ForceCharge,
+                WorkModes.ForceDischarge
             )
         )
     }

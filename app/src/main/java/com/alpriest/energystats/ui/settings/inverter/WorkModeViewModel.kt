@@ -12,7 +12,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
-import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
+import com.alpriest.energystats.ui.settings.inverter.schedule.WorkModeOLD
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class WorkModeViewModelFactory(
@@ -31,10 +31,10 @@ class WorkModeViewModel(
     val config: ConfigManaging,
     val navController: NavController
 ) : ViewModel(), AlertDialogMessageProviding {
-    var workModeStream = MutableStateFlow(WorkMode.SelfUse)
+    var workModeStream = MutableStateFlow(WorkModeOLD.SelfUse)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
-    val items = listOf(WorkMode.SelfUse, WorkMode.Feedin, WorkMode.Backup, WorkMode.ForceCharge, WorkMode.ForceDischarge)
+    val items = listOf(WorkModeOLD.SelfUse, WorkModeOLD.Feedin, WorkModeOLD.Backup, WorkModeOLD.ForceCharge, WorkModeOLD.ForceDischarge)
 
     suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
@@ -45,7 +45,7 @@ class WorkModeViewModel(
 
                 try {
                     val result = network.fetchDeviceSettingsItem(deviceSN, DeviceSettingsItem.WorkMode)
-                    workModeStream.value = WorkMode.from(result.value)
+                    workModeStream.value = WorkModeOLD.from(result.value)
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
@@ -82,7 +82,7 @@ class WorkModeViewModel(
         }
     }
 
-    fun select(workMode: WorkMode) {
+    fun select(workMode: WorkModeOLD) {
         workModeStream.value = workMode
     }
 }
