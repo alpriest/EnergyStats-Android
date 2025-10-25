@@ -199,7 +199,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             HorizontalDivider()
 
             SettingsSegmentedControl(
-                title = "Display battery stack",
+                title = stringResource(R.string.display_battery_stack),
                 segmentedControl = {
                     val items = listOf(BatteryTemperatureDisplayMode.Automatic, BatteryTemperatureDisplayMode.Battery1, BatteryTemperatureDisplayMode.Battery2)
                     SegmentedControl(
@@ -225,7 +225,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumn {
-            InlineSettingsNavButton("Battery versions") {
+            InlineSettingsNavButton(stringResource(R.string.battery_versions)) {
                 navController.navigate(SettingsScreen.BatteryVersions.name)
             }
         }
