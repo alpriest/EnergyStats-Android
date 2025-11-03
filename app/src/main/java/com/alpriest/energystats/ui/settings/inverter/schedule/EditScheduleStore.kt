@@ -111,7 +111,7 @@ enum class WorkModeOLD {
     fun title(context: Context): String {
         return when (this) {
             SelfUse -> context.getString(R.string.self_use)
-            Feedin -> context.getString(R.string.feed_in)
+            Feedin -> context.getString(R.string.feed_in_first)
             Backup -> context.getString(R.string.backup)
             ForceCharge -> context.getString(R.string.force_charge)
             ForceDischarge -> context.getString(R.string.force_discharge)

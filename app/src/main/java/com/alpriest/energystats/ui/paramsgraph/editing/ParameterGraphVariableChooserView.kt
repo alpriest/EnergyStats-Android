@@ -86,7 +86,7 @@ class ParameterGraphVariableChooserView(
                 Box {
                     SettingsColumn(
                         modifier = Modifier.padding(top = 16.dp),
-                        header = "Groups"
+                        header = stringResource(R.string.groups)
                     ) {
                         ListRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
                         HorizontalDivider()

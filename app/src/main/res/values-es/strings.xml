@@ -77,6 +77,7 @@
     <string name="rawvariable_batdischargepower">Potencia descargada de la batería</string>
     <string name="rawvariable_gridconsumptionpower">Potencia consumida de la red</string>
     <string name="rawvariable_loadspower">La potencia de CA que fluye hacia la carga de la casa, en kilovatios (kW)</string>
+    <string name="rawvariable_pvpower">La potencia total de todas las cadenas de PV, en kilovatios (kW)</string>
     <string name="rawvariable_pv1power">La potencia de la cadena de PV 1, en kilovatios (kW)</string>
     <string name="rawvariable_pv1volt">El voltaje CC presentado por la cadena de PV 1, en voltios (V)</string>
     <string name="rawvariable_pv1current">La corriente CC que fluye a través de la cadena de PV 1, en amperios (A)</string>
@@ -96,6 +97,7 @@
     <string name="rawvariable_batvolt">El voltaje de la batería CC, medido por el BMS, en voltios (V)</string>
     <string name="rawvariable_invbatvolt">El voltaje de la batería CC, medido por el inversor, en voltios (V)</string>
     <string name="rawvariable_invbatcurrent">La corriente CC que fluye desde la batería, medida por el inversor, en amperios (A)</string>
+    <string name="rawvariable_invbatpower">La potencia que fluye desde (positivo) o hacia (negativo) la batería, medida por el inversor, en kilovatios (kW)</string>
     <string name="rawvariable_meterpower">La potencia medida por el medidor de red o la pinza de corriente CT1, en kilovatios (kW)</string>
     <string name="rawvariable_reactivepower">La potencia reactiva emitida por el inversor, en kilovoltamperios reactivos (kVAR)</string>
     <string name="rawvariable_soc">Estado de carga de la batería. El porcentaje de la capacidad de la batería que está disponible</string>
@@ -392,7 +394,7 @@
     <string name="fetch_solar_forecast_on_app_launch">Obtener la previsión solar al iniciar la aplicación</string>
     <string name="clear">Despejado</string>
     <string name="no_data">Sin datos</string>
-    <string name="parameters">"Parámetros...  "</string>
+    <string name="parameters">"Parámetros…  "</string>
     <string name="reportvariable_pvenergytotal">Energía generada a partir de PV</string>
     <string name="logout_from_demo">Cerrar sesión en la demostración</string>
     <string name="show_ct2_value">Mostrar el valor de CT2</string>
@@ -417,8 +419,8 @@
     <string name="maxsoc_description">"Establece el nivel máximo de carga que la batería puede alcanzar, expresado como porcentaje.  "</string>
     <string name="export_limit_behaviour">"Al configurar esta opción, puedes controlar la cantidad de energía enviada a la red, asegurando el cumplimiento de normativas locales o preferencias personales. Por ejemplo, si las normativas locales limitan la capacidad de exportación, establecer este valor garantiza que el inversor no supere el límite especificado.  "</string>
     <string name="maxsoc_behaviour">"La carga se detiene cuando la batería alcanza el Max SoC. Puede ajustarse según los patrones de uso o para alinearse con las tarifas energéticas y la disponibilidad solar.  "</string>
-    <string name="device_settings_warning">Por favor, ten cuidado y cambia esta configuración solo si sabes lo que estás haciendo.\\n\\nEnergy Stats no se hace responsable de los daños ocasionados por este cambio.</string>
-    <string name="about_59_seconds">Los 59 segundos están determinados por el funcionamiento del firmware del inversor. Esto se debe a que las horas de finalización incluyen el minuto que configures, por lo que tu intervalo de tiempo se ejecutará hasta el segundo 59 de ese minuto.\\n\\nEjemplo: si deseas que el intervalo termine a las 05:30, debes establecerlo en 05:29:59. Si lo configuras en 05:30, el inversor continuará hasta las 05:30:59 y tendrás un minuto en el que el uso de energía no será el esperado.</string>
+    <string name="device_settings_warning">Por favor, ten cuidado y cambia esta configuración solo si sabes lo que estás haciendo.\n\nEnergy Stats no se hace responsable de los daños ocasionados por este cambio.</string>
+    <string name="about_59_seconds">Los 59 segundos están determinados por el funcionamiento del firmware del inversor. Esto se debe a que las horas de finalización incluyen el minuto que configures, por lo que tu intervalo de tiempo se ejecutará hasta el segundo 59 de ese minuto.\n\nEjemplo: si deseas que el intervalo termine a las 05:30, debes establecerlo en 05:29:59. Si lo configuras en 05:30, el inversor continuará hasta las 05:30:59 y tendrás un minuto en el que el uso de energía no será el esperado.</string>
     <string name="solar_strings_description">Si tienes varios conjuntos de paneles solares, por ejemplo, en el frente/trasero de tu casa, esto te permitirá ver la energía generada por cada conjunto. La configuración tendrá efecto en la próxima obtención de datos.</string>
     <string name="solar_yield_description">Su generación diaria total se mostrará. Si tiene activada la opción \'Mostrar la potencia fotovoltaica por cadenas\', también se mostrará una estimación de la generación diaria por cadena.</string>
     <string name="string_total_today_description">" (%1$s hoy)"</string>
@@ -426,11 +428,11 @@
     <string name="earnings_ct2_description">Introduce el precio unitario que recibes por kWh por exportar electricidad a través de otro inversor monitorizado mediante CT2. Esto solo mostrará los datos de ganancias en la página de flujo de energía, ya que Fox no almacena estadísticas históricas de CT2.</string>
     <string name="peak_shaving">Reducción de picos</string>
     <string name="failed_to_load_settings">No se pudieron cargar los ajustes</string>
-    <string name="peak_shaving_is_not_available">La reducción de picos no está disponible. Esto podría deberse al firmware o modelo de su inversor.\\n\\nPóngase en contacto con FoxESS para obtener más información.</string>
+    <string name="peak_shaving_is_not_available">La reducción de picos no está disponible. Esto podría deberse al firmware o modelo de su inversor.\n\nPóngase en contacto con FoxESS para obtener más información.</string>
     <string name="import_limit">Límite de importación</string>
     <string name="battery_threshold_soc">Umbral de batería SOC</string>
     <string name="failed_to_save_settings">No se pudieron guardar los ajustes</string>
-    <string name="reset_ellipsis">Restablecer...</string>
+    <string name="reset_ellipsis">Restablecer…</string>
     <string name="will_be_reset">Se restablecerá:</string>
     <string name="inverter_display_settings_ct2_settings">Configuración de visualización del inversor, configuración de CT2</string>
     <string name="battery_display_settings">Configuración de visualización de la batería</string>
@@ -447,14 +449,14 @@
     <string name="self_sufficiency_settings">Configuración de autosuficiencia</string>
     <string name="will_not_be_reset">No se restablecerá:</string>
     <string name="display_settings">Configuración de visualización</string>
-    <string name="peak_shaving_explanation">Tu sistema monitorea la energía importada de la red. Si la importación supera tu Límite de Importación de %1$s y el estado de carga (SOC) de la batería está por encima de %2$s%%, el sistema descarga la batería para suministrar la demanda adicional, reduciendo así el pico de carga desde la red.\\n\\nEsta operación continúa mientras el estado de carga (SOC) de la batería esté por encima de un umbral determinado.\\n\\nEl Peak Shaving solo funciona cuando el modo Peak Shaving está activado desde el programador del inversor.</string>
+    <string name="peak_shaving_explanation">Tu sistema monitorea la energía importada de la red. Si la importación supera tu Límite de Importación de %1$s y el estado de carga (SOC) de la batería está por encima de %2$s%%, el sistema descarga la batería para suministrar la demanda adicional, reduciendo así el pico de carga desde la red.\n\nEsta operación continúa mientras el estado de carga (SOC) de la batería esté por encima de un umbral determinado.\n\nEl Peak Shaving solo funciona cuando el modo Peak Shaving está activado desde el programador del inversor.</string>
     <string name="force_charge">Carga forzada</string>
     <string name="force_discharge">Descarga forzada</string>
     <string name="time_period_missing_warning">Cualquier periodo no especificado arriba se configurará por defecto en modo de autoconsumo, utilizando el SOC mínimo del periodo activo más reciente.</string>
     <string name="estimated_energy_used_to_power_the_inverter">Energía estimada utilizada para alimentar el inversor</string>
     <string name="show_estimated_inverter_consumption">Mostrar el consumo estimado del inversor</string>
     <string name="summary_tab">Resumen</string>
-    <string name="parameters_more">Parámetros...</string>
+    <string name="parameters_more">Parámetros…</string>
     <string name="inverter_consumption">Consumo del inversor</string>
     <string name="battery_state_of_charge">Estado de carga de la batería</string>
     <string name="show_battery_soc_on_daily_stats_description">Muestra el nivel de carga de la batería en la vista diaria de estadísticas.</string>
@@ -465,4 +467,8 @@
     <string name="do_you_want_to_replace_your_existing_templates_with_the_imported_templates">¿Quieres reemplazar tus plantillas existentes con las plantillas importadas?</string>
     <string name="invalid_api_key_format">Tu clave API parece tener un formato incorrecto.</string>
     <string name="yes">Si</string>
+    <string name="use_traditional_load_formula">Utilizar la fórmula de carga tradicional</string>
+    <string name="use_traditional_load_formula_description">Utiliza el valor de carga FoxESS para mostrar la carga, lo que no gestiona muy bien el CT2 +ve/-ve. Los cambios solo surten efecto en la siguiente obtención de datos.</string>
+    <string name="battery_versions">Versiones de batería</string>
+    <string name="device_selection">Selección de dispositivos</string>
 </resources>

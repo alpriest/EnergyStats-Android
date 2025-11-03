@@ -90,11 +90,11 @@ fun DataSettingsView(config: ConfigManaging, modifier: Modifier) {
 
         SettingsColumn {
             SettingsCheckbox(
-                title = "Use traditional load formula",
+                title = stringResource(R.string.use_traditional_load_formula),
                 state = useTraditionalLoadFormulaState,
                 onUpdate = { config.useTraditionalLoadFormula = !it },
                 footer = buildAnnotatedString {
-                    append("Uses the FoxESS loads value to show load which doesn't handle +ve/-ve CT2 very well. Changes only take effect on next data fetch.")
+                    append(stringResource(R.string.use_traditional_load_formula_description))
                 }
             )
         }
