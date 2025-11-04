@@ -34,6 +34,9 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
+import com.alpriest.energystats.ui.settings.inverter.schedule.subtitle
+import com.alpriest.energystats.ui.settings.inverter.schedule.title
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class WorkModeSettingsView(
@@ -62,7 +65,7 @@ class WorkModeSettingsView(
                 ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save(context) }, { modifier ->
                     SettingsPage(modifier) {
                         SettingsColumnWithChild {
-                            viewModel.items.forEachIndexed { index, workMode ->
+                            viewModel.items.forEachIndexed { index, workMode: WorkMode ->
                                 Column(
                                     modifier = Modifier
                                         .clickable { viewModel.select(workMode) }
@@ -81,11 +84,13 @@ class WorkModeSettingsView(
                                         )
                                     }
 
-                                    Row(modifier = Modifier.padding(start = 48.dp)) {
-                                        Text(
-                                            workMode.subtitle(context),
-                                            color = colorScheme.onSecondary
-                                        )
+                                    workMode.subtitle(context)?.let {
+                                        Row(modifier = Modifier.padding(start = 48.dp)) {
+                                            Text(
+                                                it,
+                                                color = colorScheme.onSecondary
+                                            )
+                                        }
                                     }
                                 }
 

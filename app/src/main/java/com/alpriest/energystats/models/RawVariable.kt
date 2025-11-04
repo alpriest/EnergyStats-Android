@@ -1,6 +1,7 @@
 package com.alpriest.energystats.models
 
 import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColorInt
 
 class Variable(
     val name: String,
@@ -18,7 +19,7 @@ class Variable(
             Variable.solcastPrediction.variable -> Color.Black
             else ->
                 this.variable.md5()?.let {
-                    Color(android.graphics.Color.parseColor("#" + it.subSequence(0, 6).toString()))
+                    Color(("#" + it.subSequence(0, 6).toString()).toColorInt())
                 } ?: Color.Black
         }
     }
@@ -39,6 +40,13 @@ class Variable(
         return result
     }
 
+    fun fuzzyNameMatches(other: String): Boolean {
+        // Systems with multiple batteries can return the raw variable name with a numbering appended
+        return "${variable}_1" == other ||
+                "${variable}_2" == other ||
+                "${variable}_3" == other
+    }
+
     companion object
 }
 
@@ -48,3 +56,4 @@ val Variable.Companion.solcastPrediction: Variable
         variable = "solcast_prediction",
         unit = "kW"
     )
+

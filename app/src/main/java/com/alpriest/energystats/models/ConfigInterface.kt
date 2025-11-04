@@ -10,6 +10,7 @@ import com.alpriest.energystats.widget.GenerationViewData
 import java.time.LocalDateTime
 
 interface ConfigInterface {
+    var workModes: List<String>
     var fetchSolcastOnAppLaunch: Boolean
     var showInverterScheduleQuickLink: Boolean
     var batteryTemperatureDisplayMode: Int

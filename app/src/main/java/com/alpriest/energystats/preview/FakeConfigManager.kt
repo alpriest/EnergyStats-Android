@@ -148,4 +148,6 @@ class FakeConfigManager : ConfigManaging {
     override var appVersion: String = "1.29"
 
     override fun resetDisplaySettings() {}
+
+    override var workModes: List<String> = listOf()
 }

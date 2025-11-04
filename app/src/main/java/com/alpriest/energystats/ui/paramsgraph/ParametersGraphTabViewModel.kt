@@ -174,7 +174,7 @@ class ParametersGraphTabViewModel(
             val backfilledHistoryResponse = backfillMissingTimes(serverSpecifiedHistoryResponse)
 
             val rawData: List<ParametersGraphValue> = backfilledHistoryResponse.datas.flatMap { response ->
-                val rawVariable = configManager.variables.firstOrNull { it.variable == response.variable } ?: return@flatMap emptyList()
+                val configVariable = configManager.variables.firstOrNull { cv -> cv.fuzzyNameMatches(response.variable) } ?: return@flatMap emptyList()
 
                 response.data.mapIndexed { index, item ->
                     val localDateTime = parseToLocalDateTime(item.time)
@@ -183,7 +183,7 @@ class ParametersGraphTabViewModel(
                         graphPoint = index,
                         time = localDateTime,
                         value = item.value,
-                        type = rawVariable
+                        type = configVariable
                     )
                 }
             }

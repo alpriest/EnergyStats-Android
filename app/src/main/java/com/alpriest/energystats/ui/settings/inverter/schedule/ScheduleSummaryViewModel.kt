@@ -112,6 +112,7 @@ class ScheduleSummaryViewModel(
                     val schedule = Schedule.create(scheduleResponse)
                     scheduleStream.value = schedule
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
+                    config.workModes = scheduleResponse.workModes
 
                     if (schedule.supportsMaxSOC()) {
                         config.setDeviceSupports(DeviceCapability.ScheduleMaxSOC, deviceSN)

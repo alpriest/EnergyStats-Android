@@ -90,7 +90,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_STRING_TOTALS_AS_PERCENTAGE,
         GENERATION_VIEW_DATA,
         SHOW_INVERTER_CONSUMPTION,
-        SHOW_BATTERY_SOC_ON_DAILY_STATS
+        SHOW_BATTERY_SOC_ON_DAILY_STATS,
+        INVERTER_WORK_MODES
     }
 
     override fun clearDisplaySettings() {
@@ -711,6 +712,18 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, value)
+            }
+        }
+
+    override var workModes: List<String>
+        get() {
+            val workModes = sharedPreferences.getString(SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, Gson().toJson(listOf<String>()))
+            return Gson().fromJson(workModes, object : TypeToken<List<String>>() {}.type)
+        }
+        set(value) {
+            sharedPreferences.edit {
+                val jsonString = Gson().toJson(value)
+                putString(SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, jsonString)
             }
         }
 }

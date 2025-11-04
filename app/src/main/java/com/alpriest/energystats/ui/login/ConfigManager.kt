@@ -381,9 +381,7 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             deviceList.asFlow().map { networkDevice ->
                 val deviceBattery: Battery? = if (networkDevice.hasBattery) {
                     try {
-                        method = "openapi_fetchRealData"
                         val batteryVariables = networking.fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC", "SoC_1"))
-                        method = "openapi_fetchBatterySOC"
                         val batterySettings = networking.fetchBatterySettings(networkDevice.deviceSN)
 
                         BatteryResponseMapper.map(batteryVariables, batterySettings)
@@ -601,6 +599,12 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
         set(value) {
             config.showBatterySOCOnDailyStats = value
             themeStream.value = themeStream.value.copy(showBatterySOCOnDailyStats = showBatterySOCOnDailyStats)
+        }
+
+    override var workModes: List<String>
+        get() = config.workModes
+        set(value) {
+            config.workModes = value
         }
 
     init {

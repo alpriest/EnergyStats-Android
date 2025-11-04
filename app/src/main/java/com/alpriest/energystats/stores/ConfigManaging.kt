@@ -17,6 +17,7 @@ import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
+import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -94,6 +95,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean
     fun setDeviceSupports(capability: DeviceCapability, deviceSN: String)
     fun resetDisplaySettings()
+    var workModes: List<WorkMode>
+
     var showInverterConsumption: Boolean
     var showBatterySOCOnDailyStats: Boolean
     var showStringTotalsAsPercentage: Boolean
