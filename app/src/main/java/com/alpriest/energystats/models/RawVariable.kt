@@ -6,7 +6,8 @@ import androidx.core.graphics.toColorInt
 class Variable(
     val name: String,
     val variable: String,
-    val unit: String) {
+    val unit: String
+) {
 
     fun colour(): Color {
         return when (this.variable) {
@@ -42,7 +43,8 @@ class Variable(
 
     fun fuzzyNameMatches(other: String): Boolean {
         // Systems with multiple batteries can return the raw variable name with a numbering appended
-        return "${variable}_1" == other ||
+        return variable == other ||
+                "${variable}_1" == other ||
                 "${variable}_2" == other ||
                 "${variable}_3" == other
     }
