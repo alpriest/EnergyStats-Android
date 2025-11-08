@@ -1,8 +1,14 @@
 package com.alpriest.energystats.ui.paramsgraph
 
 import android.net.Uri
+import androidx.compose.foundation.Image
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -10,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.services.Networking
@@ -23,6 +30,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEdi
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.ESButton
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -112,7 +120,15 @@ class NavigableParametersGraphTabView(
             }
 
             composable(ParametersScreen.ParameterChooser.name) {
-                topBarSettings.value = TopBarSettings(true, "Choose Parameters", {}, { navController.popBackStack() })
+                topBarSettings.value = TopBarSettings(true, stringResource(R.string.parameters), {
+                    ESButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
+                        Image(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            colorFilter = ColorFilter.tint(Color.White)
+                        )
+                    }
+                }, { navController.popBackStack() })
 
                 ParameterGraphVariableChooserView(
                     configManager,
@@ -122,7 +138,7 @@ class NavigableParametersGraphTabView(
             }
 
             composable(ParametersScreen.ParameterGroupEditor.name) {
-                topBarSettings.value = TopBarSettings(true, "Edit Parameter Group", {}, { navController.popBackStack() })
+                topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_parameter_group), {}, { navController.popBackStack() })
 
                 ParameterVariableGroupEditorView(
                     ParameterVariableGroupEditorViewModel(configManager, viewModel.graphVariablesStream),

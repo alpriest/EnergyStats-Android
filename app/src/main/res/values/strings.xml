@@ -476,4 +476,6 @@
     <string name="use_traditional_load_formula_description">Uses the FoxESS loads value to show load which doesn\'t handle +ve/-ve CT2 very well. Changes only take effect on next data fetch.</string>
     <string name="battery_versions">Battery versions</string>
     <string name="device_selection">Device selection</string>
+    <string name="edit_parameter_group">Edit Parameter Group</string>
+    <string name="parameter_selector_overview">Select a group below to focus on commonly used parameters, or create your own using the Edit button.</string>
 </resources>

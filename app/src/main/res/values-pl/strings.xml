@@ -472,4 +472,6 @@
     <string name="use_traditional_load_formula_description">Wykorzystuje wartość obciążenia FoxESS do wyświetlenia obciążenia, które nie radzi sobie zbyt dobrze z +ve/-ve CT2. Zmiany zaczną obowiązywać dopiero przy następnym pobraniu danych.</string>
     <string name="battery_versions">Wersje baterii</string>
     <string name="device_selection">Wybór urządzenia</string>
+    <string name="edit_parameter_group">Edytuj grupę parametrów</string>
+    <string name="parameter_selector_overview">Wybierz poniżej grupę, aby skupić się na najczęściej używanych parametrach, lub utwórz własną za pomocą przycisku „Edytuj”.</string>
 </resources>

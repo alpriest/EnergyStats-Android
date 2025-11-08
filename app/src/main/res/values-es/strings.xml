@@ -471,4 +471,6 @@
     <string name="use_traditional_load_formula_description">Utiliza el valor de carga FoxESS para mostrar la carga, lo que no gestiona muy bien el CT2 +ve/-ve. Los cambios solo surten efecto en la siguiente obtención de datos.</string>
     <string name="battery_versions">Versiones de batería</string>
     <string name="device_selection">Selección de dispositivos</string>
+    <string name="edit_parameter_group">Editar grupo de parámetros</string>
+    <string name="parameter_selector_overview">Selecciona un grupo a continuación para centrarte en los parámetros más utilizados o crea el tuyo propio con el botón “Editar”.</string>
 </resources>

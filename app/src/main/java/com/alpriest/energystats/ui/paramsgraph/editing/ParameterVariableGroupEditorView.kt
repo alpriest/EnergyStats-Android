@@ -176,7 +176,7 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
             Header(viewModel)
 
             SettingsColumn(
-                header = "Choose parameters"
+                header = "Parameters"
             ) {
                 ParameterVariableListView(variables = variables, onTap = { viewModel.toggle(it) })
             }

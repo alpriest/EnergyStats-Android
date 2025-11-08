@@ -471,4 +471,6 @@
     <string name="use_traditional_load_formula_description">Verwendet die FoxESS-Lastwerte um Leistung anzuzeigen. Dies funktioniert nicht sonderlich gut mit +ve/-ve CT2. Änderungen werden erst bei der nächsten Datenübertragung wirksam.</string>
     <string name="battery_versions">Batterie-Versionen</string>
     <string name="device_selection">Geräte-Auswahl</string>
+    <string name="edit_parameter_group">Parametergruppe bearbeiten</string>
+    <string name="parameter_selector_overview">Wählen Sie unten eine Gruppe aus, um sich auf häufig verwendete Parameter zu konzentrieren, oder erstellen Sie mit der Schaltfläche „Bearbeiten“ Ihre eigene.</string>
 </resources>

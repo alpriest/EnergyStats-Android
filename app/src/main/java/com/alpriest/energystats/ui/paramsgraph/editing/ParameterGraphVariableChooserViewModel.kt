@@ -102,11 +102,11 @@ class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, 
 
     companion object {
         val DefaultGraphVariables = listOf(
-            "generationPower",
-            "batChargePower",
-            "batDischargePower",
-            "feedinPower",
-            "gridConsumptionPower"
+            "invBatPower",
+            "meterPower",
+            "loadsPower",
+            "pvPower",
+            "SoC"
         )
     }
 }

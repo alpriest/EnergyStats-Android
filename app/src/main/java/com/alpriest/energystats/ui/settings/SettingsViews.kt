@@ -39,12 +39,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.ui.helpers.darkenColor
 import com.alpriest.energystats.ui.dialog.AlertDialog
+import com.alpriest.energystats.ui.helpers.darkenColor
 import com.alpriest.energystats.ui.theme.ESButton
 
 object SettingsPadding {
@@ -80,6 +81,7 @@ class SettingsPaddingValues {
 fun SettingsColumn(
     modifier: Modifier = Modifier,
     header: String? = null,
+    headerExtra: @Composable () -> Unit = {},
     footer: String? = null,
     footerAnnotatedString: AnnotatedString? = null,
     footerModifier: Modifier = Modifier,
@@ -102,7 +104,8 @@ fun SettingsColumn(
                                 bottom = 8.dp
                             )
                         )
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    headerExtra
                 )
             }
         },
@@ -206,7 +209,7 @@ fun SettingsTitleView(title: String, modifier: Modifier = Modifier, extra: @Comp
     Row(modifier = modifier.fillMaxWidth()) {
         Text(
             text = title.uppercase(),
-            style = TextStyle.Default.copy(color = colorScheme.onSecondary)
+            style = TextStyle.Default.copy(color = colorScheme.onSecondary, fontWeight = Bold),
         )
 
         extra()

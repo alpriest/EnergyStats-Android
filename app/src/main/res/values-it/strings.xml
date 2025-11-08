@@ -472,4 +472,6 @@
     <string name="use_traditional_load_formula_description">Utilizza il valore dei carichi FoxESS per mostrare il carico che non gestisce molto bene CT2 +ve/-ve. Le modifiche hanno effetto solo al successivo recupero dei dati.</string>
     <string name="battery_versions">Versioni con batteria</string>
     <string name="device_selection">Selezione del dispositivo</string>
+    <string name="edit_parameter_group">Modifica gruppo di parametri</string>
+    <string name="parameter_selector_overview">Seleziona un gruppo qui sotto per concentrarti sui parametri più comuni oppure crea il tuo gruppo con il pulsante “Modifica”.</string>
 </resources>

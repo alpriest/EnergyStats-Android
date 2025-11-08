@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.paramsgraph.editing
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,16 +12,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -42,7 +43,6 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
-import com.alpriest.energystats.ui.paramsgraph.ParametersScreen
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.theme.ESButton
@@ -64,6 +64,7 @@ class ParameterGraphVariableChooserView(
         val groups = configManager.themeStream.collectAsState().value.parameterGroups
         val selectedGroupId = viewModel.selectedIdState.collectAsState().value
         trackScreenView("Parameters", "ParameterGraphVariableChooserView")
+        var showAllParameters by remember { mutableStateOf(false) }
 
         ContentWithBottomButtonPair(navController, onConfirm = {
             viewModel.apply()
@@ -79,56 +80,69 @@ class ParameterGraphVariableChooserView(
                 modifier = modifier
                     .fillMaxWidth()
                     .verticalScroll(scrollState)
-                    .padding(horizontal = 12.dp)
                     .padding(bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
-                Box {
-                    SettingsColumn(
-                        modifier = Modifier.padding(top = 16.dp),
-                        header = stringResource(R.string.groups)
-                    ) {
-                        ListRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
-                        HorizontalDivider()
-                        ListRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
-                        HorizontalDivider()
+                Column(
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+                        .padding(horizontal = 12.dp)
+                ) {
+                    Text(stringResource(R.string.parameter_selector_overview))
+                }
 
-                        groups.forEachIndexed { index, item ->
-                            Row {
-                                ListRow(
-                                    onClick = { viewModel.select(item.parameterNames) },
-                                    item.id == selectedGroupId
-                                ) {
-                                    Text(
-                                        item.title,
-                                        modifier = it
-                                    )
-                                }
-                            }
+                SettingsColumn(
+                    modifier = Modifier.padding(top = 16.dp),
+                    header = "Groups"
+                ) {
+                    ListRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
+                    HorizontalDivider()
+                    ListRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
+                    HorizontalDivider()
 
-                            if (index < groups.lastIndex) {
-                                HorizontalDivider()
+                    groups.forEachIndexed { index, item ->
+                        Row {
+                            ListRow(
+                                onClick = { viewModel.select(item.parameterNames) },
+                                item.id == selectedGroupId
+                            ) {
+                                Text(
+                                    item.title,
+                                    modifier = it
+                                )
                             }
                         }
-                    }
 
-                    Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                        Spacer(modifier = Modifier.weight(1.0f))
-                        IconButton(onClick = { navController.navigate(ParametersScreen.ParameterGroupEditor.name) }) {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = null,
-                                tint = colorScheme.onSecondary,
-                            )
+                        if (index < groups.lastIndex) {
+                            HorizontalDivider()
                         }
                     }
                 }
 
                 SettingsColumn(
                     modifier = Modifier.padding(bottom = 12.dp),
-                    header = "All"
+                    header = "Parameters",
+                    headerExtra = {
+                        Row(
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Spacer(modifier = Modifier.weight(1.0f))
+                            Text(
+                                if (showAllParameters) {
+                                    "Show only selected"
+                                } else {
+                                    "Show all"
+                                },
+                                modifier = Modifier.clickable {
+                                    showAllParameters = !showAllParameters
+                                }
+                            )
+                        }
+                    }
                 ) {
-                    ParameterVariableListView(variables, onTap = { viewModel.toggle(it) })
+                    ParameterVariableListView(
+                        variables.filter { it.enabled || showAllParameters },
+                        onTap = { viewModel.toggle(it) })
                 }
 
                 Column(
