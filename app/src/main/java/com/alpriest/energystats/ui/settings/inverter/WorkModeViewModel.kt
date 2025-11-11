@@ -46,6 +46,10 @@ class WorkModeViewModel(
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
+                if (items.isEmpty()) {
+                    config.workModes = fetchWorkModes(deviceSN)
+                }
+
                 try {
                     val result = network.fetchDeviceSettingsItem(deviceSN, DeviceSettingsItem.WorkMode)
                     workModeStream.value = result.value
@@ -57,6 +61,11 @@ class WorkModeViewModel(
                 uiState.value = UiLoadState(LoadState.Inactive)
             }
         }
+    }
+
+    suspend fun fetchWorkModes(deviceSN: String): List<String> {
+        val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
+        return scheduleResponse.workModes
     }
 
     suspend fun save(context: Context) {

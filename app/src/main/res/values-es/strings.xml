@@ -371,7 +371,7 @@
     <string name="show_self_sufficiency_percentage_on_stats_graph">Mostrar el porcentaje de autosuficiencia en el gráfico de estadísticas</string>
     <string name="get_started">Comenzar</string>
     <string name="energy_management_at_your_fingertips">Gestión de energía al alcance de tu mano</string>
-    <string name="find_out_more_about_your_api_key">Obtén más información sobre tu clave API</string>
+    <string name="what_is_an_api_key">¿Qué es una clave API?</string>
     <string name="launch">Lanzar</string>
     <string name="refresh">Actualizar</string>
     <string name="automatic">Automático</string>

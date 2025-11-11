@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -157,9 +158,19 @@ class SummaryView(
 
     @Composable
     private fun LoadedView(approximationsViewModel: ApproximationsViewModel, hasPV: Boolean, appTheme: AppTheme, oldestDataDate: String, latestDataDate: String) {
-        EnergySummaryRow(stringResource(R.string.home_usage), approximationsViewModel.homeUsage, textStyle = typography.titleLarge)
+        val style = typography.titleLarge.copy(color = MaterialTheme.colorScheme.onSurface)
+
+        EnergySummaryRow(
+            stringResource(R.string.home_usage),
+            approximationsViewModel.homeUsage,
+            textStyle = style
+        )
         if (hasPV) {
-            EnergySummaryRow(stringResource(R.string.solar_generated), approximationsViewModel.totalsViewModel?.solar, textStyle = typography.titleLarge)
+            EnergySummaryRow(
+                stringResource(R.string.solar_generated),
+                approximationsViewModel.totalsViewModel?.solar,
+                textStyle = style
+            )
         } else {
             Text(
                 stringResource(R.string.your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data),
@@ -174,19 +185,19 @@ class SummaryView(
             MoneySummaryRow(
                 title = stringResource(R.string.export_income),
                 amount = energyStatsModel.exportIncome,
-                textStyle = typography.titleLarge,
+                textStyle = style,
                 currencySymbol = appTheme.currencySymbol
             )
             MoneySummaryRow(
                 title = stringResource(R.string.grid_import_avoided),
                 amount = energyStatsModel.solarSaving,
-                textStyle = typography.titleLarge,
+                textStyle = style,
                 currencySymbol = appTheme.currencySymbol
             )
             MoneySummaryRow(
                 title = stringResource(R.string.total_benefit),
                 amount = energyStatsModel.total,
-                textStyle = typography.titleLarge,
+                textStyle = style,
                 currencySymbol = appTheme.currencySymbol
             )
         }
@@ -207,9 +218,11 @@ class SummaryView(
     private fun EnergySummaryRow(title: String, amount: Double?, textStyle: TextStyle, modifier: Modifier = Modifier) {
 
         amount?.let {
-            var displayAmount by remember { mutableStateOf(
-                " ".repeat(amount.kWh(0, suffix = "").length)
-            ) }
+            var displayAmount by remember {
+                mutableStateOf(
+                    " ".repeat(amount.kWh(0, suffix = "").length)
+                )
+            }
 
             LaunchedEffect(title) {
                 displayAmount = amount.kWh(decimalPlaces = 0, suffix = "")
@@ -237,8 +250,10 @@ class SummaryView(
 
     @Composable
     private fun MoneySummaryRow(title: String, amount: FinanceAmount, textStyle: TextStyle, modifier: Modifier = Modifier, currencySymbol: String) {
-        var displayAmount by remember { mutableStateOf(
-            " ".repeat(amount.formattedAmount("").length))
+        var displayAmount by remember {
+            mutableStateOf(
+                " ".repeat(amount.formattedAmount("").length)
+            )
         }
 
         LaunchedEffect(title) {

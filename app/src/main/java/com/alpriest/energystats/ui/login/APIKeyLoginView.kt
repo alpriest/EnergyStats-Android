@@ -1,8 +1,5 @@
 package com.alpriest.energystats.ui.login
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +22,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -32,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -79,7 +76,9 @@ class APIKeyLoginView(private val userManager: UserManaging) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.safeDrawing)
         ) {
             Text(
                 stringResource(R.string.enter_your_foxess_cloud_details),
@@ -115,7 +114,8 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                     color = Color.Red
                 )
 
-                EqualWidthButtonList(listOf(
+                EqualWidthButtonList(
+                    listOf(
                     ButtonDefinition(stringResource(R.string.copy_debug_data)) {
                         copyDebugData(context)
                     }
@@ -157,8 +157,6 @@ class APIKeyLoginView(private val userManager: UserManaging) {
 class HowToObtainAPIKeyView {
     @Composable
     fun Content(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-        val showing = remember { mutableStateOf(false) }
-
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = modifier.fillMaxWidth()
@@ -169,6 +167,7 @@ class HowToObtainAPIKeyView {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             BulletPoint(1, stringResource(R.string.api_key_step_1), themeStream)
+            Text("** Do not use the V2 website yet.**")
             BulletPoint(2, stringResource(R.string.api_key_step_2), themeStream)
             BulletPoint(3, stringResource(R.string.api_key_step_3), themeStream)
             BulletPoint(4, stringResource(R.string.api_key_step_4), themeStream)
@@ -176,29 +175,18 @@ class HowToObtainAPIKeyView {
             BulletPoint(6, stringResource(R.string.api_key_step_6), themeStream)
             BulletPoint(7, stringResource(R.string.api_key_step_7), themeStream)
 
-            ESButton(
-                onClick = { showing.value = !showing.value },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorScheme.surfaceContainer,
-                    contentColor = colorScheme.onSecondary
-                ),
+            Text(
+                stringResource(R.string.what_is_an_api_key),
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(top = 16.dp)
-            ) {
-                Text(stringResource(R.string.find_out_more_about_your_api_key))
-            }
+            )
 
-            AnimatedVisibility(
-                visible = showing.value,
-                enter = expandVertically(),
-                exit = shrinkVertically()
-            ) {
-                Column {
-                    Paragraph(stringResource(R.string.what_is_api_key_1), themeStream = themeStream)
-                    Paragraph(stringResource(R.string.what_is_api_key_2), themeStream = themeStream)
-                    Paragraph(stringResource(R.string.what_is_api_key_3), themeStream = themeStream)
-                    Paragraph(stringResource(R.string.what_is_api_key_4), themeStream = themeStream)
-                    Paragraph(stringResource(R.string.what_is_api_key_5), themeStream = themeStream)
-                }
+            Column {
+                Paragraph(stringResource(R.string.what_is_api_key_1), themeStream = themeStream)
+                Paragraph(stringResource(R.string.what_is_api_key_2), themeStream = themeStream)
+                Paragraph(stringResource(R.string.what_is_api_key_3), themeStream = themeStream)
+                Paragraph(stringResource(R.string.what_is_api_key_4), themeStream = themeStream)
+                Paragraph(stringResource(R.string.what_is_api_key_5), themeStream = themeStream)
             }
         }
     }
