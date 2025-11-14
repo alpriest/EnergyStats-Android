@@ -34,6 +34,16 @@ class DeviceSettingsItemViewModel(
     private val _unitStream = MutableStateFlow("")
     val unitStream: StateFlow<String> = _unitStream
 
+    private var remoteValue: String? = null
+
+    init {
+        viewModelScope.launch {
+            valueStream.collect {
+                _dirtyState.value = remoteValue != valueStream.value
+            }
+        }
+    }
+
     fun load() {
         if (_uiState.value != LoadState.Inactive) {
             return
@@ -46,28 +56,28 @@ class DeviceSettingsItemViewModel(
                 val response = network.fetchDeviceSettingsItem(selectedDeviceSN, item)
 
                 _unitStream.value = response.unit ?: item.fallbackUnit()
+                remoteValue = response.value
                 valueStream.value = response.value
                 _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
-                _uiState.value = LoadState.Error(e, "Failed to fetch battery information")
+                _uiState.value = LoadState.Error(e, "Failed to load data")
             }
         }
     }
-
     fun save() {
         if (_uiState.value != LoadState.Inactive) {
             return
         }
         val selectedDeviceSN = config.selectedDeviceSN ?: return
-        _uiState.value = LoadState.Active("Loading")
+        _uiState.value = LoadState.Active("Saving")
 
         viewModelScope.launch {
             try {
                 network.setDeviceSettingsItem(selectedDeviceSN, item, valueStream.value)
-
+                remoteValue = valueStream.value
                 _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
-                _uiState.value = LoadState.Error(e, "Failed to fetch battery information")
+                _uiState.value = LoadState.Error(e, "Failed to save data")
             }
         }
     }

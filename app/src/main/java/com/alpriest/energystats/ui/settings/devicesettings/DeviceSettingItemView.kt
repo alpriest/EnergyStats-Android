@@ -98,7 +98,7 @@ class DeviceSettingItemView(
             onConfirm = {
                 viewModel.save()
             },
-            dirtyStateFlow = null,
+            dirtyStateFlow = viewModel.dirtyState,
             content = { modifier ->
                 SettingsPage(modifier) {
                     SettingsColumn {
