@@ -72,51 +72,57 @@ class SolcastSettingsView(
 
         MonitorAlertDialog(viewModel, userManager)
 
-        ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save() }, content = { innerModifier ->
-            SettingsPage(innerModifier) {
-                SettingsColumn(padding = SettingsPaddingValues.withVertical()) {
-                    ClickableUrlText(
-                        text = stringResource(R.string.solcast_how_to_find_keys),
-                        modifier = Modifier.padding(bottom = 8.dp),
-                        textStyle = TextStyle(colorScheme.onSecondary),
-                        themeStream = configManager.themeStream
-                    )
+        ContentWithBottomButtonPair(
+            navController,
+            onConfirm = { viewModel.save() },
+            dirtyStateFlow = null,
+            content = { innerModifier ->
+                SettingsPage(innerModifier) {
+                    SettingsColumn(padding = SettingsPaddingValues.withVertical()) {
+                        ClickableUrlText(
+                            text = stringResource(R.string.solcast_how_to_find_keys),
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            textStyle = TextStyle(colorScheme.onSecondary),
+                            themeStream = configManager.themeStream
+                        )
 
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = apiKey,
-                        onValueChange = { viewModel.apiKeyStream.value = it },
-                        label = { Text(stringResource(R.string.api_key)) },
-                        visualTransformation = PasswordVisualTransformation(),
-                        singleLine = true,
-                        textStyle = TextStyle(colorScheme.onSecondary),
-                    )
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = apiKey,
+                            onValueChange = { viewModel.apiKeyStream.value = it },
+                            label = { Text(stringResource(R.string.api_key)) },
+                            visualTransformation = PasswordVisualTransformation(),
+                            singleLine = true,
+                            textStyle = TextStyle(colorScheme.onSecondary),
+                        )
+                    }
+
+                    SettingsColumn(
+                        padding = SettingsPaddingValues.withVertical(),
+                        footer = stringResource(R.string.solcast_fetch_on_launch)
+                    ) {
+                        SettingsCheckbox(
+                            title = stringResource(R.string.fetch_solar_forecast_on_app_launch),
+                            state = fetchSolcastOnAppLaunch,
+                            onUpdate = { configManager.fetchSolcastOnAppLaunch = it }
+                        )
+                    }
+
+                    sites.forEach {
+                        SolcastSiteView(it)
+                    }
+
+                    OutlinedESButton(
+                        onClick = { viewModel.removeKey() }
+                    ) {
+                        Text(stringResource(R.string.remove_key))
+                    }
+
+                    SettingsBottomSpace()
                 }
-
-                SettingsColumn(
-                    padding = SettingsPaddingValues.withVertical(),
-                    footer = stringResource(R.string.solcast_fetch_on_launch)
-                ) {
-                    SettingsCheckbox(
-                        title = stringResource(R.string.fetch_solar_forecast_on_app_launch),
-                        state = fetchSolcastOnAppLaunch,
-                        onUpdate = { configManager.fetchSolcastOnAppLaunch = it }
-                    )
-                }
-
-                sites.forEach {
-                    SolcastSiteView(it)
-                }
-
-                OutlinedESButton(
-                    onClick = { viewModel.removeKey() }
-                ) {
-                    Text(stringResource(R.string.remove_key))
-                }
-
-                SettingsBottomSpace()
-            }
-        }, modifier)
+            },
+            modifier = modifier
+        )
     }
 }
 

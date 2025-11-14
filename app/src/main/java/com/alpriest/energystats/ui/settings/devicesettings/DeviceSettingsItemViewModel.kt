@@ -12,19 +12,26 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DeviceSettingsItemViewViewModel(
+interface DirtyStateProviding {
+    val dirtyState: StateFlow<Boolean>
+}
+
+class DeviceSettingsItemViewModel(
     private val config: ConfigManaging,
     private val network: Networking,
     val item: DeviceSettingsItem
-) : ViewModel(), AlertDialogMessageProviding {
+) : ViewModel(), AlertDialogMessageProviding, DirtyStateProviding {
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     private val _uiState = MutableStateFlow<LoadState>(LoadState.Inactive)
     val uiState: StateFlow<LoadState> = _uiState
 
-    val valueStream = MutableStateFlow<String>("")
+    private val _dirtyState = MutableStateFlow(false)
+    override val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private val _unitStream = MutableStateFlow<String>("")
+    val valueStream = MutableStateFlow("")
+
+    private val _unitStream = MutableStateFlow("")
     val unitStream: StateFlow<String> = _unitStream
 
     fun load() {

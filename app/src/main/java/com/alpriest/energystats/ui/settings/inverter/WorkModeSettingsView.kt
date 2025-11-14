@@ -62,47 +62,51 @@ class WorkModeSettingsView(
             is LoadState.Active -> LoadingView(loadState.value)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() }, allowRetry = true)
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save(context) }, { modifier ->
-                    SettingsPage(modifier) {
-                        SettingsColumnWithChild {
-                            viewModel.items.forEachIndexed { index, workMode: WorkMode ->
-                                Column(
-                                    modifier = Modifier
-                                        .clickable { viewModel.select(workMode) }
-                                        .padding(bottom = 24.dp)) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        RadioButton(
-                                            selected = selectedWorkMode == workMode,
-                                            onClick = {
-                                                viewModel.select(workMode)
-                                            }
-                                        )
-                                        Text(
-                                            workMode.title(context),
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = colorScheme.onSecondary
-                                        )
-                                    }
-
-                                    workMode.subtitle(context)?.let {
-                                        Row(modifier = Modifier.padding(start = 48.dp)) {
+                ContentWithBottomButtonPair(
+                    navController,
+                    onConfirm = { viewModel.save(context) },
+                    dirtyStateFlow = null,
+                    content = { modifier ->
+                        SettingsPage(modifier) {
+                            SettingsColumnWithChild {
+                                viewModel.items.forEachIndexed { index, workMode: WorkMode ->
+                                    Column(
+                                        modifier = Modifier
+                                            .clickable { viewModel.select(workMode) }
+                                            .padding(bottom = 24.dp)) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            RadioButton(
+                                                selected = selectedWorkMode == workMode,
+                                                onClick = {
+                                                    viewModel.select(workMode)
+                                                }
+                                            )
                                             Text(
-                                                it,
+                                                workMode.title(context),
+                                                style = MaterialTheme.typography.bodyMedium,
                                                 color = colorScheme.onSecondary
                                             )
                                         }
+
+                                        workMode.subtitle(context)?.let {
+                                            Row(modifier = Modifier.padding(start = 48.dp)) {
+                                                Text(
+                                                    it,
+                                                    color = colorScheme.onSecondary
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    if (index < viewModel.items.size - 1) {
+                                        HorizontalDivider()
                                     }
                                 }
-
-                                if (index < viewModel.items.size - 1) {
-                                    HorizontalDivider()
-                                }
                             }
-                        }
 
-                        FindOutMoreView(uriHandler, "https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Inverter-Work-Modes")
-                    }
-                }, Modifier)
+                            FindOutMoreView(uriHandler, "https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Inverter-Work-Modes")
+                        }
+                    })
         }
     }
 }

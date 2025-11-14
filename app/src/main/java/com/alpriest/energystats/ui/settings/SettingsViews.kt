@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,6 +48,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.helpers.darkenColor
 import com.alpriest.energystats.ui.theme.ESButton
+import kotlinx.coroutines.flow.StateFlow
 
 object SettingsPadding {
     val COLUMN_BOTTOM: Dp = 12.dp
@@ -390,10 +392,19 @@ fun InlineSettingsNavButton(
 }
 
 @Composable
-fun SettingsNavButton(title: String, modifier: Modifier = Modifier, disclosureIcon: (() -> ImageVector)? = { Icons.Default.ChevronRight }, onClick: () -> Unit) {
+fun SettingsNavButton(
+    title: String,
+    modifier: Modifier = Modifier,
+    enabledStateFlow: StateFlow<Boolean>?,
+    disclosureIcon: (() -> ImageVector)? = { Icons.Default.ChevronRight },
+    onClick: () -> Unit
+) {
+    val enabled = (enabledStateFlow?.collectAsState()?.value) ?: true
+
     ESButton(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary)
     ) {
         Row(

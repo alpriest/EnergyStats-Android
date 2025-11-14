@@ -48,7 +48,7 @@ class DeviceSettingItemView(
     private val navController: NavHostController
 ) {
     @Composable
-    fun Content(modifier: Modifier, viewModel: DeviceSettingsItemViewViewModel = viewModel(factory = DeviceSettingsItemViewViewModelFactory(configManager, network, item))) {
+    fun Content(modifier: Modifier, viewModel: DeviceSettingsItemViewModel = viewModel(factory = DeviceSettingsItemViewModelFactory(configManager, network, item))) {
         val message = viewModel.alertDialogMessage.collectAsState().value
 
         LaunchedEffect(null) {
@@ -77,7 +77,7 @@ class DeviceSettingItemView(
     }
 
     @Composable
-    private fun LoadedView(viewModel: DeviceSettingsItemViewViewModel, modifier: Modifier, navController: NavController) {
+    private fun LoadedView(viewModel: DeviceSettingsItemViewModel, modifier: Modifier, navController: NavController) {
         val context = LocalContext.current
         val value = viewModel.valueStream.collectAsState().value
         val unit = viewModel.unitStream.collectAsState().value
@@ -92,38 +92,43 @@ class DeviceSettingItemView(
             }
         }
 
-        ContentWithBottomButtonPair(navController, modifier = modifier, onConfirm = {
-            viewModel.save()
-        }, content = { modifier ->
-            SettingsPage(modifier) {
-                SettingsColumn {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surface)
-                    ) {
-                        Text(
-                            viewModel.item.title(context),
-                            Modifier.weight(1.0f),
-                            color = MaterialTheme.colorScheme.onSecondary
-                        )
-                        OutlinedTextField(
-                            value = value,
-                            onValueChange = { viewModel.valueStream.value = it.filter { it.isDigit() } },
-                            modifier = Modifier.width(130.dp),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                            trailingIcon = { Text(unit, color = colorScheme.onSecondary) }
-                        )
+        ContentWithBottomButtonPair(
+            navController,
+            modifier = modifier,
+            onConfirm = {
+                viewModel.save()
+            },
+            dirtyStateFlow = null,
+            content = { modifier ->
+                SettingsPage(modifier) {
+                    SettingsColumn {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.surface)
+                        ) {
+                            Text(
+                                viewModel.item.title(context),
+                                Modifier.weight(1.0f),
+                                color = MaterialTheme.colorScheme.onSecondary
+                            )
+                            OutlinedTextField(
+                                value = value,
+                                onValueChange = { viewModel.valueStream.value = it.filter { it.isDigit() } },
+                                modifier = Modifier.width(130.dp),
+                                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                                trailingIcon = { Text(unit, color = colorScheme.onSecondary) }
+                            )
+                        }
                     }
-                }
 
-                Text(
-                    annotatedString,
-                    color = colorScheme.onSecondary,
-                    modifier = Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)
-                )
-            }
-        })
+                    Text(
+                        annotatedString,
+                        color = colorScheme.onSecondary,
+                        modifier = Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)
+                    )
+                }
+            })
     }
 }
 

@@ -111,7 +111,9 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(SettingsPadding.PANEL_INNER_HORIZONTAL),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ESButton(
@@ -168,20 +170,25 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
 fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorViewModel, navController: NavHostController) {
     val variables = viewModel.variables.collectAsState().value
 
-    ContentWithBottomButtonPair(navController = navController, onConfirm = {
-        viewModel.save()
-        navController.popBackStack()
-    }, { modifier ->
-        SettingsPage(modifier) {
-            Header(viewModel)
+    ContentWithBottomButtonPair(
+        navController = navController,
+        onConfirm = {
+            viewModel.save()
+            navController.popBackStack()
+        },
+        dirtyStateFlow = null,
+        content = { modifier ->
+            SettingsPage(modifier) {
+                Header(viewModel)
 
-            SettingsColumn(
-                header = "Parameters"
-            ) {
-                ParameterVariableListView(variables = variables, onTap = { viewModel.toggle(it) })
+                SettingsColumn(
+                    header = "Parameters"
+                ) {
+                    ParameterVariableListView(variables = variables, onTap = { viewModel.toggle(it) })
+                }
             }
         }
-    }, Modifier)
+    )
 }
 
 @ExperimentalMaterial3Api

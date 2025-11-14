@@ -96,24 +96,30 @@ class BatteryChargeScheduleSettingsView(
             )
 
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save(context) }, { innerModifier ->
-                    SettingsPage(innerModifier) {
-                        BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
-                        BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
+                ContentWithBottomButtonPair(
+                    navController,
+                    onConfirm = { viewModel.save(context) },
+                    dirtyStateFlow = null,
+                    content = { innerModifier ->
+                        SettingsPage(innerModifier) {
+                            BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
+                            BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
 
-                        SettingsColumn(
-                            header = stringResource(R.string.schedule_summary),
-                            padding = SettingsPaddingValues.withVertical()
-                        ) {
-                            Text(
-                                chargeSummary,
-                                color = colorScheme.onSecondary
-                            )
+                            SettingsColumn(
+                                header = stringResource(R.string.schedule_summary),
+                                padding = SettingsPaddingValues.withVertical()
+                            ) {
+                                Text(
+                                    chargeSummary,
+                                    color = colorScheme.onSecondary
+                                )
+                            }
+
+                            SettingsBottomSpace()
                         }
-
-                        SettingsBottomSpace()
-                    }
-                }, modifier)
+                    },
+                    modifier = modifier
+                )
         }
     }
 

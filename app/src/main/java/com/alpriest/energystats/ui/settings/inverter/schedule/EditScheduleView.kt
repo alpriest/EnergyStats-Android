@@ -32,7 +32,6 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.settings.ButtonLabels
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsPadding
@@ -73,9 +72,11 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
     val context = LocalContext.current
 
     ContentWithBottomButtonPair(
-        navController = navController,
+        navController,
+        modifier = modifier,
         onConfirm = { viewModel.saveSchedule(context) },
-        { innerModifier ->
+        dirtyStateFlow = null,
+        content = { innerModifier ->
             SettingsPage(innerModifier) {
                 ScheduleDetailView(viewModel.navController, schedule)
 
@@ -107,9 +108,7 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
 
                 SettingsBottomSpace()
             }
-        },
-        labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save)),
-        modifier = modifier
+        }
     )
 }
 

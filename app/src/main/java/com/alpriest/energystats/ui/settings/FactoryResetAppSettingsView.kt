@@ -30,9 +30,9 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.ButtonLabels
+import com.alpriest.energystats.ui.settings.BottomButtonConfiguration
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -51,13 +51,13 @@ fun FactoryResetAppSettingsView(
     val positiveColor = PowerFlowPositive
     val negativeColor = PowerFlowNegative
 
-    ContentWithBottomButtonPair(
-        navController,
-        modifier = Modifier,
-        labels = ButtonLabels(stringResource(R.string.cancel), stringResource(R.string.reset_ellipsis)),
-        onConfirm = {
-            confirmationShowing = true
-        },
+    ContentWithBottomButtons(
+        buttons = listOf(
+            BottomButtonConfiguration(title = LocalContext.current.getString(R.string.cancel), onTap = { navController.popBackStack() }),
+            BottomButtonConfiguration(title = LocalContext.current.getString(R.string.reset_ellipsis), onTap = {
+                confirmationShowing = true
+            }),
+        ),
         content = {
             SettingsPage(Modifier) {
                 SettingsColumn(header = stringResource(R.string.will_be_reset)) {

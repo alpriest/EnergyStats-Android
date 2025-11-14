@@ -85,18 +85,20 @@ fun EditSummaryView(
         MaterialTheme.colorScheme.onBackground
     }
 
-    ContentWithBottomButtonPair(navController, modifier = modifier, onConfirm = {
-        val updatedSummaryDateRange = if (automatic.value) {
-            SummaryDateRange.Automatic
-        } else {
-            SummaryDateRange.Manual(
-                from = MonthYear(fromMonth.intValue, fromYear.intValue),
-                to = MonthYear(toMonth.intValue, toYear.intValue)
-            )
-        }
-        navController.popBackStack()
-        viewModel.setDateRange(updatedSummaryDateRange, context)
-    },
+    ContentWithBottomButtonPair(
+        navController, modifier = modifier, onConfirm = {
+            val updatedSummaryDateRange = if (automatic.value) {
+                SummaryDateRange.Automatic
+            } else {
+                SummaryDateRange.Manual(
+                    from = MonthYear(fromMonth.intValue, fromYear.intValue),
+                    to = MonthYear(toMonth.intValue, toYear.intValue)
+                )
+            }
+            navController.popBackStack()
+            viewModel.setDateRange(updatedSummaryDateRange, context)
+        },
+        dirtyStateFlow = null,
         content = { innerModifier ->
             SettingsPage(innerModifier) {
                 Column(

@@ -157,50 +157,54 @@ class PeakShavingSettingsView(
         val explanation = stringResource(R.string.peak_shaving_explanation, importLimit, soc)
         val context = LocalContext.current
 
-        ContentWithBottomButtonPair(navController, onConfirm = {
-            viewModel.save(context)
-        }, content = { modifier ->
-            SettingsColumnWithChild(
-                modifier = modifier,
-                footer = explanation
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(vertical = 4.dp)
+        ContentWithBottomButtonPair(
+            navController,
+            onConfirm = {
+                viewModel.save(context)
+            },
+            dirtyStateFlow = null,
+            content = { modifier ->
+                SettingsColumnWithChild(
+                    modifier = modifier,
+                    footer = explanation
                 ) {
-                    Text(
-                        stringResource(R.string.import_limit),
-                        Modifier.weight(1.0f),
-                        color = MaterialTheme.colorScheme.onSecondary
-                    )
-                    OutlinedTextField(
-                        value = importLimit,
-                        onValueChange = { viewModel.importLimit.value = it.filter { it.isDigit() } },
-                        modifier = Modifier.width(130.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
-                        trailingIcon = { Text("kW", color = MaterialTheme.colorScheme.onSecondary) })
-                }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surface)
+                            .padding(vertical = 4.dp)
+                    ) {
+                        Text(
+                            stringResource(R.string.import_limit),
+                            Modifier.weight(1.0f),
+                            color = MaterialTheme.colorScheme.onSecondary
+                        )
+                        OutlinedTextField(
+                            value = importLimit,
+                            onValueChange = { viewModel.importLimit.value = it.filter { it.isDigit() } },
+                            modifier = Modifier.width(130.dp),
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
+                            trailingIcon = { Text("kW", color = MaterialTheme.colorScheme.onSecondary) })
+                    }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(vertical = 4.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.battery_threshold_soc),
-                        Modifier.weight(1.0f),
-                        color = MaterialTheme.colorScheme.onSecondary
-                    )
-                    OutlinedTextField(
-                        value = soc,
-                        onValueChange = { viewModel.soc.value = it.filter { it.isDigit() } },
-                        modifier = Modifier.width(130.dp),
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
-                        trailingIcon = { Text("%", color = MaterialTheme.colorScheme.onSecondary) })
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surface)
+                            .padding(vertical = 4.dp)
+                    ) {
+                        Text(
+                            stringResource(R.string.battery_threshold_soc),
+                            Modifier.weight(1.0f),
+                            color = MaterialTheme.colorScheme.onSecondary
+                        )
+                        OutlinedTextField(
+                            value = soc,
+                            onValueChange = { viewModel.soc.value = it.filter { it.isDigit() } },
+                            modifier = Modifier.width(130.dp),
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
+                            trailingIcon = { Text("%", color = MaterialTheme.colorScheme.onSecondary) })
+                    }
                 }
-            }
-        })
+            })
     }
 }
 

@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.alpriest.energystats.R
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -31,13 +33,12 @@ fun ContentWithBottomButtonPair(
     content: @Composable BoxScope.(modifier: Modifier) -> Unit,
     modifier: Modifier = Modifier,
     footer: @Composable ColumnScope.() -> Unit = {},
-    labels: ButtonLabels = ButtonLabels.Defaults(LocalContext.current)
-) {
-    val buttons = listOf(
-        BottomButtonConfiguration(title = labels.left, onTap = { navController.popBackStack() }),
-        BottomButtonConfiguration(title = labels.right, onTap = onConfirm),
+    dirtyStateFlow: StateFlow<Boolean>?,
+    buttons: List<BottomButtonConfiguration> = listOf(
+        BottomButtonConfiguration(title = LocalContext.current.getString(R.string.cancel), onTap = { navController.popBackStack() }),
+        BottomButtonConfiguration(title = LocalContext.current.getString(R.string.save), dirtyStateFlow, onTap = onConfirm),
     )
-
+) {
     ContentWithBottomButtons(content, modifier, footer, buttons)
 }
 
@@ -81,6 +82,7 @@ fun ContentWithBottomButtons(
 
 data class BottomButtonConfiguration(
     val title: String,
+    val enabled: StateFlow<Boolean>? = null,
     val onTap: (suspend () -> Unit)
 )
 
@@ -101,7 +103,8 @@ fun BottomButtonsView(
                 SettingsNavButton(
                     button.title,
                     modifier = Modifier.weight(1.0f),
-                    disclosureIcon = null
+                    disclosureIcon = null,
+                    enabledStateFlow = button.enabled
                 ) {
                     scope.launch {
                         button.onTap()

@@ -66,109 +66,114 @@ class ParameterGraphVariableChooserView(
         trackScreenView("Parameters", "ParameterGraphVariableChooserView")
         var showAllParameters by remember { mutableStateOf(false) }
 
-        ContentWithBottomButtonPair(navController, onConfirm = {
-            viewModel.apply()
-            navController.popBackStack()
-        }, footer = {
-            Text(
-                stringResource(R.string.note_that_not_all_parameters_contain_values),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }, content = { modifier ->
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .verticalScroll(scrollState)
-                    .padding(bottom = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
+        ContentWithBottomButtonPair(
+            navController,
+            onConfirm = {
+                viewModel.apply()
+                navController.popBackStack()
+            },
+            footer = {
+                Text(
+                    stringResource(R.string.note_that_not_all_parameters_contain_values),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            dirtyStateFlow = null,
+            content = { modifier ->
                 Column(
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .padding(horizontal = 12.dp)
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                        .padding(bottom = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
                 ) {
-                    Text(stringResource(R.string.parameter_selector_overview))
-                }
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 12.dp)
+                            .padding(horizontal = 12.dp)
+                    ) {
+                        Text(stringResource(R.string.parameter_selector_overview))
+                    }
 
-                SettingsColumn(
-                    modifier = Modifier.padding(top = 16.dp),
-                    header = "Groups"
-                ) {
-                    ListRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
-                    HorizontalDivider()
-                    ListRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
-                    HorizontalDivider()
+                    SettingsColumn(
+                        modifier = Modifier.padding(top = 16.dp),
+                        header = "Groups"
+                    ) {
+                        ListRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
+                        HorizontalDivider()
+                        ListRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
+                        HorizontalDivider()
 
-                    groups.forEachIndexed { index, item ->
-                        Row {
-                            ListRow(
-                                onClick = { viewModel.select(item.parameterNames) },
-                                item.id == selectedGroupId
+                        groups.forEachIndexed { index, item ->
+                            Row {
+                                ListRow(
+                                    onClick = { viewModel.select(item.parameterNames) },
+                                    item.id == selectedGroupId
+                                ) {
+                                    Text(
+                                        item.title,
+                                        modifier = it
+                                    )
+                                }
+                            }
+
+                            if (index < groups.lastIndex) {
+                                HorizontalDivider()
+                            }
+                        }
+                    }
+
+                    SettingsColumn(
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        header = "Parameters",
+                        headerExtra = {
+                            Row(
+                                horizontalArrangement = Arrangement.End
                             ) {
+                                Spacer(modifier = Modifier.weight(1.0f))
                                 Text(
-                                    item.title,
-                                    modifier = it
+                                    if (showAllParameters) {
+                                        "Show only selected"
+                                    } else {
+                                        "Show all"
+                                    },
+                                    modifier = Modifier.clickable {
+                                        showAllParameters = !showAllParameters
+                                    }
                                 )
                             }
                         }
-
-                        if (index < groups.lastIndex) {
-                            HorizontalDivider()
-                        }
+                    ) {
+                        ParameterVariableListView(
+                            variables.filter { it.enabled || showAllParameters },
+                            onTap = { viewModel.toggle(it) })
                     }
-                }
 
-                SettingsColumn(
-                    modifier = Modifier.padding(bottom = 12.dp),
-                    header = "Parameters",
-                    headerExtra = {
-                        Row(
-                            horizontalArrangement = Arrangement.End
+                    Column(
+                        modifier = Modifier.fillMaxWidth(), horizontalAlignment = CenterHorizontally
+                    ) {
+                        ESButton(
+                            onClick = {
+                                uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Fox-ESS-Cloud#search-parameters")
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = colorScheme.primary,
+                                containerColor = Color.Transparent
+                            ),
+                            elevation = null,
                         ) {
-                            Spacer(modifier = Modifier.weight(1.0f))
+                            Icon(
+                                Icons.Default.OpenInBrowser, contentDescription = "Open In Browser", modifier = Modifier.padding(end = 5.dp)
+                            )
                             Text(
-                                if (showAllParameters) {
-                                    "Show only selected"
-                                } else {
-                                    "Show all"
-                                },
-                                modifier = Modifier.clickable {
-                                    showAllParameters = !showAllParameters
-                                }
+                                stringResource(R.string.find_out_more),
+                                fontSize = 12.sp,
                             )
                         }
                     }
-                ) {
-                    ParameterVariableListView(
-                        variables.filter { it.enabled || showAllParameters },
-                        onTap = { viewModel.toggle(it) })
                 }
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(), horizontalAlignment = CenterHorizontally
-                ) {
-                    ESButton(
-                        onClick = {
-                            uriHandler.openUri("https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Fox-ESS-Cloud#search-parameters")
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = colorScheme.primary,
-                            containerColor = Color.Transparent
-                        ),
-                        elevation = null,
-                    ) {
-                        Icon(
-                            Icons.Default.OpenInBrowser, contentDescription = "Open In Browser", modifier = Modifier.padding(end = 5.dp)
-                        )
-                        Text(
-                            stringResource(R.string.find_out_more),
-                            fontSize = 12.sp,
-                        )
-                    }
-                }
-            }
-        })
+            })
     }
 }
 

@@ -113,77 +113,83 @@ fun SolarBandingSettingsView(navController: NavHostController, configManager: Co
         mutatedAppTheme.value = makeAppTheme(threshold1.floatValue, threshold2.floatValue, threshold3.floatValue)
     }
 
-    ContentWithBottomButtonPair(navController, onConfirm = {
-        configManager.solarRangeDefinitions = SolarRangeDefinitions(
-            threshold1 = threshold1.floatValue.toDouble(),
-            threshold2 = threshold2.floatValue.toDouble(),
-            threshold3 = threshold3.floatValue.toDouble()
-        )
-        Toast.makeText(context, context.getString(R.string.thresholds_were_saved), Toast.LENGTH_LONG).show()
-    }, { innerModifier ->
-        SettingsPage(innerModifier) {
-            ThresholdView(
-                mutableStateValue = threshold1,
-                title = stringResource(R.string.low_threshold),
-                description = stringResource(R.string.below_this_amount_the_sun_will_be_yellow)
+    ContentWithBottomButtonPair(
+        navController,
+        onConfirm = {
+            configManager.solarRangeDefinitions = SolarRangeDefinitions(
+                threshold1 = threshold1.floatValue.toDouble(),
+                threshold2 = threshold2.floatValue.toDouble(),
+                threshold3 = threshold3.floatValue.toDouble()
             )
-            ThresholdView(
-                mutableStateValue = threshold2,
-                title = stringResource(R.string.medium_threshold),
-                description = stringResource(R.string.between_low_and_medium_the_sun_will_be_yellow_and_glowing)
-            )
-            ThresholdView(
-                mutableStateValue = threshold3,
-                title = stringResource(R.string.high_threshold),
-                description = stringResource(R.string.between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing)
-            )
+            Toast.makeText(context, context.getString(R.string.thresholds_were_saved), Toast.LENGTH_LONG).show()
+        },
+        dirtyStateFlow = null,
+        content = { innerModifier ->
+            SettingsPage(innerModifier) {
+                ThresholdView(
+                    mutableStateValue = threshold1,
+                    title = stringResource(R.string.low_threshold),
+                    description = stringResource(R.string.below_this_amount_the_sun_will_be_yellow)
+                )
+                ThresholdView(
+                    mutableStateValue = threshold2,
+                    title = stringResource(R.string.medium_threshold),
+                    description = stringResource(R.string.between_low_and_medium_the_sun_will_be_yellow_and_glowing)
+                )
+                ThresholdView(
+                    mutableStateValue = threshold3,
+                    title = stringResource(R.string.high_threshold),
+                    description = stringResource(R.string.between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing)
+                )
 
-            SettingsColumn(
-                header = stringResource(R.string.example),
-                padding = SettingsPaddingValues.withVertical()
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    SolarPowerFlow(
-                        amount = amount.floatValue.toDouble(),
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(100.dp),
-                        iconHeight = 40.dp,
-                        themeStream = mutatedAppTheme
-                    )
-
-                    Slider(
-                        value = amount.floatValue,
-                        onValueChange = { amount.floatValue = it },
-                        valueRange = 0.0f..threshold3.floatValue + 0.5f,
-                        colors = SliderDefaults.colors(
-                            activeTickColor = colorScheme.primary,
-                            inactiveTickColor = colorScheme.background,
-                            activeTrackColor = colorScheme.primary,
-                            inactiveTrackColor = colorScheme.background,
-                            thumbColor = colorScheme.primary
+                SettingsColumn(
+                    header = stringResource(R.string.example),
+                    padding = SettingsPaddingValues.withVertical()
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        SolarPowerFlow(
+                            amount = amount.floatValue.toDouble(),
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(100.dp),
+                            iconHeight = 40.dp,
+                            themeStream = mutatedAppTheme
                         )
+
+                        Slider(
+                            value = amount.floatValue,
+                            onValueChange = { amount.floatValue = it },
+                            valueRange = 0.0f..threshold3.floatValue + 0.5f,
+                            colors = SliderDefaults.colors(
+                                activeTickColor = colorScheme.primary,
+                                inactiveTickColor = colorScheme.background,
+                                activeTrackColor = colorScheme.primary,
+                                inactiveTrackColor = colorScheme.background,
+                                thumbColor = colorScheme.primary
+                            )
+                        )
+                    }
+
+                    Text(
+                        stringResource(R.string.drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power),
+                        color = colorScheme.onSecondary,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
 
-                Text(
-                    stringResource(R.string.drag_the_slider_above_to_see_how_your_solar_flow_will_display_when_generating_different_levels_of_power),
-                    color = colorScheme.onSecondary,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-            }
+                ESButton({
+                    threshold1.floatValue = 1.0f
+                    threshold2.floatValue = 2.0f
+                    threshold3.floatValue = 3.0f
+                }) {
+                    Text(stringResource(R.string.restore_defaults))
+                }
 
-            ESButton({
-                threshold1.floatValue = 1.0f
-                threshold2.floatValue = 2.0f
-                threshold3.floatValue = 3.0f
-            }) {
-                Text(stringResource(R.string.restore_defaults))
+                SettingsBottomSpace()
             }
-
-            SettingsBottomSpace()
-        }
-    }, modifier)
+        },
+        modifier = modifier
+    )
 }
 
 fun makeAppTheme(threshold1: Float, threshold2: Float, threshold3: Float): AppTheme {
@@ -205,7 +211,7 @@ fun SolarBandingSettingsPreview() {
         SolarBandingSettingsView(
             NavHostController(LocalContext.current),
             configManager = FakeConfigManager(),
- Modifier
+            Modifier
         )
     }
 }

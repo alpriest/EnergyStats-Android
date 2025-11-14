@@ -68,87 +68,93 @@ class BatterySOCSettings(
                 onRetry = { viewModel.load(context) },
                 onLogout = { userManager.logout() }
             )
+
             is LoadState.Inactive ->
-                ContentWithBottomButtonPair(navController, onConfirm = { viewModel.save(context) }, modifier = modifier, content = { innerModifier ->
-                    SettingsPage(innerModifier) {
-                        Column {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .background(colorScheme.surface)
-                                    .padding(horizontal = 12.dp, vertical = 4.dp)
-                            ) {
+                ContentWithBottomButtonPair(
+                    navController,
+                    onConfirm = { viewModel.save(context) },
+                    modifier = modifier,
+                    dirtyStateFlow = null,
+                    content = { innerModifier ->
+                        SettingsPage(innerModifier) {
+                            Column {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .background(colorScheme.surface)
+                                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                                ) {
+                                    Text(
+                                        stringResource(R.string.min_soc),
+                                        Modifier.weight(1.0f),
+                                        color = colorScheme.onSecondary
+                                    )
+                                    OutlinedTextField(
+                                        value = minSOC,
+                                        onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
+                                        modifier = Modifier.width(100.dp),
+                                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                                        trailingIcon = { Text("%", color = colorScheme.onSecondary) }
+                                    )
+                                }
+
                                 Text(
-                                    stringResource(R.string.min_soc),
-                                    Modifier.weight(1.0f),
-                                    color = colorScheme.onSecondary
-                                )
-                                OutlinedTextField(
-                                    value = minSOC,
-                                    onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
-                                    modifier = Modifier.width(100.dp),
-                                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                                    trailingIcon = { Text("%", color = colorScheme.onSecondary) }
+                                    stringResource(R.string.minsoc_description),
+                                    color = colorScheme.onSecondary,
+                                    modifier = Modifier
+                                        .padding(horizontal = 12.dp)
+                                        .padding(top = 4.dp)
                                 )
                             }
 
-                            Text(
-                                stringResource(R.string.minsoc_description),
-                                color = colorScheme.onSecondary,
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp)
-                                    .padding(top = 4.dp)
-                            )
+                            Column {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .background(colorScheme.surface)
+                                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                                ) {
+                                    Text(
+                                        stringResource(R.string.min_soc_on_grid),
+                                        Modifier.weight(1.0f),
+                                        color = colorScheme.onSecondary
+                                    )
+                                    OutlinedTextField(
+                                        value = minSOConGrid,
+                                        onValueChange = { viewModel.minSOConGridStream.value = it.filter { it.isDigit() } },
+                                        modifier = Modifier.width(100.dp),
+                                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                                        trailingIcon = { Text("%", color = colorScheme.onSecondary) }
+                                    )
+                                }
+
+                                Column(
+                                    modifier = Modifier
+                                        .padding(horizontal = 12.dp)
+                                        .padding(top = 4.dp)
+                                ) {
+                                    Text(
+                                        stringResource(R.string.minsocgrid_description),
+                                        color = colorScheme.onSecondary,
+                                        modifier = Modifier.padding(bottom = 8.dp)
+                                    )
+
+                                    Text(
+                                        stringResource(R.string.minsoc_detail),
+                                        color = colorScheme.onSecondary,
+                                        modifier = Modifier.padding(bottom = 8.dp)
+                                    )
+
+                                    Text(
+                                        stringResource(R.string.minsoc_notsure_footnote),
+                                        color = colorScheme.onSecondary,
+                                        modifier = Modifier.padding(bottom = 8.dp)
+                                    )
+                                }
+                            }
                         }
-
-                        Column {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .background(colorScheme.surface)
-                                    .padding(horizontal = 12.dp, vertical = 4.dp)
-                            ) {
-                                Text(
-                                    stringResource(R.string.min_soc_on_grid),
-                                    Modifier.weight(1.0f),
-                                    color = colorScheme.onSecondary
-                                )
-                                OutlinedTextField(
-                                    value = minSOConGrid,
-                                    onValueChange = { viewModel.minSOConGridStream.value = it.filter { it.isDigit() } },
-                                    modifier = Modifier.width(100.dp),
-                                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                                    trailingIcon = { Text("%", color = colorScheme.onSecondary) }
-                                )
-                            }
-
-                            Column(
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp)
-                                    .padding(top = 4.dp)
-                            ) {
-                                Text(
-                                    stringResource(R.string.minsocgrid_description),
-                                    color = colorScheme.onSecondary,
-                                    modifier = Modifier.padding(bottom = 8.dp)
-                                )
-
-                                Text(
-                                    stringResource(R.string.minsoc_detail),
-                                    color = colorScheme.onSecondary,
-                                    modifier = Modifier.padding(bottom = 8.dp)
-                                )
-
-                                Text(
-                                    stringResource(R.string.minsoc_notsure_footnote),
-                                    color = colorScheme.onSecondary,
-                                    modifier = Modifier.padding(bottom = 8.dp)
-                                )
-                            }
-                        }
-                    }
-                })
+                    })
         }
     }
 }

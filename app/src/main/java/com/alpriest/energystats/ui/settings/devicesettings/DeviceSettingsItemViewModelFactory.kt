@@ -6,13 +6,13 @@ import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 
-class DeviceSettingsItemViewViewModelFactory(
+class DeviceSettingsItemViewModelFactory(
     private val configManager: ConfigManaging,
     private val networking: Networking,
     private val item: DeviceSettingsItem
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DeviceSettingsItemViewViewModel(configManager, networking, item) as T
+        return DeviceSettingsItemViewModel(configManager, networking, item) as T
     }
 }

@@ -44,9 +44,9 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.settings.ButtonLabels
+import com.alpriest.energystats.ui.settings.BottomButtonConfiguration
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.ErrorTextView
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
@@ -82,9 +82,12 @@ fun EditPhaseView(
     }
     trackScreenView("Edit phase", "EditPhaseView")
 
-    ContentWithBottomButtonPair(
-        navController,
-        onConfirm = { viewModel.save(context) }, { innerModifier ->
+    ContentWithBottomButtons(
+        buttons = listOf(
+            BottomButtonConfiguration(title = LocalContext.current.getString(R.string.cancel), onTap = { navController.popBackStack() }),
+            BottomButtonConfiguration(title = LocalContext.current.getString(R.string.apply), onTap = { viewModel.save(context) }),
+        ),
+        content = { innerModifier ->
             SettingsPage(innerModifier) {
                 TimeAndWorkModeView(viewModel, userManager)
 
@@ -111,8 +114,7 @@ fun EditPhaseView(
                 SettingsBottomSpace()
             }
         },
-        modifier = modifier,
-        labels = ButtonLabels(context.getString(R.string.cancel), context.getString(R.string.apply))
+        modifier = modifier
     )
 }
 

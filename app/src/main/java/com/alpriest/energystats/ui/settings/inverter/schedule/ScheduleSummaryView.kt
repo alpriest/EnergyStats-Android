@@ -221,7 +221,10 @@ class ScheduleSummaryView(
     @Composable
     fun NoScheduleView(viewModel: ScheduleSummaryViewModel) {
         Column {
-            SettingsNavButton(stringResource(R.string.create_a_schedule)) {
+            SettingsNavButton(
+                stringResource(R.string.create_a_schedule),
+                enabledStateFlow = null
+            ) {
                 viewModel.createSchedule()
             }
         }

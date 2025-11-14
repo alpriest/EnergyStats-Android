@@ -86,6 +86,7 @@ class EditTemplateView(
                 },
                 onLogout = { userManager.logout() }
             )
+
             is LoadState.Inactive -> template?.let { it ->
                 Loaded(it, viewModel, modifier)
             }
@@ -101,7 +102,8 @@ class EditTemplateView(
         ContentWithBottomButtonPair(
             navController = navController,
             onConfirm = { viewModel.saveTemplate(context) },
-            { innerModifier ->
+            dirtyStateFlow = null,
+            content = { innerModifier ->
                 SettingsPage(innerModifier) {
                     ScheduleDetailView(viewModel.navController, template.asSchedule())
 
@@ -209,7 +211,6 @@ class EditTemplateView(
                     }
                 }
             },
-            labels = ButtonLabels(context.getString(R.string.cancel), stringResource(id = R.string.save)),
             modifier = modifier
         )
     }

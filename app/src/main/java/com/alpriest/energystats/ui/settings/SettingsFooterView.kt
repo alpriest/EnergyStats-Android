@@ -81,6 +81,7 @@ fun SettingsFooterView(
             title = logoutButtonTitle,
             disclosureIcon = null,
             onClick = onLogout,
+            enabledStateFlow = null,
             modifier = Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)
         )
 

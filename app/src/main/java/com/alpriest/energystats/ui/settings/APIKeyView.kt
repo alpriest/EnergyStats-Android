@@ -32,10 +32,14 @@ fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, th
     var apiKey by rememberSaveable { mutableStateOf(store.getApiKey() ?: "") }
     trackScreenView("API Key", "ConfigureAPIKeyView")
 
-    ContentWithBottomButtonPair(navController, modifier = modifier, onConfirm = {
-        store.store(apiKey)
-        navController.popBackStack()
-    },
+    ContentWithBottomButtonPair(
+        navController,
+        modifier = modifier,
+        onConfirm = {
+            store.store(apiKey)
+            navController.popBackStack()
+        },
+        dirtyStateFlow = null,
         content = { innerModifier ->
             SettingsPage(innerModifier) {
                 SettingsColumnWithChild {
