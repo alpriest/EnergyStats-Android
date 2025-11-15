@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.battery
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.ProhibitedActionException
@@ -12,6 +13,8 @@ import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class BatterySOCSettingsViewModelFactory(
     private val network: Networking,
@@ -27,10 +30,31 @@ class BatterySOCSettingsViewModel(
     private val network: Networking,
     private val config: ConfigManaging
 ) : ViewModel(), AlertDialogMessageProviding {
-    var minSOCStream = MutableStateFlow("")
-    var minSOConGridStream = MutableStateFlow("")
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    private val _viewDataStream = MutableStateFlow(BatterySOCSettingsViewData("",""))
+    val viewDataStream: StateFlow<BatterySOCSettingsViewData> = _viewDataStream
+
+    private val _dirtyState = MutableStateFlow(false)
+    val dirtyState: StateFlow<Boolean> = _dirtyState
+
+    private var remoteValue: BatterySOCSettingsViewData? = null
+
+    fun didChangeMinSOC(value: String) {
+        _viewDataStream.value = viewDataStream.value.copy(minSOC = value)
+    }
+
+    fun didChangeMinSOConGrid(value: String) {
+        _viewDataStream.value = viewDataStream.value.copy(minSOConGrid = value)
+    }
+
+    init {
+        viewModelScope.launch {
+            viewDataStream.collect {
+                _dirtyState.value = remoteValue != it
+            }
+        }
+    }
 
     suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
@@ -41,8 +65,9 @@ class BatterySOCSettingsViewModel(
 
                 try {
                     val result = network.fetchBatterySettings(deviceSN)
-                    minSOCStream.value = result.minSoc.toString()
-                    minSOConGridStream.value = result.minSocOnGrid.toString()
+                    val viewData = BatterySOCSettingsViewData(result.minSoc.toString(), result.minSocOnGrid.toString())
+                    remoteValue = viewData
+                    _viewDataStream.value = viewData
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error)))
@@ -59,13 +84,15 @@ class BatterySOCSettingsViewModel(
         runCatching {
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
+                val viewData = viewDataStream.value
 
                 try {
                     network.setBatterySoc(
                         deviceSN = deviceSN,
-                        minSOCOnGrid = minSOConGridStream.value.toInt(),
-                        minSOC = minSOCStream.value.toInt()
+                        minSOCOnGrid = viewData.minSOConGrid.toInt(),
+                        minSOC = viewData.minSOC.toInt()
                     )
+                    resetDirtyState()
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_soc_changes_were_saved))
 
@@ -80,5 +107,10 @@ class BatterySOCSettingsViewModel(
                 uiState.value = UiLoadState(LoadState.Inactive)
             }
         }
+    }
+
+    private fun resetDirtyState() {
+        remoteValue = _viewDataStream.value
+        _dirtyState.value = false
     }
 }

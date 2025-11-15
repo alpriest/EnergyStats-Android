@@ -12,22 +12,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-interface DirtyStateProviding {
-    val dirtyState: StateFlow<Boolean>
-}
-
 class DeviceSettingsItemViewModel(
     private val config: ConfigManaging,
     private val network: Networking,
     val item: DeviceSettingsItem
-) : ViewModel(), AlertDialogMessageProviding, DirtyStateProviding {
+) : ViewModel(), AlertDialogMessageProviding {
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
     private val _uiState = MutableStateFlow<LoadState>(LoadState.Inactive)
     val uiState: StateFlow<LoadState> = _uiState
 
     private val _dirtyState = MutableStateFlow(false)
-    override val dirtyState: StateFlow<Boolean> = _dirtyState
+    val dirtyState: StateFlow<Boolean> = _dirtyState
 
     private val _viewDataStream = MutableStateFlow(DeviceSettingItemViewData("",""))
     val viewDataStream: StateFlow<DeviceSettingItemViewData> = _viewDataStream
@@ -42,10 +38,12 @@ class DeviceSettingsItemViewModel(
         }
     }
 
+    fun didChange(value: String) {
+        _viewDataStream.value = viewDataStream.value.copy(value = value)
+    }
+
     fun load() {
-        if (_uiState.value != LoadState.Inactive) {
-            return
-        }
+        if (_uiState.value != LoadState.Inactive) { return }
         val selectedDeviceSN = config.selectedDeviceSN ?: return
         _uiState.value = LoadState.Active("Loading")
 
@@ -62,21 +60,25 @@ class DeviceSettingsItemViewModel(
             }
         }
     }
+
     fun save() {
-        if (_uiState.value != LoadState.Inactive) {
-            return
-        }
+        if (_uiState.value != LoadState.Inactive) { return }
         val selectedDeviceSN = config.selectedDeviceSN ?: return
         _uiState.value = LoadState.Active("Saving")
 
         viewModelScope.launch {
             try {
                 network.setDeviceSettingsItem(selectedDeviceSN, item, viewDataStream.value.value)
-                remoteValue = _viewDataStream.value
+                resetDirtyState()
                 _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
                 _uiState.value = LoadState.Error(e, "Failed to save data")
             }
         }
+    }
+
+    private fun resetDirtyState() {
+        remoteValue = _viewDataStream.value
+        _dirtyState.value = false
     }
 }

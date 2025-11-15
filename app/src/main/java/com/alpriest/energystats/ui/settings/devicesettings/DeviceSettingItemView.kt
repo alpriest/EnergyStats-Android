@@ -118,7 +118,7 @@ class DeviceSettingItemView(
                             )
                             OutlinedTextField(
                                 value = viewData.value,
-                                onValueChange = { viewModel.valueStream.value = it.filter { it.isDigit() } },
+                                onValueChange = { viewModel.didChange(it.filter { char -> char.isDigit() }) },
                                 modifier = Modifier.width(130.dp),
                                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
                                 trailingIcon = { Text(viewData.unit, color = colorScheme.onSecondary) }
