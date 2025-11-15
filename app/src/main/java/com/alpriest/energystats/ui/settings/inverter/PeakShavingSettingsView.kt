@@ -1,7 +1,6 @@
-package com.alpriest.energystats.ui.settings
+package com.alpriest.energystats.ui.settings.inverter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -23,21 +22,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class PeakShavingSettingsViewModelFactory(
     private val configManager: ConfigManaging, private val networking: Networking
@@ -48,74 +42,9 @@ class PeakShavingSettingsViewModelFactory(
     }
 }
 
-class PeakShavingSettingsViewModel(
-    private val configManager: ConfigManaging, private val networking: Networking
-) : ViewModel() {
-    private val _state = MutableStateFlow<LoadState>(LoadState.Inactive)
-    val uiState: StateFlow<LoadState> = _state
-
-    private val _importLimit = MutableStateFlow("")
-    var importLimit: MutableStateFlow<String> = _importLimit
-
-    private val _soc = MutableStateFlow("")
-    var soc: MutableStateFlow<String> = _soc
-
-    private val _supported = MutableStateFlow(false)
-    var supported: MutableStateFlow<Boolean> = _supported
-
-    fun load(context: Context) {
-        val selectedDeviceSN = configManager.selectedDeviceSN ?: return
-        if (_state.value is LoadState.Error) return
-
-        _state.value = LoadState.Active(context.getString(R.string.loading))
-
-        viewModelScope.launch {
-            try {
-                val settings = networking.fetchPeakShavingSettings(selectedDeviceSN)
-
-                _importLimit.value = settings.importLimit.value.removingEmptyDecimals()
-                _soc.value = settings.soc.value
-                _supported.value = true
-
-                _state.value = LoadState.Inactive
-            } catch (e: Exception) {
-                val errorMessage = context.getString(R.string.failed_to_load_settings)
-                _state.value = when (e) {
-                    is FoxServerError -> if (e.errno == 40257) {
-                        LoadState.Inactive
-                    } else {
-                        LoadState.Error(e, errorMessage)
-                    }
-
-                    else -> LoadState.Error(e, errorMessage)
-                }
-            }
-        }
-    }
-
-    fun save(context: Context) {
-        if (_state.value != LoadState.Inactive) {
-            return
-        }
-        val selectedDeviceSN = configManager.selectedDeviceSN ?: return
-        _state.value = LoadState.Active(context.getString(R.string.saving))
-
-        viewModelScope.launch {
-            try {
-                networking.setPeakShavingSettings(selectedDeviceSN, importLimit.value.toDouble(), soc.value.toInt())
-
-                _state.value = LoadState.Inactive
-            } catch (e: Exception) {
-                _state.value = LoadState.Error(e, context.getString(R.string.failed_to_save_settings))
-            }
-        }
-    }
-}
-
 class PeakShavingSettingsView(
     private val configManager: ConfigManaging, private val network: Networking, val navController: NavController
 ) {
-
     @Composable
     fun Content(modifier: Modifier, viewModel: PeakShavingSettingsViewModel = viewModel(factory = PeakShavingSettingsViewModelFactory(configManager, network))) {
         val context = LocalContext.current
@@ -130,20 +59,20 @@ class PeakShavingSettingsView(
                 if (supported) {
                     Loaded(viewModel, navController)
                 } else {
-                    SettingsPage(modifier) {
-                        SettingsColumn(error = stringResource(R.string.peak_shaving_is_not_available)) { }
+                    _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsPage(modifier) {
+                        _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsColumn(error = stringResource(R.string.peak_shaving_is_not_available)) { }
                     }
                 }
             }
 
             is LoadState.Active -> {
-                SettingsPage(modifier) {
+                _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsPage(modifier) {
                     CircularProgressIndicator()
                 }
             }
 
             is LoadState.Error -> {
-                SettingsPage(modifier) {
+                _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsPage(modifier) {
                     Text("Error: $loadState")
                 }
             }
@@ -157,14 +86,14 @@ class PeakShavingSettingsView(
         val explanation = stringResource(R.string.peak_shaving_explanation, importLimit, soc)
         val context = LocalContext.current
 
-        ContentWithBottomButtonPair(
+        _root_ide_package_.com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair(
             navController,
             onConfirm = {
                 viewModel.save(context)
             },
             dirtyStateFlow = null,
             content = { modifier ->
-                SettingsColumnWithChild(
+                _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsColumnWithChild(
                     modifier = modifier,
                     footer = explanation
                 ) {
@@ -213,7 +142,7 @@ class PeakShavingSettingsView(
 @Composable
 fun PeakShavingSettingsViewPreview() {
     EnergyStatsTheme {
-        SettingsPage(Modifier) {
+        _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsPage(Modifier) {
             PeakShavingSettingsView(
                 FakeConfigManager(), DemoNetworking(), NavHostController(LocalContext.current)
             ).Loaded(

@@ -29,17 +29,15 @@ class DeviceSettingsItemViewModel(
     private val _dirtyState = MutableStateFlow(false)
     override val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    val valueStream = MutableStateFlow("")
+    private val _viewDataStream = MutableStateFlow(DeviceSettingItemViewData("",""))
+    val viewDataStream: StateFlow<DeviceSettingItemViewData> = _viewDataStream
 
-    private val _unitStream = MutableStateFlow("")
-    val unitStream: StateFlow<String> = _unitStream
-
-    private var remoteValue: String? = null
+    private var remoteValue: DeviceSettingItemViewData? = null
 
     init {
         viewModelScope.launch {
-            valueStream.collect {
-                _dirtyState.value = remoteValue != valueStream.value
+            viewDataStream.collect {
+                _dirtyState.value = remoteValue != it
             }
         }
     }
@@ -55,9 +53,9 @@ class DeviceSettingsItemViewModel(
             try {
                 val response = network.fetchDeviceSettingsItem(selectedDeviceSN, item)
 
-                _unitStream.value = response.unit ?: item.fallbackUnit()
-                remoteValue = response.value
-                valueStream.value = response.value
+                val viewData = DeviceSettingItemViewData(response.value, response.unit ?: item.fallbackUnit())
+                remoteValue = viewData
+                _viewDataStream.value = viewData
                 _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
                 _uiState.value = LoadState.Error(e, "Failed to load data")
@@ -73,8 +71,8 @@ class DeviceSettingsItemViewModel(
 
         viewModelScope.launch {
             try {
-                network.setDeviceSettingsItem(selectedDeviceSN, item, valueStream.value)
-                remoteValue = valueStream.value
+                network.setDeviceSettingsItem(selectedDeviceSN, item, viewDataStream.value.value)
+                remoteValue = _viewDataStream.value
                 _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
                 _uiState.value = LoadState.Error(e, "Failed to save data")

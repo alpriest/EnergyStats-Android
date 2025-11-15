@@ -41,6 +41,11 @@ import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
+data class DeviceSettingItemViewData(
+    val value: String,
+    val unit: String
+)
+
 class DeviceSettingItemView(
     private val configManager: ConfigManaging,
     private val network: Networking,
@@ -79,8 +84,7 @@ class DeviceSettingItemView(
     @Composable
     private fun LoadedView(viewModel: DeviceSettingsItemViewModel, modifier: Modifier, navController: NavController) {
         val context = LocalContext.current
-        val value = viewModel.valueStream.collectAsState().value
-        val unit = viewModel.unitStream.collectAsState().value
+        val viewData = viewModel.viewDataStream.collectAsState().value
         val annotatedString = buildAnnotatedString {
             append(viewModel.item.description(context))
             append("\n\n")
@@ -113,11 +117,11 @@ class DeviceSettingItemView(
                                 color = MaterialTheme.colorScheme.onSecondary
                             )
                             OutlinedTextField(
-                                value = value,
+                                value = viewData.value,
                                 onValueChange = { viewModel.valueStream.value = it.filter { it.isDigit() } },
                                 modifier = Modifier.width(130.dp),
                                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                                trailingIcon = { Text(unit, color = colorScheme.onSecondary) }
+                                trailingIcon = { Text(viewData.unit, color = colorScheme.onSecondary) }
                             )
                         }
                     }

@@ -25,6 +25,7 @@ import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
 import com.alpriest.energystats.ui.settings.devicesettings.DeviceSettingItemView
 import com.alpriest.energystats.ui.settings.financial.FinancialsSettingsView
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
+import com.alpriest.energystats.ui.settings.inverter.PeakShavingSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeSettingsView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditPhaseView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleView
