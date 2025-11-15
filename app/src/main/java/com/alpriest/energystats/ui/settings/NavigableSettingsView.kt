@@ -33,6 +33,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryVie
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.EditTemplateView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.ScheduleTemplateListView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
+import com.alpriest.energystats.ui.settings.solar.SolarBandingSettingsView
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 import com.example.energystats.FactoryResetAppSettingsView
@@ -116,7 +117,7 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.SolarBandings.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.sun_display_thresholds), {}, { navController.popBackStack() })
-            SolarBandingSettingsView(navController, configManager, Modifier)
+            SolarBandingSettingsView(configManager, navController).Content()
         }
         composable(SettingsScreen.FAQ.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.frequently_asked_questions), {}, { navController.popBackStack() })

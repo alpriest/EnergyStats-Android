@@ -17,6 +17,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.SegmentedControl
+import com.alpriest.energystats.ui.settings.solar.SolarStringsSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
