@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.inverter
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DeviceSettingsItem
@@ -16,6 +17,8 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkModes
 import com.alpriest.energystats.ui.settings.inverter.schedule.networkTitle
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class WorkModeViewModelFactory(
     private val network: Networking,
@@ -28,15 +31,34 @@ class WorkModeViewModelFactory(
     }
 }
 
+data class WorkModeViewData(
+    val workMode: String
+)
+
 class WorkModeViewModel(
     val network: Networking,
     val config: ConfigManaging,
     val navController: NavController
 ) : ViewModel(), AlertDialogMessageProviding {
-    var workModeStream = MutableStateFlow(WorkModes.SelfUse)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var items: List<WorkMode> = listOf()
+
+    private val _viewDataStream = MutableStateFlow(WorkModeViewData(WorkModes.SelfUse))
+    val viewDataStream: StateFlow<WorkModeViewData> = _viewDataStream
+
+    private val _dirtyState = MutableStateFlow(false)
+    val dirtyState: StateFlow<Boolean> = _dirtyState
+
+    private var remoteValue: WorkModeViewData? = null
+
+    init {
+        viewModelScope.launch {
+            viewDataStream.collect {
+                _dirtyState.value = remoteValue != it
+            }
+        }
+    }
 
     suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
@@ -52,7 +74,9 @@ class WorkModeViewModel(
 
                 try {
                     val result = network.fetchDeviceSettingsItem(deviceSN, DeviceSettingsItem.WorkMode)
-                    workModeStream.value = result.value
+                    val viewData = WorkModeViewData(result.value)
+                    remoteValue = viewData
+                    _viewDataStream.value = viewData
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
@@ -79,8 +103,9 @@ class WorkModeViewModel(
                     network.setDeviceSettingsItem(
                         deviceSN,
                         DeviceSettingsItem.WorkMode,
-                        workModeStream.value.networkTitle()
+                        viewDataStream.value.workMode.networkTitle()
                     )
+                    resetDirtyState()
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.inverter_work_mode_was_saved))
 
@@ -95,6 +120,11 @@ class WorkModeViewModel(
     }
 
     fun select(workMode: WorkMode) {
-        workModeStream.value = workMode
+        _viewDataStream.value = viewDataStream.value.copy(workMode = workMode.networkTitle())
+    }
+
+    private fun resetDirtyState() {
+        remoteValue = _viewDataStream.value
+        _dirtyState.value = false
     }
 }

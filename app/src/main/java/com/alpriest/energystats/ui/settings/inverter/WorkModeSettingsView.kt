@@ -49,7 +49,7 @@ class WorkModeSettingsView(
     fun Content(viewModel: WorkModeViewModel = viewModel(factory = WorkModeViewModelFactory(network, configManager, navController))) {
         val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
-        val selectedWorkMode = viewModel.workModeStream.collectAsState().value
+        val viewData = viewModel.viewDataStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
 
         MonitorAlertDialog(viewModel, userManager)
@@ -65,7 +65,7 @@ class WorkModeSettingsView(
                 ContentWithBottomButtonPair(
                     navController,
                     onConfirm = { viewModel.save(context) },
-                    dirtyStateFlow = null,
+                    dirtyStateFlow = viewModel.dirtyState,
                     content = { modifier ->
                         SettingsPage(modifier) {
                             SettingsColumnWithChild {
@@ -76,7 +76,7 @@ class WorkModeSettingsView(
                                             .padding(bottom = 24.dp)) {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
                                             RadioButton(
-                                                selected = selectedWorkMode == workMode,
+                                                selected = viewData.workMode == workMode,
                                                 onClick = {
                                                     viewModel.select(workMode)
                                                 }
