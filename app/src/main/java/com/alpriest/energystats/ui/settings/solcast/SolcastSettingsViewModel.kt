@@ -2,10 +2,18 @@ package com.alpriest.energystats.ui.settings.solcast
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+data class SolcastSettingsViewData(
+    val apiKey: String,
+    val sites: List<SolcastSite>
+)
 
 class SolcastSettingsViewModelFactory(
     private val configManager: ConfigManaging,
@@ -21,21 +29,35 @@ class SolcastSettingsViewModel(
     private val configManager: ConfigManaging,
     private val solarForecastingProvider: () -> SolcastCaching
 ) : ViewModel(), AlertDialogMessageProviding {
-    val apiKeyStream = MutableStateFlow("")
-    val sitesStream = MutableStateFlow<List<SolcastSite>>(listOf())
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    private val _viewDataStream = MutableStateFlow(SolcastSettingsViewData(configManager.solcastSettings.apiKey ?: "", configManager.solcastSettings.sites))
+    val viewDataStream: StateFlow<SolcastSettingsViewData> = _viewDataStream
+
+    private val _dirtyState = MutableStateFlow(false)
+    val dirtyState: StateFlow<Boolean> = _dirtyState
+
+    private var remoteValue: SolcastSettingsViewData? = null
 
     init {
-        apiKeyStream.value = configManager.solcastSettings.apiKey ?: ""
-        sitesStream.value = configManager.solcastSettings.sites
+        remoteValue = viewDataStream.value
+        viewModelScope.launch {
+            viewDataStream.collect {
+                _dirtyState.value = remoteValue != it
+            }
+        }
+    }
+
+    fun didChange(apiKey: String) {
+        _viewDataStream.value = viewDataStream.value.copy(apiKey = apiKey)
     }
 
     suspend fun save() {
         val service = solarForecastingProvider()
         try {
-            val response = service.fetchSites(apiKey = apiKeyStream.value)
-            configManager.solcastSettings = SolcastSettings(apiKeyStream.value, response.sites.map { SolcastSite(site = it) })
-            sitesStream.value = configManager.solcastSettings.sites
+            val response = service.fetchSites(apiKey = viewDataStream.value.apiKey)
+            configManager.solcastSettings = SolcastSettings(viewDataStream.value.apiKey, response.sites.map { SolcastSite(site = it) })
+            _viewDataStream.value = viewDataStream.value.copy(sites = configManager.solcastSettings.sites)
+            resetDirtyState()
             alertDialogMessage.value = MonitorAlertDialogData(null, "Your Solcast settings were successfully verified.")
         } catch (ex: Exception) {
             alertDialogMessage.value = MonitorAlertDialogData(ex, "Your Solcast settings failed to verify\n\n${ex.localizedMessage}")
@@ -44,7 +66,11 @@ class SolcastSettingsViewModel(
 
     fun removeKey() {
         configManager.solcastSettings = SolcastSettings.defaults
-        apiKeyStream.value = ""
-        sitesStream.value = listOf()
+        remoteValue = _viewDataStream.value
+    }
+
+    private fun resetDirtyState() {
+        remoteValue = _viewDataStream.value
+        _dirtyState.value = false
     }
 }

@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -23,6 +22,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -65,8 +65,7 @@ class SolcastSettingsView(
         ),
         modifier: Modifier
     ) {
-        val apiKey = viewModel.apiKeyStream.collectAsState().value
-        val sites = viewModel.sitesStream.collectAsState().value
+        val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
         trackScreenView("Solar Prediction", "SolcastSettingsView")
         val fetchSolcastOnAppLaunch = rememberSaveable { mutableStateOf(configManager.fetchSolcastOnAppLaunch) }
 
@@ -75,7 +74,7 @@ class SolcastSettingsView(
         ContentWithBottomButtonPair(
             navController,
             onConfirm = { viewModel.save() },
-            dirtyStateFlow = null,
+            dirtyStateFlow = viewModel.dirtyState,
             content = { innerModifier ->
                 SettingsPage(innerModifier) {
                     SettingsColumn(padding = SettingsPaddingValues.withVertical()) {
@@ -88,8 +87,8 @@ class SolcastSettingsView(
 
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = apiKey,
-                            onValueChange = { viewModel.apiKeyStream.value = it },
+                            value = viewData.apiKey,
+                            onValueChange = { viewModel.didChange(it) },
                             label = { Text(stringResource(R.string.api_key)) },
                             visualTransformation = PasswordVisualTransformation(),
                             singleLine = true,
@@ -108,7 +107,7 @@ class SolcastSettingsView(
                         )
                     }
 
-                    sites.forEach {
+                    viewData.sites.forEach {
                         SolcastSiteView(it)
                     }
 
