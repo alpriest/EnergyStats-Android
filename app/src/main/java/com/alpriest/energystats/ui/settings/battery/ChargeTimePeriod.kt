@@ -18,4 +18,10 @@ data class ChargeTimePeriod(
             endTime = end
         )
     }
+    companion object {
+        fun empty(): ChargeTimePeriod {
+            return ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false)
+        }
+    }
 }
+

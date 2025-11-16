@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -44,7 +45,6 @@ import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 
 enum class TimeType {
     START,
@@ -57,6 +57,12 @@ enum class TimeType {
         }
     }
 }
+
+data class BatteryChargeScheduleSettingsViewData(
+    val summary: String,
+    val chargeTimePeriod1: ChargeTimePeriod,
+    val chargeTimePeriod2: ChargeTimePeriod
+)
 
 class BatteryChargeScheduleSettingsView(
     private val network: Networking,
@@ -77,6 +83,7 @@ class BatteryChargeScheduleSettingsView(
         val chargeSummary = viewModel.summaryStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
         val context = LocalContext.current
+        val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -99,11 +106,19 @@ class BatteryChargeScheduleSettingsView(
                 ContentWithBottomButtonPair(
                     navController,
                     onConfirm = { viewModel.save(context) },
-                    dirtyStateFlow = null,
+                    dirtyStateFlow = viewModel.dirtyState,
                     content = { innerModifier ->
                         SettingsPage(innerModifier) {
-                            BatteryTimePeriodView(viewModel.timePeriod1Stream, stringResource(R.string.period_1))
-                            BatteryTimePeriodView(viewModel.timePeriod2Stream, stringResource(R.string.period_2))
+                            BatteryTimePeriodView(
+                                viewData.chargeTimePeriod1,
+                                stringResource(R.string.period_1),
+                                onChange = { viewModel.didChangeTimePeriod1(it, context) }
+                            )
+                            BatteryTimePeriodView(
+                                viewData.chargeTimePeriod2,
+                                stringResource(R.string.period_2),
+                                { viewModel.didChangeTimePeriod2(it, context) }
+                            )
 
                             SettingsColumn(
                                 header = stringResource(R.string.schedule_summary),
@@ -124,8 +139,7 @@ class BatteryChargeScheduleSettingsView(
     }
 
     @Composable
-    fun BatteryTimePeriodView(timePeriodStream: MutableStateFlow<ChargeTimePeriod>, periodTitle: String) {
-        val timePeriod = timePeriodStream.collectAsState().value
+    fun BatteryTimePeriodView(timePeriod: ChargeTimePeriod, periodTitle: String, onChange: (ChargeTimePeriod) -> Unit) {
         val textColor = remember { mutableStateOf(Color.Black) }
 
         SettingsColumn(
@@ -141,7 +155,7 @@ class BatteryChargeScheduleSettingsView(
                     color = colorScheme.onSecondary,
                 )
                 Switch(checked = timePeriod.enabled, onCheckedChange = {
-                    timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)
+                    onChange(ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it))
                 })
             }
 
@@ -154,7 +168,7 @@ class BatteryChargeScheduleSettingsView(
                 labelStyle = TextStyle(color = textColor.value),
                 includeSeconds = false
             ) { hour, minute ->
-                timePeriodStream.value = ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled)
+                onChange(ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled))
             }
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
@@ -166,11 +180,11 @@ class BatteryChargeScheduleSettingsView(
                 labelStyle = TextStyle(color = textColor.value),
                 includeSeconds = false
             ) { hour, minute ->
-                timePeriodStream.value = ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled)
+                onChange(ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled))
             }
 
             OutlinedButton(
-                onClick = { timePeriodStream.value = ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false) },
+                onClick = { onChange(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false)) },
             ) {
                 Text(
                     stringResource(R.string.reset_times),

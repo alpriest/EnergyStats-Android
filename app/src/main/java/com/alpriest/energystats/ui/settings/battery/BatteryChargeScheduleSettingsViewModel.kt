@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.battery
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.services.Networking
@@ -11,8 +12,8 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 private val ChargeTimePeriod.hasTimes: Boolean
@@ -30,20 +31,35 @@ class BatteryChargeScheduleSettingsViewModelFactory(
     }
 }
 
-private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
-    return !(end.hour < period2.start.hour || (end.hour == period2.start.hour && end.minute <= period2.start.minute) ||
-            start.hour > period2.end.hour || (start.hour == period2.end.hour && start.minute >= period2.end.minute))
-}
-
 class BatteryChargeScheduleSettingsViewModel(
     private val network: Networking,
     private val config: ConfigManaging
 ) : ViewModel(), AlertDialogMessageProviding {
-    val timePeriod1Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
-    val timePeriod2Stream = MutableStateFlow(ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false))
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val summaryStream = MutableStateFlow("")
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+
+    private val _viewDataStream = MutableStateFlow(
+        BatteryChargeScheduleSettingsViewData(
+            "",
+            ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false),
+            ChargeTimePeriod(start = Time.zero(), end = Time.zero(), enabled = false)
+        )
+    )
+    val viewDataStream: StateFlow<BatteryChargeScheduleSettingsViewData> = _viewDataStream
+
+    private val _dirtyState = MutableStateFlow(false)
+    val dirtyState: StateFlow<Boolean> = _dirtyState
+
+    private var remoteValue: BatteryChargeScheduleSettingsViewData? = null
+
+    init {
+        viewModelScope.launch {
+            viewDataStream.collect {
+                _dirtyState.value = remoteValue != it
+            }
+        }
+    }
 
     suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
@@ -54,19 +70,27 @@ class BatteryChargeScheduleSettingsViewModel(
 
                 try {
                     val result = network.fetchBatteryTimes(deviceSN)
-                    result.getOrNull(0)?.let {
-                        timePeriod1Stream.value = ChargeTimePeriod(
+                    val chargeTimePeriod1 = result.getOrNull(0)?.let {
+                        ChargeTimePeriod(
                             start = it.startTime, end = it.endTime, enabled = it.enable
                         )
-                    }
+                    } ?: ChargeTimePeriod.empty()
 
-                    result.getOrNull(1)?.let {
-                        timePeriod2Stream.value = ChargeTimePeriod(
+                    val chargeTimePeriod2 = result.getOrNull(1)?.let {
+                        ChargeTimePeriod(
                             start = it.startTime, end = it.endTime, enabled = it.enable
                         )
-                    }
+                    } ?: ChargeTimePeriod.empty()
 
-                    generateSummary(timePeriod1Stream.value, timePeriod2Stream.value, context)
+                    val viewData = BatteryChargeScheduleSettingsViewData(
+                        generateSummary(chargeTimePeriod1, chargeTimePeriod2, context),
+                        chargeTimePeriod1,
+                        chargeTimePeriod2
+                    )
+
+                    remoteValue = viewData
+                    _viewDataStream.value = viewData
+
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), true))
@@ -75,23 +99,19 @@ class BatteryChargeScheduleSettingsViewModel(
                 uiState.value = UiLoadState(LoadState.Inactive)
             }
         }
-
-        coroutineScope {
-            launch {
-                timePeriod1Stream.collect {
-                    generateSummary(it, timePeriod2Stream.value, context)
-                }
-            }
-
-            launch {
-                timePeriod2Stream.collect {
-                    generateSummary(timePeriod1Stream.value, it, context)
-                }
-            }
-        }
     }
 
-    private fun generateSummary(period1: ChargeTimePeriod, period2: ChargeTimePeriod, context: Context) {
+    fun didChangeTimePeriod1(chargeTimePeriod: ChargeTimePeriod, context: Context) {
+        _viewDataStream.value = viewDataStream.value.copy(chargeTimePeriod1 = chargeTimePeriod)
+        generateSummary(viewDataStream.value.chargeTimePeriod1, viewDataStream.value.chargeTimePeriod2, context)
+    }
+
+    fun didChangeTimePeriod2(chargeTimePeriod: ChargeTimePeriod, context: Context) {
+        _viewDataStream.value = viewDataStream.value.copy(chargeTimePeriod2 = chargeTimePeriod)
+        generateSummary(viewDataStream.value.chargeTimePeriod1, viewDataStream.value.chargeTimePeriod2, context)
+    }
+
+    private fun generateSummary(period1: ChargeTimePeriod, period2: ChargeTimePeriod, context: Context): String {
         val resultParts = mutableListOf<String>()
 
         if (!period1.enabled && !period2.enabled) {
@@ -132,29 +152,41 @@ class BatteryChargeScheduleSettingsViewModel(
             }
         }
 
-        summaryStream.value = resultParts.joinToString(" ")
+        return resultParts.joinToString(" ")
     }
 
     suspend fun save(context: Context) {
         uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+        val viewData = viewDataStream.value
 
         runCatching {
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
-                val times = listOf(timePeriod1Stream.value, timePeriod2Stream.value).map { it.asChargeTime() }
+                val times = listOf(viewData.chargeTimePeriod1, viewData.chargeTimePeriod2).map { it.asChargeTime() }
 
                 try {
                     network.setBatteryTimes(deviceSN, times)
+                    resetDirtyState()
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_charge_schedule_was_saved))
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex,"Something went wrong fetching data from FoxESS cloud.", false))
+                    uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud.", false))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)
             }
         }
     }
+
+    private fun resetDirtyState() {
+        remoteValue = _viewDataStream.value
+        _dirtyState.value = false
+    }
+}
+
+private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
+    return !(end.hour < period2.start.hour || (end.hour == period2.start.hour && end.minute <= period2.start.minute) ||
+            start.hour > period2.end.hour || (start.hour == period2.end.hour && start.minute >= period2.end.minute))
 }
