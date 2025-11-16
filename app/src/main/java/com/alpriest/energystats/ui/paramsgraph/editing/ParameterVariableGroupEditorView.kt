@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -60,12 +61,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedGroup = viewModel.selected.collectAsState().value
-    val groups = viewModel.groups.collectAsState().value
+    val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
     val renameDialogShowing = remember { mutableStateOf(false) }
     val createDialogShowing = remember { mutableStateOf(false) }
     val dialogText = remember { mutableStateOf("") }
-    val canDelete = viewModel.canDelete.collectAsState().value
 
     Column {
         SettingsColumnWithChild {
@@ -82,7 +81,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                 Box(contentAlignment = Alignment.TopEnd) {
                     ESButton(onClick = { expanded = !expanded }) {
                         Text(
-                            selectedGroup.title,
+                            viewData.selectedGroup.title,
                             fontSize = 12.sp,
                             color = colorScheme.onPrimary,
                         )
@@ -97,7 +96,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     ) {
-                        groups.forEach { group ->
+                        viewData.groups.forEach { group ->
                             DropdownMenuItem(onClick = {
                                 expanded = false
                                 viewModel.select(group)
@@ -118,7 +117,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
         ) {
             ESButton(
                 onClick = {
-                    dialogText.value = viewModel.selected.value.title
+                    dialogText.value = viewData.selectedGroup.title
                     renameDialogShowing.value = true
                 }
             ) {
@@ -145,7 +144,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
                     containerColor = PowerFlowNegative,
                     contentColor = PaleWhite
                 ),
-                enabled = canDelete
+                enabled = viewData.canDelete
             ) {
                 Image(
                     imageVector = Icons.Default.Delete,
@@ -168,7 +167,7 @@ fun Header(viewModel: ParameterVariableGroupEditorViewModel) {
 
 @Composable
 fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorViewModel, navController: NavHostController) {
-    val variables = viewModel.variables.collectAsState().value
+    val variables = viewModel.viewDataStream.collectAsStateWithLifecycle().value.variables
 
     ContentWithBottomButtonPair(
         navController = navController,
@@ -176,7 +175,7 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
             viewModel.save()
             navController.popBackStack()
         },
-        dirtyStateFlow = null,
+        dirtyStateFlow = viewModel.dirtyState,
         content = { modifier ->
             SettingsPage(modifier) {
                 Header(viewModel)
