@@ -81,6 +81,7 @@ class SummaryView(
     ) {
         trackScreenView("Summary", "SummaryView")
         val navController = rememberNavController()
+        val context = LocalContext.current
 
         NavHost(
             navController = navController,
@@ -101,7 +102,7 @@ class SummaryView(
 
             composable(SummaryScreen.EditSummaryDateRanges.name) {
                 topBarSettings.value = TopBarSettings(true, stringResource(R.string.summary_date_range), {}, { navController.popBackStack() })
-                EditSummaryView(Modifier, navController, viewModel)
+                EditSummaryView(configManager, navController, onChange = { viewModel.setDateRange(it, context) }).Content()
             }
         }
     }

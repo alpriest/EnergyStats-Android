@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.summary
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenReportResponse
@@ -20,6 +21,7 @@ import com.alpriest.energystats.ui.paramsgraph.monthYear
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.concurrent.CancellationException
@@ -61,11 +63,13 @@ class SummaryTabViewModel(
         loadStateStream.value = UiLoadState(LoadState.Inactive)
     }
 
-    suspend fun setDateRange(dateRange: SummaryDateRange, context: Context) {
-        configManager.summaryDateRange = dateRange
-        summaryDateRangeStream.value = dateRange
-        approximationsViewModelStream.value = null
-        load(context)
+    fun setDateRange(dateRange: SummaryDateRange, context: Context) {
+        viewModelScope.launch {
+            configManager.summaryDateRange = dateRange
+            summaryDateRangeStream.value = dateRange
+            approximationsViewModelStream.value = null
+            load(context)
+        }
     }
 
     private val fromYear: Int
