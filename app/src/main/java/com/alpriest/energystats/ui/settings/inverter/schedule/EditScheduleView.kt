@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,13 +52,9 @@ class EditScheduleView(
 
         MonitorAlertDialog(viewModel, userManager)
 
-        LaunchedEffect(null) {
-            viewModel.load()
-        }
-
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState.value)
-            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, loadState.allowRetry, onRetry = { viewModel.load() }, onLogout = { userManager.logout() })
+            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, false, onRetry = {}, onLogout = { userManager.logout() })
             is LoadState.Inactive -> schedule?.let {
                 Loaded(schedule, viewModel, navController, Modifier)
             }
@@ -75,7 +70,7 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
         navController,
         modifier = modifier,
         onConfirm = { viewModel.saveSchedule(context) },
-        dirtyStateFlow = null,
+        dirtyStateFlow = viewModel.dirtyState,
         content = { innerModifier ->
             SettingsPage(innerModifier) {
                 ScheduleDetailView(viewModel.navController, schedule)
