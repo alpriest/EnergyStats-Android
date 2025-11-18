@@ -58,7 +58,6 @@ fun FinancialsSettingsView(config: ConfigManaging) {
     val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(config.showFinancialSummaryOnFlowPage) }
     val unitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
-    val currencySymbol = rememberSaveable { mutableStateOf(config.currencySymbol) }
     val earningsModel = rememberSaveable { mutableStateOf(config.earningsModel) }
     trackScreenView("Financial Model", "FinancialsSettingsView")
 
@@ -75,8 +74,6 @@ fun FinancialsSettingsView(config: ConfigManaging) {
             SettingsCheckbox(title = stringResource(R.string.show_on_flow_page), state = showFinancialSummaryOnFlowPageState, onUpdate = {
                 config.showFinancialSummaryOnFlowPage = it
             })
-
-            MakeCurrencySymbolField(config, currencySymbol)
         }
 
         SettingsColumn(

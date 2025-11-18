@@ -17,6 +17,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetTapAction
 import com.alpriest.energystats.ui.SegmentedControl
+import com.alpriest.energystats.ui.settings.financial.MakeCurrencySymbolField
 import com.alpriest.energystats.ui.settings.solar.SolarStringsSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -36,6 +37,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
     val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
     val showBatteryAsPercentageState = rememberSaveable { mutableStateOf(config.showBatteryAsPercentage) }
     val widgetTapActionState = rememberSaveable { mutableStateOf(config.widgetTapAction) }
+    val currencySymbol = rememberSaveable { mutableStateOf(config.currencySymbol) }
     val context = LocalContext.current
 
     SettingsColumn(
@@ -177,6 +179,8 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                 }
             }
         )
+
+        MakeCurrencySymbolField(config, currencySymbol)
     }
 }
 
