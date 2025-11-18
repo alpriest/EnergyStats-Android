@@ -428,9 +428,10 @@
     <string name="earnings_ct2_description">Introduce el precio unitario que recibes por kWh por exportar electricidad a través de otro inversor monitorizado mediante CT2. Esto solo mostrará los datos de ganancias en la página de flujo de energía, ya que Fox no almacena estadísticas históricas de CT2.</string>
     <string name="peak_shaving">Reducción de picos</string>
     <string name="failed_to_load_settings">No se pudieron cargar los ajustes</string>
-    <string name="peak_shaving_is_not_available">La reducción de picos no está disponible. Esto podría deberse al firmware o modelo de su inversor.\n\nPóngase en contacto con FoxESS para obtener más información.</string>
+    <string name="peak_shaving_is_not_available">La función de Peak Shaving no está disponible. Esto podría deberse al firmware o al modelo de tu inversor.</string>
     <string name="import_limit">Límite de importación</string>
     <string name="battery_threshold_soc">Umbral de batería SOC</string>
+    <string name="peak_shaving_explanation">Tu sistema supervisa la potencia importada de la red. Si la importación supera tu Límite de Importación de %1$s y el estado de carga (SOC) de la batería está por encima de %2$s%%, el sistema descarga la batería para cubrir la demanda adicional, “recortando” así el pico de carga desde la red. Esta operación continúa mientras el estado de carga (SOC) de la batería se mantenga por encima de un determinado umbral. El Peak Shaving solo funciona cuando el modo de Peak Shaving está activado en el programador del inversor.</string>
     <string name="failed_to_save_settings">No se pudieron guardar los ajustes</string>
     <string name="reset_ellipsis">Restablecer…</string>
     <string name="will_be_reset">Se restablecerá:</string>
@@ -449,7 +450,6 @@
     <string name="self_sufficiency_settings">Configuración de autosuficiencia</string>
     <string name="will_not_be_reset">No se restablecerá:</string>
     <string name="display_settings">Configuración de visualización</string>
-    <string name="peak_shaving_explanation">Tu sistema monitorea la energía importada de la red. Si la importación supera tu Límite de Importación de %1$s y el estado de carga (SOC) de la batería está por encima de %2$s%%, el sistema descarga la batería para suministrar la demanda adicional, reduciendo así el pico de carga desde la red.\n\nEsta operación continúa mientras el estado de carga (SOC) de la batería esté por encima de un umbral determinado.\n\nEl Peak Shaving solo funciona cuando el modo Peak Shaving está activado desde el programador del inversor.</string>
     <string name="force_charge">Carga forzada</string>
     <string name="force_discharge">Descarga forzada</string>
     <string name="time_period_missing_warning">Cualquier periodo no especificado arriba se configurará por defecto en modo de autoconsumo, utilizando el SOC mínimo del periodo activo más reciente.</string>

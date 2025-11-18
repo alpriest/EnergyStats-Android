@@ -428,9 +428,10 @@
     <string name="earnings_ct2_description">Geben Sie den Einheitspreis ein, den Sie pro kWh für den Export von Strom über einen anderen Wechselrichter erhalten, der über CT2 erfasst wird. Dies zeigt nur Ertragsdaten auf der Leistungsfluss-Seite an, da Fox keine historischen CT2-Statistiken speichert.</string>
     <string name="peak_shaving">Lastspitzenkappung</string>
     <string name="failed_to_load_settings">Einstellungen konnten nicht geladen werden</string>
-    <string name="peak_shaving_is_not_available">Lastspitzenkappung ist nicht verfügbar. Dies könnte an der Firmware oder dem Modell Ihres Wechselrichters liegen.\n\nBitte kontaktieren Sie FoxESS für weitere Informationen.</string>
+    <string name="peak_shaving_is_not_available">Peak Shaving ist nicht verfügbar. Dies könnte an der Firmware oder dem Modell Ihres Wechselrichters liegen.</string>
     <string name="import_limit">Importlimit</string>
     <string name="battery_threshold_soc">Batterieschwellenwert SoC</string>
+    <string name="peak_shaving_explanation">Ihr System überwacht die aus dem Netz bezogene Leistung. Wenn der Import Ihren Importgrenzwert von %1$s überschreitet und der Ladezustand (SOC) Ihrer Batterie über %2$s%% liegt, entlädt das System die Batterie, um den zusätzlichen Bedarf zu decken und so die Spitzenlast aus dem Netz zu „kappen“. Dieser Vorgang läuft weiter, solange der Ladezustand (SOC) der Batterie über einem bestimmten Schwellenwert liegt. Peak Shaving funktioniert nur, wenn der Peak-Shaving-Modus im Wechselrichter-Zeitplan aktiviert ist.</string>
     <string name="failed_to_save_settings">Einstellungen konnten nicht gespeichert werden</string>
     <string name="reset_ellipsis">Zurücksetzen…</string>
     <string name="will_be_reset">Wird zurückgesetzt:</string>
@@ -449,7 +450,6 @@
     <string name="self_sufficiency_settings">Einstellungen zur Autarkie</string>
     <string name="will_not_be_reset">Wird nicht zurückgesetzt:</string>
     <string name="display_settings">Anzeigeeinstellungen</string>
-    <string name="peak_shaving_explanation">Ihr System überwacht den Strom, der aus dem Netz importiert wird. Wenn der Import Ihren Importgrenzwert von %1$s überschreitet und der Ladezustand (SOC) Ihrer Batterie über %2$s%% liegt, entlädt das System die Batterie, um den zusätzlichen Bedarf zu decken und so die Spitzenlast vom Netz zu „kappen“.\n\nDieser Vorgang wird fortgesetzt, solange der Ladezustand (SOC) der Batterie über einem bestimmten Schwellenwert liegt.\n\nPeak Shaving funktioniert nur, wenn der Modus „Peak Shaving“ im Wechselrichter-Zeitplan aktiviert ist.</string>
     <string name="force_charge">Erzwungenes Laden</string>
     <string name="force_discharge">Erzwungenes Entladen</string>
     <string name="time_period_missing_warning">Alle oben nicht angegebenen Zeiträume werden standardmäßig im Eigenverbrauchsmodus betrieben, wobei der minimale SOC aus dem zuletzt aktiven Zeitraum verwendet wird.</string>

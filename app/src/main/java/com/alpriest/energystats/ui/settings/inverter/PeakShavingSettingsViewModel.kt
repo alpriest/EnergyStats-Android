@@ -12,39 +12,52 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+data class PeakShavingSettingsViewData(
+    val importLimit: String,
+    val soc: String,
+    val supported: Boolean
+)
+
 class PeakShavingSettingsViewModel(
     private val configManager: ConfigManaging, private val networking: Networking
 ) : ViewModel() {
-    private val _state = MutableStateFlow<LoadState>(LoadState.Inactive)
-    val uiState: StateFlow<LoadState> = _state
+    private val _uiState = MutableStateFlow<LoadState>(LoadState.Inactive)
+    val uiState: StateFlow<LoadState> = _uiState
 
-    private val _importLimit = MutableStateFlow("")
-    var importLimit: MutableStateFlow<String> = _importLimit
+    private val _viewDataStream = MutableStateFlow(PeakShavingSettingsViewData("","", false))
+    val viewDataStream: StateFlow<PeakShavingSettingsViewData> = _viewDataStream
 
-    private val _soc = MutableStateFlow("")
-    var soc: MutableStateFlow<String> = _soc
+    private val _dirtyState = MutableStateFlow(false)
+    val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private val _supported = MutableStateFlow(false)
-    var supported: MutableStateFlow<Boolean> = _supported
+    private var remoteValue: PeakShavingSettingsViewData? = null
+
+    init {
+        viewModelScope.launch {
+            viewDataStream.collect {
+                _dirtyState.value = remoteValue != it
+            }
+        }
+    }
 
     fun load(context: Context) {
         val selectedDeviceSN = configManager.selectedDeviceSN ?: return
-        if (_state.value is LoadState.Error) return
+        if (_uiState.value is LoadState.Error) return
 
-        _state.value = LoadState.Active(context.getString(R.string.loading))
+        _uiState.value = LoadState.Active(context.getString(R.string.loading))
 
         viewModelScope.launch {
             try {
                 val settings = networking.fetchPeakShavingSettings(selectedDeviceSN)
 
-                _importLimit.value = settings.importLimit.value.removingEmptyDecimals()
-                _soc.value = settings.soc.value
-                _supported.value = true
+                val viewData = PeakShavingSettingsViewData(settings.importLimit.value.removingEmptyDecimals(), settings.soc.value, true)
+                remoteValue = viewData
+                _viewDataStream.value = viewData
 
-                _state.value = LoadState.Inactive
+                _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
                 val errorMessage = context.getString(R.string.failed_to_load_settings)
-                _state.value = when (e) {
+                _uiState.value = when (e) {
                     is FoxServerError -> if (e.errno == 40257) {
                         LoadState.Inactive
                     } else {
@@ -58,20 +71,29 @@ class PeakShavingSettingsViewModel(
     }
 
     fun save(context: Context) {
-        if (_state.value != LoadState.Inactive) {
+        if (_uiState.value != LoadState.Inactive) {
             return
         }
         val selectedDeviceSN = configManager.selectedDeviceSN ?: return
-        _state.value = LoadState.Active(context.getString(R.string.saving))
+        _uiState.value = LoadState.Active(context.getString(R.string.saving))
 
         viewModelScope.launch {
             try {
-                networking.setPeakShavingSettings(selectedDeviceSN, importLimit.value.toDouble(), soc.value.toInt())
+                val viewData = viewDataStream.value
+                networking.setPeakShavingSettings(selectedDeviceSN, viewData.importLimit.toDouble(), viewData.soc.toInt())
 
-                _state.value = LoadState.Inactive
+                _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
-                _state.value = LoadState.Error(e, context.getString(R.string.failed_to_save_settings))
+                _uiState.value = LoadState.Error(e, context.getString(R.string.failed_to_save_settings))
             }
         }
+    }
+
+    fun didChangeImportLimit(value: String) {
+        _viewDataStream.value = viewDataStream.value.copy(importLimit = value)
+    }
+
+    fun didChangeSoc(value: String) {
+        _viewDataStream.value = viewDataStream.value.copy(soc = value)
     }
 }

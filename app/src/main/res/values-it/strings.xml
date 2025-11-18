@@ -429,9 +429,10 @@
     <string name="earnings_ct2_description">Inserisci il prezzo unitario che ricevi per kWh per l\'esportazione di elettricità tramite un altro inverter monitorato tramite CT2. Questo mostrerà solo i dati dei guadagni nella pagina del flusso di energia, poiché Fox non memorizza le statistiche storiche di CT2.</string>
     <string name="peak_shaving">Taglio dei picchi</string>
     <string name="failed_to_load_settings">Impossibile caricare le impostazioni</string>
-    <string name="peak_shaving_is_not_available">Il taglio dei picchi non è disponibile. Questo potrebbe dipendere dal firmware o dal modello del tuo inverter.\n\nContatta FoxESS per ulteriori informazioni.</string>
+    <string name="peak_shaving_is_not_available">Peak Shaving ist nicht verfügbar. Dies könnte an der Firmware oder dem Modell Ihres Wechselrichters liegen.</string>
     <string name="import_limit">Limite di importazione</string>
     <string name="battery_threshold_soc">Soglia della batteria SOC</string>
+    <string name="peak_shaving_explanation">Il tuo sistema monitora la potenza importata dalla rete. Se l\'importazione supera il tuo Limite di Importazione di %1$s e lo stato di carica (SOC) della batteria è superiore a %2$s%%, il sistema scarica la batteria per coprire la richiesta in eccesso, “tagliando” così il picco di carico dalla rete. Questa operazione continua finché lo stato di carica (SOC) della batteria rimane al di sopra di una determinata soglia. Il Peak Shaving funziona solo quando la modalità Peak Shaving è abilitata nel programma dell’inverter.</string>
     <string name="failed_to_save_settings">Impossibile salvare le impostazioni</string>
     <string name="reset_ellipsis">Reimposta…</string>
     <string name="will_be_reset">Verrà reimpostato:</string>
@@ -450,7 +451,6 @@
     <string name="self_sufficiency_settings">Impostazioni di autosufficienza</string>
     <string name="will_not_be_reset">Non verrà reimpostato:</string>
     <string name="display_settings">Impostazioni di visualizzazione</string>
-    <string name="peak_shaving_explanation">Il tuo sistema monitora l’energia importata dalla rete. Se l’importazione supera il tuo limite di importazione di %1$s e lo stato di carica (SOC) della batteria è superiore a %2$s%%, il sistema scarica la batteria per soddisfare la domanda in eccesso, riducendo così il carico di picco dalla rete.\n\nQuesta operazione continua finché lo stato di carica (SOC) della batteria rimane sopra una certa soglia.\n\nIl Peak Shaving funziona solo quando la modalità Peak Shaving è attivata dal pianificatore dell’inverter.</string>
     <string name="force_charge">Carica forzata</string>
     <string name="force_discharge">Scarica forzata</string>
     <string name="time_period_missing_warning">Tutti i periodi non specificati sopra verranno impostati di default sulla modalità di autoconsumo, utilizzando il SOC minimo del periodo attivo più recente.</string>

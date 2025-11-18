@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -31,6 +32,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 class PeakShavingSettingsViewModelFactory(
@@ -48,7 +50,7 @@ class PeakShavingSettingsView(
     @Composable
     fun Content(modifier: Modifier, viewModel: PeakShavingSettingsViewModel = viewModel(factory = PeakShavingSettingsViewModelFactory(configManager, network))) {
         val context = LocalContext.current
-        val supported = viewModel.supported.collectAsState().value
+        val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
 
         LaunchedEffect(null) {
             viewModel.load(context)
@@ -56,23 +58,23 @@ class PeakShavingSettingsView(
 
         when (val loadState = viewModel.uiState.collectAsState().value) {
             is LoadState.Inactive -> {
-                if (supported) {
+                if (viewData.supported) {
                     Loaded(viewModel, navController)
                 } else {
-                    _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsPage(modifier) {
+                    SettingsPage(modifier) {
                         _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsColumn(error = stringResource(R.string.peak_shaving_is_not_available)) { }
                     }
                 }
             }
 
             is LoadState.Active -> {
-                _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsPage(modifier) {
+                SettingsPage(modifier) {
                     CircularProgressIndicator()
                 }
             }
 
             is LoadState.Error -> {
-                _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsPage(modifier) {
+                SettingsPage(modifier) {
                     Text("Error: $loadState")
                 }
             }
@@ -81,9 +83,8 @@ class PeakShavingSettingsView(
 
     @Composable
     fun Loaded(viewModel: PeakShavingSettingsViewModel, navController: NavController) {
-        val importLimit = viewModel.importLimit.collectAsState().value
-        val soc = viewModel.soc.collectAsState().value
-        val explanation = stringResource(R.string.peak_shaving_explanation, importLimit, soc)
+        val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
+        val explanation = stringResource(R.string.peak_shaving_explanation, viewData.importLimit, viewData.soc)
         val context = LocalContext.current
 
         _root_ide_package_.com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair(
@@ -91,7 +92,7 @@ class PeakShavingSettingsView(
             onConfirm = {
                 viewModel.save(context)
             },
-            dirtyStateFlow = null,
+            dirtyStateFlow = viewModel.dirtyState,
             content = { modifier ->
                 _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsColumnWithChild(
                     modifier = modifier,
@@ -108,8 +109,8 @@ class PeakShavingSettingsView(
                             color = MaterialTheme.colorScheme.onSecondary
                         )
                         OutlinedTextField(
-                            value = importLimit,
-                            onValueChange = { viewModel.importLimit.value = it.filter { it.isDigit() } },
+                            value = viewData.importLimit,
+                            onValueChange = { viewModel.didChangeImportLimit(it.filter { it.isDigit() }) },
                             modifier = Modifier.width(130.dp),
                             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
                             trailingIcon = { Text("kW", color = MaterialTheme.colorScheme.onSecondary) })
@@ -126,8 +127,8 @@ class PeakShavingSettingsView(
                             color = MaterialTheme.colorScheme.onSecondary
                         )
                         OutlinedTextField(
-                            value = soc,
-                            onValueChange = { viewModel.soc.value = it.filter { it.isDigit() } },
+                            value = viewData.soc,
+                            onValueChange = { viewModel.didChangeSoc(it.filter { it.isDigit() }) },
                             modifier = Modifier.width(130.dp),
                             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
                             trailingIcon = { Text("%", color = MaterialTheme.colorScheme.onSecondary) })

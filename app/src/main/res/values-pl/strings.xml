@@ -429,9 +429,10 @@
     <string name="earnings_ct2_description">Wprowadź cenę jednostkową, jaką otrzymujesz za eksport energii elektrycznej (za kWh) za pośrednictwem innego inwertera monitorowanego przez CT2. Dane o zarobkach będą widoczne tylko na stronie przepływu energii, ponieważ Fox nie przechowuje historycznych statystyk CT2.</string>
     <string name="peak_shaving">Ograniczanie szczytów zużycia</string>
     <string name="failed_to_load_settings">Nie udało się załadować ustawień</string>
-    <string name="peak_shaving_is_not_available">Ograniczanie szczytów zużycia jest niedostępne. Może to być spowodowane oprogramowaniem układowym lub modelem falownika.\n\nSkontaktuj się z FoxESS, aby uzyskać więcej informacji.</string>
+    <string name="peak_shaving_is_not_available">Funkcja Peak Shaving jest niedostępna. Może to wynikać z oprogramowania układowego lub modelu Twojego falownika.</string>
     <string name="import_limit">Limit importu</string>
     <string name="battery_threshold_soc">Próg baterii SOC</string>
+    <string name="peak_shaving_explanation">Twój system monitoruje moc pobieraną z sieci. Jeśli import przekroczy Twój Limit Importu wynoszący %1$s, a stan naładowania (SOC) baterii będzie powyżej %2$s%%, system zacznie rozładowywać baterię, aby pokryć nadmierne zapotrzebowanie, „ścinać” szczytowe obciążenie pobierane z sieci. Operacja trwa tak długo, jak stan naładowania (SOC) baterii pozostaje powyżej określonego progu. Peak Shaving działa tylko wtedy, gdy tryb Peak Shaving jest włączony w harmonogramie falownika.</string>
     <string name="failed_to_save_settings">Nie udało się zapisać ustawień</string>
     <string name="reset_ellipsis">Resetuj…</string>
     <string name="will_be_reset">Zostanie zresetowane:</string>
@@ -450,7 +451,6 @@
     <string name="self_sufficiency_settings">Ustawienia samowystarczalności</string>
     <string name="will_not_be_reset">Nie zostanie zresetowane:</string>
     <string name="display_settings">Ustawienia wyświetlania</string>
-    <string name="peak_shaving_explanation">Twój system monitoruje moc importowaną z sieci. Jeśli import przekracza Twój limit importu wynoszący %1$s, a poziom naładowania baterii (SOC) przekracza %2$s%%, system rozładowuje baterię, aby zaspokoić nadmiarowe zapotrzebowanie, tym samym „ścina” szczytowe obciążenie z sieci.\n\nTa operacja trwa, dopóki poziom naładowania baterii (SOC) pozostaje powyżej określonego progu.\n\nFunkcja Peak Shaving działa tylko wtedy, gdy tryb Peak Shaving jest włączony w harmonogramie falownika.</string>
     <string name="force_charge">Wymuszone ładowanie</string>
     <string name="force_discharge">Wymuszone rozładowanie</string>
     <string name="time_period_missing_warning">Wszystkie okresy czasu niewymienione powyżej domyślnie przejdą w tryb własnego zużycia, używając minimalnego SOC z ostatniego aktywnego okresu.</string>
