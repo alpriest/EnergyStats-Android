@@ -42,14 +42,14 @@ class EditScheduleViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: Schedule? = null
+    private var originalValue: Schedule? = null
 
     init {
-        remoteValue = scheduleStream.value
+        originalValue = scheduleStream.value
 
         viewModelScope.launch {
             scheduleStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }

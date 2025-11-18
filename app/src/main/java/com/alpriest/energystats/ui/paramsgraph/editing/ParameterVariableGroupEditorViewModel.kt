@@ -34,15 +34,15 @@ class ParameterVariableGroupEditorViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: ParameterVariableGroupEditorViewData? = null
+    private var originalValue: ParameterVariableGroupEditorViewData? = null
 
     init {
         updateVariables(viewDataStream.value.selectedGroup)
-        remoteValue = viewDataStream.value
+        originalValue = viewDataStream.value
 
         viewModelScope.launch {
             viewDataStream.collect { changedViewData ->
-                _dirtyState.value = remoteValue
+                _dirtyState.value = originalValue
                     ?.groups
                     ?.firstOrNull { group -> group.id == changedViewData.selectedGroup.id }
                     ?.let { originalGroup ->

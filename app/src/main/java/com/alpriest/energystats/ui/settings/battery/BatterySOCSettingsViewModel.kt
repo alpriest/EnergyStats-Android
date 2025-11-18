@@ -38,7 +38,7 @@ class BatterySOCSettingsViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: BatterySOCSettingsViewData? = null
+    private var originalValue: BatterySOCSettingsViewData? = null
 
     fun didChangeMinSOC(value: String) {
         _viewDataStream.value = viewDataStream.value.copy(minSOC = value)
@@ -51,7 +51,7 @@ class BatterySOCSettingsViewModel(
     init {
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }
@@ -66,7 +66,7 @@ class BatterySOCSettingsViewModel(
                 try {
                     val result = network.fetchBatterySettings(deviceSN)
                     val viewData = BatterySOCSettingsViewData(result.minSoc.toString(), result.minSocOnGrid.toString())
-                    remoteValue = viewData
+                    originalValue = viewData
                     _viewDataStream.value = viewData
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
@@ -110,7 +110,7 @@ class BatterySOCSettingsViewModel(
     }
 
     private fun resetDirtyState() {
-        remoteValue = _viewDataStream.value
+        originalValue = _viewDataStream.value
         _dirtyState.value = false
     }
 }

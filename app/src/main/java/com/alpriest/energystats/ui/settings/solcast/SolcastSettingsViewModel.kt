@@ -36,13 +36,13 @@ class SolcastSettingsViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: SolcastSettingsViewData? = null
+    private var originalValue: SolcastSettingsViewData? = null
 
     init {
-        remoteValue = viewDataStream.value
+        originalValue = viewDataStream.value
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }
@@ -66,11 +66,11 @@ class SolcastSettingsViewModel(
 
     fun removeKey() {
         configManager.solcastSettings = SolcastSettings.defaults
-        remoteValue = _viewDataStream.value
+        originalValue = _viewDataStream.value
     }
 
     private fun resetDirtyState() {
-        remoteValue = _viewDataStream.value
+        originalValue = _viewDataStream.value
         _dirtyState.value = false
     }
 }

@@ -50,12 +50,12 @@ class WorkModeViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: WorkModeViewData? = null
+    private var originalValue: WorkModeViewData? = null
 
     init {
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }
@@ -75,7 +75,7 @@ class WorkModeViewModel(
                 try {
                     val result = network.fetchDeviceSettingsItem(deviceSN, DeviceSettingsItem.WorkMode)
                     val viewData = WorkModeViewData(result.value)
-                    remoteValue = viewData
+                    originalValue = viewData
                     _viewDataStream.value = viewData
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
@@ -124,7 +124,7 @@ class WorkModeViewModel(
     }
 
     private fun resetDirtyState() {
-        remoteValue = _viewDataStream.value
+        originalValue = _viewDataStream.value
         _dirtyState.value = false
     }
 }

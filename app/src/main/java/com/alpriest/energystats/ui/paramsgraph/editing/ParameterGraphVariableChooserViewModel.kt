@@ -78,15 +78,15 @@ class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, 
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: ParameterGraphVariableChooserViewData? = null
+    private var originalValue: ParameterGraphVariableChooserViewData? = null
 
     init {
         determineSelectedGroup()
 
-        remoteValue = viewDataStream.value
+        originalValue = viewDataStream.value
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }

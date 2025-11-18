@@ -51,12 +51,12 @@ class BatteryChargeScheduleSettingsViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: BatteryChargeScheduleSettingsViewData? = null
+    private var originalValue: BatteryChargeScheduleSettingsViewData? = null
 
     init {
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }
@@ -88,7 +88,7 @@ class BatteryChargeScheduleSettingsViewModel(
                         chargeTimePeriod2
                     )
 
-                    remoteValue = viewData
+                    originalValue = viewData
                     _viewDataStream.value = viewData
 
                     uiState.value = UiLoadState(LoadState.Inactive)
@@ -181,7 +181,7 @@ class BatteryChargeScheduleSettingsViewModel(
     }
 
     private fun resetDirtyState() {
-        remoteValue = _viewDataStream.value
+        originalValue = _viewDataStream.value
         _dirtyState.value = false
     }
 }

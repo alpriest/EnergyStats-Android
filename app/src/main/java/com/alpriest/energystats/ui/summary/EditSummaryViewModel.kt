@@ -29,7 +29,7 @@ class EditSummaryViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: EditSummaryViewData? = null
+    private var originalValue: EditSummaryViewData? = null
 
     init {
         val summaryDateRange = configManager.summaryDateRange
@@ -52,10 +52,10 @@ class EditSummaryViewModel(
         }
         _viewDataStream = MutableStateFlow(viewData)
         viewDataStream = _viewDataStream
-        remoteValue = viewDataStream.value
+        originalValue = viewDataStream.value
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }

@@ -30,12 +30,12 @@ class PeakShavingSettingsViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: PeakShavingSettingsViewData? = null
+    private var originalValue: PeakShavingSettingsViewData? = null
 
     init {
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }
@@ -51,7 +51,7 @@ class PeakShavingSettingsViewModel(
                 val settings = networking.fetchPeakShavingSettings(selectedDeviceSN)
 
                 val viewData = PeakShavingSettingsViewData(settings.importLimit.value.removingEmptyDecimals(), settings.soc.value, true)
-                remoteValue = viewData
+                originalValue = viewData
                 _viewDataStream.value = viewData
 
                 _uiState.value = LoadState.Inactive

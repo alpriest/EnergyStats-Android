@@ -51,12 +51,12 @@ class EditTemplateViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var remoteValue: ScheduleTemplate? = EditScheduleStore.shared.templateStream.value
+    private var originalValue: ScheduleTemplate? = EditScheduleStore.shared.templateStream.value
 
     init {
         viewModelScope.launch {
             templateStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }

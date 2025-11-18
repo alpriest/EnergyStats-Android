@@ -22,12 +22,12 @@ class SolarBandingSettingsViewModel(
     private val _themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(config.themeStream.value)
     val themeStream: StateFlow<AppTheme> = _themeStream
 
-    private var remoteValue: SolarBandingSettingsViewData? = null
+    private var originalValue: SolarBandingSettingsViewData? = null
 
     init {
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue?.compareTo(it) != 0
+                _dirtyState.value = originalValue?.compareTo(it) != 0
             }
         }
 
@@ -36,7 +36,7 @@ class SolarBandingSettingsViewModel(
             config.solarRangeDefinitions.threshold2.toFloat(),
             config.solarRangeDefinitions.threshold3.toFloat()
         )
-        remoteValue = viewData
+        originalValue = viewData
         _viewDataStream.value = viewData
     }
 

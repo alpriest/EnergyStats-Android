@@ -28,12 +28,12 @@ class DeviceSettingsItemViewModel(
     private val _viewDataStream = MutableStateFlow(DeviceSettingItemViewData("",""))
     val viewDataStream: StateFlow<DeviceSettingItemViewData> = _viewDataStream
 
-    private var remoteValue: DeviceSettingItemViewData? = null
+    private var originalValue: DeviceSettingItemViewData? = null
 
     init {
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = remoteValue != it
+                _dirtyState.value = originalValue != it
             }
         }
     }
@@ -52,7 +52,7 @@ class DeviceSettingsItemViewModel(
                 val response = network.fetchDeviceSettingsItem(selectedDeviceSN, item)
 
                 val viewData = DeviceSettingItemViewData(response.value, response.unit ?: item.fallbackUnit())
-                remoteValue = viewData
+                originalValue = viewData
                 _viewDataStream.value = viewData
                 _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
@@ -78,7 +78,7 @@ class DeviceSettingsItemViewModel(
     }
 
     private fun resetDirtyState() {
-        remoteValue = _viewDataStream.value
+        originalValue = _viewDataStream.value
         _dirtyState.value = false
     }
 }
