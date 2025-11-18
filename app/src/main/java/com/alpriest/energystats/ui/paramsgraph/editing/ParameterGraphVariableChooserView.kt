@@ -59,10 +59,9 @@ class ParameterGraphVariableChooserView(
         viewModel: ParameterGraphVariableChooserViewModel = viewModel(factory = ParameterGraphVariableChooserViewModelFactory(configManager, variables))
     ) {
         val scrollState = rememberScrollState()
-        val variables = viewModel.variablesState.collectAsState().value
+        val viewData = viewModel.viewDataStream.collectAsState().value
         val uriHandler = LocalUriHandler.current
         val groups = configManager.themeStream.collectAsState().value.parameterGroups
-        val selectedGroupId = viewModel.selectedIdState.collectAsState().value
         trackScreenView("Parameters", "ParameterGraphVariableChooserView")
         var showAllParameters by remember { mutableStateOf(false) }
 
@@ -79,7 +78,7 @@ class ParameterGraphVariableChooserView(
                     modifier = Modifier.fillMaxWidth()
                 )
             },
-            dirtyStateFlow = null,
+            dirtyStateFlow = viewModel.dirtyState,
             content = { modifier ->
                 Column(
                     modifier = modifier
@@ -109,7 +108,7 @@ class ParameterGraphVariableChooserView(
                             Row {
                                 ListRow(
                                     onClick = { viewModel.select(item.parameterNames) },
-                                    item.id == selectedGroupId
+                                    item.id == viewData.selectedId
                                 ) {
                                     Text(
                                         item.title,
@@ -146,7 +145,7 @@ class ParameterGraphVariableChooserView(
                         }
                     ) {
                         ParameterVariableListView(
-                            variables.filter { it.enabled || showAllParameters },
+                            viewData.variables.filter { it.enabled || showAllParameters },
                             onTap = { viewModel.toggle(it) })
                     }
 

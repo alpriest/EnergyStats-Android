@@ -2,9 +2,12 @@ package com.alpriest.energystats.ui.paramsgraph.editing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 data class ParameterGroup(val id: String, val title: String, val parameterNames: List<String>) {
     companion object {
@@ -55,16 +58,41 @@ class ParameterGraphVariableChooserViewModelFactory(
     }
 }
 
-class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: MutableStateFlow<List<ParameterGraphVariable>>): ViewModel() {
-    val variablesState: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
-    val selectedIdState: MutableStateFlow<String?> = MutableStateFlow(null)
+data class ParameterGraphVariableChooserViewData(
+    val variables: List<ParameterGraphVariable>,
+    val selectedId: String?
+)
+
+class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: MutableStateFlow<List<ParameterGraphVariable>>) : ViewModel() {
+//    val variablesState: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
+//    val selectedIdState: MutableStateFlow<String?> = MutableStateFlow(null)
+
+    private val _viewDataStream = MutableStateFlow(
+        ParameterGraphVariableChooserViewData(
+            variables.value.sortedBy { it.type.name.lowercase() },
+            null
+        )
+    )
+    val viewDataStream: StateFlow<ParameterGraphVariableChooserViewData> = _viewDataStream
+
+    private val _dirtyState = MutableStateFlow(false)
+    val dirtyState: StateFlow<Boolean> = _dirtyState
+
+    private var remoteValue: ParameterGraphVariableChooserViewData? = null
 
     init {
         determineSelectedGroup()
+
+        remoteValue = viewDataStream.value
+        viewModelScope.launch {
+            viewDataStream.collect {
+                _dirtyState.value = remoteValue != it
+            }
+        }
     }
 
     fun apply() {
-        variables.value = variablesState.value
+        variables.value = viewDataStream.value.variables
     }
 
     fun chooseDefaultVariables() {
@@ -76,28 +104,33 @@ class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, 
     }
 
     fun select(newVariables: List<String>) {
-        variablesState.value = variablesState.value.map {
+        val viewData = viewDataStream.value
+        _viewDataStream.value = viewDataStream.value.copy(variables = viewData.variables.map {
             val select = newVariables.contains(it.type.variable)
             return@map it.copy(isSelected = select, enabled = select)
-        }
+        })
         determineSelectedGroup()
     }
 
     fun toggle(updating: ParameterGraphVariable) {
-        variablesState.value = variablesState.value.map {
+        val viewData = viewDataStream.value
+        _viewDataStream.value = viewDataStream.value.copy(variables = viewData.variables.map {
             if (it.type.variable == updating.type.variable) {
                 return@map it.copy(isSelected = !it.isSelected, enabled = !it.isSelected)
             }
 
             return@map it
-        }
+        })
         determineSelectedGroup()
     }
 
     private fun determineSelectedGroup() {
-        selectedIdState.value = configManager.parameterGroups.firstOrNull { group ->
-            group.parameterNames.sorted() == variablesState.value.filter { it.isSelected }.map { it.type.variable }.sorted()
-        }?.id
+        val viewData = viewDataStream.value
+        _viewDataStream.value = viewDataStream.value.copy(
+            selectedId = configManager.parameterGroups.firstOrNull { group ->
+                group.parameterNames.sorted() == viewData.variables.filter { it.isSelected }.map { it.type.variable }.sorted()
+            }?.id
+        )
     }
 
     companion object {
