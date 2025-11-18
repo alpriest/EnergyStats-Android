@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.gms.google.services)
+    id("com.google.firebase.firebase-perf") version "2.0.2" apply false
 }
 
 val localProperties = Properties()
@@ -76,4 +77,5 @@ dependencies {
     implementation(libs.firebase.inappmessaging.display)
     implementation(libs.chucker)
     implementation(libs.rollingnumbers)
+    implementation(libs.firebase.perf)
 }

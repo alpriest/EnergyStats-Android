@@ -20,6 +20,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.errorMessage
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class EditTemplateViewModelFactory(
@@ -46,6 +47,19 @@ class EditTemplateViewModel(
     private val modes: List<WorkMode> = EditScheduleStore.modes(configManager)
     private var templateID: String = ""
     private var shouldPopNavOnDismissal = false
+
+    private val _dirtyState = MutableStateFlow(false)
+    val dirtyState: StateFlow<Boolean> = _dirtyState
+
+    private var remoteValue: ScheduleTemplate? = EditScheduleStore.shared.templateStream.value
+
+    init {
+        viewModelScope.launch {
+            templateStream.collect {
+                _dirtyState.value = remoteValue != it
+            }
+        }
+    }
 
     fun load() {
         val sharedSchedule = EditScheduleStore.shared.scheduleStream.value

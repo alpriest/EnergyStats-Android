@@ -164,7 +164,8 @@ class HowToObtainAPIKeyView {
             Text(
                 stringResource(R.string.how_to_get_api_key),
                 color = colorScheme.onSecondary,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp),
+                fontWeight = FontWeight.Bold
             )
             BulletPoint(1, stringResource(R.string.api_key_step_1), themeStream)
             Text("** Do not use the V2 website yet.**")
@@ -178,7 +179,8 @@ class HowToObtainAPIKeyView {
             Text(
                 stringResource(R.string.what_is_an_api_key),
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = 32.dp),
+                fontWeight = FontWeight.Bold
             )
 
             Column {

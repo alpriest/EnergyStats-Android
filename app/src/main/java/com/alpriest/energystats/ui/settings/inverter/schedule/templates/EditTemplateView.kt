@@ -102,7 +102,7 @@ class EditTemplateView(
         ContentWithBottomButtonPair(
             navController = navController,
             onConfirm = { viewModel.saveTemplate(context) },
-            dirtyStateFlow = null,
+            dirtyStateFlow = viewModel.dirtyState,
             content = { innerModifier ->
                 SettingsPage(innerModifier) {
                     ScheduleDetailView(viewModel.navController, template.asSchedule())

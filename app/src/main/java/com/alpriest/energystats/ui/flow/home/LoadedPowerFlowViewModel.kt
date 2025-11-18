@@ -62,12 +62,8 @@ class LoadedPowerFlowViewModel(
     val displayStrings = MutableStateFlow<List<StringPower>>(listOf())
 
     init {
-        try {
-            loadDeviceStatus()
-            loadTotals()
-        } catch (ex: Exception) {
-            bannerAlertManager.showToast("Failed: ${ex.message}")
-        }
+        loadDeviceStatus()
+        loadTotals()
 
         viewModelScope.launch {
             combine(configManager.themeStream, currentValuesStream) { theme, currentValues ->
@@ -148,8 +144,6 @@ class LoadedPowerFlowViewModel(
                 }
             } catch (ex: FoxServerError) {
                 bannerAlertManager.showToast("Failed to load device status: ${ex.message}")
-            } catch (ex: Exception) {
-                bannerAlertManager.showToast("Failed: ${ex.message}")
             }
         }
     }
