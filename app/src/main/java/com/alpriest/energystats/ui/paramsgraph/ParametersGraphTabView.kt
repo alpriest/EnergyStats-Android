@@ -114,7 +114,7 @@ class ParametersGraphTabView(
         MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(viewModel.displayModeStream) {
-            viewModel.load(context)
+            viewModel.load()
         }
 
         Column(

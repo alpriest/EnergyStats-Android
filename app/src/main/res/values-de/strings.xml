@@ -22,7 +22,7 @@
     <string name="increase_sizes_for_large_display">Skalierung für große Bildschirme</string>
     <string name="show_coloured_flow_lines">Zeige farbige Leistungsfluss-Linien</string>
     <string name="show_total_yield">Zeige den Gesamtertrag</string>
-    <string name="show_battery_temperature">Zeige die Batterie-Temperatur</string>
+    <string name="show_battery_temperature">Batterietemperatur (BMS) anzeigen</string>
     <string name="show_battery_full_empty_estimate">Zeige die Schätzung für Batterie voll/leer</string>
     <string name="show_usable_battery_only">Zeige nur die verwendbare Batteriekapazität</string>
     <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">\'Zeige nur die verwendbare Batteriekapazität\' leitet den minimalen SOC vom Batterieladezustand und -prozentsatz ab. Aufgrund von Ungenauigkeiten in der Art und Weise, wie der Batterieladezustand gemessen wird, kann dies manchmal zur Anzeige einer negativen verbleibenden Restladung führen. Ein * wird angezeigt, wenn diese Option ausgewählt ist.</string>
@@ -473,4 +473,5 @@
     <string name="device_selection">Geräte-Auswahl</string>
     <string name="edit_parameter_group">Parametergruppe bearbeiten</string>
     <string name="parameter_selector_overview">Wählen Sie unten eine Gruppe aus, um sich auf häufig verwendete Parameter zu konzentrieren, oder erstellen Sie mit der Schaltfläche „Bearbeiten“ Ihre eigene.</string>
+    <string name="battery_temperature_footer">Energy Stats zeigt die BMS-Temperatur an. Beachten Sie, dass die FoxESS-App die niedrigste Batteriezellentemperatur anzeigt (die vom BMS zur Steuerung des Lade- und Entladeverhaltens verwendet wird). FoxESS stellt die niedrigste Batteriezellentemperatur nicht für Apps von Drittanbietern zur Verfügung.</string>
 </resources>

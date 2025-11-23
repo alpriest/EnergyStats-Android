@@ -61,7 +61,7 @@ class WorkModeViewModel(
     }
 
     suspend fun load(context: Context) {
-        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+        uiState.value = UiLoadState(LoadState.Active.Loading)
         items = config.workModes
 
         runCatching {
@@ -93,7 +93,7 @@ class WorkModeViewModel(
     }
 
     suspend fun save(context: Context) {
-        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+        uiState.value = UiLoadState(LoadState.Active.Saving)
 
         runCatching {
             config.currentDevice.value?.let { device ->

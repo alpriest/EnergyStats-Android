@@ -53,7 +53,7 @@ class EditScheduleView(
         MonitorAlertDialog(viewModel, userManager)
 
         when (loadState) {
-            is LoadState.Active -> LoadingView(loadState.value)
+            is LoadState.Active -> LoadingView(loadState)
             is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, false, onRetry = {}, onLogout = { userManager.logout() })
             is LoadState.Inactive -> schedule?.let {
                 Loaded(schedule, viewModel, navController, Modifier)

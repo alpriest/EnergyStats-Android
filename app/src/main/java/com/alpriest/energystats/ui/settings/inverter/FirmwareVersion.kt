@@ -85,7 +85,7 @@ fun FirmwareVersionView(device: Device, network: Networking) {
         }
     } ?: SettingsColumn {
         if (isLoading) {
-            LoadingView(title = stringResource(R.string.loading))
+            LoadingView(title = stringResource(R.string.loading), stringResource(R.string.still_loading))
         } else {
             ESButton(
                 onClick = {

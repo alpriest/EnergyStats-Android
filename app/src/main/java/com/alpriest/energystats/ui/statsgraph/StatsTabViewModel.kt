@@ -156,7 +156,7 @@ class StatsTabViewModel(
     suspend fun load(context: Context) {
         val device = configManager.currentDevice.value ?: return
         if (!requiresLoad()) return
-        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+        uiState.value = UiLoadState(LoadState.Active.Loading)
         if (graphVariablesStream.value.isEmpty()) {
             updateGraphVariables(device)
         }

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Energy Stats</string>
     <string name="loading">Loading…</string>
+    <string name="still_loading">Still loading…</string>
     <string name="mins">mins</string>
     <string name="hour">hour</string>
     <string name="hours">hours</string>
@@ -21,7 +22,7 @@
     <string name="increase_sizes_for_large_display">Increase sizes for large display</string>
     <string name="show_coloured_flow_lines">Show coloured flow lines</string>
     <string name="show_total_yield">Show total yield</string>
-    <string name="show_battery_temperature">Show battery temperature</string>
+    <string name="show_battery_temperature">Show battery (BMS) temperature</string>
     <string name="show_battery_full_empty_estimate">Show battery full/empty estimate</string>
     <string name="show_usable_battery_only">Show usable battery only</string>
     <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Deducts the Min SOC amount from the battery charge level and percentage. Due to inaccuracies in the way battery levels are measured this may result in occasionally showing a negative amount remaining. A * will be shown when you have this option selected.</string>
@@ -124,7 +125,8 @@
     <string name="battery_periods_overlap">. These periods overlap, you may want to update them.</string>
     <string name="one_battery_charge_period">Your battery will be force charged from the grid between %1s.</string>
     <string name="both_battery_charge_periods">Your battery will be force charged from the grid between %1s, and %2s.</string>
-    <string name="saving">Saving</string>
+    <string name="saving">Saving…</string>
+    <string name="still_saving">Still saving…</string>
     <string name="enable_charge_from_grid">Enable charge from grid</string>
     <string name="start">Start</string>
     <string name="end">End</string>
@@ -172,6 +174,7 @@
     <string name="show_inverter_type_name">Show inverter type name</string>
     <string name="show_inverter_station_name">Show inverter station name</string>
     <string name="logging_in">Logging in…</string>
+    <string name="still_logging_in">Still logging in…</string>
     <string name="last_update">Last update %1s</string>
     <string name="today">today</string>
     <string name="total">total</string>
@@ -260,6 +263,7 @@
     <string name="activate">Activate</string>
     <string name="create_a_schedule">Create a schedule</string>
     <string name="activating">Activating…</string>
+    <string name="still_activating">Still activating…</string>
     <string name="no_schedule_time_periods">You have no time periods defined. Add a time period to define how you\'d like your inverter to behave during specific hours.</string>
     <string name="edit_template">Edit template</string>
     <string name="add_time_period">Add time period</string>
@@ -308,6 +312,7 @@
     <string name="templates_not_yet_available">Schedule templates are not yet available via OpenAPI from FoxESS. They have been requested and will be added when available.</string>
     <string name="enable_scheduler">Enable Scheduler</string>
     <string name="deactivating">Deactivating</string>
+    <string name="still_deactivating">Still deactivating</string>
     <string name="edit_api_key">Edit API Key</string>
     <string name="api_key_step_1">Login at https://www.foxesscloud.com/</string>
     <string name="api_key_step_2">Click the person icon top-right</string>
@@ -433,7 +438,7 @@
     <string name="earnings_ct2_description">Enter the unit price you are paid per kWh for exporting electricity via another inverter tracked via CT2. This will only show earnings data on the power flow page because Fox do not store historical CT2 statistics.</string>
     <string name="peak_shaving">Peak Shaving</string>
     <string name="failed_to_load_settings">Failed to load settings</string>
-    <string name="peak_shaving_is_not_available">Peak shaving is not available. This could be due to your inverter firmware or model.  Please contact FoxESS for compatability information with your installation.</string>
+    <string name="peak_shaving_is_not_available">Peak shaving is not available. This could be due to your inverter firmware or model.  Please contact FoxESS for compatibility information with your installation.</string>
     <string name="import_limit">Import limit</string>
     <string name="battery_threshold_soc">Battery threshold SOC</string>
     <string name="peak_shaving_explanation">Your system monitors the power being imported from the grid. If the import exceeds your Import Limit of %1$s and your battery\'s state of charge (SOC) is above %2$s%%, the system discharges the battery to supply the excess demand, thereby “shaving” the peak load from the grid.  This operation continues as long as the battery’s state of charge (SOC) is above a certain threshold SOC.  Peak shaving only operates when you have the Peak Shaving mode enabled from the Inverter scheduler.</string>
@@ -478,4 +483,5 @@
     <string name="device_selection">Device selection</string>
     <string name="edit_parameter_group">Edit Parameter Group</string>
     <string name="parameter_selector_overview">Select a group below to focus on commonly used parameters, or create your own using the Edit button.</string>
+    <string name="battery_temperature_footer">Energy Stats shows the BMS temperature. Note that the FoxESS app shows the lowest battery cell temperature (which is used by the BMS for controlling charge/discharge behaviour). FoxESS don’t make the lowest battery cell temperature available to third party apps.</string>
 </resources>

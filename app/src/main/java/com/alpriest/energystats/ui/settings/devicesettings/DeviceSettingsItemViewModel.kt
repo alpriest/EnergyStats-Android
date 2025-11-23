@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.devicesettings
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.models.DeviceSettingsItem
@@ -42,10 +43,10 @@ class DeviceSettingsItemViewModel(
         _viewDataStream.value = viewDataStream.value.copy(value = value)
     }
 
-    fun load() {
+    fun load(context: Context) {
         if (_uiState.value != LoadState.Inactive) { return }
         val selectedDeviceSN = config.selectedDeviceSN ?: return
-        _uiState.value = LoadState.Active("Loading")
+        _uiState.value = LoadState.Active.Loading
 
         viewModelScope.launch {
             try {
@@ -61,10 +62,10 @@ class DeviceSettingsItemViewModel(
         }
     }
 
-    fun save() {
+    fun save(context: Context) {
         if (_uiState.value != LoadState.Inactive) { return }
         val selectedDeviceSN = config.selectedDeviceSN ?: return
-        _uiState.value = LoadState.Active("Saving")
+        _uiState.value = LoadState.Active.Saving
 
         viewModelScope.launch {
             try {

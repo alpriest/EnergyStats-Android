@@ -62,7 +62,7 @@ class BatteryChargeScheduleSettingsViewModel(
     }
 
     suspend fun load(context: Context) {
-        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+        uiState.value = UiLoadState(LoadState.Active.Loading)
 
         runCatching {
             config.currentDevice.value?.let { device ->
@@ -156,7 +156,7 @@ class BatteryChargeScheduleSettingsViewModel(
     }
 
     suspend fun save(context: Context) {
-        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+        uiState.value = UiLoadState(LoadState.Active.Saving)
         val viewData = viewDataStream.value
 
         runCatching {

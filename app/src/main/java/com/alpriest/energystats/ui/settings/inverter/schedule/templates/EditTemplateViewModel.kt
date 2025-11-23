@@ -157,10 +157,10 @@ class EditTemplateViewModel(
                     val deviceSN = device.deviceSN
 
                     try {
-                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+                        uiState.value = UiLoadState(LoadState.Active.Saving)
                         network.saveSchedule(deviceSN, template.asSchedule())
 
-                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
+                        uiState.value = UiLoadState(LoadState.Active.Activating)
                         network.setScheduleFlag(deviceSN, true)
 
                         uiState.value = UiLoadState(LoadState.Inactive)

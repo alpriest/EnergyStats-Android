@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.dialog
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -20,7 +19,7 @@ fun LoadingOverlayView() {
         border = BorderStroke(1.dp, Color.Gray),
         shape = RectangleShape
     ) {
-        LoadingView(title = stringResource(R.string.loading), modifier = Modifier)
+        LoadingView(title = stringResource(R.string.loading), longOperationTitle = stringResource(R.string.still_loading))
     }
 }
 

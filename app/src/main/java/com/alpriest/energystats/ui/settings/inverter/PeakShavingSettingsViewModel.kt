@@ -44,7 +44,7 @@ class PeakShavingSettingsViewModel(
         val selectedDeviceSN = configManager.selectedDeviceSN ?: return
         if (_uiState.value is LoadState.Error) return
 
-        _uiState.value = LoadState.Active(context.getString(R.string.loading))
+        _uiState.value = LoadState.Active.Loading
 
         viewModelScope.launch {
             try {
@@ -75,7 +75,7 @@ class PeakShavingSettingsViewModel(
             return
         }
         val selectedDeviceSN = configManager.selectedDeviceSN ?: return
-        _uiState.value = LoadState.Active(context.getString(R.string.saving))
+        _uiState.value = LoadState.Active.Saving
 
         viewModelScope.launch {
             try {

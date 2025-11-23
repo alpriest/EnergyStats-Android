@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.EnergyStatsApplication
-import com.alpriest.energystats.R
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenHistoryResponseData
 import com.alpriest.energystats.models.QueryDate
@@ -111,7 +110,7 @@ class ParametersGraphTabViewModel(
 
                     if (queryDate != updatedDate) {
                         queryDate = updatedDate
-                        load(context)
+                        load()
                     }
                     if (it.hours != previousHours) {
                         hours = it.hours
@@ -132,7 +131,7 @@ class ParametersGraphTabViewModel(
         if (rawData.isNotEmpty()) {
             viewModelScope.launch {
                 val context = EnergyStatsApplication.applicationContext()
-                load(context)
+                load()
             }
         }
     }
@@ -146,7 +145,7 @@ class ParametersGraphTabViewModel(
         return sufficientTimeHasPassed || viewDataHasChanged
     }
 
-    suspend fun load(context: Context) {
+    suspend fun load() {
         val device = configManager.currentDevice.value ?: return
         if (!requiresLoad()) {
             return
@@ -156,7 +155,7 @@ class ParametersGraphTabViewModel(
             .filter { it.type.variable != Variable.solcastPrediction.variable }
             .map { it.type.variable }
             .toList()
-        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+        uiState.value = UiLoadState(LoadState.Active.Loading)
 
         try {
             val start = queryDate.toUtcMillis()

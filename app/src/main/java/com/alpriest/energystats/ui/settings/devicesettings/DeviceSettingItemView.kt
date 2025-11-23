@@ -55,9 +55,10 @@ class DeviceSettingItemView(
     @Composable
     fun Content(modifier: Modifier, viewModel: DeviceSettingsItemViewModel = viewModel(factory = DeviceSettingsItemViewModelFactory(configManager, network, item))) {
         val message = viewModel.alertDialogMessage.collectAsState().value
+        val context = LocalContext.current
 
         LaunchedEffect(null) {
-            viewModel.load()
+            viewModel.load(context)
         }
 
         message?.let {
@@ -67,17 +68,9 @@ class DeviceSettingItemView(
         }
 
         when (val loadState = viewModel.uiState.collectAsState().value) {
-            is LoadState.Inactive -> {
-                LoadedView(viewModel, modifier, navController)
-            }
-
-            is LoadState.Active -> {
-                LoadingView(loadState.value)
-            }
-
-            is LoadState.Error -> {
-                Text("Error: $loadState")
-            }
+            is LoadState.Inactive -> LoadedView(viewModel, modifier, navController)
+            is LoadState.Active -> LoadingView(loadState)
+            is LoadState.Error -> Text("Error: $loadState")
         }
     }
 
@@ -100,7 +93,7 @@ class DeviceSettingItemView(
             navController,
             modifier = modifier,
             onConfirm = {
-                viewModel.save()
+                viewModel.save(context)
             },
             dirtyStateFlow = viewModel.dirtyState,
             content = { modifier ->

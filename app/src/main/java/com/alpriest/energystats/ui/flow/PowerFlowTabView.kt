@@ -152,7 +152,7 @@ class PowerFlowTabView(
             contentAlignment = TopEnd
         ) {
             when (uiState) {
-                is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading))
+                is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading), stringResource(R.string.still_loading))
                 is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, uiState.viewModel, themeStream, network, userManager, templateStore)
                 is PowerFlowLoadState.Error -> ErrorView(
                     uiState.ex,
@@ -292,8 +292,35 @@ data class UiLoadState(
 
 sealed class LoadState {
     data object Inactive : LoadState()
-    data class Error(val ex: Exception?, val reason: String, val allowRetry: Boolean = true) : LoadState()
-    data class Active(val value: String) : LoadState()
 
-    companion object
+    data class Error(
+        val ex: Exception?,
+        val reason: String,
+        val allowRetry: Boolean = true
+    ) : LoadState()
+
+    sealed class Active : LoadState() {
+        abstract val titleResId: Int
+        abstract val longOperationTitleResId: Int
+
+        data object Loading : Active() {
+            override val titleResId = R.string.loading
+            override val longOperationTitleResId = R.string.still_loading
+        }
+
+        data object Saving : Active() {
+            override val titleResId = R.string.saving
+            override val longOperationTitleResId = R.string.still_saving
+        }
+
+        data object Activating : Active() {
+            override val titleResId = R.string.activating
+            override val longOperationTitleResId = R.string.still_activating
+        }
+
+        data object Deactivating : Active() {
+            override val titleResId = R.string.deactivating
+            override val longOperationTitleResId = R.string.still_deactivating
+        }
+    }
 }

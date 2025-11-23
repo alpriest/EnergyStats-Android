@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -44,6 +45,7 @@ class BatteryFirmwareVersionsView(
 
     @Composable
     fun Content(modifier: Modifier, viewModel: BatteryFirmwareVersionsViewModel = viewModel(factory = BatteryFirmwareVersionsViewModelFactory(configManager, network))) {
+        val context = LocalContext.current
         LaunchedEffect(null) {
             viewModel.load()
         }
@@ -115,7 +117,7 @@ class BatteryFirmwareVersionsViewModel(
         val selectedDeviceSN = config.selectedDeviceSN ?: return
         if (_modules.value.isNotEmpty() || _state.value is LoadState.Error) return
 
-        _state.value = LoadState.Active("Loading")
+        _state.value = LoadState.Active.Loading
 
         viewModelScope.launch {
             try {

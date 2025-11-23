@@ -22,7 +22,7 @@
     <string name="increase_sizes_for_large_display">Zwiększ rozmiary dla dużego wyświetlacza</string>
     <string name="show_coloured_flow_lines">Pokaż kolorowe linie przepływu</string>
     <string name="show_total_yield">Pokaż całkowity wydajność</string>
-    <string name="show_battery_temperature">Pokaż temperaturę baterii</string>
+    <string name="show_battery_temperature">Pokaż temperaturę baterii (BMS)</string>
     <string name="show_battery_full_empty_estimate">Pokaż oszacowanie pełny/pusty stan baterii</string>
     <string name="show_usable_battery_only">Pokaż tylko użyteczną baterię</string>
     <string name="deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining">Odejmuje ilość Min SOC od poziomu naładowania baterii i procentu. Ze względu na niedokładności w pomiarze poziomu baterii może czasami pokazywać ujemny pozostały stan. Gwiazdka * będzie wyświetlana, gdy ta opcja będzie zaznaczona.</string>
@@ -474,4 +474,5 @@
     <string name="device_selection">Wybór urządzenia</string>
     <string name="edit_parameter_group">Edytuj grupę parametrów</string>
     <string name="parameter_selector_overview">Wybierz poniżej grupę, aby skupić się na najczęściej używanych parametrach, lub utwórz własną za pomocą przycisku „Edytuj”.</string>
+    <string name="battery_temperature_footer">Energy Stats wyświetla temperaturę BMS. Zwróć uwagę, że aplikacja FoxESS pokazuje najniższą temperaturę ogniwa baterii (wykorzystywaną przez BMS do sterowania ładowaniem i rozładowaniem). FoxESS nie udostępnia najniższej temperatury ogniwa baterii aplikacjom firm trzecich.</string>
 </resources>

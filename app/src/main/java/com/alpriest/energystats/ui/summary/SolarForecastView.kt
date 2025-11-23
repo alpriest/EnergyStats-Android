@@ -85,7 +85,7 @@ class SolarForecastView(
         }
 
         when (loadState) {
-            is LoadState.Active -> LoadingView(loadState.value)
+            is LoadState.Active -> LoadingView(loadState)
             is LoadState.Error -> {
                 Column(
                     modifier = Modifier.padding(top = 22.dp)

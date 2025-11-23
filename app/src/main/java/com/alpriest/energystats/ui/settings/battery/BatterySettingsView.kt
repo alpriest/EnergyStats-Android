@@ -188,16 +188,18 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumn(
-            footer = batteryTemperateDisplayModeFooter(batteryTemperatureDisplayModeState.value)
+            footer = stringResource(R.string.battery_temperature_footer)
         ) {
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_temperature),
                 state = showBatteryTemperatureState,
                 onUpdate = { config.showBatteryTemperature = it }
             )
+        }
 
-            HorizontalDivider()
-
+        SettingsColumn(
+            footer = batteryTemperateDisplayModeFooter(batteryTemperatureDisplayModeState.value)
+        ) {
             SettingsSegmentedControl(
                 title = stringResource(R.string.display_battery_stack),
                 segmentedControl = {

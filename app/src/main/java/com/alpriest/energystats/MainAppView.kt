@@ -59,7 +59,7 @@ fun MainAppView(appContainer: AppContainer) {
                         themeStream = appContainer.configManager.themeStream
                     ) { showingApiKey = !showingApiKey }
 
-                is LoggingIn -> LoadingView(title = stringResource(R.string.logging_in))
+                is LoggingIn -> LoadingView(stringResource(R.string.logging_in), stringResource(R.string.still_logging_in))
             }
         }
     }

@@ -54,7 +54,7 @@ class ScheduleSummaryViewModel(
         runCatching {
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
-                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+                uiState.value = UiLoadState(LoadState.Active.Loading)
 
                 try {
                     val flags = network.fetchSchedulerFlag(deviceSN)
@@ -103,7 +103,7 @@ class ScheduleSummaryViewModel(
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
-                uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+                uiState.value = UiLoadState(LoadState.Active.Loading)
 
                 try {
                     templateStream.value = templateStore.load()
@@ -160,9 +160,9 @@ class ScheduleSummaryViewModel(
                     val deviceSN = device.deviceSN
 
                     if (schedulerEnabled) {
-                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
+                        uiState.value = UiLoadState(LoadState.Active.Activating)
                     } else {
-                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.deactivating)))
+                        uiState.value = UiLoadState(LoadState.Active.Deactivating)
                     }
 
                     try {
@@ -201,7 +201,7 @@ class ScheduleSummaryViewModel(
                 config.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
                     try {
-                        uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.activating)))
+                        uiState.value = UiLoadState(LoadState.Active.Activating)
                         network.saveSchedule(deviceSN, schedule)
                         uiState.value = UiLoadState(LoadState.Inactive)
                         load(context)

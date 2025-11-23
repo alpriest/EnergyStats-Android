@@ -135,7 +135,7 @@ class SummaryView(
                 .padding(12.dp)
         ) {
             when (isLoading) {
-                is LoadState.Active -> LoadingView(title = "Loading...")
+                is LoadState.Active -> LoadingView(isLoading)
                 else -> {
                     approximations?.let {
                         LoadedView(

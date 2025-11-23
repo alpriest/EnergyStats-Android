@@ -76,7 +76,7 @@ class ScheduleSummaryView(
         }
 
         when (loadState) {
-            is LoadState.Active -> LoadingView(loadState.value)
+            is LoadState.Active -> LoadingView(loadState)
             is LoadState.Error -> ErrorView(
                 loadState.ex,
                 loadState.reason,

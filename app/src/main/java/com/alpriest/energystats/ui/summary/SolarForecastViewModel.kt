@@ -61,7 +61,7 @@ class SolarForecastViewModel(
             return
         }
 
-        loadStateStream.value = LoadState.Active("Loading...")
+        loadStateStream.value = LoadState.Active.Loading
         val formatter = DateTimeFormatter.ofPattern("dd/MM/y, HH:mm")
 
         try {

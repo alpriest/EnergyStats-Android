@@ -63,7 +63,7 @@ class EditScheduleViewModel(
         }
 
         runCatching {
-            uiState.value = UiLoadState(LoadState.Active(context.getString(R.string.saving)))
+            uiState.value = UiLoadState(LoadState.Active.Saving)
             try {
                 network.saveSchedule(deviceSN = deviceSN, schedule = schedule)
 

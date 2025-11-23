@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseData
@@ -54,7 +53,7 @@ class SummaryTabViewModel(
             return
         }
 
-        loadStateStream.value = UiLoadState(LoadState.Active(context.getString(R.string.loading)))
+        loadStateStream.value = UiLoadState(LoadState.Active.Loading)
         configManager.currentDevice.value?.let {
             val totals = fetchAllYears(it)
             approximationsViewModelStream.value = makeApproximationsViewModel(totals = totals)
