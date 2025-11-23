@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Energy Stats</string>
     <string name="loading">Lade…</string>
+    <string name="still_loading">Lädt noch…</string>
     <string name="mins">Minuten</string>
     <string name="hour">Stunde</string>
     <string name="hours">Stunden</string>
@@ -125,6 +126,7 @@
     <string name="one_battery_charge_period">Ihr Akku wird zwischen %1s vom Netz erzwungen geladen.</string>
     <string name="both_battery_charge_periods">Ihr Akku wird zwischen %1s und %2s vom Netz erzwungen geladen.</string>
     <string name="saving">Speichern</string>
+    <string name="still_saving">Speichert noch…</string>
     <string name="enable_charge_from_grid">Laden aus dem Netz aktivieren</string>
     <string name="start">Start</string>
     <string name="end">Ende</string>
@@ -172,6 +174,7 @@
     <string name="show_inverter_type_name">Inverter-Typ anzeigen</string>
     <string name="show_inverter_station_name">Anlagenname anzeigen</string>
     <string name="logging_in">Anmelden…</string>
+    <string name="still_logging_in">Meldet sich noch an…</string>
     <string name="last_update">Letzte Aktualisierung %1s</string>
     <string name="today">heute</string>
     <string name="total">gesamt</string>
@@ -257,6 +260,7 @@
     <string name="activate">Aktivieren</string>
     <string name="create_a_schedule">Einen Zeitplan erstellen</string>
     <string name="activating">Aktivierung</string>
+    <string name="still_activating">Aktiviert noch…</string>
     <string name="no_schedule_time_periods">Sie haben keine Zeitperioden definiert. Fügen Sie eine Zeitperiode hinzu, um zu definieren, wie sich Ihr Wechselrichter zu bestimmten Stunden verhalten soll.</string>
     <string name="you_have_no_templates">Sie haben keine Vorlagen.</string>
     <string name="edit_template">Vorlage bearbeiten</string>
@@ -306,6 +310,7 @@
     <string name="templates_not_yet_available">Zeitplanvorlagen sind über OpenAPI von FoxESS noch nicht verfügbar. Sie wurden angefordert und werden hinzugefügt, sobald sie verfügbar sind.</string>
     <string name="enable_scheduler">Zeitplaner aktivieren</string>
     <string name="deactivating">Deaktivierung</string>
+    <string name="still_deactivating">Deaktiviert noch…</string>
     <string name="edit_api_key">API-Schlüssel bearbeiten</string>
     <string name="api_key_step_1">1. Logge dich ein unter https://www.foxesscloud.com/</string>
     <string name="api_key_step_2">2, Klicke oben rechts auf das Personensymbol</string>

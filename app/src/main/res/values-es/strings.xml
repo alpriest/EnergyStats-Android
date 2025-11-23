@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Energy Stats</string>
     <string name="loading">Carga…</string>
+    <string name="still_loading">Todavía cargando…</string>
     <string name="mins">Minutos</string>
     <string name="hour">hora</string>
     <string name="hours">horas</string>
@@ -125,6 +126,7 @@
     <string name="battery_periods_overlap">Estos períodos se superponen, puede que desee actualizarlos.</string>
     <string name="one_battery_charge_period">Su batería será cargada forzadamente desde la red eléctrica entre %1s.</string>
     <string name="saving">Ahorro</string>
+    <string name="still_saving">Todavía guardando…</string>
     <string name="enable_charge_from_grid">Activar carga desde la red</string>
     <string name="start">Inicio</string>
     <string name="end">Fin</string>
@@ -172,6 +174,7 @@
     <string name="show_inverter_type_name">Mostrar nombre del inversor</string>
     <string name="show_inverter_station_name">Mostrar nombre de la planta del inversor</string>
     <string name="logging_in">Iniciando sesión…</string>
+    <string name="still_logging_in">Todavía iniciando sesión…</string>
     <string name="last_update">Última actualización %1s</string>
     <string name="today">hoy</string>
     <string name="total">total</string>
@@ -257,6 +260,7 @@
     <string name="activate">Activar</string>
     <string name="create_a_schedule">Crear un horario</string>
     <string name="activating">Activando</string>
+    <string name="still_activating">Todavía activando…</string>
     <string name="no_schedule_time_periods">No tienes períodos de tiempo definidos. Añade un período de tiempo para definir cómo te gustaría que se comportara tu inversor durante horas específicas.</string>
     <string name="you_have_no_templates">No tienes plantillas.</string>
     <string name="edit_template">Editar plantilla</string>
@@ -306,6 +310,7 @@
     <string name="templates_not_yet_available">Las plantillas de programación aún no están disponibles a través de OpenAPI de FoxESS. Se han solicitado y se añadirán cuando estén disponibles.</string>
     <string name="enable_scheduler">Habilitar programador</string>
     <string name="deactivating">Desactivando</string>
+    <string name="still_deactivating">Todavía desactivando…</string>
     <string name="edit_api_key">Editar clave API</string>
     <string name="api_key_step_1">"1. Iniciar sesión en https://www.foxesscloud.com/ "</string>
     <string name="api_key_step_2">"2. Haz clic en el icono de persona en la parte superior derecha "</string>
