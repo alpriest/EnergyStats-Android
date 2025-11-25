@@ -36,11 +36,6 @@ fun LoadingView(loadState: LoadState.Active) {
     LoadingView(context.getString(loadState.titleResId), context.getString(loadState.longOperationTitleResId))
 }
 
-//@Composable
-//fun LoadingView(loadState: LoadState.LoggingIn) {
-//    LoadingView(loadState.title, loadState.longOperationTitle)
-//}
-
 @Composable
 fun LoadingView(title: String, longOperationTitle: String, modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "SunIconTransition")

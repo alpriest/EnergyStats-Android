@@ -183,11 +183,13 @@ class PowerFlowTabViewModel(
 
                 val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real, configManager, context)
                 if (battery.hasBattery) {
-                    try {
-                        val batterySettings = network.fetchBatterySettings(currentDevice.deviceSN)
-                        configManager.minSOC = batterySettings.minSocOnGridPercent()
-                    } catch (_: Exception) {
-                        // Ignore exceptions which can occur if the device is offline
+                    viewModelScope.launch {
+                        try {
+                            val batterySettings = network.fetchBatterySettings(currentDevice.deviceSN)
+                            configManager.minSOC = batterySettings.minSocOnGridPercent()
+                        } catch (_: Exception) {
+                            // Ignore exceptions which can occur if the device is offline
+                        }
                     }
                 }
                 widgetDataSharer.batteryViewModel = battery

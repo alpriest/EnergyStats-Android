@@ -3,19 +3,30 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -26,6 +37,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
@@ -33,6 +46,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
@@ -48,8 +62,63 @@ import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.PreviewTemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
+import com.alpriest.energystats.ui.settings.inverterScheduleGraph
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+
+class PopupScheduleSummaryView(
+    private val configManager: ConfigManaging,
+    private val userManager: UserManaging,
+    private val network: Networking,
+    private val templateStore: TemplateStoring
+) {
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun Content() {
+        val navController = rememberNavController()
+        val snackbarHostState = remember { SnackbarHostState() }
+        val topBarSettings = remember { mutableStateOf(TopBarSettings(false, "", {}, null)) }
+
+        Scaffold(
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            topBar = {
+                if (topBarSettings.value.topBarVisible) {
+                    TopAppBar(
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = colorScheme.primary,
+                            titleContentColor = colorScheme.onPrimary,
+                            navigationIconContentColor = colorScheme.onPrimary
+                        ),
+                        navigationIcon = {
+                            topBarSettings.value.backButtonAction?.let {
+                                IconButton(onClick = {
+                                    it()
+                                }) {
+                                    Icon(Icons.AutoMirrored.Default.ArrowBack, "backIcon")
+                                }
+                            }
+                        },
+                        title = {
+                            topBarSettings.value.title?.let { Text(it) }
+                        },
+                        actions = topBarSettings.value.actions
+                    )
+                }
+            },
+            contentWindowInsets = WindowInsets.Companion.navigationBars,
+            content = { padding ->
+                Column(modifier = Modifier.padding(padding)) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = SettingsScreen.PopupInverterSchedule.name
+                    ) {
+                        inverterScheduleGraph(navController, topBarSettings, configManager, userManager, network, templateStore)
+                    }
+                }
+            }
+        )
+    }
+}
 
 class ScheduleSummaryView(
     private val configManager: ConfigManaging,

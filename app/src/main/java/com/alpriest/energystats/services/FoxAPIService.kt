@@ -50,6 +50,8 @@ import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.solcast.UserAgent
 import com.alpriest.energystats.ui.statsgraph.ReportType
+import com.google.firebase.Firebase
+import com.google.firebase.perf.performance
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -437,12 +439,18 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         type: Type
     ): NetworkTuple<T> {
         return suspendCoroutine { continuation ->
+            val metric = Firebase.performance.newHttpMetric(
+                request.url.toString(),
+                request.method,
+            )
+            metric.start()
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     continuation.resumeWithException(e)
                 }
 
                 override fun onResponse(call: Call, response: Response) {
+                    metric.markRequestComplete()
                     if (response.code == 406) {
                         continuation.resumeWithException(UnacceptableException())
                         return

@@ -67,8 +67,6 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import com.alpriest.energystats.ui.theme.demo
-import com.valentinilk.shimmer.ShimmerBounds
-import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -113,7 +111,6 @@ fun LoadedPowerFlowView(
     val theme by themeStream.collectAsState()
     val deviceState = loadedPowerFlowViewModel.deviceState.collectAsState().value
     val earnings = loadedPowerFlowViewModel.earnings.collectAsState().value
-    val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
     val solarTotal = loadedPowerFlowViewModel.todaysGeneration.collectAsState().value
     val faults = loadedPowerFlowViewModel.faults.collectAsState().value
 

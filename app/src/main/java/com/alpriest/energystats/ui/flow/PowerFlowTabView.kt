@@ -47,7 +47,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.models.BatteryViewModel
@@ -67,7 +66,7 @@ import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
+import com.alpriest.energystats.ui.settings.inverter.schedule.PopupScheduleSummaryView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -107,7 +106,7 @@ class PowerFlowTabView(
     private val themeStream: MutableStateFlow<AppTheme>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
-    private val templateStore: TemplateStoring
+    private val templateStore: TemplateStoring,
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -153,7 +152,16 @@ class PowerFlowTabView(
         ) {
             when (uiState) {
                 is PowerFlowLoadState.Active -> LoadingView(stringResource(R.string.loading), stringResource(R.string.still_loading))
-                is PowerFlowLoadState.Loaded -> LoadedView(viewModel, configManager, uiState.viewModel, themeStream, network, userManager, templateStore)
+                is PowerFlowLoadState.Loaded -> LoadedView(
+                    viewModel,
+                    configManager,
+                    uiState.viewModel,
+                    themeStream,
+                    network,
+                    userManager,
+                    templateStore
+                )
+
                 is PowerFlowLoadState.Error -> ErrorView(
                     uiState.ex,
                     uiState.reason,
@@ -180,7 +188,6 @@ fun LoadedView(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
-    val navController = NavHostController(LocalContext.current)
     val appSettings = themeStream.collectAsState().value
 
     Column(
@@ -200,7 +207,8 @@ fun LoadedView(
                         modifier = Modifier
                             .clickable {
                                 showBottomSheet = true
-                            }.align(Alignment.End)
+                            }
+                            .align(Alignment.End)
                     )
 
                     appSettings.detectedActiveTemplate?.let {
@@ -222,10 +230,10 @@ fun LoadedView(
                         showBottomSheet = false
                     },
                     sheetState = sheetState,
-                    contentWindowInsets = { WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom) }
+                    contentWindowInsets = { WindowInsets.safeDrawing }
                 ) {
                     Column(modifier = Modifier.fillMaxHeight()) {
-                        ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+                        PopupScheduleSummaryView(configManager, userManager, network, templateStore).Content()
                     }
                 }
             }
@@ -246,10 +254,14 @@ fun PowerFlowTabViewPreview() {
     )
     val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
         LocalContext.current,
-        currentValuesStream = MutableStateFlow(CurrentValues(2.45, 2.45, null, 0.4, 1.0, listOf(
-            StringPower("pv1", 0.3),
-            StringPower("pv2", 0.7)
-        ))),
+        currentValuesStream = MutableStateFlow(
+            CurrentValues(
+                2.45, 2.45, null, 0.4, 1.0, listOf(
+                    StringPower("pv1", 0.3),
+                    StringPower("pv2", 0.7)
+                )
+            )
+        ),
         hasBattery = true,
         battery = BatteryViewModel(),
         FakeConfigManager(),
@@ -258,6 +270,7 @@ fun PowerFlowTabViewPreview() {
         BannerAlertManager()
     )
     val themeStream = MutableStateFlow(AppTheme.demo())
+    val topBarSettings = mutableStateOf(TopBarSettings(false, "", {}, null))
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         LoadedView(

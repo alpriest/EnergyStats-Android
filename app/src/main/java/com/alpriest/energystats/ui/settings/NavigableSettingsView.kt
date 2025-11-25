@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -9,6 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -95,10 +96,6 @@ fun NavigableSettingsView(
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.inverter), {}, { navController.popBackStack() })
             InverterSettingsView(configManager = configManager, network = network, navController = navController, modifier = Modifier)
         }
-        composable(SettingsScreen.InverterSchedule.name) {
-            topBarSettings.value = TopBarSettings(true, stringResource(R.string.manage_schedules), {}, { navController.popBackStack() })
-            ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
-        }
         composable(SettingsScreen.Dataloggers.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.dataloggers), {}, { navController.popBackStack() })
             DataLoggerViewContainer(network = network, configManager = configManager, navController = navController).Content(modifier = Modifier)
@@ -126,30 +123,6 @@ fun NavigableSettingsView(
         composable(SettingsScreen.SolcastSolarPrediction.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.solcast_solar_prediction), {}, { navController.popBackStack() })
             SolcastSettingsView(navController, configManager, userManager, solarForecastingProvider).Content(modifier = Modifier)
-        }
-        composable(SettingsScreen.EditSchedule.name) {
-            topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_schedule), {}, { navController.popBackStack() })
-            EditScheduleView(
-                configManager,
-                network,
-                navController,
-                userManager
-            ).Content(modifier = Modifier)
-        }
-
-        composable(SettingsScreen.EditPhase.name) {
-            topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_phase), {}, { navController.popBackStack() })
-            EditPhaseView(navController, userManager, configManager, modifier = Modifier)
-        }
-
-        composable(SettingsScreen.TemplateList.name) {
-            topBarSettings.value = TopBarSettings(true, stringResource(R.string.templates), {}, { navController.popBackStack() })
-            ScheduleTemplateListView(configManager, templateStore, navController, userManager).Content(modifier = Modifier)
-        }
-
-        composable(SettingsScreen.EditTemplate.name) {
-            topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_template), {}, { navController.popBackStack() })
-            EditTemplateView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
         }
 
         composable(SettingsScreen.APIKey.name) {
@@ -199,7 +172,52 @@ fun NavigableSettingsView(
             WorkModeSettingsView(network, configManager, navController, userManager).Content()
         }
 
+        inverterScheduleGraph(navController, topBarSettings, configManager, userManager, network, templateStore)
+
         debugGraph(topBarSettings, network)
     }
 }
 
+fun NavGraphBuilder.inverterScheduleGraph(
+    navController: NavHostController,
+    topBarSettings: MutableState<TopBarSettings>,
+    configManager: ConfigManaging,
+    userManager: UserManaging,
+    network: Networking,
+    templateStore: TemplateStoring
+) {
+    composable(SettingsScreen.PopupInverterSchedule.name) {
+        topBarSettings.value = TopBarSettings(true, stringResource(R.string.manage_schedules), {}, backButtonAction = null)
+        ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+    }
+
+    composable(SettingsScreen.InverterSchedule.name) {
+        topBarSettings.value = TopBarSettings(true, stringResource(R.string.manage_schedules), {}, { navController.popBackStack() })
+        ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+    }
+
+    composable(SettingsScreen.EditSchedule.name) {
+        topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_schedule), {}, { navController.popBackStack() })
+        EditScheduleView(
+            configManager,
+            network,
+            navController,
+            userManager
+        ).Content(modifier = Modifier)
+    }
+
+    composable(SettingsScreen.EditPhase.name) {
+        topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_phase), {}, { navController.popBackStack() })
+        EditPhaseView(navController, userManager, configManager, modifier = Modifier)
+    }
+
+    composable(SettingsScreen.TemplateList.name) {
+        topBarSettings.value = TopBarSettings(true, stringResource(R.string.templates), {}, { navController.popBackStack() })
+        ScheduleTemplateListView(configManager, templateStore, navController, userManager).Content(modifier = Modifier)
+    }
+
+    composable(SettingsScreen.EditTemplate.name) {
+        topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_template), {}, { navController.popBackStack() })
+        EditTemplateView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+    }
+}

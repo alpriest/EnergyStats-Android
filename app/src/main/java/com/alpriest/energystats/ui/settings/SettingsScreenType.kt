@@ -7,6 +7,7 @@ enum class SettingsScreen {
     BatterySOC,
     BatteryChargeTimes,
     Inverter,
+    PopupInverterSchedule,
     InverterSchedule,
     Dataloggers,
     SelfSufficiencyEstimates,
