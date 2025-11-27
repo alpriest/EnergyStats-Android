@@ -19,16 +19,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.flow.roundedToString
-import com.alpriest.energystats.ui.statsgraph.GraphVariable
+import com.alpriest.energystats.ui.paramsgraph.GraphVariable
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
-
-data class GraphBounds(
-    val min: Float,
-    val max: Float,
-    val now: Float
-)
 
 @Composable
 fun <T : GraphVariable> ToggleRowView(

@@ -58,12 +58,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-enum class ParametersScreen {
-    Graph,
-    ParameterChooser,
-    ParameterGroupEditor
-}
-
 class ParametersGraphTabViewModelFactory(
     private val network: Networking,
     private val configManager: ConfigManaging,

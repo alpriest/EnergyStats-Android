@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.paramsgraph
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.ui.statsgraph.GraphVariable
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -33,3 +32,10 @@ data class ParameterGraphBounds(
     val max: Float,
     val now: Float
 )
+
+interface GraphVariable {
+    val enabled: Boolean
+
+    @Composable
+    fun colour(themeStream: MutableStateFlow<AppTheme>): Color
+}

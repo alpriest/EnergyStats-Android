@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.statsgraph
 
 import android.graphics.Paint
 import android.graphics.Typeface
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb

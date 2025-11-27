@@ -6,7 +6,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,42 +39,9 @@ import kotlinx.coroutines.yield
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
-
-data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double) {
-    fun periodDescription(displayMode: StatsDisplayMode): String {
-        return when (displayMode) {
-            is StatsDisplayMode.Day -> {
-                val time = LocalTime.of(graphPoint, 0) // Assuming graphPoint represents the hour
-                val formatter = DateTimeFormatter.ofPattern("HH:mm") // 24-hour format
-                time.format(formatter)
-            }
-
-            is StatsDisplayMode.Month -> {
-                val dateFormatSymbols = DateFormatSymbols.getInstance()
-                val monthName = dateFormatSymbols.months.getOrNull(displayMode.month) ?: "${displayMode.month}"
-                "$graphPoint $monthName"
-            }
-
-            is StatsDisplayMode.Year -> {
-                val dateFormatSymbols = DateFormatSymbols.getInstance()
-                val monthName = dateFormatSymbols.months.getOrNull(graphPoint - 1) ?: "$graphPoint"
-                "$monthName ${displayMode.year}"
-            }
-
-            is StatsDisplayMode.Custom -> {
-                val start = displayMode.start
-                val end = displayMode.end
-
-                "${start.year}_${start.month}_$start.day_${end.year}_${end.month}_$end.day"
-            }
-        }
-    }
-}
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
@@ -607,15 +573,6 @@ class StatsTabViewModel(
             approximationsViewModelStream.value = approximations
         }
     }
-}
-
-data class ValuesAtTime<T>(val values: List<T>)
-
-interface GraphVariable {
-    val enabled: Boolean
-
-    @Composable
-    fun colour(themeStream: MutableStateFlow<AppTheme>): Color
 }
 
 @Composable

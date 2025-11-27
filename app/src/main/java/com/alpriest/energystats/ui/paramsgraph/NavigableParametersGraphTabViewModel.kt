@@ -34,6 +34,12 @@ import com.alpriest.energystats.ui.theme.ESButton
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
+enum class ParametersScreen {
+    Graph,
+    ParameterChooser,
+    ParameterGroupEditor
+}
+
 class NavigableParametersGraphTabViewModel(val configManager: ConfigManaging) : ViewModel() {
     val graphVariablesStream = MutableStateFlow<List<ParameterGraphVariable>>(listOf())
 

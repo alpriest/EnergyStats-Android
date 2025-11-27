@@ -64,9 +64,6 @@ data class ParameterGraphVariableChooserViewData(
 )
 
 class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, var variables: MutableStateFlow<List<ParameterGraphVariable>>) : ViewModel() {
-//    val variablesState: MutableStateFlow<List<ParameterGraphVariable>> = MutableStateFlow(variables.value.sortedBy { it.type.name.lowercase() })
-//    val selectedIdState: MutableStateFlow<String?> = MutableStateFlow(null)
-
     private val _viewDataStream = MutableStateFlow(
         ParameterGraphVariableChooserViewData(
             variables.value.sortedBy { it.type.name.lowercase() },

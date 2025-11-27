@@ -35,35 +35,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.io.OutputStream
-import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import java.util.concurrent.CancellationException
-
-interface ExportProviding {
-    var exportFileUri: Uri?
-    fun exportTo(context: Context, uri: Uri)
-}
-
-interface AlertDialogMessageProviding {
-    val alertDialogMessage: MutableStateFlow<MonitorAlertDialogData?>
-    fun resetDialogMessage() {
-        alertDialogMessage.value = null
-    }
-}
-
-data class LastLoadState<T>(
-    val lastLoadTime: LocalDateTime,
-    val loadState: T
-)
-
-data class AxisScale(val min: Float?, val max: Float?)
 
 data class ParametersGraphViewState(
     val displayMode: ParametersDisplayMode,
@@ -457,21 +435,3 @@ class DateTimeFloatEntry(
     }
 }
 
-fun LocalDateTime.timeUntilNow(): Long {
-    val now = LocalDateTime.now(ZoneId.systemDefault())
-    return Duration.between(this, now).seconds
-}
-
-fun LocalDateTime.isSameDay(other: LocalDateTime): Boolean {
-    return this.toLocalDate() == other.toLocalDate()
-}
-
-fun LocalDate.monthYear(): String {
-    val calendar = Calendar.getInstance()
-    calendar.set(Calendar.YEAR, year)
-    calendar.set(Calendar.MONTH, month.value - 1)
-    calendar.set(Calendar.DAY_OF_MONTH, 1)
-    val date = calendar.time
-    val dateFormatter = SimpleDateFormat("MMMM y", Locale.getDefault())
-    return dateFormatter.format(date)
-}
