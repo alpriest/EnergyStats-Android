@@ -34,12 +34,11 @@ import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
-import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.Locale
 
 class SolarBandingSettingsViewModelFactory(
     private val configManager: ConfigManaging
@@ -56,7 +55,7 @@ data class SolarBandingSettingsViewData(
     val threshold3: Float
 ): Comparable<SolarBandingSettingsViewData> {
     override fun compareTo(other: SolarBandingSettingsViewData): Int {
-        fun Float.round2() = String.format("%.2f", this).toFloat()
+        fun Float.round2() = String.format(Locale.ENGLISH, "%.2f", this).toFloat()
 
         val a1 = threshold1.round2()
         val a2 = threshold2.round2()
