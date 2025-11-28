@@ -11,12 +11,12 @@ import androidx.compose.ui.geometry.Size
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.paramsgraph.LineMarkerColor
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico.core.chart.composed.ComposedChart
-import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
-import com.patrykandpatrick.vico.core.context.DrawContext
-import com.patrykandpatrick.vico.core.entry.ChartEntryModel
-import com.patrykandpatrick.vico.core.marker.Marker
-import com.patrykandpatrick.vico.core.model.Point
+import com.patrykandpatrick.vico1.core.chart.composed.ComposedChart
+import com.patrykandpatrick.vico1.core.chart.values.ChartValuesProvider
+import com.patrykandpatrick.vico1.core.context.DrawContext
+import com.patrykandpatrick.vico1.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico1.core.marker.Marker
+import com.patrykandpatrick.vico1.core.model.Point
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

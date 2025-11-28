@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2023 by Patryk Goworowski and Patrick Michalik.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <attr name="color" format="color" />
+    <attr name="shapeStyle" format="reference" />
+    <attr name="strokeColor" format="color" />
+    <attr name="strokeWidth" format="dimension" />
+    <attr name="dataLabelRotationDegrees" format="float" />
+    <attr name="showDataLabels" format="boolean" />
+    <attr name="dataLabelStyle" format="reference" />
+
+    <attr name="dataLabelVerticalPosition" format="enum">
+        <enum name="top" value="0" />
+        <enum name="center" value="1" />
+        <enum name="bottom" value="2" />
+    </attr>
+
+    <declare-styleable name="ChartView">
+        <attr name="chart" format="enum">
+            <enum name="column" value="1" />
+            <enum name="stackedColumn" value="2" />
+            <enum name="line" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ComposedChartView">
+        <attr name="charts" format="integer">
+            <flag name="column" value="1" />
+            <flag name="stackedColumn" value="2" />
+            <flag name="line" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BaseChartView">
+        <attr name="axisStyle" format="reference" />
+        <attr name="startAxisStyle" format="reference" />
+        <attr name="topAxisStyle" format="reference" />
+        <attr name="endAxisStyle" format="reference" />
+        <attr name="bottomAxisStyle" format="reference" />
+        <attr name="columnChartStyle" />
+        <attr name="lineChartStyle" />
+        <attr name="showStartAxis" format="boolean" />
+        <attr name="showTopAxis" format="boolean" />
+        <attr name="showEndAxis" format="boolean" />
+        <attr name="showBottomAxis" format="boolean" />
+        <attr name="chartHorizontalScrollingEnabled" format="boolean" />
+        <attr name="chartZoomEnabled" format="boolean" />
+        <attr name="fadingEdgeWidth" format="dimension" />
+        <attr name="startFadingEdgeWidth" format="dimension" />
+        <attr name="endFadingEdgeWidth" format="dimension" />
+        <attr name="fadingEdgeVisibilityThreshold" format="dimension" />
+        <attr name="fadingEdgeVisibilityInterpolator" format="string" />
+        <attr name="horizontalLayout" format="enum">
+            <enum name="segmented" value="0" />
+            <enum name="fullWidth" value="1" />
+        </attr>
+        <attr name="scalableStartContentPadding" format="dimension" />
+        <attr name="scalableEndContentPadding" format="dimension" />
+        <attr name="unscalableStartContentPadding" format="dimension" />
+        <attr name="unscalableEndContentPadding" format="dimension" />
+        <!-- Deprecated. Use `scalableStartContentPadding` instead. -->
+        <attr name="startContentPadding" format="dimension" />
+        <!-- Deprecated. Use `scalableEndContentPadding` instead. -->
+        <attr name="endContentPadding" format="dimension" />
+    </declare-styleable>
+
+    <!-- Defines the appearance of chart axes. -->
+    <declare-styleable name="Axis">
+        <attr name="showAxisLine" format="boolean" />
+        <attr name="axisLineStyle" format="reference" />
+        <attr name="showGuideline" format="boolean" />
+        <attr name="axisGuidelineStyle" format="reference" />
+        <attr name="showTick" format="boolean" />
+        <attr name="axisTickStyle" format="reference" />
+        <attr name="axisLabelStyle" format="reference" />
+        <attr name="axisTickLength" format="dimension" />
+        <attr name="axisLabelBackground" format="color|reference" />
+        <attr name="verticalAxisHorizontalLabelPosition" format="enum">
+            <enum name="outside" value="0" />
+            <enum name="inside" value="1" />
+        </attr>
+        <attr name="verticalAxisVerticalLabelPosition" format="enum">
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
+        </attr>
+        <attr name="labelRotationDegrees" format="float" />
+        <attr name="titleStyle" format="reference" />
+        <attr name="title" format="string|reference" />
+        <attr name="showTitle" format="boolean|reference" />
+        <attr name="horizontalAxisLabelSpacing" format="integer" />
+        <attr name="horizontalAxisLabelOffset" format="integer" />
+        <attr name="shiftExtremeHorizontalAxisTicks" format="boolean" />
+        <attr name="addExtremeHorizontalAxisLabelPadding" format="boolean" />
+        <attr name="shiftTopVerticalAxisLines" format="boolean" />
+        <attr name="maxVerticalAxisItemCount" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="LineComponent">
+        <attr name="color" />
+        <attr name="thickness" format="dimension" />
+        <attr name="shapeStyle" />
+        <attr name="strokeColor" />
+        <attr name="strokeWidth" />
+    </declare-styleable>
+
+    <declare-styleable name="TextComponentStyle">
+        <attr name="labelColor" format="color" />
+        <attr name="backgroundStyle" format="reference" />
+        <attr name="android:padding" />
+        <attr name="android:paddingStart" />
+        <attr name="android:paddingTop" />
+        <attr name="android:paddingEnd" />
+        <attr name="android:paddingBottom" />
+        <attr name="android:paddingVertical" />
+        <attr name="android:paddingHorizontal" />
+        <attr name="android:fontFamily" />
+        <attr name="fontFamily" />
+        <attr name="android:textFontWeight" />
+        <attr name="android:fontStyle" />
+        <attr name="typeface">
+            <enum name="normal" value="0" />
+            <enum name="sans" value="1" />
+            <enum name="serif" value="2" />
+            <enum name="monospace" value="3" />
+        </attr>
+        <attr name="fontStyle" />
+        <attr name="android:textSize" />
+        <attr name="android:maxLines" />
+        <attr name="android:ellipsize" />
+        <attr name="margin" format="dimension" />
+        <attr name="marginStart" format="dimension" />
+        <attr name="marginTop" format="dimension" />
+        <attr name="marginEnd" format="dimension" />
+        <attr name="marginBottom" format="dimension" />
+        <attr name="marginVertical" format="dimension" />
+        <attr name="marginHorizontal" format="dimension" />
+        <!-- Deprecated. Use `textAlignment` instead. -->
+        <attr name="textAlign" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <attr name="textAlignment" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="opposite" value="1" />
+            <enum name="center" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="Shape">
+        <attr name="cornerSize" format="dimension|fraction" />
+        <attr name="cornerTreatment" format="enum">
+            <enum name="rounded" value="0" />
+            <enum name="cut" value="1" />
+        </attr>
+
+        <attr name="topStartCornerSize" format="dimension|fraction" />
+        <attr name="topStartCornerTreatment" format="enum">
+            <enum name="rounded" value="0" />
+            <enum name="cut" value="1" />
+        </attr>
+
+        <attr name="topEndCornerSize" format="dimension|fraction" />
+        <attr name="topEndCornerTreatment" format="enum">
+            <enum name="rounded" value="0" />
+            <enum name="cut" value="1" />
+        </attr>
+
+        <attr name="bottomStartCornerSize" format="dimension|fraction" />
+        <attr name="bottomStartCornerTreatment" format="enum">
+            <enum name="rounded" value="0" />
+            <enum name="cut" value="1" />
+        </attr>
+
+        <attr name="bottomEndCornerSize" format="dimension|fraction" />
+        <attr name="bottomEndCornerTreatment" format="enum">
+            <enum name="rounded" value="0" />
+            <enum name="cut" value="1" />
+        </attr>
+
+        <attr name="dashLength" format="dimension" />
+        <attr name="dashGapLength" format="dimension" />
+    </declare-styleable>
+</resources>

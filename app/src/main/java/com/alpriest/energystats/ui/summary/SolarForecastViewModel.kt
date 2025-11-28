@@ -11,7 +11,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico.core.entry.ChartEntry
+import com.patrykandpatrick.vico1.core.entry.ChartEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.ZoneId

@@ -29,8 +29,8 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
-import com.patrykandpatrick.vico.core.entry.ChartEntry
-import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico1.core.entry.ChartEntry
+import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield

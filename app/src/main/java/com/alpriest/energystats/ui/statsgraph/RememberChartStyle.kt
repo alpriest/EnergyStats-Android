@@ -9,12 +9,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico.compose.style.ChartStyle
-import com.patrykandpatrick.vico.core.DefaultColors
-import com.patrykandpatrick.vico.core.DefaultDimens
-import com.patrykandpatrick.vico.core.chart.line.LineChart
-import com.patrykandpatrick.vico.core.component.shape.LineComponent
-import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico1.compose.style.ChartStyle
+import com.patrykandpatrick.vico1.core.DefaultColors
+import com.patrykandpatrick.vico1.core.DefaultDimens
+import com.patrykandpatrick.vico1.core.chart.line.LineChart
+import com.patrykandpatrick.vico1.core.component.shape.LineComponent
+import com.patrykandpatrick.vico1.core.component.shape.Shapes
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

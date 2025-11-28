@@ -30,9 +30,9 @@ import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico.core.entry.ChartEntry
-import com.patrykandpatrick.vico.core.entry.ChartEntryModel
-import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico1.core.entry.ChartEntry
+import com.patrykandpatrick.vico1.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield

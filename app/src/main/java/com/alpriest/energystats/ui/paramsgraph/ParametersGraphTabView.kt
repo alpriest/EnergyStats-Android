@@ -52,7 +52,7 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
-import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
