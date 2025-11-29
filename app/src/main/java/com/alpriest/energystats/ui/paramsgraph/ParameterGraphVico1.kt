@@ -102,7 +102,7 @@ fun ParameterGraphVico1(
     val loadState = viewModel.uiState.collectAsState().value.state
 
     Box(contentAlignment = Alignment.Companion.Center) {
-        ParameterGraphView(
+        ParameterGraphViewVico1(
             producer,
             yAxisScale,
             chartColors = chartColors,

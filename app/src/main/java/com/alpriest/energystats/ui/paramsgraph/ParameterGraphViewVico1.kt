@@ -37,7 +37,7 @@ import kotlin.math.abs
 import kotlin.math.max
 
 @Composable
-fun ParameterGraphView(
+fun ParameterGraphViewVico1(
     producer: ChartEntryModelProducer,
     yAxisScale: AxisScale,
     chartColors: List<Color>,
@@ -54,8 +54,8 @@ fun ParameterGraphView(
     val max = (bounds.maxByOrNull { it.max }?.max) ?: 0f
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
     val range = max - min
-    val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter<AxisPosition.Vertical.End>(range) else DecimalFormatAxisValueFormatter("0.0")
-    val marker = ParameterGraphVerticalLineMarker(
+    val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatterVico1<AxisPosition.Vertical.End>(range) else DecimalFormatAxisValueFormatter("0.0")
+    val marker = ParameterGraphVerticalLineMarkerVico1(
         producers,
         viewModel.valuesAtTimeStream,
         viewModel.lastMarkerModelStream
@@ -67,7 +67,7 @@ fun ParameterGraphView(
 
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {
-            24 -> ParameterGraphViewWithCustomMarker(
+            24 -> ParameterGraphViewWithCustomMarkerVico1(
                 producer,
                 Modifier,
                 chartColors,
@@ -84,7 +84,7 @@ fun ParameterGraphView(
                 )
             )
 
-            6 -> ParameterGraphViewWithCustomMarker(
+            6 -> ParameterGraphViewWithCustomMarkerVico1(
                 producer,
                 Modifier,
                 chartColors,
@@ -99,7 +99,7 @@ fun ParameterGraphView(
                 )
             )
 
-            else -> ParameterGraphViewWithCustomMarker(
+            else -> ParameterGraphViewWithCustomMarkerVico1(
                 producer,
                 Modifier,
                 chartColors,
@@ -118,19 +118,19 @@ fun ParameterGraphView(
 }
 
 @Composable
-fun ParameterGraphViewWithCustomMarker(
+private fun ParameterGraphViewWithCustomMarkerVico1(
     producer: ChartEntryModelProducer,
     modifier: Modifier,
     chartColors: List<Color>,
     themeStream: MutableStateFlow<AppTheme>,
     endAxisFormatter: AxisValueFormatter<AxisPosition.Vertical.End>,
-    marker: ParameterGraphVerticalLineMarker,
+    marker: ParameterGraphVerticalLineMarkerVico1,
     lastMarkerModel: ParameterGraphVerticalLineMarkerModelVico1?,
     horizontalAxisSpacing: Int,
     axisValuesOverrider: AxisValuesOverrider<ChartEntryModel>
 ) {
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
-    val formatter = remember { ParameterGraphBottomAxisValueFormatter<AxisPosition.Horizontal.Bottom>() }
+    val formatter = remember { ParameterGraphBottomAxisValueFormatterVico1<AxisPosition.Horizontal.Bottom>() }
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -172,7 +172,7 @@ fun ParameterGraphViewWithCustomMarker(
     }
 }
 
-class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValueFormatter<Position> {
+private class ParameterGraphBottomAxisValueFormatterVico1<Position : AxisPosition> : AxisValueFormatter<Position> {
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
         return chartValues.chartEntryModel.entries
             .asSequence()
@@ -187,7 +187,7 @@ class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValu
     }
 }
 
-class ParameterGraphEndAxisValueFormatter<Position : AxisPosition>(private val range: Float) : AxisValueFormatter<Position> {
+private class ParameterGraphEndAxisValueFormatterVico1<Position : AxisPosition>(private val range: Float) : AxisValueFormatter<Position> {
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
         return (chartValues.chartEntryModel.entries.first().firstOrNull() as? DateTimeFloatEntryVico1)
             ?.run {
