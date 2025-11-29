@@ -22,13 +22,10 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red
 import com.alpriest.energystats.ui.theme.TintColor
-import com.patrykandpatrick.vico1.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico1.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico1.compose.axis.vertical.rememberEndAxis
 import com.patrykandpatrick.vico1.compose.chart.Chart
-import com.patrykandpatrick.vico1.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico1.compose.chart.line.lineChart
-import com.patrykandpatrick.vico1.compose.chart.scroll.rememberChartScrollSpec
 import com.patrykandpatrick.vico1.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico1.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico1.core.axis.AxisPosition
@@ -47,7 +44,7 @@ object ForecastDefaults {
 }
 
 @Composable
-fun ForecastView(
+fun ForecastViewVico1(
     model: List<List<DateFloatEntry>>,
     todayTotal: Double,
     name: String?,
@@ -56,6 +53,7 @@ fun ForecastView(
 ) {
     val theme = themeStream.collectAsState().value
     val chartColors = listOf(ForecastDefaults.color90, ForecastDefaults.color10, ForecastDefaults.predictionColor)
+    val chartEntryModelProducer = ChartEntryModelProducer(model)
 
     Column {
         Row(
@@ -86,21 +84,20 @@ fun ForecastView(
         ProvideChartStyle(chartStyle(chartColors, themeStream)) {
             Chart(
                 chart = lineChart(
-                    axisValuesOverrider = AxisValuesOverrider.Companion.fixed(0f, 48f)
+                    axisValuesOverrider = AxisValuesOverrider.fixed(minY = 0f, maxY = 48f)
                 ),
-                chartModelProducer = ChartEntryModelProducer(model),
-                chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+                chartModelProducer = chartEntryModelProducer,
                 endAxis = rememberEndAxis(
-                    itemPlacer = AxisItemPlacer.Vertical.default(5),
+                    itemPlacer = AxisItemPlacer.Vertical.default(maxItemCount = 5),
                     valueFormatter = DecimalFormatAxisValueFormatter("0.${"0".repeat(theme.decimalPlaces)} kW")
                 ),
                 bottomAxis = rememberBottomAxis(
-                    itemPlacer = AxisItemPlacer.Horizontal.default(6, addExtremeLabelPadding = true),
-                    label = axisLabelComponent(horizontalPadding = 2.dp),
+                    itemPlacer = AxisItemPlacer.Horizontal.default(spacing = 6, addExtremeLabelPadding = true),
                     valueFormatter = SolarGraphFormatAxisValueFormatter(),
                     guideline = null,
                 ),
-                horizontalLayout = HorizontalLayout.Companion.fullWidth()
+                horizontalLayout = HorizontalLayout.FullWidth(),
+                isZoomEnabled = false
             )
         }
     }
