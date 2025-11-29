@@ -24,10 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,11 +37,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
@@ -52,7 +50,6 @@ import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
-import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -207,23 +204,9 @@ class ParametersGraphTabView(
         }
 
         if (configManager.separateParameterGraphsByUnit) {
-            producerAxisScalePairs.value.forEach { (unit, producerAxisScale) ->
-                allChartColors[unit]?.let {
-                    ParameterGraph(
-                        producerAxisScale.first,
-                        producerAxisScale.second,
-                        chartColors = it,
-                        viewModel,
-                        themeStream,
-                        showYAxisUnit = true,
-                        userManager
-                    )
-
-                    ParameterGraphVariableTogglesView(viewModel = viewModel, unit, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
-                }
-            }
+            MultipleParameterGraphVico1(allChartColors, viewModel, themeStream, userManager, producerAxisScalePairs)
         } else {
-            SingleParameterGraph(
+            SingleParameterGraphVico1(
                 allChartColors,
                 viewModel,
                 themeStream,
@@ -232,70 +215,6 @@ class ParametersGraphTabView(
             )
 
             ParameterGraphVariableTogglesView(viewModel = viewModel, null, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
-        }
-    }
-}
-
-@Composable
-private fun SingleParameterGraph(
-    allChartColors: Map<String, List<Color>>,
-    viewModel: ParametersGraphTabViewModel,
-    themeStream: MutableStateFlow<AppTheme>,
-    userManager: UserManaging,
-    producerAxisScalePairs: androidx.compose.runtime.State<Map<String, Pair<ChartEntryModelProducer, AxisScale>>>
-) {
-    val chartColors = remember(allChartColors) { allChartColors.values.flatten() }
-    val allEntries = remember(producerAxisScalePairs.value) {
-        producerAxisScalePairs.value.values.flatMap { it.first.getModel()?.entries ?: listOf() }
-    }
-    val yAxisScale = remember(producerAxisScalePairs.value) {
-        val allAxisScales = producerAxisScalePairs.value.map { it.value.second }
-        AxisScale(min = allAxisScales.minOf { it.min ?: 10000.0f }, max = allAxisScales.maxOf { it.max ?: -10000.0f })
-    }
-    val producer = remember(allEntries) { ChartEntryModelProducer(allEntries) }
-
-    ParameterGraph(
-        producer,
-        yAxisScale,
-        chartColors,
-        viewModel,
-        themeStream,
-        showYAxisUnit = false,
-        userManager
-    )
-}
-
-@Composable
-private fun ParameterGraph(
-    producer: ChartEntryModelProducer,
-    yAxisScale: AxisScale,
-    chartColors: List<Color>,
-    viewModel: ParametersGraphTabViewModel,
-    themeStream: MutableStateFlow<AppTheme>,
-    showYAxisUnit: Boolean,
-    userManager: UserManaging
-) {
-    val loadState = viewModel.uiState.collectAsState().value.state
-
-    Box(contentAlignment = Alignment.Center) {
-        ParameterGraphView(
-            producer,
-            yAxisScale,
-            chartColors = chartColors,
-            viewModel = viewModel,
-            themeStream,
-            showYAxisUnit = showYAxisUnit,
-            userManager
-        )
-
-        when (loadState) {
-            is LoadState.Error ->
-                Text(stringResource(R.string.error))
-
-            is LoadState.Active ->
-                LoadingOverlayView()
-
-            is LoadState.Inactive -> {}
         }
     }
 }
