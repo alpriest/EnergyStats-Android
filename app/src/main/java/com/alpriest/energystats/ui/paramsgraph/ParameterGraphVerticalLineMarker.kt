@@ -23,18 +23,10 @@ import com.patrykandpatrick.vico1.core.context.DrawContext
 import com.patrykandpatrick.vico1.core.entry.ChartEntry
 import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico1.core.marker.Marker
-import com.patrykandpatrick.vico1.core.model.Point
 import kotlinx.coroutines.flow.MutableStateFlow
 
-data class ParameterGraphVerticalLineMarkerModel(
-    val context: DrawContext,
-    val bounds: RectF,
-    val location: Point,
-    val markedEntries: List<ChartEntry>
-)
-
 @Composable
-fun SelectedParameterValuesLineMarker(
+fun SelectedParameterValuesLineMarkerVico1(
     allEntries: List<List<ChartEntry>>,
     model: ParameterGraphVerticalLineMarkerModel,
     themeStream: MutableStateFlow<AppTheme>
@@ -42,10 +34,10 @@ fun SelectedParameterValuesLineMarker(
     val backgroundPadding = 10f
     val labelToValueSpacing = 10f
     val labelToBackgroundLeadPadding = 5f
-    val time = model.markedEntries.firstNotNullOfOrNull { it as? DateTimeFloatEntry }?.localDateTime
+    val time = model.time
     val textMeasurer = rememberTextMeasurer()
     val textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
-    val entries = allEntries.flatMap { list -> list.mapNotNull { it as? DateTimeFloatEntry }.filter { it.localDateTime == time } }
+    val entries = allEntries.flatMap { list -> list.mapNotNull { it as? DateTimeFloatEntryVico1 }.filter { it.localDateTime == time } }
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
     val color = LineMarkerColor(isDarkMode(themeStream))
 
@@ -141,9 +133,15 @@ class ParameterGraphVerticalLineMarker(
                 .flatMap { (producer, _) -> producer.getModel()?.entries?.flatten() ?: listOf() }
                 .filter { it.x == entryModel.entry.x }
 
-            lastMarkerModel.value = ParameterGraphVerticalLineMarkerModel(context, bounds, entryModel.location, allMarkedEntries)
+            val selectionTime = allMarkedEntries.firstNotNullOfOrNull { it as? DateTimeFloatEntryVico1 }?.localDateTime
 
-            valuesAtTimeStream.value = allMarkedEntries.mapNotNull { it as? DateTimeFloatEntry }
+            lastMarkerModel.value = ParameterGraphVerticalLineMarkerModel(context, bounds, entryModel.location, selectionTime)
+
+            valuesAtTimeStream.value = allMarkedEntries.mapNotNull { markedEntry ->
+                (markedEntry as? DateTimeFloatEntryVico1)?.let {
+                    DateTimeFloatEntry(it.localDateTime, it.x, it.y, it.type)
+                }
+            }
         }
     }
 }

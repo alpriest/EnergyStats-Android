@@ -165,7 +165,7 @@ fun ParameterGraphViewWithCustomMarker(
 
             lastMarkerModel?.let {
                 producer.getModel()?.let { model ->
-                    SelectedParameterValuesLineMarker(model.entries, it, themeStream)
+                    SelectedParameterValuesLineMarkerVico1(model.entries, it, themeStream)
                 }
             }
         }
@@ -178,7 +178,7 @@ class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValu
             .asSequence()
             .flatMap { it.asSequence() }
             .firstOrNull { it.x == value }
-            ?.let { it as? DateTimeFloatEntry }
+            ?.let { it as? DateTimeFloatEntryVico1 }
             ?.localDateTime?.toLocalTime()
             ?.run {
                 String.format(Locale.getDefault(), "%02d", hour)
@@ -189,7 +189,7 @@ class ParameterGraphBottomAxisValueFormatter<Position : AxisPosition> : AxisValu
 
 class ParameterGraphEndAxisValueFormatter<Position : AxisPosition>(private val range: Float) : AxisValueFormatter<Position> {
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
-        return (chartValues.chartEntryModel.entries.first().firstOrNull() as? DateTimeFloatEntry)
+        return (chartValues.chartEntryModel.entries.first().firstOrNull() as? DateTimeFloatEntryVico1)
             ?.run {
                 if (this.type.unit == "%") {
                     String.format(Locale.getDefault(), "%d %s", value.toInt(), type.unit)

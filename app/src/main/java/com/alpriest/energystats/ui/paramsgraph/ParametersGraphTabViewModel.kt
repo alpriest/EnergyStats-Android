@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.EnergyStatsApplication
 import com.alpriest.energystats.models.OpenHistoryResponse
 import com.alpriest.energystats.models.OpenHistoryResponseData
 import com.alpriest.energystats.models.QueryDate
@@ -60,7 +59,7 @@ class ParametersGraphTabViewModel(
     override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
     var chartColorsStream: MutableStateFlow<Map<String, List<Color>>> = MutableStateFlow(mapOf())
-    val producers: MutableStateFlow<Map<String, Pair<ChartEntryModelProducer, AxisScale>>> = MutableStateFlow(mapOf())
+    val producers: MutableStateFlow<Map<String, Pair<ChartEntryModelProducer, AxisScale>>> = MutableStateFlow(mapOf())  // TODO: Don't emit Producers
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     private var rawData: List<ParametersGraphValue> = listOf()
     var queryDate = QueryDate()
@@ -84,7 +83,6 @@ class ParametersGraphTabViewModel(
                 .collect { it ->
                     val previousHours = hours
                     val updatedDate = QueryDate(it.date.year, it.date.monthValue, it.date.dayOfMonth)
-                    val context = EnergyStatsApplication.applicationContext()
 
                     if (queryDate != updatedDate) {
                         queryDate = updatedDate
@@ -108,7 +106,6 @@ class ParametersGraphTabViewModel(
     private fun appEntersForeground() {
         if (rawData.isNotEmpty()) {
             viewModelScope.launch {
-                val context = EnergyStatsApplication.applicationContext()
                 load()
             }
         }
@@ -234,7 +231,7 @@ class ParametersGraphTabViewModel(
                             ChartEntryModelProducer(
                                 it.value.map { group ->
                                     group.map { graphValue ->
-                                        return@map DateTimeFloatEntry(
+                                        return@map DateTimeFloatEntryVico1(
                                             type = graphValue.type,
                                             localDateTime = graphValue.time,
                                             x = graphValue.graphPoint.toFloat(),
@@ -414,13 +411,13 @@ fun writeContentToUri(context: Context, uri: Uri, content: String) {
     }
 }
 
-class DateTimeFloatEntry(
+class DateTimeFloatEntryVico1(
     val localDateTime: LocalDateTime,
     override val x: Float,
     override val y: Float,
     val type: Variable,
 ) : ChartEntry {
-    override fun withY(y: Float): ChartEntry = DateTimeFloatEntry(
+    override fun withY(y: Float): ChartEntry = DateTimeFloatEntryVico1(
         localDateTime = localDateTime,
         x = x,
         y = y,
@@ -435,3 +432,23 @@ class DateTimeFloatEntry(
     }
 }
 
+class DateTimeFloatEntry(
+    val localDateTime: LocalDateTime,
+    val x: Float,
+    val y: Float,
+    val type: Variable,
+)  {
+    fun withY(y: Float) = DateTimeFloatEntry(
+        localDateTime = localDateTime,
+        x = x,
+        y = y,
+        type = type,
+    )
+
+    fun formattedValue(decimalPlaces: Int): String {
+        return when (type.unit) {
+            "kW" -> y.toDouble().kW(decimalPlaces)
+            else -> "$y ${type.unit}"
+        }
+    }
+}
