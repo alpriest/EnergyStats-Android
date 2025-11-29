@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun SelectedParameterValuesLineMarkerVico1(
     allEntries: List<List<ChartEntry>>,
-    model: ParameterGraphVerticalLineMarkerModel,
+    model: ParameterGraphVerticalLineMarkerModelVico1,
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val backgroundPadding = 10f
@@ -38,14 +38,14 @@ fun SelectedParameterValuesLineMarkerVico1(
     val textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
     val entries = allEntries.flatMap { list -> list.mapNotNull { it as? DateTimeFloatEntryVico1 }.filter { it.localDateTime == time } }
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
-    val color = LineMarkerColor(isDarkMode(themeStream))
+    val color = lineMarkerColor(isDarkMode(themeStream))
 
     if (entries.isEmpty()) {
         return
     }
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        val x = model.location.x
+        val x = model.x
         drawLine(
             color = color,
             start = Offset(x, model.bounds.top),
@@ -124,7 +124,7 @@ fun SelectedParameterValuesLineMarkerVico1(
 class ParameterGraphVerticalLineMarker(
     private var allProducers: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>,
     private var valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>> = MutableStateFlow(listOf()),
-    private var lastMarkerModel: MutableStateFlow<ParameterGraphVerticalLineMarkerModel?>
+    private var lastMarkerModel: MutableStateFlow<ParameterGraphVerticalLineMarkerModelVico1?>
 ) : Marker {
     override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
         markedEntries.firstOrNull()?.let { entryModel ->
@@ -134,10 +134,10 @@ class ParameterGraphVerticalLineMarker(
 
             val selectionTime = allMarkedEntries.firstNotNullOfOrNull { it }?.localDateTime
 
-            lastMarkerModel.value = ParameterGraphVerticalLineMarkerModel(context, bounds, entryModel.location, selectionTime)
+            lastMarkerModel.value = ParameterGraphVerticalLineMarkerModelVico1(bounds, entryModel.location.x, selectionTime)
 
-            valuesAtTimeStream.value = allMarkedEntries.mapNotNull { markedEntry ->
-                markedEntry?.let {
+            valuesAtTimeStream.value = allMarkedEntries.map { markedEntry ->
+                markedEntry.let {
                     DateTimeFloatEntry(it.localDateTime, it.x, it.y, it.type)
                 }
             }
@@ -146,7 +146,7 @@ class ParameterGraphVerticalLineMarker(
 }
 
 @Composable
-fun LineMarkerColor(isDarkMode: Boolean): Color {
+fun lineMarkerColor(isDarkMode: Boolean): Color {
     return if (isDarkMode) {
         MarkerLineInDarkTheme
     } else {

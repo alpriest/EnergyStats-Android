@@ -125,7 +125,7 @@ fun ParameterGraphViewWithCustomMarker(
     themeStream: MutableStateFlow<AppTheme>,
     endAxisFormatter: AxisValueFormatter<AxisPosition.Vertical.End>,
     marker: ParameterGraphVerticalLineMarker,
-    lastMarkerModel: ParameterGraphVerticalLineMarkerModel?,
+    lastMarkerModel: ParameterGraphVerticalLineMarkerModelVico1?,
     horizontalAxisSpacing: Int,
     axisValuesOverrider: AxisValuesOverrider<ChartEntryModel>
 ) {

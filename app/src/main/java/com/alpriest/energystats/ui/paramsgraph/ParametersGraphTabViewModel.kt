@@ -67,7 +67,7 @@ class ParametersGraphTabViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     private var lastLoadState: LastLoadState<ParametersGraphViewState>? = null
-    var lastMarkerModelStream = MutableStateFlow<ParameterGraphVerticalLineMarkerModel?>(null)
+    var lastMarkerModelStream = MutableStateFlow<ParameterGraphVerticalLineMarkerModelVico1?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },

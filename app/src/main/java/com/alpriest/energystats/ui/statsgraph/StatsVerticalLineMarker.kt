@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.paramsgraph.LineMarkerColor
+import com.alpriest.energystats.ui.paramsgraph.lineMarkerColor
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico1.core.chart.composed.ComposedChart
 import com.patrykandpatrick.vico1.core.chart.values.ChartValuesProvider
@@ -32,7 +32,7 @@ fun SelectedStatsValuesLineMarker(
 
     val left = model.markedEntries.minOf { it.location.x } - additionalBarWidth
     val right = model.markedEntries.maxOf { it.location.x } + additionalBarWidth
-    val color = LineMarkerColor(isDarkMode(themeStream))
+    val color = lineMarkerColor(isDarkMode(themeStream))
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawRect(
