@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -19,6 +20,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.ui.theme.Green
+import com.alpriest.energystats.ui.theme.Red
+import com.alpriest.energystats.ui.theme.TintColor
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
@@ -36,8 +40,14 @@ import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
 import kotlinx.coroutines.flow.MutableStateFlow
 
+object ForecastDefaults {
+    val predictionColor: Color = TintColor
+    val color90: Color = Red.copy(alpha = 0.5f)
+    val color10: Color = Green.copy(alpha = 0.5f)
+}
+
 @Composable
-fun ForecastViewVico2(
+fun ForecastView(
     model: List<List<DateFloatEntry>>,
     todayTotal: Double,
     name: String?,

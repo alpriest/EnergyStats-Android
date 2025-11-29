@@ -100,8 +100,8 @@ class SolarForecastView(
 
             Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                 data.map { site ->
-                    ForecastViewVico2(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), themeStream)
-                    ForecastViewVico2(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), themeStream)
+                    ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), themeStream)
+                    ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), themeStream)
                 }
             }
 
