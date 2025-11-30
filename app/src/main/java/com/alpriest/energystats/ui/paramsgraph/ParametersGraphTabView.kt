@@ -204,9 +204,9 @@ class ParametersGraphTabView(
         }
 
         if (configManager.separateParameterGraphsByUnit) {
-            MultipleParameterGraphVico1(allChartColors, viewModel, themeStream, userManager, producerAxisScalePairs)
+            MultipleParameterGraphVico2(allChartColors, viewModel, themeStream, userManager, producerAxisScalePairs)
         } else {
-            SingleParameterGraphVico1(
+            SingleParameterGraphVico2(
                 allChartColors,
                 viewModel,
                 themeStream,

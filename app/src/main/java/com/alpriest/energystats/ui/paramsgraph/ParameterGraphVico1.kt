@@ -37,7 +37,6 @@ fun MultipleParameterGraphVico1(
             }
 
             val chartProducer = remember(vico1Models) {
-                // vico1 ChartEntryModelProducer takes vararg List<ChartEntry>
                 ChartEntryModelProducer(*vico1Models.toTypedArray())
             }
 
@@ -90,7 +89,7 @@ fun SingleParameterGraphVico1(
 }
 
 @Composable
-fun ParameterGraphVico1(
+private fun ParameterGraphVico1(
     producer: ChartEntryModelProducer,
     yAxisScale: AxisScale,
     chartColors: List<Color>,
