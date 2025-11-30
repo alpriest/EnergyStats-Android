@@ -18,15 +18,11 @@ import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
-import com.patrykandpatrick.vico.core.cartesian.axis.Axis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.data.ExtraStore
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.Locale
-import kotlin.math.abs
+import java.time.ZoneId
 
 @Composable
 fun MultipleParameterGraphVico2(
@@ -116,7 +112,7 @@ private fun LoadStateParameterGraphVico2(
             lineSeries {
                 data.forEach { seriesEntries: List<DateTimeFloatEntry> ->
                     series(
-                        x = seriesEntries.map { it.x.toDouble() },
+                        x = seriesEntries.map { it.localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() },
                         y = seriesEntries.map { it.y.toDouble() }
                     )
                 }

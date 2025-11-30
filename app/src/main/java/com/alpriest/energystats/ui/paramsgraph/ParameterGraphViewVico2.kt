@@ -30,9 +30,14 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.ZoneId
 import java.util.Locale
+import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.max
+
+private const val SECONDS_IN_DAY = 86400
 
 @Composable
 fun ParameterGraphViewVico2(
@@ -60,12 +65,14 @@ fun ParameterGraphViewVico2(
     )
     val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
+    val startOfDay = displayMode.date.atStartOfDay().atZone(ZoneId.systemDefault()).toEpochSecond()
 
     MonitorAlertDialog(viewModel, userManager)
 
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {
-            24 -> ParameterGraphViewWithCustomMarkerVico2(
+            24 ->
+                return ParameterGraphViewWithCustomMarkerVico2(
                 producer,
                 Modifier,
                 chartColors,
@@ -73,10 +80,10 @@ fun ParameterGraphViewVico2(
                 endAxisFormatter,
                 marker,
                 lastMarkerModel,
-                24,
+                    SECONDS_IN_DAY / 24,
                 CartesianLayerRangeProvider.fixed(
-                    minX = 0.0,
-                    maxX = max(288.0, entries.count().toDouble()),
+                    minX = startOfDay.toDouble(),
+                    maxX = max(startOfDay + 86400.0, entries.count().toDouble()),
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
                 )
@@ -90,7 +97,7 @@ fun ParameterGraphViewVico2(
                 endAxisFormatter,
                 marker,
                 lastMarkerModel,
-                9,
+                SECONDS_IN_DAY / 9,
                 CartesianLayerRangeProvider.fixed(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
@@ -105,7 +112,7 @@ fun ParameterGraphViewVico2(
                 endAxisFormatter,
                 marker,
                 lastMarkerModel,
-                18,
+                SECONDS_IN_DAY / 18,
                 CartesianLayerRangeProvider.fixed(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
@@ -129,12 +136,7 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
 ) {
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
 
-    // Simple bottom-axis formatter: show integer x values as-is.
-    val bottomAxisFormatter = remember {
-        CartesianValueFormatter { _, value, _ ->
-            value.toInt().toString()
-        }
-    }
+    val bottomAxisFormatter = remember { BottomAxisValueFormatter }
 
     // Build a line provider that applies your chartColors to each series.
     val lineProvider = LineCartesianLayer.LineProvider.series(
@@ -186,22 +188,19 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
     }
 }
 
-//private class ParameterGraphBottomAxisValueFormatterVico2<Position : AxisPosition> : AxisValueFormatter<Position> {
-//    override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
-//        return chartValues.chartEntryModel.entries
-//            .asSequence()
-//            .flatMap { it.asSequence() }
-//            .firstOrNull { it.x == value }
-//            ?.let { it as? DateTimeFloatEntryVico1 }
-//            ?.localDateTime?.toLocalTime()
-//            ?.run {
-//                String.format(Locale.getDefault(), "%02d", hour)
-//            }
-//            .orEmpty()
-//    }
-//}
+private val BottomAxisValueFormatter =
+    object : CartesianValueFormatter {
+        private val dateFormat =
+            SimpleDateFormat("H", Locale.ENGLISH).apply { timeZone = TimeZone.getTimeZone("GMT") }
 
-class ParameterGraphEndAxisValueFormatterVico2(private val range: Float) : CartesianValueFormatter {
+        override fun format(
+            context: CartesianMeasuringContext,
+            value: Double,
+            verticalAxisPosition: Axis.Position.Vertical?,
+        ) = dateFormat.format(value.toLong() * 1000)
+    }
+
+private class ParameterGraphEndAxisValueFormatterVico2(private val range: Float) : CartesianValueFormatter {
     override fun format(context: CartesianMeasuringContext, value: Double, verticalAxisPosition: Axis.Position.Vertical?): CharSequence {
         val unit = context.model.extraStore.getOrNull(UnitKey)
 
