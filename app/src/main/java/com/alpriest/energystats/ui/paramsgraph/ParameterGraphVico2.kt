@@ -26,18 +26,19 @@ import java.time.ZoneId
 
 @Composable
 fun MultipleParameterGraphVico2(
-    allChartColors: Map<String, List<Color>>,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     userManager: UserManaging,
     producerAxisScalePairs: State<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>>
 ) {
+    val allChartColors = viewModel.chartColorsStream.collectAsState().value
+
     producerAxisScalePairs.value.forEach { (unit, producerAxisScale) ->
         allChartColors[unit]?.let { colors ->
             LoadStateParameterGraphVico2(
                 data = producerAxisScale.first,
+                colors,
                 yAxisScale = producerAxisScale.second,
-                chartColors = colors,
                 viewModel = viewModel,
                 themeStream = themeStream,
                 showYAxisUnit = true,
@@ -56,15 +57,14 @@ fun MultipleParameterGraphVico2(
 
 @Composable
 fun SingleParameterGraphVico2(
-    allChartColors: Map<String, List<Color>>,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     userManager: UserManaging,
     producerAxisScalePairs: State<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>>
 ) {
-    val chartColors = remember(allChartColors) { allChartColors.values.flatten() }
+    val chartColors = viewModel.viewDataState.collectAsState().value.colors.values.flatten()
+
     val allData = remember(producerAxisScalePairs.value) {
-        // Flatten all units' series into one list of series
         producerAxisScalePairs.value.values.flatMap { it.first }
     }
     val yAxisScale = remember(producerAxisScalePairs.value) {
@@ -77,8 +77,8 @@ fun SingleParameterGraphVico2(
 
     LoadStateParameterGraphVico2(
         data = allData,
+        chartColors,
         yAxisScale = yAxisScale,
-        chartColors = chartColors,
         viewModel = viewModel,
         themeStream = themeStream,
         showYAxisUnit = false,
@@ -91,8 +91,8 @@ val UnitKey = ExtraStore.Key<String>()
 @Composable
 private fun LoadStateParameterGraphVico2(
     data: List<List<DateTimeFloatEntry>>,
-    yAxisScale: AxisScale,
     chartColors: List<Color>,
+    yAxisScale: AxisScale,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     showYAxisUnit: Boolean,
@@ -106,7 +106,9 @@ private fun LoadStateParameterGraphVico2(
     LaunchedEffect(data) {
         modelProducer.runTransaction {
             extras { extraStore ->
-                extraStore[UnitKey] = data.first().first().type.unit
+                data.first().firstOrNull()?.let {
+                    extraStore[UnitKey] = it.type.unit
+                }
             }
 
             lineSeries {
@@ -123,8 +125,8 @@ private fun LoadStateParameterGraphVico2(
     Box(contentAlignment = Alignment.Center) {
         ParameterGraphViewVico2(
             modelProducer,
+            chartColors,
             yAxisScale,
-            chartColors = chartColors,
             viewModel = viewModel,
             themeStream = themeStream,
             showYAxisUnit = showYAxisUnit,
@@ -132,12 +134,8 @@ private fun LoadStateParameterGraphVico2(
         )
 
         when (loadState) {
-            is LoadState.Error ->
-                Text(stringResource(R.string.error))
-
-            is LoadState.Active ->
-                LoadingOverlayView()
-
+            is LoadState.Error -> Text(stringResource(R.string.error))
+            is LoadState.Active -> LoadingOverlayView()
             is LoadState.Inactive -> {}
         }
     }

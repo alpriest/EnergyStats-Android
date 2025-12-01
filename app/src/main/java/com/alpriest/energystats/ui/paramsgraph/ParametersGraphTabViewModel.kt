@@ -28,6 +28,8 @@ import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.io.OutputStream
@@ -44,6 +46,11 @@ data class ParametersGraphViewState(
     val variables: List<ParameterGraphVariable>
 )
 
+data class ParametersGraphViewData(
+    val producers: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>,
+    val colors: Map<String, List<Color>>
+)
+
 class ParametersGraphTabViewModel(
     val networking: Networking,
     val configManager: ConfigManaging,
@@ -56,6 +63,8 @@ class ParametersGraphTabViewModel(
     override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
     var chartColorsStream: MutableStateFlow<Map<String, List<Color>>> = MutableStateFlow(mapOf())
+    private val _viewDataState = MutableStateFlow(ParametersGraphViewData(mapOf(), mapOf()))
+    val viewDataState: StateFlow<ParametersGraphViewData> = _viewDataState.asStateFlow()
     val producers: MutableStateFlow<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>> = MutableStateFlow(mapOf())
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     private var rawData: List<ParametersGraphValue> = listOf()
@@ -175,12 +184,10 @@ class ParametersGraphTabViewModel(
     }
 
     private fun refresh() {
-        val hiddenVariables = graphVariablesStream.value.filter { !it.enabled }.map { it.type }
         val hours = displayModeStream.value.hours
         val now = LocalDateTime.now()
         val oldest = displayModeStream.value.date.atTime(now.hour, now.minute).minusHours(hours.toLong())
         val grouped = rawData
-            .filter { !hiddenVariables.contains(it.type) }
             .filter {
                 it.time > oldest
             }
@@ -211,43 +218,58 @@ class ParametersGraphTabViewModel(
             hasDataStream.value = true
             entriesStream.value = entries
 
-            producers.value = grouped
-                .map { group ->
-                    return@map Pair(group.key.unit, group.value)
-                }
-                .groupBy { it.first }
-                .map { Pair(it.key, it.value.map { it.second }) }
-                .toMap()
-                .map {
-                    val values = it.value.flatMap { it.map { it.value } }
-                    val yAxisScale = AxisScale(values.min().toFloat() * 0.9f, values.max().toFloat() * 1.1f)
+            // Build producers for all variables
+            val allVariables = graphVariablesStream.value
+                .filter { it.isSelected }
+                .map { it.type }
 
-                    Pair(
-                        it.key,
-                        Pair(
-                                it.value.map { group ->
-                                    group.map { graphValue ->
-                                        return@map DateTimeFloatEntry(
-                                            type = graphValue.type,
-                                            localDateTime = graphValue.time,
-                                            x = graphValue.graphPoint.toFloat(),
-                                            y = graphValue.value.toFloat()
-                                        )
-                                    }
-                                },
-                            yAxisScale
-                        )
+            producers.value = allVariables
+                .map { variable ->
+                    val valuesForVariable: List<ParametersGraphValue> = grouped[variable] ?: emptyList()
+                    Pair(variable.unit, valuesForVariable)
+                }
+                .groupBy { it.first } // group by unit
+                .map { (unit, pairsForUnit) ->
+                    val groupedValues: List<List<ParametersGraphValue>> = pairsForUnit.map { it.second }
+                    val allValues = groupedValues.flatMap { list -> list.map { it.value } }
+
+                    val yAxisScale = if (allValues.isNotEmpty()) {
+                        AxisScale(allValues.min().toFloat() * 0.9f, allValues.max().toFloat() * 1.1f)
+                    } else {
+                        // Default scale when no visible data exists for this unit.
+                        AxisScale(0f, 1f)
+                    }
+
+                    unit to Pair(
+                        groupedValues.map { group ->
+                            group.map { graphValue ->
+                                DateTimeFloatEntry(
+                                    type = graphValue.type,
+                                    localDateTime = graphValue.time,
+                                    x = graphValue.graphPoint.toFloat(),
+                                    y = graphValue.value.toFloat()
+                                )
+                            }
+                        },
+                        yAxisScale
                     )
                 }
                 .toMap()
 
-            chartColorsStream.value = grouped
-                .map { group ->
-                    return@map Pair(group.key.unit, group.value)
+            chartColorsStream.value = graphVariablesStream.value
+                .filter { it.isSelected }
+                .groupBy { it.type.unit }
+                .mapValues { (_, varsForUnit) ->
+                    varsForUnit.map { variable ->
+                        if (variable.enabled) {
+                            variable.type.colour()
+                        } else {
+                            Color.Transparent
+                        }
+                    }
                 }
-                .groupBy { it.first }
-                .map { Pair(it.key, it.value.map { it.second.first() }) }
-                .associate { Pair(it.first, it.second.map { it.type.colour() }) }
+
+            _viewDataState.value = ParametersGraphViewData(producers.value, chartColorsStream.value)
         }
 
         prepareExport(rawData, displayModeStream.value)

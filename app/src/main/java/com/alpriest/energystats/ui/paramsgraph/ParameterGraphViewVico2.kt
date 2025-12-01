@@ -15,7 +15,6 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
@@ -42,8 +41,8 @@ private const val SECONDS_IN_DAY = 86400
 @Composable
 fun ParameterGraphViewVico2(
     producer: CartesianChartModelProducer,
-    yAxisScale: AxisScale,
     chartColors: List<Color>,
+    yAxisScale: AxisScale,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     showYAxisUnit: Boolean,
@@ -52,14 +51,14 @@ fun ParameterGraphViewVico2(
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
     val displayMode = viewModel.displayModeStream.collectAsState().value
     val bounds = viewModel.boundsStream.collectAsState().value
-    val producers = viewModel.producers.collectAsState().value
+    val viewData = viewModel.viewDataState.collectAsState().value
 
     val max = (bounds.maxByOrNull { it.max }?.max) ?: 0f
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
     val range = max - min
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatterVico2(range) else CartesianValueFormatter.decimal(DecimalFormat("#.#"))
     val marker = ParameterGraphVerticalLineMarkerVico1(
-        producers,
+        viewData.producers,
         viewModel.valuesAtTimeStream,
         viewModel.lastMarkerModelStream
     )
@@ -71,8 +70,7 @@ fun ParameterGraphViewVico2(
 
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {
-            24 ->
-                return ParameterGraphViewWithCustomMarkerVico2(
+            24 -> ParameterGraphViewWithCustomMarkerVico2(
                 producer,
                 Modifier,
                 chartColors,
@@ -80,7 +78,7 @@ fun ParameterGraphViewVico2(
                 endAxisFormatter,
                 marker,
                 lastMarkerModel,
-                    CartesianLayerRangeProvider.fixed(
+                CartesianLayerRangeProvider.fixed(
                     minX = startOfDay.toDouble(),
                     maxX = max(startOfDay + 86400.0, entries.count().toDouble()),
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
@@ -135,13 +133,15 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
     val bottomAxisFormatter = remember { BottomAxisValueFormatter }
 
     // Build a line provider that applies your chartColors to each series.
-    val lineProvider = LineCartesianLayer.LineProvider.series(
-        *chartColors.map { color ->
-            LineCartesianLayer.rememberLine(
-                fill = LineCartesianLayer.LineFill.single(fill(color))
-            )
-        }.toTypedArray()
-    )
+    val lineProvider = remember(chartColors) {
+        LineCartesianLayer.LineProvider.series(
+            *chartColors.map { color ->
+                LineCartesianLayer.Line(
+                    fill = LineCartesianLayer.LineFill.single(fill(color))
+                )
+            }.toTypedArray()
+        )
+    }
 
     val lineLayer = rememberLineCartesianLayer(
         lineProvider = lineProvider,
@@ -169,12 +169,13 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
                         ),
                         valueFormatter = bottomAxisFormatter,
                         guideline = null
-                    )
+                    ),
                 ),
                 modelProducer = producer,
                 modifier = Modifier.fillMaxSize(),
                 scrollState = rememberVicoScrollState(scrollEnabled = false),
-                animateIn = false
+                animateIn = false,
+                animationSpec = null
             )
 
             // NOTE: custom markers and the SelectedParameterValuesLineMarkerVico2 overlay

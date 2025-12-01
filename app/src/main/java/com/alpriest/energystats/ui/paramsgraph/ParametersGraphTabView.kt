@@ -169,7 +169,6 @@ class ParametersGraphTabView(
     @Composable
     private fun LoadedData(selectedDateTime: LocalDateTime?, viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
         val producerAxisScalePairs = viewModel.producers.collectAsState()
-        val allChartColors = viewModel.chartColorsStream.collectAsState().value
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -204,10 +203,9 @@ class ParametersGraphTabView(
         }
 
         if (configManager.separateParameterGraphsByUnit) {
-            MultipleParameterGraphVico2(allChartColors, viewModel, themeStream, userManager, producerAxisScalePairs)
+            MultipleParameterGraphVico2(viewModel, themeStream, userManager, producerAxisScalePairs)
         } else {
             SingleParameterGraphVico2(
-                allChartColors,
                 viewModel,
                 themeStream,
                 userManager,
