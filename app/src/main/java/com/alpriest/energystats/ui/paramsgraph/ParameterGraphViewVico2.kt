@@ -80,8 +80,7 @@ fun ParameterGraphViewVico2(
                 endAxisFormatter,
                 marker,
                 lastMarkerModel,
-                    SECONDS_IN_DAY / 24,
-                CartesianLayerRangeProvider.fixed(
+                    CartesianLayerRangeProvider.fixed(
                     minX = startOfDay.toDouble(),
                     maxX = max(startOfDay + 86400.0, entries.count().toDouble()),
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
@@ -97,7 +96,6 @@ fun ParameterGraphViewVico2(
                 endAxisFormatter,
                 marker,
                 lastMarkerModel,
-                SECONDS_IN_DAY / 9,
                 CartesianLayerRangeProvider.fixed(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
@@ -112,7 +110,6 @@ fun ParameterGraphViewVico2(
                 endAxisFormatter,
                 marker,
                 lastMarkerModel,
-                SECONDS_IN_DAY / 18,
                 CartesianLayerRangeProvider.fixed(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
@@ -131,7 +128,6 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
     endAxisFormatter: CartesianValueFormatter,
     marker: ParameterGraphVerticalLineMarkerVico1,
     lastMarkerModel: ParameterGraphVerticalLineMarkerModelVico1?,
-    horizontalAxisSpacing: Int,
     rangeProvider: CartesianLayerRangeProvider
 ) {
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
@@ -168,7 +164,7 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
                     ),
                     bottomAxis = HorizontalAxis.rememberBottom(
                         itemPlacer = HorizontalAxis.ItemPlacer.aligned(
-                            spacing = { horizontalAxisSpacing },
+                            spacing = { SECONDS_IN_DAY / 24 },
                             addExtremeLabelPadding = true
                         ),
                         valueFormatter = bottomAxisFormatter,
