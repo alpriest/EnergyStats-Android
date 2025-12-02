@@ -27,6 +27,9 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianLayerRangeProvider
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
+import com.patrykandpatrick.vico.core.common.Fill
+import com.patrykandpatrick.vico.core.common.component.LineComponent
+import com.patrykandpatrick.vico.core.common.component.TextComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -57,7 +60,7 @@ fun ParameterGraphViewVico2(
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
     val range = max - min
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatterVico2(range) else CartesianValueFormatter.decimal(DecimalFormat("#.#"))
-    val marker = ParameterGraphVerticalLineMarkerVico1(
+    val marker = ParameterGraphVerticalLineMarkerVico2(
         viewData.producers,
         viewModel.valuesAtTimeStream,
         viewModel.lastMarkerModelStream
@@ -72,6 +75,7 @@ fun ParameterGraphViewVico2(
         when (displayMode.hours) {
             24 -> ParameterGraphViewWithCustomMarkerVico2(
                 producer,
+                viewModel.valuesAtTimeStream,
                 Modifier,
                 chartColors,
                 themeStream,
@@ -88,6 +92,7 @@ fun ParameterGraphViewVico2(
 
             6 -> ParameterGraphViewWithCustomMarkerVico2(
                 producer,
+                viewModel.valuesAtTimeStream,
                 Modifier,
                 chartColors,
                 themeStream,
@@ -102,6 +107,7 @@ fun ParameterGraphViewVico2(
 
             else -> ParameterGraphViewWithCustomMarkerVico2(
                 producer,
+                viewModel.valuesAtTimeStream,
                 Modifier,
                 chartColors,
                 themeStream,
@@ -120,12 +126,13 @@ fun ParameterGraphViewVico2(
 @Composable
 private fun ParameterGraphViewWithCustomMarkerVico2(
     producer: CartesianChartModelProducer,
+    valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>>,
     modifier: Modifier,
     chartColors: List<Color>,
     themeStream: MutableStateFlow<AppTheme>,
     endAxisFormatter: CartesianValueFormatter,
-    marker: ParameterGraphVerticalLineMarkerVico1,
-    lastMarkerModel: ParameterGraphVerticalLineMarkerModelVico1?,
+    marker: ParameterGraphVerticalLineMarkerVico2,
+    lastMarkerModel: ParameterGraphVerticalLineMarkerModel?,
     rangeProvider: CartesianLayerRangeProvider
 ) {
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
@@ -170,6 +177,12 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
                         valueFormatter = bottomAxisFormatter,
                         guideline = null
                     ),
+                    marker = remember {
+                        MyCartesianMarker(
+                            TextComponent(),
+                            guideline = LineComponent(Fill.Black)
+                        )
+                    }
                 ),
                 modelProducer = producer,
                 modifier = Modifier.fillMaxSize(),
@@ -178,9 +191,9 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
                 animationSpec = null
             )
 
-            // NOTE: custom markers and the SelectedParameterValuesLineMarkerVico2 overlay
-            // are not yet implemented for Vico 2 here. The marker and lastMarkerModel
-            // parameters are kept to preserve the call sites, but are currently unused.
+            lastMarkerModel?.let {
+                ParameterValuesPopupVico2(valuesAtTimeStream, it, themeStream)
+            }
         }
     }
 }

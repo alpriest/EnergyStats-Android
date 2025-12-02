@@ -22,7 +22,6 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.data.ExtraStore
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.time.ZoneId
 
 @Composable
 fun MultipleParameterGraphVico2(
@@ -114,7 +113,7 @@ private fun LoadStateParameterGraphVico2(
             lineSeries {
                 data.forEach { seriesEntries: List<DateTimeFloatEntry> ->
                     series(
-                        x = seriesEntries.map { it.localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() },
+                        x = seriesEntries.map { it.graphPoint },
                         y = seriesEntries.map { it.y.toDouble() }
                     )
                 }

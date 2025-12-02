@@ -15,24 +15,22 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico1.core.entry.ChartEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun SelectedParameterValuesLineMarkerVico2(
-    allEntries: List<List<ChartEntry>>,
+fun ParameterValuesPopupVico2(
+    valuesAtTimeStream: MutableStateFlow<List<DateTimeFloatEntry>>,
     model: ParameterGraphVerticalLineMarkerModel,
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val backgroundPadding = 10f
     val labelToValueSpacing = 10f
     val labelToBackgroundLeadPadding = 5f
-    val time = model.time
     val textMeasurer = rememberTextMeasurer()
     val textStyle = TextStyle(fontSize = 12.sp, color = Color.Companion.Black)
-    val entries = allEntries.flatMap { list -> list.mapNotNull { it as? DateTimeFloatEntryVico1 }.filter { it.localDateTime == time } }
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
     val color = lineMarkerColor(isDarkMode(themeStream))
+    val entries = valuesAtTimeStream.collectAsState().value
 
     if (entries.isEmpty()) {
         return

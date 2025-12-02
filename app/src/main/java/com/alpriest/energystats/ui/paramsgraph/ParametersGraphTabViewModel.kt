@@ -13,6 +13,7 @@ import com.alpriest.energystats.models.QueryDate
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.UnitData
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.models.toDate
 import com.alpriest.energystats.models.toUtcMillis
@@ -76,7 +77,7 @@ class ParametersGraphTabViewModel(
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     private var lastLoadState: LastLoadState<ParametersGraphViewState>? = null
-    var lastMarkerModelStream = MutableStateFlow<ParameterGraphVerticalLineMarkerModelVico1?>(null)
+    var lastMarkerModelStream = MutableStateFlow<ParameterGraphVerticalLineMarkerModel?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -434,4 +435,13 @@ class DateTimeFloatEntry(
     val x: Float,
     val y: Float,
     val type: Variable,
-)
+) {
+    fun formattedValue(decimalPlaces: Int): String {
+        return when (type.unit) {
+            "kW" -> y.toDouble().kW(decimalPlaces)
+            else -> "$y ${type.unit}"
+        }
+    }
+
+    var graphPoint: Long = this.localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
+}
