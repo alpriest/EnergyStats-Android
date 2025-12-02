@@ -10,9 +10,7 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModel
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianLayerModel
 import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerDimensions
 import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerMargins
-import com.patrykandpatrick.vico.core.cartesian.marker.CandlestickCartesianLayerMarkerTarget
 import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
-import com.patrykandpatrick.vico.core.cartesian.marker.ColumnCartesianLayerMarkerTarget
 import com.patrykandpatrick.vico.core.cartesian.marker.LineCartesianLayerMarkerTarget
 import com.patrykandpatrick.vico.core.common.Position
 import com.patrykandpatrick.vico.core.common.component.LineComponent
@@ -150,44 +148,13 @@ internal class DefaultValueFormatter(
         }
     }
 
-    private fun SpannableStringBuilder.append(target: CartesianMarker.Target, shorten: Boolean) {
-        when (target) {
-            is CandlestickCartesianLayerMarkerTarget -> {
-                if (shorten) {
-                    append(target.entry.closing, target.closingColor)
-                } else {
-                    append("O ")
-                    append(target.entry.opening, target.openingColor)
-                    append(", C ")
-                    append(target.entry.closing, target.closingColor)
-                    append(", L ")
-                    append(target.entry.low, target.lowColor)
-                    append(", H ")
-                    append(target.entry.high, target.highColor)
-                }
-            }
+    private fun SpannableStringBuilder.append(target: CartesianMarker.Target, unit: String?) {
+        val lineTarget = target as? LineCartesianLayerMarkerTarget ?: return
 
-            is ColumnCartesianLayerMarkerTarget -> {
-                val includeSum = target.columns.size > 1
-                if (includeSum) {
-                    append(target.columns.sumOf { it.entry.y })
-                    append(" (")
-                }
-                target.columns.forEachIndexed { index, column ->
-                    append(column.entry.y, column.color)
-                    if (index != target.columns.lastIndex) append(", ")
-                }
-                if (includeSum) append(")")
-            }
-
-            is LineCartesianLayerMarkerTarget -> {
-                target.points.forEachIndexed { index, point ->
-                    append(point.entry.y, point.color)
-                    if (index != target.points.lastIndex) append(", ")
-                }
-            }
-
-            else -> throw IllegalArgumentException("Unexpected `CartesianMarker.Target` implementation.")
+        lineTarget.points.forEachIndexed { index, point ->
+            append(point.entry.y, point.color)
+            append(unit)
+            if (index != target.points.lastIndex) append(", ")
         }
     }
 
@@ -197,7 +164,8 @@ internal class DefaultValueFormatter(
     ): CharSequence =
         SpannableStringBuilder().apply {
             targets.forEachIndexed { index, target ->
-                append(target = target, shorten = targets.size > 1)
+                val unit = context.model.models[index].extraStore.getOrNull(UnitKey)
+                append(target, unit)
                 if (index != targets.lastIndex) append(", ")
             }
         }
