@@ -174,7 +174,7 @@ fun NavigableSettingsView(
 
         inverterScheduleGraph(navController, topBarSettings, configManager, userManager, network, templateStore)
 
-        debugGraph(topBarSettings, network)
+        debugGraph(topBarSettings, network, navController)
     }
 }
 

@@ -100,8 +100,8 @@ data class PowerStationDetailResponse(
 }
 
 data class ApiRequestCountResponse(
-    val total: String,
-    val remaining: String
+    val total: Int,
+    val remaining: Int
 )
 
 data class DeviceBatteryModule(

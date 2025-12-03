@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.alpriest.energystats.R
@@ -26,11 +27,12 @@ import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.debugGraph(
     topBarSettings: MutableState<TopBarSettings>,
-    network: Networking
+    network: Networking,
+    navController: NavHostController
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") {
-            topBarSettings.value = TopBarSettings(true, stringResource(R.string.view_debug_data), {}, null)
+            topBarSettings.value = TopBarSettings(true, stringResource(R.string.view_debug_data), {}, { navController.popBackStack() })
             DebugDataSettingsView(network, Modifier)
         }
     }

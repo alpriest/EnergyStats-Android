@@ -246,7 +246,7 @@ class DemoAPI : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
-        return ApiRequestCountResponse("10", "5")
+        return ApiRequestCountResponse(10, 5)
     }
 
     override suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse {
