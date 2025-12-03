@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.paramsgraph
 import android.graphics.RectF
 import com.patrykandpatrick.vico.core.cartesian.CartesianDrawingContext
 import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
+import com.patrykandpatrick.vico.core.cartesian.marker.LineCartesianLayerMarkerTarget
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 
@@ -14,8 +15,11 @@ class ParameterGraphVerticalLineMarkerVico2(
     override fun drawOverLayers(context: CartesianDrawingContext, targets: List<CartesianMarker.Target>) {
         super.drawOverLayers(context, targets)
 
-        val firstTarget = targets.firstOrNull() ?: return
-        val targetX = firstTarget.x
+        val firstTarget = targets.firstOrNull() as? LineCartesianLayerMarkerTarget ?: return
+
+        firstTarget.points.forEachIndexed { index, point ->
+            val unit = context.model.models[index].extraStore.getOrNull(UnitKey)
+        }
 
         // Find all entries across all producers with the same x.
         val allEntriesAtMarker: List<DateTimeFloatEntry> = allProducers.values
