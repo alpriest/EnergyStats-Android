@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.RectF
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import com.alpriest.energystats.models.Variable
 import com.patrykandpatrick.vico.core.cartesian.CartesianDrawingContext
 import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModel
@@ -13,29 +14,19 @@ import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerMargins
 import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
 import com.patrykandpatrick.vico.core.cartesian.marker.LineCartesianLayerMarkerTarget
 import com.patrykandpatrick.vico.core.common.Fill
+import com.patrykandpatrick.vico.core.common.Insets
 import com.patrykandpatrick.vico.core.common.Position
 import com.patrykandpatrick.vico.core.common.component.LineComponent
 import com.patrykandpatrick.vico.core.common.component.ShapeComponent
 import com.patrykandpatrick.vico.core.common.component.TextComponent
-import com.patrykandpatrick.vico.core.common.orZero
-import com.patrykandpatrick.vico.core.common.shape.MarkerCorneredShape
 import com.patrykandpatrick.vico1.core.extension.averageOf
-import com.patrykandpatrick.vico1.core.extension.copyColor
-import com.patrykandpatrick.vico1.core.extension.doubled
 import java.text.DecimalFormat
-import kotlin.math.ceil
-import kotlin.math.min
 
 open class MyCartesianMarker(
     protected val label: TextComponent,
     protected val valueFormatter: ValueFormatter = ValueFormatter.default(),
     protected val guideline: LineComponent? = null,
 ) : CartesianMarker {
-
-    protected val markerCorneredShape: MarkerCorneredShape? =
-        (label.background as? ShapeComponent)?.shape as? MarkerCorneredShape
-
-    protected val tickSizeDp: Float = markerCorneredShape?.tickSizeDp.orZero
 
     override fun drawOverLayers(
         context: CartesianDrawingContext,
@@ -54,27 +45,28 @@ open class MyCartesianMarker(
         with(context) {
             val label = TextComponent(
                 lineCount = 4,
-                background = ShapeComponent(Fill(Color.BLACK.copyColor(alpha = 0.05f)))
+                padding = Insets(horizontalDp = 4.0f, verticalDp = 2.0f),
+                background = ShapeComponent(
+                    Fill(Color.WHITE),
+                    strokeFill = Fill(Color.BLACK),
+                    strokeThicknessDp = 1.0f
+                )
             )
             val text = valueFormatter.format(context, targets)
             val targetX = targets.averageOf { it.canvasX }
             val labelBounds = label.getBounds(context, text, layerBounds.width().toInt())
             val textWidth = labelBounds.width()
             val x = overrideXPositionToFit(targetX, layerBounds, textWidth)
-            markerCorneredShape?.tickX = targetX
 
-            val tickPosition: MarkerCorneredShape.TickPosition = MarkerCorneredShape.TickPosition.Bottom
-            val y: Float = context.layerBounds.top - tickSizeDp.pixels
-
-            markerCorneredShape?.tickPosition = tickPosition
+            val y: Float = context.layerBounds.top
 
             label.draw(
                 context = context,
                 text = text,
                 x = x,
                 y = y,
+                horizontalPosition = Position.Horizontal.Start,
                 verticalPosition = Position.Vertical.Bottom,
-                maxWidth = ceil(min(layerBounds.right - x, x - layerBounds.left).doubled).toInt(),
             )
         }
 
@@ -84,9 +76,9 @@ open class MyCartesianMarker(
         textWidth: Float,
     ): Float =
         when {
-            xPosition - textWidth < bounds.left -> bounds.left + textWidth
-            xPosition + textWidth > bounds.right -> bounds.right - textWidth
-            else -> xPosition
+            xPosition - textWidth < bounds.left -> xPosition + textWidth
+            xPosition + textWidth > bounds.right -> xPosition
+            else -> xPosition + textWidth
         }
 
     protected fun CartesianDrawingContext.drawGuideline(targets: List<CartesianMarker.Target>) {
@@ -132,21 +124,22 @@ open class MyCartesianMarker(
             fun default(
                 decimalFormat: DecimalFormat = DecimalFormat("#.##;−#.##"),
                 colorCode: Boolean = true,
-            ): ValueFormatter = DefaultValueFormatter(decimalFormat, colorCode)
+            ): ValueFormatter = MyCartesianMarkerValueFormatter(decimalFormat, colorCode)
         }
     }
 }
 
-internal class DefaultValueFormatter(
+internal class MyCartesianMarkerValueFormatter(
     private val decimalFormat: DecimalFormat,
     private val colorCode: Boolean,
 ) : MyCartesianMarker.ValueFormatter {
-    private fun SpannableStringBuilder.append(target: CartesianMarker.Target, unit: String?) {
+    private fun SpannableStringBuilder.append(target: CartesianMarker.Target, variable: Variable?) {
         val lineTarget = target as? LineCartesianLayerMarkerTarget ?: return
 
         lineTarget.points.forEachIndexed { index, point ->
+            append(variable?.name)
             append(decimalFormat.format(point.entry.y))
-            append(unit)
+            append(variable?.unit)
             if (index != target.points.lastIndex) append("\n")
         }
     }
@@ -157,15 +150,15 @@ internal class DefaultValueFormatter(
     ): CharSequence =
         SpannableStringBuilder().apply {
             targets.forEachIndexed { index, target ->
-                val unit = context.model.models[index].extraStore.getOrNull(UnitKey)
-                append(target, unit)
+                val variable = context.model.models[index].extraStore.getOrNull(VariableKey)
+                append(target, variable)
                 if (index != targets.lastIndex) append(", ")
             }
         }
 
     override fun equals(other: Any?): Boolean =
         this === other ||
-                other is DefaultValueFormatter &&
+                other is MyCartesianMarkerValueFormatter &&
                 decimalFormat == other.decimalFormat &&
                 colorCode == other.colorCode
 

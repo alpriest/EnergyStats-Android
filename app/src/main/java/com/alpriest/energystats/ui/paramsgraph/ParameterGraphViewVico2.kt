@@ -1,5 +1,7 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import ParameterGraphVerticalLineMarkerModel
+import android.graphics.Color.RED
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,11 +62,6 @@ fun ParameterGraphViewVico2(
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
     val range = max - min
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatterVico2(range) else CartesianValueFormatter.decimal(DecimalFormat("#.#"))
-    val marker = ParameterGraphVerticalLineMarkerVico2(
-        viewData.producers,
-        viewModel.valuesAtTimeStream,
-        viewModel.lastMarkerModelStream
-    )
     val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
     val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
     val startOfDay = displayMode.date.atStartOfDay().atZone(ZoneId.systemDefault()).toEpochSecond()
@@ -80,7 +77,6 @@ fun ParameterGraphViewVico2(
                 chartColors,
                 themeStream,
                 endAxisFormatter,
-                marker,
                 lastMarkerModel,
                 CartesianLayerRangeProvider.fixed(
                     minX = startOfDay.toDouble(),
@@ -97,7 +93,6 @@ fun ParameterGraphViewVico2(
                 chartColors,
                 themeStream,
                 endAxisFormatter,
-                marker,
                 lastMarkerModel,
                 CartesianLayerRangeProvider.fixed(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
@@ -112,7 +107,6 @@ fun ParameterGraphViewVico2(
                 chartColors,
                 themeStream,
                 endAxisFormatter,
-                marker,
                 lastMarkerModel,
                 CartesianLayerRangeProvider.fixed(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
@@ -131,7 +125,6 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
     chartColors: List<Color>,
     themeStream: MutableStateFlow<AppTheme>,
     endAxisFormatter: CartesianValueFormatter,
-    marker: ParameterGraphVerticalLineMarkerVico2,
     lastMarkerModel: ParameterGraphVerticalLineMarkerModel?,
     rangeProvider: CartesianLayerRangeProvider
 ) {
@@ -180,7 +173,7 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
                     marker = remember {
                         MyCartesianMarker(
                             TextComponent(),
-                            guideline = LineComponent(Fill.Black)
+                            guideline = LineComponent(Fill(color = RED))
                         )
                     }
                 ),
@@ -190,10 +183,6 @@ private fun ParameterGraphViewWithCustomMarkerVico2(
                 animateIn = false,
                 animationSpec = null
             )
-
-            lastMarkerModel?.let {
-                ParameterValuesPopupVico2(valuesAtTimeStream, it, themeStream)
-            }
         }
     }
 }
@@ -212,7 +201,7 @@ private val BottomAxisValueFormatter =
 
 private class ParameterGraphEndAxisValueFormatterVico2(private val range: Float) : CartesianValueFormatter {
     override fun format(context: CartesianMeasuringContext, value: Double, verticalAxisPosition: Axis.Position.Vertical?): CharSequence {
-        val unit = context.model.extraStore.getOrNull(UnitKey)
+        val unit = context.model.extraStore.getOrNull(VariableKey)?.unit
 
         return if (unit == "%") {
             String.format(Locale.getDefault(), "%d %s", value.toInt(), "%")

@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
@@ -85,7 +86,7 @@ fun SingleParameterGraphVico2(
     )
 }
 
-val UnitKey = ExtraStore.Key<String>()
+val VariableKey = ExtraStore.Key<Variable>()
 
 @Composable
 private fun LoadStateParameterGraphVico2(
@@ -106,7 +107,7 @@ private fun LoadStateParameterGraphVico2(
         modelProducer.runTransaction {
             extras { extraStore ->
                 data.first().firstOrNull()?.let {
-                    extraStore[UnitKey] = it.type.unit
+                    extraStore[VariableKey] = it.type
                 }
             }
 

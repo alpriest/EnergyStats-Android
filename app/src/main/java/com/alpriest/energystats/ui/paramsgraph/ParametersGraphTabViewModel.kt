@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import ParameterGraphVerticalLineMarkerModel
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
