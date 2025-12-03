@@ -18,6 +18,7 @@ import com.patrykandpatrick.vico.core.common.component.LineComponent
 import com.patrykandpatrick.vico.core.common.component.ShapeComponent
 import com.patrykandpatrick.vico.core.common.component.TextComponent
 import com.patrykandpatrick.vico1.core.extension.averageOf
+import com.patrykandpatrick.vico1.core.extension.copyColor
 import java.text.DecimalFormat
 
 open class MyCartesianMarker(
@@ -70,9 +71,9 @@ open class MyCartesianMarker(
 
             val backgroundWidth = typeMaxWidth + labelToValueSpacing + valueMaxWidth + (2 * backgroundPadding)
             val backgroundShape = ShapeComponent(
-                Fill(Color.WHITE),
+                Fill(Color.WHITE.copyColor(alpha = 0.6f)),
                 strokeFill = Fill(Color.BLACK),
-                strokeThicknessDp = 1.0f
+                strokeThicknessDp = 0.5f
             )
 
             val typeLabel = TextComponent(
@@ -94,15 +95,15 @@ open class MyCartesianMarker(
                 x,
                 y,
                 x + backgroundWidth,
-                y + labelBounds.height()
+                y + labelBounds.height() + ( 2 * backgroundPadding)
             )
 
             // Draw types
             typeLabel.draw(
                 context = context,
                 text = typeText,
-                x = x,
-                y = y,
+                x = x + backgroundPadding,
+                y = y + backgroundPadding,
                 horizontalPosition = Position.Horizontal.End,
                 verticalPosition = Position.Vertical.Bottom,
             )
@@ -111,8 +112,8 @@ open class MyCartesianMarker(
             valueLabel.draw(
                 context = context,
                 text = valueText,
-                x = x + typeMaxWidth,
-                y = y,
+                x = x + backgroundPadding + labelToValueSpacing + typeMaxWidth,
+                y = y + backgroundPadding,
                 horizontalPosition = Position.Horizontal.End,
                 verticalPosition = Position.Vertical.Bottom,
             )

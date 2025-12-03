@@ -110,6 +110,7 @@ private fun LoadStateParameterGraphVico2(
                 extraStore[VariablesKey] = data.map {
                     it.first().type
                 }
+                extraStore[VariableKey] = data.first().first().type
             }
 
             lineSeries {
