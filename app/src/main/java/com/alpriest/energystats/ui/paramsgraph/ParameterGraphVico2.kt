@@ -87,6 +87,7 @@ fun SingleParameterGraphVico2(
 }
 
 val VariableKey = ExtraStore.Key<Variable>()
+val VariablesKey = ExtraStore.Key<List<Variable>>()
 
 @Composable
 private fun LoadStateParameterGraphVico2(
@@ -106,8 +107,8 @@ private fun LoadStateParameterGraphVico2(
     LaunchedEffect(data) {
         modelProducer.runTransaction {
             extras { extraStore ->
-                data.first().firstOrNull()?.let {
-                    extraStore[VariableKey] = it.type
+                extraStore[VariablesKey] = data.map {
+                    it.first().type
                 }
             }
 

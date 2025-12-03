@@ -8,13 +8,11 @@ import com.alpriest.energystats.models.Variable
 import com.patrykandpatrick.vico.core.cartesian.CartesianDrawingContext
 import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModel
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianLayerModel
 import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerDimensions
 import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerMargins
 import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
 import com.patrykandpatrick.vico.core.cartesian.marker.LineCartesianLayerMarkerTarget
 import com.patrykandpatrick.vico.core.common.Fill
-import com.patrykandpatrick.vico.core.common.Insets
 import com.patrykandpatrick.vico.core.common.Position
 import com.patrykandpatrick.vico.core.common.component.LineComponent
 import com.patrykandpatrick.vico.core.common.component.ShapeComponent
@@ -27,7 +25,6 @@ open class MyCartesianMarker(
     protected val valueFormatter: ValueFormatter = ValueFormatter.default(),
     protected val guideline: LineComponent? = null,
 ) : CartesianMarker {
-
     override fun drawOverLayers(
         context: CartesianDrawingContext,
         targets: List<CartesianMarker.Target>,
@@ -41,44 +38,96 @@ open class MyCartesianMarker(
     protected fun drawLabel(
         context: CartesianDrawingContext,
         targets: List<CartesianMarker.Target>,
-    ): Unit =
+    ): Unit {
+        val labelToValueSpacing = 10f
+        val backgroundPadding = 10f
+        val decimalFormat = DecimalFormat("#.##;−#.##")
+        val variables = context.model.extraStore[VariablesKey]
+
         with(context) {
-            val label = TextComponent(
-                lineCount = 4,
-                padding = Insets(horizontalDp = 4.0f, verticalDp = 2.0f),
-                background = ShapeComponent(
-                    Fill(Color.WHITE),
-                    strokeFill = Fill(Color.BLACK),
-                    strokeThicknessDp = 1.0f
-                )
+            val lineTargets = targets.mapNotNull { it as? LineCartesianLayerMarkerTarget }
+            var typeText = ""
+            val typeMaxWidth = lineTargets
+                .flatMap { it.points }
+                .mapIndexed { index, point ->
+                    val text = variables.getOrNull(index)?.name
+                    typeText = typeText + text
+                    if (index != variables.count()) {
+                        typeText += "\n"
+                    }
+                    label.getBounds(context, text)
+                }.maxOf { it.width() }
+
+            var valueText = ""
+            val valueMaxWidth = lineTargets.flatMap { it.points }.mapIndexed { index, point ->
+                val text = decimalFormat.format(point.entry.y)
+                valueText = valueText + text
+                if (index != variables.count()) {
+                    valueText += "\n"
+                }
+                label.getBounds(context, text)
+            }.maxOf { it.width() }
+
+            val backgroundWidth = typeMaxWidth + labelToValueSpacing + valueMaxWidth + (2 * backgroundPadding)
+            val backgroundShape = ShapeComponent(
+                Fill(Color.WHITE),
+                strokeFill = Fill(Color.BLACK),
+                strokeThicknessDp = 1.0f
+            )
+
+            val typeLabel = TextComponent(
+                lineCount = variables.count()
+            )
+            val valueLabel = TextComponent(
+                lineCount = variables.count()
             )
             val text = valueFormatter.format(context, targets)
             val targetX = targets.averageOf { it.canvasX }
-            val labelBounds = label.getBounds(context, text, layerBounds.width().toInt())
+            val labelBounds = typeLabel.getBounds(context, text, layerBounds.width().toInt())
             val textWidth = labelBounds.width()
-            val x = overrideXPositionToFit(targetX, layerBounds, textWidth)
-
+            val margin = 10.0f
+            val x = overrideXPositionToFit(targetX, layerBounds, textWidth, margin)
             val y: Float = context.layerBounds.top
 
-            label.draw(
+            backgroundShape.draw(
+                context,
+                x,
+                y,
+                x + backgroundWidth,
+                y + labelBounds.height()
+            )
+
+            // Draw types
+            typeLabel.draw(
                 context = context,
-                text = text,
+                text = typeText,
                 x = x,
                 y = y,
-                horizontalPosition = Position.Horizontal.Start,
+                horizontalPosition = Position.Horizontal.End,
+                verticalPosition = Position.Vertical.Bottom,
+            )
+
+            // Draw values
+            valueLabel.draw(
+                context = context,
+                text = valueText,
+                x = x + typeMaxWidth,
+                y = y,
+                horizontalPosition = Position.Horizontal.End,
                 verticalPosition = Position.Vertical.Bottom,
             )
         }
+    }
 
     protected fun overrideXPositionToFit(
         xPosition: Float,
         bounds: RectF,
         textWidth: Float,
+        margin: Float,
     ): Float =
         when {
-            xPosition - textWidth < bounds.left -> xPosition + textWidth
-            xPosition + textWidth > bounds.right -> xPosition
-            else -> xPosition + textWidth
+            xPosition + textWidth > bounds.right -> xPosition - margin - textWidth
+            else -> xPosition + margin
         }
 
     protected fun CartesianDrawingContext.drawGuideline(targets: List<CartesianMarker.Target>) {
@@ -116,11 +165,6 @@ open class MyCartesianMarker(
 
         /** Houses a [ValueFormatter] factory function. */
         companion object {
-            /**
-             * Creates an instance of the default [ValueFormatter] implementation. The labels produced
-             * include the [CartesianLayerModel.Entry] _y_ values, which are formatted via [decimalFormat]
-             * and, if [colorCode] is true, color-coded.
-             */
             fun default(
                 decimalFormat: DecimalFormat = DecimalFormat("#.##;−#.##"),
                 colorCode: Boolean = true,
@@ -133,13 +177,13 @@ internal class MyCartesianMarkerValueFormatter(
     private val decimalFormat: DecimalFormat,
     private val colorCode: Boolean,
 ) : MyCartesianMarker.ValueFormatter {
-    private fun SpannableStringBuilder.append(target: CartesianMarker.Target, variable: Variable?) {
+    private fun SpannableStringBuilder.append(target: CartesianMarker.Target, variables: List<Variable>?) {
         val lineTarget = target as? LineCartesianLayerMarkerTarget ?: return
 
         lineTarget.points.forEachIndexed { index, point ->
-            append(variable?.name)
+            append(variables?.getOrNull(index)?.name)
             append(decimalFormat.format(point.entry.y))
-            append(variable?.unit)
+            append(variables?.getOrNull(index)?.unit)
             if (index != target.points.lastIndex) append("\n")
         }
     }
@@ -147,14 +191,16 @@ internal class MyCartesianMarkerValueFormatter(
     override fun format(
         context: CartesianDrawingContext,
         targets: List<CartesianMarker.Target>,
-    ): CharSequence =
-        SpannableStringBuilder().apply {
+    ): CharSequence {
+        val variables = context.model.extraStore.getOrNull(VariablesKey)
+
+        return SpannableStringBuilder().apply {
             targets.forEachIndexed { index, target ->
-                val variable = context.model.models[index].extraStore.getOrNull(VariableKey)
-                append(target, variable)
+                append(target, variables)
                 if (index != targets.lastIndex) append(", ")
             }
         }
+    }
 
     override fun equals(other: Any?): Boolean =
         this === other ||
