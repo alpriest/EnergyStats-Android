@@ -562,3 +562,10 @@ enum class ReportType {
     month,
     year,
 }
+
+class StatsChartEntry(
+    val periodDescription: String,
+    val x: Float,
+    val y: Float,
+    val type: ReportVariable
+)

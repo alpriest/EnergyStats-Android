@@ -56,18 +56,27 @@ import java.time.format.FormatStyle
 import java.util.Calendar
 import java.util.Locale
 
-class StatsChartEntry(
+class StatsChartEntryVico1(
     val periodDescription: String,
     override val x: Float,
     override val y: Float,
     val type: ReportVariable
 ) : ChartEntry {
-    override fun withY(y: Float): ChartEntry = StatsChartEntry(
+    override fun withY(y: Float): ChartEntry = StatsChartEntryVico1(
         periodDescription = periodDescription,
         x = x,
         y = y,
         type = type
     )
+
+    companion object {
+        fun fromStatsChartEntry(entry: StatsChartEntry) = StatsChartEntryVico1(
+            periodDescription = entry.periodDescription,
+            x = entry.x,
+            y = entry.y,
+            type = entry.type
+        )
+    }
 }
 
 @Composable
@@ -76,10 +85,14 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val themeStream = viewModel.themeStream
     val chartColors = viewModel.chartColorsStream.collectAsStateWithLifecycle().value.map { it.colour(themeStream) }
     val viewData = viewModel.viewDataStateFlow.collectAsStateWithLifecycle().value
-    val selfSufficiencyGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.selfSufficiency).getModel()
-    val inverterConsumptionData: ChartEntryModel? = ChartEntryModelProducer(viewData.inverterUsage).getModel()
-    val statsGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.stats).getModel()
-    val batterySOCData: ChartEntryModel? = ChartEntryModelProducer(viewData.batterySOC).getModel()
+    val selfSufficiencyGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.selfSufficiency.map { StatsChartEntryVico1.fromStatsChartEntry(it) }).getModel()
+    val inverterConsumptionData: ChartEntryModel? = ChartEntryModelProducer(viewData.inverterUsage.map { StatsChartEntryVico1.fromStatsChartEntry(it) }).getModel()
+    val batterySOCData: ChartEntryModel? = ChartEntryModelProducer(viewData.batterySOC.map { StatsChartEntryVico1.fromStatsChartEntry(it) }).getModel()
+    val statsGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.stats.map { list ->
+        list.map {
+            StatsChartEntryVico1.fromStatsChartEntry(it)
+        }
+    }).getModel()
     val context = LocalContext.current
 
     if (statsGraphData == null && inverterConsumptionData == null && selfSufficiencyGraphData == null) {
