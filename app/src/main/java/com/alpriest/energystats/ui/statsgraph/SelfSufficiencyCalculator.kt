@@ -57,7 +57,7 @@ class AbsoluteSelfSufficiencyCalculator {
     }
 }
 
-fun Double.roundTo(decimalPlaces: Int): Double {
+private fun Double.roundTo(decimalPlaces: Int): Double {
     val factor = 10.0.pow(decimalPlaces.toDouble())
     return (this * factor).roundToInt() / factor
 }

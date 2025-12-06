@@ -13,5 +13,3 @@ data class LastLoadState<T>(
     val lastLoadTime: LocalDateTime,
     val loadState: T
 )
-
-data class AxisScale(val min: Float?, val max: Float?)

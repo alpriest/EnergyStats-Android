@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.statsgraph
+package com.alpriest.energystats.ui.helpers
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -20,16 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.settings.SlimButton
 import com.alpriest.energystats.ui.theme.Typography
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 @Composable
-fun MonthPicker(month: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
+fun YearPicker(year: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
-    val calendar = Calendar.getInstance()
-    calendar.set(Calendar.DAY_OF_MONTH, 1)
-    val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
     Box(
         modifier = Modifier.Companion
@@ -40,25 +36,22 @@ fun MonthPicker(month: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
             enabled = enabled,
             onClick = { showing = true }
         ) {
-            calendar.set(Calendar.MONTH, month)
-            Text(monthFormat.format(calendar.time), style = Typography.headlineMedium)
+            Text(year.toString(), style = Typography.headlineMedium)
         }
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
-            for (monthIndex in 0 until 12) {
-                calendar.set(Calendar.MONTH, monthIndex)
-                val monthName = monthFormat.format(calendar.time)
+            for (yearIndex in 2021..currentYear) {
                 DropdownMenuItem(onClick = {
-                    onClick(monthIndex)
+                    onClick(yearIndex)
                     showing = false
                 }, text = {
-                    Text(monthName)
+                    Text(yearIndex.toString())
                 }, trailingIcon = {
-                    if (monthIndex == month) {
+                    if (yearIndex == year) {
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                     }
                 })
-                if (monthIndex < 11) {
+                if (yearIndex < currentYear) {
                     HorizontalDivider()
                 }
             }

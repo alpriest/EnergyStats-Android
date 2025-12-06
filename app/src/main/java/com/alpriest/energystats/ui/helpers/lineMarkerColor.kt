@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.paramsgraph
+package com.alpriest.energystats.ui.helpers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

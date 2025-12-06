@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,10 +21,9 @@ import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.statsgraph.MonthPicker
-import com.alpriest.energystats.ui.statsgraph.YearPicker
+import com.alpriest.energystats.ui.helpers.MonthPicker
+import com.alpriest.energystats.ui.helpers.YearPicker
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import java.time.LocalDate
 
 sealed class SummaryDateRange {
     object Automatic : SummaryDateRange()

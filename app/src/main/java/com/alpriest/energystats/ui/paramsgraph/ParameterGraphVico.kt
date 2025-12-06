@@ -24,6 +24,8 @@ import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.data.ExtraStore
 import kotlinx.coroutines.flow.MutableStateFlow
 
+data class AxisScale(val min: Float?, val max: Float?)
+
 @Composable
 fun MultipleParameterGraphVico(
     viewModel: ParametersGraphTabViewModel,

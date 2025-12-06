@@ -1,16 +1,12 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import android.widget.CalendarView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.BarChart
@@ -33,25 +29,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.ui.settings.SlimButton
+import com.alpriest.energystats.ui.helpers.MonthPicker
+import com.alpriest.energystats.ui.helpers.YearPicker
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.Typography
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-import java.util.Calendar
 
 sealed class DatePickerRange {
     object DAY : DatePickerRange()
@@ -90,7 +79,7 @@ class StatsDatePickerView(private val displayModeStream: MutableStateFlow<StatsD
             DateRangePicker(viewModel, range, graphShowingState)
 
             when (range) {
-                is DatePickerRange.DAY -> CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
+                is DatePickerRange.DAY -> com.alpriest.energystats.ui.helpers.CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
                 is DatePickerRange.MONTH -> {
                     MonthPicker(month) { viewModel.monthStream.value = it }
                     YearPicker(year) { viewModel.yearStream.value = it }
@@ -132,43 +121,6 @@ class StatsDatePickerView(private val displayModeStream: MutableStateFlow<StatsD
                         contentDescription = "Right",
                         modifier = Modifier.size(32.dp)
                     )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun YearPicker(year: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
-    var showing by remember { mutableStateOf(false) }
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-
-    Box(
-        modifier = Modifier
-            .wrapContentSize(Alignment.TopStart)
-            .padding(end = 14.dp)
-    ) {
-        SlimButton(
-            enabled = enabled,
-            onClick = { showing = true }
-        ) {
-            Text(year.toString(), style = Typography.headlineMedium)
-        }
-
-        DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
-            for (yearIndex in 2021..currentYear) {
-                DropdownMenuItem(onClick = {
-                    onClick(yearIndex)
-                    showing = false
-                }, text = {
-                    Text(yearIndex.toString())
-                }, trailingIcon = {
-                    if (yearIndex == year) {
-                        Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
-                    }
-                })
-                if (yearIndex < currentYear) {
-                    HorizontalDivider()
                 }
             }
         }
@@ -265,79 +217,19 @@ private fun DateRangePicker(
 }
 
 @Composable
-fun CustomRangePicker(viewModel: StatsDatePickerViewModel) {
+private fun CustomRangePicker(viewModel: StatsDatePickerViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CalendarView(viewModel.customStartDate, style = Typography.bodyMedium)
+        com.alpriest.energystats.ui.helpers.CalendarView(viewModel.customStartDate, style = Typography.bodyMedium)
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
             modifier = Modifier.padding(end = 14.dp),
             tint = Color.White
         )
-        CalendarView(viewModel.customEndDate, style = Typography.bodyMedium)
+        com.alpriest.energystats.ui.helpers.CalendarView(viewModel.customEndDate, style = Typography.bodyMedium)
     }
-}
-
-@Composable
-fun CalendarView(dateStream: MutableStateFlow<LocalDate>, style: TextStyle) {
-    var showingDatePicker by remember { mutableStateOf(false) }
-
-    val dateState = dateStream.collectAsState().value
-    val millis = localDateToMillis(dateState)
-
-    Box(
-        modifier = Modifier
-            .wrapContentSize(Alignment.BottomCenter)
-            .padding(end = 14.dp)
-    ) {
-        SlimButton(
-            onClick = { showingDatePicker = true }
-        ) {
-            Text(
-                dateState.toString(),
-                style = style
-            )
-        }
-        if (showingDatePicker) {
-            Dialog(
-                onDismissRequest = { showingDatePicker = false },
-            ) {
-                Column(
-                    modifier = Modifier
-                        .background(Color.White)
-                ) {
-                    AndroidView(
-                        { CalendarView(it) },
-                        modifier = Modifier.wrapContentWidth(),
-                        update = { views ->
-                            views.date = millis
-                            views.setOnDateChangeListener { _, year, month, dayOfMonth ->
-                                val cal = Calendar.getInstance()
-                                cal.set(year, month, dayOfMonth)
-                                dateStream.value = millisToLocalDate(cal.timeInMillis)
-                                showingDatePicker = false
-                            }
-                        }
-                    )
-                }
-            }
-        }
-    }
-}
-
-fun localDateToMillis(localDate: LocalDate): Long {
-    val localDateTime = LocalDateTime.of(localDate, LocalTime.MIDNIGHT)
-    val zoneId = ZoneId.systemDefault()
-    return localDateTime.atZone(zoneId).toInstant().toEpochMilli()
-}
-
-fun millisToLocalDate(millis: Long): LocalDate {
-    val instant = Instant.ofEpochMilli(millis)
-    val zoneId = ZoneId.systemDefault()
-    val localDateTime = LocalDateTime.ofInstant(instant, zoneId)
-    return localDateTime.toLocalDate()
 }
 
 @Preview(widthDp = 500, heightDp = 500)

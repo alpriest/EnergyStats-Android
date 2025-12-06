@@ -14,6 +14,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.helpers.lineMarkerColor
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
