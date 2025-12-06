@@ -25,24 +25,30 @@ import com.patrykandpatrick.vico.core.common.data.ExtraStore
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun MultipleParameterGraphVico2(
+fun MultipleParameterGraphVico(
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     userManager: UserManaging,
     producerAxisScalePairs: State<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>>
 ) {
     val allChartColors = viewModel.chartColorsStream.collectAsState().value
+    val valuesAtTimeState = viewModel.valuesAtTimeStream.collectAsState().value
 
     producerAxisScalePairs.value.forEach { (unit, producerAxisScale) ->
         allChartColors[unit]?.let { colors ->
-            LoadStateParameterGraphVico2(
+            val valuesForThisUnit: List<DateTimeFloatEntry> = remember(unit, valuesAtTimeState) {
+                valuesAtTimeState.filter { it.key.unit == unit }.values.flatten()
+            }
+
+            LoadStateParameterGraphVico(
                 data = producerAxisScale.first,
                 colors,
                 yAxisScale = producerAxisScale.second,
                 viewModel = viewModel,
                 themeStream = themeStream,
                 showYAxisUnit = true,
-                userManager = userManager
+                userManager = userManager,
+                valuesAtTimeStream = valuesForThisUnit
             )
 
             ParameterGraphVariableTogglesView(
@@ -56,13 +62,17 @@ fun MultipleParameterGraphVico2(
 }
 
 @Composable
-fun SingleParameterGraphVico2(
+fun SingleParameterGraphVico(
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     userManager: UserManaging,
     producerAxisScalePairs: State<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>>
 ) {
     val chartColors = viewModel.viewDataState.collectAsState().value.colors.values.flatten()
+    val valuesAtTimeState = viewModel.valuesAtTimeStream.collectAsState().value
+    val valuesForThisUnit: List<DateTimeFloatEntry> = remember(valuesAtTimeState) {
+        valuesAtTimeState.values.flatten()
+    }
 
     val allData = remember(producerAxisScalePairs.value) {
         producerAxisScalePairs.value.values.flatMap { it.first }
@@ -75,29 +85,33 @@ fun SingleParameterGraphVico2(
         )
     }
 
-    LoadStateParameterGraphVico2(
+    LoadStateParameterGraphVico(
         data = allData,
         chartColors,
         yAxisScale = yAxisScale,
         viewModel = viewModel,
         themeStream = themeStream,
         showYAxisUnit = false,
-        userManager = userManager
+        userManager = userManager,
+        valuesForThisUnit
     )
+
+    ParameterGraphVariableTogglesView(viewModel = viewModel, null, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
 }
 
 val VariableKey = ExtraStore.Key<Variable>()
 val VariablesKey = ExtraStore.Key<List<Variable>>()
 
 @Composable
-private fun LoadStateParameterGraphVico2(
+private fun LoadStateParameterGraphVico(
     data: List<List<DateTimeFloatEntry>>,
     chartColors: List<Color>,
     yAxisScale: AxisScale,
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     showYAxisUnit: Boolean,
-    userManager: UserManaging
+    userManager: UserManaging,
+    valuesAtTimeStream: List<DateTimeFloatEntry>
 ) {
     val loadState = viewModel.uiState.collectAsState().value.state
     val modelProducer = remember {
@@ -125,14 +139,15 @@ private fun LoadStateParameterGraphVico2(
     }
 
     Box(contentAlignment = Alignment.Center) {
-        ParameterGraphViewVico2(
+        ParameterGraphViewVico(
             modelProducer,
             chartColors,
             yAxisScale,
             viewModel = viewModel,
             themeStream = themeStream,
             showYAxisUnit = showYAxisUnit,
-            userManager = userManager
+            userManager = userManager,
+            valuesAtTimeStream
         )
 
         when (loadState) {

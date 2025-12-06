@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.paramsgraph
 
-import ParameterGraphVerticalLineMarkerModel
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -72,13 +71,14 @@ class ParametersGraphTabViewModel(
     private var rawData: List<ParametersGraphValue> = listOf()
     var queryDate = QueryDate()
     var hours: Int = 24
-    var valuesAtTimeStream = MutableStateFlow<List<DateTimeFloatEntry>>(listOf())
+    private var _valuesAtTimeStream = MutableStateFlow<Map<Variable, List<DateTimeFloatEntry>>>(mapOf())
+    var valuesAtTimeStream: StateFlow<Map<Variable, List<DateTimeFloatEntry>>> = _valuesAtTimeStream
+    var selectedValueStream = MutableStateFlow<ParameterGraphVerticalLineMarkerModel?>(null)
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     private var lastLoadState: LastLoadState<ParametersGraphViewState>? = null
-    var lastMarkerModelStream = MutableStateFlow<ParameterGraphVerticalLineMarkerModel?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -102,6 +102,20 @@ class ParametersGraphTabViewModel(
                         refresh()
                     }
                 }
+        }
+
+        viewModelScope.launch {
+            selectedValueStream.collect { selectedValue ->
+                if (selectedValue == null) {
+                    _valuesAtTimeStream.value = mapOf()
+                } else {
+                    _valuesAtTimeStream.value = entriesStream.value.associate { entryList ->
+                        val variableType = entryList.first().type
+                        val matchingEntries = entryList.filter { it.localDateTime == selectedValue.time }
+                        variableType to matchingEntries
+                    }
+                }
+            }
         }
 
         appLifecycleObserver.attach()
@@ -437,12 +451,12 @@ class DateTimeFloatEntry(
     val y: Float,
     val type: Variable,
 ) {
+    var graphPoint: Long = this.localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
+
     fun formattedValue(decimalPlaces: Int): String {
         return when (type.unit) {
             "kW" -> y.toDouble().kW(decimalPlaces)
             else -> "$y ${type.unit}"
         }
     }
-
-    var graphPoint: Long = this.localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
 }

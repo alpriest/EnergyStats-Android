@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -21,6 +22,21 @@ import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.Instant
+import java.util.Map.entry
+
+data class SelectedValue(
+    val type: Variable,
+    val value: Double,
+    val timestamp: Double
+) {
+    var dateTime: LocalDateTime = LocalDateTime.ofInstant(
+        Instant.ofEpochSecond(timestamp.toLong()),
+        ZoneId.systemDefault()
+    )
+}
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -36,7 +52,11 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
             .filter { it.isSelected }
             .filter { unit == null || it.type.unit == unit }
             .map {
-                val selectedValue = selectedValues.firstOrNull { entry -> entry.type == it.type }
+                val selectedValue = selectedValues
+                    .filter { it.key.unit == unit }
+                    .map { it.value }
+                    .flatten()
+                    .firstOrNull { entry -> entry.type == it.type }
                 val titleType = ValueUsage.SNAPSHOT
 
                 val title = when (it.type.variable) {
@@ -63,7 +83,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
                 } else {
                     val formattedValue = when (it.type.unit) {
                         "kW" -> selectedValue.y.toDouble().kW(appTheme.decimalPlaces)
-                        else -> "${selectedValue.y} ${it.type.unit}"
+                        else -> "${selectedValue.y} ${selectedValue.type.unit}"
                     }
                     ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it, unit) }, title, description, formattedValue, null)
                 }

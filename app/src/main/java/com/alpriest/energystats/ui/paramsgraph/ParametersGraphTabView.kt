@@ -95,7 +95,7 @@ class ParametersGraphTabView(
         val scrollState = rememberScrollState()
         val hasData = viewModel.hasDataStream.collectAsState().value
         val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
-        val selectedDateTime = selectedValues.firstOrNull()?.localDateTime
+        val selectedDateTime = selectedValues.values.firstOrNull()?.firstOrNull()?.localDateTime
         val context = LocalContext.current
         val loadState = viewModel.uiState.collectAsState().value.state
         topBarSettings.value = TopBarSettings(true, null, {
@@ -176,23 +176,20 @@ class ParametersGraphTabView(
                 .padding(vertical = 8.dp)
                 .fillMaxWidth()
         ) {
-            viewModel.lastMarkerModelStream.value?.let {
-                selectedDateTime?.let {
-                    Row(modifier = Modifier.clickable {
-                        viewModel.lastMarkerModelStream.value = null
-                        viewModel.valuesAtTimeStream.value = listOf()
-                    }) {
-                        Text(
-                            text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.padding(end = 6.dp)
-                        )
+            selectedDateTime?.let {
+                Row(modifier = Modifier.clickable {
+                    viewModel.selectedValueStream.value = null
+                }) {
+                    Text(
+                        text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.padding(end = 6.dp)
+                    )
 
-                        Text(
-                            text = stringResource(R.string.clear),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                    Text(
+                        text = stringResource(R.string.clear),
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             } ?: run {
                 Text(
@@ -203,16 +200,14 @@ class ParametersGraphTabView(
         }
 
         if (configManager.separateParameterGraphsByUnit) {
-            MultipleParameterGraphVico2(viewModel, themeStream, userManager, producerAxisScalePairs)
+            MultipleParameterGraphVico(viewModel, themeStream, userManager, producerAxisScalePairs)
         } else {
-            SingleParameterGraphVico2(
+            SingleParameterGraphVico(
                 viewModel,
                 themeStream,
                 userManager,
                 producerAxisScalePairs
             )
-
-            ParameterGraphVariableTogglesView(viewModel = viewModel, null, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
         }
     }
 }
