@@ -1,12 +1,10 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,8 +49,6 @@ import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico1.core.entry.composed.plus
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.Calendar
 import java.util.Locale
 
@@ -80,15 +76,15 @@ class StatsChartEntryVico1(
 }
 
 @Composable
-fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
+fun StatsGraphViewVico1(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsStateWithLifecycle().value
     val themeStream = viewModel.themeStream
-    val chartColors = viewModel.chartColorsStream.collectAsStateWithLifecycle().value.map { it.colour(themeStream) }
     val viewData = viewModel.viewDataStateFlow.collectAsStateWithLifecycle().value
+    val chartColors = viewData.stats.keys.map { it.colour(themeStream) }
     val selfSufficiencyGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.selfSufficiency.map { StatsChartEntryVico1.fromStatsChartEntry(it) }).getModel()
     val inverterConsumptionData: ChartEntryModel? = ChartEntryModelProducer(viewData.inverterUsage.map { StatsChartEntryVico1.fromStatsChartEntry(it) }).getModel()
     val batterySOCData: ChartEntryModel? = ChartEntryModelProducer(viewData.batterySOC.map { StatsChartEntryVico1.fromStatsChartEntry(it) }).getModel()
-    val statsGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.stats.map { list ->
+    val statsGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.stats.values.map { list ->
         list.map {
             StatsChartEntryVico1.fromStatsChartEntry(it)
         }
@@ -103,7 +99,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     } else {
         val normalDataChart = columnChart(
             columns = chartColors.map { lineComponent(color = it) }.toList(),
-            axisValuesOverrider = ZeroValuesAxisOverrider(),
+            axisValuesOverrider = ZeroValuesAxisOverriderVico1(),
             targetVerticalAxisPosition = AxisPosition.Vertical.End
         )
         val selfSufficiencyChart = lineChart(
@@ -156,7 +152,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                             ),
                             bottomAxis = rememberBottomAxis(
                                 itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
-                                valueFormatter = StatsGraphFormatAxisValueFormatter(displayMode),
+                                valueFormatter = StatsGraphFormatAxisValueFormatterVico1(displayMode),
                                 guideline = null
                             ),
                             horizontalLayout = HorizontalLayout.fullWidth(),
@@ -192,53 +188,14 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
 }
 
 @Composable
-fun TimeSelectionText(viewModel: StatsTabViewModel) {
-    val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
-    val selectedDateTime = selectedValues.firstOrNull()?.periodDescription
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .fillMaxWidth()
-
-    ) {
-        viewModel.lastMarkerModelStream.value?.let {
-            selectedDateTime?.let {
-                Row(modifier = Modifier.clickable {
-                    viewModel.lastMarkerModelStream.value = null
-                    viewModel.valuesAtTimeStream.value = listOf()
-                }) {
-                    Text(
-                        text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.padding(end = 6.dp)
-                    )
-
-                    Text(
-                        text = stringResource(R.string.clear),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        } ?: run {
-            Text(
-                stringResource(R.string.touch_the_graph_to_see_values_at_that_time),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-    }
-}
-
-@Composable
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
-    StatsGraphView(
+    StatsGraphViewVico1(
         StatsTabViewModel(FakeConfigManager(), DemoNetworking(), themeStream = MutableStateFlow(AppTheme.demo()), onWriteTempFile = { _, _ -> null })
     )
 }
 
-class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val displayMode: StatsDisplayMode) :
+private class StatsGraphFormatAxisValueFormatterVico1<Position : AxisPosition>(private val displayMode: StatsDisplayMode) :
     AxisValueFormatter<Position> {
 
     override fun formatValue(value: Float, chartValues: ChartValues): CharSequence {
@@ -256,8 +213,8 @@ class StatsGraphFormatAxisValueFormatter<Position : AxisPosition>(private val di
         }
     }
 }
-
-class ZeroValuesAxisOverrider : AxisValuesOverrider<ChartEntryModel> {
-    override fun getMaxY(model: ChartEntryModel) = if (model.maxY != 0f) model.maxY else 1f
-}
+//
+//class ZeroValuesAxisOverriderVico1 : AxisValuesOverrider<ChartEntryModel> {
+//    override fun getMaxY(model: ChartEntryModel) = if (model.maxY != 0f) model.maxY else 1f
+//}
 

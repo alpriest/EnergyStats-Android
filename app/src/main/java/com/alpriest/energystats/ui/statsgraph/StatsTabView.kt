@@ -134,7 +134,7 @@ class StatsTabView(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 if (graphShowing) {
-                    StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
+                    StatsGraphViewVico2(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
                 }
 
                 when (loadState) {

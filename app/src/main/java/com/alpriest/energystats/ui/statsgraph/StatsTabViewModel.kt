@@ -42,7 +42,7 @@ import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
 
 data class StatsGraphViewData(
-    val stats: List<List<StatsChartEntry>>,
+    val stats: Map<ReportVariable, List<StatsChartEntry>>,
     val batterySOC: List<StatsChartEntry>,
     val inverterUsage: List<StatsChartEntry>,
     val selfSufficiency: List<StatsChartEntry>
@@ -54,7 +54,6 @@ class StatsTabViewModel(
     val themeStream: MutableStateFlow<AppTheme>,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
-    var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
     var valuesAtTimeStream = MutableStateFlow<List<StatsChartEntry>>(listOf())
@@ -74,7 +73,7 @@ class StatsTabViewModel(
     private var lastSelectedIndex: Float? = null
     var lastMarkerModelStream = MutableStateFlow<StatsGraphVerticalLineMarkerModel?>(null)
 
-    private val _viewDataStateFlow = MutableStateFlow(StatsGraphViewData(listOf(), listOf(), listOf(), listOf()))
+    private val _viewDataStateFlow = MutableStateFlow(StatsGraphViewData(mapOf(), listOf(), listOf(), listOf()))
     val viewDataStateFlow = _viewDataStateFlow.asStateFlow()
 
     private val appLifecycleObserver = AppLifecycleObserver(
@@ -185,7 +184,7 @@ class StatsTabViewModel(
     }
 
     private fun totalsForInverterConsumption(rawData: List<StatsGraphValue>): MutableMap<ReportVariable, Double> {
-        var result = mutableMapOf<ReportVariable, Double>()
+        val result = mutableMapOf<ReportVariable, Double>()
 
         result[ReportVariable.InverterConsumption] = rawData.sumOf { if (it.type == ReportVariable.InverterConsumption) it.graphValue else 0.0 }
 
@@ -264,24 +263,22 @@ class StatsTabViewModel(
 
     private fun refresh() {
         val hiddenVariables = graphVariablesStream.value.filter { !it.enabled }.map { it.type }
-        val grouped = rawData
+        val statsEntries = rawData
             .filter { it.type != ReportVariable.SelfSufficiency }
             .filter { it.type != ReportVariable.InverterConsumption }
             .filter { it.type != ReportVariable.BatterySOC }
             .filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
-        val statsEntries = grouped
-            .map { group ->
-                group.value.map {
+            .mapValues { (_, values) ->
+                values.map { value ->
                     StatsChartEntry(
-                        periodDescription = it.periodDescription(displayModeStream.value),
-                        x = it.graphPoint.toFloat(),
-                        y = it.graphValue.toFloat(),
-                        type = it.type,
+                        periodDescription = value.periodDescription(displayModeStream.value),
+                        x = value.graphPoint.toFloat(),
+                        y = value.graphValue.toFloat(),
+                        type = value.type,
                     )
-                }.toList()
-            }.toList()
+                }
+            }
 
-        chartColorsStream.value = grouped.keys.toList()
         val now = LocalDateTime.now(ZoneId.systemDefault())
         val displayMode = displayModeStream.value
 
@@ -298,7 +295,7 @@ class StatsTabViewModel(
             selfSufficiency = selfSufficiencyData
         )
 
-        maxIndex = statsEntries.flatten()
+        maxIndex = statsEntries.values.flatten()
             .maxByOrNull { it.y }
             ?.x
 
