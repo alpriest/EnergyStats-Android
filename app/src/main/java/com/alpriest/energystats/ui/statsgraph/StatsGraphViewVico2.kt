@@ -25,6 +25,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
@@ -32,6 +33,7 @@ import com.patrykandpatrick.vico.compose.common.fill
 import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.core.cartesian.axis.Axis
 import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
@@ -40,6 +42,7 @@ import com.patrykandpatrick.vico.core.common.component.LineComponent
 import com.patrykandpatrick.vico1.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico1.core.entry.ChartEntryModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -95,15 +98,9 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
         }
 
         val statsLayer = rememberColumnCartesianLayer(
-            columnProvider = columnProvider,
+            columnProvider = columnProvider
+        )
 
-            )
-
-//        val normalDataChart = columnChart(
-//            columns = chartColors.map { lineComponent(color = it) }.toList(),
-//            axisValuesOverrider = ZeroValuesAxisOverriderVico1(),
-//            targetVerticalAxisPosition = AxisPosition.Vertical.End
-//        )
 //        val selfSufficiencyChart = lineChart(
 //            lines = listOf(
 //                lineSpec(
@@ -146,10 +143,10 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
                 CartesianChartHost(
                     chart = rememberCartesianChart(
                         statsLayer,
-//                        endAxis = VerticalAxis.rememberEnd(
-//                            itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
-//                                valueFormatter = endAxisFormatter
-//                        ),
+                        endAxis = VerticalAxis.rememberEnd(
+                            itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
+                            valueFormatter = remember { CartesianValueFormatter.decimal(DecimalFormat("#.#")) }
+                        ),
                         bottomAxis = HorizontalAxis.rememberBottom(
                             itemPlacer = HorizontalAxis.ItemPlacer.aligned(
                                 spacing = { 4 },
