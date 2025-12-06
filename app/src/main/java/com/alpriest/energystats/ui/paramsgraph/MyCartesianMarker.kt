@@ -9,7 +9,6 @@ import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerDimensions
 import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerMargins
 import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
 import com.patrykandpatrick.vico.core.cartesian.marker.LineCartesianLayerMarkerTarget
-import com.patrykandpatrick.vico1.core.extension.averageOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.Instant
 import java.time.LocalDateTime
@@ -60,3 +59,8 @@ class MyCartesianMarker(
         return label.hashCode()
     }
 }
+
+internal fun <T> Collection<T>.averageOf(selector: (T) -> Float): Float =
+    fold(0f) { sum, element ->
+        sum + selector(element)
+    } / size
