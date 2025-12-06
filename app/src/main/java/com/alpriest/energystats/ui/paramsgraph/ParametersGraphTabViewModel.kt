@@ -65,7 +65,7 @@ class ParametersGraphTabViewModel(
     val hasDataStream = MutableStateFlow(false)
     var chartColorsStream: MutableStateFlow<Map<String, List<Color>>> = MutableStateFlow(mapOf())
     private val _viewDataState = MutableStateFlow(ParametersGraphViewData(mapOf(), mapOf()))
-    val viewDataState: StateFlow<ParametersGraphViewData> = _viewDataState.asStateFlow()
+    val viewDataState = _viewDataState.asStateFlow()
     val producers: MutableStateFlow<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>> = MutableStateFlow(mapOf())
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     private var rawData: List<ParametersGraphValue> = listOf()

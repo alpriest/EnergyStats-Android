@@ -10,7 +10,7 @@ data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val gr
         return when (displayMode) {
             is StatsDisplayMode.Day -> {
                 val time = LocalTime.of(graphPoint, 0) // Assuming graphPoint represents the hour
-                val formatter = DateTimeFormatter.ofPattern("HH:mm") // 24-hour format
+                val formatter = DateTimeFormatter.ofPattern("HH:mm")
                 time.format(formatter)
             }
 

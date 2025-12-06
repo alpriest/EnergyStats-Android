@@ -34,6 +34,7 @@ import com.patrykandpatrick.vico1.core.entry.ChartEntry
 import com.patrykandpatrick.vico1.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.text.DateFormatSymbols
@@ -42,6 +43,12 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
+
+data class StatsGraphViewData(
+    val batterySOC: List<StatsChartEntry>,
+    val inverterUsage: List<StatsChartEntry>,
+    val selfSufficiency: List<StatsChartEntry>
+)
 
 class StatsTabViewModel(
     val configManager: ConfigManaging,
@@ -72,6 +79,9 @@ class StatsTabViewModel(
     private var maxIndex: Float? = null
     private var lastSelectedIndex: Float? = null
     var lastMarkerModelStream = MutableStateFlow<StatsGraphVerticalLineMarkerModel?>(null)
+
+    private val _viewDataState = MutableStateFlow(StatsGraphViewData(listOf(), listOf(), listOf()))
+    val viewDataState = _viewDataState.asStateFlow()
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -279,92 +289,63 @@ class StatsTabViewModel(
 
         chartColorsStream.value = grouped.keys.toList()
         statsGraphDataStream.value = ChartEntryModelProducer(entries).getModel()
-        var now = LocalDateTime.now(ZoneId.systemDefault())
+        val now = LocalDateTime.now(ZoneId.systemDefault())
         val displayMode = displayModeStream.value
 
-        selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(rawData
-            .filter { it.type == ReportVariable.SelfSufficiency }
-            .filter { !hiddenVariables.contains(it.type) }
-            .filter {
-                when (displayMode) {
-                    is StatsDisplayMode.Day -> {
-                        if (displayMode.date == LocalDate.now()) {
-                            it.graphPoint <= now.hour
-                        } else {
-                            true
-                        }
-                    }
-                    is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
-                    is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
-                    else -> true
-                }
-            }
-            .map {
-                StatsChartEntry(
-                    periodDescription = it.periodDescription(displayModeStream.value),
-                    x = it.graphPoint.toFloat(),
-                    y = it.graphValue.toFloat(),
-                    type = it.type
-                )
-            }).getModel()
+        val selfSufficiencyData = rawDataFiltered(ReportVariable.SelfSufficiency, hiddenVariables, displayMode, now)
+        selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(selfSufficiencyData).getModel()
 
-        inverterConsumptionDataStream.value = ChartEntryModelProducer(rawData
-            .filter { it.type == ReportVariable.InverterConsumption }
-            .filter { !hiddenVariables.contains(it.type) }
-            .filter {
-                when (displayMode) {
-                    is StatsDisplayMode.Day -> {
-                        if (displayMode.date == LocalDate.now()) {
-                            it.graphPoint <= now.hour
-                        } else {
-                            true
-                        }
-                    }
-                    is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
-                    is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
-                    else -> true
-                }
-            }
-            .map {
-                StatsChartEntry(
-                    periodDescription = it.periodDescription(displayModeStream.value),
-                    x = it.graphPoint.toFloat(),
-                    y = it.graphValue.toFloat(),
-                    type = it.type
-                )
-            }).getModel()
+        val inverterData = rawDataFiltered(ReportVariable.InverterConsumption, hiddenVariables, displayMode, now)
+        inverterConsumptionDataStream.value = ChartEntryModelProducer(inverterData).getModel()
 
-        batterySOCDataStream.value = ChartEntryModelProducer(rawData
-            .filter { it.type == ReportVariable.BatterySOC }
-            .filter { !hiddenVariables.contains(it.type) }
-            .filter {
-                when (displayMode) {
-                    is StatsDisplayMode.Day -> {
-                        if (displayMode.date == LocalDate.now()) {
-                            it.graphPoint <= now.hour
-                        } else {
-                            true
-                        }
-                    }
-                    is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
-                    is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
-                    else -> true
-                }
-            }
-            .map {
-                StatsChartEntry(
-                    periodDescription = it.periodDescription(displayModeStream.value),
-                    x = it.graphPoint.toFloat(),
-                    y = it.graphValue.toFloat(),
-                    type = it.type
-                )
-            }).getModel()
+        val batteryData = rawDataFiltered(ReportVariable.BatterySOC, hiddenVariables, displayMode, now)
+        batterySOCDataStream.value = ChartEntryModelProducer(batteryData).getModel()
+
+        _viewDataState.value = StatsGraphViewData(
+            batterySOC = batteryData,
+            inverterUsage = inverterData,
+            selfSufficiency = selfSufficiencyData
+        )
 
         maxIndex = entries.flatten()
             .maxByOrNull { it.y }
             ?.x
 
         prepareExport(rawData, displayModeStream.value)
+    }
+
+    private fun rawDataFiltered(
+        type: ReportVariable,
+        hiddenVariables: List<ReportVariable>,
+        displayMode: StatsDisplayMode,
+        now: LocalDateTime
+    ): List<StatsChartEntry> {
+        return rawData
+            .filter { it.type == type }
+            .filter { !hiddenVariables.contains(it.type) }
+            .filter {
+                when (displayMode) {
+                    is StatsDisplayMode.Day -> {
+                        if (displayMode.date == LocalDate.now()) {
+                            it.graphPoint <= now.hour
+                        } else {
+                            true
+                        }
+                    }
+
+                    is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
+                    is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
+                    else -> true
+                }
+            }
+            .map {
+                StatsChartEntry(
+                    periodDescription = it.periodDescription(displayModeStream.value),
+                    x = it.graphPoint.toFloat(),
+                    y = it.graphValue.toFloat(),
+                    type = it.type
+                )
+            }
     }
 
     fun toggleVisibility(statsGraphVariable: StatsGraphVariable) {
@@ -477,7 +458,8 @@ class StatsTabViewModel(
             val solar = valuesAtTime.values.firstOrNull { it.type == ReportVariable.PvEnergyToTal }
 
             if (grid != null && feedIn != null && loads != null && batteryCharge != null && batteryDischarge != null && solar != null) {
-                val inverterConsumption = max((solar.graphValue + grid.graphValue + batteryDischarge.graphValue) - (feedIn.graphValue + batteryCharge.graphValue + loads.graphValue), 0.0)
+                val inverterConsumption =
+                    max((solar.graphValue + grid.graphValue + batteryDischarge.graphValue) - (feedIn.graphValue + batteryCharge.graphValue + loads.graphValue), 0.0)
 
                 entries.add(
                     StatsGraphValue(
