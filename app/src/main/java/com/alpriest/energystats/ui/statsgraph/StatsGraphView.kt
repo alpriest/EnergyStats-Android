@@ -45,7 +45,9 @@ import com.patrykandpatrick.vico1.core.chart.composed.plus
 import com.patrykandpatrick.vico1.core.chart.layout.HorizontalLayout
 import com.patrykandpatrick.vico1.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico1.core.chart.values.ChartValues
+import com.patrykandpatrick.vico1.core.entry.ChartEntry
 import com.patrykandpatrick.vico1.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico1.core.entry.composed.plus
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
@@ -54,15 +56,30 @@ import java.time.format.FormatStyle
 import java.util.Calendar
 import java.util.Locale
 
+class StatsChartEntry(
+    val periodDescription: String,
+    override val x: Float,
+    override val y: Float,
+    val type: ReportVariable
+) : ChartEntry {
+    override fun withY(y: Float): ChartEntry = StatsChartEntry(
+        periodDescription = periodDescription,
+        x = x,
+        y = y,
+        type = type
+    )
+}
+
 @Composable
 fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsStateWithLifecycle().value
     val themeStream = viewModel.themeStream
     val chartColors = viewModel.chartColorsStream.collectAsStateWithLifecycle().value.map { it.colour(themeStream) }
-    val selfSufficiencyGraphData = viewModel.selfSufficiencyGraphDataStream.collectAsStateWithLifecycle().value
-    val inverterConsumptionData = viewModel.inverterConsumptionDataStream.collectAsStateWithLifecycle().value
-    val statsGraphData = viewModel.statsGraphDataStream.collectAsStateWithLifecycle().value
-    val batterySOCData = viewModel.batterySOCDataStream.collectAsStateWithLifecycle().value
+    val viewData = viewModel.viewDataStateFlow.collectAsStateWithLifecycle().value
+    val selfSufficiencyGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.selfSufficiency).getModel()
+    val inverterConsumptionData: ChartEntryModel? = ChartEntryModelProducer(viewData.inverterUsage).getModel()
+    val statsGraphData: ChartEntryModel? = ChartEntryModelProducer(viewData.stats).getModel()
+    val batterySOCData: ChartEntryModel? = ChartEntryModelProducer(viewData.batterySOC).getModel()
     val context = LocalContext.current
 
     if (statsGraphData == null && inverterConsumptionData == null && selfSufficiencyGraphData == null) {
@@ -106,7 +123,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             ),
             targetVerticalAxisPosition = AxisPosition.Vertical.Start
         )
-        val composedChart = remember(normalDataChart, selfSufficiencyChart, inverterConsumptionChart) { normalDataChart + selfSufficiencyChart + inverterConsumptionChart + batterySOCChart }
+        val composedChart =
+            remember(normalDataChart, selfSufficiencyChart, inverterConsumptionChart) { normalDataChart + selfSufficiencyChart + inverterConsumptionChart + batterySOCChart }
 
         if (statsGraphData != null && selfSufficiencyGraphData != null && inverterConsumptionData != null && batterySOCData != null) {
             Column(modifier = modifier.fillMaxWidth()) {

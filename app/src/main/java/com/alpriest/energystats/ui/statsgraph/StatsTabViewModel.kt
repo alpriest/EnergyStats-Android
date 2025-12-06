@@ -30,9 +30,6 @@ import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico1.core.entry.ChartEntry
-import com.patrykandpatrick.vico1.core.entry.ChartEntryModel
-import com.patrykandpatrick.vico1.core.entry.ChartEntryModelProducer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -45,6 +42,7 @@ import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
 
 data class StatsGraphViewData(
+    val stats: List<List<StatsChartEntry>>,
     val batterySOC: List<StatsChartEntry>,
     val inverterUsage: List<StatsChartEntry>,
     val selfSufficiency: List<StatsChartEntry>
@@ -57,11 +55,7 @@ class StatsTabViewModel(
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     var chartColorsStream = MutableStateFlow(listOf<ReportVariable>())
-    val batterySOCDataStream = MutableStateFlow<ChartEntryModel?>(null)
-    val selfSufficiencyGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
-    val inverterConsumptionDataStream = MutableStateFlow<ChartEntryModel?>(null)
-    val statsGraphDataStream = MutableStateFlow<ChartEntryModel?>(null)
-    val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
+    val displayModeStream = MutableStateFlow<StatsDisplayMode>(Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
     var valuesAtTimeStream = MutableStateFlow<List<StatsChartEntry>>(listOf())
     var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
@@ -80,8 +74,8 @@ class StatsTabViewModel(
     private var lastSelectedIndex: Float? = null
     var lastMarkerModelStream = MutableStateFlow<StatsGraphVerticalLineMarkerModel?>(null)
 
-    private val _viewDataState = MutableStateFlow(StatsGraphViewData(listOf(), listOf(), listOf()))
-    val viewDataState = _viewDataState.asStateFlow()
+    private val _viewDataStateFlow = MutableStateFlow(StatsGraphViewData(listOf(), listOf(), listOf(), listOf()))
+    val viewDataStateFlow = _viewDataStateFlow.asStateFlow()
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -275,7 +269,7 @@ class StatsTabViewModel(
             .filter { it.type != ReportVariable.InverterConsumption }
             .filter { it.type != ReportVariable.BatterySOC }
             .filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
-        val entries = grouped
+        val statsEntries = grouped
             .map { group ->
                 group.value.map {
                     StatsChartEntry(
@@ -288,26 +282,23 @@ class StatsTabViewModel(
             }.toList()
 
         chartColorsStream.value = grouped.keys.toList()
-        statsGraphDataStream.value = ChartEntryModelProducer(entries).getModel()
         val now = LocalDateTime.now(ZoneId.systemDefault())
         val displayMode = displayModeStream.value
 
         val selfSufficiencyData = rawDataFiltered(ReportVariable.SelfSufficiency, hiddenVariables, displayMode, now)
-        selfSufficiencyGraphDataStream.value = ChartEntryModelProducer(selfSufficiencyData).getModel()
 
         val inverterData = rawDataFiltered(ReportVariable.InverterConsumption, hiddenVariables, displayMode, now)
-        inverterConsumptionDataStream.value = ChartEntryModelProducer(inverterData).getModel()
 
         val batteryData = rawDataFiltered(ReportVariable.BatterySOC, hiddenVariables, displayMode, now)
-        batterySOCDataStream.value = ChartEntryModelProducer(batteryData).getModel()
 
-        _viewDataState.value = StatsGraphViewData(
+        _viewDataStateFlow.value = StatsGraphViewData(
+            stats = statsEntries,
             batterySOC = batteryData,
             inverterUsage = inverterData,
             selfSufficiency = selfSufficiencyData
         )
 
-        maxIndex = entries.flatten()
+        maxIndex = statsEntries.flatten()
             .maxByOrNull { it.y }
             ?.x
 
@@ -570,18 +561,4 @@ enum class ReportType {
     day,
     month,
     year,
-}
-
-class StatsChartEntry(
-    val periodDescription: String,
-    override val x: Float,
-    override val y: Float,
-    val type: ReportVariable
-) : ChartEntry {
-    override fun withY(y: Float): ChartEntry = StatsChartEntry(
-        periodDescription = periodDescription,
-        x = x,
-        y = y,
-        type = type
-    )
 }
