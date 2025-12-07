@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 class MyCartesianMarker(
-    private val selectedValueStream: MutableStateFlow<ParameterGraphVerticalLineMarkerModel?>
+    private val selectedValueStream: MutableStateFlow<VerticalLineMarkerModel?>
 ) : CartesianMarker {
     override fun drawOverLayers(
         context: CartesianDrawingContext,
@@ -34,7 +34,7 @@ class MyCartesianMarker(
         val lineTargets = targets.mapNotNull { it as? LineCartesianLayerMarkerTarget }
         val targetX = targets.averageOf { it.canvasX }
 
-        selectedValueStream.value = ParameterGraphVerticalLineMarkerModel(
+        selectedValueStream.value = VerticalLineMarkerModel(
             context.layerBounds,
             targetX,
             LocalDateTime.ofInstant(

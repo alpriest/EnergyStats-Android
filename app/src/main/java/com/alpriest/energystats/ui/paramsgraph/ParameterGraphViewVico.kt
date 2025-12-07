@@ -114,7 +114,7 @@ fun ParameterGraphViewVico(
 @Composable
 private fun ParameterGraphViewWithCustomMarker(
     producer: CartesianChartModelProducer,
-    selectedValueStream: MutableStateFlow<ParameterGraphVerticalLineMarkerModel?>,
+    selectedValueStream: MutableStateFlow<VerticalLineMarkerModel?>,
     valuesAtTimeStream: List<DateTimeFloatEntry>,
     modifier: Modifier,
     chartColors: List<Color>,

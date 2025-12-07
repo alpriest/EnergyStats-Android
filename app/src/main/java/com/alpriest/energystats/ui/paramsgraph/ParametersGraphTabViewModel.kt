@@ -73,7 +73,7 @@ class ParametersGraphTabViewModel(
     var hours: Int = 24
     private var _valuesAtTimeStream = MutableStateFlow<Map<Variable, List<DateTimeFloatEntry>>>(mapOf())
     var valuesAtTimeStream: StateFlow<Map<Variable, List<DateTimeFloatEntry>>> = _valuesAtTimeStream
-    var selectedValueStream = MutableStateFlow<ParameterGraphVerticalLineMarkerModel?>(null)
+    var selectedValueStream = MutableStateFlow<VerticalLineMarkerModel?>(null)
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)

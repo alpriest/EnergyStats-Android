@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ParameterValuesPopupVico(
     valuesAtTimeStream: List<DateTimeFloatEntry>,
-    model: ParameterGraphVerticalLineMarkerModel,
+    model: VerticalLineMarkerModel,
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val backgroundPadding = 10f
