@@ -50,7 +50,7 @@ data class StatsGraphVerticalLineMarkerModel(
     val markedEntries: List<Marker.EntryModel>
 )
 
-class StatsVerticalLineMarker(
+class StatsVerticalLineMarkerVico1(
     private var valuesAtTimeStream: MutableStateFlow<List<StatsChartEntry>>,
     private var graphVariablesStream: MutableStateFlow<List<StatsGraphVariable>>,
     private val composedChart: ComposedChart<ChartEntryModel>,

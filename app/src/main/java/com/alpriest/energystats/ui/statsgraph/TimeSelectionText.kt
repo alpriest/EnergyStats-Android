@@ -20,7 +20,7 @@ import java.time.format.FormatStyle
 @Composable
 fun TimeSelectionText(viewModel: StatsTabViewModel) {
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
-    val selectedDateTime = selectedValues.firstOrNull()?.periodDescription
+    val selectedDateTime = selectedValues.values.firstOrNull()?.firstOrNull()?.periodDescription
 
     Column(
         horizontalAlignment = Alignment.Companion.CenterHorizontally,
@@ -33,7 +33,7 @@ fun TimeSelectionText(viewModel: StatsTabViewModel) {
             selectedDateTime?.let {
                 Row(modifier = Modifier.Companion.clickable {
                     viewModel.lastMarkerModelStream.value = null
-                    viewModel.valuesAtTimeStream.value = listOf()
+//                    viewModel.valuesAtTimeStream.value = listOf()
                 }) {
                     Text(
                         text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),

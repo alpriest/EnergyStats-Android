@@ -29,7 +29,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifi
 
     Column(modifier) {
         graphVariables.value.map { graphVariable ->
-            val selectedValue = selectedValues.firstOrNull { entry -> entry.type == graphVariable.type }
+            val selectedValue = selectedValues[graphVariable.type]?.firstOrNull()
             val title = when (graphVariable.type) {
                 ReportVariable.FeedIn -> stringResource(R.string.feed_in) + title(ValueUsage.TOTAL)
                 ReportVariable.Generation -> stringResource(R.string.output) + title(ValueUsage.TOTAL)

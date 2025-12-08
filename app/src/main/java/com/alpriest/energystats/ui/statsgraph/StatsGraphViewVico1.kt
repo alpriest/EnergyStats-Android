@@ -156,14 +156,14 @@ fun StatsGraphViewVico1(viewModel: StatsTabViewModel, modifier: Modifier = Modif
                                 guideline = null
                             ),
                             horizontalLayout = HorizontalLayout.fullWidth(),
-                            marker = StatsVerticalLineMarker(
-                                viewModel.valuesAtTimeStream,
-                                viewModel.graphVariablesStream,
-                                composedChart,
-                                viewModel,
-                                context,
-                                viewModel.lastMarkerModelStream
-                            )
+//                            marker = StatsVerticalLineMarkerVico1(
+//                                viewModel.valuesAtTimeStream,
+//                                viewModel.graphVariablesStream,
+//                                composedChart,
+//                                viewModel,
+//                                context,
+//                                viewModel.lastMarkerModelStream
+//                            )
                         )
                     }
 
@@ -213,8 +213,8 @@ private class StatsGraphFormatAxisValueFormatterVico1<Position : AxisPosition>(p
         }
     }
 }
-//
-//class ZeroValuesAxisOverriderVico1 : AxisValuesOverrider<ChartEntryModel> {
-//    override fun getMaxY(model: ChartEntryModel) = if (model.maxY != 0f) model.maxY else 1f
-//}
+
+private class ZeroValuesAxisOverriderVico1 : AxisValuesOverrider<ChartEntryModel> {
+    override fun getMaxY(model: ChartEntryModel) = if (model.maxY != 0f) model.maxY else 1f
+}
 

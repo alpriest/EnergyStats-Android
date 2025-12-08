@@ -24,6 +24,7 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.LastLoadState
+import com.alpriest.energystats.ui.paramsgraph.VerticalLineMarkerModel
 import com.alpriest.energystats.ui.paramsgraph.isSameDay
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
@@ -31,6 +32,7 @@ import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
@@ -56,8 +58,7 @@ class StatsTabViewModel(
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
-    var valuesAtTimeStream = MutableStateFlow<List<StatsChartEntry>>(listOf())
-    var totalsStream: MutableStateFlow<MutableMap<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
+    var totalsStream: MutableStateFlow<Map<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
@@ -75,6 +76,9 @@ class StatsTabViewModel(
 
     private val _viewDataStateFlow = MutableStateFlow(StatsGraphViewData(mapOf(), listOf(), listOf(), listOf()))
     val viewDataStateFlow = _viewDataStateFlow.asStateFlow()
+    private var _valuesAtTimeStream = MutableStateFlow<Map<ReportVariable, List<StatsChartEntry>>>(emptyMap())
+    var valuesAtTimeStream: StateFlow<Map<ReportVariable, List<StatsChartEntry>>> = _valuesAtTimeStream
+    var selectedValueStream = MutableStateFlow<VerticalLineMarkerModel?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
@@ -96,6 +100,20 @@ class StatsTabViewModel(
             themeStream.collect {
                 configManager.currentDevice.value?.let {
                     updateGraphVariables(it)
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            selectedValueStream.collect { selectedValue ->
+                if (selectedValue == null) {
+                    _valuesAtTimeStream.value = emptyMap()
+                } else {
+                    _valuesAtTimeStream.value = _viewDataStateFlow.value.stats
+                        .mapValues { (_, entries) ->
+                            entries.filter { it.x == selectedValue.x }
+                        }
+                        .filterValues { it.isNotEmpty() }
                 }
             }
         }
@@ -512,7 +530,7 @@ class StatsTabViewModel(
     }
 
     fun updateApproximationsFromSelectedValues(context: Context) {
-        val selectedValue = valuesAtTimeStream.value.firstOrNull() ?: return
+        val selectedValue = valuesAtTimeStream.value.values.firstOrNull()?.firstOrNull() ?: return
         val valuesAtTime = ValuesAtTime(values = rawData.filter { it.graphPoint == selectedValue.x.toInt() })
 
         val grid = valuesAtTime.values.firstOrNull { it.type == ReportVariable.GridConsumption }
