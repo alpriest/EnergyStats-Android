@@ -37,7 +37,7 @@ fun ParameterValuesPopupVico(
     }
 
     Canvas(modifier = Modifier.Companion.fillMaxSize()) {
-        val x = model.x
+        val x = model.canvasX
         drawLine(
             color = color,
             start = Offset(x, model.bounds.top),

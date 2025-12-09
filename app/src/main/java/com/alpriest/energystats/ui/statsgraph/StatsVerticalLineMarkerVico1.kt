@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import android.content.Context
 import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,10 +10,7 @@ import androidx.compose.ui.geometry.Size
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.lineMarkerColor
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico1.core.chart.composed.ComposedChart
-import com.patrykandpatrick.vico1.core.chart.values.ChartValuesProvider
 import com.patrykandpatrick.vico1.core.context.DrawContext
-import com.patrykandpatrick.vico1.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico1.core.marker.Marker
 import com.patrykandpatrick.vico1.core.model.Point
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,36 +46,36 @@ data class StatsGraphVerticalLineMarkerModel(
     val markedEntries: List<Marker.EntryModel>
 )
 
-class StatsVerticalLineMarkerVico1(
-    private var valuesAtTimeStream: MutableStateFlow<List<StatsChartEntry>>,
-    private var graphVariablesStream: MutableStateFlow<List<StatsGraphVariable>>,
-    private val composedChart: ComposedChart<ChartEntryModel>,
-    private val viewModel: StatsTabViewModel,
-    private val context: Context,
-    private var lastMarkerModelStream: MutableStateFlow<StatsGraphVerticalLineMarkerModel?>
-) : Marker {
-    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
-        val markedEntry = markedEntries.first()
-        val graphVariables = graphVariablesStream.value
-
-        val chartMarkedEntriesAtPosition = composedChart.charts.flatMap {
-            it.entryLocationMap.flatMap { modelList ->
-                modelList.value.filter { it.index == markedEntry.index }
-            }
-        }
-
-        val chartEntries = chartMarkedEntriesAtPosition.mapNotNull { it.entry as? StatsChartEntry }
-
-        valuesAtTimeStream.value = graphVariables.map { graphVariable ->
-            chartEntries.firstOrNull { it.type == graphVariable.type } ?: StatsChartEntry(
-                periodDescription = chartEntries.firstOrNull()?.periodDescription ?: "",
-                x = chartEntries.firstOrNull()?.x ?: 0f,
-                y = 0f,
-                type = graphVariable.type
-            )
-        }
-        viewModel.updateApproximationsFromSelectedValues(this.context)
-
-        lastMarkerModelStream.value = StatsGraphVerticalLineMarkerModel(context, bounds, markedEntry.location, chartMarkedEntriesAtPosition)
-    }
-}
+//class StatsVerticalLineMarkerVico1(
+//    private var valuesAtTimeStream: MutableStateFlow<List<StatsChartEntry>>,
+//    private var graphVariablesStream: MutableStateFlow<List<StatsGraphVariable>>,
+//    private val composedChart: ComposedChart<ChartEntryModel>,
+//    private val viewModel: StatsTabViewModel,
+//    private val context: Context,
+//    private var lastMarkerModelStream: MutableStateFlow<StatsGraphVerticalLineMarkerModel?>
+//) : Marker {
+//    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
+//        val markedEntry = markedEntries.first()
+//        val graphVariables = graphVariablesStream.value
+//
+//        val chartMarkedEntriesAtPosition = composedChart.charts.flatMap {
+//            it.entryLocationMap.flatMap { modelList ->
+//                modelList.value.filter { it.index == markedEntry.index }
+//            }
+//        }
+//
+//        val chartEntries = chartMarkedEntriesAtPosition.mapNotNull { it.entry as? StatsChartEntry }
+//
+//        valuesAtTimeStream.value = graphVariables.map { graphVariable ->
+//            chartEntries.firstOrNull { it.type == graphVariable.type } ?: StatsChartEntry(
+//                periodDescription = chartEntries.firstOrNull()?.periodDescription ?: "",
+//                x = chartEntries.firstOrNull()?.x ?: 0f,
+//                y = 0f,
+//                type = graphVariable.type
+//            )
+//        }
+//        viewModel.updateApproximationsFromSelectedValues(this.context)
+//
+//        lastMarkerModelStream.value = StatsGraphVerticalLineMarkerModel(context, bounds, markedEntry.location, chartMarkedEntriesAtPosition)
+//    }
+//}

@@ -168,7 +168,7 @@ class ParametersGraphTabView(
 
     @Composable
     private fun LoadedData(selectedDateTime: LocalDateTime?, viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
-        val producerAxisScalePairs = viewModel.producers.collectAsState()
+        val producerAxisScalePairs = viewModel.viewDataState.collectAsState().value.producers
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

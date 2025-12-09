@@ -23,7 +23,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.paramsgraph.MyCartesianMarker
+import com.alpriest.energystats.ui.paramsgraph.MyCartesianLineMarker
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
@@ -173,7 +173,7 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
                             guideline = null
                         ),
                         marker = remember {
-                            MyCartesianMarker(viewModel.selectedValueStream)
+                            MyCartesianLineMarker(viewModel.selectedValueStream)
                         }
                     ),
                     modelProducer = modelProducer,

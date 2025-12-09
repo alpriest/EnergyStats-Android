@@ -164,7 +164,7 @@ private fun ParameterGraphViewWithCustomMarker(
                         guideline = null
                     ),
                     marker = remember {
-                        MyCartesianMarker(selectedValueStream)
+                        MyCartesianLineMarker(selectedValueStream)
                     }
                 ),
                 modelProducer = producer,

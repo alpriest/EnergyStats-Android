@@ -32,7 +32,6 @@ import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
@@ -41,6 +40,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.math.abs
 import kotlin.math.max
 
 data class StatsGraphViewData(
@@ -76,8 +76,7 @@ class StatsTabViewModel(
 
     private val _viewDataStateFlow = MutableStateFlow(StatsGraphViewData(mapOf(), listOf(), listOf(), listOf()))
     val viewDataStateFlow = _viewDataStateFlow.asStateFlow()
-    private var _valuesAtTimeStream = MutableStateFlow<Map<ReportVariable, List<StatsChartEntry>>>(emptyMap())
-    var valuesAtTimeStream: StateFlow<Map<ReportVariable, List<StatsChartEntry>>> = _valuesAtTimeStream
+    val valuesAtTimeStream = MutableStateFlow<Map<ReportVariable, List<StatsChartEntry>>>(emptyMap())
     var selectedValueStream = MutableStateFlow<VerticalLineMarkerModel?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
@@ -107,11 +106,12 @@ class StatsTabViewModel(
         viewModelScope.launch {
             selectedValueStream.collect { selectedValue ->
                 if (selectedValue == null) {
-                    _valuesAtTimeStream.value = emptyMap()
+                    valuesAtTimeStream.value = emptyMap()
                 } else {
-                    _valuesAtTimeStream.value = _viewDataStateFlow.value.stats
+                    valuesAtTimeStream.value = _viewDataStateFlow.value.stats
                         .mapValues { (_, entries) ->
-                            entries.filter { it.x == selectedValue.x }
+                            val nearest = entries.minByOrNull { entry -> abs(entry.x - selectedValue.x) }
+                            nearest?.let { listOf(it) } ?: emptyList()
                         }
                         .filterValues { it.isNotEmpty() }
                 }
@@ -289,7 +289,7 @@ class StatsTabViewModel(
             .mapValues { (_, values) ->
                 values.map { value ->
                     StatsChartEntry(
-                        periodDescription = value.periodDescription(displayModeStream.value),
+                        periodDescription = periodDescription(value.graphPoint, displayModeStream.value),
                         x = value.graphPoint.toFloat(),
                         y = value.graphValue.toFloat(),
                         type = value.type,
@@ -346,10 +346,10 @@ class StatsTabViewModel(
             }
             .map {
                 StatsChartEntry(
-                    periodDescription = it.periodDescription(displayModeStream.value),
+                    periodDescription = periodDescription(it.graphPoint, displayModeStream.value),
                     x = it.graphPoint.toFloat(),
                     y = it.graphValue.toFloat(),
-                    type = it.type
+                    type = it.type,
                 )
             }
     }

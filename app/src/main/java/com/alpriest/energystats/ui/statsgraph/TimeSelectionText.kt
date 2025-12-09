@@ -29,23 +29,21 @@ fun TimeSelectionText(viewModel: StatsTabViewModel) {
             .fillMaxWidth()
 
     ) {
-        viewModel.lastMarkerModelStream.value?.let {
-            selectedDateTime?.let {
-                Row(modifier = Modifier.Companion.clickable {
-                    viewModel.lastMarkerModelStream.value = null
-//                    viewModel.valuesAtTimeStream.value = listOf()
-                }) {
-                    Text(
-                        text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.Companion.padding(end = 6.dp)
-                    )
+        selectedDateTime?.let {
+            Row(modifier = Modifier.Companion.clickable {
+//                viewModel.lastMarkerModelStream.value = null
+                viewModel.valuesAtTimeStream.value = emptyMap()
+            }) {
+                Text(
+                    text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.Companion.padding(end = 6.dp)
+                )
 
-                    Text(
-                        text = stringResource(R.string.clear),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+                Text(
+                    text = stringResource(R.string.clear),
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         } ?: run {
             Text(

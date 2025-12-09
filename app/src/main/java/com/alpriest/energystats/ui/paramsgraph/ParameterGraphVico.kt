@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,12 +30,12 @@ fun MultipleParameterGraphVico(
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     userManager: UserManaging,
-    producerAxisScalePairs: State<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>>
+    producerAxisScalePairs: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>
 ) {
-    val allChartColors = viewModel.chartColorsStream.collectAsState().value
+    val allChartColors = viewModel.viewDataState.collectAsState().value.colors
     val valuesAtTimeState = viewModel.valuesAtTimeStream.collectAsState().value
 
-    producerAxisScalePairs.value.forEach { (unit, producerAxisScale) ->
+    producerAxisScalePairs.forEach { (unit, producerAxisScale) ->
         allChartColors[unit]?.let { colors ->
             val valuesForThisUnit: List<DateTimeFloatEntry> = remember(unit, valuesAtTimeState) {
                 valuesAtTimeState.filter { it.key.unit == unit }.values.flatten()
@@ -68,7 +67,7 @@ fun SingleParameterGraphVico(
     viewModel: ParametersGraphTabViewModel,
     themeStream: MutableStateFlow<AppTheme>,
     userManager: UserManaging,
-    producerAxisScalePairs: State<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>>
+    producerAxisScalePairs: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>
 ) {
     val chartColors = viewModel.viewDataState.collectAsState().value.colors.values.flatten()
     val valuesAtTimeState = viewModel.valuesAtTimeStream.collectAsState().value
@@ -76,11 +75,11 @@ fun SingleParameterGraphVico(
         valuesAtTimeState.values.flatten()
     }
 
-    val allData = remember(producerAxisScalePairs.value) {
-        producerAxisScalePairs.value.values.flatMap { it.first }
+    val allData = remember(producerAxisScalePairs) {
+        producerAxisScalePairs.values.flatMap { it.first }
     }
-    val yAxisScale = remember(producerAxisScalePairs.value) {
-        val allAxisScales = producerAxisScalePairs.value.map { it.value.second }
+    val yAxisScale = remember(producerAxisScalePairs) {
+        val allAxisScales = producerAxisScalePairs.map { it.value.second }
         AxisScale(
             min = allAxisScales.minOf { it.min ?: 10000.0f },
             max = allAxisScales.maxOf { it.max ?: -10000.0f }
@@ -135,6 +134,7 @@ private fun LoadStateParameterGraphVico(
                         x = seriesEntries.map { it.graphPoint },
                         y = seriesEntries.map { it.y.toDouble() }
                     )
+
                 }
             }
         }

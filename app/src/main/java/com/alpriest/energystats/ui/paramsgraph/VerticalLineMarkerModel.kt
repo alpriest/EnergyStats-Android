@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 
 data class VerticalLineMarkerModel(
     val bounds: RectF,
-    val x: Float,
+    val canvasX: Float,
+    val x: Double,
     val time: LocalDateTime?
 )

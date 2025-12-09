@@ -63,10 +63,8 @@ class ParametersGraphTabViewModel(
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
-    var chartColorsStream: MutableStateFlow<Map<String, List<Color>>> = MutableStateFlow(mapOf())
     private val _viewDataState = MutableStateFlow(ParametersGraphViewData(mapOf(), mapOf()))
     val viewDataState = _viewDataState.asStateFlow()
-    val producers: MutableStateFlow<Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>> = MutableStateFlow(mapOf())
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     private var rawData: List<ParametersGraphValue> = listOf()
     var queryDate = QueryDate()
@@ -239,7 +237,7 @@ class ParametersGraphTabViewModel(
                 .filter { it.isSelected }
                 .map { it.type }
 
-            producers.value = allVariables
+            val producers = allVariables
                 .map { variable ->
                     val valuesForVariable: List<ParametersGraphValue> = grouped[variable] ?: emptyList()
                     Pair(variable.unit, valuesForVariable)
@@ -272,7 +270,7 @@ class ParametersGraphTabViewModel(
                 }
                 .toMap()
 
-            chartColorsStream.value = graphVariablesStream.value
+            val chartColorsStream = graphVariablesStream.value
                 .filter { it.isSelected }
                 .groupBy { it.type.unit }
                 .mapValues { (_, varsForUnit) ->
@@ -285,7 +283,7 @@ class ParametersGraphTabViewModel(
                     }
                 }
 
-            _viewDataState.value = ParametersGraphViewData(producers.value, chartColorsStream.value)
+            _viewDataState.value = ParametersGraphViewData(producers, chartColorsStream)
         }
 
         prepareExport(rawData, displayModeStream.value)

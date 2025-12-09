@@ -5,33 +5,33 @@ import java.text.DateFormatSymbols
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double) {
-    fun periodDescription(displayMode: StatsDisplayMode): String {
-        return when (displayMode) {
-            is StatsDisplayMode.Day -> {
-                val time = LocalTime.of(graphPoint, 0) // Assuming graphPoint represents the hour
-                val formatter = DateTimeFormatter.ofPattern("HH:mm")
-                time.format(formatter)
-            }
+data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double)
 
-            is StatsDisplayMode.Month -> {
-                val dateFormatSymbols = DateFormatSymbols.getInstance()
-                val monthName = dateFormatSymbols.months.getOrNull(displayMode.month) ?: "${displayMode.month}"
-                "$graphPoint $monthName"
-            }
+fun periodDescription(graphPoint: Int, displayMode: StatsDisplayMode): String {
+    return when (displayMode) {
+        is StatsDisplayMode.Day -> {
+            val time = LocalTime.of(graphPoint, 0) // Assuming graphPoint represents the hour
+            val formatter = DateTimeFormatter.ofPattern("HH:mm")
+            time.format(formatter)
+        }
 
-            is StatsDisplayMode.Year -> {
-                val dateFormatSymbols = DateFormatSymbols.getInstance()
-                val monthName = dateFormatSymbols.months.getOrNull(graphPoint - 1) ?: "$graphPoint"
-                "$monthName ${displayMode.year}"
-            }
+        is StatsDisplayMode.Month -> {
+            val dateFormatSymbols = DateFormatSymbols.getInstance()
+            val monthName = dateFormatSymbols.months.getOrNull(displayMode.month) ?: "${displayMode.month}"
+            "$graphPoint $monthName"
+        }
 
-            is StatsDisplayMode.Custom -> {
-                val start = displayMode.start
-                val end = displayMode.end
+        is StatsDisplayMode.Year -> {
+            val dateFormatSymbols = DateFormatSymbols.getInstance()
+            val monthName = dateFormatSymbols.months.getOrNull(graphPoint - 1) ?: "$graphPoint"
+            "$monthName ${displayMode.year}"
+        }
 
-                "${start.year}_${start.month}_$start.day_${end.year}_${end.month}_$end.day"
-            }
+        is StatsDisplayMode.Custom -> {
+            val start = displayMode.start
+            val end = displayMode.end
+
+            "${start.year}_${start.month}_$start.day_${end.year}_${end.month}_$end.day"
         }
     }
 }
