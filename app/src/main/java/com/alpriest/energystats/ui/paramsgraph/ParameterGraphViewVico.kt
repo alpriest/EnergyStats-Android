@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
+import com.alpriest.energystats.ui.paramsgraph.graphs.VariableKey
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
@@ -114,7 +116,7 @@ fun ParameterGraphViewVico(
 @Composable
 private fun ParameterGraphViewWithCustomMarker(
     producer: CartesianChartModelProducer,
-    selectedValueStream: MutableStateFlow<VerticalLineMarkerModel?>,
+    selectedValueStream: MutableStateFlow<ParameterGraphLineMarkerModel?>,
     valuesAtTimeStream: List<DateTimeFloatEntry>,
     modifier: Modifier,
     chartColors: List<Color>,
@@ -164,7 +166,7 @@ private fun ParameterGraphViewWithCustomMarker(
                         guideline = null
                     ),
                     marker = remember {
-                        MyCartesianLineMarker(selectedValueStream)
+                        ParameterGraphLineMarker(selectedValueStream)
                     }
                 ),
                 modelProducer = producer,

@@ -137,40 +137,39 @@ fun StatsGraphViewVico1(viewModel: StatsTabViewModel, modifier: Modifier = Modif
 
         if (statsGraphData != null && selfSufficiencyGraphData != null && inverterConsumptionData != null && batterySOCData != null) {
             Column(modifier = modifier.fillMaxWidth()) {
-                val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
                 TimeSelectionText(viewModel)
 
-                Box(modifier = Modifier.fillMaxSize()) {
-                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
-                        Chart(
-                            chart = composedChart,
-                            model = statsGraphData + selfSufficiencyGraphData + inverterConsumptionData + batterySOCData,
-                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
-                            endAxis = rememberEndAxis(
-                                itemPlacer = AxisItemPlacer.Vertical.default(5),
-                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
-                            ),
-                            bottomAxis = rememberBottomAxis(
-                                itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
-                                valueFormatter = StatsGraphFormatAxisValueFormatterVico1(displayMode),
-                                guideline = null
-                            ),
-                            horizontalLayout = HorizontalLayout.fullWidth(),
-//                            marker = StatsVerticalLineMarkerVico1(
-//                                viewModel.valuesAtTimeStream,
-//                                viewModel.graphVariablesStream,
-//                                composedChart,
-//                                viewModel,
-//                                context,
-//                                viewModel.lastMarkerModelStream
-//                            )
-                        )
-                    }
-
-                    lastMarkerModel?.let {
-                        SelectedStatsValuesLineMarker(it, themeStream)
-                    }
-                }
+//                Box(modifier = Modifier.fillMaxSize()) {
+//                    ProvideChartStyle(chartStyle(chartColors, themeStream)) {
+//                        Chart(
+//                            chart = composedChart,
+//                            model = statsGraphData + selfSufficiencyGraphData + inverterConsumptionData + batterySOCData,
+//                            chartScrollSpec = rememberChartScrollSpec(isScrollEnabled = false),
+//                            endAxis = rememberEndAxis(
+//                                itemPlacer = AxisItemPlacer.Vertical.default(5),
+//                                valueFormatter = DecimalFormatAxisValueFormatter("0.0")
+//                            ),
+//                            bottomAxis = rememberBottomAxis(
+//                                itemPlacer = AxisItemPlacer.Horizontal.default(3, addExtremeLabelPadding = true),
+//                                valueFormatter = StatsGraphFormatAxisValueFormatterVico1(displayMode),
+//                                guideline = null
+//                            ),
+//                            horizontalLayout = HorizontalLayout.fullWidth(),
+////                            marker = StatsVerticalLineMarkerVico1(
+////                                viewModel.valuesAtTimeStream,
+////                                viewModel.graphVariablesStream,
+////                                composedChart,
+////                                viewModel,
+////                                context,
+////                                viewModel.lastMarkerModelStream
+////                            )
+//                        )
+//                    }
+//
+//                    lastMarkerModel?.let {
+//                        SelectedStatsValuesLineMarker(it, themeStream)
+//                    }
+//                }
 
                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Text(

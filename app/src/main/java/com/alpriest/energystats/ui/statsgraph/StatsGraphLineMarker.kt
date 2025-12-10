@@ -1,7 +1,8 @@
-package com.alpriest.energystats.ui.paramsgraph
+package com.alpriest.energystats.ui.statsgraph
 
-import android.R.attr.label
 import android.annotation.SuppressLint
+import android.graphics.RectF
+import com.alpriest.energystats.ui.paramsgraph.averageOf
 import com.patrykandpatrick.vico.core.cartesian.CartesianDrawingContext
 import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModel
@@ -15,8 +16,8 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-class MyCartesianLineMarker(
-    private val selectedValueStream: MutableStateFlow<VerticalLineMarkerModel?>
+class StatsGraphLineMarker(
+    private val selectedValueStream: MutableStateFlow<StatsGraphLineMarkerModel?>
 ) : CartesianMarker {
     override fun drawOverLayers(
         context: CartesianDrawingContext,
@@ -61,7 +62,7 @@ class MyCartesianLineMarker(
 
         val targetX = targets.averageOf { it.canvasX }
 
-        selectedValueStream.value = VerticalLineMarkerModel(
+        selectedValueStream.value = StatsGraphLineMarkerModel(
             context.layerBounds,
             targetX,
             entryX,
@@ -77,18 +78,12 @@ class MyCartesianLineMarker(
         layerMargins: CartesianLayerMargins,
         layerDimensions: CartesianLayerDimensions,
         model: CartesianChartModel,
-    ) {
-    }
-
-    override fun equals(other: Any?): Boolean =
-        this === other
-
-    override fun hashCode(): Int {
-        return label.hashCode()
-    }
+    ) {}
 }
 
-internal fun <T> Collection<T>.averageOf(selector: (T) -> Float): Float =
-    fold(0f) { sum, element ->
-        sum + selector(element)
-    } / size
+data class StatsGraphLineMarkerModel(
+    val bounds: RectF,
+    val canvasX: Float,
+    val x: Double,
+    val time: LocalDateTime?,
+)

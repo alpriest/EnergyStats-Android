@@ -23,7 +23,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.paramsgraph.MyCartesianLineMarker
+import com.alpriest.energystats.ui.paramsgraph.ParameterGraphLineMarker
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
@@ -60,14 +60,13 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
     val displayMode = viewModel.displayModeStream.collectAsStateWithLifecycle().value
     val themeStream = viewModel.themeStream
     val viewData = viewModel.viewDataStateFlow.collectAsStateWithLifecycle().value
+    val selectedValue = viewModel.selectedValueStream.collectAsStateWithLifecycle().value
     val chartColors = viewData.stats.keys.map { it.colour(themeStream) }
     val selfSufficiencyGraphData = viewData.selfSufficiency
     val inverterConsumptionData = viewData.inverterUsage
     val batterySOCData = viewData.batterySOC
     val statsGraphData = viewData.stats.values
-    val modelProducer = remember {
-        CartesianChartModelProducer()
-    }
+    val modelProducer = remember { CartesianChartModelProducer() }
     val bottomAxisFormatter = remember(displayMode) { BottomAxisValueFormatter(displayMode) }
     val scrollState = rememberVicoScrollState(scrollEnabled = false)
     val isSystemInDarkTheme = isDarkMode(themeStream)
@@ -75,13 +74,6 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
 
     LaunchedEffect(statsGraphData) {
         modelProducer.runTransaction {
-//            extras { extraStore ->
-//                extraStore[VariablesKey] = data.map {
-//                    it.first().type
-//                }
-//                extraStore[VariableKey] = data.first().first().type
-//            }
-
             columnSeries {
                 statsGraphData.forEach { seriesEntries: List<StatsChartEntry> ->
                     series(
@@ -150,7 +142,6 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
         )
 
         Column(modifier = modifier.fillMaxWidth()) {
-            val lastMarkerModel = viewModel.lastMarkerModelStream.collectAsState().value
             TimeSelectionText(viewModel)
 
             Box(modifier = Modifier.fillMaxSize()) {
@@ -167,13 +158,13 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
                             label = graphLabel,
                             itemPlacer = HorizontalAxis.ItemPlacer.aligned(
                                 spacing = { 3 },
-                                addExtremeLabelPadding = true
+//                                addExtremeLabelPadding = true
                             ),
                             valueFormatter = bottomAxisFormatter,
                             guideline = null
                         ),
                         marker = remember {
-                            MyCartesianLineMarker(viewModel.selectedValueStream)
+                            StatsGraphLineMarker(viewModel.selectedValueStream)
                         }
                     ),
                     modelProducer = modelProducer,
@@ -183,7 +174,7 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
                     animationSpec = null
                 )
 
-                lastMarkerModel?.let {
+                selectedValue?.let {
                     SelectedStatsValuesLineMarker(it, themeStream)
                 }
             }

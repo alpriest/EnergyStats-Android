@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import android.graphics.RectF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -10,72 +9,31 @@ import androidx.compose.ui.geometry.Size
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.lineMarkerColor
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.patrykandpatrick.vico1.core.context.DrawContext
-import com.patrykandpatrick.vico1.core.marker.Marker
-import com.patrykandpatrick.vico1.core.model.Point
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun SelectedStatsValuesLineMarker(
-    model: StatsGraphVerticalLineMarkerModel,
+    model: StatsGraphLineMarkerModel,
     themeStream: MutableStateFlow<AppTheme>
 ) {
-    val additionalBarWidth = 3.0f
+    val margin = 20.0f
 
-    if (model.markedEntries.isEmpty()) {
-        return
-    }
+    val barWidth = (model.bounds.width() / 24f) - 1.0f
 
-    val left = model.markedEntries.minOf { it.location.x } - additionalBarWidth
-    val right = model.markedEntries.maxOf { it.location.x } + additionalBarWidth
+    // Which bar index is canvasX inside?
+    val graphX = (model.canvasX - margin).coerceAtLeast(0f)
+    val barIndex = (graphX / barWidth).toInt().coerceIn(0, 23)
+
+    // Left/right of the snapped bar
+    val left = margin + (barIndex * barWidth) + 1.0f
+
     val color = lineMarkerColor(isDarkMode(themeStream))
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawRect(
             color.copy(alpha = 0.4f),
-            topLeft = Offset(left, 24f),
-            size = Size(width = right - left, model.bounds.height() + 4f)
+            topLeft = Offset(left, 19f),
+            size = Size(width = barWidth, height = model.bounds.height())
         )
     }
 }
-
-data class StatsGraphVerticalLineMarkerModel(
-    val context: DrawContext,
-    val bounds: RectF,
-    val location: Point,
-    val markedEntries: List<Marker.EntryModel>
-)
-
-//class StatsVerticalLineMarkerVico1(
-//    private var valuesAtTimeStream: MutableStateFlow<List<StatsChartEntry>>,
-//    private var graphVariablesStream: MutableStateFlow<List<StatsGraphVariable>>,
-//    private val composedChart: ComposedChart<ChartEntryModel>,
-//    private val viewModel: StatsTabViewModel,
-//    private val context: Context,
-//    private var lastMarkerModelStream: MutableStateFlow<StatsGraphVerticalLineMarkerModel?>
-//) : Marker {
-//    override fun draw(context: DrawContext, bounds: RectF, markedEntries: List<Marker.EntryModel>, chartValuesProvider: ChartValuesProvider) {
-//        val markedEntry = markedEntries.first()
-//        val graphVariables = graphVariablesStream.value
-//
-//        val chartMarkedEntriesAtPosition = composedChart.charts.flatMap {
-//            it.entryLocationMap.flatMap { modelList ->
-//                modelList.value.filter { it.index == markedEntry.index }
-//            }
-//        }
-//
-//        val chartEntries = chartMarkedEntriesAtPosition.mapNotNull { it.entry as? StatsChartEntry }
-//
-//        valuesAtTimeStream.value = graphVariables.map { graphVariable ->
-//            chartEntries.firstOrNull { it.type == graphVariable.type } ?: StatsChartEntry(
-//                periodDescription = chartEntries.firstOrNull()?.periodDescription ?: "",
-//                x = chartEntries.firstOrNull()?.x ?: 0f,
-//                y = 0f,
-//                type = graphVariable.type
-//            )
-//        }
-//        viewModel.updateApproximationsFromSelectedValues(this.context)
-//
-//        lastMarkerModelStream.value = StatsGraphVerticalLineMarkerModel(context, bounds, markedEntry.location, chartMarkedEntriesAtPosition)
-//    }
-//}

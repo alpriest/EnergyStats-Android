@@ -46,6 +46,8 @@ import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
+import com.alpriest.energystats.ui.paramsgraph.graphs.MultipleParameterGraphVico
+import com.alpriest.energystats.ui.paramsgraph.graphs.SingleParameterGraphVico
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme

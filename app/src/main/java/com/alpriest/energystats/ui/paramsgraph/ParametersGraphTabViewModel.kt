@@ -26,6 +26,7 @@ import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,7 +72,7 @@ class ParametersGraphTabViewModel(
     var hours: Int = 24
     private var _valuesAtTimeStream = MutableStateFlow<Map<Variable, List<DateTimeFloatEntry>>>(mapOf())
     var valuesAtTimeStream: StateFlow<Map<Variable, List<DateTimeFloatEntry>>> = _valuesAtTimeStream
-    var selectedValueStream = MutableStateFlow<VerticalLineMarkerModel?>(null)
+    var selectedValueStream = MutableStateFlow<ParameterGraphLineMarkerModel?>(null)
     var boundsStream = MutableStateFlow<List<ParameterGraphBounds>>(listOf())
     var entriesStream = MutableStateFlow<List<List<DateTimeFloatEntry>>>(listOf())
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)

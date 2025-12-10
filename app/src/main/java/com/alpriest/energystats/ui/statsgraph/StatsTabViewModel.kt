@@ -24,7 +24,6 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.LastLoadState
-import com.alpriest.energystats.ui.paramsgraph.VerticalLineMarkerModel
 import com.alpriest.energystats.ui.paramsgraph.isSameDay
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
@@ -72,12 +71,11 @@ class StatsTabViewModel(
     private var lastLoadState: LastLoadState<StatsDisplayMode>? = null
     private var maxIndex: Float? = null
     private var lastSelectedIndex: Float? = null
-    var lastMarkerModelStream = MutableStateFlow<StatsGraphVerticalLineMarkerModel?>(null)
 
     private val _viewDataStateFlow = MutableStateFlow(StatsGraphViewData(mapOf(), listOf(), listOf(), listOf()))
     val viewDataStateFlow = _viewDataStateFlow.asStateFlow()
     val valuesAtTimeStream = MutableStateFlow<Map<ReportVariable, List<StatsChartEntry>>>(emptyMap())
-    var selectedValueStream = MutableStateFlow<VerticalLineMarkerModel?>(null)
+    var selectedValueStream = MutableStateFlow<StatsGraphLineMarkerModel?>(null)
 
     private val appLifecycleObserver = AppLifecycleObserver(
         onAppGoesToBackground = { },
