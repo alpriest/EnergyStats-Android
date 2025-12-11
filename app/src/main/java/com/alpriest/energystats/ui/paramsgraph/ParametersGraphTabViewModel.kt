@@ -21,6 +21,7 @@ import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
@@ -29,6 +30,7 @@ import com.alpriest.energystats.ui.flow.home.dateFormat
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
+import com.alpriest.energystats.helpers.timeUntilNow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

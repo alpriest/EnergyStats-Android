@@ -20,7 +20,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.SegmentedControl
+import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn

@@ -55,7 +55,7 @@ import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.inverter.InverterIconView
 import com.alpriest.energystats.ui.helpers.OptionalView
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName

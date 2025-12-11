@@ -37,7 +37,7 @@ import com.alpriest.energystats.models.Wh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.SegmentedControl
+import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox

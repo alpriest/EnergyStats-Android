@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

@@ -36,7 +36,7 @@ import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.SettingsRow

@@ -21,10 +21,10 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.LastLoadState
-import com.alpriest.energystats.ui.paramsgraph.isSameDay
+import com.alpriest.energystats.helpers.isSameDay
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day

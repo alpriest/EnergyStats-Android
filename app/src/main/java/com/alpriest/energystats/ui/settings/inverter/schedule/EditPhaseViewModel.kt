@@ -10,7 +10,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 

@@ -18,7 +18,7 @@ import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import kotlinx.coroutines.flow.MutableStateFlow

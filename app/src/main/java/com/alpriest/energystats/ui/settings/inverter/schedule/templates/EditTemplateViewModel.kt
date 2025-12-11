@@ -12,7 +12,7 @@ import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate

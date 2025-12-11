@@ -17,7 +17,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.services.UnacceptableException
 import com.alpriest.energystats.ui.helpers.UnsupportedErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.theme.ESButton
 
 data class MonitorAlertDialogData(

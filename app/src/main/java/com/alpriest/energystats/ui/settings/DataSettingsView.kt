@@ -15,7 +15,7 @@ import com.alpriest.energystats.models.w
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.SegmentedControl
+import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable

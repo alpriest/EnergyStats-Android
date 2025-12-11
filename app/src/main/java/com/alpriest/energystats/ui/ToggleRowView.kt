@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.models.GraphBounds
 import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.paramsgraph.GraphVariable
 import com.alpriest.energystats.ui.theme.AppTheme

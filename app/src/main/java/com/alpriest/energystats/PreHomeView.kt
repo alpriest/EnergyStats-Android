@@ -9,7 +9,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.paramsgraph.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhase
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule

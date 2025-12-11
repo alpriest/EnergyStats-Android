@@ -44,20 +44,22 @@ fun LoadStateParameterGraphVico(
 
     LaunchedEffect(data) {
         modelProducer.runTransaction {
-            extras { extraStore ->
-                extraStore[VariablesKey] = data.map {
-                    it.first().type
+            if ( data.firstOrNull()?.isNotEmpty() == true) {
+                extras { extraStore ->
+                    extraStore[VariablesKey] = data.map {
+                        it.first().type
+                    }
+                    extraStore[VariableKey] = data.first().first().type
                 }
-                extraStore[VariableKey] = data.first().first().type
-            }
 
-            lineSeries {
-                data.forEach { seriesEntries: List<DateTimeFloatEntry> ->
-                    series(
-                        x = seriesEntries.map { it.graphPoint },
-                        y = seriesEntries.map { it.y.toDouble() }
-                    )
+                lineSeries {
+                    data.forEach { seriesEntries: List<DateTimeFloatEntry> ->
+                        series(
+                            x = seriesEntries.map { it.graphPoint },
+                            y = seriesEntries.map { it.y.toDouble() }
+                        )
 
+                    }
                 }
             }
         }

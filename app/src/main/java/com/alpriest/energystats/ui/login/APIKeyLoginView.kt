@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.ui.ClickableUrlText
+import com.alpriest.energystats.ui.helpers.ClickableUrlText
 import com.alpriest.energystats.ui.helpers.ButtonDefinition
 import com.alpriest.energystats.ui.helpers.EqualWidthButtonList
 import com.alpriest.energystats.ui.helpers.copyDebugData
