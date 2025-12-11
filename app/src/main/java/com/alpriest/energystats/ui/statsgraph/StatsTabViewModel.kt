@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.EnergyStatsApplication
 import com.alpriest.energystats.R
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.isSameDay
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.models.ValueUsage
@@ -21,10 +23,8 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.LastLoadState
-import com.alpriest.energystats.helpers.isSameDay
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
@@ -113,6 +113,12 @@ class StatsTabViewModel(
                         }
                         .filterValues { it.isNotEmpty() }
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            displayModeStream.collect { _ ->
+                selectedValueStream.value = null
             }
         }
     }

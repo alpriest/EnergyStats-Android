@@ -17,16 +17,28 @@ fun SelectedStatsValuesLineMarker(
     model: StatsGraphLineMarkerModel,
     themeStream: MutableStateFlow<AppTheme>
 ) {
-    val margin = 20.0f
+    val spacingBetweenBars = when (segmentCount) {
+        24 -> 1.0f
+        else -> 2.0f
+    }
 
-    val barWidth = (model.bounds.width() / segmentCount.toFloat()) - 1.0f
+    val margin = when (segmentCount) {
+        28, 29, 30, 31 -> 0f
+        else -> 10f
+    }
+
+    val indexOffset = when (segmentCount) {
+        24 -> 0f
+        else -> 1f
+    }
+
+    val barWidth = (model.bounds.width() / segmentCount.toFloat()) - (spacingBetweenBars * 2.0f)
 
     // Which bar index is canvasX inside?
-    val graphX = (model.canvasX - margin).coerceAtLeast(0f)
-    val barIndex = (graphX / barWidth).toInt().coerceIn(0, segmentCount - 1)
+    val barIndex = model.x.toFloat() - indexOffset
 
     // Left/right of the snapped bar
-    val left = margin + (barIndex * barWidth) + 1.0f
+    val left = margin + (barIndex * barWidth) + spacingBetweenBars
 
     val color = lineMarkerColor(isDarkMode(themeStream))
 

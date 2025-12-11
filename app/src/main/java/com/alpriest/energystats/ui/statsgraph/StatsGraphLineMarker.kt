@@ -63,7 +63,7 @@ class StatsGraphLineMarker(
         val targetX = targets.averageOf { it.canvasX }
 
         selectedValueStream.value = StatsGraphLineMarkerModel(
-            context.layerBounds,
+            context.canvasBounds,
             targetX,
             entryX,
             LocalDateTime.ofInstant(
