@@ -95,7 +95,13 @@ class DemoAPI : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        val fileContent = this::class.java.classLoader?.getResource("res/raw/history.json")?.readText()
+        val filename = if (variables.contains("invBatPower")) {
+            "res/raw/parameters_history.json"
+        } else {
+            "res/raw/stats_history.json"
+        }
+
+        val fileContent = this::class.java.classLoader?.getResource(filename)?.readText()
         val formatter = DateTimeFormatter.ofPattern(dateFormat)
         val now = LocalDate.now()
 
