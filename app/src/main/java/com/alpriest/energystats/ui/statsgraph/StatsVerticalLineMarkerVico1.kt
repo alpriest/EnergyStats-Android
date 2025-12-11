@@ -13,16 +13,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun SelectedStatsValuesLineMarker(
+    segmentCount: Int,
     model: StatsGraphLineMarkerModel,
     themeStream: MutableStateFlow<AppTheme>
 ) {
     val margin = 20.0f
 
-    val barWidth = (model.bounds.width() / 24f) - 1.0f
+    val barWidth = (model.bounds.width() / segmentCount.toFloat()) - 1.0f
 
     // Which bar index is canvasX inside?
     val graphX = (model.canvasX - margin).coerceAtLeast(0f)
-    val barIndex = (graphX / barWidth).toInt().coerceIn(0, 23)
+    val barIndex = (graphX / barWidth).toInt().coerceIn(0, segmentCount - 1)
 
     // Left/right of the snapped bar
     val left = margin + (barIndex * barWidth) + 1.0f

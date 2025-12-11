@@ -31,8 +31,7 @@ fun TimeSelectionText(viewModel: StatsTabViewModel) {
     ) {
         selectedDateTime?.let {
             Row(modifier = Modifier.Companion.clickable {
-//                viewModel.lastMarkerModelStream.value = null
-                viewModel.valuesAtTimeStream.value = emptyMap()
+                viewModel.clearSelectedValue()
             }) {
                 Text(
                     text = it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),

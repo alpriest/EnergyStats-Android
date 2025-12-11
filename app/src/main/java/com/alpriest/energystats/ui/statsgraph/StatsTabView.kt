@@ -69,6 +69,19 @@ sealed class StatsDisplayMode {
             is Custom -> "Day"
         }
     }
+
+    val segmentCount: Int
+        get() {
+            return when (this) {
+                is Day -> 24
+                is Month -> java.time.YearMonth.of(year, month).lengthOfMonth()
+                is Year -> 12
+                is Custom -> {
+                    val days = java.time.temporal.ChronoUnit.DAYS.between(start, end).toInt() + 1
+                    if (days < 0) 0 else days
+                }
+            }
+        }
 }
 
 class StatsTabViewModelFactory(

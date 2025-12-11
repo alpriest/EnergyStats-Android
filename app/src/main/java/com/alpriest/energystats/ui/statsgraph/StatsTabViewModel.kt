@@ -559,6 +559,11 @@ class StatsTabViewModel(
             approximationsViewModelStream.value = approximations
         }
     }
+
+    fun clearSelectedValue() {
+        selectedValueStream.value = null
+        valuesAtTimeStream.value = emptyMap()
+    }
 }
 
 @Composable

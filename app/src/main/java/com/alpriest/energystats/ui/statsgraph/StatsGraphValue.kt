@@ -28,10 +28,10 @@ fun periodDescription(graphPoint: Int, displayMode: StatsDisplayMode): String {
         }
 
         is StatsDisplayMode.Custom -> {
-            val start = displayMode.start
-            val end = displayMode.end
-
-            "${start.year}_${start.month}_$start.day_${end.year}_${end.month}_$end.day"
+            val date = displayMode.start.plusDays(graphPoint.toLong())
+            val dateFormatSymbols = DateFormatSymbols.getInstance()
+            val monthName = dateFormatSymbols.months.getOrNull(date.monthValue - 1) ?: "${date.monthValue}"
+            "${date.dayOfMonth} $monthName"
         }
     }
 }

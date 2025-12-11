@@ -158,7 +158,6 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
                             label = graphLabel,
                             itemPlacer = HorizontalAxis.ItemPlacer.aligned(
                                 spacing = { 3 },
-//                                addExtremeLabelPadding = true
                             ),
                             valueFormatter = bottomAxisFormatter,
                             guideline = null
@@ -175,7 +174,7 @@ fun StatsGraphViewVico2(viewModel: StatsTabViewModel, modifier: Modifier = Modif
                 )
 
                 selectedValue?.let {
-                    SelectedStatsValuesLineMarker(it, themeStream)
+                    SelectedStatsValuesLineMarker(displayMode.segmentCount, it, themeStream)
                 }
             }
 
