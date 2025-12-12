@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import android.R.attr.data
+import android.R.attr.label
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -30,6 +32,7 @@ import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
@@ -72,8 +75,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray.copy(alpha = 0.5f)
 
     LaunchedEffect(statsGraphData) {
-        if (statsGraphData.any { it.isNotEmpty() }) {
-            modelProducer.runTransaction {
+        modelProducer.runTransaction {
+            if (statsGraphData.any { it.isNotEmpty() }) {
                 columnSeries {
                     statsGraphData.forEach { seriesEntries: List<StatsChartEntry> ->
                         series(
@@ -82,38 +85,38 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                         )
                     }
                 }
+            }
 
-                if (selfSufficiencyGraphData.isNotEmpty()) {
-                    lineSeries {
-                        series(
-                            x = selfSufficiencyGraphData.map { it.x },
-                            y = selfSufficiencyGraphData.map { it.y.toDouble() }
-                        )
-                    }
+            if (selfSufficiencyGraphData.isNotEmpty()) {
+                lineSeries {
+                    series(
+                        x = selfSufficiencyGraphData.map { it.x },
+                        y = selfSufficiencyGraphData.map { it.y.toDouble() }
+                    )
                 }
+            }
 
-                if (inverterConsumptionData.isNotEmpty()) {
-                    lineSeries {
-                        series(
-                            x = inverterConsumptionData.map { it.x },
-                            y = inverterConsumptionData.map { it.y.toDouble() }
-                        )
-                    }
+            if (inverterConsumptionData.isNotEmpty()) {
+                lineSeries {
+                    series(
+                        x = inverterConsumptionData.map { it.x },
+                        y = inverterConsumptionData.map { it.y.toDouble() }
+                    )
                 }
+            }
 
-                if (batterySOCData.isNotEmpty()) {
-                    lineSeries {
-                        series(
-                            x = batterySOCData.map { it.x },
-                            y = batterySOCData.map { it.y.toDouble() }
-                        )
-                    }
+            if (batterySOCData.isNotEmpty()) {
+                lineSeries {
+                    series(
+                        x = batterySOCData.map { it.x },
+                        y = batterySOCData.map { it.y.toDouble() }
+                    )
                 }
             }
         }
     }
 
-    if (statsGraphData.isEmpty() && inverterConsumptionData.isEmpty() && selfSufficiencyGraphData.isEmpty()) {
+    if (statsGraphData.isEmpty() && inverterConsumptionData.isEmpty() && selfSufficiencyGraphData.isEmpty() && batterySOCData.isEmpty()) {
         Text(
             stringResource(R.string.no_data),
             color = MaterialTheme.colorScheme.onSecondary
@@ -155,6 +158,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                             valueFormatter = remember { CartesianValueFormatter.decimal(DecimalFormat("#.#")) },
                             guideline = rememberAxisGuidelineComponent(fill = fill(axisGuidelineColor))
                         ),
+                        startAxis = VerticalAxis.rememberStart(),
                         bottomAxis = HorizontalAxis.rememberBottom(
                             label = graphLabel,
                             itemPlacer = HorizontalAxis.ItemPlacer.aligned(
@@ -215,7 +219,10 @@ private fun rememberStatsLayer(chartColors: List<Color>): ColumnCartesianLayer {
         )
     }
 
-    return rememberColumnCartesianLayer(statsColumnProvider)
+    return rememberColumnCartesianLayer(
+        statsColumnProvider,
+        verticalAxisPosition = Axis.Position.Vertical.End
+    )
 }
 
 @Composable
