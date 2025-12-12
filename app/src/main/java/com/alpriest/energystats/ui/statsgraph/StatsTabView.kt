@@ -114,7 +114,6 @@ class StatsTabView(
         val graphShowing = viewModel.showingGraphStream.collectAsState().value
         val showingApproximations = remember { mutableStateOf(false) }
         val loadState = viewModel.uiState.collectAsState().value.state
-        val tipKitManager = remember { TipKitManager() }
 
         topBarSettings.value = TopBarSettings(true, null, {
             StatsDatePickerView(viewModel.displayModeStream).Content(
@@ -128,16 +127,6 @@ class StatsTabView(
             viewModel.displayModeStream.collectLatest { viewModel.load(context) }
         }
         trackScreenView("Stats Tab", "StatsTabView")
-
-        LaunchedEffect(Unit) {
-            tipKitManager.checkAndShow(TipType.statsGraphDecimalPlacesFixedTo1, context)
-        }
-
-        tipKitManager.activeTip.value?.let { tip ->
-            TipDialog(tip, context) {
-                tipKitManager.dismiss()
-            }
-        }
 
         Column(
             modifier = Modifier

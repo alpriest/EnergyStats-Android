@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.R.attr.data
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -71,40 +72,42 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray.copy(alpha = 0.5f)
 
     LaunchedEffect(statsGraphData) {
-        modelProducer.runTransaction {
-            columnSeries {
-                statsGraphData.forEach { seriesEntries: List<StatsChartEntry> ->
-                    series(
-                        x = seriesEntries.map { it.x },
-                        y = seriesEntries.map { it.y.toDouble() }
-                    )
+        if (statsGraphData.any { it.isNotEmpty() }) {
+            modelProducer.runTransaction {
+                columnSeries {
+                    statsGraphData.forEach { seriesEntries: List<StatsChartEntry> ->
+                        series(
+                            x = seriesEntries.map { it.x },
+                            y = seriesEntries.map { it.y.toDouble() }
+                        )
+                    }
                 }
-            }
 
-            if (selfSufficiencyGraphData.isNotEmpty()) {
-                lineSeries {
-                    series(
-                        x = selfSufficiencyGraphData.map { it.x },
-                        y = selfSufficiencyGraphData.map { it.y.toDouble() }
-                    )
+                if (selfSufficiencyGraphData.isNotEmpty()) {
+                    lineSeries {
+                        series(
+                            x = selfSufficiencyGraphData.map { it.x },
+                            y = selfSufficiencyGraphData.map { it.y.toDouble() }
+                        )
+                    }
                 }
-            }
 
-            if (inverterConsumptionData.isNotEmpty()) {
-                lineSeries {
-                    series(
-                        x = inverterConsumptionData.map { it.x },
-                        y = inverterConsumptionData.map { it.y.toDouble() }
-                    )
+                if (inverterConsumptionData.isNotEmpty()) {
+                    lineSeries {
+                        series(
+                            x = inverterConsumptionData.map { it.x },
+                            y = inverterConsumptionData.map { it.y.toDouble() }
+                        )
+                    }
                 }
-            }
 
-            if (batterySOCData.isNotEmpty()) {
-                lineSeries {
-                    series(
-                        x = batterySOCData.map { it.x },
-                        y = batterySOCData.map { it.y.toDouble() }
-                    )
+                if (batterySOCData.isNotEmpty()) {
+                    lineSeries {
+                        series(
+                            x = batterySOCData.map { it.x },
+                            y = batterySOCData.map { it.y.toDouble() }
+                        )
+                    }
                 }
             }
         }

@@ -308,11 +308,11 @@ class StatsTabViewModel(
 
         val inverterData = rawDataFiltered(ReportVariable.InverterConsumption, hiddenVariables, displayMode, now)
 
-        val batteryData = rawDataFiltered(ReportVariable.BatterySOC, hiddenVariables, displayMode, now)
+        val batterySOCData = rawDataFiltered(ReportVariable.BatterySOC, hiddenVariables, displayMode, now)
 
         _viewDataStateFlow.value = StatsGraphViewData(
             stats = statsEntries,
-            batterySOC = batteryData,
+            batterySOC = batterySOCData,
             inverterUsage = inverterData,
             selfSufficiency = selfSufficiencyData
         )
