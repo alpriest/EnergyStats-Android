@@ -114,10 +114,16 @@ class StatsTabViewModel(
                         }
                         .filterValues { it.isNotEmpty() }
 
-                    val nearest = viewData.batterySOC.minByOrNull { entry -> abs(entry.x - selectedValue.x) }
-                    val batterySocAtTime: Map<ReportVariable, List<StatsChartEntry>> = mapOf(Pair(ReportVariable.BatterySOC, nearest?.let { listOf(it) } ?: emptyList()))
+                    val nearestBattery = viewData.batterySOC.minByOrNull { entry -> abs(entry.x - selectedValue.x) }
+                    val batterySocAtTime = mapOf(Pair(ReportVariable.BatterySOC, nearestBattery?.let { listOf(it) } ?: emptyList()))
 
-                    valuesAtTimeStream.value = statsAtTime + batterySocAtTime
+                    val nearestSufficiency = viewData.selfSufficiency.minByOrNull { entry -> abs(entry.x - selectedValue.x) }
+                    val sufficiencyAtTime = mapOf(Pair(ReportVariable.SelfSufficiency, nearestSufficiency?.let { listOf(it) } ?: emptyList()))
+
+                    val nearestInverter = viewData.inverterUsage.minByOrNull { entry -> abs(entry.x - selectedValue.x) }
+                    val inverterAtTime = mapOf(Pair(ReportVariable.InverterConsumption, nearestInverter?.let { listOf(it) } ?: emptyList()))
+
+                    valuesAtTimeStream.value = statsAtTime + batterySocAtTime + sufficiencyAtTime + inverterAtTime
                 }
             }
         }

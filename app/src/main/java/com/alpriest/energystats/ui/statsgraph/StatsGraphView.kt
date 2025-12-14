@@ -144,7 +144,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             color = vicoTheme.textColor,
             textSize = 10.sp,
         )
-        
+
         Column(modifier = modifier.fillMaxWidth()) {
             TimeSelectionText(viewModel)
 
