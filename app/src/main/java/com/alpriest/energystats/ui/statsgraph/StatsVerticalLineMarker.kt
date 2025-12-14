@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.lineMarkerColor
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -16,13 +15,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun SelectedStatsValuesLineMarker(
     displayMode: StatsDisplayMode,
     model: StatsGraphLineMarkerModel,
-    themeStream: MutableStateFlow<AppTheme>,
-    showingStartAxis: Boolean
+    themeStream: MutableStateFlow<AppTheme>
 ) {
-    val leadingMargin = model.dimensions.startPadding // when startPadding, markers align with first x point
-    val trailingMargin = model.dimensions.endPadding // when endPadding, markers align with last x point
-
-    val boundsWidth = model.width - leadingMargin - trailingMargin
+    val leadingMargin = model.dimensions.startPadding
 
     val indexOffset = when (displayMode) {
         is StatsDisplayMode.Day -> 0f
@@ -32,7 +27,6 @@ fun SelectedStatsValuesLineMarker(
     }
 
     val barWidth = model.dimensions.xSpacing
-//    val boundsWidth = barWidth * displayMode.segmentCount
 
     // Which bar index is canvasX inside?
     val barIndex = model.x.toFloat()  + indexOffset
@@ -43,12 +37,6 @@ fun SelectedStatsValuesLineMarker(
     val color = lineMarkerColor(isDarkMode(themeStream))
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        drawRect(
-            Color.Blue.copy(alpha = 0.1f),
-            topLeft = Offset(leadingMargin, 21f),
-            size = Size(width = boundsWidth, height = model.height)
-        )
-
         drawRect(
             color.copy(alpha = 0.3f),
             topLeft = Offset(left, 21f),

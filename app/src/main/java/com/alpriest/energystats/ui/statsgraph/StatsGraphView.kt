@@ -1,7 +1,5 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import android.R.attr.data
-import android.R.attr.label
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -147,13 +144,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             color = vicoTheme.textColor,
             textSize = 10.sp,
         )
-
-        val startAxis = if (selfSufficiencyGraphData.isNotEmpty() || batterySOCData.isNotEmpty()) {
-            VerticalAxis.rememberStart()
-        } else {
-            null
-        }
-
+        
         Column(modifier = modifier.fillMaxWidth()) {
             TimeSelectionText(viewModel)
 
@@ -167,7 +158,6 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                             valueFormatter = remember { CartesianValueFormatter.decimal(DecimalFormat("#.#")) },
                             guideline = rememberAxisGuidelineComponent(fill = fill(axisGuidelineColor))
                         ),
-//                        startAxis = startAxis,
                         bottomAxis = HorizontalAxis.rememberBottom(
                             label = graphLabel,
                             itemPlacer = HorizontalAxis.ItemPlacer.aligned(
@@ -192,8 +182,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                     SelectedStatsValuesLineMarker(
                         displayMode,
                         it,
-                        themeStream,
-                        startAxis != null
+                        themeStream
                     )
                 }
             }

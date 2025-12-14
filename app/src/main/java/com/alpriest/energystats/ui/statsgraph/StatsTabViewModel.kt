@@ -106,12 +106,18 @@ class StatsTabViewModel(
                 if (selectedValue == null) {
                     valuesAtTimeStream.value = emptyMap()
                 } else {
-                    valuesAtTimeStream.value = _viewDataStateFlow.value.stats
+                    val viewData = _viewDataStateFlow.value
+                    val statsAtTime = viewData.stats
                         .mapValues { (_, entries) ->
                             val nearest = entries.minByOrNull { entry -> abs(entry.x - selectedValue.x) }
                             nearest?.let { listOf(it) } ?: emptyList()
                         }
                         .filterValues { it.isNotEmpty() }
+
+                    val nearest = viewData.batterySOC.minByOrNull { entry -> abs(entry.x - selectedValue.x) }
+                    val batterySocAtTime: Map<ReportVariable, List<StatsChartEntry>> = mapOf(Pair(ReportVariable.BatterySOC, nearest?.let { listOf(it) } ?: emptyList()))
+
+                    valuesAtTimeStream.value = statsAtTime + batterySocAtTime
                 }
             }
         }
