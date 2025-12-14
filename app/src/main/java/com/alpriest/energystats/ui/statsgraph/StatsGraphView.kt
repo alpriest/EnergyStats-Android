@@ -37,10 +37,12 @@ import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesian
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.patrykandpatrick.vico.compose.common.fill
 import com.patrykandpatrick.vico.compose.common.vicoTheme
 import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
+import com.patrykandpatrick.vico.core.cartesian.Zoom
 import com.patrykandpatrick.vico.core.cartesian.axis.Axis
 import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
@@ -73,6 +75,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val scrollState = rememberVicoScrollState(scrollEnabled = false)
     val isSystemInDarkTheme = isDarkMode(themeStream)
     val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray.copy(alpha = 0.5f)
+    val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = Zoom.Content)
 
     LaunchedEffect(statsGraphData) {
         modelProducer.runTransaction {
@@ -145,6 +148,12 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             textSize = 10.sp,
         )
 
+        val startAxis = if (selfSufficiencyGraphData.isNotEmpty() || batterySOCData.isNotEmpty()) {
+            VerticalAxis.rememberStart()
+        } else {
+            null
+        }
+
         Column(modifier = modifier.fillMaxWidth()) {
             TimeSelectionText(viewModel)
 
@@ -158,11 +167,11 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                             valueFormatter = remember { CartesianValueFormatter.decimal(DecimalFormat("#.#")) },
                             guideline = rememberAxisGuidelineComponent(fill = fill(axisGuidelineColor))
                         ),
-                        startAxis = VerticalAxis.rememberStart(),
+//                        startAxis = startAxis,
                         bottomAxis = HorizontalAxis.rememberBottom(
                             label = graphLabel,
                             itemPlacer = HorizontalAxis.ItemPlacer.aligned(
-                                spacing = { 3 },
+                                spacing = { 2 }
                             ),
                             valueFormatter = bottomAxisFormatter,
                             guideline = null
@@ -175,11 +184,17 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                     modifier = Modifier.fillMaxSize(),
                     scrollState = scrollState,
                     animateIn = false,
-                    animationSpec = null
+                    animationSpec = null,
+                    zoomState = zoomState
                 )
 
                 selectedValue?.let {
-                    SelectedStatsValuesLineMarker(displayMode.segmentCount, it, themeStream)
+                    SelectedStatsValuesLineMarker(
+                        displayMode,
+                        it,
+                        themeStream,
+                        startAxis != null
+                    )
                 }
             }
 

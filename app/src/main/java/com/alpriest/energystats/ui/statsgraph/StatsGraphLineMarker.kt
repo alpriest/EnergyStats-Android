@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import android.annotation.SuppressLint
-import android.graphics.RectF
 import com.alpriest.energystats.ui.paramsgraph.averageOf
 import com.patrykandpatrick.vico.core.cartesian.CartesianDrawingContext
 import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
@@ -64,7 +63,8 @@ class StatsGraphLineMarker(
 
         selectedValueStream.value = StatsGraphLineMarkerModel(
             dimensions = context.layerDimensions,
-            bounds = context.canvasBounds,
+            width = context.layerDimensions.getContentWidth(context),
+            height = context.layerBounds.height(),
             canvasX = targetX,
             x = entryX,
             time = LocalDateTime.ofInstant(
@@ -84,7 +84,8 @@ class StatsGraphLineMarker(
 
 data class StatsGraphLineMarkerModel(
     val dimensions: CartesianLayerDimensions,
-    val bounds: RectF,
+    val width: Float,
+    val height: Float,
     val canvasX: Float,
     val x: Double,
     val time: LocalDateTime?,
