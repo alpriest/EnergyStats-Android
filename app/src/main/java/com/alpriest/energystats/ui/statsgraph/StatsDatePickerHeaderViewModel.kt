@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Calendar
 
-class StatsDatePickerViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
+class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
     var rangeStream = MutableStateFlow<DatePickerRange>(DatePickerRange.DAY)
     var monthStream = MutableStateFlow(0)
     var yearStream = MutableStateFlow(0)

@@ -53,21 +53,21 @@ sealed class DatePickerRange {
     }
 }
 
-class StatsDatePickerViewModelFactory(
+class StatsDatePickerHeaderViewModelFactory(
     private val displayModeStream: MutableStateFlow<StatsDisplayMode>
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StatsDatePickerViewModel(displayModeStream) as T
+        return StatsDatePickerHeaderViewModel(displayModeStream) as T
     }
 }
 
-class StatsDatePickerView(private val displayModeStream: MutableStateFlow<StatsDisplayMode>) {
+class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<StatsDisplayMode>) {
     @Composable
     fun Content(
-        viewModel: StatsDatePickerViewModel = viewModel(factory = StatsDatePickerViewModelFactory(displayModeStream)),
+        modifier: Modifier = Modifier,
+        viewModel: StatsDatePickerHeaderViewModel = viewModel(factory = StatsDatePickerHeaderViewModelFactory(displayModeStream)),
         graphShowingState: MutableStateFlow<Boolean>,
-        modifier: Modifier = Modifier
     ) {
         val range = viewModel.rangeStream.collectAsState().value
         val month = viewModel.monthStream.collectAsState().value
@@ -129,7 +129,7 @@ class StatsDatePickerView(private val displayModeStream: MutableStateFlow<StatsD
 
 @Composable
 private fun DateRangePicker(
-    viewModel: StatsDatePickerViewModel,
+    viewModel: StatsDatePickerHeaderViewModel,
     range: DatePickerRange,
     graphShowingState: MutableStateFlow<Boolean>
 ) {
@@ -217,7 +217,7 @@ private fun DateRangePicker(
 }
 
 @Composable
-private fun CustomRangePicker(viewModel: StatsDatePickerViewModel) {
+private fun CustomRangePicker(viewModel: StatsDatePickerHeaderViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -235,7 +235,7 @@ private fun CustomRangePicker(viewModel: StatsDatePickerViewModel) {
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerView(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))).Content(
+    StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))).Content(
         graphShowingState = MutableStateFlow(false)
     )
 }

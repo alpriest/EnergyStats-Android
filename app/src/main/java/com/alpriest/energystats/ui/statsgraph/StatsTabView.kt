@@ -116,7 +116,7 @@ class StatsTabView(
         val loadState = viewModel.uiState.collectAsState().value.state
 
         topBarSettings.value = TopBarSettings(true, null, {
-            StatsDatePickerView(viewModel.displayModeStream).Content(
+            StatsDatePickerHeaderView(viewModel.displayModeStream).Content(
                 graphShowingState = viewModel.showingGraphStream
             )
         }, null)
