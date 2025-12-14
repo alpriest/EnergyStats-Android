@@ -63,10 +63,11 @@ class StatsGraphLineMarker(
         val targetX = targets.averageOf { it.canvasX }
 
         selectedValueStream.value = StatsGraphLineMarkerModel(
-            context.canvasBounds,
-            targetX,
-            entryX,
-            LocalDateTime.ofInstant(
+            dimensions = context.layerDimensions,
+            bounds = context.canvasBounds,
+            canvasX = targetX,
+            x = entryX,
+            time = LocalDateTime.ofInstant(
                 Instant.ofEpochSecond(entryX.toLong()),
                 ZoneId.systemDefault()
             )
@@ -82,6 +83,7 @@ class StatsGraphLineMarker(
 }
 
 data class StatsGraphLineMarkerModel(
+    val dimensions: CartesianLayerDimensions,
     val bounds: RectF,
     val canvasX: Float,
     val x: Double,

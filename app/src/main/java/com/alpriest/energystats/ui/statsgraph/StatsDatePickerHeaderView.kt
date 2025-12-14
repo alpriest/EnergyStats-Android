@@ -1,10 +1,14 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
@@ -16,9 +20,12 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -76,7 +83,7 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
         val canDecrease = viewModel.canDecreaseStream.collectAsState().value
 
         Row(modifier = modifier) {
-            DateRangePicker(viewModel, range, graphShowingState)
+            DateRangeMenu(viewModel, range, graphShowingState)
 
             when (range) {
                 is DatePickerRange.DAY -> com.alpriest.energystats.ui.helpers.CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
@@ -127,14 +134,17 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DateRangePicker(
+private fun DateRangeMenu(
     viewModel: StatsDatePickerHeaderViewModel,
     range: DatePickerRange,
     graphShowingState: MutableStateFlow<Boolean>
 ) {
     var showing by remember { mutableStateOf(false) }
     val graphShowing = graphShowingState.collectAsState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     Box(
         modifier = Modifier
@@ -193,7 +203,7 @@ private fun DateRangePicker(
             })
             HorizontalDivider()
             DropdownMenuItem(onClick = {
-                viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now().minusDays(30), LocalDate.now())
+                showBottomSheet = true
                 showing = false
             }, text = {
                 Text(stringResource(R.string.custom_range))
@@ -212,6 +222,20 @@ private fun DateRangePicker(
             }, trailingIcon = {
                 Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
             })
+        }
+
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                sheetState = sheetState,
+                contentWindowInsets = { WindowInsets.safeDrawing }
+            ) {
+                Column(modifier = Modifier.fillMaxHeight()) {
+                    CustomDateRangePickerView()
+                }
+            }
         }
     }
 }
