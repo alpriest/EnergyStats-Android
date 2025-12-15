@@ -91,7 +91,7 @@ class CurrentStatusCalculator(
     private fun updateCurrentValues() {
         val status = mapCurrentValues(response, device.hasPV)
         val grid = status.feedinPower - status.gridConsumptionPower
-        val homeConsumption = loadsPower(status, config.shouldCombineCT2WithLoadsPower)
+        val homeConsumption = calculateLoadsPower(status, config.shouldCombineCT2WithLoadsPower)
         val temperatures = InverterTemperatures(ambient = status.ambientTemperation, inverter = status.invTemperation)
         lastUpdate = parseToLocalDateTime(status.lastUpdate)
         val ct2 = if (config.shouldInvertCT2) 0 - status.meterPower2 else status.meterPower2
@@ -129,8 +129,10 @@ class CurrentStatusCalculator(
         )
     }
 
-    private fun loadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
-        return abs(status.gridConsumptionPower + status.generationPower - status.feedinPower + (if (shouldCombineCT2WithLoadsPower) abs(status.meterPower2) else 0.0))
+    private fun calculateLoadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
+        val actual = status.gridConsumptionPower + status.generationPower - status.feedinPower + (if (shouldCombineCT2WithLoadsPower) abs(status.meterPower2) else 0.0)
+
+        return if (config.allowNegativeHouseLoad) actual else abs(actual)
     }
 
     private fun calculateSolarPower(hasPV: Boolean, status: CurrentRawValues, shouldInvertCT2: Boolean, shouldCombineCT2WithPVPower: Boolean): Double {

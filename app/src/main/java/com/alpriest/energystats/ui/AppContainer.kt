@@ -107,7 +107,8 @@ class AppContainer(private val context: Context) {
             showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
             detectedActiveTemplate = null,
             showInverterConsumption = config.showInverterConsumption,
-            showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats
+            showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats,
+            allowNegativeHouseLoad = config.allowNegativeHouseLoad
         )
     )
 

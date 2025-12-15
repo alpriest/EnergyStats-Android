@@ -15,7 +15,9 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
     var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
     var isInitialised = false
     var customStartDate = MutableStateFlow<LocalDate>(LocalDate.now().minusDays(30))
+    val customStartDateString = MutableStateFlow<String>("")
     var customEndDate = MutableStateFlow<LocalDate>(LocalDate.now())
+    val customEndDateString = MutableStateFlow<String>("")
     var canDecreaseStream = MutableStateFlow(false)
     var canIncreaseStream = MutableStateFlow(false)
 
@@ -61,6 +63,18 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
 
             updateIncreaseDecreaseButtons()
             isInitialised = true
+        }
+
+        viewModelScope.launch {
+            customStartDate.collect {
+                customStartDateString.value = it.toString()
+            }
+        }
+
+        viewModelScope.launch {
+            customEndDate.collect {
+                customEndDateString.value = it.toString()
+            }
         }
     }
 

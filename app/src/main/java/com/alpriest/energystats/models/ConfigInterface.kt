@@ -72,6 +72,7 @@ interface ConfigInterface {
     var generationViewData: GenerationViewData?
     var showInverterConsumption: Boolean
     var showBatterySOCOnDailyStats: Boolean
+    var allowNegativeHouseLoad: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()

@@ -23,6 +23,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -40,10 +41,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.helpers.CalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.YearPicker
+import com.alpriest.energystats.ui.settings.SlimButton
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.Typography
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,25 +81,12 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
         graphShowingState: MutableStateFlow<Boolean>,
     ) {
         val range = viewModel.rangeStream.collectAsState().value
-        val month = viewModel.monthStream.collectAsState().value
-        val year = viewModel.yearStream.collectAsState().value
         val canIncrease = viewModel.canIncreaseStream.collectAsState().value
         val canDecrease = viewModel.canDecreaseStream.collectAsState().value
 
         Row(modifier = modifier) {
             DateRangeMenu(viewModel, range, graphShowingState)
-
-            when (range) {
-                is DatePickerRange.DAY -> com.alpriest.energystats.ui.helpers.CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
-                is DatePickerRange.MONTH -> {
-                    MonthPicker(month) { viewModel.monthStream.value = it }
-                    YearPicker(year) { viewModel.yearStream.value = it }
-                }
-
-                is DatePickerRange.YEAR -> YearPicker(year) { viewModel.yearStream.value = it }
-                is DatePickerRange.CUSTOM -> CustomRangePicker(viewModel)
-            }
-
+            Title(viewModel, range)
             Spacer(modifier = Modifier.weight(1.0f))
 
             if (!range.isCustom()) {
@@ -130,6 +121,23 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
                     )
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun Title(viewModel: StatsDatePickerHeaderViewModel, range: DatePickerRange) {
+        val month = viewModel.monthStream.collectAsState().value
+        val year = viewModel.yearStream.collectAsState().value
+
+        when (range) {
+            is DatePickerRange.DAY -> CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
+            is DatePickerRange.MONTH -> {
+                MonthPicker(month) { viewModel.monthStream.value = it }
+                YearPicker(year) { viewModel.yearStream.value = it }
+            }
+
+            is DatePickerRange.YEAR -> YearPicker(year) { viewModel.yearStream.value = it }
+            is DatePickerRange.CUSTOM -> CustomDateRangeTitle(viewModel)
         }
     }
 }
@@ -203,7 +211,8 @@ private fun DateRangeMenu(
             })
             HorizontalDivider()
             DropdownMenuItem(onClick = {
-                showBottomSheet = true
+                viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now().minusDays(30), LocalDate.now())
+//                showBottomSheet = true
                 showing = false
             }, text = {
                 Text(stringResource(R.string.custom_range))
@@ -241,25 +250,43 @@ private fun DateRangeMenu(
 }
 
 @Composable
-private fun CustomRangePicker(viewModel: StatsDatePickerHeaderViewModel) {
+private fun CustomDateRangeTitle(viewModel: StatsDatePickerHeaderViewModel) {
+    val customStartDateString = viewModel.customStartDateString.collectAsStateWithLifecycle().value
+    val customEndDateString = viewModel.customEndDateString.collectAsStateWithLifecycle().value
+    var showingCustomDateRangePicker = remember { false }
+
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        com.alpriest.energystats.ui.helpers.CalendarView(viewModel.customStartDate, style = Typography.bodyMedium)
+        Spacer(Modifier.weight(1.0f))
+        Text(
+            customStartDateString,
+            style = MaterialTheme.typography.headlineSmall
+        )
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp),
+            modifier = Modifier.padding(horizontal = 8.dp),
             tint = Color.White
         )
-        com.alpriest.energystats.ui.helpers.CalendarView(viewModel.customEndDate, style = Typography.bodyMedium)
+        Text(
+            customEndDateString,
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Spacer(Modifier.weight(1.0f))
+
+        SlimButton(
+            onClick = { showingCustomDateRangePicker = true }
+        ) {
+            Text("Change")
+        }
     }
 }
 
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Day(LocalDate.now()))).Content(
+    StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now()))).Content(
         graphShowingState = MutableStateFlow(false)
     )
 }

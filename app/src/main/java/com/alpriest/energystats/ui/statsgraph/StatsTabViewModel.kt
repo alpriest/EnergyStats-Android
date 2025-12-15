@@ -256,7 +256,7 @@ class StatsTabViewModel(
         val baseExportFileName: String
 
         when (displayMode) {
-            is StatsDisplayMode.Day -> {
+            is Day -> {
                 val date = displayMode.date
 
                 val year = date.year
@@ -347,7 +347,7 @@ class StatsTabViewModel(
             .filter { !hiddenVariables.contains(it.type) }
             .filter {
                 when (displayMode) {
-                    is StatsDisplayMode.Day -> {
+                    is Day -> {
                         if (displayMode.date == LocalDate.now()) {
                             it.graphPoint <= now.hour
                         } else {

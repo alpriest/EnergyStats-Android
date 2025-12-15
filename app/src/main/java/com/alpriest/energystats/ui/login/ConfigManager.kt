@@ -587,6 +587,13 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             themeStream.value = themeStream.value.copy(showStringTotalsAsPercentage = showStringTotalsAsPercentage)
         }
 
+    override var allowNegativeHouseLoad: Boolean
+        get() = config.allowNegativeHouseLoad
+        set(value) {
+            config.allowNegativeHouseLoad = value
+            themeStream.value = themeStream.value.copy(allowNegativeHouseLoad = allowNegativeHouseLoad)
+        }
+
     override var showInverterConsumption: Boolean
         get() = config.showInverterConsumption
         set(value) {

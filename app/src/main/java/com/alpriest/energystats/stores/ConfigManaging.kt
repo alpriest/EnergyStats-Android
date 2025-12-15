@@ -100,6 +100,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var showInverterConsumption: Boolean
     var showBatterySOCOnDailyStats: Boolean
     var showStringTotalsAsPercentage: Boolean
+    var allowNegativeHouseLoad: Boolean
 }
 
 enum class DeviceCapability {

@@ -91,7 +91,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         GENERATION_VIEW_DATA,
         SHOW_INVERTER_CONSUMPTION,
         SHOW_BATTERY_SOC_ON_DAILY_STATS,
-        INVERTER_WORK_MODES
+        INVERTER_WORK_MODES,
+        ALLOW_NEGATIVE_LOADS
     }
 
     override fun clearDisplaySettings() {
@@ -724,6 +725,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             sharedPreferences.edit {
                 val jsonString = Gson().toJson(value)
                 putString(SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, jsonString)
+            }
+        }
+
+    override var allowNegativeHouseLoad: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, false)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, value)
             }
         }
 }

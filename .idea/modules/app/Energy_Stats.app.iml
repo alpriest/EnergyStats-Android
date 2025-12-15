@@ -3,8 +3,8 @@
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
-        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="8.13.1" />
-        <option name="LAST_KNOWN_AGP_VERSION" value="8.13.1" />
+        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="8.13.2" />
+        <option name="LAST_KNOWN_AGP_VERSION" value="8.13.2" />
       </configuration>
     </facet>
     <facet type="android" name="Android">
@@ -16,5 +16,15 @@
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
       </configuration>
     </facet>
+  </component>
+  <component name="ModuleClassLoaderOverlays">
+    <paths>
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay2545082310782890570" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay611480500591819288" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay4270116831613231576" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay10571272324605345407" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay1306203397709332570" />
+      <option value="/var/folders/4q/ylmm_6m968l2n6gl67kwkck80000gn/T/overlay5692411046291998751" />
+    </paths>
   </component>
 </module>

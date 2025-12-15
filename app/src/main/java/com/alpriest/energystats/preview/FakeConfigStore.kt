@@ -84,7 +84,8 @@ class FakeConfigStore(
     override var generationViewData: GenerationViewData? = null,
     override var showInverterConsumption: Boolean = false,
     override var showBatterySOCOnDailyStats: Boolean = false,
-    override var workModes: List<String> = listOf()
+    override var workModes: List<String> = listOf(),
+    override var allowNegativeHouseLoad: Boolean = false
 
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}
