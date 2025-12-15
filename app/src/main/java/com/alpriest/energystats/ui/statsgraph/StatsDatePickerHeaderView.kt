@@ -83,10 +83,22 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
         val range = viewModel.rangeStream.collectAsState().value
         val canIncrease = viewModel.canIncreaseStream.collectAsState().value
         val canDecrease = viewModel.canDecreaseStream.collectAsState().value
+        var showingCustomDateRangePicker by remember { mutableStateOf(false) }
 
         Row(modifier = modifier) {
-            DateRangeMenu(viewModel, range, graphShowingState)
-            Title(viewModel, range)
+            DateRangeMenu(
+                viewModel = viewModel,
+                range = range,
+                graphShowingState = graphShowingState,
+                showingCustomDateRangePicker = showingCustomDateRangePicker,
+                onShowingCustomDateRangePickerChange = { showingCustomDateRangePicker = it }
+            )
+            Title(
+                viewModel = viewModel,
+                range = range,
+                showingCustomDateRangePicker = showingCustomDateRangePicker,
+                onShowingCustomDateRangePickerChange = { showingCustomDateRangePicker = it }
+            )
             Spacer(modifier = Modifier.weight(1.0f))
 
             if (!range.isCustom()) {
@@ -125,7 +137,12 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
     }
 
     @Composable
-    private fun Title(viewModel: StatsDatePickerHeaderViewModel, range: DatePickerRange) {
+    private fun Title(
+        viewModel: StatsDatePickerHeaderViewModel,
+        range: DatePickerRange,
+        showingCustomDateRangePicker: Boolean,
+        onShowingCustomDateRangePickerChange: (Boolean) -> Unit
+    ) {
         val month = viewModel.monthStream.collectAsState().value
         val year = viewModel.yearStream.collectAsState().value
 
@@ -137,7 +154,10 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
             }
 
             is DatePickerRange.YEAR -> YearPicker(year) { viewModel.yearStream.value = it }
-            is DatePickerRange.CUSTOM -> CustomDateRangeTitle(viewModel)
+            is DatePickerRange.CUSTOM -> CustomDateRangeTitle(
+                viewModel = viewModel,
+                onChangeClick = { onShowingCustomDateRangePickerChange(true) }
+            )
         }
     }
 }
@@ -147,11 +167,12 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
 private fun DateRangeMenu(
     viewModel: StatsDatePickerHeaderViewModel,
     range: DatePickerRange,
-    graphShowingState: MutableStateFlow<Boolean>
+    graphShowingState: MutableStateFlow<Boolean>,
+    showingCustomDateRangePicker: Boolean,
+    onShowingCustomDateRangePickerChange: (Boolean) -> Unit
 ) {
     var showing by remember { mutableStateOf(false) }
     val graphShowing = graphShowingState.collectAsState()
-    var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     Box(
@@ -211,9 +232,7 @@ private fun DateRangeMenu(
             })
             HorizontalDivider()
             DropdownMenuItem(onClick = {
-                viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now().minusDays(30), LocalDate.now())
-//                showBottomSheet = true
-                showing = false
+                onShowingCustomDateRangePickerChange(true)
             }, text = {
                 Text(stringResource(R.string.custom_range))
             }, trailingIcon = {
@@ -233,27 +252,31 @@ private fun DateRangeMenu(
             })
         }
 
-        if (showBottomSheet) {
+        if (showingCustomDateRangePicker) {
             ModalBottomSheet(
                 onDismissRequest = {
-                    showBottomSheet = false
+                    onShowingCustomDateRangePickerChange(false)
                 },
                 sheetState = sheetState,
                 contentWindowInsets = { WindowInsets.safeDrawing }
             ) {
                 Column(modifier = Modifier.fillMaxHeight()) {
                     CustomDateRangePickerView()
+//                viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now().minusDays(30), LocalDate.now())
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CustomDateRangeTitle(viewModel: StatsDatePickerHeaderViewModel) {
+private fun CustomDateRangeTitle(
+    viewModel: StatsDatePickerHeaderViewModel,
+    onChangeClick: () -> Unit
+) {
     val customStartDateString = viewModel.customStartDateString.collectAsStateWithLifecycle().value
     val customEndDateString = viewModel.customEndDateString.collectAsStateWithLifecycle().value
-    var showingCustomDateRangePicker = remember { false }
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -261,7 +284,8 @@ private fun CustomDateRangeTitle(viewModel: StatsDatePickerHeaderViewModel) {
         Spacer(Modifier.weight(1.0f))
         Text(
             customStartDateString,
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
+            color = Color.White
         )
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
@@ -271,16 +295,18 @@ private fun CustomDateRangeTitle(viewModel: StatsDatePickerHeaderViewModel) {
         )
         Text(
             customEndDateString,
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
+            color = Color.White
         )
         Spacer(Modifier.weight(1.0f))
 
         SlimButton(
-            onClick = { showingCustomDateRangePicker = true }
+            onClick = onChangeClick
         ) {
             Text("Change")
         }
     }
+
 }
 
 @Preview(widthDp = 500, heightDp = 500)
