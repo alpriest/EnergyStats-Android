@@ -9,7 +9,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.paramsgraph.graphs.VariableKey
@@ -20,6 +23,7 @@ import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
+import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.patrykandpatrick.vico.compose.common.fill
 import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.core.cartesian.axis.Axis
@@ -143,6 +147,12 @@ private fun ParameterGraphViewWithCustomMarker(
         rangeProvider = rangeProvider
     )
 
+    val color = axisLabelColor(isDarkMode(themeStream))
+    val graphLabel = rememberTextComponent(
+        color = color,
+        textSize = 10.sp,
+    )
+
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -154,10 +164,12 @@ private fun ParameterGraphViewWithCustomMarker(
                 chart = rememberCartesianChart(
                     lineLayer,
                     endAxis = VerticalAxis.rememberEnd(
+                        label = graphLabel,
                         itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
                         valueFormatter = endAxisFormatter
                     ),
                     bottomAxis = HorizontalAxis.rememberBottom(
+                        label = graphLabel,
                         itemPlacer = HorizontalAxis.ItemPlacer.aligned(
                             spacing = { SECONDS_IN_DAY / 24 },
                             addExtremeLabelPadding = true

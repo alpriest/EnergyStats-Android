@@ -22,6 +22,7 @@ import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
@@ -139,8 +140,9 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             if (batterySOCData.isNotEmpty()) add(batterySOCLayer)
         }
 
+        val color = axisLabelColor(isDarkMode(themeStream))
         val graphLabel = rememberTextComponent(
-            color = vicoTheme.textColor,
+            color = color,
             textSize = 10.sp,
         )
 

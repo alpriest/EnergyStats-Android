@@ -13,3 +13,12 @@ fun lineMarkerColor(isDarkMode: Boolean): Color {
         MarkerLineInLightTheme
     }
 }
+
+@Composable
+fun axisLabelColor(isDarkMode: Boolean): Color {
+    return if (isDarkMode) {
+        Color.White
+    } else {
+        Color.Black
+    }
+}
