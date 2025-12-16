@@ -1,12 +1,11 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -48,6 +47,7 @@ import com.alpriest.energystats.ui.helpers.CalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.YearPicker
 import com.alpriest.energystats.ui.settings.SlimButton
+import com.alpriest.energystats.ui.settings.darkenedBackgroundColor
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.Typography
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -254,16 +254,15 @@ private fun DateRangeMenu(
 
         if (showingCustomDateRangePicker) {
             ModalBottomSheet(
+                containerColor = darkenedBackgroundColor(),
                 onDismissRequest = {
                     onShowingCustomDateRangePickerChange(false)
                 },
                 sheetState = sheetState,
                 contentWindowInsets = { WindowInsets.safeDrawing }
             ) {
-                Column(modifier = Modifier.fillMaxHeight()) {
-                    CustomDateRangePickerView()
-//                viewModel.rangeStream.value = DatePickerRange.CUSTOM(LocalDate.now().minusDays(30), LocalDate.now())
-                }
+                CustomDateRangePickerView()
+                Spacer(Modifier.height(48.dp))
             }
         }
     }

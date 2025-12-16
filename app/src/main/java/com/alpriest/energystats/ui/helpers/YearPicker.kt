@@ -23,13 +23,13 @@ import com.alpriest.energystats.ui.theme.Typography
 import java.util.Calendar
 
 @Composable
-fun YearPicker(year: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
+fun YearPicker(year: Int, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
     Box(
-        modifier = Modifier.Companion
-            .wrapContentSize(Alignment.Companion.TopStart)
+        modifier = modifier
+            .wrapContentSize(Alignment.TopStart)
             .padding(end = 14.dp)
     ) {
         SlimButton(

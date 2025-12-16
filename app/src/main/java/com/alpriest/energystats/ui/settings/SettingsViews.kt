@@ -434,9 +434,10 @@ fun SettingsBottomSpace() {
 }
 
 @Composable
-fun SlimButton(enabled: Boolean = true, onClick: () -> Unit, content: @Composable () -> Unit) {
+fun SlimButton(modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit, content: @Composable () -> Unit) {
     ESButton(
         onClick = onClick,
+        modifier = modifier,
         enabled = enabled,
         contentPadding = PaddingValues(horizontal = 12.dp)
     ) {

@@ -25,15 +25,15 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun MonthPicker(month: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
+fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifier = Modifier, enabled: Boolean = true, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
     val calendar = Calendar.getInstance()
     calendar.set(Calendar.DAY_OF_MONTH, 1)
     val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
 
     Box(
-        modifier = Modifier.Companion
-            .wrapContentSize(Alignment.Companion.TopStart)
+        modifier = modifier
+            .wrapContentSize(Alignment.TopStart)
             .padding(end = 14.dp)
     ) {
         SlimButton(
@@ -41,7 +41,11 @@ fun MonthPicker(month: Int, enabled: Boolean = true, onClick: (Int) -> Unit) {
             onClick = { showing = true }
         ) {
             calendar.set(Calendar.MONTH, month)
-            Text(monthFormat.format(calendar.time), style = Typography.headlineMedium)
+            Text(
+                monthFormat.format(calendar.time),
+                style = Typography.headlineMedium,
+                modifier = textModifier
+            )
         }
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
