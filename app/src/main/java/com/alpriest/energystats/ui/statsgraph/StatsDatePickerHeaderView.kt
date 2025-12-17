@@ -45,7 +45,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.ui.helpers.CalendarView
+import com.alpriest.energystats.ui.helpers.PopupCalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.YearPicker
 import com.alpriest.energystats.ui.settings.SlimButton
@@ -154,7 +154,7 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
         val year = viewModel.yearStream.collectAsState().value
 
         when (range) {
-            is DatePickerRange.DAY -> CalendarView(viewModel.dateStream, style = Typography.headlineMedium)
+            is DatePickerRange.DAY -> PopupCalendarView(viewModel.dateStream, style = Typography.headlineMedium)
             is DatePickerRange.MONTH -> {
                 MonthPicker(month) { viewModel.monthStream.value = it }
                 YearPicker(year) { viewModel.yearStream.value = it }
@@ -287,7 +287,7 @@ private fun DateRangeMenu(
                         }
                     },
                     { start, end, unit ->
-                        viewModel.updateCustomDateRange(start, end, unit)
+                        viewModel.updateCustomDateRange(start, end)
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
                                 onShowingCustomDateRangePickerChange(false)

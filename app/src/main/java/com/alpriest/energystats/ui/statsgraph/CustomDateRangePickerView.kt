@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.helpers.CalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.helpers.YearPicker
@@ -53,6 +56,7 @@ fun CustomDateRangePickerView(
     onDismiss: () -> Unit,
     onConfirm: (LocalDate, LocalDate, CustomDateRangeDisplayUnit) -> Unit
 ) {
+    var scrollState = rememberScrollState()
     var start by remember(initialStart) { mutableStateOf(initialStart) }
     var end by remember(initialEnd) { mutableStateOf(initialEnd) }
     var viewBy by remember(initialViewBy) { mutableStateOf(initialViewBy) }
@@ -69,7 +73,8 @@ fun CustomDateRangePickerView(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .darkenedBackground(),
+            .darkenedBackground()
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
@@ -114,34 +119,44 @@ fun CustomDateRangePickerView(
             )
         }
 
-        SettingsColumn(header = "Start") {
-            Row(Modifier.fillMaxWidth()) {
-                MonthPicker(
-                    start.monthValue,
-                    modifier = Modifier.weight(1.0f),
-                    textModifier = Modifier.fillMaxWidth()
-                ) {
-                    start = start.withMonth(it)
-                }
+        if (viewBy == CustomDateRangeDisplayUnit.DAYS) {
+            SettingsColumn(header = "Start") {
+                CalendarView(start, { start = it })
+            }
 
-                YearPicker(start.year, modifier = Modifier.weight(1.0f)) {
-                    start = start.withYear(it)
+            SettingsColumn(header = "End") {
+                CalendarView(end, { end = it })
+            }
+        } else {
+            SettingsColumn(header = "Start") {
+                Row(Modifier.fillMaxWidth()) {
+                    MonthPicker(
+                        start.monthValue,
+                        modifier = Modifier.weight(1.0f),
+                        textModifier = Modifier.fillMaxWidth()
+                    ) {
+                        start = start.withMonth(it)
+                    }
+
+                    YearPicker(start.year, modifier = Modifier.weight(1.0f)) {
+                        start = start.withYear(it)
+                    }
                 }
             }
-        }
 
-        SettingsColumn(header = "End") {
-            Row(Modifier.fillMaxWidth()) {
-                MonthPicker(
-                    end.monthValue,
-                    modifier = Modifier.weight(1.0f),
-                    textModifier = Modifier.fillMaxWidth()
-                ) {
-                    end = end.withMonth(it)
-                }
+            SettingsColumn(header = "End") {
+                Row(Modifier.fillMaxWidth()) {
+                    MonthPicker(
+                        end.monthValue,
+                        modifier = Modifier.weight(1.0f),
+                        textModifier = Modifier.fillMaxWidth()
+                    ) {
+                        end = end.withMonth(it)
+                    }
 
-                YearPicker(end.year, modifier = Modifier.weight(1.0f)) {
-                    end = end.withYear(it)
+                    YearPicker(end.year, modifier = Modifier.weight(1.0f)) {
+                        end = end.withYear(it)
+                    }
                 }
             }
         }

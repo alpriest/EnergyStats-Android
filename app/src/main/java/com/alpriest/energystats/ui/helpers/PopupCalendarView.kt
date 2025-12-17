@@ -31,7 +31,7 @@ import java.time.ZoneId
 import java.util.Calendar
 
 @Composable
-fun CalendarView(dateStream: MutableStateFlow<LocalDate>, style: TextStyle) {
+fun PopupCalendarView(dateStream: MutableStateFlow<LocalDate>, style: TextStyle) {
     var showingDatePicker by remember { mutableStateOf(false) }
 
     val dateState = dateStream.collectAsState().value
@@ -75,6 +75,24 @@ fun CalendarView(dateStream: MutableStateFlow<LocalDate>, style: TextStyle) {
             }
         }
     }
+}
+
+@Composable
+fun CalendarView(date: LocalDate, onChange: (LocalDate) -> Unit) {
+    val millis = localDateToMillis(date)
+
+    AndroidView(
+        { CalendarView(it) },
+        modifier = Modifier.Companion.wrapContentWidth(),
+        update = { views ->
+            views.date = millis
+            views.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                val cal = Calendar.getInstance()
+                cal.set(year, month, dayOfMonth)
+                onChange(millisToLocalDate(cal.timeInMillis))
+            }
+        }
+    )
 }
 
 private fun localDateToMillis(localDate: LocalDate): Long {

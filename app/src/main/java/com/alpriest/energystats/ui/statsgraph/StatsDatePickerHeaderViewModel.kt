@@ -78,7 +78,7 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
         }
     }
 
-    fun updateCustomDateRange(start: LocalDate, end: LocalDate, unit: CustomDateRangeDisplayUnit) {
+    fun updateCustomDateRange(start: LocalDate, end: LocalDate) {
         if (start > end) {
             return
         }

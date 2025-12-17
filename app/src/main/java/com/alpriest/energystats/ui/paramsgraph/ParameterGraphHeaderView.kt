@@ -38,7 +38,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.helpers.CalendarView
+import com.alpriest.energystats.ui.helpers.PopupCalendarView
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.ESButton
@@ -109,7 +109,7 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
             })
         }
 
-        CalendarView(dateStream = candidateQueryDate, style = Typography.headlineMedium)
+        PopupCalendarView(dateStream = candidateQueryDate, style = Typography.headlineMedium)
 
         Spacer(modifier = Modifier.weight(2.0f))
 
