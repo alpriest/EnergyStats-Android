@@ -78,6 +78,16 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
         }
     }
 
+    fun updateCustomDateRange(start: LocalDate, end: LocalDate, unit: CustomDateRangeDisplayUnit) {
+        if (start > end) {
+            return
+        }
+
+        customStartDate.value = start
+        customEndDate.value = end
+        updateDisplayMode()
+    }
+
     private fun makeUpdatedDisplayMode(range: DatePickerRange): StatsDisplayMode {
         return when (range) {
             is DatePickerRange.DAY -> StatsDisplayMode.Day(dateStream.value)
@@ -119,7 +129,7 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
 
             is StatsDisplayMode.Custom -> {
                 canIncreaseStream.value = false
-                canDecreaseStream.value = true
+                canDecreaseStream.value = false
             }
         }
     }

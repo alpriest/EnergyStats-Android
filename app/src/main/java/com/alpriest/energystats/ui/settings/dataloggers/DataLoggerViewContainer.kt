@@ -28,15 +28,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.DataLoggerStatus
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
-import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.SettingsRow
@@ -65,13 +65,12 @@ class DataLoggerViewModel(
     val network: Networking,
     val config: ConfigManaging,
     val navController: NavController
-) : ViewModel(), AlertDialogMessageProviding {
+) : ViewModel() {
     var itemStream: MutableStateFlow<List<DataLogger>> = MutableStateFlow(listOf())
-    var activityStream = MutableStateFlow<LoadState>(LoadState.Inactive)
-    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+    var uiState = MutableStateFlow<UiLoadState>(UiLoadState(LoadState.Inactive))
 
     suspend fun load(context: Context) {
-        activityStream.value = LoadState.Active.Loading
+        uiState.value = UiLoadState(LoadState.Active.Loading)
 
         runCatching {
             try {
@@ -84,12 +83,10 @@ class DataLoggerViewModel(
                         status = it.status
                     )
                 }
-                activityStream.value = LoadState.Inactive
+                uiState.value = UiLoadState(LoadState.Inactive)
             } catch (ex: Exception) {
-                alertDialogMessage.value = MonitorAlertDialogData(ex, ex.localizedMessage)
+                uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), true))
             }
-        }.also {
-            activityStream.value = LoadState.Inactive
         }
     }
 }
@@ -101,7 +98,7 @@ class DataLoggerViewContainer(
 ) {
     @Composable
     fun Content(viewModel: DataLoggerViewModel = viewModel(factory = DataLoggerViewModelFactory(network, configManager, navController)), modifier: Modifier) {
-        val loadState = viewModel.activityStream.collectAsState().value
+        val loadState = viewModel.uiState.collectAsState().value.state
         val context = LocalContext.current
 
         LaunchedEffect(null) {
@@ -114,7 +111,8 @@ class DataLoggerViewContainer(
         when (loadState) {
             is LoadState.Active ->
                 LoadingView(loadState)
-            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { }, allowRetry = true)
+            is LoadState.Error ->
+                ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { }, allowRetry = true)
             is LoadState.Inactive ->
                 SettingsPage(modifier) {
                     items.value.map {

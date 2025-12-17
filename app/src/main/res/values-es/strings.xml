@@ -479,4 +479,6 @@
     <string name="edit_parameter_group">Editar grupo de parámetros</string>
     <string name="parameter_selector_overview">Selecciona un grupo a continuación para centrarte en los parámetros más utilizados o crea el tuyo propio con el botón “Editar”.</string>
     <string name="battery_temperature_footer">Energy Stats muestra la temperatura del BMS. Ten en cuenta que la aplicación de FoxESS muestra la temperatura más baja de las celdas de la batería (que el BMS utiliza para controlar el comportamiento de carga y descarga). FoxESS no pone a disposición de aplicaciones de terceros la temperatura más baja de las celdas de la batería.</string>
+    <string name="capacity">Capacidad</string>
+    <string name="timezone">Zona horaria</string>
 </resources>

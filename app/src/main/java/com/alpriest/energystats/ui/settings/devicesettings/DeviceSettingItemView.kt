@@ -35,6 +35,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPadding
@@ -70,7 +71,7 @@ class DeviceSettingItemView(
         when (val loadState = viewModel.uiState.collectAsState().value) {
             is LoadState.Inactive -> LoadedView(viewModel, modifier, navController)
             is LoadState.Active -> LoadingView(loadState)
-            is LoadState.Error -> Text("Error: $loadState")
+            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { }, allowRetry = true)
         }
     }
 

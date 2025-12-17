@@ -56,27 +56,37 @@ fun ContentWithBottomButtons(
     ) {
         content(Modifier.padding(bottom = 86.dp))
 
-        Box(
-            contentAlignment = Alignment.BottomCenter,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column {
-                HorizontalDivider(
-                    color = Color.LightGray,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                )
+        BottomButtons(modifier, footer, buttons)
+    }
+}
 
-                BottomButtonsView(
-                    modifier = Modifier
-                            .background(colorScheme.surface)
-                            .padding(12.dp),
-                    footer = footer,
-                    buttons = buttons
-                )
-            }
-        }
+@Composable
+fun BottomButtons(modifier: Modifier, footer: @Composable (ColumnScope.() -> Unit) = {}, buttons: List<BottomButtonConfiguration>) {
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        ButtonStrip(modifier, footer, buttons)
+    }
+}
+
+@Composable
+fun ButtonStrip(modifier: Modifier, footer: @Composable (ColumnScope.() -> Unit) = {}, buttons: List<BottomButtonConfiguration>) {
+    Column {
+        HorizontalDivider(
+            color = Color.LightGray,
+            modifier = modifier
+                .fillMaxWidth()
+                .height(1.dp)
+        )
+
+        BottomButtonsView(
+            modifier = Modifier
+                .background(colorScheme.surface)
+                .padding(12.dp),
+            footer = footer,
+            buttons = buttons
+        )
     }
 }
 

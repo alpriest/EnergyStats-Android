@@ -32,6 +32,7 @@ import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -73,11 +74,7 @@ class PeakShavingSettingsView(
                 }
             }
 
-            is LoadState.Error -> {
-                SettingsPage(modifier) {
-                    Text("Error: $loadState")
-                }
-            }
+            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { }, allowRetry = true)
         }
     }
 

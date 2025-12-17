@@ -6,13 +6,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
-import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkModes
 import com.alpriest.energystats.ui.settings.inverter.schedule.networkTitle
@@ -40,7 +39,7 @@ class WorkModeViewModel(
     val config: ConfigManaging,
     val navController: NavController
 ) : ViewModel(), AlertDialogMessageProviding {
-    var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
+    var uiState = MutableStateFlow<LoadState>(LoadState.Inactive)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var items: List<WorkMode> = listOf()
 
@@ -61,28 +60,28 @@ class WorkModeViewModel(
     }
 
     suspend fun load(context: Context) {
-        uiState.value = UiLoadState(LoadState.Active.Loading)
+        uiState.value = LoadState.Active.Loading
         items = config.workModes
 
         runCatching {
             config.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
-                if (items.isEmpty()) {
-                    config.workModes = fetchWorkModes(deviceSN)
-                }
-
                 try {
+                    if (items.isEmpty()) {
+                        config.workModes = fetchWorkModes(deviceSN)
+                    }
+
                     val result = network.fetchDeviceSettingsItem(deviceSN, DeviceSettingsItem.WorkMode)
                     val viewData = WorkModeViewData(result.value)
                     originalValue = viewData
                     _viewDataStream.value = viewData
-                    uiState.value = UiLoadState(LoadState.Inactive)
+                    uiState.value = LoadState.Inactive
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: "Unknown error"))
+                    uiState.value = LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.failed_to_load_settings))
                 }
             } ?: {
-                uiState.value = UiLoadState(LoadState.Inactive)
+                uiState.value = LoadState.Inactive
             }
         }
     }
@@ -93,7 +92,7 @@ class WorkModeViewModel(
     }
 
     suspend fun save(context: Context) {
-        uiState.value = UiLoadState(LoadState.Active.Saving)
+        uiState.value = LoadState.Active.Saving
 
         runCatching {
             config.currentDevice.value?.let { device ->
@@ -109,12 +108,12 @@ class WorkModeViewModel(
 
                     alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.inverter_work_mode_was_saved))
 
-                    uiState.value = UiLoadState(LoadState.Inactive)
+                    uiState.value = LoadState.Inactive
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, context.getString(R.string.something_went_wrong_fetching_data_from_foxess_cloud)))
+                    uiState.value = LoadState.Error(ex, context.getString(R.string.something_went_wrong_fetching_data_from_foxess_cloud))
                 }
             } ?: run {
-                uiState.value = UiLoadState(LoadState.Inactive)
+                uiState.value = LoadState.Inactive
             }
         }
     }

@@ -479,4 +479,6 @@
     <string name="edit_parameter_group">Parametergruppe bearbeiten</string>
     <string name="parameter_selector_overview">Wählen Sie unten eine Gruppe aus, um sich auf häufig verwendete Parameter zu konzentrieren, oder erstellen Sie mit der Schaltfläche „Bearbeiten“ Ihre eigene.</string>
     <string name="battery_temperature_footer">Energy Stats zeigt die BMS-Temperatur an. Beachten Sie, dass die FoxESS-App die niedrigste Batteriezellentemperatur anzeigt (die vom BMS zur Steuerung des Lade- und Entladeverhaltens verwendet wird). FoxESS stellt die niedrigste Batteriezellentemperatur nicht für Apps von Drittanbietern zur Verfügung.</string>
+    <string name="capacity">Kapazität</string>
+    <string name="timezone">Zeitzone</string>
 </resources>

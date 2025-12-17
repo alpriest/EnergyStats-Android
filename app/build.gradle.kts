@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.lifecycle.process)
     implementation(libs.lifecycle.runtimeKtx)
     implementation(libs.lifecycle.viewmodelCompose)
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     implementation(platform(libs.firebase.bom))

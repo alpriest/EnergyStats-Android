@@ -50,7 +50,7 @@ class WorkModeSettingsView(
         val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
         val viewData = viewModel.viewDataStream.collectAsState().value
-        val loadState = viewModel.uiState.collectAsState().value.state
+        val loadState = viewModel.uiState.collectAsState().value
 
         MonitorAlertDialog(viewModel, userManager)
 

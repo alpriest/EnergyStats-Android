@@ -480,4 +480,6 @@
     <string name="edit_parameter_group">Edytuj grupę parametrów</string>
     <string name="parameter_selector_overview">Wybierz poniżej grupę, aby skupić się na najczęściej używanych parametrach, lub utwórz własną za pomocą przycisku „Edytuj”.</string>
     <string name="battery_temperature_footer">Energy Stats wyświetla temperaturę BMS. Zwróć uwagę, że aplikacja FoxESS pokazuje najniższą temperaturę ogniwa baterii (wykorzystywaną przez BMS do sterowania ładowaniem i rozładowaniem). FoxESS nie udostępnia najniższej temperatury ogniwa baterii aplikacjom firm trzecich.</string>
+    <string name="capacity">Pojemność</string>
+    <string name="timezone">Strefa czasowa</string>
 </resources>
