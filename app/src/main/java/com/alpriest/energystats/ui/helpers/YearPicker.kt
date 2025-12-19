@@ -1,9 +1,11 @@
 package com.alpriest.energystats.ui.helpers
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -18,7 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.ui.settings.SlimButton
+import com.alpriest.energystats.ui.settings.OutlinedSlimButton
 import com.alpriest.energystats.ui.theme.Typography
 import java.util.Calendar
 
@@ -32,11 +34,14 @@ fun YearPicker(year: Int, modifier: Modifier = Modifier, enabled: Boolean = true
             .wrapContentSize(Alignment.TopStart)
             .padding(end = 14.dp)
     ) {
-        SlimButton(
+        OutlinedSlimButton(
             enabled = enabled,
             onClick = { showing = true }
         ) {
-            Text(year.toString(), style = Typography.headlineMedium)
+            Row {
+                Text(year.toString(), style = Typography.headlineMedium)
+                Icon(Icons.Default.ArrowDropDown, "backIcon")
+            }
         }
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {

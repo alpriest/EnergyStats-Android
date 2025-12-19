@@ -4,7 +4,6 @@ package com.alpriest.energystats.ui.flow.home
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,10 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
@@ -67,33 +64,7 @@ import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import com.alpriest.energystats.ui.theme.demo
-import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
-
-@Composable
-fun ShimmerText(
-    shimmering: Boolean,
-    text: String,
-    color: Color = Color.Unspecified,
-    fontSize: TextUnit = TextUnit.Unspecified,
-    fontWeight: FontWeight? = null
-) {
-    Box(modifier = Modifier.let {
-        if (shimmering) {
-            it.shimmer()
-        } else {
-            it
-        }
-    }) {
-        Text(
-            text = text,
-            color = if (shimmering) Color.Transparent else color,
-            modifier = Modifier.background(if (shimmering) Color.LightGray else Color.Transparent),
-            fontSize = fontSize,
-            fontWeight = fontWeight
-        )
-    }
-}
 
 @Composable
 fun LoadedPowerFlowView(

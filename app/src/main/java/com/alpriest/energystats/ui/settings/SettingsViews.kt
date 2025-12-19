@@ -432,15 +432,3 @@ fun SettingsNavButton(
 fun SettingsBottomSpace() {
     Spacer(Modifier.height(SettingsPadding.CONTENT_BOTTOM))
 }
-
-@Composable
-fun SlimButton(modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit, content: @Composable () -> Unit) {
-    ESButton(
-        onClick = onClick,
-        modifier = modifier,
-        enabled = enabled,
-        contentPadding = PaddingValues(horizontal = 12.dp)
-    ) {
-        content()
-    }
-}
