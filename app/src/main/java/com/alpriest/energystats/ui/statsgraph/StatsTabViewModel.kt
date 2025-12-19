@@ -49,12 +49,12 @@ data class StatsGraphViewData(
 )
 
 class StatsTabViewModel(
+    val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     val configManager: ConfigManaging,
     private val networking: Networking,
     val themeStream: MutableStateFlow<AppTheme>,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
-    val displayModeStream = MutableStateFlow<StatsDisplayMode>(Day(LocalDate.now()))
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
     var totalsStream: MutableStateFlow<Map<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileName: String = ""

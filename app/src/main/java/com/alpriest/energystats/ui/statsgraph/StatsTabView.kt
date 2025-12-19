@@ -33,12 +33,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
@@ -53,8 +53,10 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import java.time.LocalDate
 
 class StatsTabViewModelFactory(
+    private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     private val configManager: ConfigManaging,
     private val networking: Networking,
     private val themeStream: MutableStateFlow<AppTheme>,
@@ -62,22 +64,24 @@ class StatsTabViewModelFactory(
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StatsTabViewModel(configManager, networking, themeStream, onWriteTempFile) as T
+        return StatsTabViewModel(displayModeStream, configManager, networking, themeStream, onWriteTempFile) as T
     }
 }
 
 class StatsTabView(
+    private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     private val topBarSettings: MutableState<TopBarSettings>,
     private val configManager: ConfigManaging,
     private val network: Networking,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     private val themeStream: MutableStateFlow<AppTheme>,
-    private val userManager: UserManaging
+    private val userManager: UserManaging,
+    private val navController: NavController
 ) {
     @Composable
     fun Content(
-        viewModel: StatsTabViewModel = viewModel(factory = StatsTabViewModelFactory(configManager, network, themeStream, onWriteTempFile)),
+        viewModel: StatsTabViewModel = viewModel(factory = StatsTabViewModelFactory(displayModeStream, configManager, network, themeStream, onWriteTempFile)),
     ) {
         val scrollState = rememberScrollState()
         val context = LocalContext.current
@@ -86,7 +90,10 @@ class StatsTabView(
         val loadState = viewModel.uiState.collectAsState().value.state
 
         topBarSettings.value = TopBarSettings(true, null, {
-            StatsDatePickerHeaderView(viewModel.displayModeStream).Content(
+            StatsDatePickerHeaderView(
+                displayModeStream,
+                { navController.navigate(StatsScreen.CustomDateRangeEditor.name) }
+            ).Content(
                 graphShowingState = viewModel.showingGraphStream
             )
         }, null)
@@ -96,7 +103,6 @@ class StatsTabView(
         LaunchedEffect(viewModel.displayModeStream) {
             viewModel.displayModeStream.collectLatest { viewModel.load() }
         }
-        trackScreenView("Stats Tab", "StatsTabView")
 
         Column(
             modifier = Modifier
@@ -110,8 +116,7 @@ class StatsTabView(
                 }
 
                 when (loadState) {
-                    is LoadState.Error ->
-                        Text(stringResource(R.string.error))
+                    is LoadState.Error -> Text(stringResource(R.string.error))
 
                     is LoadState.Active ->
                         Box(
@@ -175,13 +180,15 @@ fun StatsGraphTabViewPreview() {
         val topBarSettings = remember { mutableStateOf(TopBarSettings(false, "", {}, null)) }
 
         StatsTabView(
+            MutableStateFlow(StatsDisplayMode.Day(LocalDate.now())),
             topBarSettings,
             FakeConfigManager(),
             DemoNetworking(),
             { _, _ -> null },
             { _, _ -> },
             MutableStateFlow(AppTheme.demo()),
-            FakeUserManager()
+            FakeUserManager(),
+            NavController(LocalContext.current)
         ).Content()
     }
 }

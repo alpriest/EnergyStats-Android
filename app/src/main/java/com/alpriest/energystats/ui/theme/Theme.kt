@@ -108,15 +108,16 @@ fun OutlinedESButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    colors: ButtonColors = ButtonDefaults.buttonColors().copy(
+        containerColor = Color.Transparent,
+        contentColor = colorScheme.primary
+    ),
     content: @Composable RowScope.() -> Unit
 ) {
     ESButton(
         onClick = onClick,
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors().copy(
-            containerColor = Color.Transparent,
-            contentColor = colorScheme.primary
-        ),
+        colors = colors,
         border = BorderStroke(
             width = 1.dp,
             brush = SolidColor(colorScheme.primary)

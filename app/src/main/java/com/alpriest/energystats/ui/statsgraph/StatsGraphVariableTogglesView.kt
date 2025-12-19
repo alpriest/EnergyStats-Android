@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.statsgraph
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,6 +18,7 @@ import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDate
 
 @Composable
 fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
@@ -78,10 +78,10 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifi
 fun StatsGraphVariableTogglesViewPreview() {
     StatsGraphVariableTogglesView(
         StatsTabViewModel(
+            MutableStateFlow(StatsDisplayMode.Day(LocalDate.now())),
             FakeConfigManager(),
             DemoNetworking(),
-            onWriteTempFile = { _, _ -> null },
             themeStream = MutableStateFlow(AppTheme.demo())
-        )
+        ) { _, _ -> null }
     )
 }

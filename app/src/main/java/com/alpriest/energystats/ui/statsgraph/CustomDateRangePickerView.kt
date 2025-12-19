@@ -152,12 +152,17 @@ fun CustomDateRangePickerView(
                             MonthPicker(
                                 start.monthValue - 1,
                                 modifier = Modifier.weight(1.0f),
-                                textModifier = Modifier.fillMaxWidth()
+                                textModifier = Modifier.fillMaxWidth(),
+                                onPrimary = false
                             ) {
                                 start = start.withMonth(it + 1)
                             }
 
-                            YearPicker(start.year, modifier = Modifier.weight(1.0f)) {
+                            YearPicker(
+                                start.year,
+                                modifier = Modifier.weight(1.0f),
+                                onPrimary = false
+                            ) {
                                 start = start.withYear(it)
                             }
                         }
@@ -168,12 +173,17 @@ fun CustomDateRangePickerView(
                             MonthPicker(
                                 end.monthValue - 1,
                                 modifier = Modifier.weight(1.0f),
-                                textModifier = Modifier.fillMaxWidth()
+                                textModifier = Modifier.fillMaxWidth(),
+                                onPrimary = false
                             ) {
-                                end = end.withMonth(it + 1)
+                                start = start.withMonth(it + 1)
                             }
 
-                            YearPicker(end.year, modifier = Modifier.weight(1.0f)) {
+                            YearPicker(
+                                end.year,
+                                modifier = Modifier.weight(1.0f),
+                                onPrimary = false
+                            ) {
                                 end = end.withYear(it)
                             }
                         }

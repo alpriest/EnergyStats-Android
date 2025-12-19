@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
@@ -23,16 +20,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,11 +42,9 @@ import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.PopupCalendarView
 import com.alpriest.energystats.ui.helpers.YearPicker
 import com.alpriest.energystats.ui.settings.SlimButton
-import com.alpriest.energystats.ui.settings.darkenedBackgroundColor
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.Typography
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 sealed class DatePickerRange {
@@ -76,7 +67,10 @@ class StatsDatePickerHeaderViewModelFactory(
     }
 }
 
-class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<StatsDisplayMode>) {
+class StatsDatePickerHeaderView(
+    private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
+    private val onShowCustomDateRangePicker: () -> Unit
+) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content(
@@ -87,22 +81,18 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
         val range = viewModel.rangeStream.collectAsState().value
         val canIncrease = viewModel.canIncreaseStream.collectAsState().value
         val canDecrease = viewModel.canDecreaseStream.collectAsState().value
-        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        var showingCustomDateRangePicker by remember { mutableStateOf(false) }
 
         Row(modifier = modifier) {
             DateRangeMenu(
                 viewModel = viewModel,
                 range = range,
                 graphShowingState = graphShowingState,
-                sheetState = sheetState,
-                showingCustomDateRangePicker = showingCustomDateRangePicker,
-                onShowingCustomDateRangePickerChange = { showingCustomDateRangePicker = it }
+                onShowCustomDateRangePickerChange = onShowCustomDateRangePicker
             )
             Title(
                 viewModel = viewModel,
                 range = range,
-                onShowCustomRangePicker = { showingCustomDateRangePicker = true }
+                onShowCustomRangePicker = onShowCustomDateRangePicker
             )
             Spacer(modifier = Modifier.weight(1.0f))
 
@@ -154,11 +144,11 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
         when (range) {
             is DatePickerRange.DAY -> PopupCalendarView(viewModel.dateStream, style = Typography.headlineMedium)
             is DatePickerRange.MONTH -> {
-                MonthPicker(month) { viewModel.monthStream.value = it }
-                YearPicker(year) { viewModel.yearStream.value = it }
+                MonthPicker(month, onPrimary = true) { viewModel.monthStream.value = it }
+                YearPicker(year, onPrimary = true) { viewModel.yearStream.value = it }
             }
 
-            is DatePickerRange.YEAR -> YearPicker(year) { viewModel.yearStream.value = it }
+            is DatePickerRange.YEAR -> YearPicker(year, onPrimary = true) { viewModel.yearStream.value = it }
             is DatePickerRange.CUSTOM -> CustomDateRangeTitle(
                 viewModel = viewModel,
                 onChangeClick = onShowCustomRangePicker
@@ -173,15 +163,10 @@ private fun DateRangeMenu(
     viewModel: StatsDatePickerHeaderViewModel,
     range: DatePickerRange,
     graphShowingState: MutableStateFlow<Boolean>,
-    sheetState: SheetState,
-    showingCustomDateRangePicker: Boolean,
-    onShowingCustomDateRangePickerChange: (Boolean) -> Unit
+    onShowCustomDateRangePickerChange: () -> Unit
 ) {
     var showingDropdown by remember { mutableStateOf(false) }
     val graphShowing = graphShowingState.collectAsState()
-    val scope = rememberCoroutineScope()
-    val start = viewModel.customStartDate.collectAsStateWithLifecycle().value
-    val end = viewModel.customEndDate.collectAsStateWithLifecycle().value
 
     Box(
         modifier = Modifier
@@ -241,7 +226,7 @@ private fun DateRangeMenu(
             HorizontalDivider()
             DropdownMenuItem(onClick = {
                 showingDropdown = false
-                onShowingCustomDateRangePickerChange(true)
+                onShowCustomDateRangePickerChange()
             }, text = {
                 Text(stringResource(R.string.custom_range))
             }, trailingIcon = {
@@ -259,42 +244,6 @@ private fun DateRangeMenu(
             }, trailingIcon = {
                 Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
             })
-        }
-
-        if (showingCustomDateRangePicker) {
-            ModalBottomSheet(
-                containerColor = darkenedBackgroundColor(),
-                onDismissRequest = {
-                    scope.launch {
-                        sheetState.hide()
-                        onShowingCustomDateRangePickerChange(false)
-                    }
-                },
-                sheetState = sheetState,
-                contentWindowInsets = { WindowInsets.safeDrawing }
-            ) {
-                CustomDateRangePickerView(
-                    start,
-                    end,
-                    CustomDateRangeDisplayUnit.MONTHS,
-                    {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                onShowingCustomDateRangePickerChange(false)
-                            }
-                        }
-                    },
-                    { start, end ->
-                        viewModel.updateCustomDateRange(start, end)
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                onShowingCustomDateRangePickerChange(false)
-                            }
-                        }
-                    }
-                )
-                Spacer(Modifier.height(48.dp))
-            }
         }
     }
 }
@@ -342,7 +291,7 @@ private fun CustomDateRangeTitle(
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now(), CustomDateRangeDisplayUnit.DAYS))).Content(
+    StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now(), CustomDateRangeDisplayUnit.DAYS)), { }).Content(
         graphShowingState = MutableStateFlow(false)
     )
 }

@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,13 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.settings.OutlinedSlimButton
 import com.alpriest.energystats.ui.theme.Typography
 import java.util.Calendar
 
 @Composable
-fun YearPicker(year: Int, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: (Int) -> Unit) {
+fun YearPicker(year: Int, modifier: Modifier = Modifier, onPrimary: Boolean, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
@@ -35,14 +38,18 @@ fun YearPicker(year: Int, modifier: Modifier = Modifier, enabled: Boolean = true
             .padding(end = 14.dp)
     ) {
         OutlinedSlimButton(
-            enabled = enabled,
-            onClick = { showing = true }
-        ) {
-            Row {
-                Text(year.toString(), style = Typography.headlineMedium)
-                Icon(Icons.Default.ArrowDropDown, "backIcon")
-            }
-        }
+            onClick = { showing = true },
+            colors = ButtonDefaults.buttonColors().copy(
+                containerColor = Color.Transparent,
+                contentColor = if (onPrimary) colorScheme.onPrimary else colorScheme.primary
+            ),
+            content = {
+                Row {
+                    Text(year.toString(), style = Typography.headlineMedium)
+                    Icon(Icons.Default.ArrowDropDown, "backIcon")
+                }
+            },
+        )
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
             for (yearIndex in 2021..currentYear) {

@@ -93,8 +93,8 @@ class EditSummaryView(
                                 color = textColor
                             )
 
-                            MonthPicker(month = viewData.fromMonth, enabled = !viewData.automatic) { viewModel.didChangeFromMonth(it) }
-                            YearPicker(year = viewData.fromYear, enabled = !viewData.automatic) { viewModel.didChangeFromYear(it) }
+                            MonthPicker(month = viewData.fromMonth, onPrimary = false) { viewModel.didChangeFromMonth(it) }
+                            YearPicker(year = viewData.fromYear, onPrimary = false) { viewModel.didChangeFromYear(it) }
                         }
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -104,8 +104,8 @@ class EditSummaryView(
                                 color = textColor
                             )
 
-                            MonthPicker(month = viewData.toMonth, enabled = !viewData.automatic) { viewModel.didChangeToMonth(it) }
-                            YearPicker(year = viewData.toYear, enabled = !viewData.automatic) { viewModel.didChangeToYear(it) }
+                            MonthPicker(month = viewData.toMonth, onPrimary = false) { viewModel.didChangeToMonth(it) }
+                            YearPicker(year = viewData.toYear, onPrimary = false) { viewModel.didChangeToYear(it) }
                         }
                     }
                 }

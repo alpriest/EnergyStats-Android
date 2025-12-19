@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.settings.OutlinedSlimButton
@@ -29,7 +32,7 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifier = Modifier, enabled: Boolean = true, onClick: (Int) -> Unit) {
+fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifier = Modifier, onPrimary: Boolean, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
     val calendar = Calendar.getInstance()
     calendar.set(Calendar.DAY_OF_MONTH, 1)
@@ -41,19 +44,19 @@ fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifie
             .padding(end = 14.dp)
     ) {
         OutlinedSlimButton(
-            enabled = enabled,
-            onClick = { showing = true }
-        ) {
-            calendar.set(Calendar.MONTH, month)
-            Row(modifier = textModifier) {
-                Text(
-                    monthFormat.format(calendar.time),
-                    style = Typography.headlineMedium
-                )
-
-                Icon(Icons.Default.ArrowDropDown, "down")
-            }
-        }
+            onClick = { showing = true },
+            colors = ButtonDefaults.buttonColors().copy(
+                containerColor = Color.Transparent,
+                contentColor = if (onPrimary) colorScheme.onPrimary else colorScheme.primary
+            ),
+            content = {
+                calendar.set(Calendar.MONTH, month)
+                Row(modifier = textModifier) {
+                    Text(monthFormat.format(calendar.time), style = Typography.headlineMedium)
+                    Icon(Icons.Default.ArrowDropDown, "down")
+                }
+            },
+        )
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
             for (monthIndex in 0 until 12) {
@@ -83,6 +86,7 @@ private fun MonthPickerViewPreview() {
     EnergyStatsTheme {
         MonthPicker(
             1,
+            onPrimary = false,
             onClick = { _ -> }
         )
     }

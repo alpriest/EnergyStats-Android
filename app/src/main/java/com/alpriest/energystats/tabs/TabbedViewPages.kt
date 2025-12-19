@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
-import com.alpriest.energystats.ui.statsgraph.StatsTabView
+import com.alpriest.energystats.ui.statsgraph.NavigableStatsGraphTabView
 import com.alpriest.energystats.ui.summary.SummaryView
 
 @Composable
@@ -24,7 +24,7 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.templateStore
         ).Content(themeStream = dependencies.themeStream)
 
-        1 -> StatsTabView(
+        1 -> NavigableStatsGraphTabView(
             topBarSettings,
             dependencies.configManager,
             dependencies.network,

@@ -52,6 +52,7 @@ import com.patrykandpatrick.vico.core.common.component.LineComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
@@ -210,7 +211,12 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
 @Composable
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
-    val viewModel = StatsTabViewModel(FakeConfigManager(), DemoNetworking(), themeStream = MutableStateFlow(AppTheme.demo()), onWriteTempFile = { _, _ -> null })
+    val viewModel = StatsTabViewModel(
+        MutableStateFlow(Day(LocalDate.now())),
+        FakeConfigManager(),
+        DemoNetworking(),
+        themeStream = MutableStateFlow(AppTheme.demo())
+    ) { _, _ -> null }
 
     StatsGraphView(viewModel)
 }

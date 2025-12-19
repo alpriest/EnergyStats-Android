@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import java.util.Calendar
 
 class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
@@ -32,10 +31,15 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
                 updateDisplayMode()
             }.collect { }
         }
+
         viewModelScope.launch {
             combine(customStartDate, customEndDate) { _, _ ->
                 updateDisplayMode()
             }.collect { }
+        }
+
+        viewModelScope.launch {
+            displayModeStream.collect { updateDisplayMode() }
         }
 
         viewModelScope.launch {
@@ -78,33 +82,6 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
                 customEndDateString.value = it.toString()
             }
         }
-    }
-
-    fun updateCustomDateRange(start: LocalDate, end: LocalDate) {
-        if (start > end) {
-            return
-        }
-
-        val daysBetween = ChronoUnit.DAYS.between(start, end)
-        val displayUnit = if (daysBetween > 31) CustomDateRangeDisplayUnit.MONTHS else CustomDateRangeDisplayUnit.DAYS
-
-        val normalizedStart: LocalDate
-        val normalizedEnd: LocalDate
-
-        if (displayUnit == CustomDateRangeDisplayUnit.MONTHS) {
-            normalizedStart = start.withDayOfMonth(1)
-            normalizedEnd = end.withDayOfMonth(end.lengthOfMonth())
-        } else {
-            normalizedStart = start
-            normalizedEnd = end
-        }
-
-        customStartDate.value = normalizedStart
-        customEndDate.value = normalizedEnd
-        customRangeDisplayUnit = displayUnit
-        rangeStream.value = DatePickerRange.CUSTOM(normalizedStart, normalizedEnd)
-
-        updateDisplayMode()
     }
 
     private fun makeUpdatedDisplayMode(range: DatePickerRange): StatsDisplayMode {
