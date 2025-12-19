@@ -50,7 +50,7 @@ object URLs {
     }
 
     fun getOpenDeviceDetail(deviceSN: String): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/detail"
+        return "https://www.foxesscloud.com/op/v1/device/detail"
             .toHttpUrl()
             .newBuilder()
             .addSN(deviceSN)
