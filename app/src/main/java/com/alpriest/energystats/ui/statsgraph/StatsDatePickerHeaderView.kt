@@ -102,7 +102,6 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
             Title(
                 viewModel = viewModel,
                 range = range,
-                sheetState = sheetState,
                 onShowCustomRangePicker = { showingCustomDateRangePicker = true }
             )
             Spacer(modifier = Modifier.weight(1.0f))
@@ -147,7 +146,6 @@ class StatsDatePickerHeaderView(private val displayModeStream: MutableStateFlow<
     private fun Title(
         viewModel: StatsDatePickerHeaderViewModel,
         range: DatePickerRange,
-        sheetState: SheetState,
         onShowCustomRangePicker: () -> Unit
     ) {
         val month = viewModel.monthStream.collectAsState().value
@@ -278,7 +276,7 @@ private fun DateRangeMenu(
                 CustomDateRangePickerView(
                     start,
                     end,
-                    CustomDateRangeDisplayUnit.DAYS,
+                    CustomDateRangeDisplayUnit.MONTHS,
                     {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {

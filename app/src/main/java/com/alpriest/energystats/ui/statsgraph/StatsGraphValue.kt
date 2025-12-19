@@ -28,10 +28,21 @@ fun periodDescription(graphPoint: Int, displayMode: StatsDisplayMode): String {
         }
 
         is StatsDisplayMode.Custom -> {
-            val date = displayMode.start.plusDays(graphPoint.toLong())
-            val dateFormatSymbols = DateFormatSymbols.getInstance()
-            val monthName = dateFormatSymbols.months.getOrNull(date.monthValue - 1) ?: "${date.monthValue}"
-            "${date.dayOfMonth} $monthName"
+            when (displayMode.unit) {
+                CustomDateRangeDisplayUnit.DAYS -> {
+                    val date = displayMode.start.plusDays(graphPoint.toLong())
+                    val dateFormatSymbols = DateFormatSymbols.getInstance()
+                    val monthName = dateFormatSymbols.months.getOrNull(date.monthValue - 1) ?: "${date.monthValue}"
+                    "${date.dayOfMonth} $monthName"
+                }
+
+                CustomDateRangeDisplayUnit.MONTHS -> {
+                    val date = displayMode.start.plusMonths(graphPoint.toLong())
+                    val dateFormatSymbols = DateFormatSymbols.getInstance()
+                    val monthName = dateFormatSymbols.months.getOrNull(date.monthValue - 1) ?: "${date.monthValue}"
+                    "$monthName ${date.year}"
+                }
+            }
         }
     }
 }

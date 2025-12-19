@@ -37,7 +37,6 @@ import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.patrykandpatrick.vico.compose.common.fill
-import com.patrykandpatrick.vico.compose.common.vicoTheme
 import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.core.cartesian.Zoom
 import com.patrykandpatrick.vico.core.cartesian.axis.Axis
@@ -53,6 +52,7 @@ import com.patrykandpatrick.vico.core.common.component.LineComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -194,7 +194,12 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                         is Day -> stringResource(R.string.hours)
                         is StatsDisplayMode.Month -> stringResource(R.string.days)
                         is StatsDisplayMode.Year -> stringResource(R.string.months)
-                        is StatsDisplayMode.Custom -> stringResource(R.string.days)
+                        is StatsDisplayMode.Custom -> {
+                            when (displayMode.unit) {
+                                CustomDateRangeDisplayUnit.DAYS -> stringResource(R.string.days)
+                                CustomDateRangeDisplayUnit.MONTHS -> stringResource(R.string.months)
+                            }
+                        }
                     }
                 )
             }
@@ -264,7 +269,13 @@ class BottomAxisValueFormatter(private val displayMode: StatsDisplayMode) : Cart
             is StatsDisplayMode.Custom -> {
                 when (displayMode.unit) {
                     CustomDateRangeDisplayUnit.DAYS -> displayMode.start.plusDays(value.toLong()).dayOfMonth.toString()
-                    CustomDateRangeDisplayUnit.MONTHS -> displayMode.start.plusMonths(value.toLong()).monthValue.toString()
+                    CustomDateRangeDisplayUnit.MONTHS -> {
+                        // `value` is a 0-based month offset from `start` and can cross year boundaries.
+                        val offset = value.toLong()
+                        val date = displayMode.start.plusMonths(offset)
+                        val formatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault())
+                        return date.format(formatter)
+                    }
                 }
             }
         }

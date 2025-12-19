@@ -56,7 +56,7 @@ fun CustomDateRangePickerView(
     onDismiss: () -> Unit,
     onConfirm: (LocalDate, LocalDate) -> Unit
 ) {
-    var scrollState = rememberScrollState()
+    val scrollState = rememberScrollState()
     var start by remember(initialStart) { mutableStateOf(initialStart) }
     var end by remember(initialEnd) { mutableStateOf(initialEnd) }
     var viewBy by remember(initialViewBy) { mutableStateOf(initialViewBy) }
@@ -82,7 +82,7 @@ fun CustomDateRangePickerView(
             Row {
                 ESButton(
                     onClick = {
-                        start = LocalDate.now().minusMonths(12)
+                        start = LocalDate.now().minusMonths(11)
                         end = LocalDate.now()
                     },
                     content = {
@@ -94,7 +94,7 @@ fun CustomDateRangePickerView(
             Row {
                 ESButton(
                     onClick = {
-                        start = LocalDate.now().minusMonths(6)
+                        start = LocalDate.now().minusMonths(5)
                         end = LocalDate.now()
                     },
                     content = {

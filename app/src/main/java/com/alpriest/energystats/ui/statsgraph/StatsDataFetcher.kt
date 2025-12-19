@@ -110,15 +110,6 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                 it.graphPoint >= 0
             }
 
-//            val graphValues = graphValues1.filter {
-//                val dataDate: LocalDate = when (unit) {
-//                    CustomDateRangeDisplayUnit.DAYS -> LocalDate.of(year, month, it.graphPoint)
-//                    CustomDateRangeDisplayUnit.MONTHS -> LocalDate.of(year, it.graphPoint, 1)
-//                }
-//
-//                start.atStartOfDay() <= dataDate.atStartOfDay() && dataDate.atStartOfDay() <= end.atStartOfDay()
-//            }
-
             reports.forEach { response ->
                 if (accumulatedReportResponses.find { it.variable == response.variable } != null) {
                     accumulatedReportResponses = accumulatedReportResponses.map {

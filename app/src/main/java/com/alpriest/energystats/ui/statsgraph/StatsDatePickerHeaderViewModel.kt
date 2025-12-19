@@ -16,10 +16,10 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
     var dateStream = MutableStateFlow<LocalDate>(LocalDate.now())
     var isInitialised = false
     var customStartDate = MutableStateFlow<LocalDate>(LocalDate.now().minusDays(30))
-    val customStartDateString = MutableStateFlow<String>("")
+    val customStartDateString = MutableStateFlow("")
     var customEndDate = MutableStateFlow<LocalDate>(LocalDate.now())
-    val customEndDateString = MutableStateFlow<String>("")
-    var customRangeDisplayUnit: CustomDateRangeDisplayUnit = CustomDateRangeDisplayUnit.DAYS
+    val customEndDateString = MutableStateFlow("")
+    var customRangeDisplayUnit: CustomDateRangeDisplayUnit = CustomDateRangeDisplayUnit.MONTHS
     var canDecreaseStream = MutableStateFlow(false)
     var canIncreaseStream = MutableStateFlow(false)
 
@@ -84,12 +84,25 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
         if (start > end) {
             return
         }
-        val daysBetween = ChronoUnit.DAYS.between(start, end)
 
-        customStartDate.value = start
-        customEndDate.value = end
-        customRangeDisplayUnit = if (daysBetween > 31) CustomDateRangeDisplayUnit.MONTHS else CustomDateRangeDisplayUnit.DAYS
-        rangeStream.value = DatePickerRange.CUSTOM(start, end)
+        val daysBetween = ChronoUnit.DAYS.between(start, end)
+        val displayUnit = if (daysBetween > 31) CustomDateRangeDisplayUnit.MONTHS else CustomDateRangeDisplayUnit.DAYS
+
+        val normalizedStart: LocalDate
+        val normalizedEnd: LocalDate
+
+        if (displayUnit == CustomDateRangeDisplayUnit.MONTHS) {
+            normalizedStart = start.withDayOfMonth(1)
+            normalizedEnd = end.withDayOfMonth(end.lengthOfMonth())
+        } else {
+            normalizedStart = start
+            normalizedEnd = end
+        }
+
+        customStartDate.value = normalizedStart
+        customEndDate.value = normalizedEnd
+        customRangeDisplayUnit = displayUnit
+        rangeStream.value = DatePickerRange.CUSTOM(normalizedStart, normalizedEnd)
 
         updateDisplayMode()
     }
