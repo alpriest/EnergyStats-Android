@@ -261,7 +261,12 @@ class BottomAxisValueFormatter(private val displayMode: StatsDisplayMode) : Cart
                 return monthFormat.format(calendar.time)
             }
 
-            is StatsDisplayMode.Custom -> displayMode.start.plusDays(value.toLong()).dayOfMonth.toString()
+            is StatsDisplayMode.Custom -> {
+                when (displayMode.unit) {
+                    CustomDateRangeDisplayUnit.DAYS -> displayMode.start.plusDays(value.toLong()).dayOfMonth.toString()
+                    CustomDateRangeDisplayUnit.MONTHS -> displayMode.start.plusMonths(value.toLong()).monthValue.toString()
+                }
+            }
         }
     }
 }

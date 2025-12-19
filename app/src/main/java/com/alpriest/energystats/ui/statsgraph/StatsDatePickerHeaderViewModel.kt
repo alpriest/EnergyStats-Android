@@ -88,7 +88,7 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
 
         customStartDate.value = start
         customEndDate.value = end
-        customRangeDisplayUnit = if (daysBetween > 31) CustomDateRangeDisplayUnit.DAYS else CustomDateRangeDisplayUnit.MONTHS
+        customRangeDisplayUnit = if (daysBetween > 31) CustomDateRangeDisplayUnit.MONTHS else CustomDateRangeDisplayUnit.DAYS
         rangeStream.value = DatePickerRange.CUSTOM(start, end)
 
         updateDisplayMode()

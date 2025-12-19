@@ -88,7 +88,7 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                 reportType = reportType
             )
 
-            val graphValues = reports.flatMap { reportResponse ->
+            val graphValues1 = reports.flatMap { reportResponse ->
                 val reportVariable = ReportVariable.parse(reportResponse.variable)
 
                 reportResponse.values.map { dataPoint ->
@@ -107,13 +107,17 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                     )
                 }
             }.filter {
-                val dataDate: LocalDate = when (unit) {
-                    CustomDateRangeDisplayUnit.DAYS -> LocalDate.of(year, month, it.graphPoint)
-                    CustomDateRangeDisplayUnit.MONTHS -> LocalDate.of(year, it.graphPoint, 1)
-                }
-
-                start.atStartOfDay() <= dataDate.atStartOfDay() && dataDate.atStartOfDay() <= end.atStartOfDay()
+                it.graphPoint >= 0
             }
+
+//            val graphValues = graphValues1.filter {
+//                val dataDate: LocalDate = when (unit) {
+//                    CustomDateRangeDisplayUnit.DAYS -> LocalDate.of(year, month, it.graphPoint)
+//                    CustomDateRangeDisplayUnit.MONTHS -> LocalDate.of(year, it.graphPoint, 1)
+//                }
+//
+//                start.atStartOfDay() <= dataDate.atStartOfDay() && dataDate.atStartOfDay() <= end.atStartOfDay()
+//            }
 
             reports.forEach { response ->
                 if (accumulatedReportResponses.find { it.variable == response.variable } != null) {
@@ -129,7 +133,7 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                 }
             }
 
-            accumulatedGraphValues.addAll(graphValues)
+            accumulatedGraphValues.addAll(graphValues1)
 
             when (unit) {
                 CustomDateRangeDisplayUnit.DAYS -> current = current.plusMonths(1)

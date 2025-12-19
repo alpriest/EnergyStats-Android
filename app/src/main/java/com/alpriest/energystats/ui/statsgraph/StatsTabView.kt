@@ -94,7 +94,7 @@ class StatsTabView(
         MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(viewModel.displayModeStream) {
-            viewModel.displayModeStream.collectLatest { viewModel.load(context) }
+            viewModel.displayModeStream.collectLatest { viewModel.load() }
         }
         trackScreenView("Stats Tab", "StatsTabView")
 

@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.EnergyStatsApplication
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.isSameDay
@@ -156,9 +155,10 @@ class StatsTabViewModel(
         }
     }
 
-    suspend fun load(context: Context) {
+    suspend fun load() {
         val device = configManager.currentDevice.value ?: return
         if (!requiresLoad()) return
+
         uiState.value = UiLoadState(LoadState.Active.Loading)
         if (graphVariablesStream.value.isEmpty()) {
             updateGraphVariables(device)
@@ -240,10 +240,9 @@ class StatsTabViewModel(
     }
 
     private fun appEntersForeground() {
-        val context = EnergyStatsApplication.applicationContext()
         if (totalsStream.value.isNotEmpty()) {
             viewModelScope.launch {
-                load(context)
+                load()
             }
         }
     }
