@@ -1,7 +1,9 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
@@ -12,9 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.helpers.CalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
@@ -90,6 +94,11 @@ fun CustomDateRangePickerView(
     }
 
     ContentWithBottomButtons(
+        footer = {
+            Row(Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)) {
+                Text("Range: ${start.format(viewBy.dateFormat)} - ${end.format(viewBy.dateFormat)}")
+            }
+        },
         content = {
             SettingsPage {
                 SettingsColumn(header = "Quick choice") {
@@ -121,7 +130,7 @@ fun CustomDateRangePickerView(
                 }
 
                 SettingsColumn(
-                    header = "View by",
+                    header = "Select by",
                     footer = viewByFooter
                 ) {
                     SettingsSegmentedControl(
@@ -190,7 +199,7 @@ fun CustomDateRangePickerView(
                     }
                 }
 
-                Text("Range: ${start.format(viewBy.dateFormat)} - ${end.format(viewBy.dateFormat)}")
+                Spacer(modifier = Modifier.padding(44.dp))
             }
         },
         buttons = listOf(
@@ -198,7 +207,6 @@ fun CustomDateRangePickerView(
             BottomButtonConfiguration(title = stringResource(R.string.save), dirtyStateFlow, onTap = { onConfirm(start, end) }),
         )
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

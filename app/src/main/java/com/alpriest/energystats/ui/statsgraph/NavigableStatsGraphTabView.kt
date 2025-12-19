@@ -3,6 +3,8 @@ package com.alpriest.energystats.ui.statsgraph
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,11 +13,9 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 enum class StatsScreen {
     Graph,
@@ -31,10 +31,8 @@ class NavigableStatsGraphTabView(
     private val themeStream: MutableStateFlow<AppTheme>,
     private val userManager: UserManaging
 ) {
-    val displayModeStream = MutableStateFlow<StatsDisplayMode>(Day(LocalDate.now()))
-
     @Composable
-    fun Content() {
+    fun Content(viewModel: NavigableStatsGraphTabViewModel = viewModel(factory = NavigableStatsGraphTabViewModelFactory())) {
         trackScreenView("Stats Tab", "NavigableStatsGraphTabView")
         val navController = rememberNavController()
 
@@ -44,7 +42,7 @@ class NavigableStatsGraphTabView(
         ) {
             composable(StatsScreen.Graph.name) {
                 StatsTabView(
-                    displayModeStream,
+                    viewModel.displayModeStream,
                     topBarSettings,
                     configManager,
                     network,
@@ -57,63 +55,35 @@ class NavigableStatsGraphTabView(
             }
 
             composable(StatsScreen.CustomDateRangeEditor.name) {
+                val displayMode = viewModel.displayModeStream.collectAsStateWithLifecycle().value
+                val start: LocalDate
+                val end: LocalDate
+                val unit: CustomDateRangeDisplayUnit
+
+                when (displayMode) {
+                    is StatsDisplayMode.Custom -> {
+                        start = displayMode.start
+                        end = displayMode.end
+                        unit = displayMode.unit
+                    }
+                    else -> {
+                        start = LocalDate.now().minusMonths(1).startOfMonth()
+                        end = LocalDate.now().endOfMonth()
+                        unit = CustomDateRangeDisplayUnit.MONTHS
+                    }
+                }
+
                 CustomDateRangePickerView(
-                    LocalDate.now(),
-                    LocalDate.now(),
-                    CustomDateRangeDisplayUnit.MONTHS,
+                    start,
+                    end,
+                    unit,
                     { navController.popBackStack() },
                     { start, end ->
-                        updateCustomDateRange(start, end)
+                        viewModel.updateCustomDateRange(start, end)
                         navController.popBackStack()
                     }
                 )
-//                val scope = rememberCoroutineScope()
-//                val start = viewModel.customStartDate.collectAsStateWithLifecycle().value
-//                val end = viewModel.customEndDate.collectAsStateWithLifecycle().value
-
-//                CustomDateRangePickerView(
-//                    start,
-//                    end,
-//                    CustomDateRangeDisplayUnit.MONTHS,
-//                    {
-//                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-//                            if (!sheetState.isVisible) {
-//                                onShowingCustomDateRangePickerChange(false)
-//                            }
-//                        }
-//                    },
-//                    { start, end ->
-//                        viewModel.updateCustomDateRange(start, end)
-//                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-//                            if (!sheetState.isVisible) {
-//                                onShowingCustomDateRangePickerChange(false)
-//                            }
-//                        }
-//                    }
-//                )
             }
         }
-    }
-
-    fun updateCustomDateRange(start: LocalDate, end: LocalDate) {
-        if (start > end) {
-            return
-        }
-
-        val daysBetween = ChronoUnit.DAYS.between(start, end)
-        val displayUnit = if (daysBetween > 31) CustomDateRangeDisplayUnit.MONTHS else CustomDateRangeDisplayUnit.DAYS
-
-        val normalizedStart: LocalDate
-        val normalizedEnd: LocalDate
-
-        if (displayUnit == CustomDateRangeDisplayUnit.MONTHS) {
-            normalizedStart = start.withDayOfMonth(1)
-            normalizedEnd = end.withDayOfMonth(end.lengthOfMonth())
-        } else {
-            normalizedStart = start
-            normalizedEnd = end
-        }
-
-        displayModeStream.value = StatsDisplayMode.Custom(normalizedStart, normalizedEnd, displayUnit)
     }
 }

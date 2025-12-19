@@ -108,6 +108,8 @@ fun BottomButtonsView(
         modifier = modifier
             .fillMaxWidth()
     ) {
+        footer()
+
         Row(modifier = modifier) {
             buttons.forEachIndexed { index, button ->
                 SettingsNavButton(
@@ -126,7 +128,5 @@ fun BottomButtonsView(
                 }
             }
         }
-
-        footer()
     }
 }

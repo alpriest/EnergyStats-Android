@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.statsgraph
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -39,33 +40,11 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
         }
 
         viewModelScope.launch {
-            displayModeStream.collect { updateDisplayMode() }
+            displayModeStream.collectLatest { updateDatePickerRange(it) }
         }
 
         viewModelScope.launch {
-            when (val displayMode = displayModeStream.value) {
-                is StatsDisplayMode.Day -> {
-                    dateStream.value = displayMode.date
-                    rangeStream.value = DatePickerRange.DAY
-                }
-
-                is StatsDisplayMode.Month -> {
-                    monthStream.value = displayMode.month
-                    yearStream.value = displayMode.year
-                    rangeStream.value = DatePickerRange.MONTH
-                }
-
-                is StatsDisplayMode.Year -> {
-                    yearStream.value = displayMode.year
-                    rangeStream.value = DatePickerRange.YEAR
-                }
-
-                is StatsDisplayMode.Custom -> {
-                    customStartDate.value = displayMode.start
-                    customEndDate.value = displayMode.end
-                    rangeStream.value = DatePickerRange.CUSTOM(displayMode.start, displayMode.end)
-                }
-            }
+            updateDatePickerRange(displayModeStream.value)
 
             updateIncreaseDecreaseButtons()
             isInitialised = true
@@ -80,6 +59,32 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
         viewModelScope.launch {
             customEndDate.collect {
                 customEndDateString.value = it.toString()
+            }
+        }
+    }
+
+    private fun updateDatePickerRange(displayMode: StatsDisplayMode) {
+        when (val displayMode = displayMode) {
+            is StatsDisplayMode.Day -> {
+                dateStream.value = displayMode.date
+                rangeStream.value = DatePickerRange.DAY
+            }
+
+            is StatsDisplayMode.Month -> {
+                monthStream.value = displayMode.month
+                yearStream.value = displayMode.year
+                rangeStream.value = DatePickerRange.MONTH
+            }
+
+            is StatsDisplayMode.Year -> {
+                yearStream.value = displayMode.year
+                rangeStream.value = DatePickerRange.YEAR
+            }
+
+            is StatsDisplayMode.Custom -> {
+                customStartDate.value = displayMode.start
+                customEndDate.value = displayMode.end
+                rangeStream.value = DatePickerRange.CUSTOM(displayMode.start, displayMode.end)
             }
         }
     }
