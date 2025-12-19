@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 
 class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
@@ -18,6 +19,7 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
     val customStartDateString = MutableStateFlow<String>("")
     var customEndDate = MutableStateFlow<LocalDate>(LocalDate.now())
     val customEndDateString = MutableStateFlow<String>("")
+    var customRangeDisplayUnit: CustomDateRangeDisplayUnit = CustomDateRangeDisplayUnit.DAYS
     var canDecreaseStream = MutableStateFlow(false)
     var canIncreaseStream = MutableStateFlow(false)
 
@@ -82,9 +84,13 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
         if (start > end) {
             return
         }
+        val daysBetween = ChronoUnit.DAYS.between(start, end)
 
         customStartDate.value = start
         customEndDate.value = end
+        customRangeDisplayUnit = if (daysBetween > 31) CustomDateRangeDisplayUnit.DAYS else CustomDateRangeDisplayUnit.MONTHS
+        rangeStream.value = DatePickerRange.CUSTOM(start, end)
+
         updateDisplayMode()
     }
 
@@ -93,7 +99,7 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
             is DatePickerRange.DAY -> StatsDisplayMode.Day(dateStream.value)
             is DatePickerRange.MONTH -> StatsDisplayMode.Month(monthStream.value, yearStream.value)
             is DatePickerRange.YEAR -> StatsDisplayMode.Year(yearStream.value)
-            is DatePickerRange.CUSTOM -> StatsDisplayMode.Custom(customStartDate.value, customEndDate.value)
+            is DatePickerRange.CUSTOM -> StatsDisplayMode.Custom(range.start, range.end, customRangeDisplayUnit)
         }
     }
 

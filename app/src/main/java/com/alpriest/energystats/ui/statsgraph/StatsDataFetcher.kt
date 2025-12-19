@@ -65,11 +65,17 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
         device: Device,
         start: LocalDate,
         end: LocalDate,
-        reportVariables: List<ReportVariable>
+        reportVariables: List<ReportVariable>,
+        unit: CustomDateRangeDisplayUnit
     ): Pair<List<StatsGraphValue>, MutableMap<ReportVariable, Double>> {
         var current = start
         val accumulatedGraphValues: MutableList<StatsGraphValue> = mutableListOf()
         var accumulatedReportResponses: MutableList<OpenReportResponse> = mutableListOf()
+
+        val reportType: ReportType = when (unit) {
+            CustomDateRangeDisplayUnit.DAYS -> ReportType.month
+            CustomDateRangeDisplayUnit.MONTHS -> ReportType.year
+        }
 
         while (current.year < end.year || (current.year == end.year && current.month <= end.month)) {
             val month: Int = current.monthValue
@@ -79,20 +85,20 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                 device.deviceSN,
                 variables = reportVariables,
                 queryDate = queryDate,
-                reportType = ReportType.month
-            ).map { response ->
-                response.copy(values = response.values.filter {
-                    val dataDate: LocalDate = LocalDate.of(year, month, it.index)
-
-                    start.atStartOfDay() <= dataDate.atStartOfDay() && dataDate.atStartOfDay() <= end.atStartOfDay()
-                })
-            }
+                reportType = reportType
+            )
 
             val graphValues = reports.flatMap { reportResponse ->
                 val reportVariable = ReportVariable.parse(reportResponse.variable)
 
                 reportResponse.values.map { dataPoint ->
-                    val index = ChronoUnit.DAYS.between(start.atStartOfDay().toLocalDate(), LocalDate.of(year, month, dataPoint.index)).toInt()
+                    val index = when (unit) {
+                        CustomDateRangeDisplayUnit.DAYS ->
+                            ChronoUnit.DAYS.between(start.atStartOfDay().toLocalDate(), LocalDate.of(year, month, dataPoint.index)).toInt()
+
+                        CustomDateRangeDisplayUnit.MONTHS ->
+                            ChronoUnit.MONTHS.between(start.atStartOfDay().toLocalDate(), LocalDate.of(year, dataPoint.index, 1)).toInt()
+                    }
 
                     StatsGraphValue(
                         type = reportVariable,
@@ -100,6 +106,13 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
                         graphValue = dataPoint.value
                     )
                 }
+            }.filter {
+                val dataDate: LocalDate = when (unit) {
+                    CustomDateRangeDisplayUnit.DAYS -> LocalDate.of(year, month, it.graphPoint)
+                    CustomDateRangeDisplayUnit.MONTHS -> LocalDate.of(year, it.graphPoint, 1)
+                }
+
+                start.atStartOfDay() <= dataDate.atStartOfDay() && dataDate.atStartOfDay() <= end.atStartOfDay()
             }
 
             reports.forEach { response ->
@@ -118,7 +131,10 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
 
             accumulatedGraphValues.addAll(graphValues)
 
-            current = current.plusMonths(1)
+            when (unit) {
+                CustomDateRangeDisplayUnit.DAYS -> current = current.plusMonths(1)
+                CustomDateRangeDisplayUnit.MONTHS -> current = current.plusYears(1)
+            }
         }
 
         val totals = approximationsCalculator.generateTotals(device.deviceSN, accumulatedReportResponses, ReportType.month, queryDate = null, reportVariables)

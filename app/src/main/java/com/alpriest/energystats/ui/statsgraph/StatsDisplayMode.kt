@@ -8,7 +8,7 @@ sealed class StatsDisplayMode {
     data class Day(val date: LocalDate) : StatsDisplayMode()
     data class Month(val month: Int, val year: Int) : StatsDisplayMode()
     data class Year(val year: Int) : StatsDisplayMode()
-    data class Custom(val start: LocalDate, val end: LocalDate) : StatsDisplayMode()
+    data class Custom(val start: LocalDate, val end: LocalDate, val unit: CustomDateRangeDisplayUnit) : StatsDisplayMode()
 
     fun unit(): String {
         return when (this) {

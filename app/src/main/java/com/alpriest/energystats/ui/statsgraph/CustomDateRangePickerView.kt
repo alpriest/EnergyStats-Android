@@ -54,7 +54,7 @@ fun CustomDateRangePickerView(
     initialEnd: LocalDate,
     initialViewBy: CustomDateRangeDisplayUnit,
     onDismiss: () -> Unit,
-    onConfirm: (LocalDate, LocalDate, CustomDateRangeDisplayUnit) -> Unit
+    onConfirm: (LocalDate, LocalDate) -> Unit
 ) {
     var scrollState = rememberScrollState()
     var start by remember(initialStart) { mutableStateOf(initialStart) }
@@ -131,11 +131,11 @@ fun CustomDateRangePickerView(
             SettingsColumn(header = "Start") {
                 Row(Modifier.fillMaxWidth()) {
                     MonthPicker(
-                        start.monthValue,
+                        start.monthValue - 1,
                         modifier = Modifier.weight(1.0f),
                         textModifier = Modifier.fillMaxWidth()
                     ) {
-                        start = start.withMonth(it)
+                        start = start.withMonth(it + 1)
                     }
 
                     YearPicker(start.year, modifier = Modifier.weight(1.0f)) {
@@ -147,11 +147,11 @@ fun CustomDateRangePickerView(
             SettingsColumn(header = "End") {
                 Row(Modifier.fillMaxWidth()) {
                     MonthPicker(
-                        end.monthValue,
+                        end.monthValue - 1,
                         modifier = Modifier.weight(1.0f),
                         textModifier = Modifier.fillMaxWidth()
                     ) {
-                        end = end.withMonth(it)
+                        end = end.withMonth(it + 1)
                     }
 
                     YearPicker(end.year, modifier = Modifier.weight(1.0f)) {
@@ -167,7 +167,7 @@ fun CustomDateRangePickerView(
                 .padding(bottom = 12.dp),
             buttons = listOf(
                 BottomButtonConfiguration(title = stringResource(R.string.cancel), onTap = { onDismiss() }),
-                BottomButtonConfiguration(title = stringResource(R.string.save), dirtyStateFlow, onTap = { onConfirm(start, end, viewBy) }),
+                BottomButtonConfiguration(title = stringResource(R.string.save), dirtyStateFlow, onTap = { onConfirm(start, end) }),
             )
         )
     }
@@ -182,7 +182,7 @@ private fun CustomDateRangePickerViewPreview() {
             initialEnd = LocalDate.now(),
             initialViewBy = CustomDateRangeDisplayUnit.DAYS,
             onDismiss = {},
-            onConfirm = { _, _, _ -> }
+            onConfirm = { _, _ -> }
         )
     }
 }

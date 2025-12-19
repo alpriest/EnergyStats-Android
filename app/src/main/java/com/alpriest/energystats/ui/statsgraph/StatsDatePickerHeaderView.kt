@@ -45,8 +45,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.ui.helpers.PopupCalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
+import com.alpriest.energystats.ui.helpers.PopupCalendarView
 import com.alpriest.energystats.ui.helpers.YearPicker
 import com.alpriest.energystats.ui.settings.SlimButton
 import com.alpriest.energystats.ui.settings.darkenedBackgroundColor
@@ -286,7 +286,7 @@ private fun DateRangeMenu(
                             }
                         }
                     },
-                    { start, end, unit ->
+                    { start, end ->
                         viewModel.updateCustomDateRange(start, end)
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
@@ -344,7 +344,7 @@ private fun CustomDateRangeTitle(
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now()))).Content(
+    StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now(), CustomDateRangeDisplayUnit.DAYS))).Content(
         graphShowingState = MutableStateFlow(false)
     )
 }
