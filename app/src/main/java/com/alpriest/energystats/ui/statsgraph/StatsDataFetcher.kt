@@ -109,12 +109,17 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
             }.filter {
                 it.graphPoint >= 0
             }.filter {
-                val highestMonth = if (current.year == end.year) {
-                    end.monthValue
-                } else {
-                    12
+                when (unit) {
+                    CustomDateRangeDisplayUnit.DAYS -> it.graphPoint < end.dayOfMonth
+                    CustomDateRangeDisplayUnit.MONTHS -> {
+                        val highestMonth = if (current.year == end.year) {
+                            end.monthValue
+                        } else {
+                            12
+                        }
+                        it.graphPoint < highestMonth
+                    }
                 }
-                it.graphPoint < highestMonth
             }
 
             reports.forEach { response ->

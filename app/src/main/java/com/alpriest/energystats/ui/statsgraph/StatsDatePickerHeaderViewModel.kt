@@ -84,6 +84,7 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
             is StatsDisplayMode.Custom -> {
                 customStartDate.value = displayMode.start
                 customEndDate.value = displayMode.end
+                customRangeDisplayUnit = displayMode.unit
                 rangeStream.value = DatePickerRange.CUSTOM(displayMode.start, displayMode.end)
             }
         }
