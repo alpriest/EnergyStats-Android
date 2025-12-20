@@ -75,14 +75,10 @@ fun CustomDateRangePickerView(
     val start by viewModel.start.collectAsState()
     val end by viewModel.end.collectAsState()
     val viewBy by viewModel.viewBy.collectAsState()
-    val dirty by viewModel.dirty.collectAsState()
     val errorState by viewModel.errorState.collectAsState()
     val startHeader = remember { mutableStateOf("") }
     val endHeader = remember { mutableStateOf("") }
     val viewByFooter = remember { mutableStateOf("") }
-
-    val dirtyStateFlow = remember { MutableStateFlow(false) }
-    LaunchedEffect(dirty) { dirtyStateFlow.value = dirty }
 
     ContentWithBottomButtons(
         footer = {
@@ -172,7 +168,7 @@ fun CustomDateRangePickerView(
         },
         buttons = listOf(
             BottomButtonConfiguration(title = stringResource(R.string.cancel), onTap = { onDismiss() }),
-            BottomButtonConfiguration(title = stringResource(R.string.save), dirtyStateFlow, onTap = { onConfirm(start, end, viewBy) }),
+            BottomButtonConfiguration(title = stringResource(R.string.save), viewModel.dirty, onTap = { onConfirm(start, end, viewBy) }),
         )
     )
 

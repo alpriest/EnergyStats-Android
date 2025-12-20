@@ -71,7 +71,7 @@ class CustomDateRangePickerViewModel : ViewModel() {
         val daysBetween = ChronoUnit.DAYS.between(start, end)
 
         val dateRangeValid = when (viewBy) {
-            CustomDateRangeDisplayUnit.DAYS -> daysBetween < 45
+            CustomDateRangeDisplayUnit.DAYS -> daysBetween in 1..<45
             CustomDateRangeDisplayUnit.MONTHS -> true
         }
 
