@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
+import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.helpers.CalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.SegmentedControl
@@ -33,7 +35,6 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -59,6 +60,7 @@ enum class CustomDateRangeDisplayUnit {
 
 @Composable
 fun CustomDateRangePickerView(
+    topBarSettings: MutableState<TopBarSettings>,
     initialStart: LocalDate,
     initialEnd: LocalDate,
     initialViewBy: CustomDateRangeDisplayUnit,
@@ -67,6 +69,7 @@ fun CustomDateRangePickerView(
     viewModel: CustomDateRangePickerViewModel = viewModel()
 ) {
     val context = LocalContext.current
+    topBarSettings.value = TopBarSettings(topBarVisible = true, title = stringResource(R.string.choose_custom_range), actions = {}, backButtonAction = null)
 
     LaunchedEffect(Unit) {
         viewModel.initialise(initialStart, initialEnd, initialViewBy)
@@ -76,9 +79,19 @@ fun CustomDateRangePickerView(
     val end by viewModel.end.collectAsState()
     val viewBy by viewModel.viewBy.collectAsState()
     val errorState by viewModel.errorState.collectAsState()
-    val startHeader = remember { mutableStateOf("") }
-    val endHeader = remember { mutableStateOf("") }
-    val viewByFooter = remember { mutableStateOf("") }
+
+    val startHeader = when (viewBy) {
+        CustomDateRangeDisplayUnit.DAYS -> stringResource(R.string.start_day)
+        CustomDateRangeDisplayUnit.MONTHS -> stringResource(R.string.start_month)
+    }
+    val endHeader = when (viewBy) {
+        CustomDateRangeDisplayUnit.DAYS -> stringResource(R.string.end_day)
+        CustomDateRangeDisplayUnit.MONTHS -> stringResource(R.string.end_month)
+    }
+    val viewByFooter = when (viewBy) {
+        CustomDateRangeDisplayUnit.DAYS -> stringResource(R.string.shows_a_range_of_days_maximum_of_45_days)
+        CustomDateRangeDisplayUnit.MONTHS -> stringResource(R.string.shows_a_range_of_months)
+    }
 
     ContentWithBottomButtons(
         footer = {
@@ -89,8 +102,8 @@ fun CustomDateRangePickerView(
             )
 
             when (errorState) {
-                CustomDateRangePickerError.START_DATE_AFTER_END_DATE -> "Please ensure the start date is before the end date."
-                CustomDateRangePickerError.TIME_PERIOD_NEEDS_MONTHS -> "Please choose months or a shorter date range."
+                CustomDateRangePickerError.START_DATE_AFTER_END_DATE -> stringResource(R.string.please_ensure_the_start_date_is_before_the_end_date)
+                CustomDateRangePickerError.TIME_PERIOD_NEEDS_MONTHS -> stringResource(R.string.please_choose_months_or_a_shorter_date_range)
                 else -> null
             }?.let {
                 Text(
@@ -129,7 +142,7 @@ fun CustomDateRangePickerView(
 
                 SettingsColumn(
                     header = stringResource(R.string.view_by),
-                    footer = viewByFooter.value
+                    footer = viewByFooter
                 ) {
                     SettingsSegmentedControl(
                         segmentedControl = {
@@ -146,19 +159,19 @@ fun CustomDateRangePickerView(
                 }
 
                 if (viewBy == CustomDateRangeDisplayUnit.DAYS) {
-                    SettingsColumn(header = startHeader.value) {
+                    SettingsColumn(header = startHeader) {
                         CalendarView(start) { viewModel.setStart(it) }
                     }
 
-                    SettingsColumn(header = endHeader.value) {
+                    SettingsColumn(header = endHeader) {
                         CalendarView(end) { viewModel.setEnd(it) }
                     }
                 } else {
-                    MonthYearPicker(startHeader.value, start) {
+                    MonthYearPicker(startHeader, start) {
                         viewModel.setStart(it)
                     }
 
-                    MonthYearPicker(endHeader.value, end) {
+                    MonthYearPicker(endHeader, end) {
                         viewModel.setEnd(it)
                     }
                 }
@@ -171,22 +184,6 @@ fun CustomDateRangePickerView(
             BottomButtonConfiguration(title = stringResource(R.string.save), viewModel.dirty, onTap = { onConfirm(start, end, viewBy) }),
         )
     )
-
-    LaunchedEffect(viewBy) {
-        when (viewBy) {
-            CustomDateRangeDisplayUnit.DAYS -> {
-                startHeader.value = "Start day"
-                endHeader.value = "End day"
-                viewByFooter.value = "Shows a range of days. Maximum of 45 days"
-            }
-
-            CustomDateRangeDisplayUnit.MONTHS -> {
-                startHeader.value = "Start month"
-                endHeader.value = "End month"
-                viewByFooter.value = "Shows a range of months"
-            }
-        }
-    }
 }
 
 @Composable
@@ -217,8 +214,11 @@ fun MonthYearPicker(header: String, date: LocalDate, onChange: (LocalDate) -> Un
 @Preview(showBackground = false)
 @Composable
 private fun CustomDateRangePickerViewPreview() {
+    val settings = remember { mutableStateOf(TopBarSettings(topBarVisible = true, title = "Choose", actions = {}, backButtonAction = null)) }
+
     EnergyStatsTheme {
         CustomDateRangePickerView(
+            topBarSettings = settings,
             initialStart = LocalDate.now(),
             initialEnd = LocalDate.now(),
             initialViewBy = CustomDateRangeDisplayUnit.MONTHS,

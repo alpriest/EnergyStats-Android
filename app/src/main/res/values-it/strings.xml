@@ -486,4 +486,13 @@
     <string name="view_by">Visualizza per</string>
     <string name="last_6_months">Ultimi 6 mesi</string>
     <string name="last_12_months">Ultimi 12 mesi</string>
+    <string name="please_choose_months_or_a_shorter_date_range">Scegli mesi oppure un intervallo di date più breve.</string>
+    <string name="start_day">Giorno di inizio</string>
+    <string name="end_day">Giorno di fine</string>
+    <string name="shows_a_range_of_days_maximum_of_45_days">Mostra un intervallo di giorni. Massimo 45 giorni.</string>
+    <string name="end_month">Mese di fine</string>
+    <string name="start_month">Mese di inizio</string>
+    <string name="shows_a_range_of_months">Mostra un intervallo di mesi</string>
+    <string name="choose_custom_range">Seleziona intervallo personalizzato</string>
+    <string name="please_ensure_the_start_date_is_before_the_end_date">Assicurati che la data di inizio sia precedente alla data di fine.</string>
 </resources>

@@ -490,4 +490,13 @@
     <string name="last_6_months">Last 6 months</string>
     <string name="last_12_months">Last 12 months</string>
     <string name="quick_choice">Quick choice</string>
+    <string name="please_ensure_the_start_date_is_before_the_end_date">Please ensure the start date is before the end date.</string>
+    <string name="please_choose_months_or_a_shorter_date_range">Please choose months or a shorter date range.</string>
+    <string name="start_day">Start day</string>
+    <string name="end_day">End day</string>
+    <string name="shows_a_range_of_days_maximum_of_45_days">Shows a range of days. Maximum of 45 days</string>
+    <string name="end_month">End month</string>
+    <string name="start_month">Start month</string>
+    <string name="shows_a_range_of_months">Shows a range of months</string>
+    <string name="choose_custom_range">Choose Custom Range</string>
 </resources>

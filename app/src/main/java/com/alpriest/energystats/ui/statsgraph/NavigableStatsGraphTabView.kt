@@ -74,6 +74,7 @@ class NavigableStatsGraphTabView(
                 }
 
                 CustomDateRangePickerView(
+                    topBarSettings,
                     start,
                     end,
                     unit,
