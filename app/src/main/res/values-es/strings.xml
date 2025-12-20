@@ -481,4 +481,8 @@
     <string name="battery_temperature_footer">Energy Stats muestra la temperatura del BMS. Ten en cuenta que la aplicación de FoxESS muestra la temperatura más baja de las celdas de la batería (que el BMS utiliza para controlar el comportamiento de carga y descarga). FoxESS no pone a disposición de aplicaciones de terceros la temperatura más baja de las celdas de la batería.</string>
     <string name="capacity">Capacidad</string>
     <string name="timezone">Zona horaria</string>
+    <string name="quick_choice">Selección rápida</string>
+    <string name="view_by">Ver por</string>
+    <string name="last_6_months">Últimos 6 meses</string>
+    <string name="last_12_months">Últimos 12 meses</string>
 </resources>

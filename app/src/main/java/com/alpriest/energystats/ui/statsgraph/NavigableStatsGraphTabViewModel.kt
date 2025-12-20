@@ -4,31 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 class NavigableStatsGraphTabViewModel : ViewModel() {
     val displayModeStream = MutableStateFlow<StatsDisplayMode>(StatsDisplayMode.Day(LocalDate.now()))
 
-    fun updateCustomDateRange(start: LocalDate, end: LocalDate) {
+    fun updateCustomDateRange(start: LocalDate, end: LocalDate, unit: CustomDateRangeDisplayUnit) {
         if (start > end) {
             return
         }
 
-        val daysBetween = ChronoUnit.DAYS.between(start, end)
-        val displayUnit = if (daysBetween > 31) CustomDateRangeDisplayUnit.MONTHS else CustomDateRangeDisplayUnit.DAYS
-
-        val normalizedStart: LocalDate
-        val normalizedEnd: LocalDate
-
-        if (displayUnit == CustomDateRangeDisplayUnit.MONTHS) {
-            normalizedStart = start.startOfMonth()
-            normalizedEnd = end.endOfMonth()
-        } else {
-            normalizedStart = start
-            normalizedEnd = end
-        }
-
-        displayModeStream.value = StatsDisplayMode.Custom(normalizedStart, normalizedEnd, displayUnit)
+        displayModeStream.value = StatsDisplayMode.Custom(start, end, unit)
     }
 }
 

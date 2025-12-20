@@ -78,8 +78,8 @@ class NavigableStatsGraphTabView(
                     end,
                     unit,
                     { navController.popBackStack() },
-                    { start, end ->
-                        viewModel.updateCustomDateRange(start, end)
+                    { start, end, unit ->
+                        viewModel.updateCustomDateRange(start, end, unit)
                         navController.popBackStack()
                     }
                 )

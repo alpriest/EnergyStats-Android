@@ -486,4 +486,8 @@
     <string name="battery_temperature_footer">Energy Stats shows the BMS temperature. Note that the FoxESS app shows the lowest battery cell temperature (which is used by the BMS for controlling charge/discharge behaviour). FoxESS don’t make the lowest battery cell temperature available to third party apps.</string>
     <string name="capacity">Capacity</string>
     <string name="timezone">Timezone</string>
+    <string name="view_by">View by</string>
+    <string name="last_6_months">Last 6 months</string>
+    <string name="last_12_months">Last 12 months</string>
+    <string name="quick_choice">Quick choice</string>
 </resources>
