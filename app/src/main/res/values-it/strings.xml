@@ -373,7 +373,7 @@
     <string name="i_am_paid_for">Sono pagato per</string>
     <string name="exporting">esportazione</string>
     <string name="generating">generando</string>
-    <string name="custom_range">Intervallo personalizzato</string>
+    <string name="custom_range">Intervallo personalizzato…</string>
     <string name="show_self_sufficiency_percentage_on_stats_graph">Mostra la percentuale di autosufficienza sul grafico delle statistiche</string>
     <string name="get_started">Inizia</string>
     <string name="energy_management_at_your_fingertips">Gestione dell\'energia a portata di mano</string>
