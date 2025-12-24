@@ -499,4 +499,6 @@
     <string name="start_month">Start month</string>
     <string name="shows_a_range_of_months">Shows a range of months</string>
     <string name="choose_custom_range">Choose Custom Range</string>
+    <string name="workmode_force_charge_mode_bat_description">The inverter will control the power charge into battery. For example if you set the power to be 10kW that means the maximum power input to the battery is 10 kW.​ This is to control the input of the battery.</string>
+    <string name="workmode_force_discharge_mode_bat_description">The inverter will control the output power of battery. For example if you set the power to be 10kW that means the maximum output power of battery is 10kW. This is to control the output of the battery.</string>
 </resources>

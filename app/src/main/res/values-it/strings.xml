@@ -495,4 +495,6 @@
     <string name="shows_a_range_of_months">Mostra un intervallo di mesi</string>
     <string name="choose_custom_range">Seleziona intervallo personalizzato</string>
     <string name="please_ensure_the_start_date_is_before_the_end_date">Assicurati che la data di inizio sia precedente alla data di fine.</string>
+    <string name="workmode_force_charge_mode_bat_description">L’inverter controlla la potenza di carica verso la batteria. Ad esempio, se imposti la potenza a 10 kW, significa che la potenza massima in ingresso alla batteria è di 10 kW. Questo serve a controllare l’ingresso della batteria.</string>
+    <string name="workmode_force_discharge_mode_bat_description">L’inverter controlla la potenza di uscita della batteria. Ad esempio, se imposti la potenza a 10 kW, significa che la potenza massima di uscita della batteria è di 10 kW. Questo serve a controllare la potenza di uscita della batteria.</string>
 </resources>

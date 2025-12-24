@@ -62,8 +62,10 @@ fun WorkMode.subtitle(context: Context): String? = when (this) {
     WorkModes.SelfUse -> context.getString(R.string.self_use_mode)
     WorkModes.Feedin -> context.getString(R.string.feed_in_first_mode)
     WorkModes.Backup -> context.getString(R.string.backup_mode)
-    WorkModes.ForceCharge -> context.getString(R.string.workmode_force_charge_description)
-    WorkModes.ForceDischarge -> context.getString(R.string.workmode_force_discharge_description)
+    WorkModes.ForceCharge, "BatteryCharge(AC)" -> context.getString(R.string.workmode_force_charge_description)
+    WorkModes.ForceDischarge, "BatteryDischarge(AC)" -> context.getString(R.string.workmode_force_discharge_description)
     WorkModes.PeakShaving -> context.getString(R.string.peak_shaving_explanation)
+    "BatteryCharge(BAT)" -> context.getString(R.string.workmode_force_charge_mode_bat_description)
+    "BatteryDischarge(BAT)" -> context.getString(R.string.workmode_force_discharge_mode_bat_description)
     else -> null
 }
