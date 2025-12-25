@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-const val dateFormat = "yyyy-MM-dd HH:mm:ss"
+const val networkDateFormat = "yyyy-MM-dd HH:mm:ss"
 
 data class InverterTemperatures(
     val ambient: Double,

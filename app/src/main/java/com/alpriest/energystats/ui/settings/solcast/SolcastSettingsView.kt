@@ -29,12 +29,13 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.R
+import com.alpriest.energystats.helpers.monthYearString
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.helpers.ClickableUrlText
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.helpers.ClickableUrlText
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
@@ -46,8 +47,6 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.OutlinedESButton
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class SolcastSettingsView(
     private val navController: NavController,
@@ -153,7 +152,7 @@ fun SolcastSiteView(site: SolcastSite) {
                 Row(title = stringResource(R.string.azimuth), value = site.azimuth)
                 Row(title = stringResource(R.string.tilt), value = site.tilt)
                 site.installDate?.let {
-                    Row(title = stringResource(R.string.install_date), value = it.monthYear())
+                    Row(title = stringResource(R.string.install_date), value = it.monthYearString())
                 }
             }
         }
@@ -174,11 +173,6 @@ private fun Map(site: SolcastSite) {
         contentDescription = "Map",
         modifier = Modifier.size(width = 120.dp, height = 120.dp)
     )
-}
-
-private fun LocalDate.monthYear(): String {
-    val formatter = DateTimeFormatter.ofPattern("MMM, yyyy")
-    return this.format(formatter)
 }
 
 @Composable

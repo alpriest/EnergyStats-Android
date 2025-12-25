@@ -27,16 +27,12 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.settings.OutlinedSlimButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Typography
-import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.time.Month
 import java.util.Locale
 
 @Composable
 fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifier = Modifier, onPrimary: Boolean, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
-    val calendar = Calendar.getInstance()
-    calendar.set(Calendar.DAY_OF_MONTH, 1)
-    val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
 
     Box(
         modifier = modifier
@@ -50,29 +46,33 @@ fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifie
                 contentColor = if (onPrimary) colorScheme.onPrimary else colorScheme.primary
             ),
             content = {
-                calendar.set(Calendar.MONTH, month)
+                val selectedMonth = Month.of(month)
                 Row(modifier = textModifier) {
-                    Text(monthFormat.format(calendar.time), style = Typography.headlineMedium)
+                    Text(
+                        selectedMonth.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()),
+                        style = Typography.headlineMedium
+                    )
                     Icon(Icons.Default.ArrowDropDown, "down")
                 }
             },
         )
 
         DropdownMenu(expanded = showing, onDismissRequest = { showing = false }) {
-            for (monthIndex in 0 until 12) {
-                calendar.set(Calendar.MONTH, monthIndex)
-                val monthName = monthFormat.format(calendar.time)
+            for (monthIndex in 1 until 13) {
+                val selectedMonth = Month.of(monthIndex)
                 DropdownMenuItem(onClick = {
                     onClick(monthIndex)
                     showing = false
                 }, text = {
-                    Text(monthName)
+                    Text(
+                        selectedMonth.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault())
+                    )
                 }, trailingIcon = {
                     if (monthIndex == month) {
                         Icon(imageVector = Icons.Default.Done, contentDescription = "checked")
                     }
                 })
-                if (monthIndex < 11) {
+                if (monthIndex < 12) {
                     HorizontalDivider()
                 }
             }

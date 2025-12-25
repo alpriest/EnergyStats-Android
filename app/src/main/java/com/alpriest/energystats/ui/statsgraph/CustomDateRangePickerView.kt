@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
+import com.alpriest.energystats.helpers.dayMonthFormat
+import com.alpriest.energystats.helpers.dayMonthYearFormat
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.helpers.CalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
@@ -41,8 +43,8 @@ import java.time.format.DateTimeFormatter
 private val CustomDateRangeDisplayUnit.dateFormat: DateTimeFormatter
     get() {
         return when (this) {
-            CustomDateRangeDisplayUnit.DAYS -> DateTimeFormatter.ofPattern("d MMM")
-            CustomDateRangeDisplayUnit.MONTHS -> DateTimeFormatter.ofPattern("d MMM yyyy")
+            CustomDateRangeDisplayUnit.DAYS -> dayMonthFormat
+            CustomDateRangeDisplayUnit.MONTHS -> dayMonthYearFormat
         }
     }
 
@@ -191,12 +193,12 @@ fun MonthYearPicker(header: String, date: LocalDate, onChange: (LocalDate) -> Un
     SettingsColumn(header = header) {
         Row(Modifier.fillMaxWidth()) {
             MonthPicker(
-                date.monthValue - 1,
+                date.monthValue,
                 modifier = Modifier.weight(1.0f),
                 textModifier = Modifier.fillMaxWidth(),
                 onPrimary = false
             ) {
-                onChange(date.withMonth(it + 1))
+                onChange(date.withMonth(it))
             }
 
             YearPicker(

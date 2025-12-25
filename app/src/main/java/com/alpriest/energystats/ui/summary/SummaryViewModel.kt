@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.monthYearString
 import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.OpenReportResponse
 import com.alpriest.energystats.models.OpenReportResponseData
@@ -15,8 +17,6 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.helpers.monthYear
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.ReportType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -111,7 +111,7 @@ class SummaryTabViewModel(
 
                 emptyMonth?.let { month ->
                     oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
-                        is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).plusMonths(1).monthYear()
+                        is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).plusMonths(1).monthYearString()
                         is SummaryDateRange.Manual -> dateRange.from.monthYear()
                     }
                     hasFinished = true
@@ -195,10 +195,10 @@ class SummaryTabViewModel(
                         unit = report.unit,
                         values = report.values.map { reportData ->
                             when {
-                                year == dateRange.from.year && reportData.index < (dateRange.from.month + 1) -> {
+                                year == dateRange.from.year && reportData.index < (dateRange.from.month) -> {
                                     OpenReportResponseData(index = reportData.index, value = 0.0)
                                 }
-                                year == dateRange.to.year && reportData.index > (dateRange.to.month + 1) -> {
+                                year == dateRange.to.year && reportData.index > (dateRange.to.month) -> {
                                     OpenReportResponseData(index = reportData.index, value = 0.0)
                                 }
                                 else -> {
@@ -238,5 +238,5 @@ class SummaryTabViewModel(
 }
 
 private fun MonthYear.monthYear(): String {
-    return LocalDate.of(year, month + 1, 1).monthYear()
+    return LocalDate.of(year, month, 1).monthYearString()
 }

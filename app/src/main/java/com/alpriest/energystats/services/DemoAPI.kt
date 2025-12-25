@@ -33,7 +33,7 @@ import com.alpriest.energystats.models.ScheduleResponse
 import com.alpriest.energystats.models.SettingItem
 import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.parseToLocalDateTime
-import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.flow.home.networkDateFormat
 import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.WorkModes
 import com.alpriest.energystats.ui.statsgraph.ReportType
@@ -102,7 +102,7 @@ class DemoAPI : FoxAPIServicing {
         }
 
         val fileContent = this::class.java.classLoader?.getResource(filename)?.readText()
-        val formatter = DateTimeFormatter.ofPattern(dateFormat)
+        val formatter = DateTimeFormatter.ofPattern(networkDateFormat)
         val now = LocalDate.now()
 
         val data: NetworkResponse<List<OpenHistoryResponse>> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<List<OpenHistoryResponse>>>() {}.type)

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.ReportVariable
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -211,12 +212,14 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
 @Composable
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
-    val viewModel = StatsTabViewModel(
+    val factory = StatsTabViewModelFactory(
         MutableStateFlow(Day(LocalDate.now())),
         FakeConfigManager(),
         DemoNetworking(),
-        themeStream = MutableStateFlow(AppTheme.demo())
-    ) { _, _ -> null }
+        themeStream = MutableStateFlow(AppTheme.demo()),
+        { _, _ -> null }
+    )
+    val viewModel: StatsTabViewModel = viewModel(factory = factory)
 
     StatsGraphView(viewModel)
 }
@@ -266,9 +269,9 @@ class BottomAxisValueFormatter(private val displayMode: StatsDisplayMode) : Cart
             is Day -> String.format(Locale.getDefault(), "%d:00", value.toInt())
             is StatsDisplayMode.Month -> value.toInt().toString()
             is StatsDisplayMode.Year -> {
-                val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
                 val calendar = Calendar.getInstance()
                 calendar.set(Calendar.MONTH, value.toInt() - 1)
+                val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
                 return monthFormat.format(calendar.time)
             }
 

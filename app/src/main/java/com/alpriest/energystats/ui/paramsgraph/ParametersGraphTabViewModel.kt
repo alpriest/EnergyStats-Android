@@ -26,7 +26,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.ui.flow.home.dateFormat
+import com.alpriest.energystats.ui.flow.home.networkDateFormat
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
@@ -409,7 +409,7 @@ class ParametersGraphTabViewModel(
         val first = parseToLocalDateTime(openHistoryResponseData.data[0].time)
         val second = parseToLocalDateTime(openHistoryResponseData.data[1].time)
         val interval = Duration.between(first, second) // assume constant interval
-        val formatter = DateTimeFormatter.ofPattern(dateFormat)
+        val formatter = DateTimeFormatter.ofPattern(networkDateFormat)
 
         val midnight = first.toLocalDate().atStartOfDay()
 

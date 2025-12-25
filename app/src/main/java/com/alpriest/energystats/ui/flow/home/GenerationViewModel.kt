@@ -22,7 +22,7 @@ class GenerationViewModel(
     val ct2Total: Double
 
     init {
-        val dateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
+        val dateFormat = SimpleDateFormat(networkDateFormat, Locale.getDefault())
         val timeZone = ZoneId.systemDefault()
         ct2Total = response.datas.asSequence().filter { it.variable == "meterPower2" }
             .flatMap { it.data.toList() }
@@ -96,7 +96,7 @@ class GenerationViewModel(
 }
 
 private fun OpenHistoryResponse.trapezoidalAverage(key: String): Double {
-    val dateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
+    val dateFormat = SimpleDateFormat(networkDateFormat, Locale.getDefault())
     val timeZone = ZoneId.systemDefault()
     return datas
         .filter { it.variable == key }

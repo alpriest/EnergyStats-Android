@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
+import com.alpriest.energystats.helpers.fullDateTime
 import com.alpriest.energystats.models.SolcastFailure
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.toHalfHourOfDay
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import java.util.Date
 
 data class SolarForecastViewData(
@@ -61,12 +61,11 @@ class SolarForecastViewModel(
         }
 
         loadStateStream.value = LoadState.Active.Loading
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/y, HH:mm")
 
         try {
             dataStream.value = settings.sites.mapNotNull { site ->
                 val forecast = solarForecastProvider().fetchForecast(site, settings.apiKey, ignoreCache)
-                lastFetchedStream.value = configManager.lastSolcastRefresh?.format(formatter)
+                lastFetchedStream.value = configManager.lastSolcastRefresh?.fullDateTime()
 
                 if (forecast.failure == null) {
                     val forecasts = forecast.forecasts

@@ -8,19 +8,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.flow.home.dateFormat
-import com.alpriest.energystats.ui.summary.PreviewContextHolder.context
-import com.alpriest.energystats.ui.theme.AppTheme
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.alpriest.energystats.ui.flow.home.networkDateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -50,7 +43,7 @@ class MainActivity : ComponentActivity() {
 }
 
 fun parseToLocalDateTime(input: String): LocalDateTime {
-    val simpleDate = SimpleDateFormat(dateFormat, Locale.getDefault()).parse(input)
+    val simpleDate = SimpleDateFormat(networkDateFormat, Locale.getDefault()).parse(input)
     return if (simpleDate != null) {
         simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
     } else {
