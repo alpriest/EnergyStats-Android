@@ -1,9 +1,9 @@
-package com.alpriest.energystats.shared.models
+package com.alpriest.energystats.shared.helpers
 
 import java.math.BigInteger
 import java.security.MessageDigest
 
-fun String.md5(): String? {
+fun String.md5(): String {
     val md5Digest = MessageDigest.getInstance("MD5")
     val bytes = this.toByteArray(Charsets.UTF_8)
     val digestBytes = md5Digest.digest(bytes)

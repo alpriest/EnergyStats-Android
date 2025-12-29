@@ -3,8 +3,8 @@ package com.alpriest.energystats.models
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
+import com.alpriest.energystats.shared.helpers.md5
 import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.md5
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.statsgraph.selfSufficiencyLineColor
 import com.alpriest.energystats.ui.theme.AppTheme
@@ -15,7 +15,6 @@ class Variable(
     val variable: String,
     val unit: String
 ) {
-
     fun colour(): Color {
         return when (this.variable) {
             "generationPower" -> Color(244, 184, 96)

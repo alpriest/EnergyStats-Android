@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.services
 
+import com.alpriest.energystats.shared.helpers.md5
 import com.alpriest.energystats.shared.models.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.BatterySOCResponse
 import com.alpriest.energystats.shared.models.BatteryTimesResponse
@@ -43,7 +44,6 @@ import com.alpriest.energystats.shared.models.SetCurrentScheduleRequest
 import com.alpriest.energystats.shared.models.SetDeviceSettingsItemRequest
 import com.alpriest.energystats.shared.models.SetPeakShavingSettingsRequest
 import com.alpriest.energystats.shared.models.SetSchedulerFlagRequest
-import com.alpriest.energystats.shared.models.md5
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -80,7 +80,7 @@ data class RequestData(
 
 class FoxAPIService(private val requestData: RequestData, interceptor: Interceptor? = null) : FoxAPIServicing {
     private fun makeSignature(encodedPath: String, token: String, timestamp: Long): String {
-        return listOf(encodedPath, token, timestamp.toString()).joinToString("\\r\\n").md5() ?: ""
+        return listOf(encodedPath, token, timestamp.toString()).joinToString("\\r\\n").md5()
     }
 
     private val okHttpClient by lazy {
