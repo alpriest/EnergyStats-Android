@@ -25,7 +25,8 @@ class MainActivity : ComponentActivity() {
         val preHomeViewModel = PreHomeViewModel(
             appContainer.networking,
             appContainer.configManager,
-            appContainer.solarForecastingProvider
+            appContainer.solarForecastingProvider,
+            appContainer.credentialStore
         )
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
