@@ -202,7 +202,7 @@ private fun ParameterGraphViewWithCustomMarker(
 private val BottomAxisValueFormatter =
     object : CartesianValueFormatter {
         private val dateFormat =
-            SimpleDateFormat("H", Locale.ENGLISH).apply { timeZone = TimeZone.getTimeZone("GMT") }
+            SimpleDateFormat("H", Locale.ENGLISH).apply { timeZone = TimeZone.getDefault() }
 
         override fun format(
             context: CartesianMeasuringContext,
