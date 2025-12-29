@@ -3,7 +3,7 @@ package com.alpriest.energystats.stores
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.services.ConfigInterface
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup

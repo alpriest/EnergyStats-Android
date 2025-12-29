@@ -10,7 +10,7 @@ import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.shared.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel

@@ -15,8 +15,8 @@ import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.services.NetworkService
 import com.alpriest.energystats.services.NetworkValueCleaner
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.shared.services.FoxAPIService
-import com.alpriest.energystats.shared.services.RequestData
+import com.alpriest.energystats.shared.network.FoxAPIService
+import com.alpriest.energystats.shared.network.RequestData
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore

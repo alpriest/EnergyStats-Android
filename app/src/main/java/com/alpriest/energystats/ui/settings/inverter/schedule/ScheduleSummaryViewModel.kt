@@ -10,10 +10,10 @@ import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.ScheduleResponse
+import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.WorkModes
-import com.alpriest.energystats.shared.services.FoxServerError
+import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData

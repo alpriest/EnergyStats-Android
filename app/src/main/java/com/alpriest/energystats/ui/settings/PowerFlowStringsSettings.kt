@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.settings
 
-import com.alpriest.energystats.shared.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.currentValue
 import kotlin.math.abs

@@ -1,27 +1,27 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.shared.models.ApiRequestCountResponse
-import com.alpriest.energystats.shared.models.BatterySOCResponse
-import com.alpriest.energystats.shared.models.ChargeTime
-import com.alpriest.energystats.shared.models.DataLoggerResponse
-import com.alpriest.energystats.shared.models.DeviceDetailResponse
-import com.alpriest.energystats.shared.models.DeviceSettingsItem
-import com.alpriest.energystats.shared.models.DeviceSummaryResponse
-import com.alpriest.energystats.shared.models.FetchDeviceSettingsItemResponse
-import com.alpriest.energystats.shared.models.FetchPeakShavingSettingsResponse
-import com.alpriest.energystats.shared.models.GetSchedulerFlagResponse
-import com.alpriest.energystats.shared.models.OpenApiVariable
-import com.alpriest.energystats.shared.models.OpenHistoryResponse
-import com.alpriest.energystats.shared.models.OpenRealQueryResponse
-import com.alpriest.energystats.shared.models.OpenReportResponse
-import com.alpriest.energystats.shared.models.PowerGenerationResponse
+import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.BatterySOCResponse
+import com.alpriest.energystats.shared.models.network.ChargeTime
+import com.alpriest.energystats.shared.models.network.DataLoggerResponse
+import com.alpriest.energystats.shared.models.network.DeviceDetailResponse
+import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
+import com.alpriest.energystats.shared.models.network.DeviceSummaryResponse
+import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
+import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
+import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.ReportType
+import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.ScheduleResponse
-import com.alpriest.energystats.shared.services.FoxAPIServicing
+import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import com.alpriest.energystats.shared.network.FoxAPIServicing
 
 interface Networking {
     suspend fun fetchErrorMessages()
@@ -29,7 +29,7 @@ interface Networking {
     suspend fun fetchDeviceList(): List<DeviceSummaryResponse>
     suspend fun fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse
     suspend fun fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse
-    suspend fun fetchVariables(): List<OpenApiVariable>
+    suspend fun fetchVariables(): List<ApiVariable>
     suspend fun fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse>
     suspend fun fetchBatterySettings(deviceSN: String): BatterySOCResponse
     suspend fun setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int)
@@ -67,7 +67,7 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
         return api.openapi_fetchHistory(deviceSN, variables, start, end)
     }
 
-    override suspend fun fetchVariables(): List<OpenApiVariable> {
+    override suspend fun fetchVariables(): List<ApiVariable> {
         return api.openapi_fetchVariables()
     }
 

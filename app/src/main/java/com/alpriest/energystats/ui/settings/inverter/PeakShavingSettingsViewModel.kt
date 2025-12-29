@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.shared.services.FoxServerError
+import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import kotlinx.coroutines.flow.MutableStateFlow

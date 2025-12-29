@@ -1,7 +1,7 @@
 package com.alpriest.energystats.ui.flow
 
-import com.alpriest.energystats.shared.models.OpenReportResponse
-import com.alpriest.energystats.shared.models.OpenReportResponseData
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.OpenReportResponseData
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import java.util.Calendar

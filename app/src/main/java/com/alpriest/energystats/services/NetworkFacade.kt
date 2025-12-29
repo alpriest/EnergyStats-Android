@@ -1,28 +1,28 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.shared.models.ApiRequestCountResponse
-import com.alpriest.energystats.shared.models.BatterySOCResponse
-import com.alpriest.energystats.shared.models.ChargeTime
-import com.alpriest.energystats.shared.models.DataLoggerResponse
-import com.alpriest.energystats.shared.models.DeviceDetailResponse
-import com.alpriest.energystats.shared.models.DeviceSettingsItem
-import com.alpriest.energystats.shared.models.DeviceSummaryResponse
-import com.alpriest.energystats.shared.models.FetchDeviceSettingsItemResponse
-import com.alpriest.energystats.shared.models.FetchPeakShavingSettingsResponse
-import com.alpriest.energystats.shared.models.GetSchedulerFlagResponse
-import com.alpriest.energystats.shared.models.OpenApiVariable
-import com.alpriest.energystats.shared.models.OpenHistoryResponse
-import com.alpriest.energystats.shared.models.OpenRealQueryResponse
-import com.alpriest.energystats.shared.models.OpenReportResponse
-import com.alpriest.energystats.shared.models.PagedPowerStationListResponse
-import com.alpriest.energystats.shared.models.PowerGenerationResponse
-import com.alpriest.energystats.shared.models.PowerStationDetailResponse
+import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.BatterySOCResponse
+import com.alpriest.energystats.shared.models.network.ChargeTime
+import com.alpriest.energystats.shared.models.network.DataLoggerResponse
+import com.alpriest.energystats.shared.models.network.DeviceDetailResponse
+import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
+import com.alpriest.energystats.shared.models.network.DeviceSummaryResponse
+import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
+import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
+import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.PagedPowerStationListResponse
+import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
+import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
 import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.ReportType
+import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.ScheduleResponse
+import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.services.FoxAPIServicing
+import com.alpriest.energystats.shared.network.FoxAPIServicing
 import kotlinx.coroutines.delay
 import java.util.concurrent.ConcurrentHashMap
 
@@ -53,7 +53,7 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
         }
     }
 
-    override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
+    override suspend fun openapi_fetchVariables(): List<ApiVariable> {
         return if (isDemoUser()) {
             demoAPI.openapi_fetchVariables()
         } else {

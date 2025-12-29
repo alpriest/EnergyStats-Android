@@ -2,9 +2,9 @@ package com.alpriest.energystats.ui.statsgraph
 
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.ReportType
+import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.parse
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator

@@ -3,8 +3,8 @@ package com.alpriest.energystats.ui.login
 import android.content.Context
 import androidx.annotation.UiThread
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.services.BadCredentialsException
-import com.alpriest.energystats.shared.services.InvalidTokenException
+import com.alpriest.energystats.shared.network.BadCredentialsException
+import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.theme.AppTheme

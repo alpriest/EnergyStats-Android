@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.flow.home
 
-import com.alpriest.energystats.shared.models.OpenHistoryResponse
+import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.ui.flow.StringType
 import java.text.SimpleDateFormat
 import java.time.ZoneId

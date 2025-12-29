@@ -8,7 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
-import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 

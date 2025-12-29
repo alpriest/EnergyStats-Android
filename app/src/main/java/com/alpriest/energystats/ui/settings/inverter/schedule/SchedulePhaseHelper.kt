@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
-import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.models.WorkMode
 
 class SchedulePhaseHelper {

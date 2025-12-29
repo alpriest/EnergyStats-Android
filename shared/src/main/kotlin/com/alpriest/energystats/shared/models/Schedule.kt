@@ -1,5 +1,8 @@
 package com.alpriest.energystats.shared.models
 
+import com.alpriest.energystats.shared.models.network.SchedulePhaseNetworkModel
+import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import com.alpriest.energystats.shared.models.network.Time
 import java.util.UUID
 
 private val Boolean.intValue: Int
@@ -102,8 +105,8 @@ data class SchedulePhase(
 
             return SchedulePhase(
                 UUID.randomUUID().toString(),
-                Time.now(),
-                Time.now().adding(1),
+                Time.Companion.now(),
+                Time.Companion.now().adding(1),
                 mode,
                 0,
                 minSOC,
@@ -160,17 +163,6 @@ data class ScheduleTemplate(
     val name: String,
     val phases: List<SchedulePhase>
 )
-
-typealias WorkMode = String
-
-object WorkModes {
-    const val SelfUse = "SelfUse"
-    const val Feedin = "Feedin"
-    const val Backup = "Backup"
-    const val ForceCharge = "ForceCharge"
-    const val ForceDischarge = "ForceDischarge"
-    const val PeakShaving = "PeakShaving"
-}
 
 internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
     if (enable == 0) { return null }

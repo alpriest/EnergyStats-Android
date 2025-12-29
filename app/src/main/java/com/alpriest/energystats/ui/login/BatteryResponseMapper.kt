@@ -1,8 +1,8 @@
 package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.shared.models.Battery
-import com.alpriest.energystats.shared.models.BatterySOCResponse
-import com.alpriest.energystats.shared.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.BatterySOCResponse
+import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.ui.flow.SoC
 import com.alpriest.energystats.ui.flow.currentValue
 

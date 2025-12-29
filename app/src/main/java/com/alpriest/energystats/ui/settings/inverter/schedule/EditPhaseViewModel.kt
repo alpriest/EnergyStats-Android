@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.shared.models.SchedulePhase
-import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.stores.ConfigManaging

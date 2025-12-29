@@ -137,3 +137,9 @@ class BatteryFirmwareVersionsViewModel(
         }
     }
 }
+
+data class DeviceBatteryModule(
+    val batterySN: String,
+    val type: String,
+    val version: String
+)

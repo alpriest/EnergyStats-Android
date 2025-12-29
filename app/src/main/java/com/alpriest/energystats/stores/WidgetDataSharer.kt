@@ -1,7 +1,7 @@
 package com.alpriest.energystats.stores
 
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.services.ConfigInterface
 import com.alpriest.energystats.widget.GenerationViewData
 
 interface WidgetDataSharing {

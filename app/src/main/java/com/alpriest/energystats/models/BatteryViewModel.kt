@@ -3,7 +3,7 @@ package com.alpriest.energystats.models
 import android.content.Context
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.SoC
 import com.alpriest.energystats.ui.flow.battery.BatteryCapacityCalculator

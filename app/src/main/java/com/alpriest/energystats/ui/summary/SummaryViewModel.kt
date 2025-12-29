@@ -7,13 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.monthYearString
 import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.OpenReportResponse
-import com.alpriest.energystats.shared.models.OpenReportResponseData
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.OpenReportResponseData
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.parse
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.shared.models.ReportType
+import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState

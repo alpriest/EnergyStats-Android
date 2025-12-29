@@ -2,43 +2,43 @@ package com.alpriest.energystats.services
 
 import com.alpriest.energystats.R
 import com.alpriest.energystats.parseToLocalDateTime
-import com.alpriest.energystats.shared.models.ApiRequestCountResponse
-import com.alpriest.energystats.shared.models.BatterySOCResponse
-import com.alpriest.energystats.shared.models.ChargeTime
-import com.alpriest.energystats.shared.models.DataLoggerResponse
-import com.alpriest.energystats.shared.models.DataLoggerStatus
-import com.alpriest.energystats.shared.models.DeviceDetailResponse
-import com.alpriest.energystats.shared.models.DeviceFunction
-import com.alpriest.energystats.shared.models.DeviceSettingsItem
-import com.alpriest.energystats.shared.models.DeviceSummaryResponse
-import com.alpriest.energystats.shared.models.FetchDeviceSettingsItemResponse
-import com.alpriest.energystats.shared.models.FetchPeakShavingSettingsResponse
-import com.alpriest.energystats.shared.models.GetSchedulerFlagResponse
-import com.alpriest.energystats.shared.models.OpenApiVariable
-import com.alpriest.energystats.shared.models.OpenApiVariableArray
-import com.alpriest.energystats.shared.models.OpenHistoryResponse
-import com.alpriest.energystats.shared.models.OpenQueryResponseData
-import com.alpriest.energystats.shared.models.OpenRealQueryResponse
-import com.alpriest.energystats.shared.models.OpenReportResponse
-import com.alpriest.energystats.shared.models.PagedPowerStationListResponse
-import com.alpriest.energystats.shared.models.PowerGenerationResponse
-import com.alpriest.energystats.shared.models.PowerStationDetailResponse
+import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.BatterySOCResponse
+import com.alpriest.energystats.shared.models.network.ChargeTime
+import com.alpriest.energystats.shared.models.network.DataLoggerResponse
+import com.alpriest.energystats.shared.models.network.DataLoggerStatus
+import com.alpriest.energystats.shared.models.network.DeviceDetailResponse
+import com.alpriest.energystats.shared.models.network.DeviceFunction
+import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
+import com.alpriest.energystats.shared.models.network.DeviceSummaryResponse
+import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
+import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.ApiVariableArray
+import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
+import com.alpriest.energystats.shared.models.network.OpenQueryResponseData
+import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.PagedPowerStationListResponse
+import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
+import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
 import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.ReportType
+import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.SchedulePhaseNetworkModel
-import com.alpriest.energystats.shared.models.ScheduleResponse
-import com.alpriest.energystats.shared.models.SettingItem
-import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.network.SchedulePhaseNetworkModel
+import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import com.alpriest.energystats.shared.models.network.SettingItem
+import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.models.WorkModes
-import com.alpriest.energystats.shared.services.DataLoggerStatusDeserializer
-import com.alpriest.energystats.shared.services.FoxAPIServicing
-import com.alpriest.energystats.shared.services.InvalidTokenException
-import com.alpriest.energystats.shared.services.NetworkResponse
-import com.alpriest.energystats.shared.services.OpenApiVariableDeserializer
-import com.alpriest.energystats.shared.services.OpenRealQueryResponseDeserializer
-import com.alpriest.energystats.shared.services.OpenReportResponseDeserializer
+import com.alpriest.energystats.shared.network.DataLoggerStatusDeserializer
+import com.alpriest.energystats.shared.network.FoxAPIServicing
+import com.alpriest.energystats.shared.network.InvalidTokenException
+import com.alpriest.energystats.shared.network.NetworkResponse
+import com.alpriest.energystats.shared.network.OpenApiVariableDeserializer
+import com.alpriest.energystats.shared.network.OpenRealQueryResponseDeserializer
+import com.alpriest.energystats.shared.network.OpenReportResponseDeserializer
 import com.alpriest.energystats.ui.flow.home.networkDateFormat
 import com.alpriest.energystats.ui.summary.PreviewContextHolder
 import com.google.gson.Gson
@@ -156,10 +156,10 @@ class DemoAPI : FoxAPIServicing {
 
     }
 
-    override suspend fun openapi_fetchVariables(): List<OpenApiVariable> {
+    override suspend fun openapi_fetchVariables(): List<ApiVariable> {
         val fileContent = this::class.java.classLoader?.getResource("res/raw/variables.json")?.readText()
 
-        val data: NetworkResponse<OpenApiVariableArray> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<OpenApiVariableArray>>() {}.type)
+        val data: NetworkResponse<ApiVariableArray> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<ApiVariableArray>>() {}.type)
 
         return data.result?.array ?: listOf()
     }
@@ -303,7 +303,7 @@ class DemoAPI : FoxAPIServicing {
 
     private fun makeGson(): Gson {
         return GsonBuilder()
-            .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
+            .registerTypeAdapter(ApiVariableArray::class.java, OpenApiVariableDeserializer())
             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
             .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
             .registerTypeAdapter(OpenRealQueryResponseDeserializer::class.java, OpenRealQueryResponseDeserializer())

@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.login
 
-import com.alpriest.energystats.models.ConfigInterface
+import com.alpriest.energystats.services.ConfigInterface
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.shared.models.Battery
 import com.alpriest.energystats.shared.models.Device
@@ -22,7 +22,7 @@ import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ScheduleTemplate
-import com.alpriest.energystats.shared.services.InvalidTokenException
+import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme

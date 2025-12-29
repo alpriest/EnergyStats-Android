@@ -3,8 +3,8 @@ package com.alpriest.energystats.ui.settings.solcast
 import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.alpriest.energystats.models.SolcastSiteResponseList
-import com.alpriest.energystats.shared.services.InvalidConfigurationException
-import com.alpriest.energystats.shared.services.TryLaterException
+import com.alpriest.energystats.shared.network.InvalidConfigurationException
+import com.alpriest.energystats.shared.network.TryLaterException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

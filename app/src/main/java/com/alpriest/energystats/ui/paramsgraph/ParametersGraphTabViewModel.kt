@@ -16,8 +16,8 @@ import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.shared.models.OpenHistoryResponse
-import com.alpriest.energystats.shared.models.OpenHistoryResponseData
+import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
+import com.alpriest.energystats.shared.models.network.OpenHistoryResponseData
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.UnitData
 import com.alpriest.energystats.shared.models.toDate

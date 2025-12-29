@@ -17,7 +17,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.models.CalculationBreakdown
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.shared.models.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.valentinilk.shimmer.shimmer

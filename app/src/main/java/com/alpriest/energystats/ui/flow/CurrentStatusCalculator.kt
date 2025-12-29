@@ -2,8 +2,8 @@ package com.alpriest.energystats.ui.flow
 
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.parseToLocalDateTime
-import com.alpriest.energystats.shared.models.OpenQueryResponseData
-import com.alpriest.energystats.shared.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.OpenQueryResponseData
+import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings

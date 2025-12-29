@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.settings.devicesettings
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.shared.models.DeviceSettingsItem
+import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData

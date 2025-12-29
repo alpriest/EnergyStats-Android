@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.shared.services.UnacceptableException
+import com.alpriest.energystats.shared.network.UnacceptableException
 import com.alpriest.energystats.ui.helpers.UnsupportedErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.ESButton
