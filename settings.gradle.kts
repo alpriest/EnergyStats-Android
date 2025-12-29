@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Energy Stats"
 include(":app")
-include(":energystatswear")
+include(":wear")
+include(":shared")
