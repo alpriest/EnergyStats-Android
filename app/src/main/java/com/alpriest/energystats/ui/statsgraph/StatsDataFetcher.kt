@@ -161,7 +161,7 @@ class StatsDataFetcher(val networking: Networking, val approximationsCalculator:
             }
 
             is StatsDisplayMode.Month -> {
-                QueryDate(year = displayMode.year, month = displayMode.month + 1, day = null)
+                QueryDate(year = displayMode.year, month = displayMode.month, day = null)
             }
 
             is StatsDisplayMode.Year -> {
