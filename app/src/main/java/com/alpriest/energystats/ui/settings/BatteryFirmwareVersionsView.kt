@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -19,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.DeviceBatteryModule
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
@@ -45,7 +43,6 @@ class BatteryFirmwareVersionsView(
 
     @Composable
     fun Content(modifier: Modifier, viewModel: BatteryFirmwareVersionsViewModel = viewModel(factory = BatteryFirmwareVersionsViewModelFactory(configManager, network))) {
-        val context = LocalContext.current
         LaunchedEffect(null) {
             viewModel.load()
         }

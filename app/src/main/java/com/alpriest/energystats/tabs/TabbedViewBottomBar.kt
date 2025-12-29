@@ -28,7 +28,7 @@ fun TabbedViewBottomBar(pagerState: PagerState, titles: List<TitleItem>, depende
     val scope = rememberCoroutineScope()
 
     Column(
-        modifier = Modifier.Companion
+        modifier = Modifier
             .fillMaxWidth()
             .darkenedBackground()
     ) {
@@ -36,7 +36,7 @@ fun TabbedViewBottomBar(pagerState: PagerState, titles: List<TitleItem>, depende
             selectedTabIndex = pagerState.currentPage,
             containerColor = darkenedBackgroundColor(),
             divider = {},
-            modifier = Modifier.Companion.windowInsetsPadding(WindowInsets.Companion.navigationBars)
+            modifier = Modifier.windowInsetsPadding(WindowInsets.Companion.navigationBars)
         ) {
             titles.forEachIndexed { index, item ->
                 Tab(
@@ -49,10 +49,10 @@ fun TabbedViewBottomBar(pagerState: PagerState, titles: List<TitleItem>, depende
                         }
                     },
                     content = {
-                        Box(contentAlignment = Alignment.Companion.TopEnd) {
+                        Box(contentAlignment = Alignment.TopEnd) {
                             Column(
-                                horizontalAlignment = Alignment.Companion.CenterHorizontally,
-                                modifier = Modifier.Companion.padding(vertical = 8.dp)
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(vertical = 8.dp)
                             ) {
                                 Icon(imageVector = item.icon, contentDescription = null)
                                 Text(

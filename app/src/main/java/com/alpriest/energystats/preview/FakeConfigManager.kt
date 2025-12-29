@@ -6,8 +6,8 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.stores.DeviceCapability
-import com.alpriest.energystats.stores.WidgetTapAction
+import com.alpriest.energystats.models.DeviceCapability
+import com.alpriest.energystats.services.WidgetTapAction
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode

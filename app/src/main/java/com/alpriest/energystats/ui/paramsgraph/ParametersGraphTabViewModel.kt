@@ -16,10 +16,10 @@ import com.alpriest.energystats.models.solcastPrediction
 import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponseData
-import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.UnitData
+import com.alpriest.energystats.shared.models.network.UnitData
 import com.alpriest.energystats.shared.models.toDate
 import com.alpriest.energystats.shared.models.toUtcMillis
 import com.alpriest.energystats.stores.ConfigManaging
@@ -44,7 +44,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.concurrent.CancellationException
-import kotlin.collections.map
 
 data class ParametersGraphViewState(
     val displayMode: ParametersDisplayMode,

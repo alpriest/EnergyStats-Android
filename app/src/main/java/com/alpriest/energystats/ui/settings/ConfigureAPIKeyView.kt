@@ -2,7 +2,7 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,21 +44,21 @@ fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, th
             SettingsPage(innerModifier) {
                 SettingsColumnWithChild {
                     OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.Companion.fillMaxWidth(),
                         value = apiKey,
                         onValueChange = { apiKey = it },
                         label = { Text(stringResource(R.string.api_key)) },
                         singleLine = true,
-                        textStyle = TextStyle(colorScheme.onSecondary),
+                        textStyle = TextStyle(MaterialTheme.colorScheme.onSecondary),
                     )
 
                     Text(
                         "If you need to change your API key then you can replace it above without losing your settings.",
-                        color = colorScheme.onSecondary,
-                        modifier = Modifier.padding(top = 4.dp)
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        modifier = Modifier.Companion.padding(top = 4.dp)
                     )
 
-                    HowToObtainAPIKeyView().Content(themeStream, modifier = Modifier.padding(top = 44.dp))
+                    HowToObtainAPIKeyView().Content(themeStream, modifier = Modifier.Companion.padding(top = 44.dp))
                     SettingsBottomSpace()
                 }
             }
@@ -73,8 +73,8 @@ fun PreviewConfigureAPIKeyView() {
         ConfigureAPIKeyView(
             FakeCredentialStore(),
             NavHostController(LocalContext.current),
-            MutableStateFlow(AppTheme.demo()),
-            modifier = Modifier
+            MutableStateFlow(AppTheme.Companion.demo()),
+            modifier = Modifier.Companion
         )
     }
 }

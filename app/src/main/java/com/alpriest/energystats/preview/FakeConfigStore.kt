@@ -3,7 +3,7 @@ package com.alpriest.energystats.preview
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.services.ConfigInterface
 import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.stores.WidgetTapAction
+import com.alpriest.energystats.services.WidgetTapAction
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode

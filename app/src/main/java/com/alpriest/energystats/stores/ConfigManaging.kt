@@ -1,8 +1,8 @@
 package com.alpriest.energystats.stores
 
-import android.content.Context
-import com.alpriest.energystats.R
+import com.alpriest.energystats.models.DeviceCapability
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.services.WidgetTapAction
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.ScheduleTemplate
@@ -103,27 +103,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager {
     var allowNegativeHouseLoad: Boolean
 }
 
-enum class DeviceCapability {
-    ScheduleMaxSOC,
-    PeakShaving
-}
-
 interface ScheduleTemplateConfigManager {
     var scheduleTemplates: List<ScheduleTemplate>
 }
 
-enum class WidgetTapAction(val value: Int) {
-    Launch(0),
-    Refresh(1);
-
-    fun title(context: Context): String {
-        return when (this) {
-            Launch -> context.getString(R.string.launch)
-            Refresh -> context.getString(R.string.refresh)
-        }
-    }
-
-    companion object {
-        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: Launch
-    }
-}

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.glance.appwidget.updateAll
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.stores.WidgetTapAction
+import com.alpriest.energystats.services.WidgetTapAction
 import com.alpriest.energystats.ui.AppContainer
 
 class BatteryDataRepository private constructor() {
