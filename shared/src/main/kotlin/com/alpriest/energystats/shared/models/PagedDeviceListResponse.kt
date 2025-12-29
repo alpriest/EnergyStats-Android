@@ -1,4 +1,4 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
 data class PagedDeviceListResponse(
     val currentPage: Int,

@@ -7,13 +7,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.models.DeviceSettingsItem
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.models.DeviceSettingsItem
+import com.alpriest.energystats.shared.models.WorkMode
+import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
-import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
-import com.alpriest.energystats.ui.settings.inverter.schedule.WorkModes
 import com.alpriest.energystats.ui.settings.inverter.schedule.networkTitle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,16 +1,18 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import android.content.Context
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.WorkMode
+import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -141,7 +143,6 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
             forceDischargePower = forceDischargePowerStream.value.toIntOrNull() ?: 0,
             forceDischargeSOC = forceDischargeSOCStream.value.toIntOrNull() ?: 0,
             batterySOC = minSOCStream.value.toIntOrNull() ?: 0,
-            color = Color.scheduleColor(workModeStream.value),
             maxSOC = if (showMaxSocStream.value) maxSocStream.value.toIntOrNull() else null
         )
 

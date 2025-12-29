@@ -12,7 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.TimeType
 
 @Composable
 fun TimePeriodView(

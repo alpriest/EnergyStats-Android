@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.Device
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.ui.flow.CurrentValues
 import com.alpriest.energystats.ui.flow.StringPower

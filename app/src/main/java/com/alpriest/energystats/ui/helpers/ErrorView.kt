@@ -1,7 +1,5 @@
 package com.alpriest.energystats.ui.helpers
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,9 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
-import com.alpriest.energystats.services.InvalidTokenException
-import com.alpriest.energystats.services.MissingDataException
+import com.alpriest.energystats.shared.services.InvalidTokenException
+import com.alpriest.energystats.shared.services.MissingDataException
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
@@ -98,36 +95,11 @@ fun ErrorView(cause: Exception?, reason: String, allowRetry: Boolean, onRetry: s
                     ButtonDefinition(stringResource(R.string.retry)) { scope.launch { onRetry() } }
                 else
                     ButtonDefinition(stringResource(R.string.ok)) { scope.launch { onRetry() } },
-                ButtonDefinition(stringResource(R.string.copy_debug_data)) {
-                    scope.launch {
-                        copyDebugData(context)
-                    }
-                },
                 ButtonDefinition(stringResource(R.string.foxess_cloud_status)) { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") },
                 ButtonDefinition(stringResource(R.string.logout)) { onLogout() }
             )
         )
     }
-}
-
-fun copyDebugData(context: Context) {
-    var text = ""
-
-    InMemoryLoggingNetworkStore.shared.latestRequest?.let { request ->
-        text += request
-    }
-
-    InMemoryLoggingNetworkStore.shared.latestResponse?.let { response ->
-        text += "\n\n$response"
-    }
-
-    InMemoryLoggingNetworkStore.shared.latestResponseText?.let {
-        text += "\n\n$it"
-    }
-
-    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText("label", text)
-    clipboard.setPrimaryClip(clip)
 }
 
 @Preview

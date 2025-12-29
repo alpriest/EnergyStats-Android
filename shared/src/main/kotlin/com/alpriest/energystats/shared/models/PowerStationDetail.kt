@@ -1,4 +1,4 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
 data class PowerStationDetail(val stationName: String, val capacity: Double, val timezone: String) {
     companion object {

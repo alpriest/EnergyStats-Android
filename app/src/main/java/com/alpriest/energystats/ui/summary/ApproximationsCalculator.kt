@@ -1,17 +1,18 @@
 package com.alpriest.energystats.ui.summary
 
-import com.alpriest.energystats.models.OpenReportResponse
-import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.parse
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.models.OpenReportResponse
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportType
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.parse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.statsgraph.AbsoluteSelfSufficiencyCalculator
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.NetSelfSufficiencyCalculator
-import com.alpriest.energystats.ui.statsgraph.ReportType
+import kotlin.math.abs
 
 class ApproximationsCalculator(
     private val configManager: ConfigManaging,
@@ -74,7 +75,7 @@ class ApproximationsCalculator(
         } else {
             reportData.forEach { response ->
                 ReportVariable.parse(response.variable).let {
-                    totals[it] = response.values.sumOf { kotlin.math.abs(it.value) }
+                    totals[it] = response.values.sumOf { abs(it.value) }
                 }
             }
         }

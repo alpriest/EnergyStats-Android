@@ -6,7 +6,7 @@ import com.alpriest.energystats.models.SolcastForecastList
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.SolcastForecastResponseList
 import com.alpriest.energystats.models.SolcastSiteResponseList
-import com.alpriest.energystats.services.TryLaterException
+import com.alpriest.energystats.shared.services.TryLaterException
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import kotlinx.coroutines.sync.Mutex

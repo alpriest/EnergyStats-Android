@@ -1,10 +1,17 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.services
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonNull
 import com.google.gson.JsonPrimitive
+import com.alpriest.energystats.shared.models.DataLoggerStatus
+import com.alpriest.energystats.shared.models.OpenApiVariable
+import com.alpriest.energystats.shared.models.OpenApiVariableArray
+import com.alpriest.energystats.shared.models.OpenQueryResponseData
+import com.alpriest.energystats.shared.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.OpenReportResponse
+import com.alpriest.energystats.shared.models.OpenReportResponseData
 import java.lang.reflect.Type
 
 class OpenApiVariableDeserializer : JsonDeserializer<OpenApiVariableArray> {

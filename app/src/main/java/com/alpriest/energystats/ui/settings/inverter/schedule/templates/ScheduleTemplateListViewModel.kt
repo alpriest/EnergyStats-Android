@@ -12,7 +12,7 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID

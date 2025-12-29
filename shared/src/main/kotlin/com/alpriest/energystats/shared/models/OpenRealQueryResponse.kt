@@ -1,6 +1,4 @@
-package com.alpriest.energystats.models
-
-import com.alpriest.energystats.ui.statsgraph.ReportType
+package com.alpriest.energystats.shared.models
 
 data class OpenRealQueryRequest(
     val deviceSN: String,
@@ -78,3 +76,10 @@ data class OpenReportRequest(
     val month: Int?,
     val day: Int?
 )
+
+@Suppress("EnumEntryName")
+enum class ReportType {
+    day,
+    month,
+    year,
+}

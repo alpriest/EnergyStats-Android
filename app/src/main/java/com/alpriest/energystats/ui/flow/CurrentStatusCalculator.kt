@@ -1,9 +1,9 @@
 package com.alpriest.energystats.ui.flow
 
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.OpenQueryResponseData
-import com.alpriest.energystats.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.parseToLocalDateTime
+import com.alpriest.energystats.shared.models.OpenQueryResponseData
+import com.alpriest.energystats.shared.models.OpenRealQueryResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
@@ -173,7 +173,7 @@ fun List<OpenQueryResponseData>.currentValue(forKey: String): Double {
 }
 
 fun List<OpenQueryResponseData>.currentData(forKey: String): OpenQueryResponseData? {
-    return firstOrNull { it.variable.lowercase() == forKey.lowercase() }
+    return firstOrNull { it.variable.equals(forKey, ignoreCase = true) }
 }
 
 fun List<OpenQueryResponseData>.SoC(): Double {

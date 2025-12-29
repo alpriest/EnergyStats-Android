@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.fullDateTime
 import com.alpriest.energystats.models.SolcastFailure
+import com.alpriest.energystats.models.SolcastForecastList
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.toHalfHourOfDay
 import com.alpriest.energystats.stores.ConfigManaging
@@ -17,6 +18,8 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.Date
+import kotlin.collections.fold
+import kotlin.collections.map
 
 data class SolarForecastViewData(
     val error: String?,

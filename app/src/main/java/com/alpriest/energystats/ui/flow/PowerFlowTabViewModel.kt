@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.models.OpenRealQueryResponse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel

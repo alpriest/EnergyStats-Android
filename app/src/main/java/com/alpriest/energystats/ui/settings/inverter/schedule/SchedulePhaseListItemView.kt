@@ -14,12 +14,16 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.TimeType
+import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.battery.TimeType
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -51,7 +55,7 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifie
             modifier = Modifier
                 .width(5.dp)
                 .fillMaxHeight()
-                .background(phase.color)
+                .background(Color.scheduleColor(phase.mode))
         )
 
         Spacer(Modifier.width(8.dp))

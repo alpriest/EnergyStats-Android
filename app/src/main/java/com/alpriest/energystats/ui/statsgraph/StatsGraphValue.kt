@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import com.alpriest.energystats.models.ReportVariable
+import com.alpriest.energystats.shared.models.ReportVariable
 import java.text.DateFormatSymbols
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter

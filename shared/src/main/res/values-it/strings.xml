@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_limit">"Limite di esportazione  "</string>
+    <string name="max_soc">"Maksymalny SoC  "</string>
+    <string name="export_limit_description">Imposta la potenza massima che l\'inverter può esportare alla rete.</string>
+    <string name="maxsoc_description">"Imposta il livello massimo di carica che la batteria può raggiungere, espresso in percentuale.  "</string>
+    <string name="export_limit_behaviour">"Configurando questa impostazione, puoi controllare la quantità di energia inviata alla rete, garantendo la conformità alle normative locali o alle preferenze personali. Ad esempio, se le normative locali limitano la capacità di esportazione, questa impostazione assicura che l'inverter non superi il limite specificato.  "</string>
+    <string name="maxsoc_behaviour">"La ricarica si interrompe una volta raggiunto il Max SoC. Può essere regolato in base ai modelli di utilizzo o per adattarsi alle tariffe energetiche e alla disponibilità solare.  "</string>
+</resources>

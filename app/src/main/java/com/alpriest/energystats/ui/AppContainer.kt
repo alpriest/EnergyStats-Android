@@ -10,13 +10,13 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import com.alpriest.energystats.services.FoxAPIService
-import com.alpriest.energystats.services.InMemoryLoggingNetworkStore
 import com.alpriest.energystats.services.NetworkCache
 import com.alpriest.energystats.services.NetworkFacade
 import com.alpriest.energystats.services.NetworkService
 import com.alpriest.energystats.services.NetworkValueCleaner
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.services.FoxAPIService
+import com.alpriest.energystats.shared.services.RequestData
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
@@ -57,7 +57,6 @@ class AppContainer(private val context: Context) {
             SolcastCache(Solcast(configManager), context)
         }
     }
-    val networkStore: InMemoryLoggingNetworkStore = InMemoryLoggingNetworkStore.shared
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences(
             "com.alpriest.energystats",
@@ -122,16 +121,20 @@ class AppContainer(private val context: Context) {
                 )
             )
             .build()
-
-        NetworkService(
-            NetworkValueCleaner(
-                NetworkFacade(
-                    api = NetworkCache(api = FoxAPIService(credentialStore, networkStore, chucker)),
-                    isDemoUser = { config.isDemoUser }
-                ),
-                themeStream
-            )
+        val requestData = RequestData(
+            apiKey = credentialStore.getApiKey() ?: "",
+            userAgent = "Energy Stats Android"
         )
+
+            NetworkService(
+                NetworkValueCleaner(
+                    NetworkFacade(
+                        api = NetworkCache(api = FoxAPIService(requestData, chucker)),
+                        isDemoUser = { config.isDemoUser }
+                    ),
+                    themeStream
+                )
+            )
     }
 
     val configManager: ConfigManaging by lazy {

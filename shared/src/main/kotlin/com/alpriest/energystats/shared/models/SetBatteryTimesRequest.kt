@@ -1,4 +1,4 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
 data class SetBatteryTimesRequest(
     val sn: String,

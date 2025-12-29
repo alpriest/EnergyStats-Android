@@ -13,8 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.DeviceSettingsItem
+import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.DeviceSettingsItem
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking

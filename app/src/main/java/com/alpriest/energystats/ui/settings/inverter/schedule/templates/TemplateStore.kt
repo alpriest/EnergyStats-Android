@@ -1,8 +1,8 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule.templates
 
 import com.alpriest.energystats.stores.ScheduleTemplateConfigManager
-import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhase
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
+import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.ScheduleTemplate
 import java.util.UUID
 
 interface TemplateStoring {

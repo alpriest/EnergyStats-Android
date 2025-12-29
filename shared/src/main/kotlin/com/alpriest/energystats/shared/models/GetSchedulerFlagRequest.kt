@@ -1,4 +1,4 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer

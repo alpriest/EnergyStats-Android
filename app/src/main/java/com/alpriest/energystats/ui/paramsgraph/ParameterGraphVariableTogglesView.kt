@@ -9,12 +9,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.models.GraphBounds
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.models.GraphBounds
+import com.alpriest.energystats.shared.models.ValueUsage
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.title
@@ -22,10 +22,9 @@ import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.Instant
-import java.util.Map.entry
 
 data class SelectedValue(
     val type: Variable,

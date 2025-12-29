@@ -65,6 +65,8 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.templates.Template
 import com.alpriest.energystats.ui.settings.inverterScheduleGraph
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleTemplate
 
 class PopupScheduleSummaryView(
     private val configManager: ConfigManaging,

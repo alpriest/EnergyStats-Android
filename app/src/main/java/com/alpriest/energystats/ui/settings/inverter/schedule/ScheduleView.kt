@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
@@ -42,7 +44,6 @@ internal fun Schedule.Companion.preview(): Schedule {
                 forceDischargePower = 0,
                 forceDischargeSOC = 100,
                 batterySOC = 100,
-                color = Color.scheduleColor(WorkModes.ForceCharge),
                 maxSOC = 100
             ),
             SchedulePhase.create(
@@ -52,7 +53,6 @@ internal fun Schedule.Companion.preview(): Schedule {
                 forceDischargePower = 3500,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor(WorkModes.ForceDischarge),
                 maxSOC = 100
             ),
             SchedulePhase.create(
@@ -62,7 +62,6 @@ internal fun Schedule.Companion.preview(): Schedule {
                 forceDischargePower = 0,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor(WorkModes.SelfUse),
                 maxSOC = 100
             )
         )

@@ -1,12 +1,5 @@
-package com.alpriest.energystats.ui.settings.inverter.schedule
+package com.alpriest.energystats.shared.models
 
-import androidx.compose.ui.graphics.Color
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.SchedulePhaseNetworkModel
-import com.alpriest.energystats.models.ScheduleResponse
-import com.alpriest.energystats.models.Time
-import com.alpriest.energystats.ui.theme.PowerFlowNegative
-import com.alpriest.energystats.ui.theme.PowerFlowPositive
 import java.util.UUID
 
 private val Boolean.intValue: Int
@@ -67,7 +60,6 @@ data class SchedulePhase(
     val forceDischargePower: Int,
     val forceDischargeSOC: Int,
     val minSocOnGrid: Int,
-    val color: Color,
     val maxSOC: Int?
 ) {
     constructor(
@@ -77,9 +69,8 @@ data class SchedulePhase(
         forceDischargePower: Int,
         forceDischargeSOC: Int,
         minSocOnGrid: Int,
-        color: Color,
         maxSOC: Int?
-    ) : this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargeSOC, minSocOnGrid, color, maxSOC)
+    ) : this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargeSOC, minSocOnGrid, maxSOC)
 
     companion object {
         fun create(
@@ -90,7 +81,6 @@ data class SchedulePhase(
             forceDischargePower: Int,
             forceDischargeSOC: Int,
             batterySOC: Int,
-            color: Color,
             maxSOC: Int?
         ): SchedulePhase? {
             mode ?: return null
@@ -103,13 +93,11 @@ data class SchedulePhase(
                 forceDischargePower,
                 forceDischargeSOC,
                 batterySOC,
-                color,
                 maxSOC
             )
         }
 
         fun create(mode: WorkMode, device: Device?, initialiseMaxSOC: Boolean): SchedulePhase {
-            val color: Color = Color.scheduleColor(mode)
             val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
 
             return SchedulePhase(
@@ -120,7 +108,6 @@ data class SchedulePhase(
                 0,
                 minSOC,
                 minSOC,
-                color = color,
                 maxSOC = if (initialiseMaxSOC) 100 else null
             )
         }
@@ -133,7 +120,6 @@ data class SchedulePhase(
                 forceDischargePower = 0,
                 forceDischargeSOC = 20,
                 batterySOC = 20,
-                color = Color.scheduleColor(WorkModes.SelfUse),
                 maxSOC = 100
             )!!
         }
@@ -169,18 +155,33 @@ data class SchedulePhase(
     }
 }
 
-fun Color.Companion.scheduleColor(mode: WorkMode): Color {
-    return when (mode) {
-        WorkModes.Feedin -> PowerFlowPositive
-        WorkModes.ForceCharge -> PowerFlowNegative
-        WorkModes.ForceDischarge -> PowerFlowPositive
-        WorkModes.SelfUse -> LightGray
-        else -> Black
-    }
-}
-
 data class ScheduleTemplate(
     val id: String,
     val name: String,
     val phases: List<SchedulePhase>
 )
+
+typealias WorkMode = String
+
+object WorkModes {
+    const val SelfUse = "SelfUse"
+    const val Feedin = "Feedin"
+    const val Backup = "Backup"
+    const val ForceCharge = "ForceCharge"
+    const val ForceDischarge = "ForceDischarge"
+    const val PeakShaving = "PeakShaving"
+}
+
+internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
+    if (enable == 0) { return null }
+
+    return SchedulePhase.create(
+        start = Time(hour = startHour, minute = startMinute),
+        end = Time(hour = endHour, minute = endMinute),
+        mode = workMode,
+        forceDischargePower = fdPwr ?: 0,
+        forceDischargeSOC = fdSoc,
+        batterySOC = minSocOnGrid,
+        maxSOC = maxSoc
+    )
+}

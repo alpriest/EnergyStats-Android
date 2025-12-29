@@ -1,4 +1,4 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
 import java.math.BigInteger
 import java.security.MessageDigest

@@ -1,4 +1,4 @@
-package com.alpriest.energystats.services
+package com.alpriest.energystats.shared.services
 
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl

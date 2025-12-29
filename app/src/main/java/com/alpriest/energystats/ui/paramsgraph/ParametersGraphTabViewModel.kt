@@ -7,21 +7,22 @@ import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.models.OpenHistoryResponse
-import com.alpriest.energystats.models.OpenHistoryResponseData
-import com.alpriest.energystats.models.QueryDate
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.helpers.timeUntilNow
 import com.alpriest.energystats.models.SolcastForecastResponse
-import com.alpriest.energystats.models.UnitData
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.models.kW
 import com.alpriest.energystats.models.solcastPrediction
-import com.alpriest.energystats.models.toDate
-import com.alpriest.energystats.models.toUtcMillis
 import com.alpriest.energystats.models.truncated
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.models.OpenHistoryResponse
+import com.alpriest.energystats.shared.models.OpenHistoryResponseData
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.UnitData
+import com.alpriest.energystats.shared.models.toDate
+import com.alpriest.energystats.shared.models.toUtcMillis
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.LoadState
@@ -30,7 +31,6 @@ import com.alpriest.energystats.ui.flow.home.networkDateFormat
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
-import com.alpriest.energystats.helpers.timeUntilNow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,6 +44,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.concurrent.CancellationException
+import kotlin.collections.map
 
 data class ParametersGraphViewState(
     val displayMode: ParametersDisplayMode,

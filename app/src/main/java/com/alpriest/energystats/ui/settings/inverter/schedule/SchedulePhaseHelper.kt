@@ -1,8 +1,10 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
-import androidx.compose.ui.graphics.Color
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.WorkMode
 
 class SchedulePhaseHelper {
     companion object {
@@ -75,7 +77,6 @@ class SchedulePhaseHelper {
                 forceDischargePower = 0,
                 forceDischargeSOC = soc,
                 minSocOnGrid = soc,
-                color = Color.scheduleColor(mode),
                 maxSOC = if (initialiseMaxSOC) 100 else null
             )
         }

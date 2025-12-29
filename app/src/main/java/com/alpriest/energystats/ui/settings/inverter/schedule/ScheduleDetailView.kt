@@ -28,6 +28,7 @@ import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.shared.models.Schedule
 
 @Composable
 fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {

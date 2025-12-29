@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.DataLoggerStatus
+import com.alpriest.energystats.shared.models.DataLoggerStatus
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging

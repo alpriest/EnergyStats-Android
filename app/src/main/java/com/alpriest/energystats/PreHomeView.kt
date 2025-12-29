@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.SchedulePhase
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhase
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +48,7 @@ class PreHomeViewModel(
         val service = solarForecastProvider()
 
         try {
-            configManager.solcastSettings.sites.map { site ->
+            configManager.solcastSettings.sites.forEach { site ->
                 service.fetchForecast(site, apiKey, ignoreCache = false)
             }
         } catch (_: Exception) {

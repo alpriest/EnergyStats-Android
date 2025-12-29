@@ -1,57 +1,49 @@
-package com.alpriest.energystats.services
+package com.alpriest.energystats.shared.services
 
-import com.alpriest.energystats.models.ApiRequestCountResponse
-import com.alpriest.energystats.models.BatterySOCResponse
-import com.alpriest.energystats.models.BatteryTimesResponse
-import com.alpriest.energystats.models.ChargeTime
-import com.alpriest.energystats.models.DataLoggerListRequest
-import com.alpriest.energystats.models.DataLoggerResponse
-import com.alpriest.energystats.models.DataLoggerStatus
-import com.alpriest.energystats.models.DataLoggerStatusDeserializer
-import com.alpriest.energystats.models.DeviceDetailResponse
-import com.alpriest.energystats.models.DeviceListRequest
-import com.alpriest.energystats.models.DeviceSettingsItem
-import com.alpriest.energystats.models.DeviceSummaryResponse
-import com.alpriest.energystats.models.ErrorMessagesResponse
-import com.alpriest.energystats.models.FetchDeviceSettingsItemRequest
-import com.alpriest.energystats.models.FetchDeviceSettingsItemResponse
-import com.alpriest.energystats.models.FetchPeakShavingSettingsRequest
-import com.alpriest.energystats.models.FetchPeakShavingSettingsResponse
-import com.alpriest.energystats.models.GetSchedulerFlagRequest
-import com.alpriest.energystats.models.GetSchedulerFlagResponse
-import com.alpriest.energystats.models.OpenApiVariable
-import com.alpriest.energystats.models.OpenApiVariableArray
-import com.alpriest.energystats.models.OpenApiVariableDeserializer
-import com.alpriest.energystats.models.OpenHistoryRequest
-import com.alpriest.energystats.models.OpenHistoryResponse
-import com.alpriest.energystats.models.OpenRealQueryRequest
-import com.alpriest.energystats.models.OpenRealQueryResponse
-import com.alpriest.energystats.models.OpenRealQueryResponseDeserializer
-import com.alpriest.energystats.models.OpenReportRequest
-import com.alpriest.energystats.models.OpenReportResponse
-import com.alpriest.energystats.models.OpenReportResponseDeserializer
-import com.alpriest.energystats.models.PagedDataLoggerListResponse
-import com.alpriest.energystats.models.PagedDeviceListResponse
-import com.alpriest.energystats.models.PagedPowerStationListResponse
-import com.alpriest.energystats.models.PowerGenerationResponse
-import com.alpriest.energystats.models.PowerStationDetailResponse
-import com.alpriest.energystats.models.PowerStationListRequest
-import com.alpriest.energystats.models.QueryDate
-import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.ScheduleResponse
-import com.alpriest.energystats.models.SetBatterySOCRequest
-import com.alpriest.energystats.models.SetBatteryTimesRequest
-import com.alpriest.energystats.models.SetCurrentScheduleRequest
-import com.alpriest.energystats.models.SetDeviceSettingsItemRequest
-import com.alpriest.energystats.models.SetPeakShavingSettingsRequest
-import com.alpriest.energystats.models.SetSchedulerFlagRequest
-import com.alpriest.energystats.models.md5
-import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.ui.settings.inverter.schedule.Schedule
-import com.alpriest.energystats.ui.settings.solcast.UserAgent
-import com.alpriest.energystats.ui.statsgraph.ReportType
-import com.google.firebase.Firebase
-import com.google.firebase.perf.performance
+import com.alpriest.energystats.shared.models.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.BatterySOCResponse
+import com.alpriest.energystats.shared.models.BatteryTimesResponse
+import com.alpriest.energystats.shared.models.ChargeTime
+import com.alpriest.energystats.shared.models.DataLoggerListRequest
+import com.alpriest.energystats.shared.models.DataLoggerResponse
+import com.alpriest.energystats.shared.models.DataLoggerStatus
+import com.alpriest.energystats.shared.models.DeviceDetailResponse
+import com.alpriest.energystats.shared.models.DeviceListRequest
+import com.alpriest.energystats.shared.models.DeviceSettingsItem
+import com.alpriest.energystats.shared.models.DeviceSummaryResponse
+import com.alpriest.energystats.shared.models.ErrorMessagesResponse
+import com.alpriest.energystats.shared.models.FetchDeviceSettingsItemRequest
+import com.alpriest.energystats.shared.models.FetchDeviceSettingsItemResponse
+import com.alpriest.energystats.shared.models.FetchPeakShavingSettingsRequest
+import com.alpriest.energystats.shared.models.FetchPeakShavingSettingsResponse
+import com.alpriest.energystats.shared.models.GetSchedulerFlagRequest
+import com.alpriest.energystats.shared.models.GetSchedulerFlagResponse
+import com.alpriest.energystats.shared.models.OpenApiVariable
+import com.alpriest.energystats.shared.models.OpenApiVariableArray
+import com.alpriest.energystats.shared.models.OpenHistoryRequest
+import com.alpriest.energystats.shared.models.OpenHistoryResponse
+import com.alpriest.energystats.shared.models.OpenRealQueryRequest
+import com.alpriest.energystats.shared.models.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.OpenReportRequest
+import com.alpriest.energystats.shared.models.OpenReportResponse
+import com.alpriest.energystats.shared.models.PagedDataLoggerListResponse
+import com.alpriest.energystats.shared.models.PagedDeviceListResponse
+import com.alpriest.energystats.shared.models.PagedPowerStationListResponse
+import com.alpriest.energystats.shared.models.PowerGenerationResponse
+import com.alpriest.energystats.shared.models.PowerStationDetailResponse
+import com.alpriest.energystats.shared.models.PowerStationListRequest
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportType
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleResponse
+import com.alpriest.energystats.shared.models.SetBatterySOCRequest
+import com.alpriest.energystats.shared.models.SetBatteryTimesRequest
+import com.alpriest.energystats.shared.models.SetCurrentScheduleRequest
+import com.alpriest.energystats.shared.models.SetDeviceSettingsItemRequest
+import com.alpriest.energystats.shared.models.SetPeakShavingSettingsRequest
+import com.alpriest.energystats.shared.models.SetSchedulerFlagRequest
+import com.alpriest.energystats.shared.models.md5
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -81,7 +73,12 @@ interface NetworkResponseInterface {
     val errno: Int
 }
 
-class FoxAPIService(private val credentials: CredentialStore, private val store: InMemoryLoggingNetworkStore, interceptor: Interceptor? = null) : FoxAPIServicing {
+data class RequestData(
+    val apiKey: String,
+    val userAgent: String
+)
+
+class FoxAPIService(private val requestData: RequestData, interceptor: Interceptor? = null) : FoxAPIServicing {
     private fun makeSignature(encodedPath: String, token: String, timestamp: Long): String {
         return listOf(encodedPath, token, timestamp.toString()).joinToString("\\r\\n").md5() ?: ""
     }
@@ -96,13 +93,13 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                 val original = chain.request()
                 val languageCode = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
                 val timezone = TimeZone.getDefault().id
-                val token = credentials.getApiKey() ?: ""
+                val token = requestData.apiKey
                 val timestamp = System.currentTimeMillis()
                 val signature = makeSignature(original.url.encodedPath, token, timestamp)
 
                 val requestBuilder = original.newBuilder()
-                    .header("token", credentials.getApiKey() ?: "")
-                    .header("User-Agent", UserAgent.description())
+                    .header("token", requestData.apiKey)
+                    .header("User-Agent", requestData.userAgent)
                     .header("Accept", "application/json, text/plain, */*")
                     .header("Accept-Language", "en-US;q=0.9,en;q=0.8,de;q=0.7,nl;q=0.6")
                     .header("Content-Type", "application/json")
@@ -114,7 +111,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                 chain.proceed(requestBuilder.build())
             }
             .addInterceptor { chain ->
-                InMemoryLoggingNetworkStore.shared.latestRequest = chain.request().toString()
                 chain.proceed(chain.request())
             }
 
@@ -149,7 +145,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
         val result: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
-        store.deviceListResponseStream.value = NetworkOperation(description = "fetchDeviceList", value = result.item, raw = result.text, request)
         return result.item.result?.data ?: throw MissingDataException()
     }
 
@@ -164,7 +159,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<List<OpenRealQueryResponse>>>() {}.type
         val result: NetworkTuple<NetworkResponse<List<OpenRealQueryResponse>>> = fetch(request, type)
-        store.realQueryResponseStream.value = NetworkOperation(description = "fetchRealData", value = result.item, raw = result.text, request)
 
         return result.item.result?.let { list ->
             list.firstOrNull { it.deviceSN == deviceSN }
@@ -199,7 +193,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type
         val response: NetworkTuple<NetworkResponse<List<OpenReportResponse>>> = fetch(request, type)
-        store.reportResponseStream.value = NetworkOperation("fetchReport", response.item, response.text, request)
 
         return response.item.result ?: throw MissingDataException()
     }
@@ -209,7 +202,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<BatterySOCResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatterySOCResponse>> = fetch(request, type)
-        store.batterySOCResponseStream.value = NetworkOperation("fetchBatterySettings", response.item, response.text, request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -268,7 +260,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<OpenApiVariableArray>>() {}.type
         val response: NetworkTuple<NetworkResponse<OpenApiVariableArray>> = fetch(request, type)
-        store.variablesResponseStream.value = NetworkOperation(description = "fetchVariables", value = response.item, raw = response.text, request)
         return response.item.result?.array ?: throw MissingDataException()
     }
 
@@ -280,7 +271,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetch(request, type)
-        store.dataLoggerListResponse.value = NetworkOperation(description = "DataLoggerResponse", value = response.item, raw = response.text, request)
         return response.item.result?.data ?: throw MissingDataException()
     }
 
@@ -289,7 +279,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
 
         val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
         val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
-        store.batteryTimesResponseStream.value = NetworkOperation(description = "BatteryLoggerResponse", value = response.item, raw = response.text, request)
         val result = response.item.result ?: throw MissingDataException()
 
         return listOf(
@@ -318,52 +307,6 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         val request = Request.Builder()
             .url(URLs.setOpenBatteryChargeTimes())
             .post(body)
-            .build()
-
-        executeWithoutResponse(request)
-    }
-
-    override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
-        val body = Gson().toJson(GetSchedulerFlagRequest(deviceSN))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder().url(URLs.getOpenSchedulerFlag()).post(body).build()
-
-        val type = object : TypeToken<NetworkResponse<GetSchedulerFlagResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<GetSchedulerFlagResponse>> = fetch(request, type)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
-        val body = Gson().toJson(GetSchedulerFlagRequest(deviceSN))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder().url(URLs.getOpenCurrentSchedule()).post(body).build()
-
-        val type = object : TypeToken<NetworkResponse<ScheduleResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ScheduleResponse>> = fetch(request, type)
-        return response.item.result ?: throw MissingDataException()
-    }
-
-    override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
-        val body = Gson().toJson(SetSchedulerFlagRequest(deviceSN, schedulerEnabled.intValue))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder()
-            .post(body)
-            .url(URLs.setOpenSchedulerFlag())
-            .build()
-
-        executeWithoutResponse(request)
-    }
-
-    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
-        val body = Gson().toJson(SetCurrentScheduleRequest(deviceSN, schedule.phases.map { it.toPhaseResponse() }))
-            .toRequestBody("application/json".toMediaTypeOrNull())
-
-        val request = Request.Builder()
-            .post(body)
-            .url(URLs.setOpenCurrentSchedule())
             .build()
 
         executeWithoutResponse(request)
@@ -429,8 +372,55 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         return response.item.result ?: throw MissingDataException()
     }
 
+    override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
+        val body = Gson().toJson(GetSchedulerFlagRequest(deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder().url(URLs.getOpenSchedulerFlag()).post(body).build()
+
+        val type = object : TypeToken<NetworkResponse<GetSchedulerFlagResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<GetSchedulerFlagResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
+        val body = Gson().toJson(GetSchedulerFlagRequest(deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder().url(URLs.getOpenCurrentSchedule()).post(body).build()
+
+        val type = object : TypeToken<NetworkResponse<ScheduleResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<ScheduleResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
+        val body = Gson().toJson(SetSchedulerFlagRequest(deviceSN, schedulerEnabled.intValue))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.setOpenSchedulerFlag())
+            .build()
+
+        executeWithoutResponse(request)
+    }
+
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
+        val body = Gson().toJson(SetCurrentScheduleRequest(deviceSN, schedule.phases.map { it.toPhaseResponse() }))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.setOpenCurrentSchedule())
+            .build()
+
+        executeWithoutResponse(request)
+    }
+
+
     private suspend fun executeWithoutResponse(request: Request) {
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
+        val type = object : com.google.gson.reflect.TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)
     }
 
@@ -439,18 +429,18 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
         type: Type
     ): NetworkTuple<T> {
         return suspendCoroutine { continuation ->
-            val metric = Firebase.performance.newHttpMetric(
-                request.url.toString(),
-                request.method,
-            )
-            metric.start()
+//            val metric = Firebase.performance.newHttpMetric(
+//                request.url.toString(),
+//                request.method,
+//            )
+//            metric.start()
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     continuation.resumeWithException(e)
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    metric.markRequestComplete()
+//                    metric.markRequestComplete()
                     if (response.code == 406) {
                         continuation.resumeWithException(UnacceptableException())
                         return
@@ -461,16 +451,13 @@ class FoxAPIService(private val credentials: CredentialStore, private val store:
                         return
                     }
 
-                    if (response.code !in 200 .. 299) {
+                    if (response.code !in 200..299) {
                         continuation.resumeWithException(UnknownServerError(response.code))
                         return
                     }
 
-                    InMemoryLoggingNetworkStore.shared.latestResponse = response.toString()
-
                     try {
                         val text = response.body.string()
-                        InMemoryLoggingNetworkStore.shared.latestResponseText = text
                         val builder = GsonBuilder()
                             .registerTypeAdapter(OpenApiVariableArray::class.java, OpenApiVariableDeserializer())
                             .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())

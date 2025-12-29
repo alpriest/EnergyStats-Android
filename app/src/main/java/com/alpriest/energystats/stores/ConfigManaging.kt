@@ -2,9 +2,11 @@ package com.alpriest.energystats.stores
 
 import android.content.Context
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -16,8 +18,6 @@ import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
-import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme

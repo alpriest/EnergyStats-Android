@@ -12,9 +12,9 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.isSameDay
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.ReportVariable
-import com.alpriest.energystats.models.ValueUsage
+import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.ValueUsage
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.stores.ConfigManaging
@@ -590,13 +590,6 @@ fun title(usage: ValueUsage): String {
         ValueUsage.SNAPSHOT -> stringResource(R.string.power)
         ValueUsage.TOTAL -> stringResource(R.string.energy)
     }
-}
-
-@Suppress("EnumEntryName")
-enum class ReportType {
-    day,
-    month,
-    year,
 }
 
 class StatsChartEntry(

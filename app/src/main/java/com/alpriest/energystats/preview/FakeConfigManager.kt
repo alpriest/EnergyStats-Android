@@ -1,9 +1,10 @@
 package com.alpriest.energystats.preview
 
-import com.alpriest.energystats.models.Battery
-import com.alpriest.energystats.models.Device
-import com.alpriest.energystats.models.PowerStationDetail
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.shared.models.Battery
+import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.stores.WidgetTapAction
@@ -18,7 +19,6 @@ import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSite
 import com.alpriest.energystats.ui.settings.solcast.preview

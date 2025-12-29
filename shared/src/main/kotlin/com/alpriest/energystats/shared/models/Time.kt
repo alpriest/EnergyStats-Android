@@ -1,6 +1,5 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
-import com.alpriest.energystats.ui.settings.battery.TimeType
 import java.time.LocalDateTime
 
 data class Time(

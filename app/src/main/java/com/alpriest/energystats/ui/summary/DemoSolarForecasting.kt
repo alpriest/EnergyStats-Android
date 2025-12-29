@@ -11,6 +11,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
+import kotlin.collections.map
 
 class DemoSolarForecasting : SolcastCaching {
     override suspend fun fetchSites(apiKey: String): SolcastSiteResponseList {
@@ -40,7 +41,8 @@ class DemoSolarForecasting : SolcastCaching {
                     dcCapacity = 5.6,
                     installDate = ""
                 )
-        ))
+            )
+        )
     }
 
     override suspend fun fetchForecast(site: SolcastSite, apiKey: String, ignoreCache: Boolean): SolcastForecastList {

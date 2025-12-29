@@ -1,7 +1,7 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
 import android.content.Context
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 
 enum class DeviceSettingsItem(val rawValue: String) {
     ExportLimit("ExportLimit"),

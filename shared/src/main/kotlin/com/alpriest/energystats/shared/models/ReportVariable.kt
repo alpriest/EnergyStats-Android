@@ -1,11 +1,4 @@
-package com.alpriest.energystats.models
-
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.statsgraph.selfSufficiencyLineColor
-import com.alpriest.energystats.ui.theme.AppTheme
-import kotlinx.coroutines.flow.MutableStateFlow
+package com.alpriest.energystats.shared.models
 
 enum class ValueUsage {
     SNAPSHOT,
@@ -36,22 +29,6 @@ enum class ReportVariable {
             PvEnergyToTal -> "PVEnergyTotal"
             InverterConsumption -> "InverterConsumption"
             BatterySOC -> "BatterySOC"
-        }
-    }
-
-    @Composable
-    fun colour(themeStream: MutableStateFlow<AppTheme>): Color {
-        return when (this) {
-            Generation -> Color(244, 184, 96)
-            FeedIn -> Color(181, 121, 223)
-            ChargeEnergyToTal -> Color(125, 208, 130)
-            DischargeEnergyToTal -> Color(80, 147, 248)
-            GridConsumption -> Color(236, 109, 96)
-            Loads -> Color(209,207,83)
-            SelfSufficiency -> selfSufficiencyLineColor(isDarkMode(themeStream))
-            PvEnergyToTal -> Color(248, 216, 87)
-            InverterConsumption -> Color(0xFFFF007F)
-            BatterySOC -> Color.Cyan
         }
     }
 

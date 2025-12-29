@@ -1,4 +1,4 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
 data class BatteryTimesResponse(
     val enable1: Boolean,

@@ -16,9 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.SchedulePhase
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.Orange
@@ -42,7 +45,7 @@ fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier
                 val width = size.width
                 phases.forEach { phase ->
                     drawRect(
-                        color = phase.color,
+                        color = Color.scheduleColor(phase.mode),
                         size = Size(width * (phase.endPoint - phase.startPoint), height.toPx()),
                         topLeft = Offset(x = width * phase.startPoint, y = 0f)
                     )

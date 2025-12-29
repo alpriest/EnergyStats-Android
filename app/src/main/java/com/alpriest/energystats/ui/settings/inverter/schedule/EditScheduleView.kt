@@ -37,6 +37,7 @@ import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.shared.models.Schedule
 
 class EditScheduleView(
     private val configManager: ConfigManaging,

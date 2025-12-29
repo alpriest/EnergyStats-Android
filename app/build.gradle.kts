@@ -82,4 +82,5 @@ dependencies {
     implementation(libs.chucker)
     implementation(libs.rollingnumbers)
     implementation(libs.firebase.perf)
+    implementation(project(":shared"))
 }

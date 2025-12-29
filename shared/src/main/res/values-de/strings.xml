@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_limit">Exportlimit</string>
+    <string name="max_soc">"Max SoC  "</string>
+    <string name="export_limit_description">Legt die maximale Leistung fest, die der Wechselrichter ins Netz einspeisen darf.</string>
+    <string name="maxsoc_description">Legt den höchsten Ladezustand fest, den die Batterie erreichen darf, ausgedrückt in Prozent.</string>
+    <string name="export_limit_behaviour">"Durch die Konfiguration dieser Einstellung können Sie steuern, wie viel Energie ins Netz zurückgespeist wird, um lokale Vorschriften oder persönliche Vorlieben einzuhalten. Wenn beispielsweise lokale Vorschriften die Einspeiseleistung begrenzen, stellt dieser Wert sicher, dass der Wechselrichter das Limit nicht überschreitet.  "</string>
+    <string name="maxsoc_behaviour">"Das Laden stoppt, sobald die Batterie den Max SoC erreicht hat. Kann basierend auf dem Nutzungsverhalten oder zur Anpassung an Stromtarife und Solarnutzung eingestellt werden.  "</string>
+</resources>

@@ -15,13 +15,14 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
-import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleTemplate
-import com.alpriest.energystats.ui.settings.inverter.schedule.WorkMode
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.errorMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.collections.firstOrNull
 
 class EditTemplateViewModelFactory(
     private val configManager: ConfigManaging,

@@ -27,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Time
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
@@ -45,18 +44,8 @@ import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-
-enum class TimeType {
-    START,
-    END;
-
-    fun appendage(): String {
-        return when (this) {
-            START -> "00"
-            END -> "59"
-        }
-    }
-}
+import com.alpriest.energystats.shared.models.Time
+import com.alpriest.energystats.shared.models.TimeType
 
 data class BatteryChargeScheduleSettingsViewData(
     val summary: String,

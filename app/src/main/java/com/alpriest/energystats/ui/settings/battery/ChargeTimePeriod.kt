@@ -1,7 +1,7 @@
 package com.alpriest.energystats.ui.settings.battery
 
-import com.alpriest.energystats.models.ChargeTime
-import com.alpriest.energystats.models.Time
+import com.alpriest.energystats.shared.models.ChargeTime
+import com.alpriest.energystats.shared.models.Time
 
 data class ChargeTimePeriod(
     var start: Time,

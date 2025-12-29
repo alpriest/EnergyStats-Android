@@ -1,8 +1,15 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import android.content.Context
+import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.WorkMode
+import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.theme.PowerFlowNegative
+import com.alpriest.energystats.ui.theme.PowerFlowPositive
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EditScheduleStore(
@@ -25,17 +32,6 @@ class EditScheduleStore(
             return configManager.workModes
         }
     }
-}
-
-typealias WorkMode = String
-
-object WorkModes {
-    const val SelfUse = "SelfUse"
-    const val Feedin = "Feedin"
-    const val Backup = "Backup"
-    const val ForceCharge = "ForceCharge"
-    const val ForceDischarge = "ForceDischarge"
-    const val PeakShaving = "PeakShaving"
 }
 
 fun WorkMode.title(context: Context): String = when (this) {
@@ -69,3 +65,14 @@ fun WorkMode.subtitle(context: Context): String? = when (this) {
     "BatteryDischarge(BAT)" -> context.getString(R.string.workmode_force_discharge_mode_bat_description)
     else -> null
 }
+
+fun Color.Companion.scheduleColor(mode: WorkMode): Color {
+    return when (mode) {
+        WorkModes.Feedin -> PowerFlowPositive
+        WorkModes.ForceCharge -> PowerFlowNegative
+        WorkModes.ForceDischarge -> PowerFlowPositive
+        WorkModes.SelfUse -> LightGray
+        else -> Black
+    }
+}
+

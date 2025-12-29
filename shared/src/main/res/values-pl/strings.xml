@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_limit">"Limit eksportu  "</string>
+    <string name="max_soc">"Max SoC  "</string>
+    <string name="export_limit_description">"Ustawia maksymalną moc, jaką inwerter może eksportować do sieci.  "</string>
+    <string name="maxsoc_description">"Ustawia najwyższy poziom naładowania, jaki bateria może osiągnąć, wyrażony w procentach.  "</string>
+    <string name="export_limit_behaviour">"Konfigurując to ustawienie, możesz kontrolować ilość energii oddawanej do sieci, zapewniając zgodność z lokalnymi przepisami lub własnymi preferencjami. Na przykład, jeśli lokalne przepisy ograniczają moc eksportu, ustawienie tej wartości zapewnia, że inwerter nie przekroczy dozwolonego limitu.  "</string>
+    <string name="maxsoc_behaviour">"Ładowanie zatrzymuje się, gdy bateria osiągnie maksymalny SoC. Można dostosować w zależności od wzorców użytkowania lub w celu dopasowania do taryf energetycznych i dostępności energii słonecznej.  "</string>
+</resources>

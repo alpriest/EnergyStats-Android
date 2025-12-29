@@ -1,24 +1,24 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import android.content.Context
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.models.DeviceFirmwareVersion
-import com.alpriest.energystats.models.SchedulePhaseNetworkModel
-import com.alpriest.energystats.models.ScheduleResponse
-import com.alpriest.energystats.models.Time
-import com.alpriest.energystats.services.FoxServerError
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleResponse
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.WorkModes
+import com.alpriest.energystats.shared.services.FoxServerError
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -240,17 +240,3 @@ fun errorMessage(exception: Exception, context: Context): String {
     }
 }
 
-internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
-    if (enable == 0) { return null }
-
-    return SchedulePhase.create(
-        start = Time(hour = startHour, minute = startMinute),
-        end = Time(hour = endHour, minute = endMinute),
-        mode = workMode,
-        forceDischargePower = fdPwr ?: 0,
-        forceDischargeSOC = fdSoc,
-        batterySOC = minSocOnGrid,
-        color = Color.scheduleColor(workMode),
-        maxSOC = maxSoc
-    )
-}
