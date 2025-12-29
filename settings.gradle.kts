@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Energy Stats"
 include(":app")
- 
+include(":energystatswear")
