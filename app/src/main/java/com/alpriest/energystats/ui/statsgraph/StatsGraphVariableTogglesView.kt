@@ -7,11 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.asPercent
+import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.ValueUsage
-import com.alpriest.energystats.models.energy
-import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.shared.helpers.energy
+import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView

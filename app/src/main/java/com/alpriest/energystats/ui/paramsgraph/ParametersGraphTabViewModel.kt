@@ -11,9 +11,9 @@ import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.timeUntilNow
 import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.models.kW
+import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.models.solcastPrediction
-import com.alpriest.energystats.models.truncated
+import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.shared.models.QueryDate

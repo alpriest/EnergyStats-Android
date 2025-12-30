@@ -1,6 +1,6 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.truncated
+import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
 import com.alpriest.energystats.shared.models.network.DeviceDetailResponse

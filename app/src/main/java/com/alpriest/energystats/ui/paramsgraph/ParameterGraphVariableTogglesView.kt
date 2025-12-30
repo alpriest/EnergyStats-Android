@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.GraphBounds
 import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.models.kW
+import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.shared.models.ValueUsage

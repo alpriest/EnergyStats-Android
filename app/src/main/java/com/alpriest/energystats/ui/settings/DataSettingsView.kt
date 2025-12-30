@@ -10,8 +10,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.kW
-import com.alpriest.energystats.models.w
+import com.alpriest.energystats.shared.helpers.kW
+import com.alpriest.energystats.shared.helpers.w
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging

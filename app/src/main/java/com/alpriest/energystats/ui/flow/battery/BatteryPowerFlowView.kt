@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryTemperatures
-import com.alpriest.energystats.models.asPercent
-import com.alpriest.energystats.models.kWh
+import com.alpriest.energystats.shared.helpers.asPercent
+import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.ui.BatteryView
 import com.alpriest.energystats.ui.flow.LineOrientation

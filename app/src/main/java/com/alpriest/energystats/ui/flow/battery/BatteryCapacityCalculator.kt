@@ -1,7 +1,7 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.truncated
+import com.alpriest.energystats.shared.helpers.truncated
 import java.lang.Math.abs
 import kotlin.math.roundToInt
 

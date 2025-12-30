@@ -16,9 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.asPercent
-import com.alpriest.energystats.models.energy
-import com.alpriest.energystats.models.power
+import com.alpriest.energystats.shared.helpers.asPercent
+import com.alpriest.energystats.shared.helpers.energy
+import com.alpriest.energystats.shared.helpers.power
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode

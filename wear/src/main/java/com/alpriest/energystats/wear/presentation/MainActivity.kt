@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,19 +15,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.ui.BatteryView
 import com.alpriest.energystats.shared.ui.HouseView
 import com.alpriest.energystats.shared.ui.PylonView
 import com.alpriest.energystats.shared.ui.SunIcon
-import com.alpriest.energystats.wear.R
 import com.alpriest.energystats.wear.presentation.theme.EnergyStatsTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,15 +37,24 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp()
+            WearApp(
+                1.2,
+                2.2,
+                1.0,
+                -1.9
+            )
         }
     }
 }
 
 @Composable
-fun WearApp() {
+fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryAmount: Double, gridAmount: Double) {
     EnergyStatsTheme {
-        val edgePadding = if (LocalConfiguration.current.isScreenRound) 12.dp else 8.dp
+        val edgePadding = if (isRoundDevice()) 12.dp else 16.dp
+        val solarAlign = if (isRoundDevice()) Alignment.TopCenter else Alignment.TopStart
+        val houseAlign = if (isRoundDevice()) Alignment.CenterStart else Alignment.TopEnd
+        val batteryAlign = if (isRoundDevice()) Alignment.CenterEnd else Alignment.BottomStart
+        val gridAlign = if (isRoundDevice()) Alignment.BottomCenter else Alignment.BottomEnd
 
         Box(
             modifier = Modifier
@@ -57,15 +63,15 @@ fun WearApp() {
                 .padding(edgePadding)
         ) {
             Column(
-                modifier = Modifier.align(Alignment.TopCenter),
+                modifier = Modifier.align(solarAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SunIcon(size = 24.dp, color = Color.Yellow)
-                Text(text = "1.2kW")
+                Text(text = solarAmount.kW(2))
             }
 
             Column(
-                modifier = Modifier.align(Alignment.CenterStart),
+                modifier = Modifier.align(houseAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 HouseView(
@@ -75,11 +81,11 @@ fun WearApp() {
                     Color.Black,
                     Color.White
                 )
-                Text(text = "1.2kW")
+                Text(text = houseLoadAmount.kW(2))
             }
 
             Column(
-                modifier = Modifier.align(Alignment.CenterEnd),
+                modifier = Modifier.align(batteryAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 BatteryView(
@@ -89,11 +95,11 @@ fun WearApp() {
                     Color.Black,
                     Color.White
                 )
-                Text(text = "-0.35kW")
+                Text(text = batteryAmount.kW(2))
             }
 
             Column(
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier = Modifier.align(gridAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 PylonView(
@@ -103,26 +109,28 @@ fun WearApp() {
                     color = Color.White,
                     strokeWidth = 2f
                 )
-                Text(text = "1.0kW")
+                Text(text = gridAmount.kW(2))
             }
         }
     }
 }
 
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
-fun DefaultPreview() {
-    WearApp()
+fun DefaultPreviewRound() {
+    WearApp(1.2, 3.2, 1.0, -1.9)
+}
+
+@Preview(device = WearDevices.SQUARE, showSystemUi = true)
+@Composable
+fun DefaultPreviewSquare() {
+    WearApp(1.2, 3.2, 1.0, -1.9)
+}
+
+@Preview(device = WearDevices.RECT, showSystemUi = true)
+@Composable
+fun DefaultPreviewRect() {
+    WearApp(1.2, 3.2, 1.0, -1.9)
 }
 
 @Composable

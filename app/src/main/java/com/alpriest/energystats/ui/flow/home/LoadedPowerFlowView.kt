@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.models.energy
+import com.alpriest.energystats.shared.helpers.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.services.DemoNetworking

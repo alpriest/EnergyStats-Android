@@ -22,8 +22,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.alpriest.energystats.models.isFlowing
-import com.alpriest.energystats.models.power
+import com.alpriest.energystats.shared.helpers.Wh
+import com.alpriest.energystats.shared.helpers.isFlowing
+import com.alpriest.energystats.shared.helpers.kW
+import com.alpriest.energystats.shared.helpers.kWh
+import com.alpriest.energystats.shared.helpers.w
+import com.alpriest.energystats.ui.settings.DisplayUnit
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.alpriest.energystats.ui.theme.PowerFlowNegativeText
@@ -32,6 +36,7 @@ import com.alpriest.energystats.ui.theme.PowerFlowPositive
 import com.alpriest.energystats.ui.theme.PowerFlowPositiveText
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlin.math.abs
 
 enum class PowerFlowLinePosition {
     LEFT,
@@ -44,6 +49,30 @@ enum class PowerFlowLinePosition {
 enum class LineOrientation {
     VERTICAL,
     HORIZONTAL
+}
+
+fun Double.power(displayUnit: DisplayUnit, decimalPlaces: Int): String {
+    return when (displayUnit) {
+        DisplayUnit.Watts -> this.w()
+        DisplayUnit.Kilowatts -> this.kW(decimalPlaces)
+        DisplayUnit.Adaptive -> return if (abs(this) < 1) {
+            this.w()
+        } else {
+            this.kW(decimalPlaces)
+        }
+    }
+}
+
+fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
+    return when (displayUnit) {
+        DisplayUnit.Watts -> this.Wh(decimalPlaces)
+        DisplayUnit.Kilowatts -> this.kWh(decimalPlaces)
+        DisplayUnit.Adaptive -> return if (abs(this) < 1) {
+            this.Wh(decimalPlaces)
+        } else {
+            this.kWh(decimalPlaces)
+        }
+    }
 }
 
 @Composable
