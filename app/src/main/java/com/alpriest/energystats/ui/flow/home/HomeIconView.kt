@@ -13,6 +13,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.energy
+import com.alpriest.energystats.shared.ui.HouseView
+import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
+import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -24,6 +28,8 @@ fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateF
     val displayUnit = themeStream.collectAsStateWithLifecycle().value.displayUnit
     val context = LocalContext.current
     val homeTotal = viewModel.homeTotal.collectAsStateWithLifecycle().value
+    val foregroundColor = iconForegroundColor(isDarkMode(themeStream))
+    val backgroundColor = iconBackgroundColor(isDarkMode(themeStream))
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -31,7 +37,8 @@ fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateF
     ) {
         HouseView(
             modifier = Modifier.height(iconHeight).width(iconHeight * 1.1f),
-            themeStream
+            foregroundColor,
+            backgroundColor
         )
 
         if (showHomeTotal) {

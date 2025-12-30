@@ -30,9 +30,6 @@ android {
         buildConfig = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.7.0"
-    }
     buildTypes {
         release {
             isMinifyEnabled = false

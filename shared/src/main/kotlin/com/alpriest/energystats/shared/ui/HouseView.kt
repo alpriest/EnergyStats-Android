@@ -1,33 +1,19 @@
-package com.alpriest.energystats.ui.flow.home
+package com.alpriest.energystats.shared.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
-import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.demo
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun HouseView(modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppTheme>) {
-    val foregroundColor = iconForegroundColor(isDarkMode(themeStream))
-    val backgroundColor = iconBackgroundColor(isDarkMode(themeStream))
-
+fun HouseView(modifier: Modifier = Modifier, foregroundColor: Color, backgroundColor: Color) {
     Canvas(
         modifier = modifier
     ) {
@@ -106,26 +92,5 @@ fun HouseView(modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppTh
             topLeft = Offset(houseMargin + houseSize.width - (chimneyWidth / 2.0f), soffitsTop - 16f - chimneyHeight),
             size = Size(chimneyWidth / 2.0f, chimneyHeight),
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HouseViewPreview() {
-    val height = 45.dp
-
-    EnergyStatsTheme {
-        Box(
-            Modifier
-                .height(height)
-                .width(height * 1.2f)
-        ) {
-            HouseView(
-                modifier = Modifier
-                    .height(height)
-                    .width(height * 1.1f),
-                themeStream = MutableStateFlow(AppTheme.demo())
-            )
-        }
     }
 }

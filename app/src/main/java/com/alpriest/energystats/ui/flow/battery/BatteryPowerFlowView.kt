@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -88,6 +87,7 @@ fun BatteryIconView(
     val showBatteryTemperature = themeStream.collectAsStateWithLifecycle().value.showBatteryTemperature
     val decimalPlaces = themeStream.collectAsStateWithLifecycle().value.decimalPlaces
     val showBatteryEstimate = themeStream.collectAsStateWithLifecycle().value.showBatteryEstimate
+    val isDarkMode = isDarkMode(themeStream)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,7 +97,8 @@ fun BatteryIconView(
             modifier = Modifier
                 .height(iconHeight)
                 .width(iconHeight * 1.25f),
-            isDarkMode = isDarkMode(themeStream)
+            foregroundColor = iconForegroundColor(isDarkMode),
+            backgroundColor = iconBackgroundColor(isDarkMode)
         )
 
         if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {

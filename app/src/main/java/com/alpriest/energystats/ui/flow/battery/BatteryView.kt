@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -14,32 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.IconColorInDarkTheme
-import com.alpriest.energystats.ui.theme.IconColorInLightTheme
 
 @Composable
-fun iconBackgroundColor(isDarkMode: Boolean): Color {
-    return if (isDarkMode) {
-        IconColorInDarkTheme
-    } else {
-        IconColorInLightTheme
-    }
-}
-
-@Composable
-fun iconForegroundColor(isDarkMode: Boolean): Color {
-    return if (isDarkMode) {
-        IconColorInLightTheme
-    } else {
-        IconColorInDarkTheme
-    }
-}
-
-@Composable
-fun BatteryView(modifier: Modifier = Modifier, isDarkMode: Boolean) {
-    val foregroundColor = iconForegroundColor(isDarkMode)
-    val backgroundColor = iconBackgroundColor(isDarkMode)
-
+fun BatteryView(modifier: Modifier = Modifier, foregroundColor: Color, backgroundColor: Color) {
     Canvas(
         modifier = modifier
     ) {
@@ -115,7 +91,8 @@ fun BatteryViewPreview() {
                 modifier = Modifier
                     .height(height)
                     .width(height * 1.25f),
-                isDarkMode = true
+                foregroundColor = Color.Black,
+                backgroundColor = Color.White
             )
         }
     }
