@@ -121,20 +121,21 @@ class AppContainer(private val context: Context) {
                 )
             )
             .build()
+
         val requestData = RequestData(
-            apiKey = credentialStore.getApiKey() ?: "",
+            apiKey = { credentialStore.getApiKey() ?: "" },
             userAgent = "Energy Stats Android"
         )
 
-            NetworkService(
-                NetworkValueCleaner(
-                    NetworkFacade(
-                        api = NetworkCache(api = FoxAPIService(requestData, chucker)),
-                        isDemoUser = { config.isDemoUser }
-                    ),
-                    themeStream
-                )
+        NetworkService(
+            NetworkValueCleaner(
+                NetworkFacade(
+                    api = NetworkCache(api = FoxAPIService(requestData, chucker)),
+                    isDemoUser = { config.isDemoUser }
+                ),
+                themeStream
             )
+        )
     }
 
     val configManager: ConfigManaging by lazy {

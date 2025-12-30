@@ -12,11 +12,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.helpers.energy
 import com.alpriest.energystats.shared.ui.HouseView
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 

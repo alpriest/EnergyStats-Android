@@ -18,7 +18,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.shared.helpers.energy
+import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red

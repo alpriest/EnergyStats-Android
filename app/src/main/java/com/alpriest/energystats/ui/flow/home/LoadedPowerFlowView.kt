@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.shared.helpers.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.services.DemoNetworking
@@ -53,6 +52,7 @@ import com.alpriest.energystats.ui.flow.PowerText
 import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.battery.BatteryIconView
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
+import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
 import com.alpriest.energystats.ui.flow.preview

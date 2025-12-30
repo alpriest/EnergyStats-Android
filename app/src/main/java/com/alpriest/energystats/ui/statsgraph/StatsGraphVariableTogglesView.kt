@@ -10,11 +10,11 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.ValueUsage
-import com.alpriest.energystats.shared.helpers.energy
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
+import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow

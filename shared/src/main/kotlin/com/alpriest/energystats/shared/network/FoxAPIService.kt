@@ -1,7 +1,15 @@
 package com.alpriest.energystats.shared.network
 
 import com.alpriest.energystats.shared.helpers.md5
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.ApiVariableArray
+import com.alpriest.energystats.shared.models.network.BatterySOCResponse
+import com.alpriest.energystats.shared.models.network.BatteryTimesResponse
+import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerListRequest
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
 import com.alpriest.energystats.shared.models.network.DataLoggerStatus
@@ -14,8 +22,8 @@ import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemReq
 import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsRequest
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
-import com.alpriest.energystats.shared.models.network.ApiVariable
-import com.alpriest.energystats.shared.models.network.ApiVariableArray
+import com.alpriest.energystats.shared.models.network.GetSchedulerFlagRequest
+import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
 import com.alpriest.energystats.shared.models.network.OpenHistoryRequest
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenRealQueryRequest
@@ -28,22 +36,14 @@ import com.alpriest.energystats.shared.models.network.PagedPowerStationListRespo
 import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
 import com.alpriest.energystats.shared.models.network.PowerStationListRequest
-import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.network.SetBatteryTimesRequest
-import com.alpriest.energystats.shared.models.network.SetDeviceSettingsItemRequest
-import com.alpriest.energystats.shared.models.network.SetPeakShavingSettingsRequest
-import com.alpriest.energystats.shared.models.network.BatterySOCResponse
-import com.alpriest.energystats.shared.models.network.BatteryTimesResponse
-import com.alpriest.energystats.shared.models.network.ChargeTime
-import com.alpriest.energystats.shared.models.network.GetSchedulerFlagRequest
-import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.models.network.SetBatterySOCRequest
+import com.alpriest.energystats.shared.models.network.SetBatteryTimesRequest
 import com.alpriest.energystats.shared.models.network.SetCurrentScheduleRequest
+import com.alpriest.energystats.shared.models.network.SetDeviceSettingsItemRequest
+import com.alpriest.energystats.shared.models.network.SetPeakShavingSettingsRequest
 import com.alpriest.energystats.shared.models.network.SetSchedulerFlagRequest
-import com.alpriest.energystats.shared.models.Schedule
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -74,7 +74,7 @@ interface NetworkResponseInterface {
 }
 
 data class RequestData(
-    val apiKey: String,
+    val apiKey: () -> String,
     val userAgent: String
 )
 
@@ -93,12 +93,12 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
                 val original = chain.request()
                 val languageCode = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
                 val timezone = TimeZone.getDefault().id
-                val token = requestData.apiKey
+                val token = requestData.apiKey()
                 val timestamp = System.currentTimeMillis()
                 val signature = makeSignature(original.url.encodedPath, token, timestamp)
 
                 val requestBuilder = original.newBuilder()
-                    .header("token", requestData.apiKey)
+                    .header("token", token)
                     .header("User-Agent", requestData.userAgent)
                     .header("Accept", "application/json, text/plain, */*")
                     .header("Accept-Language", "en-US;q=0.9,en;q=0.8,de;q=0.7,nl;q=0.6")
