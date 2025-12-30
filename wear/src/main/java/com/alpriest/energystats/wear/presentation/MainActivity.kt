@@ -24,7 +24,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.alpriest.energystats.shared.ui.BatteryView
 import com.alpriest.energystats.shared.ui.HouseView
+import com.alpriest.energystats.shared.ui.PylonView
 import com.alpriest.energystats.shared.ui.SunIcon
 import com.alpriest.energystats.wear.R
 import com.alpriest.energystats.wear.presentation.theme.EnergyStatsTheme
@@ -38,13 +40,13 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp("Android")
+            WearApp()
         }
     }
 }
 
 @Composable
-fun WearApp(greetingName: String) {
+fun WearApp() {
     EnergyStatsTheme {
         val edgePadding = if (LocalConfiguration.current.isScreenRound) 12.dp else 8.dp
 
@@ -67,21 +69,42 @@ fun WearApp(greetingName: String) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 HouseView(
-                    modifier = Modifier.height(30.dp).width(30.dp * 1.1f),
+                    modifier = Modifier
+                        .height(30.dp)
+                        .width(30.dp * 1.3f),
                     Color.Black,
                     Color.White
                 )
-                Text(text = "left")
+                Text(text = "1.2kW")
             }
 
-            Text(
-                text = "right",
-                modifier = Modifier.align(Alignment.CenterEnd)
-            )
-            Text(
-                text = "bottom",
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
+            Column(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                BatteryView(
+                    modifier = Modifier
+                        .height(30.dp)
+                        .width(30.dp * 1.1f),
+                    Color.Black,
+                    Color.White
+                )
+                Text(text = "-0.35kW")
+            }
+
+            Column(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                PylonView(
+                    modifier = Modifier
+                        .height(30.dp)
+                        .width(30.dp * 1.1f),
+                    color = Color.White,
+                    strokeWidth = 2f
+                )
+                Text(text = "1.0kW")
+            }
         }
     }
 }
@@ -99,7 +122,7 @@ fun Greeting(greetingName: String) {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    WearApp("Preview Android")
+    WearApp()
 }
 
 @Composable

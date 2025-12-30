@@ -35,11 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeConfigStore
 import com.alpriest.energystats.services.DemoNetworking
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.ui.flow.BannerAlertManager
@@ -335,10 +335,13 @@ fun SummaryPowerFlowViewPreview() {
             loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
                 LocalContext.current,
                 currentValuesStream = MutableStateFlow(
-                    CurrentValues(2.45, 2.45, null, 0.4, 1.0, listOf(
-                    StringPower("pv1", 0.3),
-                    StringPower("pv2", 0.7)
-                ))),
+                    CurrentValues(
+                        2.45, 2.45, null, 0.4, 1.0, listOf(
+                            StringPower("pv1", 0.3),
+                            StringPower("pv2", 0.7)
+                        )
+                    )
+                ),
                 hasBattery = true,
                 battery = BatteryViewModel(),
                 FakeConfigManager(),

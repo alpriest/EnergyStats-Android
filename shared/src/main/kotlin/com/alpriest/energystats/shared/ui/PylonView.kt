@@ -1,29 +1,16 @@
-package com.alpriest.energystats.ui.flow.grid
+package com.alpriest.energystats.shared.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.demo
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun PylonView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
-    val color = iconBackgroundColor(isDarkMode(themeStream))
-    val strokeWidth = themeStream.collectAsStateWithLifecycle().value.strokeWidth()
-
+fun PylonView(modifier: Modifier, color: Color, strokeWidth: Float) {
     Canvas(
         modifier = modifier.padding(top = 2.dp)
     ) {
@@ -79,26 +66,5 @@ fun PylonView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modi
             end = Offset(x = hSize * 3.1f, y = vSize * 5f),
             strokeWidth = strokeWidth
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PylonViewPreview() {
-    val pylonHeight = 45.dp
-
-    EnergyStatsTheme {
-        Box(
-            Modifier
-                .height(pylonHeight)
-                .width(pylonHeight * 1.2f)
-        ) {
-            PylonView(
-                themeStream = MutableStateFlow(AppTheme.demo()),
-                modifier = Modifier
-                    .height(pylonHeight)
-                    .width(pylonHeight * 0.9f)
-            )
-        }
     }
 }

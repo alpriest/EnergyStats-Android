@@ -25,6 +25,7 @@ import com.alpriest.energystats.models.energy
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.ui.PylonView
 import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.ui.flow.CurrentValues
 import com.alpriest.energystats.ui.flow.StringPower
@@ -49,7 +50,8 @@ fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStrea
                 .height(iconHeight)
                 .width(iconHeight * 1f)
                 .clipToBounds(),
-            themeStream = themeStream
+            color = iconBackgroundColor(isDarkMode(themeStream)),
+            strokeWidth = themeStream.collectAsStateWithLifecycle().value.strokeWidth()
         )
 
         if (showGridTotals) {
