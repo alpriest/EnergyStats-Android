@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.paramsgraph.editing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import kotlinx.coroutines.flow.MutableStateFlow

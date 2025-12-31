@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.login.UserManaging

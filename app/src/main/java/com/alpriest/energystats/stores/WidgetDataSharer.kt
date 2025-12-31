@@ -1,6 +1,6 @@
 package com.alpriest.energystats.stores
 
-import com.alpriest.energystats.services.ConfigInterface
+import com.alpriest.energystats.shared.models.ConfigInterface
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.GenerationViewData
 

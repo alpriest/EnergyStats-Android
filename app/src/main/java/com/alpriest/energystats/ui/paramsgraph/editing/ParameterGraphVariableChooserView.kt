@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging

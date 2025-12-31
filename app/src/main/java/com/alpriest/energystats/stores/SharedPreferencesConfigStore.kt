@@ -2,13 +2,13 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.services.ConfigInterface
+import com.alpriest.energystats.shared.models.Variable
+import com.alpriest.energystats.shared.models.ConfigInterface
 import com.alpriest.energystats.services.WidgetTapAction
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.ScheduleTemplate
-import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
+import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings

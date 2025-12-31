@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.timeUntilNow
-import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.models.solcastPrediction
+import com.alpriest.energystats.shared.models.Variable
+import com.alpriest.energystats.shared.models.solcastPrediction
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.shared.helpers.kW

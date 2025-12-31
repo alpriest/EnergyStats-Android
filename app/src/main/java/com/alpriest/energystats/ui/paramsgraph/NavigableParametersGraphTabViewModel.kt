@@ -17,8 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.models.solcastPrediction
+import com.alpriest.energystats.shared.models.Variable
+import com.alpriest.energystats.shared.models.solcastPrediction
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging

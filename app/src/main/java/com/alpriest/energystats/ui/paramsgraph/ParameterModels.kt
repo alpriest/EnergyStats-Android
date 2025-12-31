@@ -2,7 +2,7 @@ package com.alpriest.energystats.ui.paramsgraph
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
