@@ -3,8 +3,8 @@ package com.alpriest.energystats.ui.login
 import com.alpriest.energystats.shared.models.Battery
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
-import com.alpriest.energystats.ui.flow.SoC
-import com.alpriest.energystats.ui.flow.currentValue
+import com.alpriest.energystats.shared.models.network.SoC
+import com.alpriest.energystats.shared.models.network.currentValue
 
 enum class BatteryResponseMapper {
     ;

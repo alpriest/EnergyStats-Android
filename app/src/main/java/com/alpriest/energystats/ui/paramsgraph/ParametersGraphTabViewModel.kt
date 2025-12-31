@@ -9,16 +9,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.timeUntilNow
-import com.alpriest.energystats.models.SolcastForecastResponse
 import com.alpriest.energystats.models.Variable
-import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.models.solcastPrediction
-import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.helpers.kW
+import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponseData
+import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
 import com.alpriest.energystats.shared.models.network.UnitData
 import com.alpriest.energystats.shared.models.toDate
 import com.alpriest.energystats.shared.models.toUtcMillis
@@ -338,16 +338,17 @@ class ParametersGraphTabViewModel(
 
     private suspend fun fetchSolarForecasts(): List<ParametersGraphValue> {
         val settings = configManager.solcastSettings
-        if (settings.sites.isEmpty() || settings.apiKey == null) {
+        if (settings.sites.isEmpty()) {
             return listOf()
         }
+        val apiKey = settings.apiKey ?: return listOf()
 
         val queryDate = getQueryDate()
 
         try {
             val sites = settings.sites
             val data = sites.flatMap {
-                val forecasts = solarForecastProvider().fetchForecast(it, settings.apiKey, false).forecasts
+                val forecasts = solarForecastProvider().fetchForecast(it, apiKey, false).forecasts
                 return@flatMap forecasts.filter { response ->
                     isSameDay(response.periodEnd, queryDate)
                 }

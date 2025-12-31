@@ -17,3 +17,15 @@ data class OpenQueryResponseData(
     val value: Double?,
     val valueString: String?
 )
+
+fun List<OpenQueryResponseData>.currentValue(forKey: String): Double {
+    return currentData(forKey)?.value ?: 0.0
+}
+
+fun List<OpenQueryResponseData>.currentData(forKey: String): OpenQueryResponseData? {
+    return firstOrNull { it.variable.equals(forKey, ignoreCase = true) }
+}
+
+fun List<OpenQueryResponseData>.SoC(): Double {
+    return currentData("SoC")?.value ?: currentData("SoC_1")?.value ?: 0.0
+}

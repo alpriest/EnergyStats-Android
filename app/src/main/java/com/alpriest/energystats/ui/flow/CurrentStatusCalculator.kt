@@ -1,12 +1,12 @@
 package com.alpriest.energystats.ui.flow
 
-import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.parseToLocalDateTime
-import com.alpriest.energystats.shared.models.network.OpenQueryResponseData
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.currentValue
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
-import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
+import com.alpriest.energystats.shared.models.StringPower
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,49 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import kotlin.math.abs
-
-data class StringPower(val name: String, val amount: Double) {
-    fun displayName(settings: PowerFlowStringsSettings): String {
-        when (name) {
-            "PV1" ->
-                return settings.pv1Name
-
-            "PV2" ->
-                return settings.pv2Name
-
-            "PV3" ->
-                return settings.pv3Name
-
-            "PV4" ->
-                return settings.pv4Name
-
-            "PV5" ->
-                return settings.pv5Name
-
-            "CT2" ->
-                return "CT2"
-
-            else ->
-                return settings.pv6Name
-        }
-    }
-
-    fun stringType(): StringType {
-        return when (name) {
-            "PV1" -> StringType.PV1
-            "PV2" -> StringType.PV2
-            "PV3" -> StringType.PV3
-            "PV4" -> StringType.PV4
-            "PV5" -> StringType.PV5
-            "CT2" -> StringType.CT2
-            else -> StringType.PV6
-        }
-    }
-}
-
-enum class StringType {
-    PV1, PV2, PV3, PV4, PV5, PV6, CT2
-}
 
 data class CurrentValues(
     val grid: Double,
@@ -167,15 +124,3 @@ data class CurrentRawValues(
     val hasPV: Boolean,
     val lastUpdate: String,
 )
-
-fun List<OpenQueryResponseData>.currentValue(forKey: String): Double {
-    return currentData(forKey)?.value ?: 0.0
-}
-
-fun List<OpenQueryResponseData>.currentData(forKey: String): OpenQueryResponseData? {
-    return firstOrNull { it.variable.equals(forKey, ignoreCase = true) }
-}
-
-fun List<OpenQueryResponseData>.SoC(): Double {
-    return currentData("SoC")?.value ?: currentData("SoC_1")?.value ?: 0.0
-}

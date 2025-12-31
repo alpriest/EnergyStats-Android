@@ -1,17 +1,13 @@
 package com.alpriest.energystats.stores
 
 import com.alpriest.energystats.services.ConfigInterface
-import com.alpriest.energystats.widget.GenerationViewData
+import com.alpriest.energystats.shared.models.BatteryData
+import com.alpriest.energystats.shared.models.GenerationViewData
 
 interface WidgetDataSharing {
     var batteryData: BatteryData?
     var generationViewData: GenerationViewData?
 }
-
-data class BatteryData(
-    val chargeDescription: String?,
-    val chargeLevel: Double
-)
 
 class WidgetDataSharer(private var config: ConfigInterface) : WidgetDataSharing {
     override var batteryData: BatteryData?

@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.fullDateTime
-import com.alpriest.energystats.models.SolcastFailure
-import com.alpriest.energystats.models.SolcastForecastList
-import com.alpriest.energystats.models.SolcastForecastResponse
-import com.alpriest.energystats.models.toHalfHourOfDay
+import com.alpriest.energystats.shared.models.network.SolcastFailure
+import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
+import com.alpriest.energystats.shared.models.network.toHalfHourOfDay
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.LoadState
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
@@ -18,8 +17,6 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.Date
-import kotlin.collections.fold
-import kotlin.collections.map
 
 data class SolarForecastViewData(
     val error: String?,
@@ -59,15 +56,16 @@ class SolarForecastViewModel(
             return
         }
         val settings = themeStream.value.solcastSettings
-        if (settings.sites.isEmpty() || settings.apiKey == null) {
+        if (settings.sites.isEmpty()) {
             return
         }
+        val apiKey = settings.apiKey ?: return
 
         loadStateStream.value = LoadState.Active.Loading
 
         try {
             dataStream.value = settings.sites.mapNotNull { site ->
-                val forecast = solarForecastProvider().fetchForecast(site, settings.apiKey, ignoreCache)
+                val forecast = solarForecastProvider().fetchForecast(site, apiKey, ignoreCache)
                 lastFetchedStream.value = configManager.lastSolcastRefresh?.fullDateTime()
 
                 if (forecast.failure == null) {

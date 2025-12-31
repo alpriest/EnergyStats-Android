@@ -27,13 +27,13 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.ui.PylonView
 import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.ui.flow.CurrentValues
-import com.alpriest.energystats.ui.flow.StringPower
 import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.ShimmerText
 import com.alpriest.energystats.ui.flow.preview
+import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.demo

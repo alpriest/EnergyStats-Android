@@ -1,4 +1,4 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models.network
 
 import com.google.gson.annotations.SerializedName
 

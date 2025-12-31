@@ -1,8 +1,7 @@
-package com.alpriest.energystats.ui.settings
+package com.alpriest.energystats.shared.models
 
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
-import com.alpriest.energystats.ui.flow.StringPower
-import com.alpriest.energystats.ui.flow.currentValue
+import com.alpriest.energystats.shared.models.network.currentValue
 import kotlin.math.abs
 
 data class PowerFlowStringsSettings(
@@ -118,4 +117,47 @@ data class PowerFlowStringsSettings(
                 return PowerFlowStringsSettings()
             }
     }
+}
+
+data class StringPower(val name: String, val amount: Double) {
+    fun displayName(settings: PowerFlowStringsSettings): String {
+        when (name) {
+            "PV1" ->
+                return settings.pv1Name
+
+            "PV2" ->
+                return settings.pv2Name
+
+            "PV3" ->
+                return settings.pv3Name
+
+            "PV4" ->
+                return settings.pv4Name
+
+            "PV5" ->
+                return settings.pv5Name
+
+            "CT2" ->
+                return "CT2"
+
+            else ->
+                return settings.pv6Name
+        }
+    }
+
+    fun stringType(): StringType {
+        return when (name) {
+            "PV1" -> StringType.PV1
+            "PV2" -> StringType.PV2
+            "PV3" -> StringType.PV3
+            "PV4" -> StringType.PV4
+            "PV5" -> StringType.PV5
+            "CT2" -> StringType.CT2
+            else -> StringType.PV6
+        }
+    }
+}
+
+enum class StringType {
+    PV1, PV2, PV3, PV4, PV5, PV6, CT2
 }

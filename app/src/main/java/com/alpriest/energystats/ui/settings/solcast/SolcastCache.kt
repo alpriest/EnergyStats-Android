@@ -1,11 +1,12 @@
 package com.alpriest.energystats.ui.settings.solcast
 
 import android.content.Context
-import com.alpriest.energystats.models.SolcastFailure
-import com.alpriest.energystats.models.SolcastForecastList
-import com.alpriest.energystats.models.SolcastForecastResponse
-import com.alpriest.energystats.models.SolcastForecastResponseList
-import com.alpriest.energystats.models.SolcastSiteResponseList
+import com.alpriest.energystats.shared.models.SolcastSite
+import com.alpriest.energystats.shared.models.network.SolcastFailure
+import com.alpriest.energystats.shared.models.network.SolcastForecastList
+import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
+import com.alpriest.energystats.shared.models.network.SolcastForecastResponseList
+import com.alpriest.energystats.shared.models.network.SolcastSiteResponseList
 import com.alpriest.energystats.shared.network.TryLaterException
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson

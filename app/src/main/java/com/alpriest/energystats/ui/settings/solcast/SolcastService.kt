@@ -1,8 +1,9 @@
 package com.alpriest.energystats.ui.settings.solcast
 
 import com.alpriest.energystats.BuildConfig
-import com.alpriest.energystats.models.SolcastForecastResponseList
-import com.alpriest.energystats.models.SolcastSiteResponseList
+import com.alpriest.energystats.shared.models.SolcastSite
+import com.alpriest.energystats.shared.models.network.SolcastForecastResponseList
+import com.alpriest.energystats.shared.models.network.SolcastSiteResponseList
 import com.alpriest.energystats.shared.network.InvalidConfigurationException
 import com.alpriest.energystats.shared.network.TryLaterException
 import com.alpriest.energystats.stores.ConfigManaging

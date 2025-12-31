@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.theme
+package com.alpriest.energystats.shared.models
 
 data class SolarRangeDefinitions(
     val threshold1: Double,

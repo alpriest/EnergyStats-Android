@@ -15,7 +15,7 @@ import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
+import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
@@ -23,10 +23,10 @@ import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.network.InvalidTokenException
-import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
-import com.alpriest.energystats.ui.summary.SummaryDateRange
+import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
 import com.alpriest.energystats.ui.theme.toAppTheme
 import com.google.gson.Gson

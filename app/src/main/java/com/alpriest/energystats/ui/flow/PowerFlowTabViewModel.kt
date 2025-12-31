@@ -11,7 +11,7 @@ import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
-import com.alpriest.energystats.stores.BatteryData
+import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel

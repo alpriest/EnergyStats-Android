@@ -16,6 +16,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.models.MonthYear
+import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
@@ -25,20 +27,10 @@ import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.YearPicker
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
-sealed class SummaryDateRange {
-    object Automatic : SummaryDateRange()
-    data class Manual(val from: MonthYear, val to: MonthYear) : SummaryDateRange()
-}
-
 data class SummaryDateRangeSerialised(
     var automatic: Boolean,
     var from: MonthYear?,
     var to: MonthYear?
-)
-
-data class MonthYear(
-    var month: Int, // zero-based
-    var year: Int
 )
 
 data class EditSummaryViewData(

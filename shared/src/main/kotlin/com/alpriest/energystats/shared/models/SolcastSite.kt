@@ -1,6 +1,6 @@
-package com.alpriest.energystats.ui.settings.solcast
+package com.alpriest.energystats.shared.models
 
-import com.alpriest.energystats.models.SolcastSiteResponse
+import com.alpriest.energystats.shared.models.network.SolcastSiteResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

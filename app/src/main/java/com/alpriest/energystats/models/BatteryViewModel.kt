@@ -4,12 +4,12 @@ import android.content.Context
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
+import com.alpriest.energystats.shared.models.network.SoC
+import com.alpriest.energystats.shared.models.network.currentData
+import com.alpriest.energystats.shared.models.network.currentValue
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.SoC
 import com.alpriest.energystats.ui.flow.battery.BatteryCapacityCalculator
 import com.alpriest.energystats.ui.flow.battery.BatteryCapacityEstimate
-import com.alpriest.energystats.ui.flow.currentData
-import com.alpriest.energystats.ui.flow.currentValue
 
 data class BatteryViewModel(
     var hasBattery: Boolean = false,

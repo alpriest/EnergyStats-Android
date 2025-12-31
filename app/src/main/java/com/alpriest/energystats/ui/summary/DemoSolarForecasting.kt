@@ -1,11 +1,11 @@
 package com.alpriest.energystats.ui.summary
 
-import com.alpriest.energystats.models.SolcastForecastList
-import com.alpriest.energystats.models.SolcastForecastResponse
-import com.alpriest.energystats.models.SolcastSiteResponse
-import com.alpriest.energystats.models.SolcastSiteResponseList
+import com.alpriest.energystats.shared.models.network.SolcastForecastList
+import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
+import com.alpriest.energystats.shared.models.network.SolcastSiteResponse
+import com.alpriest.energystats.shared.models.network.SolcastSiteResponseList
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.ui.settings.solcast.SolcastSite
+import com.alpriest.energystats.shared.models.SolcastSite
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId

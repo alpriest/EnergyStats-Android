@@ -36,7 +36,7 @@ import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 
