@@ -4,7 +4,6 @@ import com.alpriest.energystats.models.DeviceCapability
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.WidgetTapAction
 import com.alpriest.energystats.shared.models.Battery
-import com.alpriest.energystats.shared.models.ConfigInterface
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
@@ -12,6 +11,7 @@ import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.StoredConfig
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.network.InvalidTokenException
@@ -38,7 +38,7 @@ import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 import java.util.Locale
 
-open class ConfigManager(var config: ConfigInterface, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
+open class ConfigManager(var config: StoredConfig, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
     ConfigManaging {
     private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
     private var deviceSupportsPeakShaving: MutableMap<String, Boolean> = mutableMapOf() // In-memory only

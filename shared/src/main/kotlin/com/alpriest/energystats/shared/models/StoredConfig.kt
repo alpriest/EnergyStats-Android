@@ -2,7 +2,7 @@ package com.alpriest.energystats.shared.models
 
 import java.time.LocalDateTime
 
-interface ConfigInterface: CurrentStatusCalculatorConfig {
+interface StoredConfig: CurrentStatusCalculatorConfig {
     var batteryData: BatteryData?
     var workModes: List<String>
     var fetchSolcastOnAppLaunch: Boolean

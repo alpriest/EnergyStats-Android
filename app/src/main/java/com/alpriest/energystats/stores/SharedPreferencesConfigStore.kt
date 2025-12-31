@@ -3,7 +3,7 @@ package com.alpriest.energystats.stores
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.models.ConfigInterface
+import com.alpriest.energystats.shared.models.StoredConfig
 import com.alpriest.energystats.services.WidgetTapAction
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.PowerStationDetail
@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
-    ConfigInterface {
+    StoredConfig {
 
     private enum class SharedPreferenceDeviceKey {
         IS_DEMO_USER,

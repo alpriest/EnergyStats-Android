@@ -4,7 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alpriest.energystats.shared.models.ConfigInterface
+import com.alpriest.energystats.shared.models.StoredConfig
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
@@ -172,7 +172,7 @@ fun AppTheme.Companion.demo(
     )
 }
 
-fun AppTheme.Companion.toAppTheme(config: ConfigInterface): AppTheme {
+fun AppTheme.Companion.toAppTheme(config: StoredConfig): AppTheme {
     return AppTheme(
         useLargeDisplay = config.useLargeDisplay,
         useColouredLines = config.useColouredFlowLines,

@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.preview.FakeConfigStore
+import com.alpriest.energystats.preview.FakeStoredConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.stores.WidgetDataSharer
@@ -118,7 +118,7 @@ fun TabbedViewPreview() {
     val themeStream = MutableStateFlow(AppTheme.Companion.demo())
     val dependencies = TabbedViewDependencies(
         ConfigManager(
-            config = FakeConfigStore(),
+            config = FakeStoredConfigStore(),
             networking = DemoNetworking(),
             appVersion = "1.19",
             themeStream = themeStream
@@ -132,7 +132,7 @@ fun TabbedViewPreview() {
         { _, _ -> null },
         { _, _ -> },
         { DemoSolarForecasting() },
-        WidgetDataSharer(FakeConfigStore()),
+        WidgetDataSharer.preview(),
         BannerAlertManager(),
         TemplateStore(FakeConfigManager())
     )
