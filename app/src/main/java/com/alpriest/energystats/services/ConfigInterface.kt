@@ -1,9 +1,9 @@
 package com.alpriest.energystats.services
 
-import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.stores.BatteryData
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
@@ -13,6 +13,7 @@ import com.alpriest.energystats.widget.GenerationViewData
 import java.time.LocalDateTime
 
 interface ConfigInterface {
+    var batteryData: BatteryData?
     var workModes: List<String>
     var fetchSolcastOnAppLaunch: Boolean
     var showInverterScheduleQuickLink: Boolean
@@ -69,7 +70,6 @@ interface ConfigInterface {
     var truncatedYAxisOnParameterGraphs: Boolean
     var earningsModel: Int
     var summaryDateRange: SummaryDateRange
-    var batteryViewModel: BatteryViewModel?
     var ct2DisplayMode: Int
     var showStringTotalsAsPercentage: Boolean
     var generationViewData: GenerationViewData?

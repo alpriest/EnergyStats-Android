@@ -2,7 +2,6 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.models.Variable
 import com.alpriest.energystats.services.ConfigInterface
 import com.alpriest.energystats.services.WidgetTapAction
@@ -83,7 +82,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SCHEDULE_TEMPLATES,
         LAST_SOLCAST_REFRESH,
         WIDGET_TAP_ACTION,
-        BATTERY_VIEW_MODEL,
+        BATTERY_DATA,
         BATTERY_TEMPERATURE_DISPLAY_MODE,
         SHOW_INVERTER_SCHEDULE_QUICK_LINK,
         FETCH_SOLCAST_ON_APP_LAUNCH,
@@ -615,20 +614,16 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var batteryViewModel: BatteryViewModel?
+    override var batteryData: BatteryData?
         get() {
-            val data: String? = sharedPreferences.getString(SharedPreferenceDisplayKey.BATTERY_VIEW_MODEL.name, null) ?: return null
+            val data: String = sharedPreferences.getString(SharedPreferenceDisplayKey.BATTERY_DATA.name, null) ?: return null
 
-            return if (data != null) {
-                return Gson().fromJson(data, object : TypeToken<BatteryViewModel>() {}.type)
-            } else {
-                return data
-            }
+            return Gson().fromJson(data, object : TypeToken<BatteryData>() {}.type)
         }
         set(value) {
             sharedPreferences.edit {
                 val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.BATTERY_VIEW_MODEL.name, jsonString)
+                putString(SharedPreferenceDisplayKey.BATTERY_DATA.name, jsonString)
             }
         }
 

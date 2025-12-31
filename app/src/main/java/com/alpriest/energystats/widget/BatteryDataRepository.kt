@@ -3,8 +3,9 @@ package com.alpriest.energystats.widget
 import android.content.Context
 import androidx.glance.appwidget.updateAll
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.services.WidgetTapAction
+import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.stores.BatteryData
 import com.alpriest.energystats.ui.AppContainer
 
 class BatteryDataRepository private constructor() {
@@ -42,13 +43,15 @@ class BatteryDataRepository private constructor() {
             )
 
             val battery = BatteryViewModel.make(device, real, appContainer.configManager, context)
-            this.update(battery, appContainer.config.showBatteryTimeEstimateOnWidget)
+            val batteryData = BatteryData(battery.chargeDescription, battery.chargeLevel)
+            appContainer.widgetDataSharer.batteryData = batteryData
+            this.update(batteryData, appContainer.config.showBatteryTimeEstimateOnWidget)
         } else {
             this.hasBattery = false
         }
     }
 
-    private fun update(battery: BatteryViewModel, showBatteryTimeEstimateOnWidget: Boolean) {
+    private fun update(battery: BatteryData, showBatteryTimeEstimateOnWidget: Boolean) {
         if (showBatteryTimeEstimateOnWidget) {
             this.chargeDescription = battery.chargeDescription
         } else {
@@ -58,14 +61,14 @@ class BatteryDataRepository private constructor() {
         this.hasBattery = true
     }
 
-    // Consume viewModel and erase it so next time we fetch from network
+    // Consume shared data and erase it so next time we fetch from network
     fun updateFromSharedConfig(context: Context) {
         val appContainer = AppContainer(context)
-        val batteryViewModel = appContainer.widgetDataSharer.batteryViewModel
+        val batteryData = appContainer.widgetDataSharer.batteryData
 
-        if (batteryViewModel != null) {
-            this.update(batteryViewModel, appContainer.config.showBatteryTimeEstimateOnWidget)
-            appContainer.widgetDataSharer.batteryViewModel = null
+        if (batteryData != null) {
+            this.update(batteryData, appContainer.config.showBatteryTimeEstimateOnWidget)
+            appContainer.widgetDataSharer.batteryData = null
         }
     }
 

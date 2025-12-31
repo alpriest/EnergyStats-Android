@@ -1,9 +1,11 @@
 package com.alpriest.energystats.preview
 
-import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.services.ConfigInterface
 import com.alpriest.energystats.models.Variable
+import com.alpriest.energystats.services.ConfigInterface
 import com.alpriest.energystats.services.WidgetTapAction
+import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.stores.BatteryData
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGroup
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
@@ -14,8 +16,6 @@ import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
-import com.alpriest.energystats.shared.models.ScheduleTemplate
-import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettings
 import com.alpriest.energystats.ui.summary.SummaryDateRange
 import com.alpriest.energystats.ui.theme.SolarRangeDefinitions
@@ -75,7 +75,6 @@ class FakeConfigStore(
     override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic,
     override var lastSolcastRefresh: LocalDateTime? = null,
     override var widgetTapAction: Int = WidgetTapAction.Launch.value,
-    override var batteryViewModel: BatteryViewModel? = null,
     override var batteryTemperatureDisplayMode: Int = BatteryTemperatureDisplayMode.Automatic.value,
     override var showInverterScheduleQuickLink: Boolean = false,
     override var fetchSolcastOnAppLaunch: Boolean = false,
@@ -85,7 +84,8 @@ class FakeConfigStore(
     override var showInverterConsumption: Boolean = false,
     override var showBatterySOCOnDailyStats: Boolean = false,
     override var workModes: List<String> = listOf(),
-    override var allowNegativeHouseLoad: Boolean = false
+    override var allowNegativeHouseLoad: Boolean = false,
+    override var batteryData: BatteryData? = null
 
 ) : ConfigInterface {
     override fun clearDisplaySettings() {}

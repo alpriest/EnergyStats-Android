@@ -52,12 +52,12 @@ class PreHomeViewModel(
 
         viewModelScope.launch {
             credentialStore.getApiKey()?.let {
-                pushCredentialsToWatch(context, it)
+                pushWatchData(context, it)
             }
         }
     }
 
-    suspend fun pushCredentialsToWatch(context: Context, token: String) {
+    suspend fun pushWatchData(context: Context, token: String) {
         val dataClient = Wearable.getDataClient(context)
 
         if (WearableApiAvailability.isAvailable(dataClient)) {
