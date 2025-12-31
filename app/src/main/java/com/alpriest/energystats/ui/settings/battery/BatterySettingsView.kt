@@ -32,10 +32,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.helpers.Wh
-import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.helpers.Wh
+import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
@@ -53,7 +53,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 @Composable
 fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
     val isEditingCapacity = rememberSaveable { mutableStateOf(false) }
-    var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacity.toString()) }
+    var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacity) }
     val decimalPlaces = config.themeStream.collectAsState().value.decimalPlaces
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
@@ -130,7 +130,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     )
                 } else {
                     Text(
-                        text = config.batteryCapacity.Wh(decimalPlaces),
+                        text = config.batteryCapacityW.Wh(decimalPlaces),
                         modifier = Modifier.clickable { isEditingCapacity.value = true },
                         color = colorScheme.onSecondary,
                     )
@@ -146,7 +146,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         ESButton(
                             onClick = {
                                 try {
-                                    config.batteryCapacity = editingCapacity.toInt()
+                                    val capacity = editingCapacity.toDouble().toInt().toString()
+                                    config.batteryCapacity = capacity
                                 } catch (_: NumberFormatException) {
                                 }
                                 isEditingCapacity.value = false
@@ -236,10 +237,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 
 @Composable
 private fun batteryTemperateDisplayModeFooter(value: BatteryTemperatureDisplayMode): String {
-    val context = LocalContext.current
-
     return when (value) {
-        BatteryTemperatureDisplayMode.Automatic -> context.getString(R.string.batteryTemperatureDisplayMode_automatic)
+        BatteryTemperatureDisplayMode.Automatic -> stringResource(R.string.batteryTemperatureDisplayMode_automatic)
         BatteryTemperatureDisplayMode.Battery1 -> String.format(stringResource(R.string.batteryTemperatureDisplayMode_batteryN), "1")
         BatteryTemperatureDisplayMode.Battery2 -> String.format(stringResource(R.string.batteryTemperatureDisplayMode_batteryN), "2")
     }

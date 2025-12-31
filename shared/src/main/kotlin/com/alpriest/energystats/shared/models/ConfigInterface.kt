@@ -2,7 +2,7 @@ package com.alpriest.energystats.shared.models
 
 import java.time.LocalDateTime
 
-interface ConfigInterface {
+interface ConfigInterface: CurrentStatusCalculatorConfig {
     var batteryData: BatteryData?
     var workModes: List<String>
     var fetchSolcastOnAppLaunch: Boolean
@@ -13,14 +13,12 @@ interface ConfigInterface {
     var scheduleTemplates: List<ScheduleTemplate>
     var showBatteryTimeEstimateOnWidget: Boolean
     var powerStationDetail: PowerStationDetail?
-    var shouldCombineCT2WithLoadsPower: Boolean
     var showBatterySOCAsPercentage: Boolean
     var variables: List<Variable>
     var separateParameterGraphsByUnit: Boolean
     var dataCeiling: Int
     var colorTheme: Int
     var showGraphValueDescriptions: Boolean
-    var shouldCombineCT2WithPVPower: Boolean
     var currencyCode: String
     var gridImportUnitPrice: Double
     var feedInUnitPrice: Double
@@ -28,7 +26,6 @@ interface ConfigInterface {
     var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean
     var selfSufficiencyEstimateMode: Int
-    var showUsableBatteryOnly: Boolean
     var showBatteryEstimate: Boolean
     var showSunnyBackground: Boolean
     var selectedDeviceSN: String?
@@ -45,8 +42,6 @@ interface ConfigInterface {
     var selectedParameterGraphVariables: List<String>
     var showInverterIcon: Boolean
     var showHomeTotal: Boolean
-    var shouldInvertCT2: Boolean
-    var showGridTotals: Boolean
     var showInverterTypeNameOnPowerflow: Boolean
     var showInverterStationNameOnPowerflow: Boolean
     var deviceBatteryOverrides: Map<String, String>
@@ -55,7 +50,6 @@ interface ConfigInterface {
     var totalYieldModel: Int
     var showFinancialSummaryOnFlowPage: Boolean
     var useTraditionalLoadFormula: Boolean
-    var powerFlowStrings: PowerFlowStringsSettings
     var showSelfSufficiencyStatsGraphOverlay: Boolean
     var truncatedYAxisOnParameterGraphs: Boolean
     var earningsModel: Int
@@ -65,8 +59,24 @@ interface ConfigInterface {
     var generationViewData: GenerationViewData?
     var showInverterConsumption: Boolean
     var showBatterySOCOnDailyStats: Boolean
-    var allowNegativeHouseLoad: Boolean
+    var showUsableBatteryOnly: Boolean
+    var showGridTotals: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()
+}
+
+interface CurrentStatusCalculatorConfig {
+    var shouldInvertCT2: Boolean
+    var shouldCombineCT2WithPVPower: Boolean
+    var powerFlowStrings: PowerFlowStringsSettings
+    var shouldCombineCT2WithLoadsPower: Boolean
+    var allowNegativeHouseLoad: Boolean
+}
+
+interface BatteryConfig {
+    var batteryCapacity: String
+    val batteryCapacityW: Int
+    var minSOC: Double
+    var showUsableBatteryOnly: Boolean
 }

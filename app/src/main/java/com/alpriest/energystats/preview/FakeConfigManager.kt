@@ -1,30 +1,30 @@
 package com.alpriest.energystats.preview
 
-import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.models.Battery
-import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.PowerStationDetail
-import com.alpriest.energystats.shared.models.ScheduleTemplate
-import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.models.DeviceCapability
 import com.alpriest.energystats.services.WidgetTapAction
+import com.alpriest.energystats.shared.models.Battery
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.ParameterGroup
+import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
+import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
+import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.SolcastSite
+import com.alpriest.energystats.shared.models.SummaryDateRange
+import com.alpriest.energystats.shared.models.Variable
+import com.alpriest.energystats.shared.models.preview
+import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
-import com.alpriest.energystats.shared.models.SolcastSettings
-import com.alpriest.energystats.shared.models.SolcastSite
-import com.alpriest.energystats.shared.models.preview
-import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
@@ -50,7 +50,8 @@ class FakeConfigManager : ConfigManaging {
     override var showFinancialSummary: Boolean = true
     override var useLargeDisplay: Boolean = false
     override var minSOC: Double = 20.0
-    override var batteryCapacity: Int = 3000
+    override var batteryCapacity: String = "3000"
+    override val batteryCapacityW: Int = batteryCapacity.toInt()
     override var isDemoUser: Boolean = true
     override var useColouredFlowLines: Boolean = true
     override var refreshFrequency: RefreshFrequency = RefreshFrequency.Auto

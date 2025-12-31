@@ -1,32 +1,32 @@
 package com.alpriest.energystats.ui.login
 
-import com.alpriest.energystats.shared.models.ConfigInterface
-import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.models.Battery
-import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.PowerStationDetail
-import com.alpriest.energystats.services.Networking
-import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.models.DeviceCapability
+import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.WidgetTapAction
-import com.alpriest.energystats.ui.flow.roundedToString
+import com.alpriest.energystats.shared.models.Battery
+import com.alpriest.energystats.shared.models.ConfigInterface
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.ParameterGroup
+import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
+import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
+import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.SummaryDateRange
+import com.alpriest.energystats.shared.models.Variable
+import com.alpriest.energystats.shared.network.InvalidTokenException
+import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.DataCeiling
 import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.settings.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
-import com.alpriest.energystats.shared.models.ScheduleTemplate
-import com.alpriest.energystats.shared.network.InvalidTokenException
-import com.alpriest.energystats.shared.models.SolcastSettings
-import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.ui.theme.demo
 import com.alpriest.energystats.ui.theme.toAppTheme
 import com.google.gson.Gson
@@ -168,24 +168,27 @@ open class ConfigManager(var config: ConfigInterface, val networking: Networking
             }
         }
 
-    override var batteryCapacity: Int
+    override var batteryCapacity: String
         get() {
             return currentDevice.value?.let {
                 val override = config.deviceBatteryOverrides[it.deviceSN]
-                return (override ?: it.battery?.capacity ?: "0").toDouble().toInt()
+                return (override ?: it.battery?.capacity ?: "0").toDouble().toString()
             } ?: run {
-                10000
+                "0"
             }
         }
         set(value) {
             currentDevice.value?.let {
                 val map = config.deviceBatteryOverrides.toMutableMap()
-                map[it.deviceSN] = value.toString()
+                map[it.deviceSN] = value
                 config.deviceBatteryOverrides = map
             }
 
             devices = devices?.map { it }
         }
+
+    override val batteryCapacityW: Int
+        get() = batteryCapacity.toDouble().toInt()
 
     override var isDemoUser: Boolean
         get() = config.isDemoUser

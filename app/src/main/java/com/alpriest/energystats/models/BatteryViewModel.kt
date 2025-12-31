@@ -27,7 +27,7 @@ data class BatteryViewModel(
         temperatures = temperatures,
         residual = residual.toInt(),
         hasError = false,
-        chargeDescription = BatteryCapacityCalculator(configManager.batteryCapacity, configManager.minSOC)
+        chargeDescription = BatteryCapacityCalculator(configManager.batteryCapacityW, configManager.minSOC)
             .batteryPercentageRemaining(power, soc / 100.0)?.let {
                 duration(context, it)
             }
