@@ -363,4 +363,3 @@ fun SummaryPowerFlowViewPreview() {
         )
     }
 }
-

@@ -18,6 +18,7 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
+import com.google.android.gms.wearable.DataMap
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,17 +53,33 @@ class PreHomeViewModel(
 
         viewModelScope.launch {
             credentialStore.getApiKey()?.let {
-                pushWatchData(context, it)
+                sendWatchData(context, it, configManager)
             }
         }
     }
 
-    suspend fun pushWatchData(context: Context, token: String) {
+    suspend fun sendWatchData(context: Context, token: String, config: ConfigManaging) {
         val dataClient = Wearable.getDataClient(context)
 
         if (WearableApiAvailability.isAvailable(dataClient)) {
+            val solarRangeDataMap = DataMap().apply {
+                putDouble("threshold1", config.solarRangeDefinitions.threshold1)
+                putDouble("threshold2", config.solarRangeDefinitions.threshold2)
+                putDouble("threshold3", config.solarRangeDefinitions.threshold3)
+            }
+
             val putReq = PutDataMapRequest.create(CREDS_PATH).apply {
                 dataMap.putString("token", token)
+                config.selectedDeviceSN?.let {
+                    dataMap.putString("deviceSN", it)
+                }
+                dataMap.putBoolean("showGridTotalsOnPowerFlow", config.showGridTotals)
+                dataMap.putString("batteryCapacity", config.batteryCapacity)
+                dataMap.putBoolean("shouldInvertCT2", config.shouldInvertCT2)
+                dataMap.putDouble("minSOC", config.minSOC)
+                dataMap.putBoolean("shouldCombineCT2WithPVPower", config.shouldCombineCT2WithPVPower)
+                dataMap.putBoolean("showUsableBatteryOnly", config.showUsableBatteryOnly)
+                dataMap.putDataMap("solarRangeDefinitions", solarRangeDataMap)
 
                 // Force propagation even if token string hasn’t changed
                 dataMap.putLong("updatedAt", System.currentTimeMillis())
