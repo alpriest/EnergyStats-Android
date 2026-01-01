@@ -6,4 +6,12 @@
     <string name="maxsoc_description">"Imposta il livello massimo di carica che la batteria può raggiungere, espresso in percentuale.  "</string>
     <string name="export_limit_behaviour">"Configurando questa impostazione, puoi controllare la quantità di energia inviata alla rete, garantendo la conformità alle normative locali o alle preferenze personali. Ad esempio, se le normative locali limitano la capacità di esportazione, questa impostazione assicura che l'inverter non superi il limite specificato.  "</string>
     <string name="maxsoc_behaviour">"La ricarica si interrompe una volta raggiunto il Max SoC. Può essere regolato in base ai modelli di utilizzo o per adattarsi alle tariffe energetiche e alla disponibilità solare.  "</string>
+    <string name="loading">Caricamento in corso…</string>
+    <string name="still_loading">Sto ancora caricando…</string>
+    <string name="saving">Risparmio</string>
+    <string name="still_saving">Sto ancora salvando…</string>
+    <string name="activating">Attivando</string>
+    <string name="still_activating">Sto ancora attivando…</string>
+    <string name="deactivating">Disattivando</string>
+    <string name="still_deactivating">Sto ancora disattivando…</string>
 </resources>

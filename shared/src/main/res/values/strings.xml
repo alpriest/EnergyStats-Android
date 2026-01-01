@@ -6,4 +6,12 @@
     <string name="maxsoc_description">Sets the highest charge level the battery is allowed to reach, expressed as a percentage.</string>
     <string name="export_limit_behaviour">By configuring this setting, you can control the amount of energy sent back to the grid, ensuring compliance with local regulations or personal preferences. For example, if local regulations limit export capacity, setting this value ensures the inverter does not exceed the specified limit.</string>
     <string name="maxsoc_behaviour">Charging stops once the battery hits the Max SoC. Can be adjusted based on usage patterns or to align with energy tariffs and solar availability.</string>
+    <string name="loading">Loading…</string>
+    <string name="still_loading">Still loading…</string>
+    <string name="saving">Saving…</string>
+    <string name="still_saving">Still saving…</string>
+    <string name="activating">Activating…</string>
+    <string name="still_activating">Still activating…</string>
+    <string name="deactivating">Deactivating…</string>
+    <string name="still_deactivating">Still deactivating…</string>
 </resources>

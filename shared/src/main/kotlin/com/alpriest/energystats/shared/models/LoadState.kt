@@ -1,5 +1,7 @@
 package com.alpriest.energystats.shared.models
 
+import com.alpriest.energystats.shared.R
+
 sealed class LoadState {
     data object Inactive : LoadState()
 

@@ -63,4 +63,5 @@ dependencies {
     implementation(project(":shared"))
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.lifecycle.viewmodelCompose)
+    implementation(libs.gson)
 }

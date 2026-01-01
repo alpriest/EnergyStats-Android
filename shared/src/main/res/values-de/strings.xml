@@ -6,4 +6,12 @@
     <string name="maxsoc_description">Legt den höchsten Ladezustand fest, den die Batterie erreichen darf, ausgedrückt in Prozent.</string>
     <string name="export_limit_behaviour">"Durch die Konfiguration dieser Einstellung können Sie steuern, wie viel Energie ins Netz zurückgespeist wird, um lokale Vorschriften oder persönliche Vorlieben einzuhalten. Wenn beispielsweise lokale Vorschriften die Einspeiseleistung begrenzen, stellt dieser Wert sicher, dass der Wechselrichter das Limit nicht überschreitet.  "</string>
     <string name="maxsoc_behaviour">"Das Laden stoppt, sobald die Batterie den Max SoC erreicht hat. Kann basierend auf dem Nutzungsverhalten oder zur Anpassung an Stromtarife und Solarnutzung eingestellt werden.  "</string>
+    <string name="loading">Lade…</string>
+    <string name="still_loading">Lädt noch…</string>
+    <string name="saving">Speichern</string>
+    <string name="still_saving">Speichert noch…</string>
+    <string name="activating">Aktivierung</string>
+    <string name="still_activating">Aktiviert noch…</string>
+    <string name="deactivating">Deaktivierung</string>
+    <string name="still_deactivating">Deaktiviert noch…</string>
 </resources>

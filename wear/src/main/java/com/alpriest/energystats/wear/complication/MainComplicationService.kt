@@ -1,6 +1,7 @@
 package com.alpriest.energystats.wear.complication
 
 import android.content.ComponentName
+import android.content.Context
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.PlainComplicationText
@@ -8,6 +9,8 @@ import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import com.alpriest.energystats.wear.sync.SharedPreferencesConfigStore
+import com.alpriest.energystats.wear.sync.make
 
 class MainComplicationService : SuspendingComplicationDataSourceService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData? {
@@ -30,7 +33,8 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
     }
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
-        return createComplicationData("ABC", "ABCDEF")
+        val configStore = SharedPreferencesConfigStore.make(this)
+        return createComplicationData(configStore.batteryCapacity ?: "n/a", "ABCDEF")
     }
 
     private fun createComplicationData(text: String, contentDescription: String) =
@@ -38,4 +42,12 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
             text = PlainComplicationText.Builder(text).build(),
             contentDescription = PlainComplicationText.Builder(contentDescription).build()
         ).build()
+
+    companion object {
+        fun requestRefresh(applicationContext: Context) {
+            ComplicationDataSourceUpdateRequester
+                .create(applicationContext, ComponentName(applicationContext, MainComplicationService::class.java))
+                .requestUpdateAll()
+        }
+    }
 }

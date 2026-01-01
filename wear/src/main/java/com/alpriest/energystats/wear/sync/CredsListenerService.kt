@@ -1,16 +1,17 @@
 package com.alpriest.energystats.wear.sync
 
+import android.content.Context
+import com.alpriest.energystats.shared.models.SharedDataKeys
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.wear.complication.MainComplicationService
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.WearableListenerService
-import com.alpriest.energystats.shared.models.SharedDataKeys
 
 const val CREDS_PATH = "/auth/creds"
 
 class CredsListenerService : WearableListenerService() {
-
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         for (event in dataEvents) {
             if (event.type != DataEvent.TYPE_CHANGED) continue
@@ -34,6 +35,7 @@ class CredsListenerService : WearableListenerService() {
             val threshold3 = solarRange?.getDouble(SharedDataKeys.THRESHOLD_3)
 
             saveToWatchStorage(
+                this,
                 token,
                 deviceSN,
                 showGridTotalsOnPowerFlow,
@@ -52,6 +54,7 @@ class CredsListenerService : WearableListenerService() {
     }
 
     private fun saveToWatchStorage(
+        context: Context,
         token: String?,
         deviceSN: String?,
         showGridTotalsOnPowerFlow: Boolean,
@@ -64,5 +67,23 @@ class CredsListenerService : WearableListenerService() {
         threshold2: Double?,
         threshold3: Double?
     ) {
+        val store = SharedPreferencesConfigStore.make(context)
+        store.token = token
+        store.selectedDeviceSN = deviceSN
+        store.showGridTotals = showGridTotalsOnPowerFlow
+        store.batteryCapacity = batteryCapacity
+        store.shouldInvertCT2 = shouldInvertCT2
+        store.minSOC = minSOC
+        store.shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower
+        store.showUsableBatteryOnly = showUsableBatteryOnly
+        val solarRangeDefinitions = listOf(threshold1, threshold2, threshold3)
+            .takeIf { it.all { v -> v != null } }
+            ?.let { (t1, t2, t3) ->
+                SolarRangeDefinitions(t1!!, t2!!, t3!!)
+            }
+
+        solarRangeDefinitions?.let {
+            store.solarRangeDefinitions = it
+        }
     }
 }
