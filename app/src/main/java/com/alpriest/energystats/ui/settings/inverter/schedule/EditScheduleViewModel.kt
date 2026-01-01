@@ -13,7 +13,7 @@ import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.models.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

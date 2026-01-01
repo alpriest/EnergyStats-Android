@@ -12,6 +12,14 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
         <service
+            android:name=".sync.CredsListenerService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <data android:scheme="wear" android:pathPrefix="/auth" />
+            </intent-filter>
+        </service>
+        <service
             android:name="com.alpriest.energystats.wear.complication.MainComplicationService"
             android:exported="true"
             android:label="@string/complication_label"

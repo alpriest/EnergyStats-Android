@@ -9,7 +9,7 @@ import com.alpriest.energystats.shared.models.network.SolcastFailure
 import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
 import com.alpriest.energystats.shared.models.network.toHalfHourOfDay
 import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow

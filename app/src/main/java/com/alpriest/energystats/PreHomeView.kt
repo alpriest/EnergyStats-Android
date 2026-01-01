@@ -11,6 +11,7 @@ import com.alpriest.energystats.helpers.WearableApiAvailability
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.SharedDataKeys
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.AppContainer
@@ -63,26 +64,26 @@ class PreHomeViewModel(
 
         if (WearableApiAvailability.isAvailable(dataClient)) {
             val solarRangeDataMap = DataMap().apply {
-                putDouble("threshold1", config.solarRangeDefinitions.threshold1)
-                putDouble("threshold2", config.solarRangeDefinitions.threshold2)
-                putDouble("threshold3", config.solarRangeDefinitions.threshold3)
+                putDouble(SharedDataKeys.THRESHOLD_1, config.solarRangeDefinitions.threshold1)
+                putDouble(SharedDataKeys.THRESHOLD_2, config.solarRangeDefinitions.threshold2)
+                putDouble(SharedDataKeys.THRESHOLD_3, config.solarRangeDefinitions.threshold3)
             }
 
             val putReq = PutDataMapRequest.create(CREDS_PATH).apply {
-                dataMap.putString("token", token)
+                dataMap.putString(SharedDataKeys.TOKEN, token)
                 config.selectedDeviceSN?.let {
-                    dataMap.putString("deviceSN", it)
+                    dataMap.putString(SharedDataKeys.DEVICE_SN, it)
                 }
-                dataMap.putBoolean("showGridTotalsOnPowerFlow", config.showGridTotals)
-                dataMap.putString("batteryCapacity", config.batteryCapacity)
-                dataMap.putBoolean("shouldInvertCT2", config.shouldInvertCT2)
-                dataMap.putDouble("minSOC", config.minSOC)
-                dataMap.putBoolean("shouldCombineCT2WithPVPower", config.shouldCombineCT2WithPVPower)
-                dataMap.putBoolean("showUsableBatteryOnly", config.showUsableBatteryOnly)
-                dataMap.putDataMap("solarRangeDefinitions", solarRangeDataMap)
+                dataMap.putBoolean(SharedDataKeys.SHOW_GRID_TOTALS, config.showGridTotals)
+                dataMap.putString(SharedDataKeys.BATTERY_CAPACITY, config.batteryCapacity)
+                dataMap.putBoolean(SharedDataKeys.SHOULD_INVERT_CT2, config.shouldInvertCT2)
+                dataMap.putDouble(SharedDataKeys.MIN_SOC, config.minSOC)
+                dataMap.putBoolean(SharedDataKeys.SHOULD_COMBINE_CT2_WITH_PV, config.shouldCombineCT2WithPVPower)
+                dataMap.putBoolean(SharedDataKeys.SHOW_USABLE_BATTERY_ONLY, config.showUsableBatteryOnly)
+                dataMap.putDataMap(SharedDataKeys.SOLAR_RANGE_DEFINITIONS, solarRangeDataMap)
 
                 // Force propagation even if token string hasn’t changed
-                dataMap.putLong("updatedAt", System.currentTimeMillis())
+                dataMap.putLong(SharedDataKeys.UPDATED_AT, System.currentTimeMillis())
             }.asPutDataRequest().setUrgent()
 
             dataClient.putDataItem(putReq).await()

@@ -11,13 +11,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
@@ -37,11 +41,18 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
+            val vm: WearHomeViewModel = viewModel()
+            val appContext = LocalContext.current.applicationContext
+            androidx.compose.runtime.LaunchedEffect(Unit) {
+                vm.bootstrapFromDataLayer(appContext)
+            }
+            val state by vm.state.collectAsState()
+
             WearApp(
-                1.2,
-                2.2,
-                1.0,
-                -1.9
+                solarAmount = state.solarAmount,
+                houseLoadAmount = state.houseLoadAmount,
+                batteryAmount = state.batteryAmount,
+                gridAmount = state.gridAmount,
             )
         }
     }

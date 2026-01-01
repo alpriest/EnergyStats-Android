@@ -18,7 +18,7 @@ import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.parse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

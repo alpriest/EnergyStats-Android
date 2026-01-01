@@ -48,12 +48,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.preview.FakeStoredConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.stores.WidgetDataSharing
@@ -64,7 +65,6 @@ import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.ui.settings.inverter.schedule.PopupScheduleSummaryView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
@@ -301,37 +301,3 @@ data class UiLoadState(
     val state: LoadState
 )
 
-sealed class LoadState {
-    data object Inactive : LoadState()
-
-    data class Error(
-        val ex: Exception?,
-        val reason: String,
-        val allowRetry: Boolean = true
-    ) : LoadState()
-
-    sealed class Active : LoadState() {
-        abstract val titleResId: Int
-        abstract val longOperationTitleResId: Int
-
-        data object Loading : Active() {
-            override val titleResId = R.string.loading
-            override val longOperationTitleResId = R.string.still_loading
-        }
-
-        data object Saving : Active() {
-            override val titleResId = R.string.saving
-            override val longOperationTitleResId = R.string.still_saving
-        }
-
-        data object Activating : Active() {
-            override val titleResId = R.string.activating
-            override val longOperationTitleResId = R.string.still_activating
-        }
-
-        data object Deactivating : Active() {
-            override val titleResId = R.string.deactivating
-            override val longOperationTitleResId = R.string.still_deactivating
-        }
-    }
-}

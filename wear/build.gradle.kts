@@ -61,4 +61,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.tiles.tooling)
     implementation(project(":shared"))
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.lifecycle.viewmodelCompose)
 }

@@ -25,7 +25,7 @@ import com.alpriest.energystats.shared.models.toUtcMillis
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
-import com.alpriest.energystats.ui.flow.LoadState
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.flow.home.networkDateFormat
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
