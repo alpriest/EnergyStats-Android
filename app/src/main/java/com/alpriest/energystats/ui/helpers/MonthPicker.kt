@@ -46,7 +46,7 @@ fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifie
                 contentColor = if (onPrimary) colorScheme.onPrimary else colorScheme.primary
             ),
             content = {
-                val selectedMonth = Month.of(month)
+                val selectedMonth = Month.of(month.coerceIn(1..<12))
                 Row(modifier = textModifier) {
                     Text(
                         selectedMonth.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()),

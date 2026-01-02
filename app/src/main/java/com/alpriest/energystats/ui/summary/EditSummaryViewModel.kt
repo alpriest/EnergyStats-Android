@@ -3,7 +3,6 @@ package com.alpriest.energystats.ui.summary
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.shared.models.MonthYear
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.stores.ConfigManaging
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,9 +45,9 @@ class EditSummaryViewModel(
 
             is SummaryDateRange.Manual -> EditSummaryViewData(
                 automatic = false,
-                fromMonth = summaryDateRange.from.month,
+                fromMonth = summaryDateRange.from.monthValue,
                 fromYear = summaryDateRange.from.year,
-                toMonth = summaryDateRange.to.month,
+                toMonth = summaryDateRange.to.monthValue,
                 toYear = summaryDateRange.to.year
             )
         }
@@ -68,8 +67,8 @@ class EditSummaryViewModel(
             SummaryDateRange.Automatic
         } else {
             SummaryDateRange.Manual(
-                from = MonthYear(viewData.fromMonth, viewData.fromYear),
-                to = MonthYear(viewData.toMonth, viewData.toYear)
+                from = LocalDate.of(viewData.fromYear, viewData.fromMonth, 1),
+                to = LocalDate.of(viewData.toYear, viewData.toMonth, 1)
             )
         }
         onChange(updatedSummaryDateRange)

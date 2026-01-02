@@ -36,18 +36,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.DemoNetworking
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.helpers.kWh
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.FinanceAmount
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
@@ -81,7 +81,6 @@ class SummaryView(
     ) {
         trackScreenView("Summary", "SummaryView")
         val navController = rememberNavController()
-        val context = LocalContext.current
 
         NavHost(
             navController = navController,
@@ -102,7 +101,7 @@ class SummaryView(
 
             composable(SummaryScreen.EditSummaryDateRanges.name) {
                 topBarSettings.value = TopBarSettings(true, stringResource(R.string.summary_date_range), {}, { navController.popBackStack() })
-                EditSummaryView(configManager, navController, onChange = { viewModel.setDateRange(it, context) }).Content()
+                EditSummaryView(configManager, navController, onChange = { viewModel.setDateRange(it) }).Content()
             }
         }
     }
@@ -118,14 +117,13 @@ class SummaryView(
         val approximations = viewModel.approximationsViewModelStream.collectAsStateWithLifecycle().value
         val oldestDataDate = viewModel.oldestDataDate.collectAsStateWithLifecycle().value
         val isLoading = viewModel.loadStateStream.collectAsStateWithLifecycle().value.state
-        val context = LocalContext.current
         val latestDataDate = viewModel.latestDataDate.collectAsStateWithLifecycle().value
         val hasPV = viewModel.hasPVStream.collectAsStateWithLifecycle().value
 
         MonitorAlertDialog(viewModel, userManager)
 
         LaunchedEffect(null) {
-            viewModel.load(context)
+            viewModel.load()
         }
 
         Column(

@@ -2,25 +2,27 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.models.StoredConfig
 import com.alpriest.energystats.services.WidgetTapAction
 import com.alpriest.energystats.shared.models.BatteryData
+import com.alpriest.energystats.shared.models.GenerationViewData
+import com.alpriest.energystats.shared.models.ParameterGroup
+import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.ScheduleTemplate
-import com.alpriest.energystats.shared.models.ParameterGroup
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
+import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.StoredConfig
+import com.alpriest.energystats.shared.models.SummaryDateRange
+import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
-import com.alpriest.energystats.shared.models.SolcastSettings
-import com.alpriest.energystats.shared.models.SummaryDateRange
+import com.alpriest.energystats.ui.summary.MonthYear
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
-import com.alpriest.energystats.shared.models.SolarRangeDefinitions
-import com.alpriest.energystats.shared.models.GenerationViewData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -580,14 +582,31 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             } else {
                 val from = deserialisedValue.from!!
                 val to = deserialisedValue.to!!
-                SummaryDateRange.Manual(from, to)
+                var fromLocalDate: LocalDate
+                var toLocalDate: LocalDate
+
+                if (from.year == 0) {
+                    fromLocalDate = LocalDate.now()
+                } else {
+                    fromLocalDate = LocalDate.of(from.year, from.month, 1)
+                }
+                if (to.year == 0) {
+                    toLocalDate = LocalDate.now()
+                } else {
+                    toLocalDate = LocalDate.of(to.year, to.month, 1)
+                }
+
+                SummaryDateRange.Manual(fromLocalDate, toLocalDate)
             }
         }
         set(value) {
             sharedPreferences.edit {
                 val serialisedValue = when (value) {
                     is SummaryDateRange.Automatic -> SummaryDateRangeSerialised(automatic = true, from = null, to = null)
-                    is SummaryDateRange.Manual -> SummaryDateRangeSerialised(automatic = false, from = value.from, to = value.to)
+                    is SummaryDateRange.Manual -> SummaryDateRangeSerialised(
+                        automatic = false, from = MonthYear(value.from.monthValue, value.from.year),
+                        to = MonthYear(value.to.monthValue, value.to.year)
+                    )
                 }
 
                 val jsonString = Gson().toJson(serialisedValue)

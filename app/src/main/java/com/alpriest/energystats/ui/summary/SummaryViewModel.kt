@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.summary
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -8,7 +7,7 @@ import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.monthYearString
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.MonthYear
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.SummaryDateRange
@@ -18,7 +17,6 @@ import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.parse
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +48,7 @@ class SummaryTabViewModel(
     val summaryDateRangeStream = MutableStateFlow(configManager.summaryDateRange)
     val hasPVStream = MutableStateFlow(false)
 
-    suspend fun load(context: Context) {
+    suspend fun load() {
         if (approximationsViewModelStream.value != null) {
             return
         }
@@ -64,12 +62,12 @@ class SummaryTabViewModel(
         loadStateStream.value = UiLoadState(LoadState.Inactive)
     }
 
-    fun setDateRange(dateRange: SummaryDateRange, context: Context) {
+    fun setDateRange(dateRange: SummaryDateRange) {
         viewModelScope.launch {
             configManager.summaryDateRange = dateRange
             summaryDateRangeStream.value = dateRange
             approximationsViewModelStream.value = null
-            load(context)
+            load()
         }
     }
 
@@ -93,7 +91,7 @@ class SummaryTabViewModel(
         get() {
             return when (val dateRange = configManager.summaryDateRange) {
                 is SummaryDateRange.Automatic -> "present"
-                is SummaryDateRange.Manual -> "${dateRange.to.monthYear()} (manually selected)"
+                is SummaryDateRange.Manual -> "${dateRange.to.monthYearString()} (manually selected)"
             }
         }
 
@@ -114,7 +112,7 @@ class SummaryTabViewModel(
                 emptyMonth?.let { month ->
                     oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
                         is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).plusMonths(1).monthYearString()
-                        is SummaryDateRange.Manual -> dateRange.from.monthYear()
+                        is SummaryDateRange.Manual -> dateRange.from.monthYearString()
                     }
                     hasFinished = true
                 }
@@ -133,7 +131,7 @@ class SummaryTabViewModel(
         if (oldestDataDate.value.isEmpty()) {
             oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
                 is SummaryDateRange.Automatic -> "Present"
-                is SummaryDateRange.Manual -> dateRange.from.monthYear()
+                is SummaryDateRange.Manual -> dateRange.from.monthYearString()
             }
         }
 
@@ -197,10 +195,10 @@ class SummaryTabViewModel(
                         unit = report.unit,
                         values = report.values.map { reportData ->
                             when {
-                                year == dateRange.from.year && reportData.index < (dateRange.from.month) -> {
+                                year == dateRange.from.year && reportData.index < (dateRange.from.monthValue) -> {
                                     OpenReportResponseData(index = reportData.index, value = 0.0)
                                 }
-                                year == dateRange.to.year && reportData.index > (dateRange.to.month) -> {
+                                year == dateRange.to.year && reportData.index > (dateRange.to.monthValue) -> {
                                     OpenReportResponseData(index = reportData.index, value = 0.0)
                                 }
                                 else -> {
@@ -237,8 +235,4 @@ class SummaryTabViewModel(
             solar = solar
         )
     }
-}
-
-private fun MonthYear.monthYear(): String {
-    return LocalDate.of(year, month, 1).monthYearString()
 }
