@@ -126,15 +126,15 @@ class SummaryView(
             viewModel.load()
         }
 
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(12.dp)
-        ) {
-            when (isLoading) {
-                is LoadState.Active -> LoadingView(isLoading)
-                else -> {
+        when (isLoading) {
+            is LoadState.Active -> LoadingView(isLoading)
+            else -> {
+                Column(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(12.dp)
+                ) {
                     approximations?.let {
                         LoadedView(
                             hasPV = hasPV,
