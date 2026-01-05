@@ -21,9 +21,9 @@ fun HouseView(modifier: Modifier = Modifier, foregroundColor: Color, backgroundC
     Canvas(
         modifier = modifier
     ) {
-        val cornerRadius = 10f
+        val cornerRadius = size.width / 24f
         val roofMargin = 2f
-        val soffitsTop = (size.height * 0.37f) + cornerRadius
+        val soffitsTop = (size.height * 0.4f) + cornerRadius
         val houseMargin = (size.width * 0.1f) + (roofMargin * 2.0f)
         val roofHeight = size.height * 0.33f
 

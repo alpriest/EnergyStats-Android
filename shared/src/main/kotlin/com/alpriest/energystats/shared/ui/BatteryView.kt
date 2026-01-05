@@ -1,12 +1,16 @@
 package com.alpriest.energystats.shared.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun BatteryView(modifier: Modifier = Modifier, foregroundColor: Color, backgroundColor: Color) {
@@ -16,7 +20,7 @@ fun BatteryView(modifier: Modifier = Modifier, foregroundColor: Color, backgroun
         val boxTop = size.height * 0.11f
         val terminalInset = size.width * 0.2f
         val terminalWidth = size.width * 0.2f
-        val barHeight = 8f
+        val barHeight = size.height / 16f
         val halfBarHeight = barHeight / 2f
 
         // Battery
@@ -72,4 +76,29 @@ fun BatteryView(modifier: Modifier = Modifier, foregroundColor: Color, backgroun
             cornerRadius = CornerRadius(2f, 2f)
         )
     }
+}
+
+
+@Preview
+@Composable
+fun BatteryViewPreviewWatch() {
+    BatteryView(
+        modifier = Modifier
+            .height(20.dp)
+            .width(20.dp * 1.25f),
+        Color.Black,
+        Color.White
+    )
+}
+
+@Preview
+@Composable
+fun BatteryViewPreviewPhone() {
+    BatteryView(
+        modifier = Modifier
+            .height(60.dp)
+            .width(60.dp * 1.25f),
+        Color.Black,
+        Color.White
+    )
 }

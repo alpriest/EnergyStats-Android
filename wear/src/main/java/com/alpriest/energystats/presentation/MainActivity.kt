@@ -101,7 +101,7 @@ fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryChargeAmount: D
                 BatteryView(
                     modifier = Modifier
                         .height(30.dp)
-                        .width(30.dp * 1.1f),
+                        .width(30.dp * 1.25f),
                     Color.Black,
                     Color.White
                 )
