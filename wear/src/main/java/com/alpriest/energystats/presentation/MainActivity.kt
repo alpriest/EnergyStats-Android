@@ -35,8 +35,6 @@ import com.alpriest.energystats.shared.ui.SunIconWithThresholds
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
-
         super.onCreate(savedInstanceState)
 
         setTheme(android.R.style.Theme_DeviceDefault)
@@ -58,7 +56,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryChargeAmount: Double, batteryChargeLevel: Double, gridAmount: Double, solarRangeDefinitions: SolarRangeDefinitions) {
+fun WearApp(
+    solarAmount: Double,
+    houseLoadAmount: Double,
+    batteryChargeAmount: Double,
+    batteryChargeLevel: Double,
+    gridAmount: Double,
+    solarRangeDefinitions: SolarRangeDefinitions
+) {
     EnergyStatsTheme {
         val edgePadding = if (isRoundDevice()) 12.dp else 16.dp
         val solarAlign = if (isRoundDevice()) Alignment.TopCenter else Alignment.TopStart
@@ -76,7 +81,9 @@ fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryChargeAmount: D
                 modifier = Modifier.align(solarAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SunIconWithThresholds(solarAmount, iconHeight = 24.dp, solarRangeDefinitions, true)
+                IconWrapper {
+                    SunIconWithThresholds(solarAmount, iconHeight = 24.dp, solarRangeDefinitions, true)
+                }
                 Text(text = solarAmount.kW(2))
             }
 
@@ -84,13 +91,15 @@ fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryChargeAmount: D
                 modifier = Modifier.align(houseAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HouseView(
-                    modifier = Modifier
-                        .height(30.dp)
-                        .width(30.dp * 1.3f),
-                    Color.Black,
-                    Color.White
-                )
+                IconWrapper {
+                    HouseView(
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp * 1.3f),
+                        Color.Black,
+                        Color.White
+                    )
+                }
                 Text(text = houseLoadAmount.kW(2))
             }
 
@@ -98,13 +107,16 @@ fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryChargeAmount: D
                 modifier = Modifier.align(batteryAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                BatteryView(
-                    modifier = Modifier
-                        .height(30.dp)
-                        .width(30.dp * 1.25f),
-                    Color.Black,
-                    Color.White
-                )
+                Text("")
+                IconWrapper {
+                    BatteryView(
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp * 1.25f),
+                        Color.Black,
+                        Color.White
+                    )
+                }
                 Text(text = batteryChargeAmount.kW(2))
                 Text(text = batteryChargeLevel.asPercent())
             }
@@ -113,16 +125,29 @@ fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryChargeAmount: D
                 modifier = Modifier.align(gridAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                PylonView(
-                    modifier = Modifier
-                        .height(30.dp)
-                        .width(30.dp * 1.1f),
-                    color = Color.White,
-                    strokeWidth = 2f
-                )
+                IconWrapper {
+                    PylonView(
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp * 1.1f),
+                        color = Color.White,
+                        strokeWidth = 2f
+                    )
+                }
                 Text(text = gridAmount.kW(2))
+
+                if (!isRoundDevice()) {
+                    Text("")
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun IconWrapper(content: @Composable () -> Unit) {
+    Column(modifier = Modifier.height(35.dp)) {
+        content()
     }
 }
 
