@@ -5,9 +5,10 @@ object SharedDataKeys {
     const val DEVICE_SN = "deviceSN"
 
     // Power flow values
-    const val SOLAR_AMOUNT = "solarAmount"
+    const val SOLAR_GENERATION_AMOUNT = "solarGenerationAmount"
     const val HOUSE_LOAD_AMOUNT = "houseLoadAmount"
-    const val BATTERY_AMOUNT = "batteryAmount"
+    const val BATTERY_CHARGE_LEVEL = "batteryChargeLevel"
+    const val BATTERY_CHARGE_AMOUNT = "batteryChargeAmount"
     const val GRID_AMOUNT = "gridAmount"
 
     // Config / settings

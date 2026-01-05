@@ -18,13 +18,50 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
+
+@Composable
+fun SunIconWithThresholds(amount: Double, iconHeight: Dp, solarRangeDefinitions: SolarRangeDefinitions, isDarkMode: Boolean) {
+    val glowing: Boolean
+    val sunColor: Color
+    var glowColor: Color = Color.Transparent
+    val orange = Color(0xFFF2A53D)
+
+    if (amount >= 0.001f && amount < solarRangeDefinitions.threshold1) {
+        glowing = false
+        sunColor = Sunny
+    } else if (amount >= solarRangeDefinitions.threshold1 && amount < solarRangeDefinitions.threshold2) {
+        glowing = true
+        glowColor = Sunny.copy(alpha = 0.4f)
+        sunColor = Sunny
+    } else if (amount >= solarRangeDefinitions.threshold2 && amount < solarRangeDefinitions.threshold3) {
+        glowing = true
+        glowColor = Sunny.copy(alpha = 0.9f)
+        sunColor = orange
+    } else if (amount >= solarRangeDefinitions.threshold3 && amount < 500f) {
+        glowing = true
+        glowColor = orange
+        sunColor = Color.Red
+    } else {
+        glowing = false
+        sunColor = iconBackgroundColor(isDarkMode)
+        glowColor = Color.Transparent
+    }
+
+    SunIcon(
+        size = iconHeight,
+        color = sunColor,
+        glowColor = if (glowing) glowColor else null,
+        modifier = Modifier.requiredSize(width = iconHeight, height = iconHeight)
+    )
+}
 
 @Composable
 fun SunIcon(
     size: Dp,
     color: Color,
     glowColor: Color? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
     Box(
         modifier = modifier.requiredSize(width = size, height = size)

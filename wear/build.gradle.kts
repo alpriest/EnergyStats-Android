@@ -6,13 +6,13 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 android {
-    namespace = "com.alpriest.energystats.wear"
+    namespace = "com.alpriest.energystats"
     compileSdk {
         version = release(36)
     }
     defaultConfig {
-        applicationId = "com.alpriest.energystats.wear"
-        minSdk = 30
+        applicationId = "com.alpriest.energystats"
+        minSdk = 28
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"

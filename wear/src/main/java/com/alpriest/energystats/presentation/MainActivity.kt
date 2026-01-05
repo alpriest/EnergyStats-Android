@@ -1,4 +1,4 @@
-package com.alpriest.energystats.wear.presentation
+package com.alpriest.energystats.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,12 +26,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.alpriest.energystats.presentation.theme.EnergyStatsTheme
+import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.helpers.kW
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.ui.BatteryView
 import com.alpriest.energystats.shared.ui.HouseView
 import com.alpriest.energystats.shared.ui.PylonView
-import com.alpriest.energystats.shared.ui.SunIcon
-import com.alpriest.energystats.wear.presentation.theme.EnergyStatsTheme
+import com.alpriest.energystats.shared.ui.SunIconWithThresholds
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,23 +46,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             val vm: WearHomeViewModel = viewModel()
             val appContext = LocalContext.current.applicationContext
-            androidx.compose.runtime.LaunchedEffect(Unit) {
+            LaunchedEffect(Unit) {
                 vm.bootstrapFromDataLayer(appContext)
             }
             val state by vm.state.collectAsState()
+            val solarRangeDefinitions = SolarRangeDefinitions(state.threshold1, state.threshold2, state.threshold3)
 
             WearApp(
                 solarAmount = state.solarAmount,
                 houseLoadAmount = state.houseLoadAmount,
-                batteryAmount = state.batteryAmount,
+                batteryChargeAmount = state.batteryChargeAmount,
+                batteryChargeLevel = state.batteryChargeLevel,
                 gridAmount = state.gridAmount,
+                solarRangeDefinitions
             )
         }
     }
 }
 
 @Composable
-fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryAmount: Double, gridAmount: Double) {
+fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryChargeAmount: Double, batteryChargeLevel: Double, gridAmount: Double, solarRangeDefinitions: SolarRangeDefinitions) {
     EnergyStatsTheme {
         val edgePadding = if (isRoundDevice()) 12.dp else 16.dp
         val solarAlign = if (isRoundDevice()) Alignment.TopCenter else Alignment.TopStart
@@ -77,7 +83,7 @@ fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryAmount: Double,
                 modifier = Modifier.align(solarAlign),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SunIcon(size = 24.dp, color = Color.Yellow)
+                SunIconWithThresholds(solarAmount, iconHeight = 24.dp, solarRangeDefinitions, true)
                 Text(text = solarAmount.kW(2))
             }
 
@@ -106,7 +112,8 @@ fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryAmount: Double,
                     Color.Black,
                     Color.White
                 )
-                Text(text = batteryAmount.kW(2))
+                Text(text = batteryChargeAmount.kW(2))
+                Text(text = batteryChargeLevel.asPercent())
             }
 
             Column(
@@ -129,19 +136,19 @@ fun WearApp(solarAmount: Double, houseLoadAmount: Double, batteryAmount: Double,
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreviewRound() {
-    WearApp(1.2, 3.2, 1.0, -1.9)
+    WearApp(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.defaults)
 }
 
 @Preview(device = WearDevices.SQUARE, showSystemUi = true)
 @Composable
 fun DefaultPreviewSquare() {
-    WearApp(1.2, 3.2, 1.0, -1.9)
+    WearApp(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.defaults)
 }
 
 @Preview(device = WearDevices.RECT, showSystemUi = true)
 @Composable
 fun DefaultPreviewRect() {
-    WearApp(1.2, 3.2, 1.0, -1.9)
+    WearApp(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.defaults)
 }
 
 @Composable

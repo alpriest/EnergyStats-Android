@@ -81,4 +81,5 @@ dependencies {
     implementation(libs.rollingnumbers)
     implementation(libs.firebase.perf)
     implementation(project(":shared"))
+    wearApp(project(":wear"))
 }

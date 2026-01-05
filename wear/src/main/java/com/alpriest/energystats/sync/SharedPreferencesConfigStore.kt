@@ -1,4 +1,4 @@
-package com.alpriest.energystats.wear.sync
+package com.alpriest.energystats.sync
 
 import android.content.Context
 import android.content.SharedPreferences

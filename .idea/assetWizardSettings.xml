@@ -79,7 +79,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$USER_HOME$/Desktop/icon.png" />
+                                                <entry key="imagePath" value="$PROJECT_DIR$/app/src/main/res/playstore-icon.png" />
                                                 <entry key="scalingPercent" value="108" />
                                                 <entry key="trimmed" value="true" />
                                               </map>

@@ -42,7 +42,7 @@ import androidx.glance.unit.ColorProvider
 import com.alpriest.energystats.MainActivity
 import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.services.WidgetTapAction
-import com.alpriest.energystats.ui.theme.Sunny
+import com.alpriest.energystats.shared.ui.Sunny
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

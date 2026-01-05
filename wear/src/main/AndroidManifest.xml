@@ -20,7 +20,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.alpriest.energystats.wear.complication.MainComplicationService"
+            android:name="com.alpriest.energystats.complication.MainComplicationService"
             android:exported="true"
             android:label="@string/complication_label"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
@@ -35,19 +35,19 @@
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
                 android:value="0" />
         </service>
-        <service
-            android:name="com.alpriest.energystats.wear.tile.MainTileService"
-            android:exported="true"
-            android:label="@string/tile_label"
-            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
-            <intent-filter>
-                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
-            </intent-filter>
+<!--        <service-->
+<!--            android:name="com.alpriest.energystats.tile.MainTileService"-->
+<!--            android:exported="true"-->
+<!--            android:label="@string/tile_label"-->
+<!--            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />-->
+<!--            </intent-filter>-->
 
-            <meta-data
-                android:name="androidx.wear.tiles.PREVIEW"
-                android:resource="@drawable/tile_preview" />
-        </service>
+<!--            <meta-data-->
+<!--                android:name="androidx.wear.tiles.PREVIEW"-->
+<!--                android:resource="@drawable/tile_preview" />-->
+<!--        </service>-->
 
         <uses-library
             android:name="com.google.android.wearable"

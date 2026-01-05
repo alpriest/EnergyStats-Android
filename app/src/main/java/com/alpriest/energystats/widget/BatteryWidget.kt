@@ -43,9 +43,9 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.alpriest.energystats.MainActivity
 import com.alpriest.energystats.services.WidgetTapAction
+import com.alpriest.energystats.shared.ui.Sunny
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red
-import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

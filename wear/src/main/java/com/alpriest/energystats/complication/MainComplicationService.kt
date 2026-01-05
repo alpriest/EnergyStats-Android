@@ -1,4 +1,4 @@
-package com.alpriest.energystats.wear.complication
+package com.alpriest.energystats.complication
 
 import android.content.ComponentName
 import android.content.Context
@@ -9,8 +9,8 @@ import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
-import com.alpriest.energystats.wear.sync.SharedPreferencesConfigStore
-import com.alpriest.energystats.wear.sync.make
+import com.alpriest.energystats.sync.SharedPreferencesConfigStore
+import com.alpriest.energystats.sync.make
 
 class MainComplicationService : SuspendingComplicationDataSourceService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData? {

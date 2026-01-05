@@ -1,4 +1,4 @@
-package com.alpriest.energystats.wear.tile
+package com.alpriest.energystats.tile
 
 import android.content.Context
 import androidx.wear.protolayout.ColorBuilders.argb

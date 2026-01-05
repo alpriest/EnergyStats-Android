@@ -55,6 +55,7 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.StringPower
+import com.alpriest.energystats.shared.ui.Sunny
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.stores.WidgetDataSharing
@@ -70,7 +71,6 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.templates.Template
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.Sunny
 import com.alpriest.energystats.ui.theme.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 

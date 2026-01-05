@@ -27,14 +27,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.shared.ui.SunIcon
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.ui.Sunny
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.Sunny
 import kotlinx.coroutines.delay
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LoadingView(loadState: LoadState.Active) {
     val context = LocalContext.current
-    LoadingView(context.getString(loadState.titleResId), context.getString(loadState.longOperationTitleResId))
+    LoadingView(stringResource(loadState.titleResId), stringResource(loadState.longOperationTitleResId))
 }
 
 @Composable

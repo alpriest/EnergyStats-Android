@@ -1,4 +1,4 @@
-package com.alpriest.energystats.wear.presentation.theme
+package com.alpriest.energystats.presentation.theme
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.material.MaterialTheme

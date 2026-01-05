@@ -6,12 +6,13 @@ import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
+import com.alpriest.energystats.WatchSyncManager
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.services.Networking
 import com.alpriest.energystats.shared.helpers.truncated
+import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
-import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
@@ -206,6 +207,7 @@ class PowerFlowTabViewModel(
                     network = network,
                     bannerAlertManager
                 )
+                WatchSyncManager().sendWatchStatsData(context, currentViewModel.currentValuesStream, battery)
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
                 lastUpdateTime = currentViewModel.lastUpdate

@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alpriest.energystats.ui.flow.battery.iconBackgroundColor
-import com.alpriest.energystats.ui.flow.battery.iconForegroundColor
+import com.alpriest.energystats.shared.ui.iconBackgroundColor
+import com.alpriest.energystats.shared.ui.iconForegroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow

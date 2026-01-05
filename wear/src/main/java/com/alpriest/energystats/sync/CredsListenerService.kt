@@ -1,9 +1,9 @@
-package com.alpriest.energystats.wear.sync
+package com.alpriest.energystats.sync
 
 import android.content.Context
 import com.alpriest.energystats.shared.models.SharedDataKeys
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
-import com.alpriest.energystats.wear.complication.MainComplicationService
+import com.alpriest.energystats.complication.MainComplicationService
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
