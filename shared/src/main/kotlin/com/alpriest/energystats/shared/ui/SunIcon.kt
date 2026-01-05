@@ -153,7 +153,6 @@ fun SunIcon(
     }
 }
 
-
 @Preview
 @Composable
 fun SunIconPreviewWatch() {
