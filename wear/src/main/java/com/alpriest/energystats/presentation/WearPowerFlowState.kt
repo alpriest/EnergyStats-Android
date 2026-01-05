@@ -1,6 +1,7 @@
 package com.alpriest.energystats.presentation
 
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 
 data class WearPowerFlowState(
     val state: LoadState = LoadState.Inactive,
@@ -9,7 +10,5 @@ data class WearPowerFlowState(
     val batteryChargeLevel: Double,
     val batteryChargeAmount: Double,
     val gridAmount: Double,
-    val threshold1: Double,
-    val threshold2: Double,
-    val threshold3: Double
+    val solarRangeDefinitions: SolarRangeDefinitions
 )

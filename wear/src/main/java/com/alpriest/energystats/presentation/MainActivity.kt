@@ -11,14 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -45,12 +43,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val vm: WearHomeViewModel = viewModel()
-            val appContext = LocalContext.current.applicationContext
-            LaunchedEffect(Unit) {
-                vm.bootstrapFromDataLayer(appContext)
-            }
             val state by vm.state.collectAsState()
-            val solarRangeDefinitions = SolarRangeDefinitions(state.threshold1, state.threshold2, state.threshold3)
 
             WearApp(
                 solarAmount = state.solarAmount,
@@ -58,7 +51,7 @@ class MainActivity : ComponentActivity() {
                 batteryChargeAmount = state.batteryChargeAmount,
                 batteryChargeLevel = state.batteryChargeLevel,
                 gridAmount = state.gridAmount,
-                solarRangeDefinitions
+                state.solarRangeDefinitions
             )
         }
     }
