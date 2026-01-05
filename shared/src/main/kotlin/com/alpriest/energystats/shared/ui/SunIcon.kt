@@ -3,7 +3,9 @@ package com.alpriest.energystats.shared.ui
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,7 +19,9 @@ import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 
 @Composable
@@ -135,13 +139,13 @@ fun SunIcon(
             )
 
             // Sun rays
-            for (degrees in 44 until 360 step 45) {
+            for (degrees in 0 until 359 step 45) {
                 rotate(degrees = degrees.toFloat()) {
                     drawRoundRect(
                         color = color,
                         size = Size(width = sunBarLength, height = sunBarWidth),
-                        topLeft = center.minus(Offset(x = sunBarOffsetX, y = 5f)),
-                        cornerRadius = CornerRadius(x = 4f, y = 4f)
+                        topLeft = center.minus(Offset(x = sunBarOffsetX, y = sunBarWidth / 2f)),
+                        cornerRadius = CornerRadius(x = 2f, y = 2f)
                     )
                 }
             }
@@ -149,3 +153,27 @@ fun SunIcon(
     }
 }
 
+
+@Preview
+@Composable
+fun SunIconPreviewWatch() {
+    SunIcon(
+        size = 20.dp,
+        Color.Yellow,
+        modifier = Modifier
+            .height(30.dp)
+            .width(30.dp * 1.3f),
+    )
+}
+
+@Preview
+@Composable
+fun SunIconPreviewPhone() {
+    SunIcon(
+        size = 60.dp,
+        Color.Yellow,
+        modifier = Modifier
+            .height(60.dp)
+            .width(60.dp * 1.3f),
+    )
+}
