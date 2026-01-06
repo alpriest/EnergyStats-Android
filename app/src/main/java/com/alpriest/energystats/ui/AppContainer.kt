@@ -33,7 +33,7 @@ import com.alpriest.energystats.ui.login.UserManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.Solcast

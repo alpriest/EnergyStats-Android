@@ -21,7 +21,7 @@ import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.power
 import com.alpriest.energystats.shared.models.TotalYieldModel
-import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import kotlinx.coroutines.flow.MutableStateFlow

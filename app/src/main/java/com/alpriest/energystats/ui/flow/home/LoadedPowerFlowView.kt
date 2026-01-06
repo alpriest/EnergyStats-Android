@@ -58,7 +58,7 @@ import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
 import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.TotalYieldModel
-import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText

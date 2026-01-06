@@ -17,7 +17,7 @@ import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
-import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.ui.summary.MonthYear
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.google.gson.Gson

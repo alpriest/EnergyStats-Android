@@ -27,4 +27,7 @@
     <string name="auto">Auto</string>
     <string name="light">Light</string>
     <string name="dark">Dark</string>
+    <string name="ct2displaymode_hidden">Hidden</string>
+    <string name="ct2displaymode_separate_icon">Separate icon</string>
+    <string name="ct2displaymode_as_power_string">As power string</string>
 </resources>

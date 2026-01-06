@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.settings.inverter
 
-import android.content.Context
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
@@ -29,24 +29,6 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-
-enum class CT2DisplayMode(val value: Int) {
-    Hidden(0),
-    SeparateIcon(1),
-    AsPowerString(2);
-
-    fun title(context: Context): String {
-        return when (this) {
-            Hidden -> context.getString(R.string.ct2displaymode_hidden)
-            SeparateIcon -> context.getString(R.string.ct2displaymode_separate_icon)
-            AsPowerString -> context.getString(R.string.ct2displaymode_as_power_string)
-        }
-    }
-
-    companion object {
-        fun fromInt(value: Int) = CT2DisplayMode.values().firstOrNull { it.value == value } ?: Hidden
-    }
-}
 
 @Composable
 fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostController, network: Networking, modifier: Modifier) {

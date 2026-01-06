@@ -27,4 +27,7 @@
     <string name="auto">Automatico</string>
     <string name="light">chiaro</string>
     <string name="dark">scuro</string>
+    <string name="ct2displaymode_hidden">Nascosto</string>
+    <string name="ct2displaymode_separate_icon">Icona separata</string>
+    <string name="ct2displaymode_as_power_string">Come stringa di potenza</string>
 </resources>

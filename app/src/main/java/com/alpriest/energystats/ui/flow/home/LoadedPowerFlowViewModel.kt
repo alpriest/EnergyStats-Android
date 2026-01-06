@@ -23,7 +23,7 @@ import com.alpriest.energystats.ui.flow.TotalsViewModel
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.models.TotalYieldModel
-import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine

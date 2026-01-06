@@ -27,4 +27,7 @@
     <string name="auto">Auto</string>
     <string name="light">hell</string>
     <string name="dark">dunkel</string>
+    <string name="ct2displaymode_hidden">Aus</string>
+    <string name="ct2displaymode_separate_icon">Separates Symbol</string>
+    <string name="ct2displaymode_as_power_string">Im String</string>
 </resources>
