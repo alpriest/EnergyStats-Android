@@ -13,7 +13,7 @@ import com.alpriest.energystats.shared.models.StoredConfig
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
-import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.ui.settings.RefreshFrequency
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode

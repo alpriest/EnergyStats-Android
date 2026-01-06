@@ -18,7 +18,7 @@ import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.roundedToString
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
-import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.ui.settings.RefreshFrequency

@@ -24,4 +24,7 @@
     <string name="kilowatts">Kilovatios</string>
     <string name="watts">Vatios</string>
     <string name="adaptive">Adaptativo</string>
+    <string name="auto">Auto</string>
+    <string name="light">claro</string>
+    <string name="dark">oscuro</string>
 </resources>

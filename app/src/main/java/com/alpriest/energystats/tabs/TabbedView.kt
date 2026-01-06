@@ -38,7 +38,7 @@ import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.ui.login.ConfigManager
-import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.AppTheme

@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.HowToObtainAPIKeyView
 import com.alpriest.energystats.ui.theme.AppTheme

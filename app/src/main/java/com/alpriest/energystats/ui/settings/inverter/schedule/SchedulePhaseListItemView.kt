@@ -23,7 +23,7 @@ import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
 import com.alpriest.energystats.shared.models.TimeType
 import com.alpriest.energystats.shared.models.WorkModes
-import com.alpriest.energystats.ui.settings.ColorThemeMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable

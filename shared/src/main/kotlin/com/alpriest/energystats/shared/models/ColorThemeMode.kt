@@ -1,7 +1,7 @@
-package com.alpriest.energystats.ui.settings
+package com.alpriest.energystats.shared.models
 
 import android.content.Context
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 
 enum class ColorThemeMode(val value: Int) {
     Auto(0),
@@ -17,6 +17,6 @@ enum class ColorThemeMode(val value: Int) {
     }
 
     companion object {
-        fun fromInt(value: Int) = ColorThemeMode.values().firstOrNull { it.value == value } ?: Auto
+        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: Auto
     }
 }
