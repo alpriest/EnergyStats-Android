@@ -42,7 +42,7 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.alpriest.energystats.MainActivity
-import com.alpriest.energystats.services.WidgetTapAction
+import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.ui.Sunny
 import com.alpriest.energystats.ui.theme.Green
 import com.alpriest.energystats.ui.theme.Red

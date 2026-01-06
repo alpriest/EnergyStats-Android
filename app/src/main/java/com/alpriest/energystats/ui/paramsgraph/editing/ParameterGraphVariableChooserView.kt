@@ -41,7 +41,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumn

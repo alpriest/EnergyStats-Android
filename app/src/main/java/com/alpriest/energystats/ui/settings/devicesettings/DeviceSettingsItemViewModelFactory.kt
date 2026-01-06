@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 
 class DeviceSettingsItemViewModelFactory(
     private val configManager: ConfigManaging,

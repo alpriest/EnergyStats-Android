@@ -10,11 +10,11 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.WearableApiAvailability
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
 import com.alpriest.energystats.shared.models.SharedDataKeys
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog

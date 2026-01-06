@@ -3,6 +3,7 @@
 package com.alpriest.energystats.ui.flow.home
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -36,11 +37,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.BatteryViewModel
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.StringPower
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.models.TotalYieldModel
+import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.ui.flow.CurrentValues
@@ -56,13 +62,8 @@ import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
 import com.alpriest.energystats.ui.flow.preview
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.TotalYieldModel
-import com.alpriest.energystats.shared.models.CT2DisplayMode
-import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -323,14 +324,17 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: MutableStateFlo
 @Preview(showBackground = true, widthDp = 380, heightDp = 640)
 @Composable
 fun SummaryPowerFlowViewPreview() {
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
+
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         LoadedPowerFlowView(
             FakeConfigManager(),
             PowerFlowTabViewModel(
+                application,
                 DemoNetworking(),
                 FakeConfigManager(),
                 MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)),
-                LocalContext.current,
                 WidgetDataSharer.preview(),
                 BannerAlertManager()
             ),

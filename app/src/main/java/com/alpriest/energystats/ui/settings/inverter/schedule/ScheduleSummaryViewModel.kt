@@ -14,8 +14,8 @@ import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.network.FoxServerError
-import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.models.DeviceCapability
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState

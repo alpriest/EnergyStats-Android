@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState

@@ -17,7 +17,7 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 

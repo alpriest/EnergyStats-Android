@@ -3,7 +3,7 @@ package com.alpriest.energystats.stores
 import com.alpriest.energystats.preview.FakeStoredConfigStore
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.GenerationViewData
-import com.alpriest.energystats.shared.models.StoredConfig
+import com.alpriest.energystats.shared.config.StoredConfig
 
 interface WidgetDataSharing {
     var batteryData: BatteryData?

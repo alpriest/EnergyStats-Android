@@ -9,19 +9,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-
-enum class RefreshFrequency(val value: Int) {
-    OneMinute(1),
-    FiveMinutes(5),
-    Auto(0);
-
-    companion object {
-        fun fromInt(value: Int) = values().firstOrNull { it.value == value } ?: Auto
-    }
-}
 
 @Composable
 fun RefreshFrequencySettingsView(config: ConfigManaging) {
@@ -31,7 +22,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
         SettingsSegmentedControl(
             title = stringResource(R.string.refresh_frequency),
             segmentedControl = {
-                val items = RefreshFrequency.values()
+                val items = RefreshFrequency.entries.toTypedArray()
 
                 val itemTitles = listOf(
                     stringResource(R.string._1_min),

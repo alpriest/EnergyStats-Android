@@ -2,7 +2,7 @@
 
 package com.alpriest.energystats.ui.flow
 
-import android.content.Context
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -56,7 +56,7 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.ui.Sunny
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.tabs.TopBarSettings
@@ -75,16 +75,16 @@ import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class PowerFlowTabViewModelFactory(
+    private val application: Application,
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
-    private val context: Context,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PowerFlowTabViewModel(network, configManager, themeStream, context, widgetDataSharer, bannerAlertManager) as T
+        return PowerFlowTabViewModel(application, network, configManager, themeStream, widgetDataSharer, bannerAlertManager) as T
     }
 }
 
@@ -98,6 +98,7 @@ fun Modifier.conditional(condition: Boolean, modifier: @Composable Modifier.() -
 }
 
 class PowerFlowTabView(
+    private val application: Application,
     private val topBarSettings: MutableState<TopBarSettings>,
     private val network: Networking,
     private val configManager: ConfigManaging,
@@ -122,7 +123,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(network, configManager, this.themeStream, LocalContext.current, widgetDataSharer, bannerAlertManager)
+            factory = PowerFlowTabViewModelFactory(application, network, configManager, this.themeStream, widgetDataSharer, bannerAlertManager)
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -243,11 +244,14 @@ fun LoadedView(
 @Preview(showBackground = true, heightDp = 700)
 @Composable
 fun PowerFlowTabViewPreview() {
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
+
     val powerFlowTabViewModel = PowerFlowTabViewModel(
+        application,
         DemoNetworking(),
         FakeConfigManager(),
         MutableStateFlow(AppTheme.demo()),
-        LocalContext.current,
         WidgetDataSharer.preview(),
         BannerAlertManager()
     )

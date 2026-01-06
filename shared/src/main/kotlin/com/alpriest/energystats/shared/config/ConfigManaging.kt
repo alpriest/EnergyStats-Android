@@ -1,28 +1,26 @@
-package com.alpriest.energystats.stores
+package com.alpriest.energystats.shared.config
 
-import com.alpriest.energystats.models.DeviceCapability
-import com.alpriest.energystats.services.WidgetTapAction
-import com.alpriest.energystats.shared.models.BatteryConfig
-import com.alpriest.energystats.shared.models.CurrentStatusCalculatorConfig
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.DeviceCapability
+import com.alpriest.energystats.shared.models.DisplayUnit
+import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
 import com.alpriest.energystats.shared.models.SummaryDateRange
-import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.models.WorkMode
-import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.DataCeiling
-import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.ui.settings.RefreshFrequency
-import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.TotalYieldModel
-import com.alpriest.energystats.ui.settings.financial.EarningsModel
-import com.alpriest.energystats.shared.models.CT2DisplayMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.Variable
+import com.alpriest.energystats.shared.models.WidgetTapAction
+import com.alpriest.energystats.shared.models.WorkMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 
@@ -98,4 +96,3 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
 interface ScheduleTemplateConfigManager {
     var scheduleTemplates: List<ScheduleTemplate>
 }
-

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.network.FoxAPIService
@@ -85,6 +86,12 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
                 "batTemperature_2"
             )
         )
+
+        val device = Device(deviceSN, true, null, "", true,"", null, "")
+//        val currentStatusCalculator = CurrentStatusCalculator(device: device,
+//        response: reals,
+//        config: config)
+
     }
 
     val networking: Networking by lazy {

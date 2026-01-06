@@ -8,7 +8,7 @@ import com.alpriest.energystats.helpers.fullDateTime
 import com.alpriest.energystats.shared.models.network.SolcastFailure
 import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
 import com.alpriest.energystats.shared.models.network.toHalfHourOfDay
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.shared.models.AppTheme

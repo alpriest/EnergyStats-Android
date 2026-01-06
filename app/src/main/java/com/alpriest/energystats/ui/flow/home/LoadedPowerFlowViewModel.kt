@@ -14,7 +14,7 @@ import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.network.currentData
 import com.alpriest.energystats.shared.network.FoxServerError
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.flow.CurrentValues
 import com.alpriest.energystats.ui.flow.EarningsViewModel

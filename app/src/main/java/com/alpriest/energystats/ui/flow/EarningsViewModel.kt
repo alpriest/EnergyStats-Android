@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.CalculationBreakdown
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
-import com.alpriest.energystats.ui.settings.financial.EarningsModel
+import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.AppTheme
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow

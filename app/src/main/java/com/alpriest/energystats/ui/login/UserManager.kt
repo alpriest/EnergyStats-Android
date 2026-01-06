@@ -5,7 +5,7 @@ import androidx.annotation.UiThread
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.network.BadCredentialsException
 import com.alpriest.energystats.shared.network.InvalidTokenException
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.models.demo

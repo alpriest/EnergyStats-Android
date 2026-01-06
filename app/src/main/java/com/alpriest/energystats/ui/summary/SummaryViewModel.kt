@@ -15,7 +15,7 @@ import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponseData
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.parse
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel

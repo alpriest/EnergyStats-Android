@@ -1,14 +1,14 @@
 package com.alpriest.energystats.tabs
 
 import android.net.Uri
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.shared.models.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class TabbedViewDependencies(

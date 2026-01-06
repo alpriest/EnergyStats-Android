@@ -49,7 +49,7 @@ import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.battery.asTemperature

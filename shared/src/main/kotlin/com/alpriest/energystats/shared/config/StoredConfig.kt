@@ -1,5 +1,15 @@
-package com.alpriest.energystats.shared.models
+package com.alpriest.energystats.shared.config
 
+import com.alpriest.energystats.shared.models.BatteryData
+import com.alpriest.energystats.shared.models.GenerationViewData
+import com.alpriest.energystats.shared.models.ParameterGroup
+import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
+import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
+import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.SummaryDateRange
+import com.alpriest.energystats.shared.models.Variable
 import java.time.LocalDateTime
 
 interface StoredConfig: CurrentStatusCalculatorConfig {

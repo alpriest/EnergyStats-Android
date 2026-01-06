@@ -2,8 +2,8 @@ package com.alpriest.energystats.ui.flow.battery
 
 import androidx.lifecycle.ViewModel
 import com.alpriest.energystats.models.BatteryTemperatures
-import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 
 class BatteryPowerViewModel(
     private val configManager: ConfigManaging,

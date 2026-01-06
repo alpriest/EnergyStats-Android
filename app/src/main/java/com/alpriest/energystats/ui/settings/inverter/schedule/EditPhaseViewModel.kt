@@ -11,7 +11,7 @@ import com.alpriest.energystats.shared.models.SchedulePhase
 import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.models.WorkModes
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

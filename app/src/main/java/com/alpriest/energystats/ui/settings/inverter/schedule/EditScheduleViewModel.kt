@@ -10,8 +10,8 @@ import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.WorkMode
-import com.alpriest.energystats.stores.ConfigManaging
-import com.alpriest.energystats.models.DeviceCapability
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState

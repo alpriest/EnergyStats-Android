@@ -30,4 +30,9 @@
     <string name="ct2displaymode_hidden">Hidden</string>
     <string name="ct2displaymode_separate_icon">Separate icon</string>
     <string name="ct2displaymode_as_power_string">As power string</string>
+    <string name="launch">Launch</string>
+    <string name="refresh">Refresh</string>
+    <string name="automatic">Automatic</string>
+    <string name="battery1">1</string>
+    <string name="battery2">2</string>
 </resources>

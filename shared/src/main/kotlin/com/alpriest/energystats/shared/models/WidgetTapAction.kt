@@ -1,7 +1,7 @@
-package com.alpriest.energystats.services
+package com.alpriest.energystats.shared.models
 
 import android.content.Context
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 
 enum class WidgetTapAction(val value: Int) {
     Launch(0),

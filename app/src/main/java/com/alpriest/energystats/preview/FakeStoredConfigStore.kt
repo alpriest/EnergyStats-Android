@@ -1,6 +1,6 @@
 package com.alpriest.energystats.preview
 
-import com.alpriest.energystats.services.WidgetTapAction
+import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.GenerationViewData
 import com.alpriest.energystats.shared.models.ParameterGroup
@@ -9,16 +9,16 @@ import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
-import com.alpriest.energystats.shared.models.StoredConfig
+import com.alpriest.energystats.shared.config.StoredConfig
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
-import com.alpriest.energystats.ui.settings.RefreshFrequency
+import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.TotalYieldModel
-import com.alpriest.energystats.ui.settings.financial.EarningsModel
+import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import java.time.LocalDateTime
 

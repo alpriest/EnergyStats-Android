@@ -20,7 +20,7 @@ import com.alpriest.energystats.shared.network.NetworkService
 import com.alpriest.energystats.shared.network.NetworkValueCleaner
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.RequestData
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.stores.SharedPreferencesCredentialStore

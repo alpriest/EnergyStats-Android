@@ -30,9 +30,10 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -41,16 +42,6 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import java.text.NumberFormat
 import java.text.ParseException
 import java.util.Locale
-
-enum class EarningsModel(val value: Int) {
-    Exported(0),
-    Generated(1),
-    CT2(2);
-
-    companion object {
-        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: Exported
-    }
-}
 
 @Composable
 fun FinancialsSettingsView(config: ConfigManaging) {

@@ -1,7 +1,9 @@
 package com.alpriest.energystats.tabs
 
+import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.platform.LocalContext
 import com.alpriest.energystats.ui.flow.PowerFlowTabView
 import com.alpriest.energystats.ui.paramsgraph.NavigableParametersGraphTabView
 import com.alpriest.energystats.ui.settings.NavigableSettingsView
@@ -11,9 +13,12 @@ import com.alpriest.energystats.ui.summary.SummaryView
 @Composable
 fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSettings: MutableState<TopBarSettings>) {
     ConfigureStatusBarColours(page, dependencies.themeStream)
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
 
     when (page) {
         0 -> PowerFlowTabView(
+            application,
             topBarSettings,
             dependencies.network,
             dependencies.configManager,

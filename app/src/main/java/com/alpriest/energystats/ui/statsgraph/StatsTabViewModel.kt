@@ -15,9 +15,8 @@ import com.alpriest.energystats.helpers.isSameDay
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.ValueUsage
-import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.stores.ConfigManaging
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.shared.models.LoadState
@@ -29,6 +28,7 @@ import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.network.parseToLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
