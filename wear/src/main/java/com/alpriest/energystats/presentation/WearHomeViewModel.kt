@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.Instant
+import java.time.LocalDate
 
 class WearHomeViewModel(application: Application) : AndroidViewModel(application) {
     val store = SharedPreferencesConfigStore.make(application)
@@ -39,25 +40,28 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
     private val _state = MutableStateFlow(
         WearPowerFlowState(
             LoadState.Inactive,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            SolarRangeDefinitions.defaults
+            LocalDate.now(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            SolarRangeDefinitions.defaults,
+            null,
+            null
         )
     )
     val state: StateFlow<WearPowerFlowState> = _state.asStateFlow()
 
     init {
-        // Bind to the store
+        // Bind to the store values
         viewModelScope.launch {
             store.updatesFlow().collect { snapshot ->
                 _state.value = _state.value.copy(
                     solarAmount = snapshot.solarGenerationAmount,
                     houseLoadAmount = snapshot.houseLoadAmount,
-                    batteryChargeLevel = snapshot.batteryChargeLevel,
-                    batteryChargeAmount = snapshot.batteryChargeAmount,
+                    batteryChargePower = snapshot.batteryChargeLevel,
+                    batterySOC = snapshot.batteryChargeAmount,
                     gridAmount = snapshot.gridAmount,
                     solarRangeDefinitions = snapshot.solarRangeDefinitions,
                 )
@@ -117,7 +121,16 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
         val batteryViewModel = BatteryViewModel.make(device, reals)
         val totals = loadTotals(config, device)
 
-            // Assign state
+        _state.value = _state.value.copy(
+            solarAmount = values.solarPower,
+            houseLoadAmount = values.homeConsumption,
+            batteryChargePower = batteryViewModel.chargePower,
+            batterySOC = batteryViewModel.chargeLevel,
+            gridAmount = values.grid,
+            lastUpdated = LocalDate.now(),
+            totalImport = totals?.loads ?: 0.0,
+            totalExport = totals?.grid ?: 0.0
+        )
     }
 
     suspend fun loadTotals(config: WearConfig, device: Device): TotalsViewModel? {
