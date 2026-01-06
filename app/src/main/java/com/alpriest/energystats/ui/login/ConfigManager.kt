@@ -1,34 +1,34 @@
 package com.alpriest.energystats.ui.login
 
-import com.alpriest.energystats.shared.models.DeviceCapability
-import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.models.WidgetTapAction
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.config.StoredConfig
+import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.models.Battery
+import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.DeviceCapability
+import com.alpriest.energystats.shared.models.DisplayUnit
+import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
-import com.alpriest.energystats.shared.config.StoredConfig
 import com.alpriest.energystats.shared.models.SummaryDateRange
-import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.network.InvalidTokenException
-import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.flow.roundedToString
-import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.DataCeiling
-import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.shared.models.RefreshFrequency
-import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.TotalYieldModel
-import com.alpriest.energystats.shared.models.EarningsModel
-import com.alpriest.energystats.shared.models.CT2DisplayMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.Variable
+import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.models.toAppTheme
+import com.alpriest.energystats.shared.network.InvalidTokenException
+import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.ui.flow.roundedToString
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
@@ -590,11 +590,11 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
             themeStream.value = themeStream.value.copy(showStringTotalsAsPercentage = showStringTotalsAsPercentage)
         }
 
-    override var allowNegativeHouseLoad: Boolean
-        get() = config.allowNegativeHouseLoad
+    override var allowNegativeLoad: Boolean
+        get() = config.allowNegativeLoad
         set(value) {
-            config.allowNegativeHouseLoad = value
-            themeStream.value = themeStream.value.copy(allowNegativeHouseLoad = allowNegativeHouseLoad)
+            config.allowNegativeLoad = value
+            themeStream.value = themeStream.value.copy(allowNegativeLoad = allowNegativeLoad)
         }
 
     override var showInverterConsumption: Boolean

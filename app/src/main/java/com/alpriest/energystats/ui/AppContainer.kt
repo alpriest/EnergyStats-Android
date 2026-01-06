@@ -10,7 +10,12 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.network.FoxAPIService
@@ -20,7 +25,6 @@ import com.alpriest.energystats.shared.network.NetworkService
 import com.alpriest.energystats.shared.network.NetworkValueCleaner
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.RequestData
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.stores.SharedPreferencesConfigStore
 import com.alpriest.energystats.stores.SharedPreferencesCredentialStore
@@ -31,16 +35,12 @@ import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManager
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.Solcast
 import com.alpriest.energystats.ui.settings.solcast.SolcastCache
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
-import com.alpriest.energystats.shared.models.AppTheme
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
@@ -107,7 +107,7 @@ class AppContainer(private val context: Context) {
             detectedActiveTemplate = null,
             showInverterConsumption = config.showInverterConsumption,
             showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats,
-            allowNegativeHouseLoad = config.allowNegativeHouseLoad
+            allowNegativeLoad = config.allowNegativeLoad
         )
     )
 

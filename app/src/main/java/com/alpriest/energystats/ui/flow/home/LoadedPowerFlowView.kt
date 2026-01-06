@@ -49,7 +49,7 @@ import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.ui.flow.BannerAlertManager
-import com.alpriest.energystats.ui.flow.CurrentValues
+import com.alpriest.energystats.shared.services.CurrentValues
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition

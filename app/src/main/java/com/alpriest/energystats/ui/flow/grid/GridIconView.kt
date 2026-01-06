@@ -26,7 +26,7 @@ import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.ui.PylonView
 import com.alpriest.energystats.ui.flow.BannerAlertManager
-import com.alpriest.energystats.ui.flow.CurrentValues
+import com.alpriest.energystats.shared.services.CurrentValues
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel

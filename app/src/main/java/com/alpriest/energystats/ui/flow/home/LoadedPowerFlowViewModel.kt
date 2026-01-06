@@ -16,7 +16,7 @@ import com.alpriest.energystats.shared.models.network.currentData
 import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
-import com.alpriest.energystats.ui.flow.CurrentValues
+import com.alpriest.energystats.shared.services.CurrentValues
 import com.alpriest.energystats.ui.flow.EarningsViewModel
 import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.TotalsViewModel
@@ -24,15 +24,11 @@ import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.InverterTemperatures
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-
-data class InverterTemperatures(
-    val ambient: Double,
-    val inverter: Double
-)
 
 class LoadedPowerFlowViewModel(
     val context: Context,

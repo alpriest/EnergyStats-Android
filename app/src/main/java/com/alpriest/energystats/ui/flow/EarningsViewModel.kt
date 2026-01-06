@@ -1,4 +1,4 @@
-    package com.alpriest.energystats.ui.flow
+package com.alpriest.energystats.ui.flow
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,7 @@ import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.lang.Double.max
 
-    @Composable
+@Composable
 fun SubLabelledView(value: String, label: String, alignment: Alignment.Horizontal) {
     Column(
         horizontalAlignment = alignment,

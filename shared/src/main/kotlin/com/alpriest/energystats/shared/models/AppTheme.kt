@@ -46,7 +46,7 @@ data class AppTheme(
     val detectedActiveTemplate: String?,
     val showInverterConsumption: Boolean,
     val showBatterySOCOnDailyStats: Boolean,
-    val allowNegativeHouseLoad: Boolean
+    val allowNegativeLoad: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -158,7 +158,7 @@ fun AppTheme.Companion.demo(
         detectedActiveTemplate = detectedActiveTemplate,
         showInverterConsumption = showInverterConsumption,
         showBatterySOCOnDailyStats = showBatterySOCOnDailyStats,
-        allowNegativeHouseLoad = allowNegativeHouseLoad
+        allowNegativeLoad = allowNegativeHouseLoad
     )
 }
 
@@ -203,6 +203,6 @@ fun AppTheme.Companion.toAppTheme(config: StoredConfig): AppTheme {
         detectedActiveTemplate = null,
         showInverterConsumption = config.showInverterConsumption,
         showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats,
-        allowNegativeHouseLoad = config.allowNegativeHouseLoad
+        allowNegativeLoad = config.allowNegativeLoad
     )
 }

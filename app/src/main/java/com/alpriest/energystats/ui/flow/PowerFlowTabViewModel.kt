@@ -16,6 +16,7 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.shared.services.CurrentStatusCalculator
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState

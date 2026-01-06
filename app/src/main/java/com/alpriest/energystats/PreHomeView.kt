@@ -19,7 +19,7 @@ import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.AppContainer
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.flow.CurrentValues
+import com.alpriest.energystats.shared.services.CurrentValues
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.google.android.gms.wearable.DataMap

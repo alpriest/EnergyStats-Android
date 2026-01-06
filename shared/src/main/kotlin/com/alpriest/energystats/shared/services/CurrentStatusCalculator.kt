@@ -1,12 +1,12 @@
-package com.alpriest.energystats.ui.flow
+package com.alpriest.energystats.shared.services
 
-import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.config.CurrentStatusCalculatorConfig
 import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.InverterTemperatures
 import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.models.network.currentValue
 import com.alpriest.energystats.shared.network.parseToLocalDateTime
-import com.alpriest.energystats.ui.flow.home.InverterTemperatures
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +27,7 @@ data class CurrentValues(
 class CurrentStatusCalculator(
     val response: OpenRealQueryResponse,
     val device: Device,
-    val config: ConfigManaging,
+    val config: CurrentStatusCalculatorConfig,
     coroutineScope: CoroutineScope
 ) {
     private val _currentValuesStream =
@@ -89,7 +89,7 @@ class CurrentStatusCalculator(
     private fun calculateLoadsPower(status: CurrentRawValues, shouldCombineCT2WithLoadsPower: Boolean): Double {
         val actual = status.gridConsumptionPower + status.generationPower - status.feedinPower + (if (shouldCombineCT2WithLoadsPower) abs(status.meterPower2) else 0.0)
 
-        return if (config.allowNegativeHouseLoad) actual else abs(actual)
+        return if (config.allowNegativeLoad) actual else abs(actual)
     }
 
     private fun calculateSolarPower(hasPV: Boolean, status: CurrentRawValues, shouldInvertCT2: Boolean, shouldCombineCT2WithPVPower: Boolean): Double {

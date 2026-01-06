@@ -43,7 +43,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val showInverterScheduleQuickLinkState = rememberSaveable { mutableStateOf(configManager.showInverterScheduleQuickLink) }
     val ct2DisplayModeState = rememberSaveable { mutableStateOf(configManager.ct2DisplayMode) }
     val showInverterConsumptionState = rememberSaveable { mutableStateOf(configManager.showInverterConsumption) }
-    val allowNegativeHouseLoadState = rememberSaveable { mutableStateOf(configManager.allowNegativeHouseLoad) }
+    val allowNegativeLoadState = rememberSaveable { mutableStateOf(configManager.allowNegativeLoad) }
     val context = LocalContext.current
 
     trackScreenView("Inverter", "InverterSettingsView")
@@ -113,8 +113,8 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 
                 SettingsCheckbox(
                     title = "Allow negative house load",
-                    state = allowNegativeHouseLoadState,
-                    onUpdate = { configManager.allowNegativeHouseLoad = it }
+                    state = allowNegativeLoadState,
+                    onUpdate = { configManager.allowNegativeLoad = it }
                 )
             }
 

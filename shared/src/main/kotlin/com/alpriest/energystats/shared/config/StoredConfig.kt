@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.config
 
+import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.GenerationViewData
 import com.alpriest.energystats.shared.models.ParameterGroup
@@ -10,9 +11,10 @@ import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.Variable
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 
-interface StoredConfig: CurrentStatusCalculatorConfig {
+interface StoredConfig {
     var batteryData: BatteryData?
     var workModes: List<String>
     var fetchSolcastOnAppLaunch: Boolean
@@ -71,17 +73,23 @@ interface StoredConfig: CurrentStatusCalculatorConfig {
     var showBatterySOCOnDailyStats: Boolean
     var showUsableBatteryOnly: Boolean
     var showGridTotals: Boolean
+    var shouldInvertCT2: Boolean
+    var shouldCombineCT2WithPVPower: Boolean
+    var powerFlowStrings: PowerFlowStringsSettings
+    var shouldCombineCT2WithLoadsPower: Boolean
+    var allowNegativeLoad: Boolean
 
     fun clearDisplaySettings()
     fun clearDeviceSettings()
 }
 
 interface CurrentStatusCalculatorConfig {
+    val themeStream: MutableStateFlow<AppTheme>
     var shouldInvertCT2: Boolean
     var shouldCombineCT2WithPVPower: Boolean
     var powerFlowStrings: PowerFlowStringsSettings
     var shouldCombineCT2WithLoadsPower: Boolean
-    var allowNegativeHouseLoad: Boolean
+    var allowNegativeLoad: Boolean
 }
 
 interface BatteryConfig {

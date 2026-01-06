@@ -72,6 +72,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.templates.Template
 import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.services.CurrentValues
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class PowerFlowTabViewModelFactory(

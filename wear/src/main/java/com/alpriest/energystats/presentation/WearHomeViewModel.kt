@@ -14,6 +14,7 @@ import com.alpriest.energystats.shared.network.NetworkService
 import com.alpriest.energystats.shared.network.NetworkValueCleaner
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.RequestData
+import com.alpriest.energystats.shared.services.CurrentStatusCalculator
 import com.alpriest.energystats.sync.SharedPreferencesConfigStore
 import com.alpriest.energystats.sync.make
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -87,10 +88,13 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
             )
         )
 
-        val device = Device(deviceSN, true, null, "", true,"", null, "")
-//        val currentStatusCalculator = CurrentStatusCalculator(device: device,
-//        response: reals,
-//        config: config)
+        val device = Device(deviceSN, true, null, "", true, "", null, "")
+        val currentStatusCalculator = CurrentStatusCalculator(
+            reals,
+            device,
+            config,
+            viewModelScope
+        )
 
     }
 

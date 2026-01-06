@@ -744,7 +744,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var allowNegativeHouseLoad: Boolean
+    override var allowNegativeLoad: Boolean
         get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, false)
         set(value) {
             sharedPreferences.edit {
