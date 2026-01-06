@@ -9,6 +9,7 @@ import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.sync.SharedPreferencesConfigStore
 import com.alpriest.energystats.sync.make
 
@@ -34,7 +35,7 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
         val configStore = SharedPreferencesConfigStore.make(this)
-        return createComplicationData(configStore.batteryCapacity ?: "n/a", "ABCDEF")
+        return createComplicationData(configStore.batteryChargeLevel.asPercent(), configStore.batteryChargeLevel.asPercent() + " battery charge level")
     }
 
     private fun createComplicationData(text: String, contentDescription: String) =
