@@ -14,8 +14,8 @@ android {
         applicationId = "com.alpriest.energystats"
         minSdk = 28
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = ("36" + "01" + providers.gradleProperty("VERSION_CODE").get()).toInt()
+        versionName = providers.gradleProperty("VERSION_NAME").get()
     }
     buildTypes {
         release {

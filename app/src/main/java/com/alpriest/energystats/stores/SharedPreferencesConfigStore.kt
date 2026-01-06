@@ -585,12 +585,12 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
                 var fromLocalDate: LocalDate
                 var toLocalDate: LocalDate
 
-                if (from.year == 0) {
+                if (from.year == 0 || from.month == 0) {
                     fromLocalDate = LocalDate.now()
                 } else {
                     fromLocalDate = LocalDate.of(from.year, from.month, 1)
                 }
-                if (to.year == 0) {
+                if (to.year == 0 || to.month == 0) {
                     toLocalDate = LocalDate.now()
                 } else {
                     toLocalDate = LocalDate.of(to.year, to.month, 1)
