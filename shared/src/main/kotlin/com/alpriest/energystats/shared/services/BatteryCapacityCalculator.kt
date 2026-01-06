@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.services
 
+import android.content.Context
 import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.helpers.truncated
 import kotlin.math.abs
@@ -8,7 +9,22 @@ import kotlin.math.roundToInt
 data class BatteryCapacityEstimate(
     val stringId: Int,
     val duration: Int
-)
+) {
+    fun batteryPercentageRemainingDuration(context: Context): String {
+        val text = context.getString(stringId)
+        val mins = context.getString(R.string.mins)
+        val hour = context.getString(R.string.hour)
+        val hours = context.getString(R.string.hours)
+
+        return when (duration) {
+            in 0..60 -> "$text ${duration} $mins"
+            in 61..119 -> "$text ${duration / 60} $hour"
+            in 120..1440 -> "$text ${Math.round(duration / 60.0)} $hours"
+            in 1441..2880 -> "$text ${Math.round(duration / 1440.0)} day"
+            else -> "$text ${Math.round(duration / 1440.0)} days"
+        }
+    }
+}
 
 class BatteryCapacityCalculator(
     private val capacityW: Int,

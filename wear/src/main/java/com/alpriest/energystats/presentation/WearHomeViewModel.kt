@@ -108,7 +108,7 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
             viewModelScope
         )
         val values = currentStatusCalculator.currentValuesStream.value
-        val batteryViewModel = BatteryViewModel.make(device, reals, config)
+        val batteryViewModel = BatteryViewModel.make(device, reals)
 
 
     }

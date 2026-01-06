@@ -7,15 +7,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.WatchSyncManager
-import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.models.BatteryData
+import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.shared.services.BatteryCapacityCalculator
 import com.alpriest.energystats.shared.services.CurrentStatusCalculator
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
@@ -184,7 +185,7 @@ class PowerFlowTabViewModel(
                 )
                 this.currentViewModel = currentViewModel
 
-                val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real, configManager, application)
+                val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real)
                 if (battery.hasBattery) {
                     viewModelScope.launch {
                         try {
@@ -195,7 +196,10 @@ class PowerFlowTabViewModel(
                         }
                     }
                 }
-                widgetDataSharer.batteryData = BatteryData(chargeDescription = battery.chargeDescription, battery.chargeLevel)
+                val chargeDescription = BatteryCapacityCalculator(configManager.batteryCapacityW, configManager.minSOC)
+                    .batteryPercentageRemaining(battery.chargePower, battery.chargeLevel / 100.0)?.batteryPercentageRemainingDuration(application)
+
+                widgetDataSharer.batteryData = BatteryData(chargeDescription = chargeDescription, battery.chargeLevel)
                 BatteryWidget().updateAll(application)
 
                 val summary = LoadedPowerFlowViewModel(

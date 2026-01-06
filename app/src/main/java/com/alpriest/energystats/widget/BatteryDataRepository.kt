@@ -2,10 +2,11 @@ package com.alpriest.energystats.widget
 
 import android.content.Context
 import androidx.glance.appwidget.updateAll
-import com.alpriest.energystats.shared.models.BatteryViewModel
-import com.alpriest.energystats.shared.models.WidgetTapAction
-import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.BatteryData
+import com.alpriest.energystats.shared.models.BatteryViewModel
+import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.WidgetTapAction
+import com.alpriest.energystats.shared.services.BatteryCapacityCalculator
 import com.alpriest.energystats.ui.AppContainer
 
 class BatteryDataRepository private constructor() {
@@ -42,8 +43,12 @@ class BatteryDataRepository private constructor() {
                 variables
             )
 
-            val battery = BatteryViewModel.make(device, real, appContainer.configManager, context)
-            val batteryData = BatteryData(battery.chargeDescription, battery.chargeLevel)
+            val battery = BatteryViewModel.make(device, real)
+
+            val chargeDescription = BatteryCapacityCalculator(appContainer.configManager.batteryCapacityW, appContainer.configManager.minSOC)
+                .batteryPercentageRemaining(battery.chargePower, battery.chargeLevel / 100.0)?.batteryPercentageRemainingDuration(context)
+
+            val batteryData = BatteryData(chargeDescription, battery.chargeLevel)
             appContainer.widgetDataSharer.batteryData = batteryData
             this.update(batteryData, appContainer.config.showBatteryTimeEstimateOnWidget)
         } else {
