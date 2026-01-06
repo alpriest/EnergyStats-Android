@@ -10,8 +10,13 @@ import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
+import com.alpriest.energystats.shared.models.TotalsViewModel
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
 import com.alpriest.energystats.shared.network.NetworkFacade
@@ -98,7 +103,8 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
             store.shouldCombineCT2WithPVPower,
             PowerFlowStringsSettings.defaults,
             store.shouldCombineCT2WithLoadsPower,
-            store.allowNegativeLoad
+            store.allowNegativeLoad,
+            store.showGridTotals
         )
         val device = Device(deviceSN, true, null, "", true, "", null, "")
         val currentStatusCalculator = CurrentStatusCalculator(
@@ -109,11 +115,30 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
         )
         val values = currentStatusCalculator.currentValuesStream.value
         val batteryViewModel = BatteryViewModel.make(device, reals)
+        val totals = loadTotals(config, device)
 
-
+            // Assign state
     }
 
-    val networking: Networking by lazy {
+    suspend fun loadTotals(config: WearConfig, device: Device): TotalsViewModel? {
+        if (!config.showGridTotals) {
+            return null
+        }
+
+        return TotalsViewModel(reports = loadReportData(device), generationViewModel = null)
+    }
+
+    private suspend fun loadReportData(currentDevice: Device): List<OpenReportResponse> {
+        val reportVariables = listOf(ReportVariable.FeedIn, ReportVariable.GridConsumption)
+
+        return networking.fetchReport(
+            deviceSN = currentDevice.deviceSN,
+            variables = reportVariables,
+            queryDate = QueryDate.invoke(),
+            reportType = ReportType.month)
+    }
+
+    private val networking: Networking by lazy {
         val requestData = RequestData(
             apiKey = { store.apiKey ?: "" },
             userAgent = "Energy Stats Android"
@@ -136,7 +161,8 @@ class WearConfig(
     override var shouldCombineCT2WithPVPower: Boolean,
     override var powerFlowStrings: PowerFlowStringsSettings,
     override var shouldCombineCT2WithLoadsPower: Boolean,
-    override var allowNegativeLoad: Boolean
+    override var allowNegativeLoad: Boolean,
+    var showGridTotals: Boolean
 ) : CurrentStatusCalculatorConfig {
     override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.demo())
 }

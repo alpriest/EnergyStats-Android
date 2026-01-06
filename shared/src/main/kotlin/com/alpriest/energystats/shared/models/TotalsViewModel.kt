@@ -1,9 +1,7 @@
-package com.alpriest.energystats.ui.flow
+package com.alpriest.energystats.shared.models
 
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponseData
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.ui.flow.home.GenerationViewModel
 import java.util.Calendar
 
 class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, val solar: Double, val ct2: Double) {
@@ -16,7 +14,6 @@ class TotalsViewModel(val grid: Double, val feedIn: Double, val loads: Double, v
             ct2 = generationViewModel?.ct2Total ?: 0.0
         )
 }
-
 
 private fun List<OpenReportResponse>.todayValue(forKey: String): Double {
     val item = currentData(forKey)

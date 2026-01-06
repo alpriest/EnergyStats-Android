@@ -1,6 +1,5 @@
-package com.alpriest.energystats.ui.flow.home
+package com.alpriest.energystats.shared.models
 
-import com.alpriest.energystats.shared.models.StringType
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.network.networkDateFormat
 import java.text.SimpleDateFormat
