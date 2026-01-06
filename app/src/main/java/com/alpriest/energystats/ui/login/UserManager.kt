@@ -7,8 +7,8 @@ import com.alpriest.energystats.shared.network.BadCredentialsException
 import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.demo
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

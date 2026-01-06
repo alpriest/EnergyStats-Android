@@ -50,11 +50,11 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.ui.theme.DimmedTextColor
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.demo
+import com.alpriest.energystats.shared.models.demo
 import io.dontsayboj.rollingnumbers.RollingNumbers
 import io.dontsayboj.rollingnumbers.model.DefaultAnimationDuration
 import io.dontsayboj.rollingnumbers.ui.Utils

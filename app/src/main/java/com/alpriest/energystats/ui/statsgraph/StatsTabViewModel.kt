@@ -28,7 +28,7 @@ import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

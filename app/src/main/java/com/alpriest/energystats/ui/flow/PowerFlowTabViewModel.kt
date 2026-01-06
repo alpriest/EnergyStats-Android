@@ -21,7 +21,7 @@ import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageSt
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.ui.settings.RefreshFrequency
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.widget.BatteryWidget
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

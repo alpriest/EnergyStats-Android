@@ -59,11 +59,11 @@ import com.alpriest.energystats.ui.helpers.OptionalView
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
-import com.alpriest.energystats.ui.theme.demo
+import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class InverterViewModel(

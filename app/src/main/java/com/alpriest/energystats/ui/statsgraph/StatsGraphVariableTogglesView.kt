@@ -15,8 +15,8 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.flow.energy
-import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.demo
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 

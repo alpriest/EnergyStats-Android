@@ -28,13 +28,13 @@ import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.helpers.w
 import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.alpriest.energystats.ui.theme.PowerFlowNegativeText
 import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import com.alpriest.energystats.ui.theme.PowerFlowPositive
 import com.alpriest.energystats.ui.theme.PowerFlowPositiveText
-import com.alpriest.energystats.ui.theme.demo
+import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.abs
 

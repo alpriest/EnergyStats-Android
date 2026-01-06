@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.models.colour
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.ui.paramsgraph.GraphVariable
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class StatsGraphVariable(

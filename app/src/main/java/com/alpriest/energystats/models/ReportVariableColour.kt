@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.statsgraph.selfSufficiencyLineColor
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

@@ -11,7 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.ui.theme.WebLinkColorInDarkTheme
 import com.alpriest.energystats.ui.theme.WebLinkColorInLightTheme
 import kotlinx.coroutines.flow.MutableStateFlow

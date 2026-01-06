@@ -1,20 +1,9 @@
-package com.alpriest.energystats.ui.theme
+package com.alpriest.energystats.shared.models
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alpriest.energystats.shared.models.CT2DisplayMode
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.DataCeiling
-import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.shared.models.ParameterGroup
-import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
-import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
-import com.alpriest.energystats.shared.models.SolarRangeDefinitions
-import com.alpriest.energystats.shared.models.SolcastSettings
-import com.alpriest.energystats.shared.models.StoredConfig
-import com.alpriest.energystats.shared.models.TotalYieldModel
 
 data class AppTheme(
     val useLargeDisplay: Boolean,

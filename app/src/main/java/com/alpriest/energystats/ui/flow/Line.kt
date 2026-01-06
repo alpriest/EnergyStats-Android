@@ -18,8 +18,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.tooling.preview.Preview
-import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.demo
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.demo
 import kotlin.math.abs
 import kotlin.math.max
 

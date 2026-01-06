@@ -11,7 +11,7 @@ import com.alpriest.energystats.shared.models.network.toHalfHourOfDay
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.ZoneId

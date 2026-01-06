@@ -13,7 +13,7 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.ui.theme.AppTheme
+import com.alpriest.energystats.shared.models.AppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 

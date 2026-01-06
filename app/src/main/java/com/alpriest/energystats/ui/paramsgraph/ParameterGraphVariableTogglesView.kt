@@ -19,8 +19,8 @@ import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.title
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
-import com.alpriest.energystats.ui.theme.AppTheme
-import com.alpriest.energystats.ui.theme.demo
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.Instant
 import java.time.LocalDateTime
