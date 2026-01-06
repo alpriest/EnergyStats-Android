@@ -3,10 +3,15 @@ package com.alpriest.energystats.presentation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.shared.config.CurrentStatusCalculatorConfig
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
 import com.alpriest.energystats.shared.network.NetworkFacade
@@ -88,6 +93,13 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
             )
         )
 
+        val config = WearConfig(
+            store.shouldInvertCT2,
+            store.shouldCombineCT2WithPVPower,
+            PowerFlowStringsSettings.defaults,
+            store.shouldCombineCT2WithLoadsPower,
+            store.allowNegativeLoad
+        )
         val device = Device(deviceSN, true, null, "", true, "", null, "")
         val currentStatusCalculator = CurrentStatusCalculator(
             reals,
@@ -95,6 +107,9 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
             config,
             viewModelScope
         )
+        val values = currentStatusCalculator.currentValuesStream.value
+        val batteryViewModel = BatteryViewModel.make(device, reals, config)
+
 
     }
 
@@ -114,4 +129,14 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
             )
         )
     }
+}
+
+class WearConfig(
+    override var shouldInvertCT2: Boolean,
+    override var shouldCombineCT2WithPVPower: Boolean,
+    override var powerFlowStrings: PowerFlowStringsSettings,
+    override var shouldCombineCT2WithLoadsPower: Boolean,
+    override var allowNegativeLoad: Boolean
+) : CurrentStatusCalculatorConfig {
+    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.demo())
 }

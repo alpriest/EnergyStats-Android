@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.models.Device

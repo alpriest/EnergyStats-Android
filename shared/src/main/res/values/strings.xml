@@ -33,6 +33,11 @@
     <string name="launch">Launch</string>
     <string name="refresh">Refresh</string>
     <string name="automatic">Automatic</string>
-    <string name="battery1">1</string>
-    <string name="battery2">2</string>
+    <string name="battery1" translatable="false">1</string>
+    <string name="battery2" translatable="false">2</string>
+    <string name="mins">mins</string>
+    <string name="hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="fullIn">Full in</string>
+    <string name="emptyIn">Empty in</string>
 </resources>

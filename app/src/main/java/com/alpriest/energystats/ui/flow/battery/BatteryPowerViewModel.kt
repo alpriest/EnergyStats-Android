@@ -1,9 +1,11 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import androidx.lifecycle.ViewModel
-import com.alpriest.energystats.models.BatteryTemperatures
+import com.alpriest.energystats.shared.models.BatteryTemperatures
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.services.BatteryCapacityCalculator
+import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
 
 class BatteryPowerViewModel(
     private val configManager: ConfigManaging,

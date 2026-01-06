@@ -30,4 +30,12 @@
     <string name="ct2displaymode_hidden">Nascosto</string>
     <string name="ct2displaymode_separate_icon">Icona separata</string>
     <string name="ct2displaymode_as_power_string">Come stringa di potenza</string>
+    <string name="mins">minuti</string>
+    <string name="hour">ora</string>
+    <string name="hours">ore</string>
+    <string name="launch">Avvia</string>
+    <string name="refresh">Aggiorna</string>
+    <string name="automatic">Automatico</string>
+    <string name="fullIn">Pieno in</string>
+    <string name="emptyIn">Vuoto in</string>
 </resources>

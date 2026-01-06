@@ -30,4 +30,12 @@
     <string name="ct2displaymode_hidden">Aus</string>
     <string name="ct2displaymode_separate_icon">Separates Symbol</string>
     <string name="ct2displaymode_as_power_string">Im String</string>
+    <string name="mins">Minuten</string>
+    <string name="hour">Stunde</string>
+    <string name="hours">Stunden</string>
+    <string name="launch">Starten</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="automatic">Automatisch</string>
+    <string name="fullIn">Voll in</string>
+    <string name="emptyIn">Leer in</string>
 </resources>

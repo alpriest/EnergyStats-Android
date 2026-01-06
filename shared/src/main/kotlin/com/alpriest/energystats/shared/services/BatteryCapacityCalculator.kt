@@ -1,8 +1,8 @@
-package com.alpriest.energystats.ui.flow.battery
+package com.alpriest.energystats.shared.services
 
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.helpers.truncated
-import java.lang.Math.abs
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 data class BatteryCapacityEstimate(
@@ -25,7 +25,7 @@ class BatteryCapacityCalculator(
         batteryChargePowerkWH: Double,
         batteryStateOfCharge: Double
     ): BatteryCapacityEstimate? {
-        if (kotlin.math.abs(batteryChargePowerkWH) <= 0) {
+        if (abs(batteryChargePowerkWH) <= 0) {
             return null
         }
 
@@ -38,7 +38,7 @@ class BatteryCapacityCalculator(
             return BatteryCapacityEstimate(R.string.fullIn, minsToFullCharge.roundToInt())
         } else { // battery discharging
             val chargeRemaining = currentEstimatedChargeW - minimumCharge
-            val minsUntilEmpty = (chargeRemaining / abs(batteryChargePowerkWH * 1000.0)) * 60
+            val minsUntilEmpty = (chargeRemaining / Math.abs(batteryChargePowerkWH * 1000.0)) * 60
 
             return BatteryCapacityEstimate(R.string.emptyIn, minsUntilEmpty.roundToInt())
         }

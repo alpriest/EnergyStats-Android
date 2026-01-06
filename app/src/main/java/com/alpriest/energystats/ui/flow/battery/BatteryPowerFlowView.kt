@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
-import com.alpriest.energystats.models.BatteryTemperatures
+import com.alpriest.energystats.shared.models.BatteryTemperatures
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -39,6 +39,7 @@ import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

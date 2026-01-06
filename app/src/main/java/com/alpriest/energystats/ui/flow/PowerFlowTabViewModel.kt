@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.WatchSyncManager
-import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.AppTheme

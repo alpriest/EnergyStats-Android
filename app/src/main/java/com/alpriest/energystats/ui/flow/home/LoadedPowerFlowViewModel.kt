@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.flow.home
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponse

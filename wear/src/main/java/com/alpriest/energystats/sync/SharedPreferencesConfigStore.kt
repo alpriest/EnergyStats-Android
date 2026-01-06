@@ -55,6 +55,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOULD_INVERT_CT2,
         MIN_SOC,
         SHOULD_COMBINE_CT2_WITH_PVPOWER,
+        SHOULD_COMBINE_CT2_WITH_LOADS,
         SHOW_USABLE_BATTERY_ONLY,
         SOLAR_RANGE_DEFINITIONS,
         SOLAR_GENERATION_AMOUNT,
@@ -62,7 +63,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         BATTERY_CHARGE_LEVEL,
         BATTERY_CHARGE_AMOUNT,
         GRID_AMOUNT,
-        LAST_REFRESH_TIME
+        LAST_REFRESH_TIME,
+        ALLOW_NEGATIVE_LOAD
     }
 
     var lastRefreshTime: Instant
@@ -123,6 +125,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
+    var allowNegativeLoad: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.ALLOW_NEGATIVE_LOAD.name, false)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceKey.ALLOW_NEGATIVE_LOAD.name, value)
+            }
+        }
+
     var minSOC: Double
         get() = (sharedPreferences.getString(SharedPreferenceKey.MIN_SOC.name, "0.1") ?: "0.1").toDouble()
         set(value) {
@@ -136,6 +146,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, value)
+            }
+        }
+
+    var shouldCombineCT2WithLoadsPower: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceKey.SHOULD_COMBINE_CT2_WITH_LOADS.name, true)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceKey.SHOULD_COMBINE_CT2_WITH_LOADS.name, value)
             }
         }
 

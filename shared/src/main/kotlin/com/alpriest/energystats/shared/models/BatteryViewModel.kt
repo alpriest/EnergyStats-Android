@@ -1,15 +1,14 @@
-package com.alpriest.energystats.models
+package com.alpriest.energystats.shared.models
 
 import android.content.Context
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.models.network.SoC
 import com.alpriest.energystats.shared.models.network.currentData
 import com.alpriest.energystats.shared.models.network.currentValue
-import com.alpriest.energystats.ui.flow.battery.BatteryCapacityCalculator
-import com.alpriest.energystats.ui.flow.battery.BatteryCapacityEstimate
+import com.alpriest.energystats.shared.services.BatteryCapacityCalculator
+import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
 
 data class BatteryViewModel(
     var hasBattery: Boolean = false,

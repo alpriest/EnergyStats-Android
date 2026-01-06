@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.WearableApiAvailability
-import com.alpriest.energystats.models.BatteryViewModel
+import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
