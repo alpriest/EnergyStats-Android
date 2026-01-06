@@ -1,14 +1,14 @@
 package com.alpriest.energystats.ui.flow
 
-import android.content.Context
+import android.app.Application
 import android.os.CountDownTimer
 import androidx.glance.appwidget.updateAll
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.WatchSyncManager
 import com.alpriest.energystats.models.BatteryViewModel
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.Device
@@ -36,13 +36,13 @@ import java.util.concurrent.CancellationException
 import java.util.concurrent.locks.ReentrantLock
 
 class PowerFlowTabViewModel(
+    private val application: Application,
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
-    private val context: Context,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private var currentViewModel: CurrentStatusCalculator? = null
     val bannerAlertStream: MutableStateFlow<BannerAlertType?> = bannerAlertManager.bannerAlertStream
@@ -170,7 +170,7 @@ class PowerFlowTabViewModel(
             configManager.currentDevice.value?.let { currentDevice ->
                 updateMessage.value = UiUpdateMessageState(LoadingNowUpdateMessageState)
                 if (uiState.value.state is PowerFlowLoadState.Error) {
-                    uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(context.getString(R.string.loading)))
+                    uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Active(application.getString(R.string.loading)))
                 }
 
                 val real = loadRealData(currentDevice, configManager)
@@ -183,7 +183,7 @@ class PowerFlowTabViewModel(
                 )
                 this.currentViewModel = currentViewModel
 
-                val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real, configManager, context)
+                val battery: BatteryViewModel = BatteryViewModel.make(currentDevice, real, configManager, application)
                 if (battery.hasBattery) {
                     viewModelScope.launch {
                         try {
@@ -195,10 +195,10 @@ class PowerFlowTabViewModel(
                     }
                 }
                 widgetDataSharer.batteryData = BatteryData(chargeDescription = battery.chargeDescription, battery.chargeLevel)
-                BatteryWidget().updateAll(context)
+                BatteryWidget().updateAll(application)
 
                 val summary = LoadedPowerFlowViewModel(
-                    context,
+                    application,
                     currentValuesStream = currentViewModel.currentValuesStream,
                     hasBattery = battery.hasBattery,
                     battery = battery,
@@ -207,7 +207,7 @@ class PowerFlowTabViewModel(
                     network = network,
                     bannerAlertManager
                 )
-                WatchSyncManager().sendWatchStatsData(context, currentViewModel.currentValuesStream, battery)
+                WatchSyncManager().sendWatchStatsData(application, currentViewModel.currentValuesStream, battery)
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
                 lastUpdateTime = currentViewModel.lastUpdate

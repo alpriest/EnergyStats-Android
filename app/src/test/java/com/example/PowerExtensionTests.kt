@@ -1,6 +1,6 @@
 package com.example
 import com.alpriest.energystats.shared.helpers.energy
-import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.shared.models.DisplayUnit
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

@@ -27,7 +27,7 @@ import com.alpriest.energystats.shared.helpers.isFlowing
 import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.helpers.w
-import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.ui.theme.AppTheme
 import com.alpriest.energystats.ui.theme.PowerFlowNegative
 import com.alpriest.energystats.ui.theme.PowerFlowNegativeText

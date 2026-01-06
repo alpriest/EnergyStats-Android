@@ -50,7 +50,7 @@ class CredsListenerService : WearableListenerService() {
             } ?: SolarRangeDefinitions.defaults
 
             val store = SharedPreferencesConfigStore.make(applicationContext)
-            store.token = token
+            store.apiKey = token
             store.selectedDeviceSN = deviceSN
             store.showGridTotals = showGridTotalsOnPowerFlow
             store.batteryCapacity = batteryCapacity

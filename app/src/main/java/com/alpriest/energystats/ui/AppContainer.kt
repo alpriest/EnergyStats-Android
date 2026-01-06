@@ -10,12 +10,15 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import com.alpriest.energystats.services.NetworkCache
-import com.alpriest.energystats.services.NetworkFacade
-import com.alpriest.energystats.services.NetworkService
-import com.alpriest.energystats.services.NetworkValueCleaner
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.network.FoxAPIService
+import com.alpriest.energystats.shared.network.NetworkCache
+import com.alpriest.energystats.shared.network.NetworkFacade
+import com.alpriest.energystats.shared.network.NetworkService
+import com.alpriest.energystats.shared.network.NetworkValueCleaner
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.RequestData
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.CredentialStore
@@ -29,10 +32,7 @@ import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.login.UserManager
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.ui.settings.DisplayUnit
-import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
-import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
@@ -133,7 +133,7 @@ class AppContainer(private val context: Context) {
                     api = NetworkCache(api = FoxAPIService(requestData, chucker)),
                     isDemoUser = { config.isDemoUser }
                 ),
-                themeStream
+                { themeStream.value.dataCeiling }
             )
         )
     }

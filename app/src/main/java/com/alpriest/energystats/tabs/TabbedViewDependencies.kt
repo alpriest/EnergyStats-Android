@@ -1,7 +1,7 @@
 package com.alpriest.energystats.tabs
 
 import android.net.Uri
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.BannerAlertManaging

@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import java.time.Instant
 
 data class WearCredsSnapshot(
     val token: String?,
@@ -29,7 +30,7 @@ data class WearCredsSnapshot(
 )
 
 fun SharedPreferencesConfigStore.snapshot(): WearCredsSnapshot = WearCredsSnapshot(
-    token = token,
+    token = apiKey,
     selectedDeviceSN = selectedDeviceSN,
     batteryCapacity = batteryCapacity,
     showGridTotals = showGridTotals,
@@ -47,10 +48,42 @@ fun SharedPreferencesConfigStore.snapshot(): WearCredsSnapshot = WearCredsSnapsh
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) {
     private enum class SharedPreferenceKey {
-        TOKEN, SELECTED_DEVICE_SN, BATTERY_CAPACITY, SHOW_GRID_TOTALS, SHOULD_INVERT_CT2, MIN_SOC, SHOULD_COMBINE_CT2_WITH_PVPOWER, SHOW_USABLE_BATTERY_ONLY, SOLAR_RANGE_DEFINITIONS, SOLAR_GENERATION_AMOUNT, HOUSE_LOAD_AMOUNT, BATTERY_CHARGE_LEVEL, BATTERY_CHARGE_AMOUNT, GRID_AMOUNT
+        TOKEN,
+        SELECTED_DEVICE_SN,
+        BATTERY_CAPACITY,
+        SHOW_GRID_TOTALS,
+        SHOULD_INVERT_CT2,
+        MIN_SOC,
+        SHOULD_COMBINE_CT2_WITH_PVPOWER,
+        SHOW_USABLE_BATTERY_ONLY,
+        SOLAR_RANGE_DEFINITIONS,
+        SOLAR_GENERATION_AMOUNT,
+        HOUSE_LOAD_AMOUNT,
+        BATTERY_CHARGE_LEVEL,
+        BATTERY_CHARGE_AMOUNT,
+        GRID_AMOUNT,
+        LAST_REFRESH_TIME
     }
 
-    var token: String?
+    var lastRefreshTime: Instant
+        get() {
+            val millis = sharedPreferences.getLong(SharedPreferenceKey.LAST_REFRESH_TIME.name, 0L)
+            return if (millis == 0L) {
+                Instant.MAX
+            } else {
+                Instant.ofEpochMilli(millis)
+            }
+        }
+        set(value) {
+            sharedPreferences.edit {
+                putLong(
+                    SharedPreferenceKey.LAST_REFRESH_TIME.name,
+                    value.toEpochMilli()
+                )
+            }
+        }
+
+    var apiKey: String?
         get() = sharedPreferences.getString(SharedPreferenceKey.TOKEN.name, null)
         set(value) {
             sharedPreferences.edit {
@@ -187,4 +220,3 @@ fun SharedPreferencesConfigStore.Companion.make(context: Context): SharedPrefere
     )
     return SharedPreferencesConfigStore(preferences)
 }
-

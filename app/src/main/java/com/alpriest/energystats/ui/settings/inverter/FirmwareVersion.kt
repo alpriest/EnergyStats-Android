@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
-import com.alpriest.energystats.services.DemoNetworking
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.ui.settings.SettingsColumn

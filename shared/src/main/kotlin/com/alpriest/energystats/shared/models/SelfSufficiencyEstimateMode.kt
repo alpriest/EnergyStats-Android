@@ -1,7 +1,7 @@
-package com.alpriest.energystats.ui.settings
+package com.alpriest.energystats.shared.models
 
 import android.content.Context
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 
 enum class SelfSufficiencyEstimateMode(val value: Int) {
     Off(0),

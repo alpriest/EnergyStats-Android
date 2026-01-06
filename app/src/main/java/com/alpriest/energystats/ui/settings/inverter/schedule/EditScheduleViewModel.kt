@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.stores.ConfigManaging

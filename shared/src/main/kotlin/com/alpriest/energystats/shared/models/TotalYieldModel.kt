@@ -1,7 +1,7 @@
-package com.alpriest.energystats.ui.settings
+package com.alpriest.energystats.shared.models
 
 import android.content.Context
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 
 enum class TotalYieldModel(val value: Int) {
     Off(0), EnergyStats(1);
@@ -14,6 +14,6 @@ enum class TotalYieldModel(val value: Int) {
     }
 
     companion object {
-        fun fromInt(value: Int) = TotalYieldModel.values().firstOrNull { it.value == value } ?: EnergyStats
+        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: EnergyStats
     }
 }

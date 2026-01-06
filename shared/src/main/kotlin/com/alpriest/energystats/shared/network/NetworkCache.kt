@@ -1,6 +1,10 @@
-package com.alpriest.energystats.services
+package com.alpriest.energystats.shared.network
 
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -10,27 +14,21 @@ import com.alpriest.energystats.shared.models.network.DeviceSummaryResponse
 import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
-import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.PagedPowerStationListResponse
 import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
-import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
-import com.alpriest.energystats.shared.network.FoxAPIServicing
-import java.lang.Math.abs
 import java.util.Date
 
 data class CachedItem(val item: Any) {
     private val cacheTime: Date = Date()
 
     fun isFresherThan(seconds: Int): Boolean {
-        return abs(Date().time - cacheTime.time) < (seconds * 1000L)
+        return Math.abs(Date().time - cacheTime.time) < (seconds * 1000L)
     }
 }
 

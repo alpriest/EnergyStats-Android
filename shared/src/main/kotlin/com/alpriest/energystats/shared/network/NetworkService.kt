@@ -1,6 +1,11 @@
-package com.alpriest.energystats.services
+package com.alpriest.energystats.shared.network
 
+import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -10,18 +15,27 @@ import com.alpriest.energystats.shared.models.network.DeviceSummaryResponse
 import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
-import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
-import com.alpriest.energystats.shared.models.PowerStationDetail
-import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
-import com.alpriest.energystats.shared.network.FoxAPIServicing
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Locale
+
+const val networkDateFormat = "yyyy-MM-dd HH:mm:ss"
+
+fun parseToLocalDateTime(input: String): LocalDateTime {
+    val simpleDate = SimpleDateFormat(networkDateFormat, Locale.getDefault()).parse(input)
+    return if (simpleDate != null) {
+        simpleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+    } else {
+        LocalDateTime.now()
+    }
+}
 
 interface Networking {
     suspend fun fetchErrorMessages()

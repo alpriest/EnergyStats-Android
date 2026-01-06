@@ -14,4 +14,14 @@
     <string name="still_activating">Jeszcze aktywuje…</string>
     <string name="deactivating">Dezaktywacja</string>
     <string name="still_deactivating">Jeszcze dezaktywuje…</string>
+    <string name="off">Wyłączone</string>
+    <string name="on">Włącz</string>
+    <string name="none">Brak</string>
+    <string name="mild">Łagodny</string>
+    <string name="enhanced">Wzmocniony</string>
+    <string name="net">Sieć</string>
+    <string name="absolute">Absolute</string>
+    <string name="kilowatts">Kilowaty</string>
+    <string name="watts">Waty</string>
+    <string name="adaptive">Adaptacyjny</string>
 </resources>

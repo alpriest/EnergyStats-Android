@@ -17,11 +17,11 @@ import com.alpriest.energystats.shared.models.preview
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.settings.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.ui.settings.ColorThemeMode
-import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.ui.settings.DisplayUnit
+import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.ui.settings.RefreshFrequency
-import com.alpriest.energystats.ui.settings.SelfSufficiencyEstimateMode
-import com.alpriest.energystats.ui.settings.TotalYieldModel
+import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.ui.settings.financial.EarningsModel
 import com.alpriest.energystats.ui.settings.inverter.CT2DisplayMode
 import com.alpriest.energystats.ui.theme.AppTheme

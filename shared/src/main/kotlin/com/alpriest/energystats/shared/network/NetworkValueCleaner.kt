@@ -1,7 +1,14 @@
-package com.alpriest.energystats.services
+package com.alpriest.energystats.shared.network
 
 import com.alpriest.energystats.shared.helpers.truncated
+import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.BatterySOCResponse
+import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
 import com.alpriest.energystats.shared.models.network.DeviceDetailResponse
 import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
@@ -9,7 +16,6 @@ import com.alpriest.energystats.shared.models.network.DeviceSummaryResponse
 import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
-import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponseData
 import com.alpriest.energystats.shared.models.network.OpenQueryResponseData
@@ -19,20 +25,11 @@ import com.alpriest.energystats.shared.models.network.OpenReportResponseData
 import com.alpriest.energystats.shared.models.network.PagedPowerStationListResponse
 import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
-import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.network.ScheduleResponse
-import com.alpriest.energystats.shared.models.network.BatterySOCResponse
-import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.ui.settings.DataCeiling
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.models.network.UnitData
-import com.alpriest.energystats.shared.network.FoxAPIServicing
-import com.alpriest.energystats.ui.theme.AppTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 
-class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStream: MutableStateFlow<AppTheme>) : FoxAPIServicing {
+class NetworkValueCleaner(private val api: FoxAPIServicing, private val dataCeilingProvider: () -> DataCeiling) : FoxAPIServicing {
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
         return api.openapi_fetchDeviceList()
     }
@@ -46,7 +43,7 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
                 OpenQueryResponseData(
                     it.unit,
                     it.variable,
-                    it.value?.capped(themeStream.value.dataCeiling),
+                    it.value?.capped(dataCeilingProvider()),
                     it.valueString
                 )
             }
@@ -63,7 +60,7 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
                     unit = it.unit,
                     variable = it.variable,
                     data = it.data.map { data ->
-                        UnitData(data.time, data.value.capped(themeStream.value.dataCeiling))
+                        UnitData(data.time, data.value.capped(dataCeilingProvider()))
                     }
                 )
             }
@@ -81,7 +78,7 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val themeStr
                 variable = variables[index].networkTitle(),
                 unit = original.unit,
                 values = original.values.map { value ->
-                    OpenReportResponseData(value.index, value.value.capped(themeStream.value.dataCeiling))
+                    OpenReportResponseData(value.index, value.value.capped(dataCeilingProvider()))
                 }
             )
         }

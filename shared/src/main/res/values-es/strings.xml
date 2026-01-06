@@ -14,4 +14,14 @@
     <string name="still_activating">Todavía activando…</string>
     <string name="deactivating">Desactivando</string>
     <string name="still_deactivating">Todavía desactivando…</string>
+    <string name="off">Apagado</string>
+    <string name="on">Encendido</string>
+    <string name="none">Ninguno</string>
+    <string name="mild">Leve</string>
+    <string name="enhanced">Mejorado</string>
+    <string name="net">Red</string>
+    <string name="absolute">Absolute</string>
+    <string name="kilowatts">Kilovatios</string>
+    <string name="watts">Vatios</string>
+    <string name="adaptive">Adaptativo</string>
 </resources>

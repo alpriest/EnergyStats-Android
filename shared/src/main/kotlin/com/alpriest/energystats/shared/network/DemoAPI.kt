@@ -1,8 +1,15 @@
-package com.alpriest.energystats.services
+package com.alpriest.energystats.shared.network
 
-import com.alpriest.energystats.R
-import com.alpriest.energystats.parseToLocalDateTime
+import android.annotation.SuppressLint
+import android.content.Context
+import com.alpriest.energystats.shared.R
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.ApiVariableArray
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -14,8 +21,6 @@ import com.alpriest.energystats.shared.models.network.DeviceSummaryResponse
 import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
-import com.alpriest.energystats.shared.models.network.ApiVariable
-import com.alpriest.energystats.shared.models.network.ApiVariableArray
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenQueryResponseData
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
@@ -23,24 +28,11 @@ import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.PagedPowerStationListResponse
 import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
-import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.SchedulePhaseNetworkModel
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.models.network.SettingItem
 import com.alpriest.energystats.shared.models.network.Time
-import com.alpriest.energystats.shared.models.WorkModes
-import com.alpriest.energystats.shared.network.DataLoggerStatusDeserializer
-import com.alpriest.energystats.shared.network.FoxAPIServicing
-import com.alpriest.energystats.shared.network.InvalidTokenException
-import com.alpriest.energystats.shared.network.NetworkResponse
-import com.alpriest.energystats.shared.network.OpenApiVariableDeserializer
-import com.alpriest.energystats.shared.network.OpenRealQueryResponseDeserializer
-import com.alpriest.energystats.shared.network.OpenReportResponseDeserializer
-import com.alpriest.energystats.ui.flow.home.networkDateFormat
-import com.alpriest.energystats.ui.summary.PreviewContextHolder
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -309,4 +301,9 @@ class DemoAPI : FoxAPIServicing {
             .registerTypeAdapter(OpenRealQueryResponseDeserializer::class.java, OpenRealQueryResponseDeserializer())
             .create()
     }
+}
+
+@SuppressLint("StaticFieldLeak")
+object PreviewContextHolder {
+    var context: Context? = null
 }

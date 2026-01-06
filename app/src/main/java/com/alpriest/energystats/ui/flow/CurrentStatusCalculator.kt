@@ -1,12 +1,12 @@
 package com.alpriest.energystats.ui.flow
 
-import com.alpriest.energystats.parseToLocalDateTime
 import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.models.network.currentValue
+import com.alpriest.energystats.shared.network.parseToLocalDateTime
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.ui.flow.home.InverterTemperatures
-import com.alpriest.energystats.shared.models.StringPower
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

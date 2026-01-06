@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.stores.ConfigManaging
 import com.alpriest.energystats.models.DeviceCapability
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData

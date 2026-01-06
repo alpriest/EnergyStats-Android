@@ -1,6 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import com.alpriest.energystats.services.Networking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.QueryDate
