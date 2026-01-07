@@ -26,8 +26,8 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
-import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
 
@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 fun SettingsTabView(
     navController: NavHostController,
     config: ConfigManaging,
-    onLogout: () -> Unit,
+    onLogout: suspend () -> Unit,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
     modifier: Modifier,

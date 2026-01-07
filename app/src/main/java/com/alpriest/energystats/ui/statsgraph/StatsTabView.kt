@@ -48,7 +48,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.AppTheme
-import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow

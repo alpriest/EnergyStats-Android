@@ -26,11 +26,11 @@ fun HomePowerView(
                 Color.White
             )
         },
-        line1 = {
-            RedactedKW(amount)
+        line1 = {textStyle ->
+            RedactedKW(amount, textStyle)
         },
-    ) {
-        Text(" ")
+    ) { textStyle ->
+        Text(" ", style = textStyle)
     }
 }
 

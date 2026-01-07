@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -22,13 +23,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
@@ -37,7 +39,7 @@ import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.Schedule
+import kotlinx.coroutines.launch
 
 class EditScheduleView(
     private val configManager: ConfigManaging,
@@ -49,13 +51,20 @@ class EditScheduleView(
     fun Content(viewModel: EditScheduleViewModel = viewModel(factory = EditScheduleViewModelFactory(configManager, network, navController)), modifier: Modifier) {
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
+        val coroutineScope = rememberCoroutineScope()
         trackScreenView("Edit Schedule", "EditScheduleView")
 
         MonitorAlertDialog(viewModel, userManager)
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState)
-            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, false, onRetry = {}, onLogout = { userManager.logout() })
+            is LoadState.Error -> ErrorView(
+                loadState.ex,
+                loadState.reason,
+                false,
+                onRetry = {},
+                onLogout = { coroutineScope.launch { userManager.logout() } },
+            )
             is LoadState.Inactive -> schedule?.let {
                 Loaded(schedule, viewModel, navController, Modifier)
             }

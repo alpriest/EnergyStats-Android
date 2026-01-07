@@ -3,12 +3,13 @@ package com.alpriest.energystats.ui.login
 import android.content.Context
 import androidx.annotation.UiThread
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.network.BadCredentialsException
-import com.alpriest.energystats.shared.network.InvalidTokenException
+import com.alpriest.energystats.WatchSyncManager
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.network.BadCredentialsException
+import com.alpriest.energystats.shared.network.InvalidTokenException
+import com.alpriest.energystats.stores.CredentialStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,13 +28,14 @@ interface UserManaging {
     val loggedInState: StateFlow<LoginStateHolder>
     val store: CredentialStore
 
-    fun logout(clearDisplaySettings: Boolean = true, clearDeviceSettings: Boolean = true)
+    suspend fun logout(clearDisplaySettings: Boolean = true, clearDeviceSettings: Boolean = true)
     suspend fun loginDemo()
     @UiThread
-    suspend fun login(apiKey: String, context: Context)
+    suspend fun login(apiKey: String)
 }
 
 class UserManager(
+    private val application: Context,
     private var configManager: ConfigManaging,
     override val store: CredentialStore
 ) : UserManaging {
@@ -56,7 +58,6 @@ class UserManager(
 
     override suspend fun login(
         apiKey: String,
-        context: Context
     ) {
         if (apiKey.isBlank()) {
             return
@@ -74,27 +75,28 @@ class UserManager(
         } catch (e: BadCredentialsException) {
             logout()
             if (apiKey.isValidApiKey) {
-                _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.wrong_credentials_try_again)))
+                _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.wrong_credentials_try_again)))
             } else {
                 _loggedInState.value = LoginStateHolder(LoggedOut(
-                    context.getString(R.string.invalid_api_key_format) + "\n\n" +
-                    context.getString(R.string.what_is_api_key_3)
+                    application.getString(R.string.invalid_api_key_format) + "\n\n" +
+                            application.getString(R.string.what_is_api_key_3)
                 ))
             }
         } catch (e: InvalidTokenException) {
             logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.invalid_token_logout_not_required)))
+            _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.invalid_token_logout_not_required)))
         } catch (e: SocketTimeoutException) {
             logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut(context.getString(R.string.foxess_timeout)))
+            _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.foxess_timeout)))
         } catch (e: Exception) {
             logout()
             _loggedInState.value = LoginStateHolder(LoggedOut("Could not login. ${e.localizedMessage}"))
         }
     }
 
-    override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
+    override suspend fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
         store.logout()
+        WatchSyncManager().sendWatchConfigData(application, "", configManager)
 
         if (configManager.isDemoUser) {
             configManager.logout(clearDisplaySettings = true, clearDeviceSettings = true)

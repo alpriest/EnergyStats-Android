@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.login
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -21,8 +20,8 @@ class APIKeyLoginViewModel(
         }
     }
 
-    suspend fun onLogin(apiKey: String, context: Context) {
-        userManager.login(apiKey.trim(), context)
+    suspend fun onLogin(apiKey: String) {
+        userManager.login(apiKey.trim())
     }
 
     suspend fun onDemoLogin() {

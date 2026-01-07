@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +30,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsFooterRowView(imageContent: @Composable () -> Unit, text: String, onClick: () -> Unit) {
@@ -62,10 +64,11 @@ fun SettingsFooterRowView(image: ImageVector, imageDescription: String, text: St
 @Composable
 fun SettingsFooterView(
     config: ConfigManaging,
-    onLogout: () -> Unit,
+    onLogout: suspend () -> Unit,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
     val logoutButtonTitle = when (config.isDemoUser) {
         true -> stringResource(R.string.logout_from_demo)
@@ -80,7 +83,7 @@ fun SettingsFooterView(
         SettingsNavButton(
             title = logoutButtonTitle,
             disclosureIcon = null,
-            onClick = onLogout,
+            onClick = { coroutineScope.launch { onLogout() } },
             enabledStateFlow = null,
             modifier = Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)
         )
@@ -111,7 +114,8 @@ fun SettingsFooterView(
 @Composable
 fun SettingsFooterViewPreview() {
     EnergyStatsTheme {
-        SettingsFooterView(config = FakeConfigManager(),
+        SettingsFooterView(
+            config = FakeConfigManager(),
             onLogout = {}, onRateApp = {}) {}
     }
 }

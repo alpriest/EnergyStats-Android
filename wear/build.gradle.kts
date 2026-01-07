@@ -11,10 +11,18 @@ android {
         version = release(36)
     }
     defaultConfig {
+        val api = 36
         applicationId = "com.alpriest.energystats"
         minSdk = 28
-        targetSdk = 36
-        versionCode = ("36" + "01" + providers.gradleProperty("VERSION_CODE").get()).toInt()
+        targetSdk = api
+        val device = 1 // wear
+        val base = providers.gradleProperty("VERSION_CODE_BASE").get().toInt()   // e.g. 2164
+        val patch = providers.gradleProperty("VERSION_CODE_PATCH").get().toInt() // 0..99
+
+        require(patch in 0..99) { "VERSION_CODE_PATCH must be 0..99" }
+        require(base in 0..9999) { "VERSION_CODE_BASE must be 0..9999" }
+
+        versionCode = (api * 10_000_000) + (device * 1_000_000) + (base * 100) + patch
         versionName = providers.gradleProperty("VERSION_NAME").get()
     }
     buildTypes {
@@ -55,6 +63,8 @@ dependencies {
     implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.tiles)
     implementation(libs.androidx.watchface.complications.data.source.ktx)
+    implementation(libs.lifecycle.process)
+    implementation(libs.androidx.wear)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
@@ -64,4 +74,5 @@ dependencies {
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.lifecycle.viewmodelCompose)
     implementation(libs.gson)
+    implementation(libs.lifecycle.runtimeKtx)
 }

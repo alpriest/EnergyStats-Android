@@ -51,7 +51,7 @@ import com.alpriest.energystats.ui.paramsgraph.graphs.SingleParameterGraphVico
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.shared.models.AppTheme
-import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

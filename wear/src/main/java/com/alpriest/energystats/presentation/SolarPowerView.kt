@@ -18,11 +18,11 @@ fun SolarPowerView(
         icon = {
             SunIconWithThresholds(solarAmount ?: 8.8, iconHeight = iconScale.iconHeight(), solarRangeDefinitions, true)
         },
-        line1 = {
-            RedactedKW(solarAmount)
+        line1 = { textStyle ->
+            RedactedKW(solarAmount, textStyle)
         },
-    ) {
-        Text(" ")
+    ) { textStyle ->
+        Text(" ", style = textStyle)
     }
 }
 

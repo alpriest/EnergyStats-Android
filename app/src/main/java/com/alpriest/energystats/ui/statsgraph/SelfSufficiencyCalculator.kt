@@ -1,7 +1,7 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import com.alpriest.energystats.models.CalculationBreakdown
-import com.alpriest.energystats.ui.flow.roundedToString
+import com.alpriest.energystats.shared.ui.roundedToString
 import kotlin.math.pow
 import kotlin.math.roundToInt
 

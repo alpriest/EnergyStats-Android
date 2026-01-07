@@ -29,7 +29,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.R
-import com.alpriest.energystats.helpers.monthYearString
+import com.alpriest.energystats.shared.helpers.monthYearString
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView

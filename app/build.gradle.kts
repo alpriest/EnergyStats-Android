@@ -18,10 +18,18 @@ android {
     compileSdk = 36
 
     defaultConfig {
+        val api = 36
         applicationId = "com.alpriest.energystats"
         minSdk = 26
-        targetSdk = 36
-        versionCode = providers.gradleProperty("VERSION_CODE").get().toInt()
+        targetSdk = api
+        val device = 0 // phone
+        val base = providers.gradleProperty("VERSION_CODE_BASE").get().toInt()   // e.g. 2164
+        val patch = providers.gradleProperty("VERSION_CODE_PATCH").get().toInt() // 0..99
+
+        require(patch in 0..99) { "VERSION_CODE_PATCH must be 0..99" }
+        require(base in 0..9999) { "VERSION_CODE_BASE must be 0..9999" }
+
+        versionCode = (api * 10_000_000) + (device * 1_000_000) + (base * 100) + patch
         versionName = providers.gradleProperty("VERSION_NAME").get()
 
         buildConfigField(type = "String", name = "GOOGLE_MAPS_APIKEY", value = localProperties.getProperty("GOOGLE_MAPS_APIKEY"))

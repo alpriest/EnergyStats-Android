@@ -19,10 +19,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.GraphBounds
-import com.alpriest.energystats.ui.flow.roundedToString
+import com.alpriest.energystats.shared.ui.roundedToString
 import com.alpriest.energystats.ui.paramsgraph.GraphVariable
 import com.alpriest.energystats.shared.models.AppTheme
-import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

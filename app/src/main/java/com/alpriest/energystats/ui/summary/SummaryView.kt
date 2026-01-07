@@ -53,7 +53,7 @@ import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
-import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import io.dontsayboj.rollingnumbers.RollingNumbers

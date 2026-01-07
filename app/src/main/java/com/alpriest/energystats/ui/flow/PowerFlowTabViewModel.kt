@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.WatchSyncManager
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.BatteryViewModel
@@ -30,10 +29,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.Locale
 import java.util.concurrent.CancellationException
 import java.util.concurrent.locks.ReentrantLock
 
@@ -43,7 +40,8 @@ class PowerFlowTabViewModel(
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
     private val widgetDataSharer: WidgetDataSharing,
-    private val bannerAlertManager: BannerAlertManaging
+    private val bannerAlertManager: BannerAlertManaging,
+    private val apiKeyProvider: () -> String?
 ) : AndroidViewModel(application) {
 
     private var currentViewModel: CurrentStatusCalculator? = null
@@ -201,6 +199,7 @@ class PowerFlowTabViewModel(
 
                 widgetDataSharer.batteryData = BatteryData(chargeDescription = chargeDescription, battery.chargeLevel)
                 BatteryWidget().updateAll(application)
+                WatchSyncManager().sendWatchStatsData(application, currentViewModel.currentValuesStream, battery, configManager, apiKeyProvider())
 
                 val summary = LoadedPowerFlowViewModel(
                     application,
@@ -212,7 +211,6 @@ class PowerFlowTabViewModel(
                     network = network,
                     bannerAlertManager
                 )
-                WatchSyncManager().sendWatchStatsData(application, currentViewModel.currentValuesStream, battery)
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
                 lastUpdateTime = currentViewModel.lastUpdate
@@ -243,16 +241,4 @@ class PowerFlowTabViewModel(
             }
         }
     }
-}
-
-fun Double.roundedToString(decimalPlaces: Int, currencySymbol: String = "", locale: Locale = Locale.getDefault()): String {
-    val roundedNumber = this.truncated(decimalPlaces)
-
-    val numberFormat = NumberFormat.getNumberInstance(locale)
-    numberFormat.maximumFractionDigits = decimalPlaces
-    numberFormat.minimumFractionDigits = decimalPlaces
-
-    val formattedNumber = numberFormat.format(roundedNumber)
-
-    return "$currencySymbol$formattedNumber"
 }

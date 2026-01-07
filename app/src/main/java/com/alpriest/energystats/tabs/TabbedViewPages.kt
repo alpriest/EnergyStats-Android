@@ -26,7 +26,8 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.themeStream,
             dependencies.widgetDataSharer,
             dependencies.bannerAlertManager,
-            dependencies.templateStore
+            dependencies.templateStore,
+            dependencies.apiKeyProvider
         ).Content(themeStream = dependencies.themeStream)
 
         1 -> NavigableStatsGraphTabView(

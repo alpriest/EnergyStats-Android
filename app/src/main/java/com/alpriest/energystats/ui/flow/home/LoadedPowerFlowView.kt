@@ -35,10 +35,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.Device
@@ -47,9 +47,10 @@ import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.services.CurrentValues
+import com.alpriest.energystats.shared.ui.PowerFlowNeutralText
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.ui.flow.BannerAlertManager
-import com.alpriest.energystats.shared.services.CurrentValues
 import com.alpriest.energystats.ui.flow.EarningsView
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
@@ -63,7 +64,6 @@ import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
 import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -336,7 +336,8 @@ fun SummaryPowerFlowViewPreview() {
                 FakeConfigManager(),
                 MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)),
                 WidgetDataSharer.preview(),
-                BannerAlertManager()
+                BannerAlertManager(),
+                { "apiKeyProvider" }
             ),
             loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
                 LocalContext.current,

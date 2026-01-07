@@ -23,8 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.helpers.dayMonthFormat
-import com.alpriest.energystats.helpers.dayMonthYearFormat
+import com.alpriest.energystats.shared.helpers.dayMonthFormat
+import com.alpriest.energystats.shared.helpers.dayMonthYearFormat
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.helpers.CalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker

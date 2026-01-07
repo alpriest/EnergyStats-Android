@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopEnd
@@ -46,17 +47,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.BatteryViewModel
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.StringPower
+import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.shared.services.CurrentValues
 import com.alpriest.energystats.shared.ui.Sunny
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.tabs.TopBarSettings
@@ -65,15 +70,12 @@ import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.PopupScheduleSummaryView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
-import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
-import com.alpriest.energystats.shared.services.CurrentValues
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class PowerFlowTabViewModelFactory(
     private val application: Application,
@@ -81,11 +83,12 @@ class PowerFlowTabViewModelFactory(
     private val configManager: ConfigManaging,
     private val themeStream: MutableStateFlow<AppTheme>,
     private val widgetDataSharer: WidgetDataSharing,
-    private val bannerAlertManager: BannerAlertManaging
+    private val bannerAlertManager: BannerAlertManaging,
+    private val apiKeyProvider: () -> String?
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PowerFlowTabViewModel(application, network, configManager, themeStream, widgetDataSharer, bannerAlertManager) as T
+        return PowerFlowTabViewModel(application, network, configManager, themeStream, widgetDataSharer, bannerAlertManager, apiKeyProvider) as T
     }
 }
 
@@ -108,6 +111,7 @@ class PowerFlowTabView(
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
     private val templateStore: TemplateStoring,
+    private val apiKeyProvider: () -> String?,
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -124,7 +128,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(application, network, configManager, this.themeStream, widgetDataSharer, bannerAlertManager)
+            factory = PowerFlowTabViewModelFactory(application, network, configManager, this.themeStream, widgetDataSharer, bannerAlertManager, apiKeyProvider)
         ),
         themeStream: MutableStateFlow<AppTheme>
     ) {
@@ -133,6 +137,7 @@ class PowerFlowTabView(
         val loadedBackground = remember { largeRadialGradient(listOf(Sunny.copy(alpha = 0.7f), Color.Transparent)) }
         val errorBackground = remember { largeRadialGradient(listOf(Color.Red.copy(alpha = 0.7f), Color.Transparent)) }
         topBarSettings.value = TopBarSettings(false, "", {}, null)
+        val coroutineScope = rememberCoroutineScope()
 
         val uiState = viewModel.uiState.collectAsStateWithLifecycle().value.state
         val showSunnyBackground = themeStream.collectAsStateWithLifecycle().value.showSunnyBackground
@@ -168,7 +173,7 @@ class PowerFlowTabView(
                     uiState.reason,
                     true,
                     onRetry = { viewModel.timerFired() },
-                    onLogout = { userManager.logout() }
+                    onLogout = { coroutineScope.launch { userManager.logout() } }
                 )
             }
 
@@ -254,7 +259,8 @@ fun PowerFlowTabViewPreview() {
         FakeConfigManager(),
         MutableStateFlow(AppTheme.demo()),
         WidgetDataSharer.preview(),
-        BannerAlertManager()
+        BannerAlertManager(),
+        { "apiKeyProvider" }
     )
     val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
         LocalContext.current,

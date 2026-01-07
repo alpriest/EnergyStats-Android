@@ -15,7 +15,7 @@ class TabbedViewDependencies(
     val configManager: ConfigManaging,
     val network: Networking,
     val userManager: UserManaging,
-    val onLogout: () -> Unit,
+    val onLogout: suspend () -> Unit,
     val themeStream: MutableStateFlow<AppTheme>,
     val onRateApp: () -> Unit,
     val onBuyMeCoffee: () -> Unit,
@@ -24,5 +24,6 @@ class TabbedViewDependencies(
     val solarForecastingProvider: () -> SolcastCaching,
     val widgetDataSharer: WidgetDataSharing,
     val bannerAlertManager: BannerAlertManaging,
-    val templateStore: TemplateStoring
+    val templateStore: TemplateStoring,
+    val apiKeyProvider: () -> String?
 )

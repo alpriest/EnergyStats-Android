@@ -39,7 +39,8 @@ fun MainAppView(appContainer: AppContainer) {
             solarForecastingProvider = appContainer.solarForecastingProvider,
             appContainer.widgetDataSharer,
             appContainer.bannerAlertManager,
-            appContainer.templateStore
+            appContainer.templateStore,
+            { appContainer.credentialStore.getApiKey() }
         )
     }
 

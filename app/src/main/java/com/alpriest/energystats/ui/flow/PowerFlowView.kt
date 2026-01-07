@@ -27,14 +27,15 @@ import com.alpriest.energystats.shared.helpers.isFlowing
 import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.helpers.w
-import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.AppTheme
-import com.alpriest.energystats.ui.theme.PowerFlowNegative
-import com.alpriest.energystats.ui.theme.PowerFlowNegativeText
-import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
-import com.alpriest.energystats.ui.theme.PowerFlowPositive
-import com.alpriest.energystats.ui.theme.PowerFlowPositiveText
+import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.ui.PowerFlowNegative
+import com.alpriest.energystats.shared.ui.PowerFlowNegativeText
+import com.alpriest.energystats.shared.ui.PowerFlowNeutral
+import com.alpriest.energystats.shared.ui.PowerFlowNeutralText
+import com.alpriest.energystats.shared.ui.PowerFlowPositive
+import com.alpriest.energystats.shared.ui.PowerFlowPositiveText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.abs
 
@@ -108,7 +109,7 @@ fun PowerFlowView(
     val theme by themeStream.collectAsStateWithLifecycle()
     val inverterColor = Color.LightGray
     val lineColor = if (amount.isFlowing() && useColouredLines && theme.useColouredLines) flowingColour(amount) else {
-        Color.LightGray
+        PowerFlowNeutral
     }
     val strokeWidth = theme.strokeWidth()
 

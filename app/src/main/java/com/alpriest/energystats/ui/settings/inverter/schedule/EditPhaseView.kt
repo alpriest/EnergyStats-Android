@@ -56,8 +56,8 @@ import com.alpriest.energystats.shared.models.TimeType
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.PaleWhite
-import com.alpriest.energystats.ui.theme.PowerFlowNegative
+import com.alpriest.energystats.shared.ui.PaleWhite
+import com.alpriest.energystats.shared.ui.PowerFlowNegative
 
 data class EditPhaseErrorData(
     val minSOCError: String?,

@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,18 +27,19 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import kotlinx.coroutines.launch
 
 data class BatterySOCSettingsViewData(
     val minSOC: String,
@@ -54,6 +56,7 @@ class BatterySOCSettings(
     fun Content(viewModel: BatterySOCSettingsViewModel = viewModel(factory = BatterySOCSettingsViewModelFactory(network, configManager)), modifier: Modifier) {
         val loadState = viewModel.uiState.collectAsState().value.state
         val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -69,7 +72,7 @@ class BatterySOCSettings(
                 loadState.reason,
                 loadState.allowRetry,
                 onRetry = { viewModel.load(context) },
-                onLogout = { userManager.logout() }
+                onLogout = { coroutineScope.launch { userManager.logout() } }
             )
 
             is LoadState.Inactive -> LoadedView(viewModel, modifier)

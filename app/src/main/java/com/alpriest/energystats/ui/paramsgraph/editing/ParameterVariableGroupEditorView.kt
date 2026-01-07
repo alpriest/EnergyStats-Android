@@ -54,8 +54,8 @@ import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.PaleWhite
-import com.alpriest.energystats.ui.theme.PowerFlowNegative
+import com.alpriest.energystats.shared.ui.PaleWhite
+import com.alpriest.energystats.shared.ui.PowerFlowNegative
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

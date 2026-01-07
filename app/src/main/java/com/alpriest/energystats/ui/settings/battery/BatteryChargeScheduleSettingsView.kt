@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,13 +30,15 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.TimeType
+import com.alpriest.energystats.shared.models.network.Time
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
@@ -44,8 +47,7 @@ import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.network.Time
-import com.alpriest.energystats.shared.models.TimeType
+import kotlinx.coroutines.launch
 
 data class BatteryChargeScheduleSettingsViewData(
     val summary: String,
@@ -73,6 +75,7 @@ class BatteryChargeScheduleSettingsView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val context = LocalContext.current
         val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
+        val coroutineScope = rememberCoroutineScope()
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -88,7 +91,7 @@ class BatteryChargeScheduleSettingsView(
                 loadState.reason,
                 loadState.allowRetry,
                 onRetry = { viewModel.load(context) },
-                onLogout = { userManager.logout() }
+                onLogout = { coroutineScope.launch { userManager.logout() } }
             )
 
             is LoadState.Inactive ->

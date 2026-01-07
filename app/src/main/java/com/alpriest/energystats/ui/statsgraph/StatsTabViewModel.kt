@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.helpers.isSameDay
+import com.alpriest.energystats.shared.helpers.isSameDay
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.ValueUsage

@@ -21,6 +21,7 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.ui.roundedToString
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.lang.Double.max

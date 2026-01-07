@@ -1,7 +1,11 @@
 package com.alpriest.energystats.presentation
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.shared.config.CurrentStatusCalculatorConfig
 import com.alpriest.energystats.shared.models.AppTheme
@@ -26,21 +30,38 @@ import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.RequestData
 import com.alpriest.energystats.shared.services.CurrentStatusCalculator
 import com.alpriest.energystats.sync.SharedPreferencesConfigStore
+import com.alpriest.energystats.sync.WearCredsSnapshot
 import com.alpriest.energystats.sync.make
+import com.alpriest.energystats.sync.snapshot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.Instant
-import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 class WearHomeViewModel(application: Application) : AndroidViewModel(application) {
     val store = SharedPreferencesConfigStore.make(application)
+    private var deviceSN: String? = null
+    private var apiKey: String? = null
+
+    private val foregroundObserver = object : DefaultLifecycleObserver {
+        override fun onStart(owner: LifecycleOwner) {
+            viewModelScope.launch {
+                load()
+            }
+        }
+    }
 
     private val _state = MutableStateFlow(
         WearPowerFlowState(
             LoadState.Inactive,
-            LocalDate.now(),
+            null,
             null,
             null,
             null,
@@ -54,34 +75,73 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
     val state: StateFlow<WearPowerFlowState> = _state.asStateFlow()
 
     init {
-        // Bind to the store values
-        viewModelScope.launch {
-            store.updatesFlow().collect { snapshot ->
-                _state.value = _state.value.copy(
-                    solarAmount = snapshot.solarGenerationAmount,
-                    houseLoadAmount = snapshot.houseLoadAmount,
-                    batteryChargePower = snapshot.batteryChargeLevel,
-                    batterySOC = snapshot.batteryChargeAmount,
-                    gridAmount = snapshot.gridAmount,
-                    solarRangeDefinitions = snapshot.solarRangeDefinitions,
-                )
-            }
-        }
+        bindToState(store.snapshot())
 
-        // Fetch new values into the store
-//        viewModelScope.launch {
-//            val network = FoxAPIService()
-        // Fetch data
-        // Bind into store
-//        }
+        ProcessLifecycleOwner.get().lifecycle.addObserver(foregroundObserver)
+
+        // Listen for updates
+        viewModelScope.launch {
+            store.updatesFlow()
+                .onEach { snapshot ->
+                    val needsLoad = (deviceSN != snapshot.selectedDeviceSN || apiKey != snapshot.apiKey)
+                    bindToState(snapshot)
+
+                    if (needsLoad) {
+                        load()
+                    }
+                }
+                .catch { e -> e.printStackTrace() }
+                .onCompletion { cause -> Log.d("AWP", "updatesFlow completed. cause=$cause") }
+                .collect()
+        }
+    }
+
+    fun bindToState(snapshot: WearCredsSnapshot) {
+        deviceSN = snapshot.selectedDeviceSN
+        apiKey = snapshot.apiKey
+        val lastUpdatedTime: LocalDateTime? = if (snapshot.lastRefreshTime == Instant.MIN) null else snapshot.lastRefreshTime.atZone(ZoneId.systemDefault()).toLocalDateTime()
+
+        _state.value = _state.value.copy(
+            solarAmount = snapshot.solarGenerationAmount,
+            houseLoadAmount = snapshot.houseLoadAmount,
+            batteryChargePower = snapshot.batteryChargeLevel,
+            batterySOC = snapshot.batteryChargeAmount,
+            gridAmount = snapshot.gridAmount,
+            solarRangeDefinitions = snapshot.solarRangeDefinitions,
+            totalExport = snapshot.totalExport,
+            totalImport = snapshot.totalImport,
+            lastUpdated = lastUpdatedTime
+        )
     }
 
     suspend fun load() {
-        val deviceSN = store.selectedDeviceSN ?: return
-        val now = Instant.now()
-        if (store.lastRefreshTime.isAfter(now.minusSeconds(4 * 60)) || store.apiKey == null) {
+        val deviceSN = store.selectedDeviceSN
+        if (deviceSN.isNullOrEmpty() || store.apiKey.isNullOrEmpty()) {
+            store.lastRefreshTime = Instant.now().minusSeconds(10 * 60)
+            _state.value = _state.value.copy(state = LoadState.Error(null, "No device/API key found. Open Energy Stats on your phone to sync."))
             return
         }
+
+        val now = Instant.now()
+        if (store.lastRefreshTime.isAfter(now.minusSeconds(4 * 60))) {
+            return
+        }
+
+        val requestData = RequestData(
+            apiKey = { store.apiKey ?: "" },
+            userAgent = "Energy Stats Android WearOS"
+        )
+        val networking = NetworkService(
+            NetworkValueCleaner(
+                NetworkFacade(
+                    api = NetworkCache(api = FoxAPIService(requestData)),
+                    isDemoUser = { store.apiKey == "demo" }
+                ),
+                { DataCeiling.None }
+            )
+        )
+
+        _state.value = _state.value.copy(state = LoadState.Active.Loading)
 
         val reals = networking.fetchRealData(
             deviceSN,
@@ -119,53 +179,44 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
         )
         val values = currentStatusCalculator.currentValuesStream.value
         val batteryViewModel = BatteryViewModel.make(device, reals)
-        val totals = loadTotals(config, device)
+        val totals = loadTotals(config, networking, device)
 
-        _state.value = _state.value.copy(
-            solarAmount = values.solarPower,
-            houseLoadAmount = values.homeConsumption,
-            batteryChargePower = batteryViewModel.chargePower,
-            batterySOC = batteryViewModel.chargeLevel,
-            gridAmount = values.grid,
-            lastUpdated = LocalDate.now(),
-            totalImport = totals?.loads ?: 0.0,
-            totalExport = totals?.grid ?: 0.0
-        )
+        store.applyAndNotify {
+            lastRefreshTime = Instant.now()
+            batteryChargeLevel = batteryViewModel.chargeLevel
+            solarGenerationAmount = values.solarPower
+            houseLoadAmount = values.homeConsumption
+            gridAmount = values.grid
+            batteryChargeAmount = batteryViewModel.chargePower
+            totalExport = totals?.grid
+            totalImport = totals?.loads
+        }
+
+        _state.value = _state.value.copy(state = LoadState.Inactive)
     }
 
-    suspend fun loadTotals(config: WearConfig, device: Device): TotalsViewModel? {
+    suspend fun loadTotals(config: WearConfig, networking: Networking, device: Device): TotalsViewModel? {
         if (!config.showGridTotals) {
             return null
         }
 
-        return TotalsViewModel(reports = loadReportData(device), generationViewModel = null)
+        return TotalsViewModel(reports = loadReportData(networking, device), generationViewModel = null)
     }
 
-    private suspend fun loadReportData(currentDevice: Device): List<OpenReportResponse> {
+    private suspend fun loadReportData(networking: Networking, currentDevice: Device): List<OpenReportResponse> {
         val reportVariables = listOf(ReportVariable.FeedIn, ReportVariable.GridConsumption)
 
         return networking.fetchReport(
             deviceSN = currentDevice.deviceSN,
             variables = reportVariables,
             queryDate = QueryDate.invoke(),
-            reportType = ReportType.month)
+            reportType = ReportType.month
+        )
     }
 
-    private val networking: Networking by lazy {
-        val requestData = RequestData(
-            apiKey = { store.apiKey ?: "" },
-            userAgent = "Energy Stats Android"
-        )
-
-        NetworkService(
-            NetworkValueCleaner(
-                NetworkFacade(
-                    api = NetworkCache(api = FoxAPIService(requestData)),
-                    isDemoUser = { false }
-                ),
-                { DataCeiling.None }
-            )
-        )
+    override fun onCleared() {
+        ProcessLifecycleOwner.get().lifecycle.removeObserver(foregroundObserver)
+        super.onCleared()
     }
 }
 

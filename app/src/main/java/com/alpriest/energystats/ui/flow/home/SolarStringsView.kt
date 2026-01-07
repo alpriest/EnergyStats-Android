@@ -23,7 +23,7 @@ import com.alpriest.energystats.ui.flow.power
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.AppTheme
-import com.alpriest.energystats.ui.theme.PowerFlowNeutralText
+import com.alpriest.energystats.shared.ui.PowerFlowNeutralText
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

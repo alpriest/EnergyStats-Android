@@ -28,7 +28,7 @@ import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.models.toAppTheme
 import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.ui.flow.roundedToString
+import com.alpriest.energystats.shared.ui.roundedToString
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow

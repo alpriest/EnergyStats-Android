@@ -8,8 +8,8 @@ import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.theme.PowerFlowNegative
-import com.alpriest.energystats.ui.theme.PowerFlowPositive
+import com.alpriest.energystats.shared.ui.PowerFlowNegative
+import com.alpriest.energystats.shared.ui.PowerFlowPositive
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EditScheduleStore(

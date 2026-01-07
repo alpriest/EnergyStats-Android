@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -42,21 +43,22 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.ui.theme.OutlinedESButton
+import kotlinx.coroutines.launch
 
 class ScheduleTemplateListViewModelFactory(
     private val configManager: ConfigManaging,
@@ -83,6 +85,7 @@ class ScheduleTemplateListView(
         val context = LocalContext.current
         val loadState = viewModel.uiState.collectAsState().value.state
         val templates = viewModel.templateStream.collectAsState().value
+        val coroutineScope = rememberCoroutineScope()
         trackScreenView("Templates", "ScheduleTemplateListView")
 
         MonitorAlertDialog(viewModel, userManager)
@@ -93,7 +96,13 @@ class ScheduleTemplateListView(
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState)
-            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, loadState.allowRetry, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() })
+            is LoadState.Error -> ErrorView(
+                loadState.ex,
+                loadState.reason,
+                loadState.allowRetry,
+                onRetry = { viewModel.load(context) },
+                onLogout = { coroutineScope.launch { userManager.logout() } },
+            )
             is LoadState.Inactive -> {
                 Loaded(templates, viewModel, modifier)
             }

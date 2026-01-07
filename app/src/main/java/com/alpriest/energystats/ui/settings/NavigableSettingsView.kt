@@ -44,7 +44,7 @@ fun NavigableSettingsView(
     topBarSettings: MutableState<TopBarSettings>,
     configManager: ConfigManaging,
     userManager: UserManaging,
-    onLogout: () -> Unit,
+    onLogout: suspend () -> Unit,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
     network: Networking,

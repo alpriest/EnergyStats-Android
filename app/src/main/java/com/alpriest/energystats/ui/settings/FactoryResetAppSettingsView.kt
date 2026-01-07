@@ -36,8 +36,8 @@ import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.PowerFlowNegative
-import com.alpriest.energystats.ui.theme.PowerFlowPositive
+import com.alpriest.energystats.shared.ui.PowerFlowNegative
+import com.alpriest.energystats.shared.ui.PowerFlowPositive
 
 @Composable
 fun FactoryResetAppSettingsView(

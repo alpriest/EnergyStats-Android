@@ -152,7 +152,7 @@ class AppContainer(private val context: Context) {
     }
 
     val userManager: UserManaging by lazy {
-        UserManager(configManager, credentialStore)
+        UserManager(context, configManager, credentialStore)
     }
 
     val bannerAlertManager: BannerAlertManaging by lazy {

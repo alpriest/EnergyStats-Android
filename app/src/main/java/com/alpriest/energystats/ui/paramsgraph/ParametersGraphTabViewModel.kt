@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.helpers.timeUntilNow
+import com.alpriest.energystats.shared.helpers.timeUntilNow
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.solcastPrediction
 import com.alpriest.energystats.shared.network.Networking

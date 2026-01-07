@@ -130,7 +130,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                 Spacer(modifier = Modifier.width(24.dp))
 
                 ESButton(onClick = {
-                    scope.launch { viewModel.onLogin(apiKey, context) }
+                    scope.launch { viewModel.onLogin(apiKey) }
                 }) {
                     Text(
                         stringResource(R.string.log_me_in),

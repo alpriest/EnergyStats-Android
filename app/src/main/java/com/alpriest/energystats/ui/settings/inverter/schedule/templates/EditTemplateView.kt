@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -30,27 +31,28 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.ui.PaleWhite
+import com.alpriest.energystats.shared.ui.PowerFlowNegative
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleDetailView
-import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.ui.settings.inverter.schedule.UnusedSchedulePeriodWarning
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.PaleWhite
-import com.alpriest.energystats.ui.theme.PowerFlowNegative
+import kotlinx.coroutines.launch
 
 class EditTemplateView(
     private val configManager: ConfigManaging,
@@ -63,6 +65,7 @@ class EditTemplateView(
     fun Content(viewModel: EditTemplateViewModel = viewModel(factory = EditTemplateViewModelFactory(configManager, network, navController, templateStore)), modifier: Modifier) {
         val template = viewModel.templateStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
+        val coroutineScope = rememberCoroutineScope()
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -83,7 +86,7 @@ class EditTemplateView(
                         viewModel.clearError()
                     }
                 },
-                onLogout = { userManager.logout() }
+                onLogout = { coroutineScope.launch { userManager.logout() } },
             )
 
             is LoadState.Inactive -> template?.let { it ->

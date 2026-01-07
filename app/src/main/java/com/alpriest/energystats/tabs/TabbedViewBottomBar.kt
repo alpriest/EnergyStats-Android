@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.settings.darkenedBackground
 import com.alpriest.energystats.ui.settings.darkenedBackgroundColor
-import com.alpriest.energystats.ui.theme.DimmedTextColor
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import kotlinx.coroutines.launch
 
 @Composable

@@ -37,6 +37,7 @@ espressoCore = "3.5.1"
 material = "1.13.0"
 playServicesWearableVersion = "19.0.0"
 coroutinesPlayServices = "1.10.2"
+wear = "1.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -89,6 +90,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 gms-play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearableVersion" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutinesPlayServices" }
+androidx-wear = { group = "androidx.wear", name = "wear", version.ref = "wear" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

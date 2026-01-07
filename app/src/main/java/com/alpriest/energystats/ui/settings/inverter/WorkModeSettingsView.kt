@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,13 +24,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.models.WorkMode
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
@@ -38,7 +39,7 @@ import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.inverter.schedule.subtitle
 import com.alpriest.energystats.ui.settings.inverter.schedule.title
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlin.collections.forEachIndexed
+import kotlinx.coroutines.launch
 
 class WorkModeSettingsView(
     private val network: Networking,
@@ -52,6 +53,7 @@ class WorkModeSettingsView(
         val uriHandler = LocalUriHandler.current
         val viewData = viewModel.viewDataStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value
+        val coroutineScope = rememberCoroutineScope()
 
         MonitorAlertDialog(viewModel, userManager)
 
@@ -61,7 +63,13 @@ class WorkModeSettingsView(
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState)
-            is LoadState.Error -> ErrorView(loadState.ex, loadState.reason, onRetry = { viewModel.load(context) }, onLogout = { userManager.logout() }, allowRetry = true)
+            is LoadState.Error -> ErrorView(
+                loadState.ex,
+                loadState.reason,
+                onRetry = { viewModel.load(context) },
+                onLogout = { coroutineScope.launch { userManager.logout() } },
+                allowRetry = true
+            )
             is LoadState.Inactive ->
                 ContentWithBottomButtonPair(
                     navController,

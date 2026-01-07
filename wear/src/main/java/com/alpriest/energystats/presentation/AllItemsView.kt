@@ -24,7 +24,9 @@ fun AllItemsView(
     batteryChargeAmount: Double?,
     batteryChargeLevel: Double?,
     gridAmount: Double?,
-    solarRangeDefinitions: SolarRangeDefinitions
+    solarRangeDefinitions: SolarRangeDefinitions,
+    totalImport: Double?,
+    totalExport: Double?
 ) {
     val edgePadding = if (isRoundDevice()) 12.dp else 16.dp
     val solarAlign = if (isRoundDevice()) Alignment.TopCenter else Alignment.TopStart
@@ -63,27 +65,33 @@ fun AllItemsView(
             modifier = Modifier.align(gridAlign),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GridPowerView(IconScale.SMALL, gridAmount)
+            GridPowerView(IconScale.SMALL, gridAmount, totalImport, totalExport)
         }
     }
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
-fun DefaultPreviewRound() {
-    AllItemsView(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.Companion.defaults)
+fun DefaultPreviewSmallRound() {
+    AllItemsView(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.Companion.defaults, 2.2, 1.2)
+}
+
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun DefaultPreviewLargeRound() {
+    AllItemsView(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.Companion.defaults, 2.2, 1.2)
 }
 
 @Preview(device = WearDevices.SQUARE, showSystemUi = true)
 @Composable
 fun DefaultPreviewSquare() {
-    AllItemsView(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.Companion.defaults)
+    AllItemsView(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.Companion.defaults, 2.2, 1.2)
 }
 
 @Preview(device = WearDevices.RECT, showSystemUi = true)
 @Composable
 fun DefaultPreviewRect() {
-    AllItemsView(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.Companion.defaults)
+    AllItemsView(1.2, 3.2, 1.0, 0.23, -1.9, SolarRangeDefinitions.Companion.defaults, 2.2, 1.2)
 }
 
 @Composable

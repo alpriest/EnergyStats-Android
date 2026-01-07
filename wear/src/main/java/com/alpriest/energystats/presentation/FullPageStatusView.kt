@@ -8,13 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 
 @Composable
 fun FullPageStatusView(
     iconScale: IconScale,
     icon: @Composable () -> Unit,
-    line1: @Composable () -> Unit,
-    line2: @Composable () -> Unit,
+    line1: @Composable (TextStyle) -> Unit,
+    line2: @Composable (TextStyle) -> Unit,
 ) {
     Column(
         modifier = if (iconScale == IconScale.LARGE) Modifier.fillMaxWidth().fillMaxHeight() else Modifier,
@@ -28,8 +29,8 @@ fun FullPageStatusView(
                 icon()
             }
 
-            line1()
-            line2()
+            line1(iconScale.line1TextStyle())
+            line2(iconScale.line2TextStyle())
         }
     }
 }

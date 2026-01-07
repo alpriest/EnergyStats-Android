@@ -20,9 +20,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.shared.models.AppTheme
-import com.alpriest.energystats.ui.theme.Green
-import com.alpriest.energystats.ui.theme.Red
-import com.alpriest.energystats.ui.theme.TintColor
+import com.alpriest.energystats.shared.ui.Green
+import com.alpriest.energystats.shared.ui.Red
+import com.alpriest.energystats.shared.ui.TintColor
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd

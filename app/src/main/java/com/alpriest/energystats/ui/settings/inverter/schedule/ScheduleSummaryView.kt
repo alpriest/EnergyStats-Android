@@ -27,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -42,17 +43,19 @@ import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsNavButton
@@ -65,8 +68,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.templates.Template
 import com.alpriest.energystats.ui.settings.inverterScheduleGraph
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import kotlinx.coroutines.launch
 
 class PopupScheduleSummaryView(
     private val configManager: ConfigManaging,
@@ -138,6 +140,7 @@ class ScheduleSummaryView(
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
         val supportedError = viewModel.supportedErrorStream.collectAsState().value
+        val coroutineScope = rememberCoroutineScope()
 
         MonitorAlertDialog(viewModel, userManager)
         trackScreenView("Work Schedule", "ScheduleSummaryView")
@@ -159,7 +162,7 @@ class ScheduleSummaryView(
                         viewModel.clearError()
                     }
                 },
-                onLogout = { userManager.logout() }
+                onLogout = { coroutineScope.launch { userManager.logout() } },
             )
 
             is LoadState.Inactive -> {

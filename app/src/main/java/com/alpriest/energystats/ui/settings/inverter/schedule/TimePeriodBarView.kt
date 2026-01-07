@@ -24,7 +24,7 @@ import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.ui.theme.Orange
+import com.alpriest.energystats.shared.ui.Orange
 
 @Composable
 fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier) {
