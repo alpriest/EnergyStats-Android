@@ -9,6 +9,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
+import com.alpriest.energystats.complication.MainComplicationService
 import com.alpriest.energystats.shared.config.CurrentStatusCalculatorConfig
 import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.models.BatteryViewModel
@@ -200,6 +201,7 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
         }
 
         _state.value = _state.value.copy(state = LoadState.Inactive)
+        MainComplicationService.requestRefresh(application)
     }
 
     suspend fun loadTotals(config: WearConfig, networking: Networking, device: Device): TotalsViewModel? {
