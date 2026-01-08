@@ -52,7 +52,7 @@ fun SharedPreferencesConfigStore.snapshot(): WearCredsSnapshot = WearCredsSnapsh
     gridAmount = gridAmount,
     totalImport = totalImport,
     totalExport = totalExport,
-    lastRefreshTime = lastRefreshTime
+    lastRefreshTime = lastUpdatedTime
 )
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) {
@@ -74,7 +74,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         BATTERY_CHARGE_LEVEL,
         BATTERY_CHARGE_AMOUNT,
         GRID_AMOUNT,
-        LAST_REFRESH_TIME,
+        LAST_UPDATED_TIME,
         ALLOW_NEGATIVE_LOAD,
         TOTAL_IMPORT,
         TOTAL_EXPORT,
@@ -112,9 +112,9 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    var lastRefreshTime: Instant
+    var lastUpdatedTime: Instant
         get() {
-            val millis = sharedPreferences.getLong(SharedPreferenceKey.LAST_REFRESH_TIME.name, 0L)
+            val millis = sharedPreferences.getLong(SharedPreferenceKey.LAST_UPDATED_TIME.name, 0L)
             return if (millis == 0L) {
                 Instant.now().minusSeconds(10 * 60)
             } else {
@@ -124,7 +124,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit(commit = true) {
                 putLong(
-                    SharedPreferenceKey.LAST_REFRESH_TIME.name,
+                    SharedPreferenceKey.LAST_UPDATED_TIME.name,
                     value.toEpochMilli()
                 )
             }

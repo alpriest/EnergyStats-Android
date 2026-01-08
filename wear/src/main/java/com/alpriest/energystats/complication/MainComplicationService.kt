@@ -1,7 +1,9 @@
 package com.alpriest.energystats.complication
 
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.PlainComplicationText
@@ -9,6 +11,7 @@ import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import com.alpriest.energystats.presentation.MainActivity
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.sync.SharedPreferencesConfigStore
 import com.alpriest.energystats.sync.make
@@ -38,11 +41,24 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
         return createComplicationData(configStore.batteryChargeLevel.asPercent(), configStore.batteryChargeLevel.asPercent() + " battery charge level")
     }
 
-    private fun createComplicationData(text: String, contentDescription: String) =
-        ShortTextComplicationData.Builder(
+    private fun createComplicationData(text: String, contentDescription: String): ComplicationData {
+        val launchIntent = Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            applicationContext,
+            0,
+            launchIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return ShortTextComplicationData.Builder(
             text = PlainComplicationText.Builder(text).build(),
             contentDescription = PlainComplicationText.Builder(contentDescription).build()
-        ).build()
+        )
+            .setTapAction(pendingIntent)
+            .build()
+    }
 
     companion object {
         fun requestRefresh(applicationContext: Context) {

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="complication_label">Estado de carga de la batería doméstica</string>
+    <string name="no_device_api_key_found">No se encontró ningún dispositivo ni clave de API. Abre Energy Stats en tu teléfono para sincronizar.</string>
+</resources>

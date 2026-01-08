@@ -36,3 +36,7 @@ sealed class LoadState {
         }
     }
 }
+
+fun LoadState.isActive(): Boolean {
+    return this is LoadState.Active
+}

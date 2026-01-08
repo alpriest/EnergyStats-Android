@@ -6,7 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.config.CurrentStatusCalculatorConfig
 import com.alpriest.energystats.shared.models.AppTheme
 import com.alpriest.energystats.shared.models.BatteryViewModel
@@ -19,6 +21,7 @@ import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.TotalsViewModel
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.isActive
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.network.FoxAPIService
@@ -117,15 +120,21 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
     suspend fun load() {
         val deviceSN = store.selectedDeviceSN
         if (deviceSN.isNullOrEmpty() || store.apiKey.isNullOrEmpty()) {
-            store.lastRefreshTime = Instant.now().minusSeconds(10 * 60)
-            _state.value = _state.value.copy(state = LoadState.Error(null, "No device/API key found. Open Energy Stats on your phone to sync."))
+            store.lastUpdatedTime = Instant.now().minusSeconds(10 * 60)
+            _state.value = _state.value.copy(state = LoadState.Error(null, application.getString(R.string.no_device_api_key_found)))
             return
         }
 
         val now = Instant.now()
-        if (store.lastRefreshTime.isAfter(now.minusSeconds(4 * 60))) {
+        if (store.lastUpdatedTime.isAfter(now.minusSeconds(4 * 60))) {
             return
         }
+
+        if (_state.value.state.isActive()) {
+            return
+        }
+
+        _state.value = _state.value.copy(state = LoadState.Active.Loading)
 
         val requestData = RequestData(
             apiKey = { store.apiKey ?: "" },
@@ -140,8 +149,6 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
                 { DataCeiling.None }
             )
         )
-
-        _state.value = _state.value.copy(state = LoadState.Active.Loading)
 
         val reals = networking.fetchRealData(
             deviceSN,
@@ -182,7 +189,7 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
         val totals = loadTotals(config, networking, device)
 
         store.applyAndNotify {
-            lastRefreshTime = Instant.now()
+            lastUpdatedTime = Instant.now()
             batteryChargeLevel = batteryViewModel.chargeLevel
             solarGenerationAmount = values.solarPower
             houseLoadAmount = values.homeConsumption

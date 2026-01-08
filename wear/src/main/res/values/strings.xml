@@ -1,10 +1,5 @@
 <resources>
-    <string name="app_name">Energy Stats</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">From the Square world,\nHello, %1$s!</string>
-    <string name="tile_label">Example tile</string>
+    <string name="app_name" translatable="false">Energy Stats</string>
     <string name="complication_label">Home Battery SOC</string>
+    <string name="no_device_api_key_found">No device/API key found. Open Energy Stats on your phone to sync.</string>
 </resources>

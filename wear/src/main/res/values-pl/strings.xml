@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="complication_label">Poziom naładowania baterii domowej</string>
+    <string name="no_device_api_key_found">Nie znaleziono urządzenia ani klucza API. Otwórz Energy Stats na telefonie, aby zsynchronizować.</string>
+</resources>
