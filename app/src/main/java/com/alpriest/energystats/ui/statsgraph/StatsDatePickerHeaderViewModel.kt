@@ -25,7 +25,7 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
 
     init {
         viewModelScope.launch {
-            monthStream.value = dateStream.value.monthValue - 1
+            monthStream.value = dateStream.value.monthValue
             yearStream.value = dateStream.value.year
 
             combine(rangeStream, dateStream, monthStream, yearStream) { _, _, _, _ ->
@@ -144,8 +144,8 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
             }
 
             is DatePickerRange.MONTH -> {
-                if (monthStream.value - 1 < 0) {
-                    monthStream.value = 11
+                if (monthStream.value - 1 < 1) {
+                    monthStream.value = 12
                     yearStream.value -= 1
                 } else {
                     monthStream.value -= 1
@@ -167,8 +167,8 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
             }
 
             is DatePickerRange.MONTH -> {
-                if (monthStream.value + 1 > 11) {
-                    monthStream.value = 0
+                if (monthStream.value + 1 > 12) {
+                    monthStream.value = 1
                     yearStream.value += 1
                 } else {
                     monthStream.value += 1

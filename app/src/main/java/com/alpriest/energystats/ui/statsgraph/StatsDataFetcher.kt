@@ -1,12 +1,12 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.parse
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit

@@ -31,6 +31,7 @@ import java.time.Month
 import java.util.Locale
 
 @Composable
+// Returns month in the range 1..12
 fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifier = Modifier, onPrimary: Boolean, onClick: (Int) -> Unit) {
     var showing by remember { mutableStateOf(false) }
 
@@ -46,7 +47,7 @@ fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifie
                 contentColor = if (onPrimary) colorScheme.onPrimary else colorScheme.primary
             ),
             content = {
-                val selectedMonth = Month.of(month.coerceIn(1..<12))
+                val selectedMonth = Month.of(month.coerceIn(1..12))
                 Row(modifier = textModifier) {
                     Text(
                         selectedMonth.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()),
