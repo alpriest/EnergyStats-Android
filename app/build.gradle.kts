@@ -79,7 +79,7 @@ dependencies {
     implementation(libs.lifecycle.runtimeKtx)
     implementation(libs.lifecycle.viewmodelCompose)
     implementation(libs.androidx.material3)
-    implementation(libs.gms.play.services.wearable)
+    implementation(libs.play.services.wearable)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     implementation(platform(libs.firebase.bom))
