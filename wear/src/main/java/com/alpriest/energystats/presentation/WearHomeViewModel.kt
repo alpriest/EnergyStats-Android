@@ -8,31 +8,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.R
 import com.alpriest.energystats.complication.MainComplicationService
 import com.alpriest.energystats.shared.config.CurrentStatusCalculatorConfig
 import com.alpriest.energystats.shared.models.AppTheme
-import com.alpriest.energystats.shared.models.BatteryViewModel
-import com.alpriest.energystats.shared.models.DataCeiling
-import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
-import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
-import com.alpriest.energystats.shared.models.TotalsViewModel
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.models.isActive
-import com.alpriest.energystats.shared.models.network.OpenReportResponse
-import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.network.FoxAPIService
-import com.alpriest.energystats.shared.network.NetworkCache
-import com.alpriest.energystats.shared.network.NetworkFacade
-import com.alpriest.energystats.shared.network.NetworkService
-import com.alpriest.energystats.shared.network.NetworkValueCleaner
-import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.network.RequestData
-import com.alpriest.energystats.shared.services.CurrentStatusCalculator
 import com.alpriest.energystats.sync.SharedPreferencesConfigStore
 import com.alpriest.energystats.sync.WearCredsSnapshot
 import com.alpriest.energystats.sync.make
@@ -119,108 +102,35 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
     }
 
     suspend fun load() {
-        val deviceSN = store.selectedDeviceSN
-        if (deviceSN.isNullOrEmpty() || store.apiKey.isNullOrEmpty()) {
-            store.lastUpdatedTime = Instant.now().minusSeconds(10 * 60)
-            _state.value = _state.value.copy(state = LoadState.Error(null, application.getString(R.string.no_device_api_key_found)))
-            return
-        }
-
-        val now = Instant.now()
-        if (store.lastUpdatedTime.isAfter(now.minusSeconds(4 * 60))) {
-            return
-        }
-
         if (_state.value.state.isActive()) {
             return
         }
 
         _state.value = _state.value.copy(state = LoadState.Active.Loading)
 
-        val requestData = RequestData(
-            apiKey = { store.apiKey ?: "" },
-            userAgent = "Energy Stats Android WearOS"
-        )
-        val networking = NetworkService(
-            NetworkValueCleaner(
-                NetworkFacade(
-                    api = NetworkCache(api = FoxAPIService(requestData)),
-                    isDemoUser = { store.apiKey == "demo" }
-                ),
-                { DataCeiling.None }
-            )
+        val refresher = WearDataRefresher(
+            context = application,
+            store = store,
+            scope = viewModelScope
         )
 
-        val reals = networking.fetchRealData(
-            deviceSN,
-            listOf(
-                "SoC",
-                "SoC_1",
-                "pvPower",
-                "feedinPower",
-                "gridConsumptionPower",
-                "generationPower",
-                "meterPower2",
-                "batChargePower",
-                "batDischargePower",
-                "ResidualEnergy",
-                "batTemperature",
-                "batTemperature_1",
-                "batTemperature_2"
-            )
-        )
-
-        val config = WearConfig(
-            store.shouldInvertCT2,
-            store.shouldCombineCT2WithPVPower,
-            PowerFlowStringsSettings.defaults,
-            store.shouldCombineCT2WithLoadsPower,
-            store.allowNegativeLoad,
-            store.showGridTotals
-        )
-        val device = Device(deviceSN, true, null, "", true, "", null, "")
-        val currentStatusCalculator = CurrentStatusCalculator(
-            reals,
-            device,
-            config,
-            viewModelScope
-        )
-        val values = currentStatusCalculator.currentValuesStream.value
-        val batteryViewModel = BatteryViewModel.make(device, reals)
-        val totals = loadTotals(config, networking, device)
-
-        store.applyAndNotify {
-            lastUpdatedTime = Instant.now()
-            batteryChargeLevel = batteryViewModel.chargeLevel
-            solarGenerationAmount = values.solarPower
-            houseLoadAmount = values.homeConsumption
-            gridAmount = values.grid
-            batteryChargeAmount = batteryViewModel.chargePower
-            totalExport = totals?.grid
-            totalImport = totals?.loads
+        when (val result = refresher.refresh()) {
+            is WearDataRefreshResult.Success -> {
+                _state.value = _state.value.copy(state = LoadState.Inactive)
+                MainComplicationService.requestRefresh(application)
+            }
+            is WearDataRefreshResult.SkippedRecent -> {
+                _state.value = _state.value.copy(state = LoadState.Inactive)
+            }
+            is WearDataRefreshResult.MissingCreds -> {
+                _state.value = _state.value.copy(state = LoadState.Error(null, result.message))
+            }
+            is WearDataRefreshResult.Error -> {
+                _state.value = _state.value.copy(
+                    state = LoadState.Error(result.throwable, result.message)
+                )
+            }
         }
-
-        _state.value = _state.value.copy(state = LoadState.Inactive)
-        MainComplicationService.requestRefresh(application)
-    }
-
-    suspend fun loadTotals(config: WearConfig, networking: Networking, device: Device): TotalsViewModel? {
-        if (!config.showGridTotals) {
-            return null
-        }
-
-        return TotalsViewModel(reports = loadReportData(networking, device), generationViewModel = null)
-    }
-
-    private suspend fun loadReportData(networking: Networking, currentDevice: Device): List<OpenReportResponse> {
-        val reportVariables = listOf(ReportVariable.FeedIn, ReportVariable.GridConsumption)
-
-        return networking.fetchReport(
-            deviceSN = currentDevice.deviceSN,
-            variables = reportVariables,
-            queryDate = QueryDate.invoke(),
-            reportType = ReportType.month
-        )
     }
 
     override fun onCleared() {

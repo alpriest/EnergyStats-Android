@@ -13,9 +13,12 @@ import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUp
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import com.alpriest.energystats.presentation.MainActivity
+import com.alpriest.energystats.presentation.WearDataRefresher
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.sync.SharedPreferencesConfigStore
 import com.alpriest.energystats.sync.make
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withTimeoutOrNull
 
 class MainComplicationService : SuspendingComplicationDataSourceService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData? {
@@ -43,14 +46,28 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
         val configStore = SharedPreferencesConfigStore.make(this)
-        val contentDescription = configStore.batteryChargeLevel.asPercent() + " battery charge level"
+
+        // Best-effort refresh; always return quickly with cached values if the network is slow.
+        coroutineScope {
+            val refresher = WearDataRefresher(
+                context = this@MainComplicationService,
+                store = configStore,
+                scope = this
+            )
+            withTimeoutOrNull(3_000) {
+                refresher.refresh()
+            }
+        }
+
+        val batteryLevel = configStore.batteryChargeLevel
+        val contentDescription = batteryLevel.asPercent() + " battery charge level"
 
         return when (request.complicationType) {
             ComplicationType.RANGED_VALUE -> {
-                createRangeComplicationData(configStore.batteryChargeLevel, contentDescription)
+                createRangeComplicationData(batteryLevel, contentDescription)
             }
             else -> {
-                createShortTextComplicationData(configStore.batteryChargeLevel.asPercent(), contentDescription)
+                createShortTextComplicationData(batteryLevel.asPercent(), contentDescription)
             }
         }
     }
@@ -86,10 +103,6 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
             launchIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-    }
-
-    private fun batteryFraction(level: Double): Float {
-        return level.coerceIn(0.0, 1.0).toFloat()
     }
 
     companion object {
