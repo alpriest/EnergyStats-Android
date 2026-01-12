@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.config
 
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
@@ -28,6 +29,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     suspend fun fetchDevices()
     fun select(device: Device)
     suspend fun fetchPowerStationDetail()
+    override val appSettingsStream: MutableStateFlow<AppSettings>
+    val appSettings: AppSettings
 
     val lastSettingsResetTime: LocalDateTime?
     var currencyCode: String

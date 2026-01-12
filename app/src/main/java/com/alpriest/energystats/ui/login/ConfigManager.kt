@@ -46,6 +46,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
     override var lastSettingsResetTime: LocalDateTime? = null
     override val appSettingsStream: MutableStateFlow<AppSettings>
         get() = appSettingsStore.appSettingStream
+    override val appSettings: AppSettings = appSettingsStore.currentValue
 
     override var showBatteryTimeEstimateOnWidget: Boolean
         get() = config.showBatteryTimeEstimateOnWidget

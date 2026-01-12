@@ -34,7 +34,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.shared.models.AppSettingsStore
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.DemoNetworking
@@ -115,7 +114,6 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
 @Composable
 fun TabbedViewPreview() {
     val themeStream = MutableStateFlow(AppSettings.Companion.demo())
-    val appSettingsStore = AppSettingsStore()
     val dependencies = TabbedViewDependencies(
         FakeConfigManager(),
         network = DemoNetworking(),
