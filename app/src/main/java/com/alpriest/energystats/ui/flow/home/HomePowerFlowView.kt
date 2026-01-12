@@ -13,9 +13,10 @@ import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun HomePowerFlowView(amount: Double, modifier: Modifier, themeStream: MutableStateFlow<AppSettings>, position: PowerFlowLinePosition = PowerFlowLinePosition.MIDDLE) {
+fun HomePowerFlowView(amount: Double, modifier: Modifier, appSettingsStream: StateFlow<AppSettings>, position: PowerFlowLinePosition = PowerFlowLinePosition.MIDDLE) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -23,7 +24,7 @@ fun HomePowerFlowView(amount: Double, modifier: Modifier, themeStream: MutableSt
         Box(modifier = Modifier.weight(1f)) {
             PowerFlowView(
                 amount = amount,
-                themeStream = themeStream,
+                themeStream = appSettingsStream,
                 position = position,
                 orientation = LineOrientation.VERTICAL
             )
@@ -39,7 +40,7 @@ fun HomePowerFlowViewPreview() {
             HomePowerFlowView(
                 amount = 1.0,
                 modifier = Modifier,
-                themeStream = MutableStateFlow(AppSettings.demo())
+                appSettingsStream = MutableStateFlow(AppSettings.demo())
             )
         }
     }

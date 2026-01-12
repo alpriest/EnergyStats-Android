@@ -22,6 +22,7 @@ import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.models.WorkMode
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDateTime
 
 interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculatorConfig, BatteryConfig {
@@ -29,8 +30,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     suspend fun fetchDevices()
     fun select(device: Device)
     suspend fun fetchPowerStationDetail()
-    override val appSettingsStream: MutableStateFlow<AppSettings>
-    val appSettings: AppSettings
+    var detectedActiveTemplate: String?
+    override val appSettingsStream: StateFlow<AppSettings>
 
     val lastSettingsResetTime: LocalDateTime?
     var currencyCode: String
@@ -86,6 +87,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean
     fun setDeviceSupports(capability: DeviceCapability, deviceSN: String)
     fun resetDisplaySettings()
+    fun loginAsDemo()
+
     var workModes: List<WorkMode>
     var showInverterConsumption: Boolean
     var showBatterySOCOnDailyStats: Boolean

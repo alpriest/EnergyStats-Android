@@ -24,32 +24,33 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.LoadingView
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.ui.DimmedTextColor
+import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class SolarForecastView(
     private val solarForecastProvider: () -> SolcastCaching,
-    val themeStream: MutableStateFlow<AppSettings>,
+    val appSettingsStream: StateFlow<AppSettings>,
     val configManager: ConfigManaging
 ) {
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
-        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, themeStream, configManager))
+        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, appSettingsStream, configManager))
     ) {
         val data = viewModel.dataStream.collectAsState().value
         val loadState: LoadState = viewModel.loadStateStream.collectAsState().value
         val context = LocalContext.current
-        val appTheme = themeStream.collectAsState().value
+        val appTheme = appSettingsStream.collectAsState().value
 
         LaunchedEffect(null) {
             viewModel.load(context)
@@ -100,8 +101,8 @@ class SolarForecastView(
 
             Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                 data.map { site ->
-                    ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), themeStream)
-                    ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), themeStream)
+                    ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), appSettingsStream)
+                    ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), appSettingsStream)
                 }
             }
 
@@ -220,7 +221,7 @@ fun SolarForecastViewPreview() {
     EnergyStatsTheme {
         SolarForecastView(
             solarForecastProvider = { DemoSolarForecasting() },
-            themeStream = MutableStateFlow(AppSettings.demo()),
+            appSettingsStream = MutableStateFlow(AppSettings.demo()),
             configManager = FakeConfigManager()
         ).Content()
     }

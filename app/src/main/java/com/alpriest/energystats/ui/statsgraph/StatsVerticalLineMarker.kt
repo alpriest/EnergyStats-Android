@@ -6,16 +6,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.lineMarkerColor
-import com.alpriest.energystats.shared.models.AppSettings
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SelectedStatsValuesLineMarker(
     displayMode: StatsDisplayMode,
     model: StatsGraphLineMarkerModel,
-    themeStream: MutableStateFlow<AppSettings>
+    themeStream: StateFlow<AppSettings>
 ) {
     val leadingMargin = model.dimensions.startPadding
 

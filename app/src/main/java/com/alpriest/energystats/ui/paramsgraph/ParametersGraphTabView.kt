@@ -38,21 +38,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.graphs.MultipleParameterGraphVico
 import com.alpriest.energystats.ui.paramsgraph.graphs.SingleParameterGraphVico
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
-import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.shared.ui.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -92,7 +93,7 @@ class ParametersGraphTabView(
                 solarForecastProvider
             )
         ),
-        themeStream: MutableStateFlow<AppSettings>
+        themeStream: StateFlow<AppSettings>
     ) {
         val scrollState = rememberScrollState()
         val hasData = viewModel.hasDataStream.collectAsState().value
@@ -169,7 +170,7 @@ class ParametersGraphTabView(
     }
 
     @Composable
-    private fun LoadedData(selectedDateTime: LocalDateTime?, viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppSettings>) {
+    private fun LoadedData(selectedDateTime: LocalDateTime?, viewModel: ParametersGraphTabViewModel, appSettingsStream: StateFlow<AppSettings>) {
         val producerAxisScalePairs = viewModel.viewDataState.collectAsState().value.producers
 
         Column(
@@ -202,11 +203,11 @@ class ParametersGraphTabView(
         }
 
         if (configManager.separateParameterGraphsByUnit) {
-            MultipleParameterGraphVico(viewModel, themeStream, userManager, producerAxisScalePairs)
+            MultipleParameterGraphVico(viewModel, appSettingsStream, userManager, producerAxisScalePairs)
         } else {
             SingleParameterGraphVico(
                 viewModel,
-                themeStream,
+                appSettingsStream,
                 userManager,
                 producerAxisScalePairs
             )

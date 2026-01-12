@@ -12,7 +12,7 @@ import com.alpriest.energystats.ui.summary.SummaryView
 
 @Composable
 fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSettings: MutableState<TopBarSettings>) {
-    ConfigureStatusBarColours(page, dependencies.themeStream)
+    ConfigureStatusBarColours(page, dependencies.appSettingsStream)
     val context = LocalContext.current
     val application = context.applicationContext as Application
 
@@ -23,12 +23,12 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.network,
             dependencies.configManager,
             dependencies.userManager,
-            dependencies.themeStream,
+            dependencies.appSettingsStream,
             dependencies.widgetDataSharer,
             dependencies.bannerAlertManager,
             dependencies.templateStore,
             dependencies.apiKeyProvider
-        ).Content(themeStream = dependencies.themeStream)
+        ).Content(appSettingsStream = dependencies.appSettingsStream)
 
         1 -> NavigableStatsGraphTabView(
             topBarSettings,
@@ -36,7 +36,7 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.network,
             dependencies.onWriteTempFile,
             dependencies.filePathChooser,
-            dependencies.themeStream,
+            dependencies.appSettingsStream,
             dependencies.userManager
         ).Content()
 
@@ -47,7 +47,7 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.network,
             dependencies.onWriteTempFile,
             dependencies.filePathChooser,
-            dependencies.themeStream,
+            dependencies.appSettingsStream,
             dependencies.solarForecastingProvider
         ).Content()
 
@@ -56,7 +56,7 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.userManager,
             dependencies.network,
             dependencies.solarForecastingProvider
-        ).NavigableContent(topBarSettings, themeStream = dependencies.themeStream)
+        ).NavigableContent(topBarSettings, appSettingsStream = dependencies.appSettingsStream)
 
         4 -> NavigableSettingsView(
             topBarSettings,

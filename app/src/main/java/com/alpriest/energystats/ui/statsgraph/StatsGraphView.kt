@@ -62,10 +62,10 @@ import java.util.Locale
 @Composable
 fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsStateWithLifecycle().value
-    val themeStream = viewModel.themeStream
+    val appSettingsStream = viewModel.themeStream
     val viewData = viewModel.viewDataStateFlow.collectAsStateWithLifecycle().value
     val selectedValue = viewModel.selectedValueStream.collectAsStateWithLifecycle().value
-    val chartColors = viewData.stats.keys.map { it.colour(themeStream) }
+    val chartColors = viewData.stats.keys.map { it.colour(appSettingsStream) }
     val selfSufficiencyGraphData = viewData.selfSufficiency
     val inverterConsumptionData = viewData.inverterUsage
     val batterySOCData = viewData.batterySOC
@@ -73,7 +73,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val modelProducer = remember { CartesianChartModelProducer() }
     val bottomAxisFormatter = remember(displayMode) { BottomAxisValueFormatter(displayMode) }
     val scrollState = rememberVicoScrollState(scrollEnabled = false)
-    val isSystemInDarkTheme = isDarkMode(themeStream)
+    val isSystemInDarkTheme = isDarkMode(appSettingsStream)
     val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray.copy(alpha = 0.5f)
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = Zoom.Content)
 
@@ -127,13 +127,13 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     } else {
         val statsLayer = rememberStatsLayer(chartColors)
 
-        val selfSufficiencyColor = selfSufficiencyLineColor(isDarkMode(themeStream))
+        val selfSufficiencyColor = selfSufficiencyLineColor(isDarkMode(appSettingsStream))
         val selfSufficiencyLayer = rememberLineLayer(color = selfSufficiencyColor, verticalAxisPosition = Axis.Position.Vertical.Start)
 
-        val inverterConsumptionColor = ReportVariable.InverterConsumption.colour(themeStream)
+        val inverterConsumptionColor = ReportVariable.InverterConsumption.colour(appSettingsStream)
         val inverterConsumptionLayer = rememberLineLayer(color = inverterConsumptionColor, verticalAxisPosition = Axis.Position.Vertical.End)
 
-        val batterySOCColor = ReportVariable.BatterySOC.colour(themeStream)
+        val batterySOCColor = ReportVariable.BatterySOC.colour(appSettingsStream)
         val batterySOCLayer = rememberLineLayer(color = batterySOCColor, verticalAxisPosition = Axis.Position.Vertical.Start)
 
         val layers = buildList {
@@ -143,7 +143,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             if (batterySOCData.isNotEmpty()) add(batterySOCLayer)
         }
 
-        val color = axisLabelColor(isDarkMode(themeStream))
+        val color = axisLabelColor(isDarkMode(appSettingsStream))
         val graphLabel = rememberTextComponent(
             color = color,
             textSize = 10.sp,
@@ -186,7 +186,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                     SelectedStatsValuesLineMarker(
                         displayMode,
                         it,
-                        themeStream
+                        appSettingsStream
                     )
                 }
             }
@@ -217,7 +217,7 @@ fun StatsGraphViewPreview() {
         MutableStateFlow(Day(LocalDate.now())),
         FakeConfigManager(),
         DemoNetworking(),
-        themeStream = MutableStateFlow(AppSettings.demo()),
+        appSettingsStream = MutableStateFlow(AppSettings.demo()),
         { _, _ -> null }
     )
     val viewModel: StatsTabViewModel = viewModel(factory = factory)

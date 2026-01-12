@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
 
 class FakeConfigManager : ConfigManaging {
-    override val appSettings: AppSettings = AppSettings.demo()
+    override var detectedActiveTemplate: String? = null
     override var showInverterConsumption: Boolean = false
     override var colorThemeMode: ColorThemeMode = ColorThemeMode.Auto
     override var showGraphValueDescriptions: Boolean = true
@@ -97,6 +97,7 @@ class FakeConfigManager : ConfigManaging {
     override var showStringTotalsAsPercentage: Boolean = false
     override var showBatterySOCOnDailyStats: Boolean = false
     override var allowNegativeLoad: Boolean = false
+    override fun loginAsDemo() {}
 
     override var devices: List<Device>? = listOf(
         Device(

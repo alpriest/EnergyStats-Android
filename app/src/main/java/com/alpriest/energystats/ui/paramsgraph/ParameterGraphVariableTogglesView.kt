@@ -22,6 +22,7 @@ import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -39,11 +40,11 @@ data class SelectedValue(
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, unit: String?, themeStream: MutableStateFlow<AppSettings>, modifier: Modifier = Modifier) {
+fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, unit: String?, appSettingsStream: StateFlow<AppSettings>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val boundsValues = viewModel.boundsStream.collectAsState().value
-    val appTheme = themeStream.collectAsState().value
+    val appTheme = appSettingsStream.collectAsState().value
     val context = LocalContext.current
 
     Column(modifier) {
@@ -78,13 +79,13 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
                 if (selectedValue == null) {
                     val boundsValue = boundsValues.firstOrNull { entry -> entry.type == it.type }
                     val graphBounds = boundsValue?.let { GraphBounds(it.min, it.max, it.now) }
-                    ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it, unit) }, title, description, null, graphBounds)
+                    ToggleRowView(it, appSettingsStream, { viewModel.toggleVisibility(it, unit) }, title, description, null, graphBounds)
                 } else {
                     val formattedValue = when (it.type.unit) {
                         "kW" -> selectedValue.y.toDouble().kW(appTheme.decimalPlaces)
                         else -> "${selectedValue.y} ${selectedValue.type.unit}"
                     }
-                    ToggleRowView(it, themeStream, { viewModel.toggleVisibility(it, unit) }, title, description, formattedValue, null)
+                    ToggleRowView(it, appSettingsStream, { viewModel.toggleVisibility(it, unit) }, title, description, formattedValue, null)
                 }
             }
     }
@@ -102,6 +103,6 @@ fun ParameterGraphVariableTogglesViewPreview() {
             solarForecastProvider = { DemoSolarForecasting() }
         ),
         null,
-        themeStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = false))
+        appSettingsStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = false))
     )
 }

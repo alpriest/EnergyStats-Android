@@ -19,16 +19,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.GraphBounds
-import com.alpriest.energystats.shared.ui.roundedToString
-import com.alpriest.energystats.ui.paramsgraph.GraphVariable
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.DimmedTextColor
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.alpriest.energystats.shared.ui.roundedToString
+import com.alpriest.energystats.ui.paramsgraph.GraphVariable
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun <T : GraphVariable> ToggleRowView(
     it: T,
-    themeStream: MutableStateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     toggleVisibility: (T) -> Unit,
     title: String,
     description: String?,
@@ -36,9 +36,9 @@ fun <T : GraphVariable> ToggleRowView(
     boundsValue: GraphBounds?
 ) {
     val textColor = if (it.enabled) MaterialTheme.colorScheme.onBackground else DimmedTextColor
-    val appTheme = themeStream.collectAsState().value
+    val appTheme = appSettingsStream.collectAsState().value
     val fontSize = appTheme.fontSize()
-    val colour = it.colour(themeStream).copy(alpha = if (it.enabled) 1.0f else 0.5f)
+    val colour = it.colour(appSettingsStream).copy(alpha = if (it.enabled) 1.0f else 0.5f)
 
     Row(
         verticalAlignment = Alignment.Top,

@@ -10,11 +10,11 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.WebLinkColorInDarkTheme
 import com.alpriest.energystats.shared.ui.WebLinkColorInLightTheme
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import kotlinx.coroutines.flow.StateFlow
 
 fun makeUrlAnnotatedString(text: String, linkColor: Color): AnnotatedString {
     val urlPattern = "(https?://[^ ]+)|(\\S+@\\S+)".toRegex()
@@ -52,8 +52,8 @@ fun makeUrlAnnotatedString(text: String, linkColor: Color): AnnotatedString {
 }
 
 @Composable
-fun ClickableUrlText(text: String, modifier: Modifier = Modifier, textStyle: TextStyle, themeStream: MutableStateFlow<AppSettings>) {
-    val annotatedString = makeUrlAnnotatedString(text, linkColor = webLinkColor(isDarkMode(themeStream)))
+fun ClickableUrlText(text: String, modifier: Modifier = Modifier, textStyle: TextStyle, appSettingsStream: StateFlow<AppSettings>) {
+    val annotatedString = makeUrlAnnotatedString(text, linkColor = webLinkColor(isDarkMode(appSettingsStream)))
     val context = LocalUriHandler.current
 
     ClickableText(

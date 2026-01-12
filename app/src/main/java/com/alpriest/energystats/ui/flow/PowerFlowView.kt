@@ -37,6 +37,7 @@ import com.alpriest.energystats.shared.ui.PowerFlowNeutralText
 import com.alpriest.energystats.shared.ui.PowerFlowPositive
 import com.alpriest.energystats.shared.ui.PowerFlowPositiveText
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.math.abs
 
 enum class PowerFlowLinePosition {
@@ -77,7 +78,7 @@ fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
 }
 
 @Composable
-fun PowerText(amount: Double, themeStream: MutableStateFlow<AppSettings>, backgroundColor: Color, textColor: Color) {
+fun PowerText(amount: Double, themeStream: StateFlow<AppSettings>, backgroundColor: Color, textColor: Color) {
     val theme by themeStream.collectAsStateWithLifecycle()
     val fontSize: TextUnit = theme.fontSize()
 
@@ -100,7 +101,7 @@ fun PowerText(amount: Double, themeStream: MutableStateFlow<AppSettings>, backgr
 @Composable
 fun PowerFlowView(
     amount: Double,
-    themeStream: MutableStateFlow<AppSettings>,
+    themeStream: StateFlow<AppSettings>,
     position: PowerFlowLinePosition,
     modifier: Modifier = Modifier,
     useColouredLines: Boolean = false,

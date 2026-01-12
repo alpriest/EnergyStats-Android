@@ -38,10 +38,11 @@ import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStream: MutableStateFlow<AppSettings>, modifier: Modifier = Modifier) {
-    val showGridTotals = themeStream.collectAsStateWithLifecycle().value.showGridTotals
+fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, appSettingsStream: StateFlow<AppSettings>, modifier: Modifier = Modifier) {
+    val showGridTotals = appSettingsStream.collectAsStateWithLifecycle().value.showGridTotals
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,20 +53,20 @@ fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStrea
                 .height(iconHeight)
                 .width(iconHeight * 1f)
                 .clipToBounds(),
-            color = iconBackgroundColor(isDarkMode(themeStream)),
-            strokeWidth = themeStream.collectAsStateWithLifecycle().value.strokeWidth()
+            color = iconBackgroundColor(isDarkMode(appSettingsStream)),
+            strokeWidth = appSettingsStream.collectAsStateWithLifecycle().value.strokeWidth()
         )
 
         if (showGridTotals) {
             if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    GridTotals(viewModel, 1, themeStream)
+                    GridTotals(viewModel, 1, appSettingsStream)
                 }
             } else {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    GridTotals(viewModel, 1, themeStream)
+                    GridTotals(viewModel, 1, appSettingsStream)
                 }
             }
         }
@@ -76,7 +77,7 @@ fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStrea
 private fun GridTotals(
     viewModel: LoadedPowerFlowViewModel,
     decimalPlaces: Int,
-    themeStream: MutableStateFlow<AppSettings>
+    themeStream: StateFlow<AppSettings>
 ) {
     val displayUnit = themeStream.collectAsStateWithLifecycle().value.displayUnit
     val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
@@ -136,7 +137,7 @@ fun GridIconViewPreview() {
         GridIconView(
             loadedPowerFlowViewModel,
             iconHeight = 30.dp,
-            themeStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true)),
+            appSettingsStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true)),
             modifier = Modifier
         )
     }

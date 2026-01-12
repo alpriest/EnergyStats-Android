@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -49,23 +48,23 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeUserManager
+import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.ui.Sunny
 import com.alpriest.energystats.ui.helpers.ClickableUrlText
-import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class APIKeyLoginView(private val userManager: UserManaging) {
     @Composable
     fun Content(
         viewModel: APIKeyLoginViewModel = viewModel(factory = APIKeyLoginViewModelFactory(userManager)),
-        themeStream: MutableStateFlow<AppSettings>
+        appSettingsStream: StateFlow<AppSettings>
     ) {
         val apiKey = viewModel.apiKeyStream.collectAsState().value
-        val context = LocalContext.current
         val errorMessage = viewModel.errorMessageStream.collectAsState().value
         val scope = rememberCoroutineScope()
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -139,14 +138,14 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                 }
             }
 
-            HowToObtainAPIKeyView().Content(themeStream, Modifier.padding(horizontal = 16.dp))
+            HowToObtainAPIKeyView().Content(appSettingsStream, Modifier.padding(horizontal = 16.dp))
         }
     }
 }
 
 class HowToObtainAPIKeyView {
     @Composable
-    fun Content(themeStream: MutableStateFlow<AppSettings>, modifier: Modifier = Modifier) {
+    fun Content(appSettingsStream: StateFlow<AppSettings>, modifier: Modifier = Modifier) {
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = modifier.fillMaxWidth()
@@ -157,14 +156,14 @@ class HowToObtainAPIKeyView {
                 modifier = Modifier.padding(bottom = 8.dp),
                 fontWeight = FontWeight.Bold
             )
-            BulletPoint(1, stringResource(R.string.api_key_step_1), themeStream)
+            BulletPoint(1, stringResource(R.string.api_key_step_1), appSettingsStream)
             Text("** Do not use the V2 website yet.**")
-            BulletPoint(2, stringResource(R.string.api_key_step_2), themeStream)
-            BulletPoint(3, stringResource(R.string.api_key_step_3), themeStream)
-            BulletPoint(4, stringResource(R.string.api_key_step_4), themeStream)
-            BulletPoint(5, stringResource(R.string.api_key_step_5), themeStream)
-            BulletPoint(6, stringResource(R.string.api_key_step_6), themeStream)
-            BulletPoint(7, stringResource(R.string.api_key_step_7), themeStream)
+            BulletPoint(2, stringResource(R.string.api_key_step_2), appSettingsStream)
+            BulletPoint(3, stringResource(R.string.api_key_step_3), appSettingsStream)
+            BulletPoint(4, stringResource(R.string.api_key_step_4), appSettingsStream)
+            BulletPoint(5, stringResource(R.string.api_key_step_5), appSettingsStream)
+            BulletPoint(6, stringResource(R.string.api_key_step_6), appSettingsStream)
+            BulletPoint(7, stringResource(R.string.api_key_step_7), appSettingsStream)
 
             Text(
                 stringResource(R.string.what_is_an_api_key),
@@ -174,27 +173,27 @@ class HowToObtainAPIKeyView {
             )
 
             Column {
-                Paragraph(stringResource(R.string.what_is_api_key_1), themeStream = themeStream)
-                Paragraph(stringResource(R.string.what_is_api_key_2), themeStream = themeStream)
-                Paragraph(stringResource(R.string.what_is_api_key_3), themeStream = themeStream)
-                Paragraph(stringResource(R.string.what_is_api_key_4), themeStream = themeStream)
-                Paragraph(stringResource(R.string.what_is_api_key_5), themeStream = themeStream)
+                Paragraph(stringResource(R.string.what_is_api_key_1), appSettingsStream = appSettingsStream)
+                Paragraph(stringResource(R.string.what_is_api_key_2), appSettingsStream = appSettingsStream)
+                Paragraph(stringResource(R.string.what_is_api_key_3), appSettingsStream = appSettingsStream)
+                Paragraph(stringResource(R.string.what_is_api_key_4), appSettingsStream = appSettingsStream)
+                Paragraph(stringResource(R.string.what_is_api_key_5), appSettingsStream = appSettingsStream)
             }
         }
     }
 
     @Composable
-    fun Paragraph(text: String, themeStream: MutableStateFlow<AppSettings>) {
+    fun Paragraph(text: String, appSettingsStream: StateFlow<AppSettings>) {
         ClickableUrlText(
             text,
             textStyle = TextStyle(colorScheme.onSecondary),
-            themeStream = themeStream,
+            appSettingsStream = appSettingsStream,
             modifier = Modifier.padding(vertical = 4.dp)
         )
     }
 
     @Composable
-    fun BulletPoint(number: Int, text: String, themeStream: MutableStateFlow<AppSettings>) {
+    fun BulletPoint(number: Int, text: String, appSettingsStream: StateFlow<AppSettings>) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -220,7 +219,7 @@ class HowToObtainAPIKeyView {
             ClickableUrlText(
                 text = text,
                 textStyle = TextStyle(colorScheme.onSecondary),
-                themeStream = themeStream,
+                appSettingsStream = appSettingsStream,
                 modifier = Modifier.align(Alignment.Top)
             )
         }
@@ -232,7 +231,7 @@ class HowToObtainAPIKeyView {
 fun APIKeyLoginViewPreview() {
     EnergyStatsTheme {
         APIKeyLoginView(FakeUserManager()).Content(
-            themeStream = MutableStateFlow(AppSettings.demo())
+            appSettingsStream = MutableStateFlow(AppSettings.demo())
         )
     }
 }

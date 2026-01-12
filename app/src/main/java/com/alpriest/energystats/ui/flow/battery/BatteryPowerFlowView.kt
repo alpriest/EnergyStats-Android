@@ -47,7 +47,7 @@ import kotlinx.coroutines.flow.StateFlow
 fun BatteryPowerFlow(
     viewModel: BatteryPowerViewModel,
     modifier: Modifier = Modifier,
-    themeStream: MutableStateFlow<AppSettings>
+    appSettingsStream: StateFlow<AppSettings>
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,7 +55,7 @@ fun BatteryPowerFlow(
     ) {
         PowerFlowView(
             amount = viewModel.chargePowerkWH,
-            themeStream = themeStream,
+            themeStream = appSettingsStream,
             position = PowerFlowLinePosition.LEFT,
             useColouredLines = true,
             modifier = Modifier.fillMaxHeight(),
@@ -65,8 +65,8 @@ fun BatteryPowerFlow(
 }
 
 @Composable
-fun isDarkMode(themeStream: StateFlow<AppSettings>): Boolean {
-    return isDarkMode(colorTheme = themeStream.collectAsStateWithLifecycle().value.colorTheme)
+fun isDarkMode(appSettingsStream: StateFlow<AppSettings>): Boolean {
+    return isDarkMode(colorTheme = appSettingsStream.collectAsStateWithLifecycle().value.colorTheme)
 }
 
 @Composable
@@ -81,17 +81,17 @@ fun isDarkMode(colorTheme: ColorThemeMode): Boolean {
 @Composable
 fun BatteryIconView(
     viewModel: BatteryPowerViewModel,
-    themeStream: MutableStateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     iconHeight: Dp,
     modifier: Modifier = Modifier
 ) {
-    val percentage = themeStream.collectAsStateWithLifecycle().value.showBatterySOCAsPercentage
-    val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
-    val smallFontSize = themeStream.collectAsStateWithLifecycle().value.smallFontSize()
-    val showBatteryTemperature = themeStream.collectAsStateWithLifecycle().value.showBatteryTemperature
-    val decimalPlaces = themeStream.collectAsStateWithLifecycle().value.decimalPlaces
-    val showBatteryEstimate = themeStream.collectAsStateWithLifecycle().value.showBatteryEstimate
-    val isDarkMode = isDarkMode(themeStream)
+    val percentage = appSettingsStream.collectAsStateWithLifecycle().value.showBatterySOCAsPercentage
+    val fontSize = appSettingsStream.collectAsStateWithLifecycle().value.fontSize()
+    val smallFontSize = appSettingsStream.collectAsStateWithLifecycle().value.smallFontSize()
+    val showBatteryTemperature = appSettingsStream.collectAsStateWithLifecycle().value.showBatteryTemperature
+    val decimalPlaces = appSettingsStream.collectAsStateWithLifecycle().value.decimalPlaces
+    val showBatteryEstimate = appSettingsStream.collectAsStateWithLifecycle().value.showBatteryEstimate
+    val isDarkMode = isDarkMode(appSettingsStream)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -218,7 +218,7 @@ fun BatteryPowerFlowViewPreview() {
                 batteryTemperatures = BatteryTemperatures(13.6, null, null),
                 residual = 5678
             ),
-            themeStream = MutableStateFlow(AppSettings.demo(showBatteryTemperature = true, showBatteryEstimate = true)),
+            appSettingsStream = MutableStateFlow(AppSettings.demo(showBatteryTemperature = true, showBatteryEstimate = true)),
             iconHeight = 24.dp
         )
     }

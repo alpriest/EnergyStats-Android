@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.CalculationBreakdown
 import com.alpriest.energystats.shared.models.AppSettings
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: CalculationBreakdown, themeStream: MutableStateFlow<AppSettings>) {
-    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
+fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: CalculationBreakdown, appSettingsStream: StateFlow<AppSettings>) {
+    val decimalPlaces = appSettingsStream.collectAsState().value.decimalPlaces
 
     AnimatedVisibility(
         visible = visible,
@@ -33,12 +33,12 @@ fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: Calculation
             Modifier
                 .padding(bottom = 8.dp)
                 .background(
-                    ApproximationBackground(themeStream),
+                    ApproximationBackground(appSettingsStream),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .border(
                     width = 1.dp,
-                    color = ApproximationHeader(themeStream),
+                    color = ApproximationHeader(appSettingsStream),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .padding(4.dp)

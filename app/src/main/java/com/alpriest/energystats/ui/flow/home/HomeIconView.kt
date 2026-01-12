@@ -18,18 +18,18 @@ import com.alpriest.energystats.shared.ui.iconForegroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.shared.models.AppSettings
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateFlow<AppSettings>, modifier: Modifier, iconHeight: Dp) {
-    val showHomeTotal = themeStream.collectAsStateWithLifecycle().value.showHomeTotal
-    val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
-    val smallFontSize = themeStream.collectAsStateWithLifecycle().value.smallFontSize()
-    val displayUnit = themeStream.collectAsStateWithLifecycle().value.displayUnit
+fun HomeIconView(viewModel: LoadedPowerFlowViewModel, appSettingsStream: StateFlow<AppSettings>, modifier: Modifier, iconHeight: Dp) {
+    val showHomeTotal = appSettingsStream.collectAsStateWithLifecycle().value.showHomeTotal
+    val fontSize = appSettingsStream.collectAsStateWithLifecycle().value.fontSize()
+    val smallFontSize = appSettingsStream.collectAsStateWithLifecycle().value.smallFontSize()
+    val displayUnit = appSettingsStream.collectAsStateWithLifecycle().value.displayUnit
     val context = LocalContext.current
     val homeTotal = viewModel.homeTotal.collectAsStateWithLifecycle().value
-    val foregroundColor = iconForegroundColor(isDarkMode(themeStream))
-    val backgroundColor = iconBackgroundColor(isDarkMode(themeStream))
+    val foregroundColor = iconForegroundColor(isDarkMode(appSettingsStream))
+    val backgroundColor = iconBackgroundColor(isDarkMode(appSettingsStream))
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

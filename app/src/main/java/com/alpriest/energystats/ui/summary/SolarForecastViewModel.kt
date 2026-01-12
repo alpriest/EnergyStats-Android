@@ -13,6 +13,7 @@ import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
 import com.alpriest.energystats.shared.models.network.toHalfHourOfDay
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -30,18 +31,18 @@ data class SolarForecastViewData(
 
 class SolarForecastViewModelFactory(
     private val solarForecastProvider: () -> SolcastCaching,
-    private val themeStream: MutableStateFlow<AppSettings>,
+    private val appSettingsStream: StateFlow<AppSettings>,
     private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SolarForecastViewModel(solarForecastProvider, themeStream, configManager) as T
+        return SolarForecastViewModel(solarForecastProvider, appSettingsStream, configManager) as T
     }
 }
 
 class SolarForecastViewModel(
     private val solarForecastProvider: () -> SolcastCaching,
-    private val themeStream: MutableStateFlow<AppSettings>,
+    private val appSettingsStream: StateFlow<AppSettings>,
     private val configManager: ConfigManaging
 ) : ViewModel() {
     val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())
@@ -55,7 +56,7 @@ class SolarForecastViewModel(
         if (loadStateStream.value != LoadState.Inactive) {
             return
         }
-        val settings = themeStream.value.solcastSettings
+        val settings = appSettingsStream.value.solcastSettings
         if (settings.sites.isEmpty()) {
             return
         }

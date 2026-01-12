@@ -10,18 +10,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.DateTimeFloatEntry
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphViewVico
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
-import com.alpriest.energystats.shared.models.AppSettings
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.data.ExtraStore
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 val VariableKey = ExtraStore.Key<Variable>()
 val VariablesKey = ExtraStore.Key<List<Variable>>()
@@ -32,7 +32,7 @@ fun LoadStateParameterGraphVico(
     chartColors: List<Color>,
     yAxisScale: AxisScale,
     viewModel: ParametersGraphTabViewModel,
-    themeStream: MutableStateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     showYAxisUnit: Boolean,
     userManager: UserManaging,
     valuesAtTimeStream: List<DateTimeFloatEntry>
@@ -71,7 +71,7 @@ fun LoadStateParameterGraphVico(
             chartColors,
             yAxisScale,
             viewModel = viewModel,
-            themeStream = themeStream,
+            appSettingsStream = appSettingsStream,
             showYAxisUnit = showYAxisUnit,
             userManager = userManager,
             valuesAtTimeStream

@@ -46,7 +46,13 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
     override var lastSettingsResetTime: LocalDateTime? = null
     override val appSettingsStream: MutableStateFlow<AppSettings>
         get() = appSettingsStore.appSettingStream
-    override val appSettings: AppSettings = appSettingsStore.currentValue
+
+    override var detectedActiveTemplate: String?
+        get() = appSettingsStream.value.detectedActiveTemplate
+        set(value) {
+            val appTheme = appSettingsStream.value.copy(detectedActiveTemplate = value)
+            appSettingsStream.value = appTheme
+        }
 
     override var showBatteryTimeEstimateOnWidget: Boolean
         get() = config.showBatteryTimeEstimateOnWidget
@@ -620,6 +626,10 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         set(value) {
             config.workModes = value
         }
+
+    override fun loginAsDemo() {
+        appSettingsStream.value = AppSettings.demo()
+    }
 
     init {
         currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })

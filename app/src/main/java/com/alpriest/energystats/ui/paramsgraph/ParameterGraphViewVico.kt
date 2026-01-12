@@ -10,13 +10,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.paramsgraph.graphs.VariableKey
-import com.alpriest.energystats.shared.models.AppSettings
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
@@ -34,6 +34,7 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianLayerRangeProvider
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.ZoneId
@@ -50,7 +51,7 @@ fun ParameterGraphViewVico(
     chartColors: List<Color>,
     yAxisScale: AxisScale,
     viewModel: ParametersGraphTabViewModel,
-    themeStream: MutableStateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     showYAxisUnit: Boolean,
     userManager: UserManaging,
     valuesAtTimeStream: List<DateTimeFloatEntry>
@@ -63,7 +64,7 @@ fun ParameterGraphViewVico(
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
     val range = max - min
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter(range) else CartesianValueFormatter.decimal(DecimalFormat("#.#"))
-    val truncatedYAxisOnParameterGraphs = themeStream.collectAsState().value.truncatedYAxisOnParameterGraphs
+    val truncatedYAxisOnParameterGraphs = appSettingsStream.collectAsState().value.truncatedYAxisOnParameterGraphs
     val startOfDay = displayMode.date.atStartOfDay().atZone(ZoneId.systemDefault()).toEpochSecond()
 
     MonitorAlertDialog(viewModel, userManager)
@@ -83,7 +84,7 @@ fun ParameterGraphViewVico(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
                 ),
-                themeStream
+                appSettingsStream
             )
 
             6 -> ParameterGraphViewWithCustomMarker(
@@ -97,7 +98,7 @@ fun ParameterGraphViewVico(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
                 ),
-                themeStream
+                appSettingsStream
             )
 
             else -> ParameterGraphViewWithCustomMarker(
@@ -111,7 +112,7 @@ fun ParameterGraphViewVico(
                     minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
                     maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
                 ),
-                themeStream
+                appSettingsStream
             )
         }
     }
@@ -126,7 +127,7 @@ private fun ParameterGraphViewWithCustomMarker(
     chartColors: List<Color>,
     endAxisFormatter: CartesianValueFormatter,
     rangeProvider: CartesianLayerRangeProvider,
-    themeStream: MutableStateFlow<AppSettings>
+    appSettingsStream: StateFlow<AppSettings>
 ) {
     val bottomAxisFormatter = remember { BottomAxisValueFormatter }
     val selectedValue = selectedValueStream.collectAsState().value
@@ -147,7 +148,7 @@ private fun ParameterGraphViewWithCustomMarker(
         rangeProvider = rangeProvider
     )
 
-    val color = axisLabelColor(isDarkMode(themeStream))
+    val color = axisLabelColor(isDarkMode(appSettingsStream))
     val graphLabel = rememberTextComponent(
         color = color,
         textSize = 10.sp,
@@ -192,7 +193,7 @@ private fun ParameterGraphViewWithCustomMarker(
                 ParameterValuesPopupVico(
                     valuesAtTimeStream,
                     it,
-                    themeStream
+                    appSettingsStream
                 )
             }
         }

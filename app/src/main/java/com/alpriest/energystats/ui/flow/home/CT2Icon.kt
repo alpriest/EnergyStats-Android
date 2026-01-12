@@ -14,10 +14,10 @@ import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.shared.models.AppSettings
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun CT2Icon(modifier: Modifier, themeStream: MutableStateFlow<AppSettings>) {
+fun CT2Icon(modifier: Modifier, themeStream: StateFlow<AppSettings>) {
     val foregroundColor = iconForegroundColor(isDarkMode(themeStream))
     val backgroundColor = iconBackgroundColor(isDarkMode(themeStream))
 

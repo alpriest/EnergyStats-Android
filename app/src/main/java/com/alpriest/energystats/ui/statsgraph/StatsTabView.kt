@@ -37,21 +37,22 @@ import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
@@ -59,12 +60,12 @@ class StatsTabViewModelFactory(
     private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     private val configManager: ConfigManaging,
     private val networking: Networking,
-    private val themeStream: MutableStateFlow<AppSettings>,
+    private val appSettingsStream: StateFlow<AppSettings>,
     private val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StatsTabViewModel(displayModeStream, configManager, networking, themeStream, onWriteTempFile) as T
+        return StatsTabViewModel(displayModeStream, configManager, networking, appSettingsStream, onWriteTempFile) as T
     }
 }
 
@@ -75,13 +76,13 @@ class StatsTabView(
     private val network: Networking,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
-    private val themeStream: MutableStateFlow<AppSettings>,
+    private val appSettingsStream: StateFlow<AppSettings>,
     private val userManager: UserManaging,
     private val navController: NavController
 ) {
     @Composable
     fun Content(
-        viewModel: StatsTabViewModel = viewModel(factory = StatsTabViewModelFactory(displayModeStream, configManager, network, themeStream, onWriteTempFile)),
+        viewModel: StatsTabViewModel = viewModel(factory = StatsTabViewModelFactory(displayModeStream, configManager, network, appSettingsStream, onWriteTempFile)),
     ) {
         val scrollState = rememberScrollState()
         val context = LocalContext.current
@@ -135,7 +136,7 @@ class StatsTabView(
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp))
 
             viewModel.approximationsViewModelStream.collectAsState().value?.let {
-                ApproximationView(viewModel = it, modifier = Modifier, themeStream = themeStream, showingApproximations = showingApproximations)
+                ApproximationView(viewModel = it, modifier = Modifier, appSettingsStream = appSettingsStream, showingApproximations = showingApproximations)
             }
 
             Text(

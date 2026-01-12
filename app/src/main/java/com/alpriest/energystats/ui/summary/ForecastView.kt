@@ -18,11 +18,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.Green
 import com.alpriest.energystats.shared.ui.Red
 import com.alpriest.energystats.shared.ui.TintColor
+import com.alpriest.energystats.ui.flow.energy
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
@@ -38,7 +38,7 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianLayerRangeProvider
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 object ForecastDefaults {
     val predictionColor: Color = TintColor
@@ -52,9 +52,9 @@ fun ForecastView(
     todayTotal: Double,
     name: String?,
     title: String,
-    themeStream: MutableStateFlow<AppSettings>
+    appSettingsStream: StateFlow<AppSettings>
 ) {
-    val theme = themeStream.collectAsState().value
+    val appSettings = appSettingsStream.collectAsState().value
 
     val chartColors = listOf(
         ForecastDefaults.color90,
@@ -77,9 +77,9 @@ fun ForecastView(
         }
     }
 
-    val yAxisValueFormatter = remember(theme.decimalPlaces) {
+    val yAxisValueFormatter = remember(appSettings.decimalPlaces) {
         CartesianValueFormatter { _, value, _ ->
-            "%.${theme.decimalPlaces}f kW".format(value)
+            "%.${appSettings.decimalPlaces}f kW".format(value)
         }
     }
 
@@ -126,7 +126,7 @@ fun ForecastView(
                     }
 
                     withStyle(style = SpanStyle()) {
-                        append(todayTotal.energy(theme.displayUnit, theme.decimalPlaces))
+                        append(todayTotal.energy(appSettings.displayUnit, appSettings.decimalPlaces))
                     }
                 },
                 style = TextStyle(color = MaterialTheme.colorScheme.onSecondary)

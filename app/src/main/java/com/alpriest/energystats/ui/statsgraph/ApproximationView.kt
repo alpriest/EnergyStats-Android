@@ -32,19 +32,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.CalculationBreakdown
-import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
-import com.alpriest.energystats.shared.models.TotalsViewModel
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
+import com.alpriest.energystats.shared.models.TotalsViewModel
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.ui.ApproximationHeaderText
 import com.alpriest.energystats.shared.ui.DarkApproximationBackground
 import com.alpriest.energystats.shared.ui.DarkApproximationHeader
-import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.ui.LightApproximationBackground
 import com.alpriest.energystats.shared.ui.LightApproximationHeader
-import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
+import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 data class ApproximationsViewModel(
     val netSelfSufficiencyEstimate: String?,
@@ -59,8 +60,8 @@ data class ApproximationsViewModel(
 )
 
 @Composable
-fun ApproximationView(themeStream: MutableStateFlow<AppSettings>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel, showingApproximations: MutableState<Boolean>) {
-    val appTheme = themeStream.collectAsState().value
+fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel, showingApproximations: MutableState<Boolean>) {
+    val appTheme = appSettingsStream.collectAsState().value
     val fontSize = appTheme.fontSize()
     val selfSufficiency = when (appTheme.selfSufficiencyEstimateMode) {
         SelfSufficiencyEstimateMode.Off -> null
@@ -77,12 +78,12 @@ fun ApproximationView(themeStream: MutableStateFlow<AppSettings>, modifier: Modi
         Column(
             Modifier
                 .background(
-                    ApproximationBackground(themeStream).copy(alpha = 0.5f),
+                    ApproximationBackground(appSettingsStream).copy(alpha = 0.5f),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .border(
                     width = 1.dp,
-                    color = ApproximationHeader(themeStream),
+                    color = ApproximationHeader(appSettingsStream),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .fillMaxWidth()
@@ -109,7 +110,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppSettings>, modifier: Modi
                     }
 
                     selfSufficiencyCalculations?.let {
-                        CalculationBreakdownView(showingApproximations.value, it, themeStream)
+                        CalculationBreakdownView(showingApproximations.value, it, appSettingsStream)
                     }
                 }
 
@@ -127,7 +128,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppSettings>, modifier: Modi
                             fontSize = fontSize
                         )
                     }
-                    CalculationBreakdownView(showingApproximations.value, it.exportBreakdown, themeStream)
+                    CalculationBreakdownView(showingApproximations.value, it.exportBreakdown, appSettingsStream)
 
                     Row(
                         Modifier.fillMaxWidth(),
@@ -142,7 +143,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppSettings>, modifier: Modi
                             fontSize = fontSize
                         )
                     }
-                    CalculationBreakdownView(showingApproximations.value, it.solarSavingBreakdown, themeStream)
+                    CalculationBreakdownView(showingApproximations.value, it.solarSavingBreakdown, appSettingsStream)
 
                     Row(
                         Modifier.fillMaxWidth(),
@@ -166,7 +167,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppSettings>, modifier: Modi
             Modifier
                 .offset(x = 8.dp, y = (-11).dp)
                 .background(
-                    ApproximationHeader(themeStream),
+                    ApproximationHeader(appSettingsStream),
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 1.dp),
@@ -182,7 +183,7 @@ fun ApproximationView(themeStream: MutableStateFlow<AppSettings>, modifier: Modi
                 .offset(x = (-8).dp, y = (-11).dp)
                 .height(21.dp)
                 .background(
-                    ApproximationHeader(themeStream),
+                    ApproximationHeader(appSettingsStream),
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 1.dp)
@@ -199,7 +200,7 @@ fun StatsApproximationViewPreview() {
 
     EnergyStatsTheme {
         ApproximationView(
-            themeStream = MutableStateFlow(AppSettings.demo().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
+            appSettingsStream = MutableStateFlow(AppSettings.demo().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
             modifier = Modifier.padding(24.dp),
             viewModel = ApproximationsViewModel(
                 netSelfSufficiencyEstimateValue = 0.95,
@@ -224,11 +225,11 @@ fun StatsApproximationViewPreview() {
 }
 
 @Composable
-fun ApproximationHeader(themeStream: MutableStateFlow<AppSettings>): Color {
-    return if (isDarkMode(themeStream)) DarkApproximationHeader else LightApproximationHeader
+fun ApproximationHeader(appSettingsStream: StateFlow<AppSettings>): Color {
+    return if (isDarkMode(appSettingsStream)) DarkApproximationHeader else LightApproximationHeader
 }
 
 @Composable
-fun ApproximationBackground(themeStream: MutableStateFlow<AppSettings>): Color {
-    return if (isDarkMode(themeStream)) DarkApproximationBackground else LightApproximationBackground
+fun ApproximationBackground(appSettingsStream: StateFlow<AppSettings>): Color {
+    return if (isDarkMode(appSettingsStream)) DarkApproximationBackground else LightApproximationBackground
 }

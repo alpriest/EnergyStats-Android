@@ -100,8 +100,7 @@ class PreHomeViewModel(
                     templatePhase.isEqualConfiguration(schedulePhase)
                 }
                 if (match) {
-                    val appTheme = configManager.appSettingsStream.value.copy(detectedActiveTemplate = template.name)
-                    configManager.appSettingsStream.value = appTheme
+                    configManager.detectedActiveTemplate = template.name
                 }
             }
         } catch (_: Exception) {

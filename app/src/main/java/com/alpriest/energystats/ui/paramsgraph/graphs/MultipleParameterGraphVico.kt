@@ -6,17 +6,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.DateTimeFloatEntry
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariableTogglesView
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
-import com.alpriest.energystats.shared.models.AppSettings
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun MultipleParameterGraphVico(
     viewModel: ParametersGraphTabViewModel,
-    themeStream: MutableStateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     userManager: UserManaging,
     producerAxisScalePairs: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>
 ) {
@@ -34,7 +34,7 @@ fun MultipleParameterGraphVico(
                 colors,
                 yAxisScale = producerAxisScale.second,
                 viewModel = viewModel,
-                themeStream = themeStream,
+                appSettingsStream = appSettingsStream,
                 showYAxisUnit = true,
                 userManager = userManager,
                 valuesAtTimeStream = valuesForThisUnit
@@ -44,7 +44,7 @@ fun MultipleParameterGraphVico(
                 viewModel = viewModel,
                 unit = unit,
                 modifier = Modifier.Companion.padding(bottom = 44.dp, top = 6.dp),
-                themeStream = themeStream
+                appSettingsStream = appSettingsStream
             )
         }
     }

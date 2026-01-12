@@ -46,6 +46,7 @@ import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.PreviewContextHolder
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -53,13 +54,13 @@ import com.alpriest.energystats.ui.flow.FinanceAmount
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
-import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import io.dontsayboj.rollingnumbers.RollingNumbers
 import io.dontsayboj.rollingnumbers.model.DefaultAnimationDuration
 import io.dontsayboj.rollingnumbers.ui.Utils
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 enum class SummaryScreen {
     Overview,
@@ -76,7 +77,7 @@ class SummaryView(
     fun NavigableContent(
         topBarSettings: MutableState<TopBarSettings>,
         viewModel: SummaryTabViewModel = viewModel(factory = SummaryTabViewModelFactory(network, configManager)),
-        themeStream: MutableStateFlow<AppSettings>
+        appSettingsStream: StateFlow<AppSettings>
     ) {
         trackScreenView("Summary", "SummaryView")
         val navController = rememberNavController()
@@ -95,7 +96,7 @@ class SummaryView(
                         )
                     }
                 }, null)
-                Content(viewModel, themeStream, Modifier)
+                Content(viewModel, appSettingsStream, Modifier)
             }
 
             composable(SummaryScreen.EditSummaryDateRanges.name) {
@@ -108,11 +109,11 @@ class SummaryView(
     @Composable
     private fun Content(
         viewModel: SummaryTabViewModel,
-        themeStream: MutableStateFlow<AppSettings>,
+        appSettingsStream: StateFlow<AppSettings>,
         modifier: Modifier
     ) {
         val scrollState = rememberScrollState()
-        val appTheme = themeStream.collectAsStateWithLifecycle().value
+        val appTheme = appSettingsStream.collectAsStateWithLifecycle().value
         val approximations = viewModel.approximationsViewModelStream.collectAsStateWithLifecycle().value
         val oldestDataDate = viewModel.oldestDataDate.collectAsStateWithLifecycle().value
         val isLoading = viewModel.loadStateStream.collectAsStateWithLifecycle().value.state
@@ -146,7 +147,7 @@ class SummaryView(
 
                     SolarForecastView(
                         solarForecastProvider,
-                        themeStream,
+                        appSettingsStream,
                         configManager
                     ).Content(modifier = Modifier.padding(top = 44.dp))
                 }
@@ -292,7 +293,7 @@ fun SummaryViewPreview() {
         ) { DemoSolarForecasting() }
             .NavigableContent(
                 topBarSettings,
-                themeStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true))
+                appSettingsStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true))
             )
     }
 }

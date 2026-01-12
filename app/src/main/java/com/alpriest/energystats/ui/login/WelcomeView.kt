@@ -40,16 +40,17 @@ import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun WelcomeView(
     showingApiKey: Boolean,
     userManager: UserManaging,
-    themeStream: MutableStateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     onClick: () -> Unit
 ) {
     val maxHeight: Dp = if (isLandscape()) 200.dp else 800.dp
@@ -67,7 +68,7 @@ fun WelcomeView(
         )
 
         if (showingApiKey) {
-            APIKeyLoginView(userManager = userManager).Content(themeStream = themeStream)
+            APIKeyLoginView(userManager = userManager).Content(appSettingsStream = appSettingsStream)
         } else {
             Text(
                 stringResource(R.string.energy_management_at_your_fingertips),

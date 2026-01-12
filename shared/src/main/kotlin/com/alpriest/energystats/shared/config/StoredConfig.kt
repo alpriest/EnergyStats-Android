@@ -11,7 +11,7 @@ import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.Variable
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDateTime
 
 interface StoredConfig {
@@ -84,7 +84,7 @@ interface StoredConfig {
 }
 
 interface CurrentStatusCalculatorConfig {
-    val appSettingsStream: MutableStateFlow<AppSettings>
+    val appSettingsStream: StateFlow<AppSettings>
     var shouldInvertCT2: Boolean
     var shouldCombineCT2WithPVPower: Boolean
     var powerFlowStrings: PowerFlowStringsSettings

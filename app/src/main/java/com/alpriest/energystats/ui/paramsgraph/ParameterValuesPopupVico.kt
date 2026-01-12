@@ -13,24 +13,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.lineMarkerColor
-import com.alpriest.energystats.shared.models.AppSettings
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun ParameterValuesPopupVico(
     valuesAtTimeStream: List<DateTimeFloatEntry>,
     model: ParameterGraphLineMarkerModel,
-    themeStream: MutableStateFlow<AppSettings>
+    appSettingsStream: StateFlow<AppSettings>
 ) {
     val backgroundPadding = 10f
     val labelToValueSpacing = 10f
     val labelToBackgroundLeadPadding = 5f
     val textMeasurer = rememberTextMeasurer()
     val textStyle = TextStyle(fontSize = 12.sp, color = Color.Companion.Black)
-    val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
-    val color = lineMarkerColor(isDarkMode(themeStream))
+    val decimalPlaces = appSettingsStream.collectAsState().value.decimalPlaces
+    val color = lineMarkerColor(isDarkMode(appSettingsStream))
 
     if (valuesAtTimeStream.isEmpty()) {
         return

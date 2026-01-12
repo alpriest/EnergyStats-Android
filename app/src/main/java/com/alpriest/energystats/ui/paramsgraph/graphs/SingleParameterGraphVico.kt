@@ -11,12 +11,12 @@ import com.alpriest.energystats.ui.paramsgraph.DateTimeFloatEntry
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariableTogglesView
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
 import com.alpriest.energystats.shared.models.AppSettings
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SingleParameterGraphVico(
     viewModel: ParametersGraphTabViewModel,
-    themeStream: MutableStateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     userManager: UserManaging,
     producerAxisScalePairs: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>
 ) {
@@ -42,11 +42,11 @@ fun SingleParameterGraphVico(
         chartColors,
         yAxisScale = yAxisScale,
         viewModel = viewModel,
-        themeStream = themeStream,
+        appSettingsStream = appSettingsStream,
         showYAxisUnit = false,
         userManager = userManager,
         valuesForThisUnit
     )
 
-    ParameterGraphVariableTogglesView(viewModel = viewModel, null, modifier = Modifier.Companion.padding(bottom = 44.dp, top = 6.dp), themeStream = themeStream)
+    ParameterGraphVariableTogglesView(viewModel = viewModel, null, modifier = Modifier.Companion.padding(bottom = 44.dp, top = 6.dp), appSettingsStream = appSettingsStream)
 }

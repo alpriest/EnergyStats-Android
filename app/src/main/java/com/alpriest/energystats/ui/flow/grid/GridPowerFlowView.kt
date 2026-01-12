@@ -12,9 +12,10 @@ import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun GridPowerFlowView(amount: Double, modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppSettings>) {
+fun GridPowerFlowView(amount: Double, modifier: Modifier = Modifier, appSettingsStream: StateFlow<AppSettings>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth()
@@ -23,7 +24,7 @@ fun GridPowerFlowView(amount: Double, modifier: Modifier = Modifier, themeStream
             PowerFlowView(
                 modifier = Modifier,
                 amount = amount,
-                themeStream = themeStream,
+                themeStream = appSettingsStream,
                 position = PowerFlowLinePosition.RIGHT,
                 useColouredLines = true,
                 orientation = LineOrientation.VERTICAL
@@ -39,7 +40,7 @@ fun GridPowerFlowViewPreview() {
         GridPowerFlowView(
             amount = 1.0,
             modifier = Modifier,
-            themeStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true))
+            appSettingsStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true))
         )
     }
 }

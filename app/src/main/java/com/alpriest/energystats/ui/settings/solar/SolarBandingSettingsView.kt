@@ -127,7 +127,7 @@ class SolarBandingSettingsView(
                                     .width(100.dp)
                                     .height(100.dp),
                                 iconHeight = 40.dp,
-                                themeStream = mutatedAppTheme
+                                appSettingsStream = mutatedAppTheme
                             )
 
                             Slider(

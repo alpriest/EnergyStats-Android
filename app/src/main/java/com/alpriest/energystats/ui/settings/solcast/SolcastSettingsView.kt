@@ -82,7 +82,7 @@ class SolcastSettingsView(
                             text = stringResource(R.string.solcast_how_to_find_keys),
                             modifier = Modifier.padding(bottom = 8.dp),
                             textStyle = TextStyle(colorScheme.onSecondary),
-                            themeStream = configManager.appSettingsStream
+                            appSettingsStream = configManager.appSettingsStream
                         )
 
                         OutlinedTextField(

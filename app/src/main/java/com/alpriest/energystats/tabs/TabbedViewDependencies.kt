@@ -9,14 +9,14 @@ import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class TabbedViewDependencies(
     val configManager: ConfigManaging,
     val network: Networking,
     val userManager: UserManaging,
     val onLogout: suspend () -> Unit,
-    val themeStream: MutableStateFlow<AppSettings>,
+    val appSettingsStream: StateFlow<AppSettings>,
     val onRateApp: () -> Unit,
     val onBuyMeCoffee: () -> Unit,
     val onWriteTempFile: (String, String) -> Uri?,

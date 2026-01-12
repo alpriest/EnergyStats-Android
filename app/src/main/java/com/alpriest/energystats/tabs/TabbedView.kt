@@ -119,7 +119,7 @@ fun TabbedViewPreview() {
         network = DemoNetworking(),
         userManager = FakeUserManager(),
         {},
-        themeStream = themeStream,
+        appSettingsStream = themeStream,
         {},
         {},
         { _, _ -> null },

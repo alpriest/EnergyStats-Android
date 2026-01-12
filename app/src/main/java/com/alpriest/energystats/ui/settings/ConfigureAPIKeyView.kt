@@ -20,16 +20,17 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.HowToObtainAPIKeyView
-import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, themeStream: MutableStateFlow<AppSettings>, modifier: Modifier) {
+fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, appSettingsStream: StateFlow<AppSettings>, modifier: Modifier) {
     var apiKey by rememberSaveable { mutableStateOf(store.getApiKey() ?: "") }
     trackScreenView("API Key", "ConfigureAPIKeyView")
 
@@ -59,7 +60,7 @@ fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, th
                         modifier = Modifier.Companion.padding(top = 4.dp)
                     )
 
-                    HowToObtainAPIKeyView().Content(themeStream, modifier = Modifier.Companion.padding(top = 44.dp))
+                    HowToObtainAPIKeyView().Content(appSettingsStream, modifier = Modifier.Companion.padding(top = 44.dp))
                     SettingsBottomSpace()
                 }
             }

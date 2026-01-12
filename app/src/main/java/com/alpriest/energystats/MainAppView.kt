@@ -31,7 +31,7 @@ fun MainAppView(appContainer: AppContainer) {
             network = appContainer.networking,
             userManager = appContainer.userManager,
             { appContainer.userManager.logout() },
-            themeStream = appContainer.configManager.appSettingsStream,
+            appSettingsStream = appContainer.configManager.appSettingsStream,
             { appContainer.openAppInPlayStore() },
             { appContainer.buyMeACoffee() },
             { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) },
@@ -57,7 +57,7 @@ fun MainAppView(appContainer: AppContainer) {
                     WelcomeView(
                         showingApiKey,
                         appContainer.userManager,
-                        themeStream = appContainer.configManager.appSettingsStream
+                        appSettingsStream = appContainer.configManager.appSettingsStream
                     ) { showingApiKey = !showingApiKey }
 
                 is LoggingIn -> LoadingView(stringResource(R.string.logging_in), stringResource(R.string.still_logging_in))

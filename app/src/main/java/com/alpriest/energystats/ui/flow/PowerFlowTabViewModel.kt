@@ -26,6 +26,7 @@ import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.widget.BatteryWidget
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -38,7 +39,7 @@ class PowerFlowTabViewModel(
     private val application: Application,
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val themeStream: MutableStateFlow<AppSettings>,
+    private val appSettingsStream: StateFlow<AppSettings>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
     private val apiKeyProvider: () -> String?
@@ -66,7 +67,7 @@ class PowerFlowTabViewModel(
         appLifecycleObserver.attach()
 
         viewModelScope.launch {
-            themeStream.collect { it ->
+            appSettingsStream.collect { it ->
                 if (it.showInverterTemperatures || it.shouldInvertCT2) {
                     timerFired()
                 }

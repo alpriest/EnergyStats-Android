@@ -75,20 +75,21 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.templates.Template
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class PowerFlowTabViewModelFactory(
     private val application: Application,
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val themeStream: MutableStateFlow<AppSettings>,
+    private val appSettingsStream: StateFlow<AppSettings>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
     private val apiKeyProvider: () -> String?
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PowerFlowTabViewModel(application, network, configManager, themeStream, widgetDataSharer, bannerAlertManager, apiKeyProvider) as T
+        return PowerFlowTabViewModel(application, network, configManager, appSettingsStream, widgetDataSharer, bannerAlertManager, apiKeyProvider) as T
     }
 }
 
@@ -107,7 +108,7 @@ class PowerFlowTabView(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
-    private val themeStream: MutableStateFlow<AppSettings>,
+    private val appSettingsStream: StateFlow<AppSettings>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
     private val templateStore: TemplateStoring,
@@ -128,9 +129,9 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(application, network, configManager, this.themeStream, widgetDataSharer, bannerAlertManager, apiKeyProvider)
+            factory = PowerFlowTabViewModelFactory(application, network, configManager, this.appSettingsStream, widgetDataSharer, bannerAlertManager, apiKeyProvider)
         ),
-        themeStream: MutableStateFlow<AppSettings>
+        appSettingsStream: StateFlow<AppSettings>
     ) {
         trackScreenView("Power Flow Tab", "PowerFlowTabView")
         val loadingBackground = remember { largeRadialGradient(listOf(Color.White, Color.Transparent)) }
@@ -140,7 +141,7 @@ class PowerFlowTabView(
         val coroutineScope = rememberCoroutineScope()
 
         val uiState = viewModel.uiState.collectAsStateWithLifecycle().value.state
-        val showSunnyBackground = themeStream.collectAsStateWithLifecycle().value.showSunnyBackground
+        val showSunnyBackground = appSettingsStream.collectAsStateWithLifecycle().value.showSunnyBackground
         val background = when (uiState) {
             is PowerFlowLoadState.Active -> loadingBackground
             is PowerFlowLoadState.Loaded -> loadedBackground
@@ -162,7 +163,7 @@ class PowerFlowTabView(
                     viewModel,
                     configManager,
                     uiState.viewModel,
-                    themeStream,
+                    appSettingsStream,
                     network,
                     userManager,
                     templateStore
@@ -187,14 +188,14 @@ fun LoadedView(
     viewModel: PowerFlowTabViewModel,
     configManager: ConfigManaging,
     loadedPowerFlowViewModel: LoadedPowerFlowViewModel,
-    themeStream: MutableStateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     network: Networking,
     userManager: UserManaging,
     templateStore: TemplateStoring
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
-    val appSettings = themeStream.collectAsState().value
+    val appSettings = appSettingsStream.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -227,7 +228,7 @@ fun LoadedView(
                 configManager = configManager,
                 powerFlowViewModel = viewModel,
                 loadedPowerFlowViewModel = loadedPowerFlowViewModel,
-                themeStream = themeStream
+                appSettingsStream = appSettingsStream
             )
 
             if (showBottomSheet) {

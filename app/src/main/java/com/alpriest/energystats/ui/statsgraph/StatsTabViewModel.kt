@@ -30,6 +30,7 @@ import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.network.parseToLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
@@ -52,7 +53,7 @@ class StatsTabViewModel(
     val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     val configManager: ConfigManaging,
     private val networking: Networking,
-    val themeStream: MutableStateFlow<AppSettings>,
+    val themeStream: StateFlow<AppSettings>,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
