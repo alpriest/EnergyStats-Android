@@ -22,7 +22,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun MainAppView(appContainer: AppContainer) {
-    val theme = appContainer.configManager.themeStream.collectAsStateWithLifecycle()
+    val theme = appContainer.configManager.appSettingsStream.collectAsStateWithLifecycle()
     val loginState = appContainer.userManager.loggedInState.collectAsStateWithLifecycle()
     var showingApiKey by remember { mutableStateOf(false) }
     val dependencies = remember {
@@ -31,7 +31,7 @@ fun MainAppView(appContainer: AppContainer) {
             network = appContainer.networking,
             userManager = appContainer.userManager,
             { appContainer.userManager.logout() },
-            themeStream = appContainer.configManager.themeStream,
+            themeStream = appContainer.configManager.appSettingsStream,
             { appContainer.openAppInPlayStore() },
             { appContainer.buyMeACoffee() },
             { baseFilename, content -> appContainer.writeToTempFile(baseFilename, content) },
@@ -57,7 +57,7 @@ fun MainAppView(appContainer: AppContainer) {
                     WelcomeView(
                         showingApiKey,
                         appContainer.userManager,
-                        themeStream = appContainer.configManager.themeStream
+                        themeStream = appContainer.configManager.appSettingsStream
                     ) { showingApiKey = !showingApiKey }
 
                 is LoggingIn -> LoadingView(stringResource(R.string.logging_in), stringResource(R.string.still_logging_in))

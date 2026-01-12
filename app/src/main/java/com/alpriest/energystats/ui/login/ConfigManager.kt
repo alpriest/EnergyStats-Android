@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.login
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.config.StoredConfig
 import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.AppSettingsStore
 import com.alpriest.energystats.shared.models.Battery
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
@@ -38,11 +39,13 @@ import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 import java.util.Locale
 
-open class ConfigManager(var config: StoredConfig, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppSettings>) :
+open class ConfigManager(var config: StoredConfig, val networking: Networking, override var appVersion: String, private val appSettingsStore: AppSettingsStore) :
     ConfigManaging {
     private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
     private var deviceSupportsPeakShaving: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
     override var lastSettingsResetTime: LocalDateTime? = null
+    override val appSettingsStream: MutableStateFlow<AppSettings>
+        get() = appSettingsStore.appSettingStream
 
     override var showBatteryTimeEstimateOnWidget: Boolean
         get() = config.showBatteryTimeEstimateOnWidget
@@ -60,28 +63,28 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = ColorThemeMode.fromInt(config.colorTheme)
         set(value) {
             config.colorTheme = value.value
-            themeStream.value = themeStream.value.copy(colorTheme = colorThemeMode)
+            appSettingsStream.value = appSettingsStream.value.copy(colorTheme = colorThemeMode)
         }
 
     override var showGraphValueDescriptions: Boolean
         get() = config.showGraphValueDescriptions
         set(value) {
             config.showGraphValueDescriptions = value
-            themeStream.value = themeStream.value.copy(showGraphValueDescriptions = showGraphValueDescriptions)
+            appSettingsStream.value = appSettingsStream.value.copy(showGraphValueDescriptions = showGraphValueDescriptions)
         }
 
     override var shouldCombineCT2WithPVPower: Boolean
         get() = config.shouldCombineCT2WithPVPower
         set(value) {
             config.shouldCombineCT2WithPVPower = value
-            themeStream.value = themeStream.value.copy(shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower)
+            appSettingsStream.value = appSettingsStream.value.copy(shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower)
         }
 
     override var shouldCombineCT2WithLoadsPower: Boolean
         get() = config.shouldCombineCT2WithLoadsPower
         set(value) {
             config.shouldCombineCT2WithLoadsPower = value
-            themeStream.value = themeStream.value.copy(shouldCombineCT2WithLoadsPower = shouldCombineCT2WithLoadsPower)
+            appSettingsStream.value = appSettingsStream.value.copy(shouldCombineCT2WithLoadsPower = shouldCombineCT2WithLoadsPower)
         }
 
     override var currencyCode: String
@@ -94,7 +97,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.currencySymbol
         set(value) {
             config.currencySymbol = value
-            themeStream.value = themeStream.value.copy(currencySymbol = currencySymbol)
+            appSettingsStream.value = appSettingsStream.value.copy(currencySymbol = currencySymbol)
         }
 
     override var gridImportUnitPrice: Double
@@ -113,42 +116,42 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.decimalPlaces
         set(value) {
             config.decimalPlaces = value
-            themeStream.value = themeStream.value.copy(decimalPlaces = decimalPlaces)
+            appSettingsStream.value = appSettingsStream.value.copy(decimalPlaces = decimalPlaces)
         }
 
     override var showSunnyBackground: Boolean
         get() = config.showSunnyBackground
         set(value) {
             config.showSunnyBackground = value
-            themeStream.value = themeStream.value.copy(showSunnyBackground = showSunnyBackground)
+            appSettingsStream.value = appSettingsStream.value.copy(showSunnyBackground = showSunnyBackground)
         }
 
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode
         get() = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode)
         set(value) {
             config.selfSufficiencyEstimateMode = value.value
-            themeStream.value = themeStream.value.copy(selfSufficiencyEstimateMode = selfSufficiencyEstimateMode)
+            appSettingsStream.value = appSettingsStream.value.copy(selfSufficiencyEstimateMode = selfSufficiencyEstimateMode)
         }
 
     override var showFinancialSummary: Boolean
         get() = config.showFinancialSummary
         set(value) {
             config.showFinancialSummary = value
-            themeStream.value = themeStream.value.copy(showFinancialSummary = showFinancialSummary)
+            appSettingsStream.value = appSettingsStream.value.copy(showFinancialSummary = showFinancialSummary)
         }
 
     override var showBatteryEstimate: Boolean
         get() = config.showBatteryEstimate
         set(value) {
             config.showBatteryEstimate = value
-            themeStream.value = themeStream.value.copy(showBatteryEstimate = showBatteryEstimate)
+            appSettingsStream.value = appSettingsStream.value.copy(showBatteryEstimate = showBatteryEstimate)
         }
 
     override var displayUnit: DisplayUnit
         get() = DisplayUnit.fromInt(config.displayUnit)
         set(value) {
             config.displayUnit = value.value
-            themeStream.value = themeStream.value.copy(displayUnit = displayUnit)
+            appSettingsStream.value = appSettingsStream.value.copy(displayUnit = displayUnit)
         }
 
     override var minSOC: Double
@@ -215,7 +218,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.useColouredFlowLines
         set(value) {
             config.useColouredFlowLines = value
-            themeStream.value = themeStream.value.copy(useColouredLines = useColouredFlowLines)
+            appSettingsStream.value = appSettingsStream.value.copy(useColouredLines = useColouredFlowLines)
         }
 
     override var refreshFrequency: RefreshFrequency
@@ -228,21 +231,21 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.showBatteryTemperature
         set(value) {
             config.showBatteryTemperature = value
-            themeStream.value = themeStream.value.copy(showBatteryTemperature = showBatteryTemperature)
+            appSettingsStream.value = appSettingsStream.value.copy(showBatteryTemperature = showBatteryTemperature)
         }
 
     override var showInverterTemperatures: Boolean
         get() = config.showInverterTemperatures
         set(value) {
             config.showInverterTemperatures = value
-            themeStream.value = themeStream.value.copy(showInverterTemperatures = showInverterTemperatures)
+            appSettingsStream.value = appSettingsStream.value.copy(showInverterTemperatures = showInverterTemperatures)
         }
 
     override var useLargeDisplay: Boolean
         get() = config.useLargeDisplay
         set(value) {
             config.useLargeDisplay = value
-            themeStream.value = themeStream.value.copy(useLargeDisplay = useLargeDisplay)
+            appSettingsStream.value = appSettingsStream.value.copy(useLargeDisplay = useLargeDisplay)
         }
 
     override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
@@ -259,70 +262,70 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.showUsableBatteryOnly
         set(value) {
             config.showUsableBatteryOnly = value
-            themeStream.value = themeStream.value.copy(showUsableBatteryOnly = showUsableBatteryOnly)
+            appSettingsStream.value = appSettingsStream.value.copy(showUsableBatteryOnly = showUsableBatteryOnly)
         }
 
     override var showInverterIcon: Boolean
         get() = config.showInverterIcon
         set(value) {
             config.showInverterIcon = value
-            themeStream.value = themeStream.value.copy(showInverterIcon = showInverterIcon)
+            appSettingsStream.value = appSettingsStream.value.copy(showInverterIcon = showInverterIcon)
         }
 
     override var showHomeTotal: Boolean
         get() = config.showHomeTotal
         set(value) {
             config.showHomeTotal = value
-            themeStream.value = themeStream.value.copy(showHomeTotal = showHomeTotal)
+            appSettingsStream.value = appSettingsStream.value.copy(showHomeTotal = showHomeTotal)
         }
 
     override var shouldInvertCT2: Boolean
         get() = config.shouldInvertCT2
         set(value) {
             config.shouldInvertCT2 = value
-            themeStream.value = themeStream.value.copy(shouldInvertCT2 = shouldInvertCT2)
+            appSettingsStream.value = appSettingsStream.value.copy(shouldInvertCT2 = shouldInvertCT2)
         }
 
     override var showGridTotals: Boolean
         get() = config.showGridTotals
         set(value) {
             config.showGridTotals = value
-            themeStream.value = themeStream.value.copy(showGridTotals = showGridTotals)
+            appSettingsStream.value = appSettingsStream.value.copy(showGridTotals = showGridTotals)
         }
 
     override var showInverterTypeNameOnPowerflow: Boolean
         get() = config.showInverterTypeNameOnPowerflow
         set(value) {
             config.showInverterTypeNameOnPowerflow = value
-            themeStream.value = themeStream.value.copy(showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow)
+            appSettingsStream.value = appSettingsStream.value.copy(showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow)
         }
 
     override var showInverterStationNameOnPowerflow: Boolean
         get() = config.showInverterStationNameOnPowerflow
         set(value) {
             config.showInverterStationNameOnPowerflow = value
-            themeStream.value = themeStream.value.copy(showInverterStationNameOnPowerflow = showInverterStationNameOnPowerflow)
+            appSettingsStream.value = appSettingsStream.value.copy(showInverterStationNameOnPowerflow = showInverterStationNameOnPowerflow)
         }
 
     override var showLastUpdateTimestamp: Boolean
         get() = config.showLastUpdateTimestamp
         set(value) {
             config.showLastUpdateTimestamp = value
-            themeStream.value = themeStream.value.copy(showLastUpdateTimestamp = showLastUpdateTimestamp)
+            appSettingsStream.value = appSettingsStream.value.copy(showLastUpdateTimestamp = showLastUpdateTimestamp)
         }
 
     override var solarRangeDefinitions: SolarRangeDefinitions
         get() = config.solarRangeDefinitions
         set(value) {
             config.solarRangeDefinitions = value
-            themeStream.value = themeStream.value.copy(solarRangeDefinitions = solarRangeDefinitions)
+            appSettingsStream.value = appSettingsStream.value.copy(solarRangeDefinitions = solarRangeDefinitions)
         }
 
     override var totalYieldModel: TotalYieldModel
         get() = TotalYieldModel.fromInt(config.totalYieldModel)
         set(value) {
             config.totalYieldModel = value.value
-            themeStream.value = themeStream.value.copy(totalYieldModel = totalYieldModel)
+            appSettingsStream.value = appSettingsStream.value.copy(totalYieldModel = totalYieldModel)
         }
 
     final override var devices: List<Device>?
@@ -438,49 +441,49 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.parameterGroups
         set(value) {
             config.parameterGroups = value
-            themeStream.value = themeStream.value.copy(parameterGroups = parameterGroups)
+            appSettingsStream.value = appSettingsStream.value.copy(parameterGroups = parameterGroups)
         }
 
     override var solcastSettings: SolcastSettings
         get() = config.solcastSettings
         set(value) {
             config.solcastSettings = value
-            themeStream.value = themeStream.value.copy(solcastSettings = solcastSettings)
+            appSettingsStream.value = appSettingsStream.value.copy(solcastSettings = solcastSettings)
         }
 
     override var dataCeiling: DataCeiling
         get() = DataCeiling.fromInt(config.dataCeiling)
         set(value) {
             config.dataCeiling = value.value
-            themeStream.value = themeStream.value.copy(dataCeiling = dataCeiling)
+            appSettingsStream.value = appSettingsStream.value.copy(dataCeiling = dataCeiling)
         }
 
     override var showFinancialSummaryOnFlowPage: Boolean
         get() = config.showFinancialSummaryOnFlowPage
         set(value) {
             config.showFinancialSummaryOnFlowPage = value
-            themeStream.value = themeStream.value.copy(showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage)
+            appSettingsStream.value = appSettingsStream.value.copy(showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage)
         }
 
     override var separateParameterGraphsByUnit: Boolean
         get() = config.separateParameterGraphsByUnit
         set(value) {
             config.separateParameterGraphsByUnit = value
-            themeStream.value = themeStream.value.copy(separateParameterGraphsByUnit = separateParameterGraphsByUnit)
+            appSettingsStream.value = appSettingsStream.value.copy(separateParameterGraphsByUnit = separateParameterGraphsByUnit)
         }
 
     override var showBatteryAsPercentage: Boolean
         get() = config.showBatterySOCAsPercentage
         set(value) {
             config.showBatterySOCAsPercentage = value
-            themeStream.value = themeStream.value.copy(showBatterySOCAsPercentage = showBatteryAsPercentage)
+            appSettingsStream.value = appSettingsStream.value.copy(showBatterySOCAsPercentage = showBatteryAsPercentage)
         }
 
     override var powerFlowStrings: PowerFlowStringsSettings
         get() = config.powerFlowStrings
         set(value) {
             config.powerFlowStrings = value
-            themeStream.value = themeStream.value.copy(powerFlowStrings = powerFlowStrings)
+            appSettingsStream.value = appSettingsStream.value.copy(powerFlowStrings = powerFlowStrings)
         }
 
     override var powerStationDetail: PowerStationDetail?
@@ -505,7 +508,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.truncatedYAxisOnParameterGraphs
         set(value) {
             config.truncatedYAxisOnParameterGraphs = value
-            themeStream.value = themeStream.value.copy(truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs)
+            appSettingsStream.value = appSettingsStream.value.copy(truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs)
         }
 
     override var earningsModel: EarningsModel
@@ -542,7 +545,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.showInverterScheduleQuickLink
         set(value) {
             config.showInverterScheduleQuickLink = value
-            themeStream.value = themeStream.value.copy(showInverterScheduleQuickLink = showInverterScheduleQuickLink)
+            appSettingsStream.value = appSettingsStream.value.copy(showInverterScheduleQuickLink = showInverterScheduleQuickLink)
         }
 
     override var fetchSolcastOnAppLaunch: Boolean
@@ -555,7 +558,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = CT2DisplayMode.fromInt(config.ct2DisplayMode)
         set(value) {
             config.ct2DisplayMode = value.value
-            themeStream.value = themeStream.value.copy(ct2DisplayMode = ct2DisplayMode)
+            appSettingsStream.value = appSettingsStream.value.copy(ct2DisplayMode = ct2DisplayMode)
         }
 
     override fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean {
@@ -579,7 +582,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
 
     override fun resetDisplaySettings() {
         config.clearDisplaySettings()
-        themeStream.value = AppSettings.toAppTheme(config)
+        appSettingsStream.value = AppSettings.toAppTheme(config)
         lastSettingsResetTime = LocalDateTime.now()
     }
 
@@ -587,28 +590,28 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.showStringTotalsAsPercentage
         set(value) {
             config.showStringTotalsAsPercentage = value
-            themeStream.value = themeStream.value.copy(showStringTotalsAsPercentage = showStringTotalsAsPercentage)
+            appSettingsStream.value = appSettingsStream.value.copy(showStringTotalsAsPercentage = showStringTotalsAsPercentage)
         }
 
     override var allowNegativeLoad: Boolean
         get() = config.allowNegativeLoad
         set(value) {
             config.allowNegativeLoad = value
-            themeStream.value = themeStream.value.copy(allowNegativeLoad = allowNegativeLoad)
+            appSettingsStream.value = appSettingsStream.value.copy(allowNegativeLoad = allowNegativeLoad)
         }
 
     override var showInverterConsumption: Boolean
         get() = config.showInverterConsumption
         set(value) {
             config.showInverterConsumption = value
-            themeStream.value = themeStream.value.copy(showInverterConsumption = showInverterConsumption)
+            appSettingsStream.value = appSettingsStream.value.copy(showInverterConsumption = showInverterConsumption)
         }
 
     override var showBatterySOCOnDailyStats: Boolean
         get() = config.showBatterySOCOnDailyStats
         set(value) {
             config.showBatterySOCOnDailyStats = value
-            themeStream.value = themeStream.value.copy(showBatterySOCOnDailyStats = showBatterySOCOnDailyStats)
+            appSettingsStream.value = appSettingsStream.value.copy(showBatterySOCOnDailyStats = showBatterySOCOnDailyStats)
         }
 
     override var workModes: List<String>

@@ -147,5 +147,5 @@ class WearConfig(
     override var allowNegativeLoad: Boolean,
     var showGridTotals: Boolean
 ) : CurrentStatusCalculatorConfig {
-    override val themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings.demo())
+    override val appSettingsStream: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings.demo())
 }

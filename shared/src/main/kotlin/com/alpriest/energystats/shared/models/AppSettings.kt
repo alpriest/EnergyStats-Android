@@ -5,6 +5,19 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.shared.config.StoredConfig
+import kotlinx.coroutines.flow.MutableStateFlow
+
+public final class AppSettingsStore {
+    private val appSettings: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings.demo())
+
+    public val appSettingStream: MutableStateFlow<AppSettings> = appSettings //TODO: Not mutable
+
+    public fun update(appSettings: AppSettings) {
+        this.appSettings.value = appSettings
+    }
+
+    public val currentValue: AppSettings get() = appSettings.value
+}
 
 data class AppSettings(
     val useLargeDisplay: Boolean,

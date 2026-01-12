@@ -84,7 +84,7 @@ interface StoredConfig {
 }
 
 interface CurrentStatusCalculatorConfig {
-    val themeStream: MutableStateFlow<AppSettings>
+    val appSettingsStream: MutableStateFlow<AppSettings>
     var shouldInvertCT2: Boolean
     var shouldCombineCT2WithPVPower: Boolean
     var powerFlowStrings: PowerFlowStringsSettings

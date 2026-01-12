@@ -37,7 +37,7 @@ class CurrentStatusCalculator(
 
     init {
         coroutineScope.launch {
-            config.themeStream.collect {
+            config.appSettingsStream.collect {
                 updateCurrentValues()
             }
         }

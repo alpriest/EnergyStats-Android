@@ -54,7 +54,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
     val isEditingCapacity = rememberSaveable { mutableStateOf(false) }
     var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacity) }
-    val decimalPlaces = config.themeStream.collectAsState().value.decimalPlaces
+    val decimalPlaces = config.appSettingsStream.collectAsState().value.decimalPlaces
     val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
     val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
     val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }

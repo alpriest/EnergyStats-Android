@@ -61,7 +61,7 @@ class ParameterGraphVariableChooserView(
         val scrollState = rememberScrollState()
         val viewData = viewModel.viewDataStream.collectAsState().value
         val uriHandler = LocalUriHandler.current
-        val groups = configManager.themeStream.collectAsState().value.parameterGroups
+        val groups = configManager.appSettingsStream.collectAsState().value.parameterGroups
         trackScreenView("Parameters", "ParameterGraphVariableChooserView")
         var showAllParameters by remember { mutableStateOf(false) }
 

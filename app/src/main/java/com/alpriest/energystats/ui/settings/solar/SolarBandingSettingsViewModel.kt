@@ -19,7 +19,7 @@ class SolarBandingSettingsViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private val _themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(config.themeStream.value)
+    private val _themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(config.appSettingsStream.value)
     val themeStream: StateFlow<AppSettings> = _themeStream
 
     private var originalValue: SolarBandingSettingsViewData? = null

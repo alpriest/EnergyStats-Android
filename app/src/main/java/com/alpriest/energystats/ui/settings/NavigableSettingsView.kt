@@ -127,7 +127,7 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.APIKey.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_api_key), {}, { navController.popBackStack() })
-            ConfigureAPIKeyView(userManager.store, navController, configManager.themeStream, Modifier)
+            ConfigureAPIKeyView(userManager.store, navController, configManager.appSettingsStream, Modifier)
         }
 
         composable(SettingsScreen.PowerStation.name) {

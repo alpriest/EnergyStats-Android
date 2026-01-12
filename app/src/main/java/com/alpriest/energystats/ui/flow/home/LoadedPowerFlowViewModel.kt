@@ -61,7 +61,7 @@ class LoadedPowerFlowViewModel(
         loadTotals()
 
         viewModelScope.launch {
-            combine(configManager.themeStream, currentValuesStream) { theme, currentValues ->
+            combine(configManager.appSettingsStream, currentValuesStream) { theme, currentValues ->
                 Pair(theme, currentValues)
             }.collect { (theme, currentValues) ->
                 solar = currentValues.solarPower

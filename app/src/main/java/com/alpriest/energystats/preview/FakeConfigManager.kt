@@ -41,7 +41,7 @@ class FakeConfigManager : ConfigManaging {
     override var currencySymbol: String = "£"
     override val variables: List<Variable> = listOf()
     override var showUsableBatteryOnly: Boolean = false
-    override val themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings.demo())
+    override val appSettingsStream: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings.demo())
     override var decimalPlaces: Int = 3
     override var showSunnyBackground: Boolean = true
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off

@@ -51,7 +51,7 @@ class UserManager(
     override suspend fun loginDemo() {
         configManager.isDemoUser = true
         store.store("demo")
-        configManager.themeStream.value = AppSettings.demo()
+        configManager.appSettingsStream.value = AppSettings.demo()
         configManager.fetchDevices()
         _loggedInState.value = LoginStateHolder(LoggedIn)
     }

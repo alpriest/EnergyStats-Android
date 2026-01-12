@@ -80,7 +80,7 @@ class SolarBandingSettingsView(
     fun Content(viewModel: SolarBandingSettingsViewModel = viewModel(factory = SolarBandingSettingsViewModelFactory(configManager))) {
         val amount = remember { mutableFloatStateOf(2.0f) }
         val viewData = viewModel.viewDataStream.collectAsState().value
-        val mutatedAppTheme = remember { MutableStateFlow(configManager.themeStream.value) }
+        val mutatedAppTheme = remember { MutableStateFlow(configManager.appSettingsStream.value) }
         val context = LocalContext.current
         trackScreenView("Sun display variation thresholds", "SolarBandingSettingsView")
 

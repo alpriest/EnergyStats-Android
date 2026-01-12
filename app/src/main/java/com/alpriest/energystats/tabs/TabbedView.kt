@@ -32,15 +32,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.preview.FakeStoredConfigStore
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.AppSettingsStore
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.stores.WidgetDataSharer
 import com.alpriest.energystats.ui.flow.BannerAlertManager
-import com.alpriest.energystats.ui.login.ConfigManager
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -116,13 +115,9 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
 @Composable
 fun TabbedViewPreview() {
     val themeStream = MutableStateFlow(AppSettings.Companion.demo())
+    val appSettingsStore = AppSettingsStore()
     val dependencies = TabbedViewDependencies(
-        ConfigManager(
-            config = FakeStoredConfigStore(),
-            networking = DemoNetworking(),
-            appVersion = "1.19",
-            themeStream = themeStream
-        ),
+        FakeConfigManager(),
         network = DemoNetworking(),
         userManager = FakeUserManager(),
         {},
