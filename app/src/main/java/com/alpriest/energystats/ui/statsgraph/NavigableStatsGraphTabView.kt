@@ -13,7 +13,7 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 
@@ -28,7 +28,7 @@ class NavigableStatsGraphTabView(
     private val network: Networking,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
-    private val themeStream: MutableStateFlow<AppTheme>,
+    private val themeStream: MutableStateFlow<AppSettings>,
     private val userManager: UserManaging
 ) {
     @Composable

@@ -37,7 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
@@ -71,7 +71,7 @@ fun LoadedPowerFlowView(
     configManager: ConfigManaging,
     powerFlowViewModel: PowerFlowTabViewModel,
     loadedPowerFlowViewModel: LoadedPowerFlowViewModel = viewModel(),
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
 ) {
     val rawIconHeight = themeStream.collectAsState().value.iconHeight()
     val iconHeight = when (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -223,7 +223,7 @@ fun LoadedPowerFlowView(
 @Composable
 private fun CT2FlowView(
     iconHeight: Dp,
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     loadedPowerFlowViewModel: LoadedPowerFlowViewModel
 ) {
     Row {
@@ -279,7 +279,7 @@ private fun CT2FlowView(
 }
 
 @Composable
-fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
+fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: MutableStateFlow<AppSettings>) {
     val updateState by viewModel.updateMessage.collectAsState()
     val appTheme = themeStream.collectAsState().value
     var showLastUpdateTimestamp by remember { mutableStateOf(false) }
@@ -334,7 +334,7 @@ fun SummaryPowerFlowViewPreview() {
                 application,
                 DemoNetworking(),
                 FakeConfigManager(),
-                MutableStateFlow(AppTheme.demo().copy(decimalPlaces = 3)),
+                MutableStateFlow(AppSettings.demo().copy(decimalPlaces = 3)),
                 WidgetDataSharer.preview(),
                 BannerAlertManager(),
                 { "apiKeyProvider" }
@@ -357,7 +357,7 @@ fun SummaryPowerFlowViewPreview() {
                 BannerAlertManager()
             ),
             themeStream = MutableStateFlow(
-                AppTheme.demo(
+                AppSettings.demo(
                     showInverterTemperatures = true,
                     showHomeTotal = true,
                     decimalPlaces = 3,

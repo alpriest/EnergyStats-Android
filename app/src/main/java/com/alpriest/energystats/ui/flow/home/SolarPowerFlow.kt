@@ -21,13 +21,13 @@ import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>) {
+fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, themeStream: MutableStateFlow<AppSettings>) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -59,7 +59,7 @@ fun SolarPowerFlowViewPreview() {
                     .width(100.dp)
                     .height(100.dp),
                 iconHeight = 40.dp,
-                themeStream = MutableStateFlow(AppTheme.demo().copy(showFinancialSummary = false))
+                themeStream = MutableStateFlow(AppSettings.demo().copy(showFinancialSummary = false))
             )
 
             Slider(
@@ -77,35 +77,35 @@ fun SolarPowerFlowViewPreview() {
                     amount = 0.0,
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
-                    themeStream = MutableStateFlow(AppTheme.demo())
+                    themeStream = MutableStateFlow(AppSettings.demo())
                 )
 
                 SolarPowerFlow(
                     amount = 0.5,
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
-                    themeStream = MutableStateFlow(AppTheme.demo())
+                    themeStream = MutableStateFlow(AppSettings.demo())
                 )
 
                 SolarPowerFlow(
                     amount = 1.5,
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
-                    themeStream = MutableStateFlow(AppTheme.demo())
+                    themeStream = MutableStateFlow(AppSettings.demo())
                 )
 
                 SolarPowerFlow(
                     amount = 2.5,
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
-                    themeStream = MutableStateFlow(AppTheme.demo())
+                    themeStream = MutableStateFlow(AppSettings.demo())
                 )
 
                 SolarPowerFlow(
                     amount = 3.5,
                     modifier = Modifier.width(100.dp),
                     iconHeight = 40.dp,
-                    themeStream = MutableStateFlow(AppTheme.demo())
+                    themeStream = MutableStateFlow(AppSettings.demo())
                 )
             }
         }

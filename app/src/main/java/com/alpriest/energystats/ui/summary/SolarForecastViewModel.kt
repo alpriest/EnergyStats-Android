@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.fullDateTime
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.network.SolcastFailure
 import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
@@ -30,7 +30,7 @@ data class SolarForecastViewData(
 
 class SolarForecastViewModelFactory(
     private val solarForecastProvider: () -> SolcastCaching,
-    private val themeStream: MutableStateFlow<AppTheme>,
+    private val themeStream: MutableStateFlow<AppSettings>,
     private val configManager: ConfigManaging
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -41,7 +41,7 @@ class SolarForecastViewModelFactory(
 
 class SolarForecastViewModel(
     private val solarForecastProvider: () -> SolcastCaching,
-    private val themeStream: MutableStateFlow<AppTheme>,
+    private val themeStream: MutableStateFlow<AppSettings>,
     private val configManager: ConfigManaging
 ) : ViewModel() {
     val dataStream = MutableStateFlow<List<SolarForecastViewData>>(listOf())

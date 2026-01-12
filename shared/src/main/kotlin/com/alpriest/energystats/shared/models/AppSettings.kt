@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.shared.config.StoredConfig
 
-data class AppTheme(
+data class AppSettings(
     val useLargeDisplay: Boolean,
     val useColouredLines: Boolean,
     val showBatteryTemperature: Boolean,
@@ -76,7 +76,7 @@ data class AppTheme(
     companion object
 }
 
-fun AppTheme.Companion.demo(
+fun AppSettings.Companion.demo(
     useLargeDisplay: Boolean = false,
     useColouredLines: Boolean = true,
     showBatteryTemperature: Boolean = true,
@@ -117,8 +117,8 @@ fun AppTheme.Companion.demo(
     showInverterConsumption: Boolean = false,
     showBatterySOCOnDailyStats: Boolean = false,
     allowNegativeHouseLoad: Boolean = false
-): AppTheme {
-    return AppTheme(
+): AppSettings {
+    return AppSettings(
         useLargeDisplay = useLargeDisplay,
         useColouredLines = useColouredLines,
         showBatteryTemperature = showBatteryTemperature,
@@ -162,8 +162,8 @@ fun AppTheme.Companion.demo(
     )
 }
 
-fun AppTheme.Companion.toAppTheme(config: StoredConfig): AppTheme {
-    return AppTheme(
+fun AppSettings.Companion.toAppTheme(config: StoredConfig): AppSettings {
+    return AppSettings(
         useLargeDisplay = config.useLargeDisplay,
         useColouredLines = config.useColouredFlowLines,
         showBatteryTemperature = config.showBatteryTemperature,

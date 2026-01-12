@@ -5,7 +5,7 @@ import androidx.annotation.UiThread
 import com.alpriest.energystats.R
 import com.alpriest.energystats.WatchSyncManager
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.BadCredentialsException
 import com.alpriest.energystats.shared.network.InvalidTokenException
@@ -51,7 +51,7 @@ class UserManager(
     override suspend fun loginDemo() {
         configManager.isDemoUser = true
         store.store("demo")
-        configManager.themeStream.value = AppTheme.demo()
+        configManager.themeStream.value = AppSettings.demo()
         configManager.fetchDevices()
         _loggedInState.value = LoginStateHolder(LoggedIn)
     }

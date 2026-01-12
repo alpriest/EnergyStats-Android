@@ -29,7 +29,7 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableCho
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.ESButton
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -99,7 +99,7 @@ class NavigableParametersGraphTabView(
     val network: Networking,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
-    val themeStream: MutableStateFlow<AppTheme>,
+    val themeStream: MutableStateFlow<AppSettings>,
     private val solarForecastProvider: () -> SolcastCaching
 ) {
     @Composable

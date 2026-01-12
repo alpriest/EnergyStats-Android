@@ -2,7 +2,7 @@ package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.config.StoredConfig
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.Battery
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
@@ -38,7 +38,7 @@ import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 import java.util.Locale
 
-open class ConfigManager(var config: StoredConfig, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppTheme>) :
+open class ConfigManager(var config: StoredConfig, val networking: Networking, override var appVersion: String, override val themeStream: MutableStateFlow<AppSettings>) :
     ConfigManaging {
     private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
     private var deviceSupportsPeakShaving: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
@@ -195,7 +195,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         set(value) {
             config.isDemoUser = value
             if (value) {
-                val demoTheme = AppTheme.demo()
+                val demoTheme = AppSettings.demo()
                 useColouredFlowLines = demoTheme.useColouredLines
                 showBatteryTemperature = demoTheme.showBatteryTemperature
                 showBatteryEstimate = demoTheme.showBatteryEstimate
@@ -579,7 +579,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
 
     override fun resetDisplaySettings() {
         config.clearDisplaySettings()
-        themeStream.value = AppTheme.toAppTheme(config)
+        themeStream.value = AppSettings.toAppTheme(config)
         lastSettingsResetTime = LocalDateTime.now()
     }
 

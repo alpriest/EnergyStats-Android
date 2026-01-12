@@ -1,7 +1,7 @@
 package com.alpriest.energystats.preview
 
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.Battery
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
@@ -41,7 +41,7 @@ class FakeConfigManager : ConfigManaging {
     override var currencySymbol: String = "£"
     override val variables: List<Variable> = listOf()
     override var showUsableBatteryOnly: Boolean = false
-    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.demo())
+    override val themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings.demo())
     override var decimalPlaces: Int = 3
     override var showSunnyBackground: Boolean = true
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off

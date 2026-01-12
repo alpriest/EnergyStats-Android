@@ -10,7 +10,7 @@ import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.complication.MainComplicationService
 import com.alpriest.energystats.shared.config.CurrentStatusCalculatorConfig
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
@@ -147,5 +147,5 @@ class WearConfig(
     override var allowNegativeLoad: Boolean,
     var showGridTotals: Boolean
 ) : CurrentStatusCalculatorConfig {
-    override val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(AppTheme.demo())
+    override val themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings.demo())
 }

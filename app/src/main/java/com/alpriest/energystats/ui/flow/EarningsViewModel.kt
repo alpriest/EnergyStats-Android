@@ -20,7 +20,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.EarningsModel
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.roundedToString
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,7 +44,7 @@ fun SubLabelledView(value: String, label: String, alignment: Alignment.Horizonta
 }
 
 @Composable
-fun EarningsView(themeStream: MutableStateFlow<AppTheme>, viewModel: EarningsViewModel?) {
+fun EarningsView(themeStream: MutableStateFlow<AppSettings>, viewModel: EarningsViewModel?) {
     val context = LocalContext.current
     val appTheme = themeStream.collectAsState().value
 

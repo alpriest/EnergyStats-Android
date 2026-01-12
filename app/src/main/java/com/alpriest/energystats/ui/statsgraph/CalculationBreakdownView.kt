@@ -17,11 +17,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.models.CalculationBreakdown
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: CalculationBreakdown, themeStream: MutableStateFlow<AppTheme>) {
+fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: CalculationBreakdown, themeStream: MutableStateFlow<AppSettings>) {
     val decimalPlaces = themeStream.collectAsState().value.decimalPlaces
 
     AnimatedVisibility(

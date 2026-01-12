@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeUserManager
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun WelcomeView(
     showingApiKey: Boolean,
     userManager: UserManaging,
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     onClick: () -> Unit
 ) {
     val maxHeight: Dp = if (isLandscape()) 200.dp else 800.dp
@@ -128,6 +128,6 @@ fun isLandscape(): Boolean {
 @Composable
 fun WelcomeViewPreview() {
     EnergyStatsTheme {
-        WelcomeView(false, userManager = FakeUserManager(), MutableStateFlow(AppTheme.demo())) {}
+        WelcomeView(false, userManager = FakeUserManager(), MutableStateFlow(AppSettings.demo())) {}
     }
 }

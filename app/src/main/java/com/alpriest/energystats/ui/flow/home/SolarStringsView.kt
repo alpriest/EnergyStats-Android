@@ -22,14 +22,14 @@ import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.power
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.CT2DisplayMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.PowerFlowNeutralText
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun SolarStringsView(
     configManaging: ConfigManaging,
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     viewModel: LoadedPowerFlowViewModel
 ) {
     val theme by themeStream.collectAsState()

@@ -51,7 +51,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.shared.ui.Sunny
 import com.alpriest.energystats.ui.helpers.ClickableUrlText
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
@@ -62,7 +62,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
     @Composable
     fun Content(
         viewModel: APIKeyLoginViewModel = viewModel(factory = APIKeyLoginViewModelFactory(userManager)),
-        themeStream: MutableStateFlow<AppTheme>
+        themeStream: MutableStateFlow<AppSettings>
     ) {
         val apiKey = viewModel.apiKeyStream.collectAsState().value
         val context = LocalContext.current
@@ -146,7 +146,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
 
 class HowToObtainAPIKeyView {
     @Composable
-    fun Content(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+    fun Content(themeStream: MutableStateFlow<AppSettings>, modifier: Modifier = Modifier) {
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = modifier.fillMaxWidth()
@@ -184,7 +184,7 @@ class HowToObtainAPIKeyView {
     }
 
     @Composable
-    fun Paragraph(text: String, themeStream: MutableStateFlow<AppTheme>) {
+    fun Paragraph(text: String, themeStream: MutableStateFlow<AppSettings>) {
         ClickableUrlText(
             text,
             textStyle = TextStyle(colorScheme.onSecondary),
@@ -194,7 +194,7 @@ class HowToObtainAPIKeyView {
     }
 
     @Composable
-    fun BulletPoint(number: Int, text: String, themeStream: MutableStateFlow<AppTheme>) {
+    fun BulletPoint(number: Int, text: String, themeStream: MutableStateFlow<AppSettings>) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -232,7 +232,7 @@ class HowToObtainAPIKeyView {
 fun APIKeyLoginViewPreview() {
     EnergyStatsTheme {
         APIKeyLoginView(FakeUserManager()).Content(
-            themeStream = MutableStateFlow(AppTheme.demo())
+            themeStream = MutableStateFlow(AppSettings.demo())
         )
     }
 }

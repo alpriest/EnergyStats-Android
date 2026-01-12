@@ -2,7 +2,7 @@ package com.alpriest.energystats.tabs
 
 import android.net.Uri
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.stores.WidgetDataSharing
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
@@ -16,7 +16,7 @@ class TabbedViewDependencies(
     val network: Networking,
     val userManager: UserManaging,
     val onLogout: suspend () -> Unit,
-    val themeStream: MutableStateFlow<AppTheme>,
+    val themeStream: MutableStateFlow<AppSettings>,
     val onRateApp: () -> Unit,
     val onBuyMeCoffee: () -> Unit,
     val onWriteTempFile: (String, String) -> Uri?,

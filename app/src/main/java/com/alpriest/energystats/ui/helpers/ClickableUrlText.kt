@@ -11,7 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.WebLinkColorInDarkTheme
 import com.alpriest.energystats.shared.ui.WebLinkColorInLightTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,7 +52,7 @@ fun makeUrlAnnotatedString(text: String, linkColor: Color): AnnotatedString {
 }
 
 @Composable
-fun ClickableUrlText(text: String, modifier: Modifier = Modifier, textStyle: TextStyle, themeStream: MutableStateFlow<AppTheme>) {
+fun ClickableUrlText(text: String, modifier: Modifier = Modifier, textStyle: TextStyle, themeStream: MutableStateFlow<AppSettings>) {
     val annotatedString = makeUrlAnnotatedString(text, linkColor = webLinkColor(isDarkMode(themeStream)))
     val context = LocalUriHandler.current
 

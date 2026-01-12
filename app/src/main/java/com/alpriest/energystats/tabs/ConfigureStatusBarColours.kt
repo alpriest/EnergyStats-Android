@@ -9,11 +9,11 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun ConfigureStatusBarColours(page: Int, themeStream: StateFlow<AppTheme>) {
+fun ConfigureStatusBarColours(page: Int, themeStream: StateFlow<AppSettings>) {
     val activity = LocalActivity.current as? ComponentActivity ?: return
     val isDarkMode = isDarkMode(themeStream)
 

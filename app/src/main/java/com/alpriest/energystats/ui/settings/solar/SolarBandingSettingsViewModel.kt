@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.settings.solar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +19,8 @@ class SolarBandingSettingsViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private val _themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(config.themeStream.value)
-    val themeStream: StateFlow<AppTheme> = _themeStream
+    private val _themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(config.themeStream.value)
+    val themeStream: StateFlow<AppSettings> = _themeStream
 
     private var originalValue: SolarBandingSettingsViewData? = null
 
@@ -60,8 +60,8 @@ class SolarBandingSettingsViewModel(
         )
     }
 
-    private fun makeAppTheme(): AppTheme {
-        return AppTheme.demo()
+    private fun makeAppTheme(): AppSettings {
+        return AppSettings.demo()
             .copy(
                 solarRangeDefinitions = SolarRangeDefinitions(
                     threshold1 = _viewDataStream.value.threshold1.toDouble(),

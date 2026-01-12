@@ -17,11 +17,11 @@ import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.energy
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier, iconHeight: Dp) {
+fun HomeIconView(viewModel: LoadedPowerFlowViewModel, themeStream: MutableStateFlow<AppSettings>, modifier: Modifier, iconHeight: Dp) {
     val showHomeTotal = themeStream.collectAsStateWithLifecycle().value.showHomeTotal
     val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
     val smallFontSize = themeStream.collectAsStateWithLifecycle().value.smallFontSize()

@@ -36,7 +36,7 @@ import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
 import com.alpriest.energystats.shared.models.TotalsViewModel
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.ApproximationHeaderText
 import com.alpriest.energystats.shared.ui.DarkApproximationBackground
 import com.alpriest.energystats.shared.ui.DarkApproximationHeader
@@ -59,7 +59,7 @@ data class ApproximationsViewModel(
 )
 
 @Composable
-fun ApproximationView(themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel, showingApproximations: MutableState<Boolean>) {
+fun ApproximationView(themeStream: MutableStateFlow<AppSettings>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel, showingApproximations: MutableState<Boolean>) {
     val appTheme = themeStream.collectAsState().value
     val fontSize = appTheme.fontSize()
     val selfSufficiency = when (appTheme.selfSufficiencyEstimateMode) {
@@ -199,7 +199,7 @@ fun StatsApproximationViewPreview() {
 
     EnergyStatsTheme {
         ApproximationView(
-            themeStream = MutableStateFlow(AppTheme.demo().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
+            themeStream = MutableStateFlow(AppSettings.demo().copy(selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Absolute)),
             modifier = Modifier.padding(24.dp),
             viewModel = ApproximationsViewModel(
                 netSelfSufficiencyEstimateValue = 0.95,
@@ -224,11 +224,11 @@ fun StatsApproximationViewPreview() {
 }
 
 @Composable
-fun ApproximationHeader(themeStream: MutableStateFlow<AppTheme>): Color {
+fun ApproximationHeader(themeStream: MutableStateFlow<AppSettings>): Color {
     return if (isDarkMode(themeStream)) DarkApproximationHeader else LightApproximationHeader
 }
 
 @Composable
-fun ApproximationBackground(themeStream: MutableStateFlow<AppTheme>): Color {
+fun ApproximationBackground(themeStream: MutableStateFlow<AppSettings>): Color {
     return if (isDarkMode(themeStream)) DarkApproximationBackground else LightApproximationBackground
 }

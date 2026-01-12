@@ -6,11 +6,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun InverterSpacer(modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppTheme>) {
+fun InverterSpacer(modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppSettings>) {
     val strokeWidth = themeStream.collectAsState().value.strokeWidth()
 
     Canvas(modifier) {

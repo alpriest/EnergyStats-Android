@@ -39,7 +39,7 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.kWh
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.demo
@@ -76,7 +76,7 @@ class SummaryView(
     fun NavigableContent(
         topBarSettings: MutableState<TopBarSettings>,
         viewModel: SummaryTabViewModel = viewModel(factory = SummaryTabViewModelFactory(network, configManager)),
-        themeStream: MutableStateFlow<AppTheme>
+        themeStream: MutableStateFlow<AppSettings>
     ) {
         trackScreenView("Summary", "SummaryView")
         val navController = rememberNavController()
@@ -108,7 +108,7 @@ class SummaryView(
     @Composable
     private fun Content(
         viewModel: SummaryTabViewModel,
-        themeStream: MutableStateFlow<AppTheme>,
+        themeStream: MutableStateFlow<AppSettings>,
         modifier: Modifier
     ) {
         val scrollState = rememberScrollState()
@@ -138,7 +138,7 @@ class SummaryView(
                         LoadedView(
                             hasPV = hasPV,
                             approximationsViewModel = it,
-                            appTheme = appTheme,
+                            appSettings = appTheme,
                             oldestDataDate = oldestDataDate,
                             latestDataDate = latestDataDate
                         )
@@ -155,7 +155,7 @@ class SummaryView(
     }
 
     @Composable
-    private fun LoadedView(approximationsViewModel: ApproximationsViewModel, hasPV: Boolean, appTheme: AppTheme, oldestDataDate: String, latestDataDate: String) {
+    private fun LoadedView(approximationsViewModel: ApproximationsViewModel, hasPV: Boolean, appSettings: AppSettings, oldestDataDate: String, latestDataDate: String) {
         val style = typography.titleLarge.copy(color = MaterialTheme.colorScheme.onSurface)
 
         EnergySummaryRow(
@@ -173,7 +173,7 @@ class SummaryView(
             Text(
                 stringResource(R.string.your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data),
                 color = DimmedTextColor,
-                fontSize = appTheme.smallFontSize()
+                fontSize = appSettings.smallFontSize()
             )
         }
 
@@ -184,19 +184,19 @@ class SummaryView(
                 title = stringResource(R.string.export_income),
                 amount = energyStatsModel.exportIncome,
                 textStyle = style,
-                currencySymbol = appTheme.currencySymbol
+                currencySymbol = appSettings.currencySymbol
             )
             MoneySummaryRow(
                 title = stringResource(R.string.grid_import_avoided),
                 amount = energyStatsModel.solarSaving,
                 textStyle = style,
-                currencySymbol = appTheme.currencySymbol
+                currencySymbol = appSettings.currencySymbol
             )
             MoneySummaryRow(
                 title = stringResource(R.string.total_benefit),
                 amount = energyStatsModel.total,
                 textStyle = style,
-                currencySymbol = appTheme.currencySymbol
+                currencySymbol = appSettings.currencySymbol
             )
         }
 
@@ -208,7 +208,7 @@ class SummaryView(
                 latestDataDate
             ),
             color = DimmedTextColor,
-            fontSize = appTheme.smallFontSize()
+            fontSize = appSettings.smallFontSize()
         )
     }
 
@@ -292,7 +292,7 @@ fun SummaryViewPreview() {
         ) { DemoSolarForecasting() }
             .NavigableContent(
                 topBarSettings,
-                themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true))
+                themeStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true))
             )
     }
 }

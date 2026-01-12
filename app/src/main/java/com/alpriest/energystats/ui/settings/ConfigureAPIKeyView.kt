@@ -23,13 +23,13 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.stores.CredentialStore
 import com.alpriest.energystats.ui.login.HowToObtainAPIKeyView
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier) {
+fun ConfigureAPIKeyView(store: CredentialStore, navController: NavController, themeStream: MutableStateFlow<AppSettings>, modifier: Modifier) {
     var apiKey by rememberSaveable { mutableStateOf(store.getApiKey() ?: "") }
     trackScreenView("API Key", "ConfigureAPIKeyView")
 
@@ -74,7 +74,7 @@ fun PreviewConfigureAPIKeyView() {
         ConfigureAPIKeyView(
             FakeCredentialStore(),
             NavHostController(LocalContext.current),
-            MutableStateFlow(AppTheme.Companion.demo()),
+            MutableStateFlow(AppSettings.Companion.demo()),
             modifier = Modifier.Companion
         )
     }

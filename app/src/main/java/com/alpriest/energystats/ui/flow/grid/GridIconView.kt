@@ -34,13 +34,13 @@ import com.alpriest.energystats.ui.flow.home.ShimmerText
 import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStream: MutableStateFlow<AppSettings>, modifier: Modifier = Modifier) {
     val showGridTotals = themeStream.collectAsStateWithLifecycle().value.showGridTotals
 
     Column(
@@ -76,7 +76,7 @@ fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, themeStrea
 private fun GridTotals(
     viewModel: LoadedPowerFlowViewModel,
     decimalPlaces: Int,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppSettings>
 ) {
     val displayUnit = themeStream.collectAsStateWithLifecycle().value.displayUnit
     val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
@@ -136,7 +136,7 @@ fun GridIconViewPreview() {
         GridIconView(
             loadedPowerFlowViewModel,
             iconHeight = 30.dp,
-            themeStream = MutableStateFlow(AppTheme.demo().copy(showGridTotals = true)),
+            themeStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true)),
             modifier = Modifier
         )
     }

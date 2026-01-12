@@ -1,6 +1,6 @@
 package com.alpriest.energystats.shared.config
 
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.GenerationViewData
 import com.alpriest.energystats.shared.models.ParameterGroup
@@ -84,7 +84,7 @@ interface StoredConfig {
 }
 
 interface CurrentStatusCalculatorConfig {
-    val themeStream: MutableStateFlow<AppTheme>
+    val themeStream: MutableStateFlow<AppSettings>
     var shouldInvertCT2: Boolean
     var shouldCombineCT2WithPVPower: Boolean
     var powerFlowStrings: PowerFlowStringsSettings

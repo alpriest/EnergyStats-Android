@@ -18,13 +18,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.tooling.preview.Preview
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
 import kotlin.math.abs
 import kotlin.math.max
 
 @Composable
-fun Line(amount: Double, color: Color, modifier: Modifier, theme: AppTheme, orientation: LineOrientation, isFlowing: Boolean) {
+fun Line(amount: Double, color: Color, modifier: Modifier, theme: AppSettings, orientation: LineOrientation, isFlowing: Boolean) {
     val phaseAnimation = rememberInfiniteTransition()
     val strokeWidth = theme.strokeWidth()
     val initialValue = if (amount > 0) {
@@ -92,7 +92,7 @@ fun LinePreview() {
             amount = 2.0,
             color = Color.Red,
             modifier = Modifier,
-            theme = AppTheme.demo(),
+            theme = AppSettings.demo(),
             orientation = LineOrientation.HORIZONTAL,
             isFlowing = true
         )
@@ -100,7 +100,7 @@ fun LinePreview() {
             amount = 2.0,
             color = Color.Red,
             modifier = Modifier,
-            theme = AppTheme.demo(),
+            theme = AppSettings.demo(),
             orientation = LineOrientation.VERTICAL,
             isFlowing = true
         )

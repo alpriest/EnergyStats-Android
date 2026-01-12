@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.WatchSyncManager
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.Device
@@ -38,7 +38,7 @@ class PowerFlowTabViewModel(
     private val application: Application,
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val themeStream: MutableStateFlow<AppTheme>,
+    private val themeStream: MutableStateFlow<AppSettings>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
     private val apiKeyProvider: () -> String?

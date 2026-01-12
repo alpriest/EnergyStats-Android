@@ -51,7 +51,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.Device
@@ -81,7 +81,7 @@ class PowerFlowTabViewModelFactory(
     private val application: Application,
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val themeStream: MutableStateFlow<AppTheme>,
+    private val themeStream: MutableStateFlow<AppSettings>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
     private val apiKeyProvider: () -> String?
@@ -107,7 +107,7 @@ class PowerFlowTabView(
     private val network: Networking,
     private val configManager: ConfigManaging,
     private val userManager: UserManaging,
-    private val themeStream: MutableStateFlow<AppTheme>,
+    private val themeStream: MutableStateFlow<AppSettings>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
     private val templateStore: TemplateStoring,
@@ -130,7 +130,7 @@ class PowerFlowTabView(
         viewModel: PowerFlowTabViewModel = viewModel(
             factory = PowerFlowTabViewModelFactory(application, network, configManager, this.themeStream, widgetDataSharer, bannerAlertManager, apiKeyProvider)
         ),
-        themeStream: MutableStateFlow<AppTheme>
+        themeStream: MutableStateFlow<AppSettings>
     ) {
         trackScreenView("Power Flow Tab", "PowerFlowTabView")
         val loadingBackground = remember { largeRadialGradient(listOf(Color.White, Color.Transparent)) }
@@ -187,7 +187,7 @@ fun LoadedView(
     viewModel: PowerFlowTabViewModel,
     configManager: ConfigManaging,
     loadedPowerFlowViewModel: LoadedPowerFlowViewModel,
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     network: Networking,
     userManager: UserManaging,
     templateStore: TemplateStoring
@@ -257,7 +257,7 @@ fun PowerFlowTabViewPreview() {
         application,
         DemoNetworking(),
         FakeConfigManager(),
-        MutableStateFlow(AppTheme.demo()),
+        MutableStateFlow(AppSettings.demo()),
         WidgetDataSharer.preview(),
         BannerAlertManager(),
         { "apiKeyProvider" }
@@ -279,7 +279,7 @@ fun PowerFlowTabViewPreview() {
         network = DemoNetworking(),
         BannerAlertManager()
     )
-    val themeStream = MutableStateFlow(AppTheme.demo())
+    val themeStream = MutableStateFlow(AppSettings.demo())
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         LoadedView(

@@ -28,7 +28,7 @@ import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 
 class SolarForecastView(
     private val solarForecastProvider: () -> SolcastCaching,
-    val themeStream: MutableStateFlow<AppTheme>,
+    val themeStream: MutableStateFlow<AppSettings>,
     val configManager: ConfigManaging
 ) {
     @Composable
@@ -82,7 +82,7 @@ class SolarForecastView(
     }
 
     @Composable
-    fun LoadedView(modifier: Modifier, data: List<SolarForecastViewData>, viewModel: SolarForecastViewModel, appTheme: AppTheme) {
+    fun LoadedView(modifier: Modifier, data: List<SolarForecastViewData>, viewModel: SolarForecastViewModel, appSettings: AppSettings) {
         val lastUpdate = viewModel.lastFetchedStream.collectAsState().value
 
         Column(
@@ -171,13 +171,13 @@ class SolarForecastView(
                     }
                 }
 
-                RefreshSolcastButton(viewModel, appTheme)
+                RefreshSolcastButton(viewModel, appSettings)
             }
         }
     }
 
     @Composable
-    fun RefreshSolcastButton(viewModel: SolarForecastViewModel, appTheme: AppTheme) {
+    fun RefreshSolcastButton(viewModel: SolarForecastViewModel, appSettings: AppSettings) {
         val context = LocalContext.current
         val tooManyRequests = viewModel.tooManyRequestsStream.collectAsState().value
         val canRefresh = viewModel.canRefreshStream.collectAsState().value
@@ -206,7 +206,7 @@ class SolarForecastView(
                     Text(
                         "Due to Solcast API rate limiting, please wait for an hour before refreshing again.",
                         color = DimmedTextColor,
-                        fontSize = appTheme.smallFontSize()
+                        fontSize = appSettings.smallFontSize()
                     )
                 }
             }
@@ -220,7 +220,7 @@ fun SolarForecastViewPreview() {
     EnergyStatsTheme {
         SolarForecastView(
             solarForecastProvider = { DemoSolarForecasting() },
-            themeStream = MutableStateFlow(AppTheme.demo()),
+            themeStream = MutableStateFlow(AppSettings.demo()),
             configManager = FakeConfigManager()
         ).Content()
     }

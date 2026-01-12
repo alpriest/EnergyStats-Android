@@ -50,7 +50,7 @@ import com.alpriest.energystats.ui.paramsgraph.graphs.MultipleParameterGraphVico
 import com.alpriest.energystats.ui.paramsgraph.graphs.SingleParameterGraphVico
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
@@ -92,7 +92,7 @@ class ParametersGraphTabView(
                 solarForecastProvider
             )
         ),
-        themeStream: MutableStateFlow<AppTheme>
+        themeStream: MutableStateFlow<AppSettings>
     ) {
         val scrollState = rememberScrollState()
         val hasData = viewModel.hasDataStream.collectAsState().value
@@ -169,7 +169,7 @@ class ParametersGraphTabView(
     }
 
     @Composable
-    private fun LoadedData(selectedDateTime: LocalDateTime?, viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppTheme>) {
+    private fun LoadedData(selectedDateTime: LocalDateTime?, viewModel: ParametersGraphTabViewModel, themeStream: MutableStateFlow<AppSettings>) {
         val producerAxisScalePairs = viewModel.viewDataState.collectAsState().value.producers
 
         Column(

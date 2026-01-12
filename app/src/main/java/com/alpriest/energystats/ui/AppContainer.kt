@@ -11,7 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
@@ -66,8 +66,8 @@ class AppContainer(private val context: Context) {
     val config = SharedPreferencesConfigStore(sharedPreferences)
     var filePathChooser: ActivityResultLauncher<String>? = null
     var filePathChooserCallback: ((Uri) -> Unit)? = null
-    val themeStream: MutableStateFlow<AppTheme> = MutableStateFlow(
-        AppTheme(
+    val themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(
+        AppSettings(
             useLargeDisplay = config.useLargeDisplay,
             useColouredLines = config.useColouredFlowLines,
             showBatteryTemperature = config.showBatteryTemperature,

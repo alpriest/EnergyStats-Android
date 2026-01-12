@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.ui.flow.energy
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.Green
 import com.alpriest.energystats.shared.ui.Red
 import com.alpriest.energystats.shared.ui.TintColor
@@ -52,7 +52,7 @@ fun ForecastView(
     todayTotal: Double,
     name: String?,
     title: String,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppSettings>
 ) {
     val theme = themeStream.collectAsState().value
 

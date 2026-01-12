@@ -27,7 +27,7 @@ import com.alpriest.energystats.shared.helpers.isFlowing
 import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.helpers.w
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.ui.PowerFlowNegative
@@ -77,7 +77,7 @@ fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
 }
 
 @Composable
-fun PowerText(amount: Double, themeStream: MutableStateFlow<AppTheme>, backgroundColor: Color, textColor: Color) {
+fun PowerText(amount: Double, themeStream: MutableStateFlow<AppSettings>, backgroundColor: Color, textColor: Color) {
     val theme by themeStream.collectAsStateWithLifecycle()
     val fontSize: TextUnit = theme.fontSize()
 
@@ -100,7 +100,7 @@ fun PowerText(amount: Double, themeStream: MutableStateFlow<AppTheme>, backgroun
 @Composable
 fun PowerFlowView(
     amount: Double,
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     position: PowerFlowLinePosition,
     modifier: Modifier = Modifier,
     useColouredLines: Boolean = false,
@@ -194,19 +194,19 @@ fun PowerFlowViewPreview() {
     Row(Modifier.height(200.dp)) {
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppTheme.demo()),
+            themeStream = MutableStateFlow(AppSettings.demo()),
             position = PowerFlowLinePosition.LEFT,
             orientation = LineOrientation.VERTICAL
         )
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = true, showBatteryTemperature = true)),
+            themeStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = true, showBatteryTemperature = true)),
             position = PowerFlowLinePosition.MIDDLE,
             orientation = LineOrientation.VERTICAL
         )
         PowerFlowView(
             -3.0,
-            themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = false, showBatteryTemperature = false)),
+            themeStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = false, showBatteryTemperature = false)),
             position = PowerFlowLinePosition.RIGHT,
             orientation = LineOrientation.VERTICAL
         )

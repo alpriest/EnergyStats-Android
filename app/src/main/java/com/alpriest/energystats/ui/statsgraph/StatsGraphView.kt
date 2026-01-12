@@ -26,7 +26,7 @@ import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
@@ -217,7 +217,7 @@ fun StatsGraphViewPreview() {
         MutableStateFlow(Day(LocalDate.now())),
         FakeConfigManager(),
         DemoNetworking(),
-        themeStream = MutableStateFlow(AppTheme.demo()),
+        themeStream = MutableStateFlow(AppSettings.demo()),
         { _, _ -> null }
     )
     val viewModel: StatsTabViewModel = viewModel(factory = factory)

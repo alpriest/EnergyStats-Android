@@ -16,7 +16,7 @@ import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.paramsgraph.graphs.VariableKey
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
@@ -50,7 +50,7 @@ fun ParameterGraphViewVico(
     chartColors: List<Color>,
     yAxisScale: AxisScale,
     viewModel: ParametersGraphTabViewModel,
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     showYAxisUnit: Boolean,
     userManager: UserManaging,
     valuesAtTimeStream: List<DateTimeFloatEntry>
@@ -126,7 +126,7 @@ private fun ParameterGraphViewWithCustomMarker(
     chartColors: List<Color>,
     endAxisFormatter: CartesianValueFormatter,
     rangeProvider: CartesianLayerRangeProvider,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppSettings>
 ) {
     val bottomAxisFormatter = remember { BottomAxisValueFormatter }
     val selectedValue = selectedValueStream.collectAsState().value

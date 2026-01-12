@@ -3,7 +3,7 @@ package com.alpriest.energystats.ui.paramsgraph
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -21,7 +21,7 @@ data class ParameterGraphVariable(
     override val enabled: Boolean
 ) : GraphVariable {
     @Composable
-    override fun colour(themeStream: MutableStateFlow<AppTheme>): Color {
+    override fun colour(themeStream: MutableStateFlow<AppSettings>): Color {
         return type.colour()
     }
 }
@@ -37,5 +37,5 @@ interface GraphVariable {
     val enabled: Boolean
 
     @Composable
-    fun colour(themeStream: MutableStateFlow<AppTheme>): Color
+    fun colour(themeStream: MutableStateFlow<AppSettings>): Color
 }

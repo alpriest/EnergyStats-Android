@@ -17,7 +17,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.DateTimeFloatEntry
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphViewVico
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.data.ExtraStore
@@ -32,7 +32,7 @@ fun LoadStateParameterGraphVico(
     chartColors: List<Color>,
     yAxisScale: AxisScale,
     viewModel: ParametersGraphTabViewModel,
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     showYAxisUnit: Boolean,
     userManager: UserManaging,
     valuesAtTimeStream: List<DateTimeFloatEntry>

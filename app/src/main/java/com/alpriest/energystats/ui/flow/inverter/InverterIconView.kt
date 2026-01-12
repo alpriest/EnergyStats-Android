@@ -22,13 +22,13 @@ import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun InverterIconView(modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppTheme>) {
+fun InverterIconView(modifier: Modifier = Modifier, themeStream: MutableStateFlow<AppSettings>) {
     val painter = rememberVectorPainter(Icons.Default.ElectricBolt)
     val inverterBackground = iconBackgroundColor(isDarkMode(themeStream))
     val boltTint = iconForegroundColor(isDarkMode(themeStream))
@@ -94,7 +94,7 @@ fun InverterViewPreview() {
                 modifier = Modifier
                     .width(50.dp)
                     .height(65.dp),
-                MutableStateFlow(AppTheme.demo())
+                MutableStateFlow(AppSettings.demo())
             )
         }
     }

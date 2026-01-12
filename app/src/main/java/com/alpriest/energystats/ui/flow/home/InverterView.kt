@@ -59,7 +59,7 @@ import com.alpriest.energystats.ui.helpers.OptionalView
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
 import com.alpriest.energystats.ui.settings.inverter.deviceDisplayName
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.InverterTemperatures
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -122,7 +122,7 @@ class InverterViewModel(
 
 @Composable
 fun InverterView(
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     viewModel: InverterViewModel,
     orientation: Int = LocalConfiguration.current.orientation
 ) {
@@ -203,7 +203,7 @@ private fun PanelColor(hasFault: Boolean): Color {
 }
 
 @Composable
-private fun PanelView(themeStream: MutableStateFlow<AppTheme>, hasFault: Boolean) {
+private fun PanelView(themeStream: MutableStateFlow<AppSettings>, hasFault: Boolean) {
     val infiniteTransition = rememberInfiniteTransition(label = "inverter-panel")
 
     if (hasFault) {
@@ -234,7 +234,7 @@ private fun PanelView(themeStream: MutableStateFlow<AppTheme>, hasFault: Boolean
 }
 
 @Composable
-private fun InverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, viewModel: InverterViewModel) {
+private fun InverterPortraitTitles(themeStream: MutableStateFlow<AppSettings>, viewModel: InverterViewModel) {
     val appTheme = themeStream.collectAsState().value
     var expanded by remember { mutableStateOf(false) }
 
@@ -312,7 +312,7 @@ private fun InverterPortraitTitles(themeStream: MutableStateFlow<AppTheme>, view
 }
 
 @Composable
-private fun InverterLandscapeTitles(themeStream: MutableStateFlow<AppTheme>, inverterTemperaturesViewModel: InverterViewModel) {
+private fun InverterLandscapeTitles(themeStream: MutableStateFlow<AppSettings>, inverterTemperaturesViewModel: InverterViewModel) {
     val appTheme = themeStream.collectAsState().value
 
     if (appTheme.showInverterStationNameOnPowerflow) {
@@ -363,7 +363,7 @@ fun InverterViewPreview() {
             Spacer(modifier = Modifier.height(50.dp))
 
             InverterView(
-                MutableStateFlow(AppTheme.demo()),
+                MutableStateFlow(AppSettings.demo()),
                 InverterViewModel(configManager = FakeConfigManager(), temperatures = null, deviceState = DeviceState.Online, faults = listOf("abc", "def")),
                 orientation = Configuration.ORIENTATION_PORTRAIT
             )

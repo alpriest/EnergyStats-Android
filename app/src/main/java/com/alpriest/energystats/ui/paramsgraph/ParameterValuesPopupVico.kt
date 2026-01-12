@@ -15,14 +15,14 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.lineMarkerColor
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun ParameterValuesPopupVico(
     valuesAtTimeStream: List<DateTimeFloatEntry>,
     model: ParameterGraphLineMarkerModel,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppSettings>
 ) {
     val backgroundPadding = 10f
     val labelToValueSpacing = 10f

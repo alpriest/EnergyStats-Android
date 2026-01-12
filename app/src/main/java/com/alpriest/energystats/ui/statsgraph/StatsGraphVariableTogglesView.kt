@@ -15,7 +15,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.flow.energy
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -81,7 +81,7 @@ fun StatsGraphVariableTogglesViewPreview() {
             MutableStateFlow(StatsDisplayMode.Day(LocalDate.now())),
             FakeConfigManager(),
             DemoNetworking(),
-            themeStream = MutableStateFlow(AppTheme.demo())
+            themeStream = MutableStateFlow(AppSettings.demo())
         ) { _, _ -> null }
     )
 }

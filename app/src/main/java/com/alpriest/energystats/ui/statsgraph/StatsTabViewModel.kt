@@ -27,7 +27,7 @@ import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.network.parseToLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -52,7 +52,7 @@ class StatsTabViewModel(
     val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     val configManager: ConfigManaging,
     private val networking: Networking,
-    val themeStream: MutableStateFlow<AppTheme>,
+    val themeStream: MutableStateFlow<AppSettings>,
     val onWriteTempFile: (String, String) -> Uri?
 ) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())

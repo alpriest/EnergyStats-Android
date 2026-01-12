@@ -19,7 +19,7 @@ import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.statsgraph.title
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.Instant
@@ -39,7 +39,7 @@ data class SelectedValue(
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, unit: String?, themeStream: MutableStateFlow<AppTheme>, modifier: Modifier = Modifier) {
+fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, unit: String?, themeStream: MutableStateFlow<AppSettings>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val boundsValues = viewModel.boundsStream.collectAsState().value
@@ -102,6 +102,6 @@ fun ParameterGraphVariableTogglesViewPreview() {
             solarForecastProvider = { DemoSolarForecasting() }
         ),
         null,
-        themeStream = MutableStateFlow(AppTheme.demo(useLargeDisplay = false))
+        themeStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = false))
     )
 }

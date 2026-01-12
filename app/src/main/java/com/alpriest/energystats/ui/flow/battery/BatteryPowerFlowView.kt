@@ -36,7 +36,7 @@ import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.AppTheme
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
@@ -47,7 +47,7 @@ import kotlinx.coroutines.flow.StateFlow
 fun BatteryPowerFlow(
     viewModel: BatteryPowerViewModel,
     modifier: Modifier = Modifier,
-    themeStream: MutableStateFlow<AppTheme>
+    themeStream: MutableStateFlow<AppSettings>
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,7 +65,7 @@ fun BatteryPowerFlow(
 }
 
 @Composable
-fun isDarkMode(themeStream: StateFlow<AppTheme>): Boolean {
+fun isDarkMode(themeStream: StateFlow<AppSettings>): Boolean {
     return isDarkMode(colorTheme = themeStream.collectAsStateWithLifecycle().value.colorTheme)
 }
 
@@ -81,7 +81,7 @@ fun isDarkMode(colorTheme: ColorThemeMode): Boolean {
 @Composable
 fun BatteryIconView(
     viewModel: BatteryPowerViewModel,
-    themeStream: MutableStateFlow<AppTheme>,
+    themeStream: MutableStateFlow<AppSettings>,
     iconHeight: Dp,
     modifier: Modifier = Modifier
 ) {
@@ -218,7 +218,7 @@ fun BatteryPowerFlowViewPreview() {
                 batteryTemperatures = BatteryTemperatures(13.6, null, null),
                 residual = 5678
             ),
-            themeStream = MutableStateFlow(AppTheme.demo(showBatteryTemperature = true, showBatteryEstimate = true)),
+            themeStream = MutableStateFlow(AppSettings.demo(showBatteryTemperature = true, showBatteryEstimate = true)),
             iconHeight = 24.dp
         )
     }
