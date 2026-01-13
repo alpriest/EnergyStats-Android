@@ -7,7 +7,7 @@ import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.parse
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
+import com.alpriest.energystats.ui.flow.earnings.EnergyStatsFinancialModel
 import com.alpriest.energystats.shared.models.TotalsViewModel
 import com.alpriest.energystats.ui.statsgraph.AbsoluteSelfSufficiencyCalculator
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel

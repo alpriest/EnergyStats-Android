@@ -111,12 +111,14 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.gridImportUnitPrice
         set(value) {
             config.gridImportUnitPrice = value
+            appSettingsStream.value = appSettingsStream.value.copy(gridImportUnitPrice = gridImportUnitPrice)
         }
 
     override var feedInUnitPrice: Double
         get() = config.feedInUnitPrice
         set(value) {
             config.feedInUnitPrice = value
+            appSettingsStream.value = appSettingsStream.value.copy(feedInUnitPrice = feedInUnitPrice)
         }
 
     override var decimalPlaces: Int

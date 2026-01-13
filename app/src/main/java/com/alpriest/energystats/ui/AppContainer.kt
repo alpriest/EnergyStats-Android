@@ -45,7 +45,6 @@ import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class AppContainer(private val context: Context) {
     val templateStore: TemplateStoring by lazy {
@@ -111,7 +110,9 @@ class AppContainer(private val context: Context) {
                 detectedActiveTemplate = null,
                 showInverterConsumption = config.showInverterConsumption,
                 showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats,
-                allowNegativeLoad = config.allowNegativeLoad
+                allowNegativeLoad = config.allowNegativeLoad,
+                feedInUnitPrice = config.feedInUnitPrice,
+                gridImportUnitPrice = config.gridImportUnitPrice
             )
         )
     }

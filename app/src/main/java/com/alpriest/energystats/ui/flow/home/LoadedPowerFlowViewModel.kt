@@ -3,29 +3,28 @@ package com.alpriest.energystats.ui.flow.home
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.shared.models.BatteryViewModel
-import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
-import com.alpriest.energystats.shared.models.network.OpenReportResponse
-import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.toUtcMillis
-import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.network.currentData
-import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.flow.BannerAlertManaging
-import com.alpriest.energystats.shared.services.CurrentValues
-import com.alpriest.energystats.ui.flow.EarningsViewModel
-import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
-import com.alpriest.energystats.shared.models.TotalsViewModel
-import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
-import com.alpriest.energystats.shared.models.StringPower
-import com.alpriest.energystats.shared.models.TotalYieldModel
+import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.GenerationViewModel
 import com.alpriest.energystats.shared.models.InverterTemperatures
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.StringPower
+import com.alpriest.energystats.shared.models.TotalYieldModel
+import com.alpriest.energystats.shared.models.TotalsViewModel
+import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.ReportType
+import com.alpriest.energystats.shared.models.network.currentData
+import com.alpriest.energystats.shared.models.toUtcMillis
+import com.alpriest.energystats.shared.network.FoxServerError
+import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.shared.services.CurrentValues
+import com.alpriest.energystats.ui.flow.BannerAlertManaging
+import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
+import com.alpriest.energystats.ui.flow.earnings.EnergyStatsFinancialModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -51,7 +50,7 @@ class LoadedPowerFlowViewModel(
     val homeTotal = MutableStateFlow<Double?>(null)
     val gridImportTotal = MutableStateFlow<Double?>(null)
     val gridExportTotal = MutableStateFlow<Double?>(null)
-    val earnings = MutableStateFlow<EarningsViewModel?>(null)
+    val earnings = MutableStateFlow<EnergyStatsFinancialModel?>(null)
     val todaysGeneration = MutableStateFlow<GenerationViewModel?>(null)
     val faults = MutableStateFlow<List<String>>(listOf())
     val displayStrings = MutableStateFlow<List<StringPower>>(listOf())
@@ -154,7 +153,7 @@ class LoadedPowerFlowViewModel(
                 try {
                     val generation = loadGeneration()
                     val totals = TotalsViewModel(loadReportData(currentDevice), generation)
-                    earnings.value = EarningsViewModel(EnergyStatsFinancialModel(totals, configManager))
+                    earnings.value = EnergyStatsFinancialModel(totals, configManager)
                     homeTotal.value = totals.loads
                     gridImportTotal.value = totals.grid
                     gridExportTotal.value = totals.feedIn

@@ -41,7 +41,7 @@ import com.alpriest.energystats.shared.ui.DarkApproximationBackground
 import com.alpriest.energystats.shared.ui.DarkApproximationHeader
 import com.alpriest.energystats.shared.ui.LightApproximationBackground
 import com.alpriest.energystats.shared.ui.LightApproximationHeader
-import com.alpriest.energystats.ui.flow.EnergyStatsFinancialModel
+import com.alpriest.energystats.ui.flow.earnings.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow

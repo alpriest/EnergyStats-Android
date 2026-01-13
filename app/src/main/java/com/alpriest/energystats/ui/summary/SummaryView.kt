@@ -50,7 +50,7 @@ import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.ui.flow.FinanceAmount
+import com.alpriest.energystats.ui.flow.earnings.FinanceAmount
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
