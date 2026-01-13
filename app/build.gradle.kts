@@ -80,8 +80,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodelCompose)
     implementation(libs.androidx.material3)
     implementation(libs.play.services.wearable)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.inappmessaging.display)
