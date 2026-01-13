@@ -31,9 +31,9 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.EarningsModel
+import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -167,7 +167,6 @@ fun MakeCurrencySymbolField(config: ConfigManaging, state: MutableState<String>)
         Text(
             stringResource(R.string.currency_symbol),
             Modifier.weight(1.0f),
-            style = MaterialTheme.typography.bodyMedium,
             color = colorScheme.onSecondary
         )
 

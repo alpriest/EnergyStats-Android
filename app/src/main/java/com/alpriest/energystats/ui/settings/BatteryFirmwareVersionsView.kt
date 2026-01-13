@@ -12,15 +12,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.ui.DimmedTextColor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -69,13 +70,13 @@ class BatteryFirmwareVersionsView(
                                     ) {
                                         Text(
                                             text = stringResource(R.string.type, battery.type),
-                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.Medium,
                                             modifier = Modifier.weight(1f),
                                             color = DimmedTextColor,
                                         )
                                         Text(
                                             text = stringResource(R.string.version, battery.version),
-                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.Medium,
                                             color = DimmedTextColor,
                                         )
                                     }

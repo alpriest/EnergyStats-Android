@@ -2,22 +2,28 @@ package com.alpriest.energystats.stores
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.alpriest.energystats.shared.models.WidgetTapAction
+import com.alpriest.energystats.shared.config.StoredConfig
+import com.alpriest.energystats.shared.helpers.preference
 import com.alpriest.energystats.shared.models.BatteryData
+import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.DisplayUnit
+import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
-import com.alpriest.energystats.shared.config.StoredConfig
 import com.alpriest.energystats.shared.models.SummaryDateRange
+import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
-import com.alpriest.energystats.shared.models.DataCeiling
-import com.alpriest.energystats.shared.models.EarningsModel
-import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.ui.summary.MonthYear
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.google.gson.Gson
@@ -80,7 +86,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_ESTIMATED_TIME_ON_WIDGET,
         SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY,
         TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS,
-        EARNINGS_MODEl,
+        EARNINGS_MODEL,
         SUMMARY_DATE_RANGE,
         SCHEDULE_TEMPLATES,
         LAST_SOLCAST_REFRESH,
@@ -114,29 +120,55 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         }
     }
 
-    override var colorTheme: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.COLOR_THEME_MODE.name, 0)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.COLOR_THEME_MODE.name, value)
-            }
-        }
-
-    override var showGraphValueDescriptions: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_GRAPH_VALUE_DESCRIPTIONS.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_GRAPH_VALUE_DESCRIPTIONS.name, value)
-            }
-        }
-
-    override var shouldCombineCT2WithPVPower: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, value)
-            }
-        }
+    override var colorTheme: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.COLOR_THEME_MODE.name, ColorThemeMode.Auto.value)
+    override var showGraphValueDescriptions: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_GRAPH_VALUE_DESCRIPTIONS.name, true)
+    override var shouldCombineCT2WithPVPower: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, true)
+    override var shouldCombineCT2WithLoadsPower: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_LOADSPOWER.name, true)
+    override var gridImportUnitPrice: Double by preference(sharedPreferences, SharedPreferenceDisplayKey.GRID_IMPORT_UNIT_PRICE.name, 0.15)
+    override var feedInUnitPrice: Double by preference(sharedPreferences, SharedPreferenceDisplayKey.FEED_IN_UNIT_PRICE.name, 0.05)
+    override var currencyCode: String by preference(sharedPreferences, SharedPreferenceDisplayKey.CURRENCY_CODE.name, "GBP")
+    override var currencySymbol: String by preference(sharedPreferences, SharedPreferenceDisplayKey.CURRENCY_SYMBOL.name, "£")
+    override var showGridTotals: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_GRID_TOTALS.name, false)
+    override var showHomeTotal: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_HOME_TOTAL.name, false)
+    override var showInverterIcon: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_ICON.name, true)
+    override var showUsableBatteryOnly: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_USABLE_BATTERY_ONLY.name, false)
+    override var showBatteryEstimate: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_ESTIMATE.name, true)
+    override var selfSufficiencyEstimateMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name, SelfSufficiencyEstimateMode.Off.value)
+    override var showSunnyBackground: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_SUNNY_BACKGROUND.name, true)
+    override var decimalPlaces: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DECIMAL_PLACES.name, 2)
+    override var selectedDeviceSN: String? by preference(sharedPreferences, SharedPreferenceDeviceKey.SELECTED_DEVICE_SN.name, null)
+    override var devices: String? by preference(sharedPreferences, SharedPreferenceDeviceKey.DEVICES.name, null)
+    override var refreshFrequency: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.REFRESH_FREQUENCY.name, RefreshFrequency.Auto.value)
+    override var showBatteryTemperature: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_TEMPERATURE.name, false)
+    override var useColouredFlowLines: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_COLOURED_FLOW_LINES.name, false)
+    override var useLargeDisplay: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_LARGE_DISPLAY.name, false)
+    override var isDemoUser: Boolean by preference(sharedPreferences, SharedPreferenceDeviceKey.IS_DEMO_USER.name, false)
+    override var showFinancialSummary: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_ESTIMATED_EARNINGS.name, false)
+    override var displayUnit: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DISPLAY_UNIT.name, DisplayUnit.Adaptive.value)
+    override var showInverterTemperatures: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_TEMPERATURES.name, false)
+    override var shouldInvertCT2: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOULD_INVERT_CT2.name, false)
+    override var showInverterTypeNameOnPowerflow: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW.name, false)
+    override var showInverterStationNameOnPowerflow: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW.name, false)
+    override var showLastUpdateTimestamp: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_LAST_UPDATE_TIMESTAMP.name, false)
+    override var dataCeiling: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DATA_CEILING.name, DataCeiling.Mild.value)
+    override var totalYieldModel: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.TOTAL_YIELD_MODEL.name, TotalYieldModel.Off.value)
+    override var showFinancialSummaryOnFlowPage: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW.name, false)
+    override var useTraditionalLoadFormula: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_TRADITIONAL_LOAD_FORMULA.name, false)
+    override var separateParameterGraphsByUnit: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SEPARATE_PARAMETER_GRAPHS_BY_UNIT.name, true)
+    override var showBatterySOCAsPercentage: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_AS_PERCENTAGE.name, false)
+    override var showBatteryTimeEstimateOnWidget: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_ESTIMATED_TIME_ON_WIDGET.name, true)
+    override var showSelfSufficiencyStatsGraphOverlay: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY.name, true)
+    override var truncatedYAxisOnParameterGraphs: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, false)
+    override var earningsModel: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.EARNINGS_MODEL.name, EarningsModel.Exported.value)
+    override var widgetTapAction: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, WidgetTapAction.Launch.value)
+    override var batteryTemperatureDisplayMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, BatteryTemperatureDisplayMode.Automatic.value)
+    override var showInverterScheduleQuickLink: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_SCHEDULE_QUICK_LINK.name, false)
+    override var fetchSolcastOnAppLaunch: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.FETCH_SOLCAST_ON_APP_LAUNCH.name, false)
+    override var ct2DisplayMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, CT2DisplayMode.Hidden.value)
+    override var showStringTotalsAsPercentage: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_STRING_TOTALS_AS_PERCENTAGE.name, false)
+    override var showInverterConsumption: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, false)
+    override var showBatterySOCOnDailyStats: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, false)
+    override var allowNegativeLoad: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, false)
 
     override var powerStationDetail: PowerStationDetail?
         get() {
@@ -148,190 +180,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             sharedPreferences.edit {
                 val jsonString = Gson().toJson(value)
                 putString(SharedPreferenceDeviceKey.POWER_STATION_DETAIL.name, jsonString)
-            }
-        }
-
-    override var shouldCombineCT2WithLoadsPower: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_LOADSPOWER.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_LOADSPOWER.name, value)
-            }
-        }
-
-    override var gridImportUnitPrice: Double
-        get() = (sharedPreferences.getString(SharedPreferenceDisplayKey.GRID_IMPORT_UNIT_PRICE.name, "0.15") ?: "0.15").toDouble()
-        set(value) {
-            sharedPreferences.edit {
-                putString(SharedPreferenceDisplayKey.GRID_IMPORT_UNIT_PRICE.name, value.toString())
-            }
-        }
-
-    override var feedInUnitPrice: Double
-        get() = (sharedPreferences.getString(SharedPreferenceDisplayKey.FEED_IN_UNIT_PRICE.name, "0.05") ?: "0.05").toDouble()
-        set(value) {
-            sharedPreferences.edit {
-                putString(SharedPreferenceDisplayKey.FEED_IN_UNIT_PRICE.name, value.toString())
-            }
-        }
-
-    override var currencyCode: String
-        get() = sharedPreferences.getString(SharedPreferenceDisplayKey.CURRENCY_CODE.name, "GBP") ?: "GBP"
-        set(value) {
-            sharedPreferences.edit {
-                putString(SharedPreferenceDisplayKey.CURRENCY_CODE.name, value)
-            }
-        }
-
-    override var currencySymbol: String
-        get() = sharedPreferences.getString(SharedPreferenceDisplayKey.CURRENCY_SYMBOL.name, "£") ?: "£"
-        set(value) {
-            sharedPreferences.edit {
-                putString(SharedPreferenceDisplayKey.CURRENCY_SYMBOL.name, value)
-            }
-        }
-
-    override var showGridTotals: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_GRID_TOTALS.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_GRID_TOTALS.name, value)
-            }
-        }
-
-    override var showHomeTotal: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_HOME_TOTAL.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_HOME_TOTAL.name, value)
-            }
-        }
-
-    override var showInverterIcon: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_ICON.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_ICON.name, value)
-            }
-        }
-
-    override var showUsableBatteryOnly: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_USABLE_BATTERY_ONLY.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_USABLE_BATTERY_ONLY.name, value)
-            }
-        }
-
-    override var showBatteryEstimate: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_ESTIMATE.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_ESTIMATE.name, value)
-            }
-        }
-
-    override var selfSufficiencyEstimateMode: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name, 0)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name, value)
-            }
-        }
-
-    override var showSunnyBackground: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_SUNNY_BACKGROUND.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_SUNNY_BACKGROUND.name, value)
-            }
-        }
-
-    override var decimalPlaces: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.DECIMAL_PLACES.name, 2)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.DECIMAL_PLACES.name, value)
-            }
-        }
-
-    override var selectedDeviceSN: String?
-        get() = sharedPreferences.getString(SharedPreferenceDeviceKey.SELECTED_DEVICE_SN.name, null)
-        set(value) {
-            sharedPreferences.edit {
-                putString(SharedPreferenceDeviceKey.SELECTED_DEVICE_SN.name, value)
-            }
-        }
-
-    override var devices: String?
-        get() = sharedPreferences.getString(SharedPreferenceDeviceKey.DEVICES.name, null)
-        set(value) {
-            sharedPreferences.edit {
-                putString(SharedPreferenceDeviceKey.DEVICES.name, value)
-            }
-        }
-
-    override var refreshFrequency: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.REFRESH_FREQUENCY.name, 0)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.REFRESH_FREQUENCY.name, value)
-            }
-        }
-
-    override var showBatteryTemperature: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_TEMPERATURE.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_TEMPERATURE.name, value)
-            }
-        }
-
-    override var useColouredFlowLines: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.USE_COLOURED_FLOW_LINES.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.USE_COLOURED_FLOW_LINES.name, value)
-            }
-        }
-
-    override var useLargeDisplay: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.USE_LARGE_DISPLAY.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.USE_LARGE_DISPLAY.name, value)
-            }
-        }
-
-    override var isDemoUser: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDeviceKey.IS_DEMO_USER.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDeviceKey.IS_DEMO_USER.name, value)
-            }
-        }
-
-    override var showFinancialSummary: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_ESTIMATED_EARNINGS.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_ESTIMATED_EARNINGS.name, value)
-            }
-        }
-
-    override var displayUnit: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.DISPLAY_UNIT.name, 0)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.DISPLAY_UNIT.name, value)
-            }
-        }
-
-    override var showInverterTemperatures: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_TEMPERATURES.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_TEMPERATURES.name, value)
             }
         }
 
@@ -347,30 +195,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var shouldInvertCT2: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOULD_INVERT_CT2.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOULD_INVERT_CT2.name, value)
-            }
-        }
-
-    override var showInverterTypeNameOnPowerflow: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW.name, value)
-            }
-        }
-
-    override var showInverterStationNameOnPowerflow: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW.name, value)
-            }
-        }
-
     override var deviceBatteryOverrides: Map<String, String>
         get() {
             val variables = sharedPreferences.getString(SharedPreferenceDeviceKey.BATTERY_CAPACITY_OVERRIDES.name, Gson().toJson(mapOf<String, String>()))
@@ -380,14 +204,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             sharedPreferences.edit {
                 val jsonString = Gson().toJson(value)
                 putString(SharedPreferenceDeviceKey.BATTERY_CAPACITY_OVERRIDES.name, jsonString)
-            }
-        }
-
-    override var showLastUpdateTimestamp: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_LAST_UPDATE_TIMESTAMP.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_LAST_UPDATE_TIMESTAMP.name, value)
             }
         }
 
@@ -437,38 +253,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var dataCeiling: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.DATA_CEILING.name, DataCeiling.Mild.value)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.DATA_CEILING.name, value)
-            }
-        }
-
-    override var totalYieldModel: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.TOTAL_YIELD_MODEL.name, 0)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.TOTAL_YIELD_MODEL.name, value)
-            }
-        }
-
-    override var showFinancialSummaryOnFlowPage: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW.name, value)
-            }
-        }
-
-    override var useTraditionalLoadFormula: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.USE_TRADITIONAL_LOAD_FORMULA.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.USE_TRADITIONAL_LOAD_FORMULA.name, value)
-            }
-        }
-
     override var powerFlowStrings: PowerFlowStringsSettings
         get() {
             var data = sharedPreferences.getString(SharedPreferenceDisplayKey.POWER_FLOW_STRINGS.name, null)
@@ -483,22 +267,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             sharedPreferences.edit {
                 val jsonString = Gson().toJson(value)
                 putString(SharedPreferenceDisplayKey.POWER_FLOW_STRINGS.name, jsonString)
-            }
-        }
-
-    override var separateParameterGraphsByUnit: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SEPARATE_PARAMETER_GRAPHS_BY_UNIT.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SEPARATE_PARAMETER_GRAPHS_BY_UNIT.name, value)
-            }
-        }
-
-    override var showBatterySOCAsPercentage: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_AS_PERCENTAGE.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_AS_PERCENTAGE.name, value)
             }
         }
 
@@ -519,22 +287,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var showBatteryTimeEstimateOnWidget: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_ESTIMATED_TIME_ON_WIDGET.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_ESTIMATED_TIME_ON_WIDGET.name, value)
-            }
-        }
-
-    override var showSelfSufficiencyStatsGraphOverlay: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY.name, true)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY.name, value)
-            }
-        }
-
     override var scheduleTemplates: List<ScheduleTemplate>
         get() {
             var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, null)
@@ -549,22 +301,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             sharedPreferences.edit {
                 val jsonString = Gson().toJson(value)
                 putString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, jsonString)
-            }
-        }
-
-    override var truncatedYAxisOnParameterGraphs: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, value)
-            }
-        }
-
-    override var earningsModel: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.EARNINGS_MODEl.name, EarningsModel.Exported.value)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.EARNINGS_MODEl.name, value)
             }
         }
 
@@ -647,54 +383,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var widgetTapAction: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, WidgetTapAction.Launch.value)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, value)
-            }
-        }
-
-    override var batteryTemperatureDisplayMode: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, BatteryTemperatureDisplayMode.Automatic.value)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, value)
-            }
-        }
-
-    override var showInverterScheduleQuickLink: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_SCHEDULE_QUICK_LINK.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_SCHEDULE_QUICK_LINK.name, value)
-            }
-        }
-
-    override var fetchSolcastOnAppLaunch: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.FETCH_SOLCAST_ON_APP_LAUNCH.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.FETCH_SOLCAST_ON_APP_LAUNCH.name, value)
-            }
-        }
-
-    override var ct2DisplayMode: Int
-        get() = sharedPreferences.getInt(SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, CT2DisplayMode.Hidden.value)
-        set(value) {
-            sharedPreferences.edit {
-                putInt(SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, value)
-            }
-        }
-
-    override var showStringTotalsAsPercentage: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_STRING_TOTALS_AS_PERCENTAGE.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_STRING_TOTALS_AS_PERCENTAGE.name, value)
-            }
-        }
-
     override var generationViewData: GenerationViewData?
         get() {
             val data: String? = sharedPreferences.getString(SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name, null) ?: return null
@@ -716,22 +404,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var showInverterConsumption: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, value)
-            }
-        }
-
-    override var showBatterySOCOnDailyStats: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, value)
-            }
-        }
-
     override var workModes: List<String>
         get() {
             val workModes = sharedPreferences.getString(SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, Gson().toJson(listOf<String>()))
@@ -741,14 +413,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             sharedPreferences.edit {
                 val jsonString = Gson().toJson(value)
                 putString(SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, jsonString)
-            }
-        }
-
-    override var allowNegativeLoad: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, false)
-        set(value) {
-            sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, value)
             }
         }
 }

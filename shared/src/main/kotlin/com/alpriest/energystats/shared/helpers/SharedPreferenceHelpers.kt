@@ -26,6 +26,7 @@ fun <T> preference(
                 is String -> getString(key, defaultValue)
                 is String? -> getString(key, defaultValue)
                 is Double -> (getString(key, defaultValue.toString()) ?: defaultValue.toString()).toDouble()
+                is Int -> getInt(key, defaultValue)
                 else -> throw IllegalArgumentException("Unsupported preference type.")
             }
             @Suppress("UNCHECKED_CAST")

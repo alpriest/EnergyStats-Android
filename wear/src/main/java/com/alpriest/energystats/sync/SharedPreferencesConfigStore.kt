@@ -10,7 +10,6 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import java.time.Instant
@@ -56,8 +55,6 @@ fun SharedPreferencesConfigStore.snapshot(): WearCredsSnapshot = WearCredsSnapsh
 )
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) {
-    private val _updatesFlow = MutableSharedFlow<WearCredsSnapshot>(replay = 1)
-
     private enum class SharedPreferenceKey {
         TOKEN,
         SELECTED_DEVICE_SN,
