@@ -3,7 +3,10 @@ package com.alpriest.energystats.shared.config
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
 import com.alpriest.energystats.shared.models.ParameterGroup
@@ -36,7 +39,7 @@ interface StoredConfig {
     var variables: List<Variable>
     var separateParameterGraphsByUnit: Boolean
     var dataCeiling: DataCeiling
-    var colorTheme: Int
+    var colorTheme: ColorThemeMode
     var showGraphValueDescriptions: Boolean
     var currencyCode: String
     var gridImportUnitPrice: Double
@@ -56,7 +59,7 @@ interface StoredConfig {
     var isDemoUser: Boolean
     var decimalPlaces: Int
     var showFinancialSummary: Boolean
-    var displayUnit: Int
+    var displayUnit: DisplayUnit
     var showInverterTemperatures: Boolean
     var selectedParameterGraphVariables: List<String>
     var showInverterIcon: Boolean
@@ -73,7 +76,7 @@ interface StoredConfig {
     var truncatedYAxisOnParameterGraphs: Boolean
     var earningsModel: EarningsModel
     var summaryDateRange: SummaryDateRange
-    var ct2DisplayMode: Int
+    var ct2DisplayMode: CT2DisplayMode
     var showStringTotalsAsPercentage: Boolean
     var generationViewData: GenerationViewData?
     var showInverterConsumption: Boolean
@@ -85,9 +88,6 @@ interface StoredConfig {
     var powerFlowStrings: PowerFlowStringsSettings
     var shouldCombineCT2WithLoadsPower: Boolean
     var allowNegativeLoad: Boolean
-
-    fun clearDisplaySettings()
-    fun clearDeviceSettings()
 }
 
 interface CurrentStatusCalculatorConfig {

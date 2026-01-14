@@ -1,7 +1,6 @@
 package com.alpriest.energystats.ui.login
 
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.config.StoredConfig
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.AppSettingsStore
 import com.alpriest.energystats.shared.models.Battery
@@ -30,6 +29,7 @@ import com.alpriest.energystats.shared.models.toAppTheme
 import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.ui.roundedToString
+import com.alpriest.energystats.stores.StoredConfigManaging
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
@@ -39,7 +39,7 @@ import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 import java.util.Locale
 
-open class ConfigManager(var config: StoredConfig, val networking: Networking, override var appVersion: String, private val appSettingsStore: AppSettingsStore) :
+open class ConfigManager(var config: StoredConfigManaging, val networking: Networking, override var appVersion: String, private val appSettingsStore: AppSettingsStore) :
     ConfigManaging {
     private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
     private var deviceSupportsPeakShaving: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
@@ -67,9 +67,9 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var colorThemeMode: ColorThemeMode
-        get() = ColorThemeMode.fromInt(config.colorTheme)
+        get() = config.colorTheme
         set(value) {
-            config.colorTheme = value.value
+            config.colorTheme = value
             appSettingsStream.value = appSettingsStream.value.copy(colorTheme = colorThemeMode)
         }
 
@@ -157,9 +157,9 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var displayUnit: DisplayUnit
-        get() = DisplayUnit.fromInt(config.displayUnit)
+        get() = config.displayUnit
         set(value) {
-            config.displayUnit = value.value
+            config.displayUnit = value
             appSettingsStream.value = appSettingsStream.value.copy(displayUnit = displayUnit)
         }
 
@@ -208,7 +208,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
             config.isDemoUser = value
             if (value) {
                 val demoTheme = AppSettings.demo()
-                useColouredFlowLines = demoTheme.useColouredLines
+                useColouredFlowLines = demoTheme.useColouredFlowLines
                 showBatteryTemperature = demoTheme.showBatteryTemperature
                 showBatteryEstimate = demoTheme.showBatteryEstimate
                 showSunnyBackground = demoTheme.showSunnyBackground
@@ -227,7 +227,7 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         get() = config.useColouredFlowLines
         set(value) {
             config.useColouredFlowLines = value
-            appSettingsStream.value = appSettingsStream.value.copy(useColouredLines = useColouredFlowLines)
+            appSettingsStream.value = appSettingsStream.value.copy(useColouredFlowLines = useColouredFlowLines)
         }
 
     override var refreshFrequency: RefreshFrequency
@@ -564,9 +564,9 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var ct2DisplayMode: CT2DisplayMode
-        get() = CT2DisplayMode.fromInt(config.ct2DisplayMode)
+        get() = config.ct2DisplayMode
         set(value) {
-            config.ct2DisplayMode = value.value
+            config.ct2DisplayMode = value
             appSettingsStream.value = appSettingsStream.value.copy(ct2DisplayMode = ct2DisplayMode)
         }
 

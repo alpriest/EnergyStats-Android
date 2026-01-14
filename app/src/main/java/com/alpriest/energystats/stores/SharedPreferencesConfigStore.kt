@@ -35,8 +35,13 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
+interface StoredConfigManaging: StoredConfig {
+    fun clearDisplaySettings()
+    fun clearDeviceSettings()
+}
+
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
-    StoredConfig {
+    StoredConfigManaging {
 
     private enum class SharedPreferenceDeviceKey {
         IS_DEMO_USER,
@@ -123,7 +128,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         }
     }
 
-    override var colorTheme: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.COLOR_THEME_MODE.name, ColorThemeMode.Auto.value)
     override var showGraphValueDescriptions: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_GRAPH_VALUE_DESCRIPTIONS.name, true)
     override var shouldCombineCT2WithPVPower: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_PVPOWER.name, true)
     override var shouldCombineCT2WithLoadsPower: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOULD_COMBINE_CT2_WITH_LOADSPOWER.name, true)
@@ -145,7 +149,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var useLargeDisplay: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_LARGE_DISPLAY.name, false)
     override var isDemoUser: Boolean by preference(sharedPreferences, SharedPreferenceDeviceKey.IS_DEMO_USER.name, false)
     override var showFinancialSummary: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_ESTIMATED_EARNINGS.name, false)
-    override var displayUnit: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DISPLAY_UNIT.name, DisplayUnit.Adaptive.value)
     override var showInverterTemperatures: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_TEMPERATURES.name, false)
     override var shouldInvertCT2: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOULD_INVERT_CT2.name, false)
     override var showInverterTypeNameOnPowerflow: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW.name, false)
@@ -164,8 +167,21 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var showInverterConsumption: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, false)
     override var showBatterySOCOnDailyStats: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, false)
     override var allowNegativeLoad: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, false)
-    override var ct2DisplayMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, CT2DisplayMode.Hidden.value)
 
+    override var displayUnit: DisplayUnit by enumIntPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.DISPLAY_UNIT.name,
+        DisplayUnit.Adaptive,
+        readStorage = { DisplayUnit.fromInt(it) },
+        writeStorage = { it.value }
+    )
+    override var ct2DisplayMode: CT2DisplayMode by enumIntPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name,
+        CT2DisplayMode.Hidden,
+        readStorage = { CT2DisplayMode.fromInt(it) },
+        writeStorage = { it.value }
+    )
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode by enumIntPreference(
         sharedPreferences,
         SharedPreferenceDisplayKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name,
@@ -206,6 +222,13 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name,
         WidgetTapAction.Launch,
         readStorage = { WidgetTapAction.fromInt(it) },
+        writeStorage = { it.value }
+    )
+    override var colorTheme: ColorThemeMode by enumIntPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.COLOR_THEME_MODE.name,
+        ColorThemeMode.Auto,
+        readStorage = { ColorThemeMode.fromInt(it) },
         writeStorage = { it.value }
     )
     override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode by enumIntPreference(

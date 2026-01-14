@@ -21,7 +21,7 @@ public final class AppSettingsStore {
 
 data class AppSettings(
     val useLargeDisplay: Boolean,
-    val useColouredLines: Boolean,
+    val useColouredFlowLines: Boolean,
     val showBatteryTemperature: Boolean,
     val showBatteryEstimate: Boolean,
     val decimalPlaces: Int,
@@ -93,7 +93,7 @@ data class AppSettings(
 
 fun AppSettings.Companion.demo(
     useLargeDisplay: Boolean = false,
-    useColouredLines: Boolean = true,
+    useColouredFlowLines: Boolean = true,
     showBatteryTemperature: Boolean = true,
     showBatteryEstimate: Boolean = true,
     showSunnyBackground: Boolean = true,
@@ -135,7 +135,7 @@ fun AppSettings.Companion.demo(
 ): AppSettings {
     return AppSettings(
         useLargeDisplay = useLargeDisplay,
-        useColouredLines = useColouredLines,
+        useColouredFlowLines = useColouredFlowLines,
         showBatteryTemperature = showBatteryTemperature,
         showBatteryEstimate = showBatteryEstimate,
         decimalPlaces = decimalPlaces,
@@ -182,7 +182,7 @@ fun AppSettings.Companion.demo(
 fun AppSettings.Companion.toAppTheme(config: StoredConfig): AppSettings {
     return AppSettings(
         useLargeDisplay = config.useLargeDisplay,
-        useColouredLines = config.useColouredFlowLines,
+        useColouredFlowLines = config.useColouredFlowLines,
         showBatteryTemperature = config.showBatteryTemperature,
         showBatteryEstimate = config.showBatteryEstimate,
         decimalPlaces = config.decimalPlaces,
@@ -190,7 +190,7 @@ fun AppSettings.Companion.toAppTheme(config: StoredConfig): AppSettings {
         showUsableBatteryOnly = config.showUsableBatteryOnly,
         selfSufficiencyEstimateMode = config.selfSufficiencyEstimateMode,
         showFinancialSummary = config.showFinancialSummary,
-        displayUnit = DisplayUnit.fromInt(config.displayUnit),
+        displayUnit = config.displayUnit,
         showInverterTemperatures = config.showInverterTemperatures,
         showInverterIcon = config.showInverterIcon,
         showHomeTotal = config.showHomeTotal,
@@ -203,7 +203,7 @@ fun AppSettings.Companion.toAppTheme(config: StoredConfig): AppSettings {
         shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
         showGraphValueDescriptions = config.showGraphValueDescriptions,
         parameterGroups = config.parameterGroups,
-        colorTheme = ColorThemeMode.fromInt(config.colorTheme),
+        colorTheme = config.colorTheme,
         solcastSettings = config.solcastSettings,
         dataCeiling = config.dataCeiling,
         totalYieldModel = config.totalYieldModel,
@@ -215,7 +215,7 @@ fun AppSettings.Companion.toAppTheme(config: StoredConfig): AppSettings {
         powerFlowStrings = config.powerFlowStrings,
         truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
         showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
-        ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
+        ct2DisplayMode = config.ct2DisplayMode,
         showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
         detectedActiveTemplate = null,
         showInverterConsumption = config.showInverterConsumption,

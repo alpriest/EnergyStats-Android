@@ -109,12 +109,12 @@ fun PowerFlowView(
 ) {
     val theme by themeStream.collectAsStateWithLifecycle()
     val inverterColor = Color.LightGray
-    val lineColor = if (amount.isFlowing() && useColouredLines && theme.useColouredLines) flowingColour(amount) else {
+    val lineColor = if (amount.isFlowing() && useColouredLines && theme.useColouredFlowLines) flowingColour(amount) else {
         PowerFlowNeutral
     }
     val strokeWidth = theme.strokeWidth()
 
-    val powerTextColor = if (amount.isFlowing() && useColouredLines && theme.useColouredLines) textForeground(amount) else {
+    val powerTextColor = if (amount.isFlowing() && useColouredLines && theme.useColouredFlowLines) textForeground(amount) else {
         PowerFlowNeutralText
     }
 

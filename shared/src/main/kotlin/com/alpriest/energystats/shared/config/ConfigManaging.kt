@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDateTime
 
+
+
 interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculatorConfig, BatteryConfig {
     fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean)
     suspend fun fetchDevices()

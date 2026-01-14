@@ -6,6 +6,7 @@ import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
 import com.alpriest.energystats.shared.models.ParameterGroup
@@ -24,7 +25,7 @@ import java.time.LocalDateTime
 
 class FakeStoredConfigStore(
     override var scheduleTemplates: List<ScheduleTemplate> = listOf(),
-    override var colorTheme: Int = ColorThemeMode.Auto.value,
+    override var colorTheme: ColorThemeMode = ColorThemeMode.Auto,
     override var showGraphValueDescriptions: Boolean = true,
     override var shouldCombineCT2WithPVPower: Boolean = false,
     override var currencyCode: String = "GBP",
@@ -43,7 +44,7 @@ class FakeStoredConfigStore(
     override var showUsableBatteryOnly: Boolean = false,
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
     override var showFinancialSummary: Boolean = false,
-    override var displayUnit: Int = 0,
+    override var displayUnit: DisplayUnit = DisplayUnit.Adaptive,
     override var showInverterTemperatures: Boolean = false,
     override var selectedParameterGraphVariables: List<String> = listOf(),
     override var showInverterIcon: Boolean = false,
@@ -78,7 +79,7 @@ class FakeStoredConfigStore(
     override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode = BatteryTemperatureDisplayMode.Automatic,
     override var showInverterScheduleQuickLink: Boolean = false,
     override var fetchSolcastOnAppLaunch: Boolean = false,
-    override var ct2DisplayMode: Int = CT2DisplayMode.Hidden.value,
+    override var ct2DisplayMode: CT2DisplayMode = CT2DisplayMode.Hidden,
     override var showStringTotalsAsPercentage: Boolean = false,
     override var generationViewData: GenerationViewData? = null,
     override var showInverterConsumption: Boolean = false,
@@ -86,8 +87,4 @@ class FakeStoredConfigStore(
     override var workModes: List<String> = listOf(),
     override var allowNegativeLoad: Boolean = false,
     override var batteryData: BatteryData? = null
-
-) : StoredConfig {
-    override fun clearDisplaySettings() {}
-    override fun clearDeviceSettings() {}
-}
+): StoredConfig

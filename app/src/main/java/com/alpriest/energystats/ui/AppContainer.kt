@@ -13,9 +13,6 @@ import androidx.core.net.toUri
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.AppSettingsStore
-import com.alpriest.energystats.shared.models.CT2DisplayMode
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
 import com.alpriest.energystats.shared.network.NetworkFacade
@@ -69,7 +66,7 @@ class AppContainer(private val context: Context) {
         appSettingsStore.update(
             AppSettings(
                 useLargeDisplay = config.useLargeDisplay,
-                useColouredLines = config.useColouredFlowLines,
+                useColouredFlowLines = config.useColouredFlowLines,
                 showBatteryTemperature = config.showBatteryTemperature,
                 showBatteryEstimate = config.showBatteryEstimate,
                 decimalPlaces = config.decimalPlaces,
@@ -77,7 +74,7 @@ class AppContainer(private val context: Context) {
                 showUsableBatteryOnly = config.showUsableBatteryOnly,
                 selfSufficiencyEstimateMode = config.selfSufficiencyEstimateMode,
                 showFinancialSummary = config.showFinancialSummary,
-                displayUnit = DisplayUnit.fromInt(config.displayUnit),
+                displayUnit = config.displayUnit,
                 showInverterTemperatures = config.showInverterTemperatures,
                 showInverterIcon = config.showInverterIcon,
                 showHomeTotal = config.showHomeTotal,
@@ -90,7 +87,7 @@ class AppContainer(private val context: Context) {
                 shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
                 showGraphValueDescriptions = config.showGraphValueDescriptions,
                 parameterGroups = config.parameterGroups,
-                colorTheme = ColorThemeMode.fromInt(config.colorTheme),
+                colorTheme = config.colorTheme,
                 solcastSettings = config.solcastSettings,
                 dataCeiling = config.dataCeiling,
                 totalYieldModel = config.totalYieldModel,
@@ -102,7 +99,7 @@ class AppContainer(private val context: Context) {
                 powerFlowStrings = config.powerFlowStrings,
                 truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
                 showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
-                ct2DisplayMode = CT2DisplayMode.fromInt(config.ct2DisplayMode),
+                ct2DisplayMode = config.ct2DisplayMode,
                 showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
                 detectedActiveTemplate = null,
                 showInverterConsumption = config.showInverterConsumption,
