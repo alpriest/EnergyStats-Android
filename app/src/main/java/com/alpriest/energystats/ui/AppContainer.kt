@@ -15,9 +15,7 @@ import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.AppSettingsStore
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
 import com.alpriest.energystats.shared.network.NetworkFacade
@@ -94,8 +92,8 @@ class AppContainer(private val context: Context) {
                 parameterGroups = config.parameterGroups,
                 colorTheme = ColorThemeMode.fromInt(config.colorTheme),
                 solcastSettings = config.solcastSettings,
-                dataCeiling = DataCeiling.fromInt(config.dataCeiling),
-                totalYieldModel = TotalYieldModel.fromInt(config.totalYieldModel),
+                dataCeiling = config.dataCeiling,
+                totalYieldModel = config.totalYieldModel,
                 showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage,
                 separateParameterGraphsByUnit = config.separateParameterGraphsByUnit,
                 currencySymbol = config.currencySymbol,

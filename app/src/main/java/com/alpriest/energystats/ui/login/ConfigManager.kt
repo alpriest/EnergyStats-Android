@@ -231,9 +231,9 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var refreshFrequency: RefreshFrequency
-        get() = RefreshFrequency.fromInt(config.refreshFrequency)
+        get() = config.refreshFrequency
         set(value) {
-            config.refreshFrequency = value.value
+            config.refreshFrequency = value
         }
 
     override var showBatteryTemperature: Boolean
@@ -331,9 +331,9 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var totalYieldModel: TotalYieldModel
-        get() = TotalYieldModel.fromInt(config.totalYieldModel)
+        get() = config.totalYieldModel
         set(value) {
-            config.totalYieldModel = value.value
+            config.totalYieldModel = value
             appSettingsStream.value = appSettingsStream.value.copy(totalYieldModel = totalYieldModel)
         }
 
@@ -461,9 +461,9 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var dataCeiling: DataCeiling
-        get() = DataCeiling.fromInt(config.dataCeiling)
+        get() = config.dataCeiling
         set(value) {
-            config.dataCeiling = value.value
+            config.dataCeiling = value
             appSettingsStream.value = appSettingsStream.value.copy(dataCeiling = dataCeiling)
         }
 
@@ -521,9 +521,9 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var earningsModel: EarningsModel
-        get() = EarningsModel.fromInt(config.earningsModel)
+        get() = config.earningsModel
         set(value) {
-            config.earningsModel = value.value
+            config.earningsModel = value
         }
 
     override var summaryDateRange: SummaryDateRange
@@ -539,15 +539,15 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var widgetTapAction: WidgetTapAction
-        get() = WidgetTapAction.fromInt(config.widgetTapAction)
+        get() = config.widgetTapAction
         set(value) {
-            config.widgetTapAction = value.value
+            config.widgetTapAction = value
         }
 
     override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode
-        get() = BatteryTemperatureDisplayMode.fromInt(config.batteryTemperatureDisplayMode)
+        get() = config.batteryTemperatureDisplayMode
         set(value) {
-            config.batteryTemperatureDisplayMode = value.value
+            config.batteryTemperatureDisplayMode = value
         }
 
     override var showInverterScheduleQuickLink: Boolean

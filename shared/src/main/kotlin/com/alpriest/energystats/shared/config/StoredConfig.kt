@@ -2,16 +2,22 @@ package com.alpriest.energystats.shared.config
 
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryData
+import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
+import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
 import com.alpriest.energystats.shared.models.SummaryDateRange
+import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
+import com.alpriest.energystats.shared.models.WidgetTapAction
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDateTime
 
@@ -20,8 +26,8 @@ interface StoredConfig {
     var workModes: List<String>
     var fetchSolcastOnAppLaunch: Boolean
     var showInverterScheduleQuickLink: Boolean
-    var batteryTemperatureDisplayMode: Int
-    var widgetTapAction: Int
+    var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode
+    var widgetTapAction: WidgetTapAction
     var lastSolcastRefresh: LocalDateTime?
     var scheduleTemplates: List<ScheduleTemplate>
     var showBatteryTimeEstimateOnWidget: Boolean
@@ -29,7 +35,7 @@ interface StoredConfig {
     var showBatterySOCAsPercentage: Boolean
     var variables: List<Variable>
     var separateParameterGraphsByUnit: Boolean
-    var dataCeiling: Int
+    var dataCeiling: DataCeiling
     var colorTheme: Int
     var showGraphValueDescriptions: Boolean
     var currencyCode: String
@@ -43,7 +49,7 @@ interface StoredConfig {
     var showSunnyBackground: Boolean
     var selectedDeviceSN: String?
     var devices: String?
-    var refreshFrequency: Int
+    var refreshFrequency: RefreshFrequency
     var showBatteryTemperature: Boolean
     var useColouredFlowLines: Boolean
     var useLargeDisplay: Boolean
@@ -60,12 +66,12 @@ interface StoredConfig {
     var deviceBatteryOverrides: Map<String, String>
     var parameterGroups: List<ParameterGroup>
     var solcastSettings: SolcastSettings
-    var totalYieldModel: Int
+    var totalYieldModel: TotalYieldModel
     var showFinancialSummaryOnFlowPage: Boolean
     var useTraditionalLoadFormula: Boolean
     var showSelfSufficiencyStatsGraphOverlay: Boolean
     var truncatedYAxisOnParameterGraphs: Boolean
-    var earningsModel: Int
+    var earningsModel: EarningsModel
     var summaryDateRange: SummaryDateRange
     var ct2DisplayMode: Int
     var showStringTotalsAsPercentage: Boolean

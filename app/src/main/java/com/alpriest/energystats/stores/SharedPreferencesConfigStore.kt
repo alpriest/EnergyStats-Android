@@ -3,7 +3,9 @@ package com.alpriest.energystats.stores
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.alpriest.energystats.shared.config.StoredConfig
-import com.alpriest.energystats.shared.helpers.enumPreference
+import com.alpriest.energystats.shared.helpers.enumIntPreference
+import com.alpriest.energystats.shared.helpers.jsonNullablePreference
+import com.alpriest.energystats.shared.helpers.jsonPreference
 import com.alpriest.energystats.shared.helpers.preference
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
@@ -162,159 +164,104 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var showInverterConsumption: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, false)
     override var showBatterySOCOnDailyStats: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, false)
     override var allowNegativeLoad: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, false)
+    override var ct2DisplayMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, CT2DisplayMode.Hidden.value)
 
-    override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode by enumPreference(
+    override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode by enumIntPreference(
         sharedPreferences,
         SharedPreferenceDisplayKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name,
         SelfSufficiencyEstimateMode.Off,
         readStorage = { SelfSufficiencyEstimateMode.fromInt(it) },
         writeStorage = { it.value }
     )
-    override var refreshFrequency: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.REFRESH_FREQUENCY.name, RefreshFrequency.Auto.value)
-    override var dataCeiling: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DATA_CEILING.name, DataCeiling.Mild.value)
-    override var totalYieldModel: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.TOTAL_YIELD_MODEL.name, TotalYieldModel.Off.value)
-    override var earningsModel: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.EARNINGS_MODEL.name, EarningsModel.Exported.value)
-    override var widgetTapAction: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, WidgetTapAction.Launch.value)
-    override var batteryTemperatureDisplayMode: Int by preference(
+    override var refreshFrequency: RefreshFrequency by enumIntPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.REFRESH_FREQUENCY.name,
+        RefreshFrequency.Auto,
+        readStorage = { RefreshFrequency.fromInt(it) },
+        writeStorage = { it.value }
+    )
+    override var dataCeiling: DataCeiling by enumIntPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.DATA_CEILING.name,
+        DataCeiling.Mild,
+        readStorage = { DataCeiling.fromInt(it) },
+        writeStorage = { it.value }
+    )
+    override var totalYieldModel: TotalYieldModel by enumIntPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.TOTAL_YIELD_MODEL.name,
+        TotalYieldModel.Off,
+        readStorage = { TotalYieldModel.fromInt(it) },
+        writeStorage = { it.value }
+    )
+    override var earningsModel: EarningsModel by enumIntPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.EARNINGS_MODEL.name,
+        EarningsModel.Exported,
+        readStorage = { EarningsModel.fromInt(it) },
+        writeStorage = { it.value }
+    )
+    override var widgetTapAction: WidgetTapAction by enumIntPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name,
+        WidgetTapAction.Launch,
+        readStorage = { WidgetTapAction.fromInt(it) },
+        writeStorage = { it.value }
+    )
+    override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode by enumIntPreference(
         sharedPreferences,
         SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name,
-        BatteryTemperatureDisplayMode.Automatic.value
+        BatteryTemperatureDisplayMode.Automatic,
+        readStorage = { BatteryTemperatureDisplayMode.fromInt(it) },
+        writeStorage = { it.value }
     )
-    override var ct2DisplayMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, CT2DisplayMode.Hidden.value)
 
-    override var powerStationDetail: PowerStationDetail?
-        get() {
-            val data: String? = sharedPreferences.getString(SharedPreferenceDeviceKey.POWER_STATION_DETAIL.name, null) ?: return null
-
-            return Gson().fromJson(data, object : TypeToken<PowerStationDetail>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDeviceKey.POWER_STATION_DETAIL.name, jsonString)
-            }
-        }
-
-    override var selectedParameterGraphVariables: List<String>
-        get() {
-            val variables = sharedPreferences.getString(SharedPreferenceDisplayKey.SELECTED_PARAMETER_GRAPH_VARIABLES.name, Gson().toJson(listOf<String>()))
-            return Gson().fromJson(variables, object : TypeToken<List<String>>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.SELECTED_PARAMETER_GRAPH_VARIABLES.name, jsonString)
-            }
-        }
-
-    override var deviceBatteryOverrides: Map<String, String>
-        get() {
-            val variables = sharedPreferences.getString(SharedPreferenceDeviceKey.BATTERY_CAPACITY_OVERRIDES.name, Gson().toJson(mapOf<String, String>()))
-            return Gson().fromJson(variables, object : TypeToken<Map<String, String>>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDeviceKey.BATTERY_CAPACITY_OVERRIDES.name, jsonString)
-            }
-        }
-
-    override var solarRangeDefinitions: SolarRangeDefinitions
-        get() {
-            val data = sharedPreferences.getString(SharedPreferenceDisplayKey.SOLAR_RANGE_DEFINITIONS.name, Gson().toJson(SolarRangeDefinitions.defaults))
-            return Gson().fromJson(data, object : TypeToken<SolarRangeDefinitions>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.SOLAR_RANGE_DEFINITIONS.name, jsonString)
-            }
-        }
-
-    override var parameterGroups: List<ParameterGroup>
-        get() {
-            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.PARAMETER_GROUPS.name, null)
-            if (data == null) {
-                data = Gson().toJson(ParameterGroup.defaults)
-                parameterGroups = ParameterGroup.defaults
-            }
-
-            return Gson().fromJson(data, object : TypeToken<List<ParameterGroup>>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.PARAMETER_GROUPS.name, jsonString)
-            }
-        }
-
-    override var solcastSettings: SolcastSettings
-        get() {
-            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SOLCAST_SETTINGS.name, null)
-            if (data == null) {
-                data = Gson().toJson(SolcastSettings.defaults)
-                solcastSettings = SolcastSettings.defaults
-            }
-
-            return Gson().fromJson(data, object : TypeToken<SolcastSettings>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.SOLCAST_SETTINGS.name, jsonString)
-            }
-        }
-
-    override var powerFlowStrings: PowerFlowStringsSettings
-        get() {
-            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.POWER_FLOW_STRINGS.name, null)
-            if (data == null) {
-                data = Gson().toJson(PowerFlowStringsSettings.defaults)
-                powerFlowStrings = PowerFlowStringsSettings.defaults
-            }
-
-            return Gson().fromJson(data, object : TypeToken<PowerFlowStringsSettings>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.POWER_FLOW_STRINGS.name, jsonString)
-            }
-        }
-
-    override var variables: List<Variable>
-        get() {
-            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.VARIABLES.name, null)
-            if (data == null) {
-                data = Gson().toJson(listOf<Variable>())
-                variables = listOf()
-            }
-
-            return Gson().fromJson(data, object : TypeToken<List<Variable>>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.VARIABLES.name, jsonString)
-            }
-        }
-
-    override var scheduleTemplates: List<ScheduleTemplate>
-        get() {
-            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, null)
-            if (data == null) {
-                data = Gson().toJson(listOf<ScheduleTemplate>())
-                scheduleTemplates = listOf()
-            }
-
-            return Gson().fromJson(data, object : TypeToken<List<ScheduleTemplate>>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, jsonString)
-            }
-        }
+    override var powerStationDetail: PowerStationDetail? by jsonNullablePreference(
+        sharedPreferences,
+        SharedPreferenceDeviceKey.POWER_STATION_DETAIL.name,
+        object : TypeToken<PowerStationDetail?>() {})
+    override var selectedParameterGraphVariables: List<String> by jsonPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.SELECTED_PARAMETER_GRAPH_VARIABLES.name,
+        emptyList(),
+        object : TypeToken<List<String>>() {})
+    override var deviceBatteryOverrides: Map<String, String> by jsonPreference(
+        sharedPreferences,
+        SharedPreferenceDeviceKey.BATTERY_CAPACITY_OVERRIDES.name,
+        emptyMap(),
+        object : TypeToken<Map<String, String>>() {})
+    override var solarRangeDefinitions: SolarRangeDefinitions by jsonPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.SOLAR_RANGE_DEFINITIONS.name,
+        SolarRangeDefinitions.defaults,
+        object : TypeToken<SolarRangeDefinitions>() {})
+    override var parameterGroups: List<ParameterGroup> by jsonPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.PARAMETER_GROUPS.name,
+        ParameterGroup.defaults,
+        object : TypeToken<List<ParameterGroup>>() {})
+    override var solcastSettings: SolcastSettings by jsonPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.SOLCAST_SETTINGS.name,
+        SolcastSettings.defaults,
+        object : TypeToken<SolcastSettings>() {})
+    override var powerFlowStrings: PowerFlowStringsSettings by jsonPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.POWER_FLOW_STRINGS.name,
+        PowerFlowStringsSettings.defaults,
+        object : TypeToken<PowerFlowStringsSettings>() {})
+    override var variables: List<Variable> by jsonPreference(sharedPreferences, SharedPreferenceDisplayKey.VARIABLES.name, listOf(), object : TypeToken<List<Variable>>() {})
+    override var scheduleTemplates: List<ScheduleTemplate> by jsonPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name,
+        listOf(),
+        object : TypeToken<List<ScheduleTemplate>>() {})
+    override var batteryData: BatteryData? by jsonNullablePreference(sharedPreferences, SharedPreferenceDisplayKey.BATTERY_DATA.name, object : TypeToken<BatteryData>() {})
+    override var generationViewData: GenerationViewData? by jsonNullablePreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name,
+        object : TypeToken<GenerationViewData>() {})
+    override var workModes: List<String> by jsonPreference(sharedPreferences, SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, listOf(), object : TypeToken<List<String>>() {})
 
     override var summaryDateRange: SummaryDateRange
         get() {
@@ -379,52 +326,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
                 } else {
                     remove(SharedPreferenceDisplayKey.LAST_SOLCAST_REFRESH.name)
                 }
-            }
-        }
-
-    override var batteryData: BatteryData?
-        get() {
-            val data: String = sharedPreferences.getString(SharedPreferenceDisplayKey.BATTERY_DATA.name, null) ?: return null
-
-            return Gson().fromJson(data, object : TypeToken<BatteryData>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.BATTERY_DATA.name, jsonString)
-            }
-        }
-
-    override var generationViewData: GenerationViewData?
-        get() {
-            val data: String? = sharedPreferences.getString(SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name, null) ?: return null
-
-            return if (data != null) {
-                Gson().fromJson(data, object : TypeToken<GenerationViewData>() {}.type)
-            } else {
-                null
-            }
-        }
-        set(value) {
-            sharedPreferences.edit {
-                if (value == null) {
-                    remove(SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name)
-                } else {
-                    val jsonString = Gson().toJson(value)
-                    putString(SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name, jsonString)
-                }
-            }
-        }
-
-    override var workModes: List<String>
-        get() {
-            val workModes = sharedPreferences.getString(SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, Gson().toJson(listOf<String>()))
-            return Gson().fromJson(workModes, object : TypeToken<List<String>>() {}.type)
-        }
-        set(value) {
-            sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, jsonString)
             }
         }
 }

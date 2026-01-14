@@ -2,6 +2,8 @@ package com.alpriest.energystats.shared.helpers
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -68,7 +70,7 @@ fun nullableDoublePreference(
     }
 }
 
-fun <T> enumPreference(
+fun <T> enumIntPreference(
     sharedPreferences: SharedPreferences,
     key: String,
     defaultValue: T,
@@ -86,6 +88,53 @@ fun <T> enumPreference(
             edit(commit = true) {
                 putInt(key, writeStorage(value))
             }
+        }
+    }
+}
+
+fun <T> jsonNullablePreference(
+    sharedPreferences: SharedPreferences,
+    key: String,
+    typeToken: TypeToken<T>,
+    gson: Gson = Gson()
+): ReadWriteProperty<Any, T?> = object : ReadWriteProperty<Any, T?> {
+
+    private val type = typeToken.type
+
+    override fun getValue(thisRef: Any, property: KProperty<*>): T? {
+        val stored = sharedPreferences.getString(key, null) ?: return null
+        return gson.fromJson(stored, type)
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: T?) {
+        sharedPreferences.edit(commit = true) {
+            if (value == null) {
+                remove(key)
+            } else {
+                putString(key, gson.toJson(value))
+            }
+        }
+    }
+}
+
+fun <T> jsonPreference(
+    sharedPreferences: SharedPreferences,
+    key: String,
+    defaultValue: T,
+    typeToken: TypeToken<T>,
+    gson: Gson = Gson()
+): ReadWriteProperty<Any, T> = object : ReadWriteProperty<Any, T> {
+
+    private val type = typeToken.type
+
+    override fun getValue(thisRef: Any, property: KProperty<*>): T {
+        val stored = sharedPreferences.getString(key, null) ?: return defaultValue
+        return gson.fromJson(stored, type)
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
+        sharedPreferences.edit(commit = true) {
+            putString(key, gson.toJson(value))
         }
     }
 }
