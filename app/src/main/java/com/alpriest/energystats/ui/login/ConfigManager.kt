@@ -25,12 +25,13 @@ import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.models.demo
-import com.alpriest.energystats.shared.models.toAppTheme
+import com.alpriest.energystats.shared.models.toAppSettings
 import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.ui.roundedToString
 import com.alpriest.energystats.stores.StoredConfigManaging
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -43,123 +44,126 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
     private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
     private var deviceSupportsPeakShaving: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
     override var lastSettingsResetTime: LocalDateTime? = null
-    override val appSettingsStream: MutableStateFlow<AppSettings>
+    override val appSettingsStream: StateFlow<AppSettings>
         get() = appSettingsStore.appSettingStream
 
     override var detectedActiveTemplate: String?
         get() = appSettingsStream.value.detectedActiveTemplate
         set(value) {
-            val appTheme = appSettingsStream.value.copy(detectedActiveTemplate = value)
-            appSettingsStream.value = appTheme
+            config.detectedActiveTemplate = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showBatteryTimeEstimateOnWidget: Boolean
         get() = config.showBatteryTimeEstimateOnWidget
         set(value) {
             config.showBatteryTimeEstimateOnWidget = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var useTraditionalLoadFormula: Boolean
         get() = config.useTraditionalLoadFormula
         set(value) {
             config.useTraditionalLoadFormula = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var colorThemeMode: ColorThemeMode
         get() = config.colorTheme
         set(value) {
             config.colorTheme = value
-            appSettingsStream.value = appSettingsStream.value.copy(colorTheme = colorThemeMode)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showGraphValueDescriptions: Boolean
         get() = config.showGraphValueDescriptions
         set(value) {
             config.showGraphValueDescriptions = value
-            appSettingsStream.value = appSettingsStream.value.copy(showGraphValueDescriptions = showGraphValueDescriptions)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var shouldCombineCT2WithPVPower: Boolean
         get() = config.shouldCombineCT2WithPVPower
         set(value) {
             config.shouldCombineCT2WithPVPower = value
-            appSettingsStream.value = appSettingsStream.value.copy(shouldCombineCT2WithPVPower = shouldCombineCT2WithPVPower)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var shouldCombineCT2WithLoadsPower: Boolean
         get() = config.shouldCombineCT2WithLoadsPower
         set(value) {
             config.shouldCombineCT2WithLoadsPower = value
-            appSettingsStream.value = appSettingsStream.value.copy(shouldCombineCT2WithLoadsPower = shouldCombineCT2WithLoadsPower)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var currencyCode: String
         get() = config.currencyCode
         set(value) {
             config.currencyCode = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var currencySymbol: String
         get() = config.currencySymbol
         set(value) {
             config.currencySymbol = value
-            appSettingsStream.value = appSettingsStream.value.copy(currencySymbol = currencySymbol)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var gridImportUnitPrice: Double
         get() = config.gridImportUnitPrice
         set(value) {
             config.gridImportUnitPrice = value
-            appSettingsStream.value = appSettingsStream.value.copy(gridImportUnitPrice = gridImportUnitPrice)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var feedInUnitPrice: Double
         get() = config.feedInUnitPrice
         set(value) {
             config.feedInUnitPrice = value
-            appSettingsStream.value = appSettingsStream.value.copy(feedInUnitPrice = feedInUnitPrice)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var decimalPlaces: Int
         get() = config.decimalPlaces
         set(value) {
             config.decimalPlaces = value
-            appSettingsStream.value = appSettingsStream.value.copy(decimalPlaces = decimalPlaces)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showSunnyBackground: Boolean
         get() = config.showSunnyBackground
         set(value) {
             config.showSunnyBackground = value
-            appSettingsStream.value = appSettingsStream.value.copy(showSunnyBackground = showSunnyBackground)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode
         get() = config.selfSufficiencyEstimateMode
         set(value) {
             config.selfSufficiencyEstimateMode = value
-            appSettingsStream.value = appSettingsStream.value.copy(selfSufficiencyEstimateMode = selfSufficiencyEstimateMode)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showFinancialSummary: Boolean
         get() = config.showFinancialSummary
         set(value) {
             config.showFinancialSummary = value
-            appSettingsStream.value = appSettingsStream.value.copy(showFinancialSummary = showFinancialSummary)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showBatteryEstimate: Boolean
         get() = config.showBatteryEstimate
         set(value) {
             config.showBatteryEstimate = value
-            appSettingsStream.value = appSettingsStream.value.copy(showBatteryEstimate = showBatteryEstimate)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var displayUnit: DisplayUnit
         get() = config.displayUnit
         set(value) {
             config.displayUnit = value
-            appSettingsStream.value = appSettingsStream.value.copy(displayUnit = displayUnit)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var minSOC: Double
@@ -177,6 +181,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
                     }
                 }
             }
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var batteryCapacity: String
@@ -196,6 +201,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             }
 
             devices = devices?.map { it }
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override val batteryCapacityW: Int
@@ -220,40 +226,42 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
                 powerFlowStrings = demoTheme.powerFlowStrings
                 ct2DisplayMode = demoTheme.ct2DisplayMode
             }
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var useColouredFlowLines: Boolean
         get() = config.useColouredFlowLines
         set(value) {
             config.useColouredFlowLines = value
-            appSettingsStream.value = appSettingsStream.value.copy(useColouredFlowLines = useColouredFlowLines)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var refreshFrequency: RefreshFrequency
         get() = config.refreshFrequency
         set(value) {
             config.refreshFrequency = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showBatteryTemperature: Boolean
         get() = config.showBatteryTemperature
         set(value) {
             config.showBatteryTemperature = value
-            appSettingsStream.value = appSettingsStream.value.copy(showBatteryTemperature = showBatteryTemperature)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showInverterTemperatures: Boolean
         get() = config.showInverterTemperatures
         set(value) {
             config.showInverterTemperatures = value
-            appSettingsStream.value = appSettingsStream.value.copy(showInverterTemperatures = showInverterTemperatures)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var useLargeDisplay: Boolean
         get() = config.useLargeDisplay
         set(value) {
             config.useLargeDisplay = value
-            appSettingsStream.value = appSettingsStream.value.copy(useLargeDisplay = useLargeDisplay)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
@@ -264,76 +272,78 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         if (clearDeviceSettings) {
             config.clearDeviceSettings()
         }
+
+        appSettingsStore.update(AppSettings.toAppSettings(config))
     }
 
     override var showUsableBatteryOnly: Boolean
         get() = config.showUsableBatteryOnly
         set(value) {
             config.showUsableBatteryOnly = value
-            appSettingsStream.value = appSettingsStream.value.copy(showUsableBatteryOnly = showUsableBatteryOnly)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showInverterIcon: Boolean
         get() = config.showInverterIcon
         set(value) {
             config.showInverterIcon = value
-            appSettingsStream.value = appSettingsStream.value.copy(showInverterIcon = showInverterIcon)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showHomeTotal: Boolean
         get() = config.showHomeTotal
         set(value) {
             config.showHomeTotal = value
-            appSettingsStream.value = appSettingsStream.value.copy(showHomeTotal = showHomeTotal)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var shouldInvertCT2: Boolean
         get() = config.shouldInvertCT2
         set(value) {
             config.shouldInvertCT2 = value
-            appSettingsStream.value = appSettingsStream.value.copy(shouldInvertCT2 = shouldInvertCT2)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showGridTotals: Boolean
         get() = config.showGridTotals
         set(value) {
             config.showGridTotals = value
-            appSettingsStream.value = appSettingsStream.value.copy(showGridTotals = showGridTotals)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showInverterTypeNameOnPowerflow: Boolean
         get() = config.showInverterTypeNameOnPowerflow
         set(value) {
             config.showInverterTypeNameOnPowerflow = value
-            appSettingsStream.value = appSettingsStream.value.copy(showInverterTypeNameOnPowerflow = showInverterTypeNameOnPowerflow)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showInverterStationNameOnPowerflow: Boolean
         get() = config.showInverterStationNameOnPowerflow
         set(value) {
             config.showInverterStationNameOnPowerflow = value
-            appSettingsStream.value = appSettingsStream.value.copy(showInverterStationNameOnPowerflow = showInverterStationNameOnPowerflow)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showLastUpdateTimestamp: Boolean
         get() = config.showLastUpdateTimestamp
         set(value) {
             config.showLastUpdateTimestamp = value
-            appSettingsStream.value = appSettingsStream.value.copy(showLastUpdateTimestamp = showLastUpdateTimestamp)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var solarRangeDefinitions: SolarRangeDefinitions
         get() = config.solarRangeDefinitions
         set(value) {
             config.solarRangeDefinitions = value
-            appSettingsStream.value = appSettingsStream.value.copy(solarRangeDefinitions = solarRangeDefinitions)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var totalYieldModel: TotalYieldModel
         get() = config.totalYieldModel
         set(value) {
             config.totalYieldModel = value
-            appSettingsStream.value = appSettingsStream.value.copy(totalYieldModel = totalYieldModel)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     final override var devices: List<Device>?
@@ -351,6 +361,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         get() = config.selectedDeviceSN
         set(value) {
             config.selectedDeviceSN = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override fun select(device: Device) {
@@ -432,130 +443,140 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         get() = config.selectedParameterGraphVariables
         set(value) {
             config.selectedParameterGraphVariables = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var parameterGroups: List<ParameterGroup>
         get() = config.parameterGroups
         set(value) {
             config.parameterGroups = value
-            appSettingsStream.value = appSettingsStream.value.copy(parameterGroups = parameterGroups)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var solcastSettings: SolcastSettings
         get() = config.solcastSettings
         set(value) {
             config.solcastSettings = value
-            appSettingsStream.value = appSettingsStream.value.copy(solcastSettings = solcastSettings)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var dataCeiling: DataCeiling
         get() = config.dataCeiling
         set(value) {
             config.dataCeiling = value
-            appSettingsStream.value = appSettingsStream.value.copy(dataCeiling = dataCeiling)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showFinancialSummaryOnFlowPage: Boolean
         get() = config.showFinancialSummaryOnFlowPage
         set(value) {
             config.showFinancialSummaryOnFlowPage = value
-            appSettingsStream.value = appSettingsStream.value.copy(showFinancialSummaryOnFlowPage = showFinancialSummaryOnFlowPage)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var separateParameterGraphsByUnit: Boolean
         get() = config.separateParameterGraphsByUnit
         set(value) {
             config.separateParameterGraphsByUnit = value
-            appSettingsStream.value = appSettingsStream.value.copy(separateParameterGraphsByUnit = separateParameterGraphsByUnit)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showBatteryAsPercentage: Boolean
         get() = config.showBatterySOCAsPercentage
         set(value) {
             config.showBatterySOCAsPercentage = value
-            appSettingsStream.value = appSettingsStream.value.copy(showBatterySOCAsPercentage = showBatteryAsPercentage)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var powerFlowStrings: PowerFlowStringsSettings
         get() = config.powerFlowStrings
         set(value) {
             config.powerFlowStrings = value
-            appSettingsStream.value = appSettingsStream.value.copy(powerFlowStrings = powerFlowStrings)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var powerStationDetail: PowerStationDetail?
         get() = config.powerStationDetail
         set(value) {
             config.powerStationDetail = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showSelfSufficiencyStatsGraphOverlay: Boolean
         get() = config.showSelfSufficiencyStatsGraphOverlay
         set(value) {
             config.showSelfSufficiencyStatsGraphOverlay = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var scheduleTemplates: List<ScheduleTemplate>
         get() = config.scheduleTemplates
         set(value) {
             config.scheduleTemplates = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var truncatedYAxisOnParameterGraphs: Boolean
         get() = config.truncatedYAxisOnParameterGraphs
         set(value) {
             config.truncatedYAxisOnParameterGraphs = value
-            appSettingsStream.value = appSettingsStream.value.copy(truncatedYAxisOnParameterGraphs = truncatedYAxisOnParameterGraphs)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var earningsModel: EarningsModel
         get() = config.earningsModel
         set(value) {
             config.earningsModel = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var summaryDateRange: SummaryDateRange
         get() = config.summaryDateRange
         set(value) {
             config.summaryDateRange = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var lastSolcastRefresh: LocalDateTime?
         get() = config.lastSolcastRefresh
         set(value) {
             config.lastSolcastRefresh = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var widgetTapAction: WidgetTapAction
         get() = config.widgetTapAction
         set(value) {
             config.widgetTapAction = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode
         get() = config.batteryTemperatureDisplayMode
         set(value) {
             config.batteryTemperatureDisplayMode = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showInverterScheduleQuickLink: Boolean
         get() = config.showInverterScheduleQuickLink
         set(value) {
             config.showInverterScheduleQuickLink = value
-            appSettingsStream.value = appSettingsStream.value.copy(showInverterScheduleQuickLink = showInverterScheduleQuickLink)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var fetchSolcastOnAppLaunch: Boolean
         get() = config.fetchSolcastOnAppLaunch
         set(value) {
             config.fetchSolcastOnAppLaunch = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var ct2DisplayMode: CT2DisplayMode
         get() = config.ct2DisplayMode
         set(value) {
             config.ct2DisplayMode = value
-            appSettingsStream.value = appSettingsStream.value.copy(ct2DisplayMode = ct2DisplayMode)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean {
@@ -579,7 +600,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
 
     override fun resetDisplaySettings() {
         config.clearDisplaySettings()
-        appSettingsStream.value = AppSettings.toAppTheme(config)
+        appSettingsStore.update(AppSettings.toAppSettings(config))
         lastSettingsResetTime = LocalDateTime.now()
     }
 
@@ -587,38 +608,39 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         get() = config.showStringTotalsAsPercentage
         set(value) {
             config.showStringTotalsAsPercentage = value
-            appSettingsStream.value = appSettingsStream.value.copy(showStringTotalsAsPercentage = showStringTotalsAsPercentage)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var allowNegativeLoad: Boolean
         get() = config.allowNegativeLoad
         set(value) {
             config.allowNegativeLoad = value
-            appSettingsStream.value = appSettingsStream.value.copy(allowNegativeLoad = allowNegativeLoad)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showInverterConsumption: Boolean
         get() = config.showInverterConsumption
         set(value) {
             config.showInverterConsumption = value
-            appSettingsStream.value = appSettingsStream.value.copy(showInverterConsumption = showInverterConsumption)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var showBatterySOCOnDailyStats: Boolean
         get() = config.showBatterySOCOnDailyStats
         set(value) {
             config.showBatterySOCOnDailyStats = value
-            appSettingsStream.value = appSettingsStream.value.copy(showBatterySOCOnDailyStats = showBatterySOCOnDailyStats)
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override var workModes: List<String>
         get() = config.workModes
         set(value) {
             config.workModes = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
     override fun loginAsDemo() {
-        appSettingsStream.value = AppSettings.demo()
+        appSettingsStore.update(AppSettings.demo())
     }
 
     init {
@@ -626,5 +648,4 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
     }
 }
 
-class DataFetchFailure(method: String, ex: Exception) : Exception("Could not fetch $method (#${ex.localizedMessage})")
 class NoDeviceFoundException : Exception("No device found")

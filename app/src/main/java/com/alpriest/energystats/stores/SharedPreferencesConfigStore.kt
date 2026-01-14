@@ -286,6 +286,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         object : TypeToken<GenerationViewData>() {})
     override var workModes: List<String> by jsonPreference(sharedPreferences, SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, emptyList(), object : TypeToken<List<String>>() {})
     override var devices: List<Device>? by jsonPreference(sharedPreferences, SharedPreferenceDeviceKey.DEVICES.name, emptyList(), object : TypeToken<List<Device>?>() {})
+    override var detectedActiveTemplate: String? = null // in memory only
 
     override var summaryDateRange: SummaryDateRange
         get() {

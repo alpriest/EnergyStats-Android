@@ -6,17 +6,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.shared.config.StoredConfig
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-public final class AppSettingsStore {
-    private val appSettings: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings.demo())
+class AppSettingsStore(initialValue: AppSettings) {
+    private val _appSettingsStream: MutableStateFlow<AppSettings> = MutableStateFlow(initialValue)
 
-    public val appSettingStream: MutableStateFlow<AppSettings> = appSettings //TODO: Not mutable
+    val appSettingStream: StateFlow<AppSettings> = _appSettingsStream
+    val currentValue: AppSettings get() = _appSettingsStream.value
 
-    public fun update(appSettings: AppSettings) {
-        this.appSettings.value = appSettings
+    fun update(appSettings: AppSettings) {
+        _appSettingsStream.value = appSettings
     }
-
-    public val currentValue: AppSettings get() = appSettings.value
 }
 
 data class AppSettings(
@@ -179,7 +179,7 @@ fun AppSettings.Companion.demo(
     )
 }
 
-fun AppSettings.Companion.toAppTheme(config: StoredConfig): AppSettings {
+fun AppSettings.Companion.toAppSettings(config: StoredConfig): AppSettings {
     return AppSettings(
         useLargeDisplay = config.useLargeDisplay,
         useColouredFlowLines = config.useColouredFlowLines,
@@ -217,7 +217,7 @@ fun AppSettings.Companion.toAppTheme(config: StoredConfig): AppSettings {
         showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
         ct2DisplayMode = config.ct2DisplayMode,
         showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
-        detectedActiveTemplate = null,
+        detectedActiveTemplate = config.detectedActiveTemplate,
         showInverterConsumption = config.showInverterConsumption,
         showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats,
         allowNegativeLoad = config.allowNegativeLoad,

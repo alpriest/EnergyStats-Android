@@ -89,6 +89,7 @@ interface StoredConfig {
     var powerFlowStrings: PowerFlowStringsSettings
     var shouldCombineCT2WithLoadsPower: Boolean
     var allowNegativeLoad: Boolean
+    var detectedActiveTemplate: String?
 }
 
 interface CurrentStatusCalculatorConfig {
