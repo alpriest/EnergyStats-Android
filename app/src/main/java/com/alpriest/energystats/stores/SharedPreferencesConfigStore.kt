@@ -12,6 +12,7 @@ import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
@@ -143,7 +144,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var showSunnyBackground: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_SUNNY_BACKGROUND.name, true)
     override var decimalPlaces: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DECIMAL_PLACES.name, 2)
     override var selectedDeviceSN: String? by preference(sharedPreferences, SharedPreferenceDeviceKey.SELECTED_DEVICE_SN.name, null)
-    override var devices: String? by preference(sharedPreferences, SharedPreferenceDeviceKey.DEVICES.name, null)
     override var showBatteryTemperature: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_TEMPERATURE.name, false)
     override var useColouredFlowLines: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_COLOURED_FLOW_LINES.name, false)
     override var useLargeDisplay: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_LARGE_DISPLAY.name, false)
@@ -273,7 +273,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SharedPreferenceDisplayKey.POWER_FLOW_STRINGS.name,
         PowerFlowStringsSettings.defaults,
         object : TypeToken<PowerFlowStringsSettings>() {})
-    override var variables: List<Variable> by jsonPreference(sharedPreferences, SharedPreferenceDisplayKey.VARIABLES.name, listOf(), object : TypeToken<List<Variable>>() {})
+    override var variables: List<Variable> by jsonPreference(sharedPreferences, SharedPreferenceDisplayKey.VARIABLES.name, emptyList(), object : TypeToken<List<Variable>>() {})
     override var scheduleTemplates: List<ScheduleTemplate> by jsonPreference(
         sharedPreferences,
         SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name,
@@ -284,7 +284,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         sharedPreferences,
         SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name,
         object : TypeToken<GenerationViewData>() {})
-    override var workModes: List<String> by jsonPreference(sharedPreferences, SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, listOf(), object : TypeToken<List<String>>() {})
+    override var workModes: List<String> by jsonPreference(sharedPreferences, SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, emptyList(), object : TypeToken<List<String>>() {})
+    override var devices: List<Device>? by jsonPreference(sharedPreferences, SharedPreferenceDeviceKey.DEVICES.name, emptyList(), object : TypeToken<List<Device>?>() {})
 
     override var summaryDateRange: SummaryDateRange
         get() {

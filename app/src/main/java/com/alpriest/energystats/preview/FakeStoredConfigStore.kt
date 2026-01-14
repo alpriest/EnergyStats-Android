@@ -6,6 +6,7 @@ import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
@@ -37,7 +38,18 @@ class FakeStoredConfigStore(
     override var showBatteryTemperature: Boolean = true,
     override var refreshFrequency: RefreshFrequency = RefreshFrequency.Auto,
     override var selectedDeviceSN: String? = null,
-    override var devices: String? = "[{\"deviceID\":\"03274209-486c-4ea3-9c28-159f25ee84cb\",\"deviceSN\":\"66BH3720228D004\",\"moduleSN\":\"669W2EFF22FA815\",\"plantName\":\"Alistair Priest\",\"deviceType\":\"H1-3.7-E\",\"country\":\"United Kingdom\",\"countryCode\":\"\",\"feedinDate\":\"2022-02-22 21:46:27 GMT+0000\",\"status\":1,\"power\":3.241,\"generationToday\":8,\"generationTotal\":3723.1,\"productType\":\"H\",\"flowType\":2,\"hasBattery\":true,\"hasPV\":true,\"dataLatestUploadDate\":\"2023-08-04 14:43:36 BST+0100\",\"hasWifiMeter\":false,\"inParallel\":0,\"wifiMeterID\":\"\",\"wifiMeterSN\":\"\",\"atFlag\":false}]",
+    override var devices: List<Device>? = listOf(
+        Device(
+            "03274209-486c-4ea3-9c28-159f25ee84cb",
+            true,
+            "Alistair Priest",
+            "Alistair Priest",
+            true,
+            "H1-3.7-E",
+            null,
+            moduleSN = "abc123"
+        )
+    ),
     override var showSunnyBackground: Boolean = true,
     override var decimalPlaces: Int = 2,
     override var showBatteryEstimate: Boolean = true,
@@ -87,4 +99,4 @@ class FakeStoredConfigStore(
     override var workModes: List<String> = listOf(),
     override var allowNegativeLoad: Boolean = false,
     override var batteryData: BatteryData? = null
-): StoredConfig
+) : StoredConfig

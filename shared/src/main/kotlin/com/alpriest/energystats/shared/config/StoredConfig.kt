@@ -6,6 +6,7 @@ import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
@@ -51,7 +52,7 @@ interface StoredConfig {
     var showBatteryEstimate: Boolean
     var showSunnyBackground: Boolean
     var selectedDeviceSN: String?
-    var devices: String?
+    var devices: List<Device>?
     var refreshFrequency: RefreshFrequency
     var showBatteryTemperature: Boolean
     var useColouredFlowLines: Boolean

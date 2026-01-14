@@ -30,7 +30,6 @@ import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.ui.roundedToString
 import com.alpriest.energystats.stores.StoredConfigManaging
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -339,19 +338,10 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
 
     final override var devices: List<Device>?
         get() {
-            config.devices?.let {
-                return Gson().fromJson(it, Array<Device>::class.java).toList()
-            }
-
-            return null
+            return config.devices
         }
         set(value) {
-            if (value != null) {
-                config.devices = Gson().toJson(value)
-            } else {
-                config.devices = null
-            }
-
+            config.devices = value
             currentDevice.value = devices?.firstOrNull { it.deviceSN == selectedDeviceSN }
         }
 
@@ -378,10 +368,8 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         }
 
     override suspend fun fetchDevices() {
-        var method = "openapi_fetchDeviceList"
         try {
             val deviceList = networking.fetchDeviceList()
-            method = "openapi_fetchVariables"
             config.variables = networking.fetchVariables().mapNotNull { variable ->
                 variable.unit?.let {
                     Variable(
