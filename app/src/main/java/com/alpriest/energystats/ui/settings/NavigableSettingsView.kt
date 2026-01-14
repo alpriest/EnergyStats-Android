@@ -14,9 +14,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatteryChargeScheduleSettingsView
@@ -170,6 +170,11 @@ fun NavigableSettingsView(
         composable(SettingsScreen.ConfigureWorkMode.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.work_mode), {}, { navController.popBackStack() })
             WorkModeSettingsView(network, configManager, navController, userManager).Content()
+        }
+
+        composable(SettingsScreen.Contact.name) {
+            topBarSettings.value = TopBarSettings(true, stringResource(R.string.contact), {}, { navController.popBackStack() })
+            ContactView(navController, configManager)
         }
 
         inverterScheduleGraph(navController, topBarSettings, configManager, userManager, network, templateStore)

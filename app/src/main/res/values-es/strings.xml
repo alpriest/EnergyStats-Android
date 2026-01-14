@@ -187,8 +187,8 @@
     <string name="between_low_and_medium_the_sun_will_be_yellow_and_glowing">Entre bajo y medio, el sol será amarillo y brillante.</string>
     <string name="between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing">Entre medio y alto, el sol será naranja y brillante. Por encima de alto, el sol será rojo y brillante.</string>
     <string name="frequently_asked_questions">Preguntas frecuentes</string>
-    <string name="facebook_group">Grupo de Facebook</string>
-    <string name="foxess_community">Comunidad FoxESS</string>
+    <string name="facebook_group">Grupo de soporte de Facebook</string>
+    <string name="foxess_community">Sitio web de soporte de la comunidad FoxESS</string>
     <string name="foxess_cloud_status">Estado de la nube FoxESS</string>
     <string name="show_last_update_timestamp">Mostrar último timestamp de actualización</string>
     <string name="sun_display_thresholds">Umbral de variación de visualización del sol</string>
@@ -496,4 +496,9 @@
     <string name="please_ensure_the_start_date_is_before_the_end_date">Asegúrate de que la fecha de inicio sea anterior a la fecha de fin.</string>
     <string name="workmode_force_charge_mode_bat_description">El inversor controla la potencia de carga hacia la batería. Por ejemplo, si configuras la potencia en 10 kW, significa que la potencia máxima de entrada a la batería es de 10 kW. Esto sirve para controlar la entrada de la batería.</string>
     <string name="workmode_force_discharge_mode_bat_description">El inversor controla la potencia de salida de la batería. Por ejemplo, si configuras la potencia en 10 kW, significa que la potencia máxima de salida de la batería es de 10 kW. Esto sirve para controlar la potencia de salida de la batería.</string>
+    <string name="contact">Contacto</string>
+    <string name="contact_header_techsupport">¿Buscas soporte técnico para tu instalación?</string>
+    <string name="contact_header_faq">¿Necesitas ayuda para usar la app?</string>
+    <string name="contact_header_getintouch">¿Has encontrado un error en la app o tienes una sugerencia?</string>
+    <string name="contact_footer_getintouch">Al informar de un error, incluye los pasos para reproducirlo. Las capturas de pantalla y los vídeos también pueden ayudar.</string>
 </resources>

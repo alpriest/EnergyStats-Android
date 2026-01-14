@@ -85,26 +85,6 @@ fun SettingsTabView(
             HorizontalDivider()
 
             InlineSettingsNavButton(
-                title = stringResource(R.string.foxess_community),
-                disclosureIcon = { Icons.Default.OpenInBrowser },
-                onClick = { uriHandler.openUri("https://www.foxesscommunity.com/") }
-            )
-            HorizontalDivider()
-
-            InlineSettingsNavButton(
-                title = stringResource(R.string.facebook_group),
-                disclosureIcon = { Icons.Default.OpenInBrowser },
-                onClick = { uriHandler.openUri("https://www.facebook.com/groups/foxessownersgroup") }
-            )
-            HorizontalDivider()
-
-            InlineSettingsNavButton(
-                title = stringResource(R.string.frequently_asked_questions),
-                onClick = { navController.navigate(SettingsScreen.FAQ.name) }
-            )
-            HorizontalDivider()
-
-            InlineSettingsNavButton(
                 title = stringResource(R.string.view_debug_data),
                 onClick = { navController.navigate(SettingsScreen.Debug.name) }
             )
@@ -117,11 +97,19 @@ fun SettingsTabView(
             HorizontalDivider()
 
             ReloadDevicesButton(config)
+
             HorizontalDivider()
 
             InlineSettingsNavButton(
                 title = stringResource(R.string.reset_app_settings),
                 onClick = { navController.navigate(SettingsScreen.FactoryResetAppSettings.name) }
+            )
+
+            HorizontalDivider()
+
+            InlineSettingsNavButton(
+                title = stringResource(R.string.contact),
+                onClick = { navController.navigate(SettingsScreen.Contact.name) }
             )
         }
 

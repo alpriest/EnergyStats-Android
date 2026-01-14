@@ -27,5 +27,6 @@ enum class SettingsScreen {
     ConfigureMaxSoc,
     ConfigurePeakShaving,
     FactoryResetAppSettings,
-    ConfigureWorkMode
+    ConfigureWorkMode,
+    Contact
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.ButtonDefaults
@@ -88,9 +87,6 @@ fun SettingsFooterView(
             modifier = Modifier.padding(SettingsPadding.PANEL_INNER_HORIZONTAL)
         )
 
-        SettingsFooterRowView(Icons.Default.Email, "Get in touch", stringResource(R.string.get_in_touch)) {
-            uriHandler.openUri("mailto:energystatsapp@gmail.com?subject=Android%20App%20${config.appVersion}")
-        }
         SettingsFooterRowView(Icons.Default.ThumbUp, "Rate this app", stringResource(R.string.rate_this_app), onRateApp)
         SettingsFooterRowView(Icons.Default.LocalCafe, "Buy me a coffee", stringResource(R.string.buy_me_a_coffee), onBuyMeCoffee)
         SettingsFooterRowView({

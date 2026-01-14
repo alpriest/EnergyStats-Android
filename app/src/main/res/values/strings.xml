@@ -187,8 +187,8 @@
     <string name="between_low_and_medium_the_sun_will_be_yellow_and_glowing">Between low and medium the sun will be yellow and glowing.</string>
     <string name="between_medium_and_high_the_sun_will_be_orange_and_glowing_above_high_the_sun_will_be_red_and_glowing">Between medium and high the sun will be orange and glowing. Above high the sun will be red and glowing.</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
-    <string name="facebook_group">Facebook group</string>
-    <string name="foxess_community">FoxESS Community</string>
+    <string name="facebook_group">Facebook Support Group</string>
+    <string name="foxess_community">FoxESS Community Support Website</string>
     <string name="foxess_cloud_status">FoxESS Cloud Status</string>
     <string name="show_last_update_timestamp">Show timestamp of last update</string>
     <string name="sun_display_thresholds">Sun display thresholds</string>
@@ -501,4 +501,9 @@
     <string name="choose_custom_range">Choose Custom Range</string>
     <string name="workmode_force_charge_mode_bat_description">The inverter will control the power charge into battery. For example if you set the power to be 10kW that means the maximum power input to the battery is 10 kW.​ This is to control the input of the battery.</string>
     <string name="workmode_force_discharge_mode_bat_description">The inverter will control the output power of battery. For example if you set the power to be 10kW that means the maximum output power of battery is 10kW. This is to control the output of the battery.</string>
+    <string name="contact">Contact</string>
+    <string name="contact_header_techsupport">Looking for technical support about your installation?</string>
+    <string name="contact_header_faq">Need help using the app?</string>
+    <string name="contact_header_getintouch">Found an app bug or have a suggestion?</string>
+    <string name="contact_footer_getintouch">When reporting a bug please include steps to reproduce it. Screenshots and videos can also help too.</string>
 </resources>
