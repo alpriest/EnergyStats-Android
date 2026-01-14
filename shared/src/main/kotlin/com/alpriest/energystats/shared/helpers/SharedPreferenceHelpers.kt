@@ -5,7 +5,6 @@ import androidx.core.content.edit
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-// Delegate for simple types like String?, Boolean, Double (stored as String)
 fun <T> preference(
     sharedPreferences: SharedPreferences,
     key: String,
@@ -29,6 +28,7 @@ fun <T> preference(
                 is Int -> getInt(key, defaultValue)
                 else -> throw IllegalArgumentException("Unsupported preference type.")
             }
+
             @Suppress("UNCHECKED_CAST")
             return result as T
         }
@@ -41,6 +41,7 @@ fun <T> preference(
                 is String -> putString(key, value)
                 is String? -> putString(key, value)
                 is Double -> putString(key, value.toString())
+                is Int -> putInt(key, value)
                 else -> throw IllegalArgumentException("Unsupported preference type.")
             }
         }
@@ -62,6 +63,28 @@ fun nullableDoublePreference(
                 remove(key)
             } else {
                 putString(key, value.toString())
+            }
+        }
+    }
+}
+
+fun <T> enumPreference(
+    sharedPreferences: SharedPreferences,
+    key: String,
+    defaultValue: T,
+    readStorage: (Int) -> T,
+    writeStorage: (T) -> Int
+): ReadWriteProperty<Any, T> = object : ReadWriteProperty<Any, T> {
+    override fun getValue(thisRef: Any, property: KProperty<*>): T {
+        with (sharedPreferences) {
+            return readStorage(getInt(key, writeStorage(defaultValue)))
+        }
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
+        with (sharedPreferences) {
+            edit(commit = true) {
+                putInt(key, writeStorage(value))
             }
         }
     }

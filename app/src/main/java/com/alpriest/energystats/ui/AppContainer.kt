@@ -17,7 +17,6 @@ import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.DataCeiling
 import com.alpriest.energystats.shared.models.DisplayUnit
-import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
@@ -78,7 +77,7 @@ class AppContainer(private val context: Context) {
                 decimalPlaces = config.decimalPlaces,
                 showSunnyBackground = config.showSunnyBackground,
                 showUsableBatteryOnly = config.showUsableBatteryOnly,
-                selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
+                selfSufficiencyEstimateMode = config.selfSufficiencyEstimateMode,
                 showFinancialSummary = config.showFinancialSummary,
                 displayUnit = DisplayUnit.fromInt(config.displayUnit),
                 showInverterTemperatures = config.showInverterTemperatures,
@@ -112,7 +111,7 @@ class AppContainer(private val context: Context) {
                 showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats,
                 allowNegativeLoad = config.allowNegativeLoad,
                 feedInUnitPrice = config.feedInUnitPrice,
-                gridImportUnitPrice = config.gridImportUnitPrice
+                gridImportUnitPrice = config.gridImportUnitPrice,
             )
         )
     }

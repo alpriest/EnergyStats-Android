@@ -3,6 +3,7 @@ package com.alpriest.energystats.stores
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.alpriest.energystats.shared.config.StoredConfig
+import com.alpriest.energystats.shared.helpers.enumPreference
 import com.alpriest.energystats.shared.helpers.preference
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
@@ -133,12 +134,10 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var showInverterIcon: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_ICON.name, true)
     override var showUsableBatteryOnly: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_USABLE_BATTERY_ONLY.name, false)
     override var showBatteryEstimate: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_ESTIMATE.name, true)
-    override var selfSufficiencyEstimateMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name, SelfSufficiencyEstimateMode.Off.value)
     override var showSunnyBackground: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_SUNNY_BACKGROUND.name, true)
     override var decimalPlaces: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DECIMAL_PLACES.name, 2)
     override var selectedDeviceSN: String? by preference(sharedPreferences, SharedPreferenceDeviceKey.SELECTED_DEVICE_SN.name, null)
     override var devices: String? by preference(sharedPreferences, SharedPreferenceDeviceKey.DEVICES.name, null)
-    override var refreshFrequency: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.REFRESH_FREQUENCY.name, RefreshFrequency.Auto.value)
     override var showBatteryTemperature: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_TEMPERATURE.name, false)
     override var useColouredFlowLines: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_COLOURED_FLOW_LINES.name, false)
     override var useLargeDisplay: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_LARGE_DISPLAY.name, false)
@@ -150,8 +149,6 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var showInverterTypeNameOnPowerflow: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_TYPE_NAME_ON_POWERFLOW.name, false)
     override var showInverterStationNameOnPowerflow: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_PLANT_NAME_ON_POWERFLOW.name, false)
     override var showLastUpdateTimestamp: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_LAST_UPDATE_TIMESTAMP.name, false)
-    override var dataCeiling: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DATA_CEILING.name, DataCeiling.Mild.value)
-    override var totalYieldModel: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.TOTAL_YIELD_MODEL.name, TotalYieldModel.Off.value)
     override var showFinancialSummaryOnFlowPage: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_FINANCIAL_SUMMARY_ON_POWERFLOW.name, false)
     override var useTraditionalLoadFormula: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_TRADITIONAL_LOAD_FORMULA.name, false)
     override var separateParameterGraphsByUnit: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SEPARATE_PARAMETER_GRAPHS_BY_UNIT.name, true)
@@ -159,16 +156,31 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var showBatteryTimeEstimateOnWidget: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_ESTIMATED_TIME_ON_WIDGET.name, true)
     override var showSelfSufficiencyStatsGraphOverlay: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_SELF_SUFFICIENCY_STATS_GRAPH_OVERLAY.name, true)
     override var truncatedYAxisOnParameterGraphs: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.TRUNCATED_Y_AXIS_ON_PARAMETER_GRAPHS.name, false)
-    override var earningsModel: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.EARNINGS_MODEL.name, EarningsModel.Exported.value)
-    override var widgetTapAction: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, WidgetTapAction.Launch.value)
-    override var batteryTemperatureDisplayMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, BatteryTemperatureDisplayMode.Automatic.value)
     override var showInverterScheduleQuickLink: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_SCHEDULE_QUICK_LINK.name, false)
     override var fetchSolcastOnAppLaunch: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.FETCH_SOLCAST_ON_APP_LAUNCH.name, false)
-    override var ct2DisplayMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, CT2DisplayMode.Hidden.value)
     override var showStringTotalsAsPercentage: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_STRING_TOTALS_AS_PERCENTAGE.name, false)
     override var showInverterConsumption: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_INVERTER_CONSUMPTION.name, false)
     override var showBatterySOCOnDailyStats: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_SOC_ON_DAILY_STATS.name, false)
     override var allowNegativeLoad: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, false)
+
+    override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode by enumPreference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.SELF_SUFFICIENCY_ESTIMATE_MODE.name,
+        SelfSufficiencyEstimateMode.Off,
+        readStorage = { SelfSufficiencyEstimateMode.fromInt(it) },
+        writeStorage = { it.value }
+    )
+    override var refreshFrequency: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.REFRESH_FREQUENCY.name, RefreshFrequency.Auto.value)
+    override var dataCeiling: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DATA_CEILING.name, DataCeiling.Mild.value)
+    override var totalYieldModel: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.TOTAL_YIELD_MODEL.name, TotalYieldModel.Off.value)
+    override var earningsModel: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.EARNINGS_MODEL.name, EarningsModel.Exported.value)
+    override var widgetTapAction: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.WIDGET_TAP_ACTION.name, WidgetTapAction.Launch.value)
+    override var batteryTemperatureDisplayMode: Int by preference(
+        sharedPreferences,
+        SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name,
+        BatteryTemperatureDisplayMode.Automatic.value
+    )
+    override var ct2DisplayMode: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.CT2_DISPLAY_MODE.name, CT2DisplayMode.Hidden.value)
 
     override var powerStationDetail: PowerStationDetail?
         get() {

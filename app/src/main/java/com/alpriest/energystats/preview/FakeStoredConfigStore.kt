@@ -41,7 +41,7 @@ class FakeStoredConfigStore(
     override var decimalPlaces: Int = 2,
     override var showBatteryEstimate: Boolean = true,
     override var showUsableBatteryOnly: Boolean = false,
-    override var selfSufficiencyEstimateMode: Int = SelfSufficiencyEstimateMode.Off.value,
+    override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.Off,
     override var showFinancialSummary: Boolean = false,
     override var displayUnit: Int = 0,
     override var showInverterTemperatures: Boolean = false,

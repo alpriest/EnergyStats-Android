@@ -136,9 +136,9 @@ open class ConfigManager(var config: StoredConfig, val networking: Networking, o
         }
 
     override var selfSufficiencyEstimateMode: SelfSufficiencyEstimateMode
-        get() = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode)
+        get() = config.selfSufficiencyEstimateMode
         set(value) {
-            config.selfSufficiencyEstimateMode = value.value
+            config.selfSufficiencyEstimateMode = value
             appSettingsStream.value = appSettingsStream.value.copy(selfSufficiencyEstimateMode = selfSufficiencyEstimateMode)
         }
 

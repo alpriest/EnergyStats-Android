@@ -188,7 +188,7 @@ fun AppSettings.Companion.toAppTheme(config: StoredConfig): AppSettings {
         decimalPlaces = config.decimalPlaces,
         showSunnyBackground = config.showSunnyBackground,
         showUsableBatteryOnly = config.showUsableBatteryOnly,
-        selfSufficiencyEstimateMode = SelfSufficiencyEstimateMode.fromInt(config.selfSufficiencyEstimateMode),
+        selfSufficiencyEstimateMode = config.selfSufficiencyEstimateMode,
         showFinancialSummary = config.showFinancialSummary,
         displayUnit = DisplayUnit.fromInt(config.displayUnit),
         showInverterTemperatures = config.showInverterTemperatures,

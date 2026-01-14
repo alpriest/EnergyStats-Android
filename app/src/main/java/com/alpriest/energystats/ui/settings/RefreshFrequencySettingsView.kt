@@ -16,7 +16,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun RefreshFrequencySettingsView(config: ConfigManaging) {
-    val refreshFrequency = rememberSaveable { mutableStateOf(RefreshFrequency.Auto) }
+    val refreshFrequency = rememberSaveable { mutableStateOf(config.refreshFrequency) }
 
     SettingsColumnWithChild {
         SettingsSegmentedControl(
@@ -32,7 +32,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
 
                 SegmentedControl(
                     items = itemTitles,
-                    defaultSelectedItemIndex = items.indexOf(refreshFrequency.value),
+                    defaultSelectedItemIndex = items.indexOfFirst { it.value == refreshFrequency.value.value },
                     color = colorScheme.primary
                 ) {
                     refreshFrequency.value = items[it]
