@@ -41,7 +41,7 @@ fun <T> preference(
             when (value) {
                 is Boolean -> putBoolean(key, value)
                 is String -> putString(key, value)
-                is String? -> putString(key, value)
+                is String? -> value?.let { putString(key, it) } ?: remove(key)
                 is Double -> putString(key, value.toString())
                 is Int -> putInt(key, value)
                 else -> throw IllegalArgumentException("Unsupported preference type.")

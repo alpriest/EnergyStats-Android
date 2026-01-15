@@ -8,25 +8,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.shared.helpers.timeUntilNow
-import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.shared.models.solcastPrediction
-import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.kW
+import com.alpriest.energystats.shared.helpers.timeUntilNow
 import com.alpriest.energystats.shared.helpers.truncated
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponseData
 import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
 import com.alpriest.energystats.shared.models.network.UnitData
+import com.alpriest.energystats.shared.models.solcastPrediction
 import com.alpriest.energystats.shared.models.toDate
 import com.alpriest.energystats.shared.models.toUtcMillis
-import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.ui.flow.AppLifecycleObserver
-import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.networkDateFormat
 import com.alpriest.energystats.shared.network.parseToLocalDateTime
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
@@ -258,7 +258,7 @@ class ParametersGraphTabViewModel(
                     }
 
                     unit to Pair(
-                        groupedValues.map { group ->
+                        groupedValues.filter { it.isNotEmpty() }.map { group ->
                             group.map { graphValue ->
                                 DateTimeFloatEntry(
                                     type = graphValue.type,
