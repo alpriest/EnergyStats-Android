@@ -20,9 +20,7 @@ class ParameterGraphLineMarker(
         context: CartesianDrawingContext,
         targets: List<CartesianMarker.Target>,
     ) {
-        with(context) {
-            drawLabel(context, targets)
-        }
+        drawLabel(context, targets)
     }
 
     @SuppressLint("RestrictedApi")

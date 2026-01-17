@@ -34,6 +34,7 @@ import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.marker.rememberShowOnPress
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
@@ -50,6 +51,7 @@ import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
+import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarkerController
 import com.patrykandpatrick.vico.core.common.component.LineComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.DecimalFormat
@@ -172,7 +174,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                         ),
                         marker = remember {
                             StatsGraphLineMarker(viewModel.selectedValueStream)
-                        }
+                        },
+                        markerController = CartesianMarkerController.rememberShowOnPress()
                     ),
                     modelProducer = modelProducer,
                     modifier = Modifier.fillMaxSize(),
