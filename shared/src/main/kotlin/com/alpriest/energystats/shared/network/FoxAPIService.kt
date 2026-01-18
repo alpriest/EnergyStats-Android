@@ -429,18 +429,12 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         type: Type
     ): NetworkTuple<T> {
         return suspendCoroutine { continuation ->
-//            val metric = Firebase.performance.newHttpMetric(
-//                request.url.toString(),
-//                request.method,
-//            )
-//            metric.start()
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     continuation.resumeWithException(e)
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-//                    metric.markRequestComplete()
                     if (response.code == 406) {
                         continuation.resumeWithException(UnacceptableException())
                         return
@@ -452,7 +446,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
                     }
 
                     if (response.code !in 200..299) {
-                        continuation.resumeWithException(UnknownServerError(response.code))
+                        continuation.resumeWithException(InvalidResponseError(request.url, response.code))
                         return
                     }
 

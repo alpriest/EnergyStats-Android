@@ -1,6 +1,10 @@
 package com.alpriest.energystats.shared.network
 
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
+import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -10,18 +14,15 @@ import com.alpriest.energystats.shared.models.network.DeviceSummaryResponse
 import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
 import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
-import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.PagedPowerStationListResponse
 import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
-import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import okhttp3.HttpUrl
 
 class InvalidConfigurationException(message: String?) : Exception(message)
 class InvalidTokenException : Exception("Invalid Token")
@@ -32,7 +33,7 @@ class MissingDataException : Exception("Missing data")
 class FoxServerError(val errno: Int, message: String?) : Exception("Fox OpenAPI servers returned error code: $errno $message.")
 class UnacceptableException: Exception("Unacceptable")
 class ProhibitedActionException: Exception("Schedules")
-class UnknownServerError(responseCode: Int): Exception("Fox servers failed with HTTP code $responseCode")
+class InvalidResponseError(url: HttpUrl, responseCode: Int): Exception("HTTP $responseCode from $url")
 
 interface FoxAPIServicing {
     suspend fun fetchErrorMessages()
