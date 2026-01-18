@@ -16,8 +16,6 @@
     <string name="battery">Batería</string>
     <string name="read_from_your_inverter_when_you_login">Leer desde tu inversor cuando inicies sesión.</string>
     <string name="storage_capacity">Capacidad de almacenamiento</string>
-    <string name="battery_capacity_formula_explanation_prefix">Calculated as </string>
-    <string name="battery_capacity_formula_explanation_suffix"> donde el residual es una estimación realizada por tu instalación y puede no ser precisa. Toca la capacidad anterior para ingresar un valor manual.</string>
     <string name="empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant">Las duraciones de batería vacía/llena son estimaciones basadas en la capacidad calculada, asumiendo que las condiciones solares y las tasas de carga de la batería permanezcan constantes.</string>
     <string name="display">Pantalla</string>
     <string name="increase_sizes_for_large_display">Aumentar tamaños para pantallas grandes</string>
@@ -501,4 +499,6 @@
     <string name="contact_header_faq">¿Necesitas ayuda para usar la app?</string>
     <string name="contact_header_getintouch">¿Has encontrado un error en la app o tienes una sugerencia?</string>
     <string name="contact_footer_getintouch">Al informar de un error, incluye los pasos para reproducirlo. Las capturas de pantalla y los vídeos también pueden ayudar.</string>
+    <string name="contact_footer_author">Energy Stats está escrito por Al Priest. El código fuente está disponible en GitHub.</string>
+    <string name="battery_capacity_calculation_description">Calculado como _battery_residual / (Min SOC / 100)_, donde el valor residual es estimado por tu instalación y puede no ser preciso. Toca la capacidad mostrada arriba para introducir un valor manual del tamaño de tu batería si el valor mostrado es incorrecto.</string>
 </resources>

@@ -144,7 +144,7 @@ fun CustomDateRangePickerView(
 
                 SettingsColumn(
                     header = stringResource(R.string.view_by),
-                    footer = viewByFooter
+                    footer = viewByFooter,
                 ) {
                     SettingsSegmentedControl(
                         segmentedControl = {

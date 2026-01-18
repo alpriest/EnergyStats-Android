@@ -15,8 +15,8 @@ import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 @Composable
 fun ThresholdView(value: Float, title: String, description: String, onChange: (Float) -> Unit) {
     SettingsColumn(
+        header = title,
         padding = SettingsPaddingValues.Companion.withVertical(),
-        header = title
     ) {
         Row {
             Slider(

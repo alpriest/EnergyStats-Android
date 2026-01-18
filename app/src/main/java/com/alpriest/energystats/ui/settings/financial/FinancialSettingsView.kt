@@ -52,13 +52,13 @@ fun FinancialsSettingsView(config: ConfigManaging) {
     val earningsModel = rememberSaveable { mutableStateOf(config.earningsModel) }
     trackScreenView("Financial Model", "FinancialsSettingsView")
 
-    SettingsColumn(content = {
+    SettingsColumn(footer = stringResource(R.string.energy_stats_earnings_calculation_description),) {
         SettingsCheckbox(title = stringResource(R.string.show_financial_summary), state = showFinancialSummaryState, onUpdate = {
             config.showFinancialSummary = it
 
             if (!it) config.showFinancialSummaryOnFlowPage = false
         })
-    }, footer = stringResource(R.string.energy_stats_earnings_calculation_description))
+    }
 
     if (showFinancialSummaryState.value) {
         SettingsColumn {
@@ -68,46 +68,45 @@ fun FinancialsSettingsView(config: ConfigManaging) {
         }
 
         SettingsColumn(
-            content = {
-                MakeTextField(config, unitPrice, stringResource(R.string.unit_price)) {
-                    unitPrice.value = it
-                    config.feedInUnitPrice = it.safeToDouble()
-                }
-
-                SettingsSegmentedControl(
-                    title = stringResource(R.string.i_am_paid_for),
-                    segmentedControl = {
-                        val items = EarningsModel.entries.toTypedArray()
-                        val itemTitles = listOf(
-                            stringResource(R.string.exporting),
-                            stringResource(R.string.generating),
-                            "CT2"
-                        )
-
-                        SegmentedControl(
-                            items = itemTitles,
-                            defaultSelectedItemIndex = items.indexOf(earningsModel.value),
-                            color = colorScheme.primary
-                        ) {
-                            earningsModel.value = items[it]
-                            config.earningsModel = items[it]
-                        }
-                    }
-                )
-            },
             footer = when (earningsModel.value) {
                 EarningsModel.Generated -> stringResource(R.string.earnings_generated_description)
                 EarningsModel.Exported -> stringResource(R.string.earnings_exported_description)
                 EarningsModel.CT2 -> stringResource(R.string.earnings_ct2_description)
+            },
+        ) {
+            MakeTextField(config, unitPrice, stringResource(R.string.unit_price)) {
+                unitPrice.value = it
+                config.feedInUnitPrice = it.safeToDouble()
             }
-        )
 
-        SettingsColumn(content = {
+            SettingsSegmentedControl(
+                title = stringResource(R.string.i_am_paid_for),
+                segmentedControl = {
+                    val items = EarningsModel.entries.toTypedArray()
+                    val itemTitles = listOf(
+                        stringResource(R.string.exporting),
+                        stringResource(R.string.generating),
+                        "CT2"
+                    )
+
+                    SegmentedControl(
+                        items = itemTitles,
+                        defaultSelectedItemIndex = items.indexOf(earningsModel.value),
+                        color = colorScheme.primary
+                    ) {
+                        earningsModel.value = items[it]
+                        config.earningsModel = items[it]
+                    }
+                }
+            )
+        }
+
+        SettingsColumn(footer = stringResource(R.string.earnings_imported_description),) {
             MakeTextField(config, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price)) {
                 gridImportUnitPrice.value = it
                 config.gridImportUnitPrice = it.safeToDouble()
             }
-        }, footer = stringResource(R.string.earnings_imported_description))
+        }
     }
 
     if (showFinancialSummaryState.value) {

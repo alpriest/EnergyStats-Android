@@ -136,11 +136,7 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging
     MonitorAlertDialog(viewModel = viewModel, userManager = userManager)
 
     SettingsColumnWithChild(
-        footerAnnotatedString = buildAnnotatedString {
-            footerText?.let {
-                append(it)
-            }
-        }
+        footer = footerText
     ) {
         TimePeriodView(
             startTime,
@@ -184,7 +180,7 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
 
     SettingsColumnWithChild(
         footer = footerText,
-        error = errorText.minSOCError
+        error = errorText.minSOCError,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -215,7 +211,7 @@ fun MaxSOCView(viewModel: EditPhaseViewModel) {
     val errorText = viewModel.errorStream.collectAsState().value
 
     SettingsColumnWithChild(
-        error = errorText.maxSOCError
+        error = errorText.maxSOCError,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -251,31 +247,30 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
     val errorText = viewModel.errorStream.collectAsState().value
 
     SettingsColumnWithChild(
-        content = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .background(colorScheme.surface)
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(
-                    stringResource(R.string.force_discharge_soc),
-                    Modifier.weight(1.0f),
-                    color = colorScheme.onSecondary
-                )
-                OutlinedTextField(
-                    value = fdSOC,
-                    onValueChange = { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } },
-                    modifier = Modifier.width(100.dp),
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                    trailingIcon = { Text("%", color = colorScheme.onSecondary) },
-                    singleLine = true
-                )
-            }
-        },
         footer = footerText,
-        error = errorText.fdSOCError
-    )
+        error = errorText.fdSOCError,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .background(colorScheme.surface)
+                .padding(vertical = 4.dp)
+        ) {
+            Text(
+                stringResource(R.string.force_discharge_soc),
+                Modifier.weight(1.0f),
+                color = colorScheme.onSecondary
+            )
+            OutlinedTextField(
+                value = fdSOC,
+                onValueChange = { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } },
+                modifier = Modifier.width(100.dp),
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                trailingIcon = { Text("%", color = colorScheme.onSecondary) },
+                singleLine = true
+            )
+        }
+    }
 }
 
 @Composable
@@ -289,31 +284,30 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
     val errorText = viewModel.errorStream.collectAsState().value
 
     SettingsColumnWithChild(
-        content = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .background(colorScheme.surface)
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(
-                    stringResource(R.string.force_discharge_power),
-                    Modifier.weight(1.0f),
-                    color = colorScheme.onSecondary
-                )
-                OutlinedTextField(
-                    value = fdPower,
-                    onValueChange = { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } },
-                    modifier = Modifier.width(100.dp),
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                    trailingIcon = { Text("W", color = colorScheme.onSecondary) },
-                    singleLine = true
-                )
-            }
-        },
         footer = footerText,
-        error = errorText.forceDischargePowerError
-    )
+        error = errorText.forceDischargePowerError,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .background(colorScheme.surface)
+                .padding(vertical = 4.dp)
+        ) {
+            Text(
+                stringResource(R.string.force_discharge_power),
+                Modifier.weight(1.0f),
+                color = colorScheme.onSecondary
+            )
+            OutlinedTextField(
+                value = fdPower,
+                onValueChange = { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } },
+                modifier = Modifier.width(100.dp),
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                trailingIcon = { Text("W", color = colorScheme.onSecondary) },
+                singleLine = true
+            )
+        }
+    }
 }
 
 @Composable

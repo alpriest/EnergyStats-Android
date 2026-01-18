@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.settings
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,10 +43,10 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.R
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.helpers.darkenColor
 import com.alpriest.energystats.ui.theme.ESButton
+import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.coroutines.flow.StateFlow
 
 object SettingsPadding {
@@ -85,7 +84,7 @@ fun SettingsColumn(
     header: String? = null,
     headerExtra: @Composable () -> Unit = {},
     footer: String? = null,
-    footerAnnotatedString: AnnotatedString? = null,
+    markdownText: String? = null,
     footerModifier: Modifier = Modifier,
     error: String? = null,
     padding: PaddingValues = SettingsPaddingValues.default(),
@@ -112,7 +111,7 @@ fun SettingsColumn(
             }
         },
         footer = footer,
-        footerAnnotatedString = footerAnnotatedString,
+        markdownText = markdownText,
         footerModifier = footerModifier,
         error = error,
         padding = padding,
@@ -125,7 +124,7 @@ fun SettingsColumnWithChild(
     modifier: Modifier = Modifier,
     header: @Composable (() -> Unit)? = null,
     footer: String? = null,
-    footerAnnotatedString: AnnotatedString? = null,
+    markdownText: String? = null,
     footerModifier: Modifier = Modifier,
     error: String? = null,
     padding: PaddingValues = SettingsPaddingValues.default(),
@@ -147,38 +146,44 @@ fun SettingsColumnWithChild(
             }
         }
 
-        footer?.let {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(padding)
-            ) {
-                Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
-                    Text(
-                        it,
-                        style = typography.bodySmall,
-                        color = colorScheme.onSecondary.copy(alpha = 0.7f),
-                        modifier = footerModifier.padding(bottom = 8.dp)
-                    )
-                }
-            }
-        }
+        val paddedModifier = Modifier
+            .padding(padding)
+            .padding(horizontal = 12.dp, vertical = 12.dp)
+        SettingsDiscreteText(paddedModifier, text = footer, textModifier = footerModifier)
+        SettingsDiscreteText(paddedModifier, markdownText = markdownText, textModifier = footerModifier)
+    }
+}
 
-        footerAnnotatedString?.let {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(padding)
-            ) {
-                Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
-                    Text(
-                        it,
-                        style = typography.bodySmall,
-                        color = colorScheme.onSecondary.copy(alpha = 0.7f),
-                        modifier = footerModifier.padding(bottom = 8.dp)
-                    )
-                }
-            }
+@Composable
+fun SettingsDiscreteText(
+    modifier: Modifier = Modifier,
+    textModifier: Modifier = Modifier,
+    text: String? = null,
+    markdownText: String? = null
+) {
+    text?.let {
+        Column(
+            modifier = modifier
+        ) {
+            Text(
+                it,
+                style = typography.bodySmall,
+                color = colorScheme.onSecondary.copy(alpha = 0.7f),
+                modifier = textModifier.padding(bottom = 8.dp)
+            )
+        }
+    }
+
+    markdownText?.let {
+        Column(
+            modifier = modifier
+        ) {
+            MarkdownText(
+                it,
+                style = typography.bodySmall,
+                color = colorScheme.onSecondary.copy(alpha = 0.7f),
+                modifier = textModifier.padding(bottom = 8.dp)
+            )
         }
     }
 }
@@ -192,17 +197,6 @@ fun ErrorTextView(text: String?) {
             color = colorScheme.error,
             modifier = Modifier.padding(8.dp)
         )
-    }
-}
-
-data class ButtonLabels(val left: String, val right: String) {
-    companion object {
-        fun Defaults(context: Context): ButtonLabels {
-            return ButtonLabels(
-                context.getString(R.string.cancel),
-                context.getString(R.string.save)
-            )
-        }
     }
 }
 

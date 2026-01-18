@@ -74,7 +74,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 }
             }
 
-            SettingsColumn(header = stringResource(R.string.display_options)) {
+            SettingsColumn(header = stringResource(R.string.display_options),) {
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_temperatures),
                     state = showInverterTemperaturesState,
@@ -120,7 +120,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 
             SettingsColumn(
                 header = stringResource(R.string.ct2_settings),
-                footer = stringResource(R.string.if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this)
+                footer = stringResource(R.string.if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this),
             ) {
                 SettingsCheckbox(
                     title = stringResource(R.string.invert_ct2_values_when_detected),

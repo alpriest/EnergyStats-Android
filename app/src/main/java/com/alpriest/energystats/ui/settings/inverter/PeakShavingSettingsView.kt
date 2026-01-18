@@ -28,11 +28,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.helpers.ErrorView
+import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
+import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
@@ -63,7 +66,7 @@ class PeakShavingSettingsView(
                     Loaded(viewModel, navController)
                 } else {
                     SettingsPage(modifier) {
-                        _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsColumn(error = stringResource(R.string.peak_shaving_is_not_available)) { }
+                        SettingsColumn(error = stringResource(R.string.peak_shaving_is_not_available)) { }
                     }
                 }
             }
@@ -84,54 +87,46 @@ class PeakShavingSettingsView(
         val explanation = stringResource(R.string.peak_shaving_explanation, viewData.importLimit, viewData.soc)
         val context = LocalContext.current
 
-        _root_ide_package_.com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair(
-            navController,
-            onConfirm = {
-                viewModel.save(context)
-            },
-            dirtyStateFlow = viewModel.dirtyState,
-            content = { modifier ->
-                _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsColumnWithChild(
-                    modifier = modifier,
-                    footer = explanation
+        ContentWithBottomButtonPair(navController, onConfirm = {
+            viewModel.save(context)
+        }, dirtyStateFlow = viewModel.dirtyState, content = { modifier ->
+            SettingsColumnWithChild(
+                modifier = modifier,
+                footer = explanation,
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(vertical = 4.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surface)
-                            .padding(vertical = 4.dp)
-                    ) {
-                        Text(
-                            stringResource(R.string.import_limit),
-                            Modifier.weight(1.0f),
-                            color = MaterialTheme.colorScheme.onSecondary
-                        )
-                        OutlinedTextField(
-                            value = viewData.importLimit,
-                            onValueChange = { viewModel.didChangeImportLimit(it.filter { it.isDigit() }) },
-                            modifier = Modifier.width(130.dp),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
-                            trailingIcon = { Text("kW", color = MaterialTheme.colorScheme.onSecondary) })
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surface)
-                            .padding(vertical = 4.dp)
-                    ) {
-                        Text(
-                            stringResource(R.string.battery_threshold_soc),
-                            Modifier.weight(1.0f),
-                            color = MaterialTheme.colorScheme.onSecondary
-                        )
-                        OutlinedTextField(
-                            value = viewData.soc,
-                            onValueChange = { viewModel.didChangeSoc(it.filter { it.isDigit() }) },
-                            modifier = Modifier.width(130.dp),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
-                            trailingIcon = { Text("%", color = MaterialTheme.colorScheme.onSecondary) })
-                    }
+                    Text(
+                        stringResource(R.string.import_limit), Modifier.weight(1.0f), color = MaterialTheme.colorScheme.onSecondary
+                    )
+                    OutlinedTextField(
+                        value = viewData.importLimit,
+                        onValueChange = { viewModel.didChangeImportLimit(it.filter { it.isDigit() }) },
+                        modifier = Modifier.width(130.dp),
+                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
+                        trailingIcon = { Text("kW", color = MaterialTheme.colorScheme.onSecondary) })
                 }
-            })
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(vertical = 4.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.battery_threshold_soc), Modifier.weight(1.0f), color = MaterialTheme.colorScheme.onSecondary
+                    )
+                    OutlinedTextField(
+                        value = viewData.soc,
+                        onValueChange = { viewModel.didChangeSoc(it.filter { it.isDigit() }) },
+                        modifier = Modifier.width(130.dp),
+                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = MaterialTheme.colorScheme.onSecondary),
+                        trailingIcon = { Text("%", color = MaterialTheme.colorScheme.onSecondary) })
+                }
+            }
+        })
     }
 }
 
@@ -140,7 +135,7 @@ class PeakShavingSettingsView(
 @Composable
 fun PeakShavingSettingsViewPreview() {
     EnergyStatsTheme {
-        _root_ide_package_.com.alpriest.energystats.ui.settings.SettingsPage(Modifier) {
+        SettingsPage(Modifier) {
             PeakShavingSettingsView(
                 FakeConfigManager(), DemoNetworking(), NavHostController(LocalContext.current)
             ).Loaded(

@@ -29,16 +29,16 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.helpers.monthYearString
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
-import com.alpriest.energystats.shared.models.SolcastSite
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.helpers.monthYearString
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.SolcastSite
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.ClickableUrlText
 import com.alpriest.energystats.ui.login.UserManaging
-import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
@@ -97,8 +97,8 @@ class SolcastSettingsView(
                     }
 
                     SettingsColumn(
+                        footer = stringResource(R.string.solcast_fetch_on_launch),
                         padding = SettingsPaddingValues.withVertical(),
-                        footer = stringResource(R.string.solcast_fetch_on_launch)
                     ) {
                         SettingsCheckbox(
                             title = stringResource(R.string.fetch_solar_forecast_on_app_launch),
@@ -129,7 +129,7 @@ class SolcastSettingsView(
 fun SolcastSiteView(site: SolcastSite) {
     SettingsColumn(
         modifier = Modifier.fillMaxWidth(),
-        padding = SettingsPaddingValues.withVertical()
+        padding = SettingsPaddingValues.withVertical(),
     ) {
         Text(
             site.name,

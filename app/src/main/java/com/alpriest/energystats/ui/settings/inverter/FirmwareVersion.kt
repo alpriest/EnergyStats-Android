@@ -77,7 +77,7 @@ fun FirmwareVersionView(device: Device, network: Networking) {
             footerModifier = Modifier
                 .clickable {
                     uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
-                }
+                },
         ) {
             SettingsRow("Manager", it.manager)
             SettingsRow("Slave", it.slave)

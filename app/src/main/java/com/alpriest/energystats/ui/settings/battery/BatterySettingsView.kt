@@ -23,22 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
-import com.alpriest.energystats.shared.helpers.Wh
-import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.helpers.SegmentedControl
+import com.alpriest.energystats.shared.helpers.Wh
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
+import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
@@ -67,7 +63,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 
     SettingsPage(modifier) {
         if (hasError) {
-            SettingsColumnWithChild(modifier = Modifier.border(width = 2.dp, color = Color.Red)) {
+            SettingsColumnWithChild(modifier = Modifier.border(width = 2.dp, color = Color.Red),) {
                 SettingsTitleView(stringResource(R.string.error))
                 Text(stringResource(R.string.battery_errors_description_1))
             }
@@ -92,14 +88,8 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumn(
-            header = "Display options",
-            footerAnnotatedString = buildAnnotatedString {
-                append(stringResource(R.string.battery_capacity_formula_explanation_prefix))
-                withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
-                    append("residual / (Min SOC / 100)")
-                }
-                append(stringResource(R.string.battery_capacity_formula_explanation_suffix))
-            },
+            header = stringResource(R.string.display_options),
+            markdownText = stringResource(R.string.battery_capacity_calculation_description),
         ) {
             Row(
                 modifier = Modifier
@@ -169,7 +159,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             }
         }
         SettingsColumn(
-            footer = stringResource(R.string.empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant)
+            footer = stringResource(R.string.empty_full_battery_durations_are_estimates_based_on_calculated_capacity_assume_that_solar_conditions_and_battery_charge_rates_remain_constant),
         ) {
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_full_empty_estimate),
@@ -179,7 +169,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumn(
-            footer = stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining)
+            footer = stringResource(R.string.deducts_the_min_soc_amount_from_the_battery_charge_level_and_percentage_due_to_inaccuracies_in_the_way_battery_levels_are_measured_this_may_result_in_occasionally_showing_a_negative_amount_remaining),
         ) {
             SettingsCheckbox(
                 title = stringResource(R.string.show_usable_battery_only),
@@ -189,7 +179,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumn(
-            footer = stringResource(R.string.battery_temperature_footer)
+            footer = stringResource(R.string.battery_temperature_footer),
         ) {
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_temperature),
@@ -199,7 +189,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumn(
-            footer = batteryTemperateDisplayModeFooter(batteryTemperatureDisplayModeState.value)
+            footer = batteryTemperateDisplayModeFooter(batteryTemperatureDisplayModeState.value),
         ) {
             SettingsSegmentedControl(
                 title = stringResource(R.string.display_battery_stack),
@@ -218,7 +208,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         }
 
         SettingsColumn(
-            footer = stringResource(R.string.show_battery_soc_on_daily_stats_description)
+            footer = stringResource(R.string.show_battery_soc_on_daily_stats_description),
         ) {
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_soc_on_daily_stats),

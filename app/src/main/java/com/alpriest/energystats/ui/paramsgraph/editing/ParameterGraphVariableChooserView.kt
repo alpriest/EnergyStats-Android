@@ -97,7 +97,7 @@ class ParameterGraphVariableChooserView(
 
                     SettingsColumn(
                         modifier = Modifier.padding(top = 16.dp),
-                        header = "Groups"
+                        header = "Groups",
                     ) {
                         ListRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
                         HorizontalDivider()
@@ -142,7 +142,7 @@ class ParameterGraphVariableChooserView(
                                     }
                                 )
                             }
-                        }
+                        },
                     ) {
                         ParameterVariableListView(
                             viewData.variables.filter { it.enabled || showAllParameters },

@@ -118,7 +118,7 @@ class SolarBandingSettingsView(
 
                     SettingsColumn(
                         header = stringResource(R.string.example),
-                        padding = SettingsPaddingValues.withVertical()
+                        padding = SettingsPaddingValues.withVertical(),
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             SolarPowerFlow(

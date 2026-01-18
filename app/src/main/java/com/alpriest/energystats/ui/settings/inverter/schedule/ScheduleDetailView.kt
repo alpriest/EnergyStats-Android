@@ -32,7 +32,7 @@ import com.alpriest.energystats.shared.models.Schedule
 
 @Composable
 fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
-    SettingsColumn(padding = PaddingValues()) {
+    SettingsColumn(padding = PaddingValues(),) {
         if (schedule.name.isNotEmpty()) {
             Column(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp))) {
                 Text(
@@ -59,7 +59,7 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
     }
 
     if (schedule.phases.isNotEmpty()) {
-        SettingsColumn(modifier = Modifier.fillMaxWidth(), padding = PaddingValues()) {
+        SettingsColumn(modifier = Modifier.fillMaxWidth(), padding = PaddingValues(),) {
             schedule.phases.forEachIndexed { index, phase ->
                 Box(Modifier.diagonalLinesIf(index >= Schedule.MAX_PHASES_COUNT)) {
                     OutlinedButton(

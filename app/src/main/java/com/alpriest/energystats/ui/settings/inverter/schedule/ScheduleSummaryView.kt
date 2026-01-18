@@ -202,7 +202,7 @@ class ScheduleSummaryView(
             }
 
             SettingsColumn(
-                header = stringResource(R.string.schedule)
+                header = stringResource(R.string.schedule),
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -231,7 +231,7 @@ class ScheduleSummaryView(
                         stringResource(R.string.templates)
                     } else {
                         null
-                    }
+                    },
                 ) {
                     Text(
                         text = it.name,

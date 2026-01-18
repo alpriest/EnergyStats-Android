@@ -34,8 +34,8 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
 
     SettingsColumn(
         modifier = modifier.fillMaxWidth(),
+        footer = description,
         padding = PaddingValues(10.dp),
-        footer = description
     ) {
         SettingsSegmentedControl(title = null, segmentedControl = {
             val items = listOf(SelfSufficiencyEstimateMode.Off, SelfSufficiencyEstimateMode.Net, SelfSufficiencyEstimateMode.Absolute)

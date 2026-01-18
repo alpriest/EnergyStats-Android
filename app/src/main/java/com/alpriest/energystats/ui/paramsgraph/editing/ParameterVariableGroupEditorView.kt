@@ -28,7 +28,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -181,7 +180,7 @@ fun ParameterVariableGroupEditorView(viewModel: ParameterVariableGroupEditorView
                 Header(viewModel)
 
                 SettingsColumn(
-                    header = "Parameters"
+                    header = "Parameters",
                 ) {
                     ParameterVariableListView(variables = variables, onTap = { viewModel.toggle(it) })
                 }
