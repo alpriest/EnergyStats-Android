@@ -1,7 +1,7 @@
 package com.alpriest.energystats.shared.models.network
 
 data class OpenRealQueryRequest(
-    val deviceSN: String,
+    val sns: List<String>,
     val variables: List<String>
 )
 

@@ -149,7 +149,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
-        val body = Gson().toJson(OpenRealQueryRequest(deviceSN, variables))
+        val body = Gson().toJson(OpenRealQueryRequest(listOf(deviceSN), variables))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()

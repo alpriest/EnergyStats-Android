@@ -35,7 +35,7 @@ object URLs {
     }
 
     fun getOpenRealData(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v0/device/real/query"
+        return "https://www.foxesscloud.com/op/v1/device/real/query"
             .toHttpUrl()
     }
 
