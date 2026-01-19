@@ -6,8 +6,8 @@ import androidx.core.content.edit
 import com.alpriest.energystats.shared.helpers.nullableDoublePreference
 import com.alpriest.energystats.shared.helpers.preference
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
-import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
