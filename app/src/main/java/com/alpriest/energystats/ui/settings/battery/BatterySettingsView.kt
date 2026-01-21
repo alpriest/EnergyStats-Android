@@ -76,14 +76,20 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
 
             HorizontalDivider()
 
-            InlineSettingsNavButton(stringResource(R.string.charge_times)) {
-                navController.navigate(SettingsScreen.BatteryChargeTimes.name)
+            InlineSettingsNavButton(DeviceSettingsItem.MaxSoc.title(context)) {
+                navController.navigate(SettingsScreen.ConfigureMaxSoc.name)
             }
 
             HorizontalDivider()
 
-            InlineSettingsNavButton(DeviceSettingsItem.MaxSoc.title(context)) {
-                navController.navigate(SettingsScreen.ConfigureMaxSoc.name)
+            InlineSettingsNavButton(stringResource(R.string.charge_times)) {
+                navController.navigate(SettingsScreen.BatteryChargeSchedule.name)
+            }
+
+            HorizontalDivider()
+
+            InlineSettingsNavButton(stringResource(R.string.heating_schedule)) {
+                navController.navigate(SettingsScreen.BatteryHeatingSchedule.name)
             }
         }
 

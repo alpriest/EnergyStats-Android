@@ -1,11 +1,13 @@
 package com.alpriest.energystats.shared.network
 
+import com.alpriest.energystats.shared.models.BatteryHeatingSchedule
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -62,6 +64,8 @@ interface Networking {
     suspend fun fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse
     suspend fun setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int)
     suspend fun fetchPowerGeneration(deviceSN: String): PowerGenerationResponse
+    suspend fun fetchBatteryHeatingSchedule(deviceSN: String): BatteryHeatingSchedule
+    suspend fun setBatteryHeatingSchedule(request: BatteryHeatingScheduleRequest)
 }
 
 open class NetworkService(val api: FoxAPIServicing) : Networking {
@@ -160,5 +164,14 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
 
     override suspend fun fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
         return api.openapi_fetchPowerGeneration(deviceSN)
+    }
+
+    override suspend fun fetchBatteryHeatingSchedule(deviceSN: String): BatteryHeatingSchedule {
+        val response = api.openapi_getBatteryHeatingSchedule(deviceSN)
+        return BatteryHeatingSchedule.make(response)
+    }
+
+    override suspend fun setBatteryHeatingSchedule(request: BatteryHeatingScheduleRequest) {
+        api.openapi_setBatteryHeatingSchedule(request)
     }
 }

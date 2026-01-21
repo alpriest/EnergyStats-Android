@@ -20,6 +20,7 @@ import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatteryChargeScheduleSettingsView
+import com.alpriest.energystats.ui.settings.battery.BatteryHeatingScheduleSettingsView
 import com.alpriest.energystats.ui.settings.battery.BatterySOCSettings
 import com.alpriest.energystats.ui.settings.battery.BatterySettingsView
 import com.alpriest.energystats.ui.settings.dataloggers.DataLoggerViewContainer
@@ -83,7 +84,7 @@ fun NavigableSettingsView(
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.battery_soc), {}, { navController.popBackStack() })
             BatterySOCSettings(configManager = configManager, network = network, navController = navController, userManager = userManager).Content(modifier = Modifier)
         }
-        composable(SettingsScreen.BatteryChargeTimes.name) {
+        composable(SettingsScreen.BatteryChargeSchedule.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.battery_charge_schedule), {}, { navController.popBackStack() })
             BatteryChargeScheduleSettingsView(
                 configManager = configManager,
@@ -175,6 +176,16 @@ fun NavigableSettingsView(
         composable(SettingsScreen.Contact.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.contact), {}, { navController.popBackStack() })
             ContactView(navController, configManager)
+        }
+
+        composable(SettingsScreen.BatteryHeatingSchedule.name) {
+            topBarSettings.value = TopBarSettings(true, stringResource(R.string.heating_schedule), {}, { navController.popBackStack() })
+            BatteryHeatingScheduleSettingsView(
+                configManager = configManager,
+                network = network,
+                navController = navController,
+                userManager = userManager
+            ).Content(modifier = Modifier)
         }
 
         inverterScheduleGraph(navController, topBarSettings, configManager, userManager, network, templateStore)

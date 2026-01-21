@@ -130,6 +130,7 @@
     <string name="end">End</string>
     <string name="period_1">Time period 1</string>
     <string name="period_2">Time period 2</string>
+    <string name="period_3">Time period 3</string>
     <string name="start_time_must_be_before_the_end_time">Start time must be before the end time</string>
     <string name="schedule_summary">Schedule Summary</string>
     <string name="save">Save</string>
@@ -506,4 +507,5 @@
     <string name="contact_footer_getintouch">When reporting a bug please include steps to reproduce it. Screenshots and videos can also help too.</string>
     <string name="contact_footer_author">Energy Stats is written by [Al Priest](https://www.linkedin.com/in/alpriest/). Sourcecode is available on [GitHub](https://github.com/alpriest/EnergyStats-Android).</string>
     <string name="battery_capacity_calculation_description">Calculated as _battery_residual / (Min SOC / 100)_  where residual is estimated by your installation and may not be accurate. Tap the capacity above to enter a manual value for the size of your battery if the value shown is incorrect.</string>
+    <string name="heating_schedule">Heating schedule</string>
 </resources>

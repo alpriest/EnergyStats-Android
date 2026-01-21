@@ -5,18 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-private val ChargeTimePeriod.hasTimes: Boolean
+val ChargeTimePeriod.hasTimes: Boolean
     get() {
         return start != Time.zero() || end != Time.zero()
     }
@@ -186,7 +186,7 @@ class BatteryChargeScheduleSettingsViewModel(
     }
 }
 
-private fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
+fun ChargeTimePeriod.overlaps(period2: ChargeTimePeriod): Boolean {
     return !(end.hour < period2.start.hour || (end.hour == period2.start.hour && end.minute <= period2.start.minute) ||
             start.hour > period2.end.hour || (start.hour == period2.end.hour && start.minute >= period2.end.minute))
 }
