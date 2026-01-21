@@ -130,6 +130,16 @@ object URLs {
             .addSN(deviceSN)
             .build()
     }
+
+    fun getBatteryHeatingSchedule(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/batteryHeating/get"
+            .toHttpUrl()
+    }
+
+    fun setBatteryHeatingSchedule(): HttpUrl {
+        return "https://www.foxesscloud.com/op/v0/device/batteryHeating/set"
+            .toHttpUrl()
+    }
 }
 
 private fun HttpUrl.Builder.addSN(deviceSN: String): HttpUrl.Builder {

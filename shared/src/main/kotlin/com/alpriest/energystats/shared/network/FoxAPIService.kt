@@ -7,6 +7,8 @@ import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.ApiVariableArray
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleResponse
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.BatteryTimesResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
@@ -22,6 +24,7 @@ import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemReq
 import com.alpriest.energystats.shared.models.network.FetchDeviceSettingsItemResponse
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsRequest
 import com.alpriest.energystats.shared.models.network.FetchPeakShavingSettingsResponse
+import com.alpriest.energystats.shared.models.network.GetBatteryHeatingScheduleRequest
 import com.alpriest.energystats.shared.models.network.GetSchedulerFlagRequest
 import com.alpriest.energystats.shared.models.network.GetSchedulerFlagResponse
 import com.alpriest.energystats.shared.models.network.OpenHistoryRequest
@@ -418,9 +421,31 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         executeWithoutResponse(request)
     }
 
+    override suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse {
+        val body = Gson().toJson(GetBatteryHeatingScheduleRequest(deviceSN))
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder().url(URLs.getBatteryHeatingSchedule()).post(body).build()
+
+        val type = object : TypeToken<NetworkResponse<BatteryHeatingScheduleResponse>>() {}.type
+        val response: NetworkTuple<NetworkResponse<BatteryHeatingScheduleResponse>> = fetch(request, type)
+        return response.item.result ?: throw MissingDataException()
+    }
+
+    override suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest) {
+        val body = Gson().toJson(schedule)
+            .toRequestBody("application/json".toMediaTypeOrNull())
+
+        val request = Request.Builder()
+            .post(body)
+            .url(URLs.setBatteryHeatingSchedule())
+            .build()
+
+        executeWithoutResponse(request)
+    }
 
     private suspend fun executeWithoutResponse(request: Request) {
-        val type = object : com.google.gson.reflect.TypeToken<NetworkResponse<String>>() {}.type
+        val type = object : TypeToken<NetworkResponse<String>>() {}.type
         fetch<NetworkResponse<String>>(request, type)
     }
 

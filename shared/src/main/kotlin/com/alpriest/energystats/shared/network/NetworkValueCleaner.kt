@@ -7,6 +7,8 @@ import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleResponse
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -158,6 +160,14 @@ class NetworkValueCleaner(private val api: FoxAPIServicing, private val dataCeil
 
     override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
         return api.openapi_fetchPowerGeneration(deviceSN)
+    }
+
+    override suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse {
+        return api.openapi_getBatteryHeatingSchedule(deviceSN)
+    }
+
+    override suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest) {
+        api.openapi_setBatteryHeatingSchedule(schedule)
     }
 
     private fun Double.capped(dataCeiling: DataCeiling): Double {

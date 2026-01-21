@@ -5,6 +5,8 @@ import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleResponse
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -61,6 +63,8 @@ interface FoxAPIServicing {
     suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse
     suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean)
     suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule)
+    suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse
+    suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest)
 }
 
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

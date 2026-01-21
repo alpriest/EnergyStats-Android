@@ -5,6 +5,8 @@ import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleResponse
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -30,27 +32,75 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
     private val throttler = ThrottleManager()
     private val writeAPIkey = "writeable-method"
 
-    override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
-        return if (isDemoUser()) {
-            demoAPI.openapi_fetchDeviceList()
-        } else {
-            api.openapi_fetchDeviceList()
+    private suspend fun <T> demoOrReal(
+        demo: suspend () -> T,
+        real: suspend () -> T,
+    ): T {
+        return if (isDemoUser()) demo() else real()
+    }
+
+    private suspend fun <T> throttled(
+        method: String,
+        seconds: Int = 1,
+        block: suspend () -> T,
+    ): T {
+        try {
+            throttler.throttle(method, seconds = seconds)
+            return block()
+        } finally {
+            throttler.didInvoke(method)
         }
     }
 
-    override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
+    private suspend fun <T> demoOrThrottled(
+        method: String,
+        seconds: Int = 1,
+        demo: suspend () -> T,
+        real: suspend () -> T,
+    ): T {
         return if (isDemoUser()) {
-            demoAPI.openapi_fetchHistory(deviceSN, variables, start, end)
+            demo()
         } else {
-            val method = "openapi_fetchHistory"
-            try {
-                throttler.throttle(method)
-                return api.openapi_fetchHistory(deviceSN, variables, start, end)
-            } finally {
-                throttler.didInvoke(method)
-            }
+            throttled(method, seconds = seconds) { real() }
         }
     }
+
+    override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
+        return demoOrReal(
+            demo = { demoAPI.openapi_fetchDeviceList() },
+            real = { api.openapi_fetchDeviceList() },
+        )
+    }
+
+    override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
+        return demoOrThrottled(
+            method = "openapi_fetchHistory",
+            demo = { demoAPI.openapi_fetchHistory(deviceSN, variables, start, end) },
+            real = { api.openapi_fetchHistory(deviceSN, variables, start, end) },
+        )
+    }
+
+//    override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
+//        return if (isDemoUser()) {
+//            demoAPI.openapi_fetchDeviceList()
+//        } else {
+//            api.openapi_fetchDeviceList()
+//        }
+//    }
+//
+//    override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
+//        return if (isDemoUser()) {
+//            demoAPI.openapi_fetchHistory(deviceSN, variables, start, end)
+//        } else {
+//            val method = "openapi_fetchHistory"
+//            try {
+//                throttler.throttle(method)
+//                return api.openapi_fetchHistory(deviceSN, variables, start, end)
+//            } finally {
+//                throttler.didInvoke(method)
+//            }
+//        }
+//    }
 
     override suspend fun openapi_fetchVariables(): List<ApiVariable> {
         return if (isDemoUser()) {
@@ -270,6 +320,20 @@ class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: ()
         } else {
             api.openapi_fetchPowerGeneration(deviceSN)
         }
+    }
+
+    override suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse {
+        return demoOrReal(
+            { demoAPI.openapi_getBatteryHeatingSchedule(deviceSN) },
+            { api.openapi_getBatteryHeatingSchedule(deviceSN) }
+        )
+    }
+
+    override suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest) {
+        demoOrReal(
+            {demoAPI.openapi_setBatteryHeatingSchedule(schedule)},
+            {api.openapi_setBatteryHeatingSchedule(schedule)}
+        )
     }
 }
 

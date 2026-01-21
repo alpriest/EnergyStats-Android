@@ -10,6 +10,8 @@ import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.ApiVariableArray
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
+import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleResponse
 import com.alpriest.energystats.shared.models.network.BatterySOCResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
@@ -292,6 +294,15 @@ class DemoAPI : FoxAPIServicing {
     }
 
     override suspend fun fetchErrorMessages() {}
+
+    override suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse {
+        return BatteryHeatingScheduleResponse(
+            listOf()
+        )
+    }
+
+    override suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest) {
+    }
 
     private fun makeGson(): Gson {
         return GsonBuilder()
