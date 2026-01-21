@@ -31,6 +31,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.helpers.toCurrency
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.ui.helpers.SegmentedControl
@@ -132,12 +133,6 @@ fun FinancialsSettingsView(config: ConfigManaging) {
             "${stringResource(R.string.exported_income_short_title)} + ${stringResource(R.string.grid_import_avoided_short_title)}"
         )
     }
-}
-
-private fun Double.toCurrency(): String {
-    val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
-    val currencySymbol = currencyFormat.currency?.symbol ?: ""
-    return currencyFormat.format(this).replace(currencySymbol, "").trim()
 }
 
 private fun String.safeToDouble(): Double {

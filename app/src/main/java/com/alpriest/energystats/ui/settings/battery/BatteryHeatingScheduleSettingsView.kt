@@ -1,21 +1,30 @@
 package com.alpriest.energystats.ui.settings.battery
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +41,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.helpers.toCelsius
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.TimeType
 import com.alpriest.energystats.shared.models.network.Time
@@ -49,6 +59,7 @@ import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 data class BatteryHeatingScheduleSettingsViewData(
     val available: Boolean,
@@ -114,32 +125,89 @@ class BatteryHeatingScheduleSettingsView(
 
         ContentWithBottomButtonPair(
             navController, onConfirm = { viewModel.save(context) }, dirtyStateFlow = viewModel.dirtyState, content = { innerModifier ->
-            SettingsPage(innerModifier) {
-                SettingsColumn(
-                    header = stringResource(R.string.schedule_summary), padding = SettingsPaddingValues.withVertical()
-                ) {
-                    Text(
-                        viewData.summary, color = MaterialTheme.colorScheme.onSecondary
-                    )
+                SettingsPage(innerModifier) {
+                    SettingsColumn(
+                        header = stringResource(R.string.schedule_summary), padding = SettingsPaddingValues.withVertical()
+                    ) {
+                        Text(
+                            viewData.summary, color = MaterialTheme.colorScheme.onSecondary
+                        )
+                    }
+
+                    SettingsColumn(
+                        padding = SettingsPaddingValues.withVertical()
+                    ) {
+                        HeatingScheduleCheckbox(viewData.enabled) { viewModel.didChangeEnabled(it, context) }
+                    }
+
+                    TimePeriodView(
+                        viewData.timePeriod1, stringResource(R.string.period_1), onChange = { viewModel.didChangeTimePeriod1(it, context) })
+                    TimePeriodView(
+                        viewData.timePeriod2, stringResource(R.string.period_2), { viewModel.didChangeTimePeriod2(it, context) })
+                    TimePeriodView(
+                        viewData.timePeriod3, "Time period 3", { viewModel.didChangeTimePeriod3(it, context) })
+
+                    SettingsBottomSpace()
+
+                    SettingsColumn {
+                        RangeSliderExample()
+                    }
                 }
-
-                SettingsColumn(
-                    padding = SettingsPaddingValues.withVertical()
-                ) {
-                    HeatingScheduleCheckbox(viewData.enabled) { viewModel.didChangeEnabled(it, context) }
-                }
-
-                TimePeriodView(
-                    viewData.timePeriod1, stringResource(R.string.period_1), onChange = { viewModel.didChangeTimePeriod1(it, context) })
-                TimePeriodView(
-                    viewData.timePeriod2, stringResource(R.string.period_2), { viewModel.didChangeTimePeriod2(it, context) })
-                TimePeriodView(
-                    viewData.timePeriod3, "Time period 3", { viewModel.didChangeTimePeriod3(it, context) })
-
-                SettingsBottomSpace()
-            }
-        }, modifier = modifier
+            }, modifier = modifier
         )
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun RangeSliderExample() {
+        val startRange = 0f..9f
+        val endRange = 10f..20f
+        var sliderPosition by remember { mutableStateOf(startRange.start..endRange.endInclusive) }
+        val range = startRange.start..endRange.endInclusive
+
+        Column {
+            RangeSlider(
+                value = sliderPosition,
+                steps = 19,
+                valueRange = range,
+                onValueChange = { range ->
+                    val lower = range.start.coerceIn(startRange)
+                    val upper = range.endInclusive.coerceIn(endRange)
+                    sliderPosition = lower..upper
+                },
+                startThumb = {
+                    SliderBubble(value = sliderPosition.start.roundToInt())
+                },
+                endThumb = {
+                    SliderBubble(value = sliderPosition.endInclusive.roundToInt())
+                },
+            )
+
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(text = range.start.toCelsius())
+                Spacer(modifier = Modifier.weight(1f))
+                Text(text = range.endInclusive.toCelsius())
+            }
+        }
+    }
+
+    @Composable
+    private fun SliderBubble(value: Int) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(34.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape
+                )
+        ) {
+            Text(
+                text = value.toString(),
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
     }
 
     @Composable
@@ -152,7 +220,7 @@ class BatteryHeatingScheduleSettingsView(
 
     @Composable
     private fun TimePeriodView(timePeriod: ChargeTimePeriod, periodTitle: String, onChange: (ChargeTimePeriod) -> Unit) {
-        val textColor = remember { mutableStateOf(Color.Companion.Black) }
+        val textColor = remember { mutableStateOf(Color.Black) }
 
         SettingsColumn(
             header = periodTitle
