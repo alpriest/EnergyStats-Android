@@ -11,24 +11,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.isSameDay
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.ValueUsage
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.network.parseToLocalDateTime
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.ExportProviding
 import com.alpriest.energystats.ui.paramsgraph.LastLoadState
 import com.alpriest.energystats.ui.paramsgraph.writeContentToUri
-import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.alpriest.energystats.ui.summary.ApproximationsCalculator
-import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.shared.network.parseToLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -439,7 +439,7 @@ class StatsTabViewModel(
                         .flatMap { it.data }
                         .groupBy { parseToLocalDateTime(it.time).hour }
                         .map { (hour, entries) ->
-                            val avgValue = entries.map { it.value.toDouble() }.average()
+                            val avgValue = entries.map { it.value }.average()
                             StatsGraphValue(
                                 type = ReportVariable.BatterySOC,
                                 graphPoint = hour,

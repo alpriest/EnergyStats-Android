@@ -130,6 +130,7 @@
     <string name="end">Fin</string>
     <string name="period_1">Forzar periodo de carga 1</string>
     <string name="period_2">Forzar periodo de carga 2</string>
+    <string name="period_3">Forzar periodo de carga 3</string>
     <string name="start_time_must_be_before_the_end_time">La hora de inicio debe ser anterior a la hora de finalización.</string>
     <string name="schedule_summary">Resumen del horario</string>
     <string name="save">Guardar</string>
@@ -501,4 +502,8 @@
     <string name="contact_footer_getintouch">Al informar de un error, incluye los pasos para reproducirlo. Las capturas de pantalla y los vídeos también pueden ayudar.</string>
     <string name="contact_footer_author">Energy Stats está escrito por Al Priest. El código fuente está disponible en GitHub.</string>
     <string name="battery_capacity_calculation_description">Calculado como _battery_residual / (Min SOC / 100)_, donde el valor residual es estimado por tu instalación y puede no ser preciso. Toca la capacidad mostrada arriba para introducir un valor manual del tamaño de tu batería si el valor mostrado es incorrecto.</string>
+    <string name="heating_schedule_enabled">Horario de calefacción activado</string>
+    <string name="heating_schedule">Horario de calefacción</string>
+    <string name="battery_heating_footer">La generación solar puede utilizarse para la calefacción. Si el SoC está por encima del 40%, la batería puede utilizarse para la calefacción. Si el SoC está por debajo del 40%, se utiliza la red eléctrica para la calefacción. Cuando la batería se utiliza para la calefacción, puede descargarse, pero no se cargará. Cuando se utiliza la red o la energía solar para la calefacción, la batería no se cargará ni se descargará.</string>
+    <string name="not_supported">No compatible</string>
 </resources>

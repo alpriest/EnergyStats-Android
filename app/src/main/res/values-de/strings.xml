@@ -130,6 +130,7 @@
     <string name="end">Ende</string>
     <string name="period_1">Ladezeitraum 1</string>
     <string name="period_2">Ladezeitraum 2</string>
+    <string name="period_3">Ladezeitraum 3</string>
     <string name="start_time_must_be_before_the_end_time">Die Startzeit muss vor der Endzeit liegen.</string>
     <string name="schedule_summary">Zeitplan Zusammenfassung</string>
     <string name="save">Speichern</string>
@@ -501,4 +502,8 @@
     <string name="contact_footer_getintouch">Bitte geben Sie beim Melden eines Fehlers die Schritte zur Reproduktion an. Screenshots und Videos können ebenfalls hilfreich sein.</string>
     <string name="contact_footer_author">Energy Stats wurde von Al Priest geschrieben. Der Quellcode ist auf GitHub verfügbar.</string>
     <string name="battery_capacity_calculation_description">Berechnet als _battery_residual / (Min SOC / 100)_, wobei der Restwert von deiner Installation geschätzt wird und möglicherweise nicht genau ist. Tippe auf die oben angezeigte Kapazität, um einen manuellen Wert für die Größe deiner Batterie einzugeben, falls der angezeigte Wert nicht korrekt ist.</string>
+    <string name="heating_schedule_enabled">Heizplan aktiviert</string>
+    <string name="heating_schedule">Heizplan</string>
+    <string name="battery_heating_footer">Solarstrom kann zum Heizen verwendet werden. Liegt der SoC über 40 %, kann die Batterie zum Heizen genutzt werden. Liegt der SoC unter 40 %, wird das Stromnetz zum Heizen verwendet. Wenn die Batterie zum Heizen genutzt wird, kann sie entladen werden, lädt jedoch nicht. Wenn Netzstrom oder Solarstrom zum Heizen verwendet wird, lädt oder entlädt die Batterie nicht.</string>
+    <string name="not_supported">Nicht unterstützt</string>
 </resources>

@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -146,7 +146,7 @@ class BatteryChargeScheduleSettingsView(
                     stringResource(R.string.enable_charge_from_grid),
                     color = colorScheme.onSecondary,
                 )
-                Switch(checked = timePeriod.enabled, onCheckedChange = {
+                Checkbox(checked = timePeriod.enabled, onCheckedChange = {
                     onChange(ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it))
                 })
             }

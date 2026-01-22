@@ -179,7 +179,7 @@ fun NavigableSettingsView(
         }
 
         composable(SettingsScreen.BatteryHeatingSchedule.name) {
-            topBarSettings.value = TopBarSettings(true, stringResource(R.string.heating_schedule), {}, { navController.popBackStack() })
+            topBarSettings.value = TopBarSettings(true, "Heating schedule", {}, { navController.popBackStack() })
             BatteryHeatingScheduleSettingsView(
                 configManager = configManager,
                 network = network,

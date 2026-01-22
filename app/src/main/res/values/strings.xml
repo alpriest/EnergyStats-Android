@@ -122,7 +122,7 @@
     <string name="no_battery_charge">Your battery will not be force charged from the grid.</string>
     <string name="battery_periods_overlap">. These periods overlap, you may want to update them.</string>
     <string name="one_battery_charge_period">Your battery will be force charged from the grid between %1s.</string>
-    <string name="both_battery_charge_periods">Your battery will be force charged from the grid between %1s, and %2s.</string>
+    <string name="both_battery_charge_periods" formatted="false">Your battery will be force charged from the grid between %1s, and %2s.</string>
     <string name="saving">Saving…</string>
     <string name="still_saving">Still saving…</string>
     <string name="enable_charge_from_grid">Enable charge from grid</string>
@@ -138,7 +138,7 @@
     <string name="minsoc_description">The minimum charge the battery should maintain.</string>
     <string name="min_soc_on_grid">Min SoC on Grid</string>
     <string name="minsocgrid_description">The minimum charge the battery should maintain when grid power is present.</string>
-    <string name="minsoc_detail">For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.</string>
+    <string name="minsoc_detail" formatted="false">For the most part this is the setting that determines when the batteries will stop being used. Setting this higher than Min SoC will reserve battery power for a grid outage. For example, if you set Min SoC to 10% and Min SoC on Grid to 20%, the inverter will stop supplying power from the batteries at 20% and the house load will be supplied from the grid. If there is a grid outage, the batteries could be used (via an EPS switch) to supply emergency power until the battery charge drops to 10%.</string>
     <string name="minsoc_notsure_footnote">If you\'re not sure then set both values the same.</string>
     <string name="both_battery_freeze_periods">Your batteries will not charge or discharge between %1s and %2s. Solar power will be diverted to charging the battery. Any house load will come from the grid between these times. Reset time periods to disable this.</string>
     <string name="one_battery_freeze_period">Your batteries will not charge or discharge between %1s. Solar power will be diverted to charging the battery. Any house load will come from the grid between these times. Reset the time period to disable this.</string>
@@ -302,7 +302,7 @@
     <string name="error">Error</string>
     <string name="battery_errors_description_1">We encountered an error while fetching your battery settings from Fox Cloud, which might be due to a temporary issue with the Fox servers. As a result, some battery-related features might not work as expected.\n\nDon\'t worry, though – once you restart the app, we\'ll try to retrieve your settings again. Thanks for your patience.</string>
     <string name="separate_parameter_graphs_by_unit">Separate parameter graphs by unit</string>
-    <string name="unsupported_firmware">Schedules are not supported on your %1s with the firmware version you have v%2s.</string>
+    <string name="unsupported_firmware" formatted="false">Schedules are not supported on your %1s with the firmware version you have v%2s.</string>
     <string name="manage_schedules">Manage schedules</string>
     <string name="display_options">Display Options</string>
     <string name="unsupported">Unsupported</string>
@@ -507,5 +507,8 @@
     <string name="contact_footer_getintouch">When reporting a bug please include steps to reproduce it. Screenshots and videos can also help too.</string>
     <string name="contact_footer_author">Energy Stats is written by [Al Priest](https://www.linkedin.com/in/alpriest/). Sourcecode is available on [GitHub](https://github.com/alpriest/EnergyStats-Android).</string>
     <string name="battery_capacity_calculation_description">Calculated as _battery_residual / (Min SOC / 100)_  where residual is estimated by your installation and may not be accurate. Tap the capacity above to enter a manual value for the size of your battery if the value shown is incorrect.</string>
+    <string name="heating_schedule_enabled">Heating schedule enabled</string>
     <string name="heating_schedule">Heating schedule</string>
+    <string name="battery_heating_footer">Solar generation can be used for heating. If the SoC is above 40% the battery can be used for heating. If the SoC is below 40%, the grid is used for heating. When the battery is being used for heating, it can discharge but won\'t charge. When grid or solar is being used for heating, the battery won\'t charge or discharge.</string>
+    <string name="not_supported">Not supported</string>
 </resources>

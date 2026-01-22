@@ -131,6 +131,7 @@
     <string name="end">Fine</string>
     <string name="period_1">Forza periodo di carica 1</string>
     <string name="period_2">Forza periodo di carica 2</string>
+    <string name="period_3">Forza periodo di carica 3</string>
     <string name="start_time_must_be_before_the_end_time">L\'ora di inizio deve essere prima dell\'ora di fine</string>
     <string name="save">Salva</string>
     <string name="schedule_summary">Sommario del programma</string>
@@ -502,4 +503,8 @@
     <string name="contact_footer_getintouch">Quando segnali un bug, includi i passaggi per riprodurlo. Anche screenshot e video possono essere utili.</string>
     <string name="contact_footer_author">Energy Stats è scritto da Al Priest. Il codice sorgente è disponibile su GitHub.</string>
     <string name="battery_capacity_calculation_description">Calcolato come _battery_residual / (Min SOC / 100)_, dove il valore residuo è stimato dalla tua installazione e potrebbe non essere accurato. Tocca la capacità sopra per inserire un valore manuale per la dimensione della batteria se il valore mostrato non è corretto.</string>
+    <string name="heating_schedule_enabled">Programma di riscaldamento attivato</string>
+    <string name="heating_schedule">Programma di riscaldamento</string>
+    <string name="battery_heating_footer">La produzione solare può essere utilizzata per il riscaldamento. Se il SoC è superiore al 40%, la batteria può essere utilizzata per il riscaldamento. Se il SoC è inferiore al 40%, viene utilizzata la rete elettrica per il riscaldamento. Quando la batteria viene utilizzata per il riscaldamento, può scaricarsi ma non si ricarica. Quando per il riscaldamento vengono utilizzati la rete o il solare, la batteria non si carica né si scarica.</string>
+    <string name="not_supported">Non supportato</string>
 </resources>

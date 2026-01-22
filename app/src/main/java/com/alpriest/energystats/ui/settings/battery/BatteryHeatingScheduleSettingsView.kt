@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RangeSlider
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -111,7 +111,7 @@ class BatteryHeatingScheduleSettingsView(
 
             is LoadState.Inactive -> {
                 when (viewData.available) {
-                    false -> Text("Not supported")
+                    false -> Text(stringResource(R.string.not_supported))
                     true -> ScheduleAvailable(viewModel, modifier)
                 }
             }
@@ -145,13 +145,14 @@ class BatteryHeatingScheduleSettingsView(
                     TimePeriodView(
                         viewData.timePeriod2, stringResource(R.string.period_2), { viewModel.didChangeTimePeriod2(it, context) })
                     TimePeriodView(
-                        viewData.timePeriod3, "Time period 3", { viewModel.didChangeTimePeriod3(it, context) })
-
-                    SettingsBottomSpace()
+                        viewData.timePeriod3, stringResource(R.string.period_3), { viewModel.didChangeTimePeriod3(it, context) })
 
                     SettingsColumn {
-                        RangeSliderExample()
+                        TemperatureRangeSlider()
                     }
+
+                    SettingsColumn(footer = stringResource(R.string.battery_heating_footer)) { }
+                    SettingsBottomSpace()
                 }
             }, modifier = modifier
         )
@@ -159,7 +160,7 @@ class BatteryHeatingScheduleSettingsView(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun RangeSliderExample() {
+    private fun TemperatureRangeSlider() {
         val startRange = 0f..9f
         val endRange = 10f..20f
         var sliderPosition by remember { mutableStateOf(startRange.start..endRange.endInclusive) }
@@ -215,7 +216,7 @@ class BatteryHeatingScheduleSettingsView(
         val state = remember { mutableStateOf(enabled) }
 
         SettingsCheckbox(
-            "Heating schedule enabled", state = state, onUpdate = { onUpdate(state.value) })
+            stringResource(R.string.heating_schedule_enabled), state = state, onUpdate = { onUpdate(state.value) })
     }
 
     @Composable
@@ -232,7 +233,7 @@ class BatteryHeatingScheduleSettingsView(
                     stringResource(R.string.enable_charge_from_grid),
                     color = MaterialTheme.colorScheme.onSecondary,
                 )
-                Switch(checked = timePeriod.enabled, onCheckedChange = {
+                Checkbox(checked = timePeriod.enabled, onCheckedChange = {
                     onChange(ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it))
                 })
             }
