@@ -23,6 +23,8 @@ import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import com.alpriest.energystats.shared.models.network.Time
+import com.alpriest.energystats.shared.ui.roundedToString
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -65,7 +67,19 @@ interface Networking {
     suspend fun setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int)
     suspend fun fetchPowerGeneration(deviceSN: String): PowerGenerationResponse
     suspend fun fetchBatteryHeatingSchedule(deviceSN: String): BatteryHeatingSchedule
-    suspend fun setBatteryHeatingSchedule(request: BatteryHeatingScheduleRequest)
+    suspend fun setBatteryHeatingSchedule(deviceSN: String,
+                                          enabled: Boolean,
+                                          period1Start: Time,
+                                          period1End: Time,
+                                          period1Enabled: Boolean,
+                                          period2Start: Time,
+                                          period2End: Time,
+                                          period2Enabled: Boolean,
+                                          period3Start: Time,
+                                          period3End: Time,
+                                          period3Enabled: Boolean,
+                                          startTemperature: Double,
+                                          endTemperature: Double)
 }
 
 open class NetworkService(val api: FoxAPIServicing) : Networking {
@@ -171,7 +185,45 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
         return BatteryHeatingSchedule.make(response)
     }
 
-    override suspend fun setBatteryHeatingSchedule(request: BatteryHeatingScheduleRequest) {
+    override suspend fun setBatteryHeatingSchedule(
+        deviceSN: String,
+        enabled: Boolean,
+        period1Start: Time,
+        period1End: Time,
+        period1Enabled: Boolean,
+        period2Start: Time,
+        period2End: Time,
+        period2Enabled: Boolean,
+        period3Start: Time,
+        period3End: Time,
+        period3Enabled: Boolean,
+        startTemperature: Double,
+        endTemperature: Double
+    ) {
+        val request = BatteryHeatingScheduleRequest(
+            sn = deviceSN,
+            batteryWarmUpEnable = enabled.toNetworkString(),
+            startTemperature = startTemperature.roundedToString(0),
+            endTemperature = endTemperature.roundedToString(0),
+            time1Enable = period1Enabled.toNetworkString(),
+            time1StartHour = period1Start.hour.toString(),
+            time1StartMinute = period1Start.minute.toString(),
+            time1EndHour = period1End.hour.toString(),
+            time1EndMinute = period1End.minute.toString(),
+            time2Enable = period2Enabled.toNetworkString(),
+            time2StartHour = period2Start.hour.toString(),
+            time2StartMinute = period2Start.minute.toString(),
+            time2EndHour = period2End.hour.toString(),
+            time2EndMinute = period2End.minute.toString(),
+            time3Enable = period3Enabled.toNetworkString(),
+            time3StartHour = period3Start.hour.toString(),
+            time3StartMinute = period3Start.minute.toString(),
+            time3EndHour = period3End.hour.toString(),
+            time3EndMinute = period3End.minute.toString(),
+        )
+
         api.openapi_setBatteryHeatingSchedule(request)
     }
 }
+
+fun Boolean.toNetworkString() = if (this) "enable" else "disable"

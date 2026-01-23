@@ -511,4 +511,5 @@
     <string name="heating_schedule">Heating schedule</string>
     <string name="battery_heating_footer">Solar generation can be used for heating. If the SoC is above 40% the battery can be used for heating. If the SoC is below 40%, the grid is used for heating. When the battery is being used for heating, it can discharge but won\'t charge. When grid or solar is being used for heating, the battery won\'t charge or discharge.</string>
     <string name="not_supported">Not supported</string>
+    <string name="enable_heating">Enable heating</string>
 </resources>

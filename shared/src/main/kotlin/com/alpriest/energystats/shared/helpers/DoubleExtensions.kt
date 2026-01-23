@@ -10,6 +10,8 @@ fun Double.toCurrency(): String {
     return currencyFormat.format(this).replace(currencySymbol, "").trim()
 }
 
-fun Float.toCelsius(): String {
-    return this.roundToInt().toString() + "℃"
-}
+val Float.celsius: String
+    get() = this.roundToInt().toString() + "℃"
+
+val Double.celsius: String
+    get() = this.roundToInt().toString() + "℃"

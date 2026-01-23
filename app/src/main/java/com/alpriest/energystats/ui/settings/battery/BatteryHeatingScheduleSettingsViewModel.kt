@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.helpers.celsius
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.network.Networking
@@ -119,7 +120,69 @@ class BatteryHeatingScheduleSettingsViewModel(
         endTemperature: Double,
         context: Context
     ): String {
-        return ""
+        if (!enabled) {
+            return "Your battery heater is not enabled."
+        }
+
+        val times = listOfNotNull(
+            if (timePeriod1.enabled) timePeriod1 else null,
+            if (timePeriod2.enabled) timePeriod2 else null,
+            if (timePeriod3.enabled) timePeriod3 else null
+        ).sortedWith { first, second -> first.start.compareTo(second.start) }
+            .map { it.description }
+
+        if (times.isEmpty()) {
+            return "Your battery heater is enabled, but you do not have any time periods enabled. It won’t run until you enable at least one time period."
+        }
+
+        return "When the battery temperature is between ${range(startTemperature, endTemperature)} the battery heater will be active during ${times.commaSeparated()}."
+    }
+
+    private fun range(lower: Double, upper: Double): String {
+        return lower.celsius + " and " + upper.celsius
+    }
+
+    suspend fun save(context: Context) {
+        uiState.value = UiLoadState(LoadState.Active.Saving)
+        val viewData = viewDataStream.value
+
+        runCatching {
+            config.currentDevice.value?.let { device ->
+                val deviceSN = device.deviceSN
+
+                try {
+                    network.setBatteryHeatingSchedule(
+                        deviceSN,
+                        viewData.enabled,
+                        viewData.timePeriod1.start,
+                        viewData.timePeriod1.end,
+                        period1Enabled = viewData.timePeriod1.enabled,
+                        period2Start = viewData.timePeriod2.start,
+                        period2End = viewData.timePeriod2.end,
+                        period2Enabled = viewData.timePeriod2.enabled,
+                        period3Start = viewData.timePeriod3.start,
+                        period3End = viewData.timePeriod3.end,
+                        period3Enabled = viewData.timePeriod3.enabled,
+                        startTemperature = viewData.startTemperature,
+                        endTemperature = viewData.endTemperature
+                    )
+                    resetDirtyState()
+
+                    alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_charge_schedule_was_saved))
+
+                    uiState.value = UiLoadState(LoadState.Inactive)
+                } catch (ex: Exception) {
+                    uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud.", false))
+                }
+            } ?: {
+                uiState.value = UiLoadState(LoadState.Inactive)
+            }
+        }
+    }
+
+    private fun resetDirtyState() {
+        originalValue = _viewDataStream.value
+        _dirtyState.value = false
     }
 
     fun didChangeTimePeriod1(chargeTimePeriod: ChargeTimePeriod, context: Context) {
@@ -140,39 +203,22 @@ class BatteryHeatingScheduleSettingsViewModel(
         generateSummary(value.enabled, value.timePeriod1, value.timePeriod2, value.timePeriod3, value.startTemperature, value.endTemperature, context)
     }
 
-    suspend fun save(context: Context) {
-        uiState.value = UiLoadState(LoadState.Active.Saving)
-        val viewData = viewDataStream.value
-
-        runCatching {
-            config.currentDevice.value?.let { device ->
-                val deviceSN = device.deviceSN
-                val times = listOf(viewData.timePeriod1, viewData.timePeriod2).map { it.asChargeTime() }
-
-                try {
-                    network.setBatteryTimes(deviceSN, times)
-                    resetDirtyState()
-
-                    alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_charge_schedule_was_saved))
-
-                    uiState.value = UiLoadState(LoadState.Inactive)
-                } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud.", false))
-                }
-            } ?: {
-                uiState.value = UiLoadState(LoadState.Inactive)
-            }
-        }
-    }
-
-    private fun resetDirtyState() {
-        originalValue = _viewDataStream.value
-        _dirtyState.value = false
-    }
-
     fun didChangeEnabled(enabled: Boolean, context: Context) {
         _viewDataStream.value = viewDataStream.value.copy(enabled = enabled)
-        val value = viewDataStream.value
-        generateSummary(value.enabled, value.timePeriod1, value.timePeriod2, value.timePeriod3, value.startTemperature, value.endTemperature, context)
+        updateSummary(context)
     }
+
+    fun didChangeTemperatures(lower: Double, upper: Double, context: Context) {
+        _viewDataStream.value = viewDataStream.value.copy(startTemperature = lower, endTemperature = upper)
+        updateSummary(context)
+    }
+
+    fun updateSummary(context: Context) {
+        val value = viewDataStream.value
+        _viewDataStream.value = viewDataStream.value.copy(summary = generateSummary(value.enabled, value.timePeriod1, value.timePeriod2, value.timePeriod3, value.startTemperature, value.endTemperature, context))
+    }
+}
+
+fun List<String>.commaSeparated(): String {
+    return this.joinToString(", ")
 }

@@ -1,10 +1,6 @@
 package com.alpriest.energystats.ui.settings.battery
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
@@ -15,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -43,6 +38,7 @@ import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
+import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -101,6 +97,16 @@ class BatteryChargeScheduleSettingsView(
                     dirtyStateFlow = viewModel.dirtyState,
                     content = { innerModifier ->
                         SettingsPage(innerModifier) {
+                            SettingsColumn(
+                                header = stringResource(R.string.schedule_summary),
+                                padding = SettingsPaddingValues.withVertical()
+                            ) {
+                                Text(
+                                    chargeSummary,
+                                    color = colorScheme.onSecondary
+                                )
+                            }
+
                             BatteryTimePeriodView(
                                 viewData.chargeTimePeriod1,
                                 stringResource(R.string.period_1),
@@ -111,16 +117,6 @@ class BatteryChargeScheduleSettingsView(
                                 stringResource(R.string.period_2),
                                 { viewModel.didChangeTimePeriod2(it, context) }
                             )
-
-                            SettingsColumn(
-                                header = stringResource(R.string.schedule_summary),
-                                padding = SettingsPaddingValues.withVertical()
-                            ) {
-                                Text(
-                                    chargeSummary,
-                                    color = colorScheme.onSecondary
-                                )
-                            }
 
                             SettingsBottomSpace()
                         }
@@ -133,23 +129,16 @@ class BatteryChargeScheduleSettingsView(
     @Composable
     fun BatteryTimePeriodView(timePeriod: ChargeTimePeriod, periodTitle: String, onChange: (ChargeTimePeriod) -> Unit) {
         val textColor = remember { mutableStateOf(Color.Black) }
+        val state = remember { mutableStateOf(timePeriod.enabled) }
 
         SettingsColumn(
             header = periodTitle
         ) {
-            Row(
-                verticalAlignment = CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    stringResource(R.string.enable_charge_from_grid),
-                    color = colorScheme.onSecondary,
-                )
-                Checkbox(checked = timePeriod.enabled, onCheckedChange = {
-                    onChange(ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it))
-                })
-            }
+            SettingsCheckbox(
+                stringResource(R.string.enable_charge_from_grid),
+                state = state,
+                onUpdate = { onChange(ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)) }
+            )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 

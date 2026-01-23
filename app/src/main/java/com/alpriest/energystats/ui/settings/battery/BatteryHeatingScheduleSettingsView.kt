@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.settings.battery
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -41,7 +39,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.helpers.toCelsius
+import com.alpriest.energystats.shared.helpers.celsius
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.TimeType
 import com.alpriest.energystats.shared.models.network.Time
@@ -148,7 +146,13 @@ class BatteryHeatingScheduleSettingsView(
                         viewData.timePeriod3, stringResource(R.string.period_3), { viewModel.didChangeTimePeriod3(it, context) })
 
                     SettingsColumn {
-                        TemperatureRangeSlider()
+                        TemperatureRangeSlider(
+                            viewData.startTemperature,
+                            viewData.endTemperature,
+                            viewData.minStartTemperature.toFloat()..viewData.maxStartTemperature.toFloat(),
+                            viewData.minEndTemperature.toFloat()..viewData.maxEndTemperature.toFloat(),
+                            { lower, upper -> viewModel.didChangeTemperatures(lower, upper, context) }
+                        )
                     }
 
                     SettingsColumn(footer = stringResource(R.string.battery_heating_footer)) { }
@@ -160,21 +164,28 @@ class BatteryHeatingScheduleSettingsView(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun TemperatureRangeSlider() {
-        val startRange = 0f..9f
-        val endRange = 10f..20f
-        var sliderPosition by remember { mutableStateOf(startRange.start..endRange.endInclusive) }
-        val range = startRange.start..endRange.endInclusive
+    private fun TemperatureRangeSlider(
+        lower: Double,
+        upper: Double,
+        lowerRange: ClosedFloatingPointRange<Float>,
+        upperRange: ClosedFloatingPointRange<Float>,
+        onUpdate: (Double, Double) -> Unit
+    ) {
+        var sliderPosition by remember { mutableStateOf(lower.toFloat()..upper.toFloat()) }
+        val range = lowerRange.start..upperRange.endInclusive
 
-        Column {
+        SettingsColumn(
+            header = "Temperatures",
+            footer = "Minimum and maximum temperature ranges are controlled by your inverter firmware."
+        ){
             RangeSlider(
                 value = sliderPosition,
                 steps = 19,
                 valueRange = range,
                 onValueChange = { range ->
-                    val lower = range.start.coerceIn(startRange)
-                    val upper = range.endInclusive.coerceIn(endRange)
-                    sliderPosition = lower..upper
+                    val lower = range.start.coerceIn(lowerRange)
+                    val upper = range.endInclusive.coerceIn(upperRange)
+                    onUpdate(lower.toDouble(), upper.toDouble())
                 },
                 startThumb = {
                     SliderBubble(value = sliderPosition.start.roundToInt())
@@ -185,9 +196,9 @@ class BatteryHeatingScheduleSettingsView(
             )
 
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(text = range.start.toCelsius())
+                Text(text = range.start.celsius)
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = range.endInclusive.toCelsius())
+                Text(text = range.endInclusive.celsius)
             }
         }
     }
@@ -216,27 +227,25 @@ class BatteryHeatingScheduleSettingsView(
         val state = remember { mutableStateOf(enabled) }
 
         SettingsCheckbox(
-            stringResource(R.string.heating_schedule_enabled), state = state, onUpdate = { onUpdate(state.value) })
+            stringResource(R.string.heating_schedule_enabled),
+            state = state,
+            onUpdate = { onUpdate(state.value) }
+        )
     }
 
     @Composable
     private fun TimePeriodView(timePeriod: ChargeTimePeriod, periodTitle: String, onChange: (ChargeTimePeriod) -> Unit) {
         val textColor = remember { mutableStateOf(Color.Black) }
+        val state = remember { mutableStateOf(timePeriod.enabled) }
 
         SettingsColumn(
             header = periodTitle
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.Companion.fillMaxWidth()
-            ) {
-                Text(
-                    stringResource(R.string.enable_charge_from_grid),
-                    color = MaterialTheme.colorScheme.onSecondary,
-                )
-                Checkbox(checked = timePeriod.enabled, onCheckedChange = {
-                    onChange(ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it))
-                })
-            }
+            SettingsCheckbox(
+                stringResource(R.string.enable_heating),
+                state = state,
+                onUpdate = { onChange(ChargeTimePeriod(start = timePeriod.start, end = timePeriod.end, enabled = it)) }
+            )
 
             AnimatedVisibility(visible = timePeriod.enabled) {
                 Column {
@@ -251,7 +260,12 @@ class BatteryHeatingScheduleSettingsView(
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
                     TimePeriodView(
-                        timePeriod.end, TimeType.END, stringResource(R.string.end), labelStyle = TextStyle(color = textColor.value), includeSeconds = false
+                        timePeriod.end,
+                        TimeType.END,
+                        stringResource(R.string.end),
+                        labelStyle = TextStyle(color = textColor.value),
+                        includeSeconds = false,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     ) { hour, minute ->
                         onChange(ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled))
                     }
