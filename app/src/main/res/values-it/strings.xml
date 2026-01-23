@@ -507,4 +507,11 @@
     <string name="heating_schedule">Programma di riscaldamento</string>
     <string name="battery_heating_footer">La produzione solare può essere utilizzata per il riscaldamento. Se il SoC è superiore al 40%, la batteria può essere utilizzata per il riscaldamento. Se il SoC è inferiore al 40%, viene utilizzata la rete elettrica per il riscaldamento. Quando la batteria viene utilizzata per il riscaldamento, può scaricarsi ma non si ricarica. Quando per il riscaldamento vengono utilizzati la rete o il solare, la batteria non si carica né si scarica.</string>
     <string name="not_supported">Non supportato</string>
+    <string name="enable_heating">Attiva il riscaldamento</string>
+    <string name="battery_schedule_active_schedule_clash">Impossibile salvare le impostazioni perché è presente un programma attivo. Devi eliminare il programma e riprovare.</string>
+    <string name="your_battery_heater_is_not_enabled">Il riscaldamento della batteria non è attivato.</string>
+    <string name="battery_schedule_enabled_but_no_active_time_periods">Il riscaldamento della batteria è attivato, ma non è attivo alcun periodo di tempo. Non funzionerà finché non attiverai almeno un periodo.</string>
+    <string name="battery_heater_schedule_summary">Quando la temperatura della batteria è compresa tra %1$s, il riscaldamento della batteria sarà attivo durante %2$s.</string>
+    <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Gli intervalli di temperatura minimo e massimo sono controllati dal firmware del tuo inverter.</string>
+    <string name="exported_template_count">Esportati %1$d modelli.</string>
 </resources>

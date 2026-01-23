@@ -506,4 +506,11 @@
     <string name="heating_schedule">Heizplan</string>
     <string name="battery_heating_footer">Solarstrom kann zum Heizen verwendet werden. Liegt der SoC über 40 %, kann die Batterie zum Heizen genutzt werden. Liegt der SoC unter 40 %, wird das Stromnetz zum Heizen verwendet. Wenn die Batterie zum Heizen genutzt wird, kann sie entladen werden, lädt jedoch nicht. Wenn Netzstrom oder Solarstrom zum Heizen verwendet wird, lädt oder entlädt die Batterie nicht.</string>
     <string name="not_supported">Nicht unterstützt</string>
+    <string name="enable_heating">Heizung aktivieren</string>
+    <string name="battery_schedule_active_schedule_clash">Die Einstellungen können nicht gespeichert werden, da ein aktiver Zeitplan vorhanden ist. Sie müssen den Zeitplan löschen und es erneut versuchen.</string>
+    <string name="your_battery_heater_is_not_enabled">Ihre Batterieheizung ist nicht aktiviert.</string>
+    <string name="battery_schedule_enabled_but_no_active_time_periods">Ihre Batterieheizung ist aktiviert, aber es sind keine Zeiträume aktiviert. Sie wird erst ausgeführt, wenn Sie mindestens einen Zeitraum aktivieren.</string>
+    <string name="battery_heater_schedule_summary">Wenn die Batterietemperatur zwischen %1$s liegt, ist die Batterieheizung während %2$s aktiv.</string>
+    <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Die minimalen und maximalen Temperaturbereiche werden von der Firmware Ihres Wechselrichters gesteuert.</string>
+    <string name="exported_template_count">%1$d Vorlage(n) exportiert.</string>
 </resources>

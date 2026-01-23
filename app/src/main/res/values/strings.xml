@@ -512,4 +512,10 @@
     <string name="battery_heating_footer">Solar generation can be used for heating. If the SoC is above 40% the battery can be used for heating. If the SoC is below 40%, the grid is used for heating. When the battery is being used for heating, it can discharge but won\'t charge. When grid or solar is being used for heating, the battery won\'t charge or discharge.</string>
     <string name="not_supported">Not supported</string>
     <string name="enable_heating">Enable heating</string>
+    <string name="battery_schedule_active_schedule_clash">Cannot save settings because you have an active schedule. You need to delete your schedule and try again.</string>
+    <string name="your_battery_heater_is_not_enabled">Your battery heater is not enabled.</string>
+    <string name="battery_schedule_enabled_but_no_active_time_periods">Your battery heater is enabled, but you do not have any time periods enabled. It won’t run until you enable at least one time period.</string>
+    <string name="battery_heater_schedule_summary">When the battery temperature is between %1$s the battery heater will be active during %2$s.</string>
+    <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Minimum and maximum temperature ranges are controlled by your inverter firmware.</string>
+    <string name="exported_template_count">Exported %1$d template(s).</string>
 </resources>

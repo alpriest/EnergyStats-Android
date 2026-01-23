@@ -175,8 +175,8 @@ class BatteryHeatingScheduleSettingsView(
         val range = lowerRange.start..upperRange.endInclusive
 
         SettingsColumn(
-            header = "Temperatures",
-            footer = "Minimum and maximum temperature ranges are controlled by your inverter firmware."
+            header = stringResource(R.string.temperatures),
+            footer = stringResource(R.string.minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware)
         ){
             RangeSlider(
                 value = sliderPosition,

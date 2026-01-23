@@ -5,14 +5,15 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
-import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
@@ -90,7 +91,7 @@ class ScheduleTemplateListViewModel(
 
             alertDialogMessage.value = MonitorAlertDialogData(
                 ex = null,
-                message = "Exported ${templateStream.value.size} template(s)."
+                message = context.getString(R.string.exported_template_count, templateStream.value.size)
             )
         } catch (t: Throwable) {
             alertDialogMessage.value = MonitorAlertDialogData(

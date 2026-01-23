@@ -507,4 +507,11 @@
     <string name="heating_schedule">Harmonogram ogrzewania</string>
     <string name="battery_heating_footer">Energia słoneczna może być wykorzystywana do ogrzewania. Jeśli poziom SoC przekracza 40%, bateria może być używana do ogrzewania. Jeśli SoC spadnie poniżej 40%, do ogrzewania wykorzystywana jest sieć energetyczna. Gdy bateria jest używana do ogrzewania, może się rozładowywać, ale nie będzie się ładować. Gdy do ogrzewania wykorzystywana jest sieć lub energia słoneczna, bateria nie będzie się ani ładować, ani rozładowywać.</string>
     <string name="not_supported">Nieobsługiwane</string>
+    <string name="enable_heating">Włącz ogrzewanie</string>
+    <string name="battery_schedule_active_schedule_clash">Nie można zapisać ustawień, ponieważ masz aktywny harmonogram. Musisz usunąć harmonogram i spróbować ponownie.</string>
+    <string name="your_battery_heater_is_not_enabled">Ogrzewanie baterii nie jest włączone.</string>
+    <string name="battery_schedule_enabled_but_no_active_time_periods">Ogrzewanie baterii jest włączone, ale nie masz włączonych żadnych okresów czasowych. Nie będzie działać, dopóki nie włączysz co najmniej jednego okresu.</string>
+    <string name="battery_heater_schedule_summary">Gdy temperatura baterii mieści się w zakresie %1$s, ogrzewanie baterii będzie aktywne w czasie %2$s.</string>
+    <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Minimalne i maksymalne zakresy temperatur są kontrolowane przez oprogramowanie układowe falownika.</string>
+    <string name="exported_template_count">Wyeksportowano %1$d szablon(ów).</string>
 </resources>

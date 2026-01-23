@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.ProhibitedActionException
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import com.alpriest.energystats.ui.flow.UiLoadState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -98,10 +98,10 @@ class BatterySOCSettingsViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: ProhibitedActionException) {
-                    alertDialogMessage.value = MonitorAlertDialogData(ex, "Cannot save settings because you have an active schedule. You need to delete your schedule and try again.")
+                    alertDialogMessage.value = MonitorAlertDialogData(ex, context.getString(R.string.battery_schedule_active_schedule_clash))
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud.", true))
+                    uiState.value = UiLoadState(LoadState.Error(ex, context.getString(R.string.something_went_wrong_fetching_data_from_foxess_cloud), true))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)

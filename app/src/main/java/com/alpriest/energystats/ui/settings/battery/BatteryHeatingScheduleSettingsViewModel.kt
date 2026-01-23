@@ -49,7 +49,7 @@ class BatteryHeatingScheduleSettingsViewModel(
             maxStartTemperature = 9.0,
             minEndTemperature = 10.0,
             maxEndTemperature = 15.0,
-            summary = "Something here"
+            summary = ""
         )
     )
     val viewDataStream: StateFlow<BatteryHeatingScheduleSettingsViewData> = _viewDataStream
@@ -129,7 +129,7 @@ class BatteryHeatingScheduleSettingsViewModel(
         context: Context
     ): String {
         if (!enabled) {
-            return "Your battery heater is not enabled."
+            return context.getString(R.string.your_battery_heater_is_not_enabled)
         }
 
         val times = listOfNotNull(
@@ -140,10 +140,10 @@ class BatteryHeatingScheduleSettingsViewModel(
             .map { it.description }
 
         if (times.isEmpty()) {
-            return "Your battery heater is enabled, but you do not have any time periods enabled. It won’t run until you enable at least one time period."
+            return context.getString(R.string.battery_schedule_enabled_but_no_active_time_periods)
         }
 
-        return "When the battery temperature is between ${range(startTemperature, endTemperature)} the battery heater will be active during ${times.commaSeparated()}."
+        return context.getString(R.string.battery_heater_schedule_summary, range(startTemperature, endTemperature), times.commaSeparated())
     }
 
     private fun range(lower: Double, upper: Double): String {
@@ -180,7 +180,7 @@ class BatteryHeatingScheduleSettingsViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud.", false))
+                    uiState.value = UiLoadState(LoadState.Error(ex, context.getString(R.string.something_went_wrong_fetching_data_from_foxess_cloud), false))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)

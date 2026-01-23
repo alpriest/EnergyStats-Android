@@ -120,7 +120,7 @@ class BatteryChargeScheduleSettingsViewModel(
             } else if (period1.hasTimes) {
                 resultParts.add(String.format(context.getString(R.string.one_battery_freeze_period), period1.description))
             } else if (period2.hasTimes) {
-                resultParts.add(String.format("one_battery_freeze_period", period2.description))
+                resultParts.add(String.format(context.getString(R.string.one_battery_freeze_period), period2.description))
             } else {
                 resultParts.add(context.getString(R.string.no_battery_charge))
             }
@@ -172,7 +172,7 @@ class BatteryChargeScheduleSettingsViewModel(
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {
-                    uiState.value = UiLoadState(LoadState.Error(ex, "Something went wrong fetching data from FoxESS cloud.", false))
+                    uiState.value = UiLoadState(LoadState.Error(ex, context.getString(R.string.something_went_wrong_fetching_data_from_foxess_cloud), false))
                 }
             } ?: {
                 uiState.value = UiLoadState(LoadState.Inactive)

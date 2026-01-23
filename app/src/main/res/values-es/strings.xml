@@ -506,4 +506,11 @@
     <string name="heating_schedule">Horario de calefacción</string>
     <string name="battery_heating_footer">La generación solar puede utilizarse para la calefacción. Si el SoC está por encima del 40%, la batería puede utilizarse para la calefacción. Si el SoC está por debajo del 40%, se utiliza la red eléctrica para la calefacción. Cuando la batería se utiliza para la calefacción, puede descargarse, pero no se cargará. Cuando se utiliza la red o la energía solar para la calefacción, la batería no se cargará ni se descargará.</string>
     <string name="not_supported">No compatible</string>
+    <string name="enable_heating">Activar calefacción</string>
+    <string name="battery_schedule_active_schedule_clash">No se pueden guardar los ajustes porque tienes un horario activo. Debes eliminar el horario y volver a intentarlo.</string>
+    <string name="your_battery_heater_is_not_enabled">La calefacción de la batería no está activada.</string>
+    <string name="battery_schedule_enabled_but_no_active_time_periods">La calefacción de la batería está activada, pero no tienes ningún periodo de tiempo activado. No funcionará hasta que actives al menos un periodo.</string>
+    <string name="battery_heater_schedule_summary">Cuando la temperatura de la batería se encuentra entre %1$s, la calefacción de la batería estará activa durante %2$s.</string>
+    <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Los rangos de temperatura mínima y máxima están controlados por el firmware de su inversor.</string>
+    <string name="exported_template_count">Se exportaron %1$d plantilla(s).</string>
 </resources>
