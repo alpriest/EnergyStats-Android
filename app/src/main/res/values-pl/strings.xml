@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Statystyki Energii</string>
-    <string name="loading">Ładowanie…</string>
-    <string name="still_loading">Jeszcze ładuje…</string>
-    <string name="mins">min</string>
-    <string name="hour">godzina</string>
-    <string name="hours">godziny</string>
     <string name="nextUpdate">Następna aktualizacja za %1s</string>
-    <string name="fullIn">Pełny za</string>
-    <string name="emptyIn">Pusty za</string>
     <string name="solarYieldToday">Słoneczne dziś %1s</string>
     <string name="power_flow_tab">Przepływ mocy</string>
     <string name="stats_tab">Statystyki</string>
@@ -29,7 +22,6 @@
     <string name="refresh_frequency">Częstotliwość odświeżania</string>
     <string name="_1_min">1m</string>
     <string name="_5_mins">5m</string>
-    <string name="auto">Auto</string>
     <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">Dane w chmurze FoxESS są aktualizowane co 5 minut. Tryb automatyczny próbuje zsynchronizować pobrania zaraz po przesłaniu danych, aby zminimalizować obciążenie serwera.</string>
     <string name="decimal_places">Miejsca dziesiętne</string>
     <string name="read_from_your_inverter_when_you_login">Odczytaj z falownika po zalogowaniu.</string>
@@ -69,7 +61,6 @@
     <string name="defalt">Domyślne</string>
     <string name="compare_strings">Porównaj ciągi znaków</string>
     <string name="temperatures">Temperatury</string>
-    <string name="none">Brak</string>
     <string name="rawvariable_solcast_prediction">Całkowita przewidywana produkcja energii słonecznej według Solcast</string>
     <string name="rawvariable_generationpower">Moc słoneczna / baterii przechodząca przez falownik</string>
     <string name="rawvariable_feedinpower">Moc eksportowana do sieci</string>
@@ -124,8 +115,6 @@
     <string name="battery_periods_overlap">. Te okresy się nakładają, możesz chcieć je zaktualizować.</string>
     <string name="one_battery_charge_period">Twoja bateria zostanie naładowana siłą z sieci między %1s.</string>
     <string name="both_battery_charge_periods">Twoja bateria zostanie naładowana siłą z sieci między %1s i %2s.</string>
-    <string name="saving">Oszczędność</string>
-    <string name="still_saving">Jeszcze zapisuje…</string>
     <string name="enable_charge_from_grid">Włącz ładowanie z sieci</string>
     <string name="start">Start</string>
     <string name="end">Koniec</string>
@@ -193,12 +182,6 @@
     <string name="show_last_update_timestamp">Pokaż ostatni znacznik czasu aktualizacji</string>
     <string name="sun_display_thresholds">Progi zmienności wyświetlania słońca</string>
     <string name="tap_the_icon_for_further_detail">Dotknij ikony, aby uzyskać więcej informacji</string>
-    <string name="kilowatts">Kilowaty</string>
-    <string name="watts">Waty</string>
-    <string name="adaptive">Adaptacyjny</string>
-    <string name="net">Sieć</string>
-    <string name="absolute">Absolute</string>
-    <string name="off">Wyłączone</string>
     <string name="units">Jednostki</string>
     <string name="display_unit_kilowatts_description">Wszystkie wartości są wyświetlane w kilowatach. Na przykład %1$s, %2$s</string>
     <string name="display_unit_watts_description">Wszystkie wartości są wyświetlane w watach. Na przykład %1$s, %2$s</string>
@@ -222,8 +205,6 @@
     <string name="export_income">Eksportuj dochody</string>
     <string name="grid_import_avoided">Oszczędność na imporcie z sieci</string>
     <string name="total_benefit">Całkowity zysk</string>
-    <string name="light">jasny</string>
-    <string name="dark">ciemny</string>
     <string name="export_save_to_a_local_file">Zapisz do lokalnego pliku</string>
     <string name="export_share_or_open_with_another_app">Udostępnij lub otwórz za pomocą innej aplikacji</string>
     <string name="choose_export_method">Wybierz metodę eksportu</string>
@@ -243,8 +224,6 @@
     <string name="low_estimate">Niskie oszacowanie</string>
     <string name="forecast_today">Prognoza na dziś</string>
     <string name="forecast_tomorrow">Prognoza na jutro</string>
-    <string name="mild">Łagodny</string>
-    <string name="enhanced">Wzmocniony</string>
     <string name="data_ceiling">Limit Danych</string>
     <string name="data_ceiling_none_description">Wartości będą wyświetlane bez modyfikacji z kanału danych. Możesz zobaczyć nienormalnie duże liczby w swoim użyciu, gdzie dane zostają uszkodzone.</string>
     <string name="data_ceiling_mild_description">Wartości powyżej 1 048 575 będą obcinane. Na przykład wartość 201 539 769 zostanie pokazana jako 3461.8. Użyj tego, jeśli zauważysz nienormalnie duże liczby na swoich wykresach.</string>
@@ -259,8 +238,6 @@
     <string name="manage_templates">Zarządzaj szablonami</string>
     <string name="activate">Aktywować</string>
     <string name="create_a_schedule">Utwórz harmonogram</string>
-    <string name="activating">Aktywowanie</string>
-    <string name="still_activating">Jeszcze aktywuje…</string>
     <string name="no_schedule_time_periods">Nie masz zdefiniowanych okresów czasu. Dodaj okres czasu, aby określić, jak chcesz, aby Twój falownik zachowywał się w określonych godzinach.</string>
     <string name="you_have_no_templates">Nie masz szablonów.</string>
     <string name="edit_template">Edytuj szablon</string>
@@ -309,8 +286,6 @@
     <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Zawiera dane od %1$s do teraz. Liczby są przybliżone i zakładają, że ceny kupna/sprzedaży energii pozostały stałe przez cały okres posiadania.</string>
     <string name="templates_not_yet_available">Szablony harmonogramów nie są jeszcze dostępne za pośrednictwem OpenAPI od FoxESS. Zostały zażądane i zostaną dodane, gdy będą dostępne.</string>
     <string name="enable_scheduler">Włącz harmonogram</string>
-    <string name="deactivating">Dezaktywacja</string>
-    <string name="still_deactivating">Jeszcze dezaktywuje…</string>
     <string name="edit_api_key">Edytuj klucz API</string>
     <string name="api_key_step_1">1. Zaloguj się na https://www.foxesscloud.com/</string>
     <string name="api_key_step_2">2. Kliknij ikonę osoby w prawym górnym rogu</string>
@@ -324,7 +299,6 @@
     <string name="what_is_api_key_4">Upewnij się, że data i godzina na twoim telefonie są ustawione na „automatyczne”, w przeciwnym razie możesz mieć problem z zalogowaniem się przy użyciu klucza API.</string>
     <string name="what_is_api_key_5">Strona internetowa FoxESS może mieć problemy na urządzeniach mobilnych. Jeśli napotkasz problemy z uzyskaniem swojego klucza API, skontaktuj się z service.uk@fox-ess.com po pomoc.</string>
     <string name="how_to_get_api_key">Aby uzyskać swój klucz API:</string>
-    <string name="on">Włącz</string>
     <string name="copy_debug_data">Kopiuj dane debugowania</string>
     <string name="combine_ct2_with_pv_power">Połącz CT2 z mocą PV</string>
     <string name="combine_ct2_with_loads_power">Połącz CT2 z mocą obciążeń</string>
@@ -377,9 +351,6 @@
     <string name="get_started">Rozpocznij</string>
     <string name="energy_management_at_your_fingertips">Zarządzanie energią na wyciągnięcie ręki</string>
     <string name="what_is_an_api_key">Czym jest klucz API?</string>
-    <string name="launch">Uruchom</string>
-    <string name="refresh">Odśwież</string>
-    <string name="automatic">Automatyczny</string>
     <string name="batteryTemperatureDisplayMode_automatic">Wszystkie temperatury baterii zostaną wyświetlone.</string>
     <string name="batteryTemperatureDisplayMode_batteryN">Wyświetlana będzie tylko temperatura zestawu baterii %1$s (np. H3 Pro). Jeśli nie zostanie znaleziona, nie zostanie wyświetlona żadna temperatura baterii.</string>
     <string name="watch">Obejrzyj</string>
@@ -408,9 +379,6 @@
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_body">Liczby w statystykach są teraz zaokrąglane do jednego miejsca po przecinku, ponieważ systemy Fox od zawsze były dokładne tylko do jednej cyfry po przecinku.</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_title">Miejsca po przecinku</string>
     <string name="your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data">Twój falownik nie zapisuje danych o produkcji energii z PV, więc nie możemy wyświetlić historycznych danych słonecznych.</string>
-    <string name="ct2displaymode_hidden">Ukryte</string>
-    <string name="ct2displaymode_separate_icon">Osobna ikona</string>
-    <string name="ct2displaymode_as_power_string">Jako ciąg mocy</string>
     <string name="batteries">Baterie</string>
     <string name="no_battery_information_available">Brak dostępnych informacji o baterii</string>
     <string name="type">Typ: %1$s</string>
@@ -418,12 +386,6 @@
     <string name="chucker_description">Chucker jest zawarty w aplikacji, aby pomóc w rozwiązywaniu problemów. Umożliwia użytkownikom przeglądanie własnej aktywności sieciowej – takich jak dane wysyłane lub odbierane przez aplikację – oraz opcjonalnie eksportowanie tych informacji w celu udostępnienia zespołowi deweloperskiemu. To narzędzie służy wyłącznie do diagnozowania problemów i nie ma wpływu na korzystanie z aplikacji.</string>
     <string name="launch_chucker">Uruchom Chucker</string>
     <string name="view_request_count">Zobacz liczbę żądań</string>
-    <string name="export_limit">"Limit eksportu  "</string>
-    <string name="max_soc">"Maksymalny SoC  "</string>
-    <string name="export_limit_description">"Ustawia maksymalną moc, jaką inwerter może eksportować do sieci.  "</string>
-    <string name="maxsoc_description">"Ustawia najwyższy poziom naładowania, jaki bateria może osiągnąć, wyrażony w procentach.  "</string>
-    <string name="export_limit_behaviour">"Konfigurując to ustawienie, możesz kontrolować ilość energii oddawanej do sieci, zapewniając zgodność z lokalnymi przepisami lub własnymi preferencjami. Na przykład, jeśli lokalne przepisy ograniczają moc eksportu, ustawienie tej wartości zapewnia, że inwerter nie przekroczy dozwolonego limitu.  "</string>
-    <string name="maxsoc_behaviour">"Ładowanie zatrzymuje się, gdy bateria osiągnie maksymalny SoC. Można dostosować w zależności od wzorców użytkowania lub w celu dopasowania do taryf energetycznych i dostępności energii słonecznej.  "</string>
     <string name="device_settings_warning">Zachowaj ostrożność i zmieniaj to ustawienie tylko, jeśli wiesz, co robisz.\n\nEnergy Stats nie ponosi odpowiedzialności za jakiekolwiek szkody spowodowane tą zmianą.</string>
     <string name="about_59_seconds">59 sekund wynika z działania oprogramowania falownika. Czas końcowy obejmuje pełną minutę, którą ustawisz, więc przedział czasowy będzie trwał do 59 sekundy tej minuty.\n\nNp. jeśli chcesz, aby przedział zakończył się o 05:30, ustaw 05:29:59. Jeśli ustawisz 05:30, falownik będzie działał do 05:30:59 i przez jedną minutę zużycie energii może być inne niż oczekiwano.</string>
     <string name="solar_strings_description">Jeśli masz kilka zestawów paneli słonecznych, np. na przodzie/tyłach domu, pozwoli Ci to zobaczyć moc generowaną przez każdy zestaw. Ustawienie zacznie obowiązywać przy następnym pobieraniu danych.</string>
