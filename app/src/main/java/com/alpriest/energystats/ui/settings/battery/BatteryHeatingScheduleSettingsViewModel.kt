@@ -10,6 +10,7 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.celsius
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.network.Time
+import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.UiLoadState
@@ -102,6 +103,13 @@ class BatteryHeatingScheduleSettingsViewModel(
                     _viewDataStream.value = viewData
 
                     uiState.value = UiLoadState(LoadState.Inactive)
+                } catch (ex: FoxServerError) {
+                    if (ex.errno == 41200) {
+                        _viewDataStream.value = viewDataStream.value.copy(available = false)
+                        uiState.value = UiLoadState(LoadState.Inactive)
+                    } else {
+                        uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), true))
+                    }
                 } catch (ex: Exception) {
                     uiState.value = UiLoadState(LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.unknown_error), true))
                 }
@@ -187,20 +195,17 @@ class BatteryHeatingScheduleSettingsViewModel(
 
     fun didChangeTimePeriod1(chargeTimePeriod: ChargeTimePeriod, context: Context) {
         _viewDataStream.value = viewDataStream.value.copy(timePeriod1 = chargeTimePeriod)
-        val value = viewDataStream.value
-        generateSummary(value.enabled, value.timePeriod1, value.timePeriod2, value.timePeriod3, value.startTemperature, value.endTemperature, context)
+        updateSummary(context)
     }
 
     fun didChangeTimePeriod2(chargeTimePeriod: ChargeTimePeriod, context: Context) {
         _viewDataStream.value = viewDataStream.value.copy(timePeriod2 = chargeTimePeriod)
-        val value = viewDataStream.value
-        generateSummary(value.enabled, value.timePeriod1, value.timePeriod2, value.timePeriod3, value.startTemperature, value.endTemperature, context)
+        updateSummary(context)
     }
 
     fun didChangeTimePeriod3(chargeTimePeriod: ChargeTimePeriod, context: Context) {
         _viewDataStream.value = viewDataStream.value.copy(timePeriod3 = chargeTimePeriod)
-        val value = viewDataStream.value
-        generateSummary(value.enabled, value.timePeriod1, value.timePeriod2, value.timePeriod3, value.startTemperature, value.endTemperature, context)
+        updateSummary(context)
     }
 
     fun didChangeEnabled(enabled: Boolean, context: Context) {
@@ -213,7 +218,7 @@ class BatteryHeatingScheduleSettingsViewModel(
         updateSummary(context)
     }
 
-    fun updateSummary(context: Context) {
+    private fun updateSummary(context: Context) {
         val value = viewDataStream.value
         _viewDataStream.value = viewDataStream.value.copy(summary = generateSummary(value.enabled, value.timePeriod1, value.timePeriod2, value.timePeriod3, value.startTemperature, value.endTemperature, context))
     }

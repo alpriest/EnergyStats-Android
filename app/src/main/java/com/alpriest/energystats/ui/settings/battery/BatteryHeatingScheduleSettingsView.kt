@@ -185,6 +185,7 @@ class BatteryHeatingScheduleSettingsView(
                 onValueChange = { range ->
                     val lower = range.start.coerceIn(lowerRange)
                     val upper = range.endInclusive.coerceIn(upperRange)
+                    sliderPosition = lower..upper
                     onUpdate(lower.toDouble(), upper.toDouble())
                 },
                 startThumb = {
