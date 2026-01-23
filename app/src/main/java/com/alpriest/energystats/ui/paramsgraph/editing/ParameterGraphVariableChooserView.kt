@@ -38,16 +38,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import com.alpriest.energystats.shared.R as SharedR
 
 class ParameterGraphVariableChooserView(
     private val configManager: ConfigManaging,
@@ -101,7 +102,7 @@ class ParameterGraphVariableChooserView(
                     ) {
                         ListRow(onClick = { viewModel.chooseDefaultVariables() }, false) { Text(stringResource(R.string.defalt), modifier = it) }
                         HorizontalDivider()
-                        ListRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(R.string.none), modifier = it) }
+                        ListRow(onClick = { viewModel.chooseNoVariables() }, false) { Text(stringResource(SharedR.string.none), modifier = it) }
                         HorizontalDivider()
 
                         groups.forEachIndexed { index, item ->

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.os.VibrationEffect
@@ -7,7 +8,7 @@ import android.os.Vibrator
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
@@ -50,12 +51,13 @@ data class StatsGraphViewData(
 )
 
 class StatsTabViewModel(
+    private val application: Application,
     val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     val configManager: ConfigManaging,
     private val networking: Networking,
     val themeStream: StateFlow<AppSettings>,
     val onWriteTempFile: (String, String) -> Uri?
-) : ViewModel(), ExportProviding, AlertDialogMessageProviding {
+) : AndroidViewModel(application), ExportProviding, AlertDialogMessageProviding {
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
     var totalsStream: MutableStateFlow<Map<ReportVariable, Double>> = MutableStateFlow(mutableMapOf())
     var exportFileName: String = ""
@@ -125,6 +127,8 @@ class StatsTabViewModel(
 
                     valuesAtTimeStream.value = statsAtTime + batterySocAtTime + sufficiencyAtTime + inverterAtTime
                 }
+
+                updateApproximationsFromSelectedValues(application)
             }
         }
 

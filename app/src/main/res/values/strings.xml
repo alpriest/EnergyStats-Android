@@ -1,13 +1,6 @@
 <resources>
     <string name="app_name">Energy Stats</string>
-    <string name="loading">Loading…</string>
-    <string name="still_loading">Still loading…</string>
-    <string name="mins">mins</string>
-    <string name="hour">hour</string>
-    <string name="hours">hours</string>
     <string name="nextUpdate">Next update in %1s</string>
-    <string name="fullIn">Full in</string>
-    <string name="emptyIn">Empty in</string>
     <string name="solarYieldToday">Solar today %1s</string>
     <string name="power_flow_tab">Power flow</string>
     <string name="stats_tab">Stats</string>
@@ -28,7 +21,6 @@
     <string name="refresh_frequency">Refresh frequency</string>
     <string name="_1_min">1m</string>
     <string name="_5_mins">5m</string>
-    <string name="auto">Auto</string>
     <string name="foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load">FoxESS Cloud data is updated every 5 minutes. Auto attempts to synchronise fetches just after the data feed uploads to minimise server load.</string>
     <string name="decimal_places">Decimal places</string>
     <string name="read_from_your_inverter_when_you_login">Read from your inverter when you login.</string>
@@ -68,7 +60,6 @@
     <string name="defalt">Default</string>
     <string name="compare_strings">Compare strings</string>
     <string name="temperatures">Temperatures</string>
-    <string name="none">None</string>
     <string name="rawvariable_solcast_prediction">Total solar energy generation predicted by Solcast</string>
     <string name="rawvariable_generationpower">Solar / Battery power coming through the inverter</string>
     <string name="rawvariable_feedinpower">Power being exported back to the grid</string>
@@ -123,8 +114,6 @@
     <string name="battery_periods_overlap">. These periods overlap, you may want to update them.</string>
     <string name="one_battery_charge_period">Your battery will be force charged from the grid between %1s.</string>
     <string name="both_battery_charge_periods" formatted="false">Your battery will be force charged from the grid between %1s, and %2s.</string>
-    <string name="saving">Saving…</string>
-    <string name="still_saving">Still saving…</string>
     <string name="enable_charge_from_grid">Enable charge from grid</string>
     <string name="start">Start</string>
     <string name="end">End</string>
@@ -192,12 +181,6 @@
     <string name="show_last_update_timestamp">Show timestamp of last update</string>
     <string name="sun_display_thresholds">Sun display thresholds</string>
     <string name="tap_the_icon_for_further_detail">Tap the icon for further detail</string>
-    <string name="kilowatts">Kilowatts</string>
-    <string name="watts">Watts</string>
-    <string name="adaptive">Adaptive</string>
-    <string name="net">Net</string>
-    <string name="absolute">Absolute</string>
-    <string name="off">Off</string>
     <string name="units">Units</string>
     <string name="display_unit_kilowatts_description">All values are shown as kilowatts. E.g. %1$s, %2$s</string>
     <string name="display_unit_watts_description">All values are shown as watts. E.g. %1$s, %2$s</string>
@@ -223,8 +206,7 @@
     <string name="export_income">Export income</string>
     <string name="grid_import_avoided">Grid import avoided</string>
     <string name="total_benefit">Total benefit</string>
-    <string name="light">Light</string>
-    <string name="dark">Dark</string>
+tring>
     <string name="export_save_to_a_local_file">Save to a local file</string>
     <string name="export_share_or_open_with_another_app">Share or open with another app</string>
     <string name="choose_export_method">Choose export method</string>
@@ -244,8 +226,6 @@
     <string name="low_estimate">Low estimate</string>
     <string name="forecast_today">Forecast today</string>
     <string name="forecast_tomorrow">Forecast tomorrow</string>
-    <string name="mild">Mild</string>
-    <string name="enhanced">Enhanced</string>
     <string name="data_ceiling">Data ceiling</string>
     <string name="data_ceiling_none_description">Values will be shown unmodified from the data feed. You may see abnormally large numbers in your usage where the data gets corrupted.</string>
     <string name="data_ceiling_mild_description">Values above 1,048,575 will be clipped. E.g. a value of 201,539,769 would be shown as 3461.8. Use this if you\'re seeing abnormally large numbers on your graphs.</string>
@@ -261,8 +241,6 @@
     <string name="manage_templates">Manage templates</string>
     <string name="activate">Activate</string>
     <string name="create_a_schedule">Create a schedule</string>
-    <string name="activating">Activating…</string>
-    <string name="still_activating">Still activating…</string>
     <string name="no_schedule_time_periods">You have no time periods defined. Add a time period to define how you\'d like your inverter to behave during specific hours.</string>
     <string name="edit_template">Edit template</string>
     <string name="add_time_period">Add time period</string>
@@ -310,8 +288,6 @@
     <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Includes data from %1$s to %2$s. Figures are approximate and assume the buy/sell energy prices remained constant throughout the period of ownership.</string>
     <string name="templates_not_yet_available">Schedule templates are not yet available via OpenAPI from FoxESS. They have been requested and will be added when available.</string>
     <string name="enable_scheduler">Enable Scheduler</string>
-    <string name="deactivating">Deactivating</string>
-    <string name="still_deactivating">Still deactivating</string>
     <string name="edit_api_key">Edit API Key</string>
     <string name="api_key_step_1">Login at https://www.foxesscloud.com/</string>
     <string name="api_key_step_2">Click the person icon top-right</string>
@@ -326,7 +302,6 @@
     <string name="what_is_api_key_4">Please ensure the system date/time on your phone is set to \'automatic\' otherwise you may be unable to login with your API key.</string>
     <string name="what_is_api_key_5">The FoxESS website may have issues on mobile devices. If you experience any problems retrieving your API key, please reach out to service.uk@fox-ess.com for assistance.</string>
     <string name="how_to_get_api_key">To get your API key:</string>
-    <string name="on">On</string>
     <string name="copy_debug_data">Copy debug data</string>
     <string name="combine_ct2_with_pv_power">Combine CT2 with PV power</string>
     <string name="combine_ct2_with_loads_power">Combine CT2 with Loads power</string>
@@ -379,11 +354,6 @@
     <string name="get_started">Get started</string>
     <string name="energy_management_at_your_fingertips">Energy management at your fingertips</string>
     <string name="what_is_an_api_key">What is an API key?</string>
-    <string name="launch">Launch</string>
-    <string name="refresh">Refresh</string>
-    <string name="automatic">Automatic</string>
-    <string name="battery1" translatable="false">1</string>
-    <string name="battery2" translatable="false">2</string>
     <string name="batteryTemperatureDisplayMode_automatic">All battery temperatures will be displayed.</string>
     <string name="batteryTemperatureDisplayMode_batteryN">Only the temperature of battery stack %1$s will be displayed (e.g H3 Pro). If not found, no battery temperature will be displayed.</string>
     <string name="watch">Watch</string>
@@ -412,9 +382,6 @@
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_body">Stats numbers are now rounded to a single decimal place as Fox systems have always only been accurate to a single decimal place.</string>
     <string name="tipkit_statsGraphDecimalPlacesFixedTo1_title">Decimal places</string>
     <string name="your_inverter_doesn_t_store_pv_generation_data_so_we_can_t_show_historic_solar_data">Your inverter doesn\'t store PV generation data so we can\'t show historic solar data.</string>
-    <string name="ct2displaymode_hidden">Hidden</string>
-    <string name="ct2displaymode_separate_icon">Separate icon</string>
-    <string name="ct2displaymode_as_power_string">As power string</string>
     <string name="batteries">Batteries</string>
     <string name="no_battery_information_available">No battery information available</string>
     <string name="type">Type: %1$s</string>
@@ -422,12 +389,6 @@
     <string name="launch_chucker">Launch Chucker</string>
     <string name="view_request_count">View request count</string>
     <string name="chucker_description">Chucker is included in the app to help with issues. It allows users to view their own network activity — like what data the app sends or receives — and optionally export it to share with the development team. This tool is only for troubleshooting and has no effect on how you use the app.</string>
-    <string name="export_limit">Export Limit</string>
-    <string name="max_soc">Max SoC</string>
-    <string name="export_limit_description">Sets the maximum power that the inverter can export to the grid.</string>
-    <string name="maxsoc_description">Sets the highest charge level the battery is allowed to reach, expressed as a percentage.</string>
-    <string name="export_limit_behaviour">By configuring this setting, you can control the amount of energy sent back to the grid, ensuring compliance with local regulations or personal preferences. For example, if local regulations limit export capacity, setting this value ensures the inverter does not exceed the specified limit.</string>
-    <string name="maxsoc_behaviour">Charging stops once the battery hits the Max SoC. Can be adjusted based on usage patterns or to align with energy tariffs and solar availability.</string>
     <string name="device_settings_warning">Please be cautious and only change this setting if you know what you are doing.\n\nEnergy Stats cannot be held responsible for any damage caused by changing this.</string>
     <string name="about_59_seconds">The 59 seconds is set by the way the inverter firmware works. This is because the end times include the minute that you set so your time slot will run up to 59th second of the minute.\n\ne.g. If you want the time slot to end by 05:30, you have to set 05:29:59. If you set 05:30, the inverter will continue up to 05:30:59 and you will get 1 minute where your energy use is not as expected.</string>
     <string name="solar_strings_description">If you have multiple sets of solar panels, e.g. front/rear of your home, this will let you see the power being generated by each set. Setting takes effect on next data fetch.</string>

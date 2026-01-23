@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -60,6 +62,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
+import com.alpriest.energystats.shared.R as SharedR
 
 @Composable
 fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
@@ -197,7 +200,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Text(
                     when (displayMode) {
-                        is Day -> stringResource(R.string.hours)
+                        is Day -> stringResource(SharedR.string.hours)
                         is StatsDisplayMode.Month -> stringResource(R.string.days)
                         is StatsDisplayMode.Year -> stringResource(R.string.months)
                         is StatsDisplayMode.Custom -> {
@@ -216,7 +219,10 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
 @Composable
 @Preview(showBackground = true)
 fun StatsGraphViewPreview() {
+    val application = LocalContext.current.applicationContext as Application
+
     val factory = StatsTabViewModelFactory(
+        application,
         MutableStateFlow(Day(LocalDate.now())),
         FakeConfigManager(),
         DemoNetworking(),

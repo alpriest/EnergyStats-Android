@@ -58,6 +58,7 @@ import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.ui.PaleWhite
 import com.alpriest.energystats.shared.ui.PowerFlowNegative
+import com.alpriest.energystats.shared.R as SharedR
 
 data class EditPhaseErrorData(
     val minSOCError: String?,
@@ -85,8 +86,8 @@ fun EditPhaseView(
 
     ContentWithBottomButtons(
         buttons = listOf(
-            BottomButtonConfiguration(title = LocalContext.current.getString(R.string.cancel), onTap = { navController.popBackStack() }),
-            BottomButtonConfiguration(title = LocalContext.current.getString(R.string.apply), onTap = { viewModel.save(context) }),
+            BottomButtonConfiguration(title = stringResource(R.string.cancel), onTap = { navController.popBackStack() }),
+            BottomButtonConfiguration(title = stringResource(R.string.apply), onTap = { viewModel.save(context) }),
         ),
         content = { innerModifier ->
             SettingsPage(innerModifier) {
@@ -220,7 +221,7 @@ fun MaxSOCView(viewModel: EditPhaseViewModel) {
                 .padding(vertical = 4.dp)
         ) {
             Text(
-                stringResource(R.string.max_soc),
+                stringResource(SharedR.string.max_soc),
                 Modifier.weight(1.0f),
                 color = colorScheme.onSecondary
             )

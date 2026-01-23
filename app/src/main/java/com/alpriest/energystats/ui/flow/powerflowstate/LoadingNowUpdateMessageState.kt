@@ -2,7 +2,7 @@ package com.alpriest.energystats.ui.flow.powerflowstate
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 
 object LoadingNowUpdateMessageState : UpdateMessageState() {
     @Composable

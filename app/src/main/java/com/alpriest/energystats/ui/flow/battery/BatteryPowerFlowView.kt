@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.models.BatteryTemperatures
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.helpers.kWh
@@ -184,8 +184,8 @@ fun duration(estimate: BatteryCapacityEstimate): String {
     val mins = stringResource(R.string.mins)
     val hour = stringResource(R.string.hour)
     val hours = stringResource(R.string.hours)
-    val day = stringResource(R.string.day)
-    val days = stringResource(R.string.days)
+    val day = stringResource(com.alpriest.energystats.R.string.day)
+    val days = stringResource(com.alpriest.energystats.R.string.days)
 
     return when (estimate.duration) {
         in 0..60 -> "$text ${estimate.duration} $mins"

@@ -22,8 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.models.DeviceFirmwareVersion
+import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.LoadingView
@@ -85,7 +85,7 @@ fun FirmwareVersionView(device: Device, network: Networking) {
         }
     } ?: SettingsColumn {
         if (isLoading) {
-            LoadingView(title = stringResource(R.string.loading), stringResource(R.string.still_loading))
+            LoadingView(title = stringResource(com.alpriest.energystats.shared.R.string.loading), stringResource(com.alpriest.energystats.shared.R.string.still_loading))
         } else {
             ESButton(
                 onClick = {

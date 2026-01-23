@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.app.Application
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -57,6 +58,7 @@ import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
 class StatsTabViewModelFactory(
+    private val application: Application,
     private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     private val configManager: ConfigManaging,
     private val networking: Networking,
@@ -65,11 +67,12 @@ class StatsTabViewModelFactory(
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StatsTabViewModel(displayModeStream, configManager, networking, appSettingsStream, onWriteTempFile) as T
+        return StatsTabViewModel(application, displayModeStream, configManager, networking, appSettingsStream, onWriteTempFile) as T
     }
 }
 
 class StatsTabView(
+    private val application: Application,
     private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     private val topBarSettings: MutableState<TopBarSettings>,
     private val configManager: ConfigManaging,
@@ -82,7 +85,7 @@ class StatsTabView(
 ) {
     @Composable
     fun Content(
-        viewModel: StatsTabViewModel = viewModel(factory = StatsTabViewModelFactory(displayModeStream, configManager, network, appSettingsStream, onWriteTempFile)),
+        viewModel: StatsTabViewModel = viewModel(factory = StatsTabViewModelFactory(application, displayModeStream, configManager, network, appSettingsStream, onWriteTempFile)),
     ) {
         val scrollState = rememberScrollState()
         val context = LocalContext.current
@@ -179,8 +182,10 @@ class StatsTabView(
 fun StatsGraphTabViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         val topBarSettings = remember { mutableStateOf(TopBarSettings(false, "", {}, null)) }
+        val application = LocalContext.current.applicationContext as Application
 
         StatsTabView(
+            application,
             MutableStateFlow(StatsDisplayMode.Day(LocalDate.now())),
             topBarSettings,
             FakeConfigManager(),

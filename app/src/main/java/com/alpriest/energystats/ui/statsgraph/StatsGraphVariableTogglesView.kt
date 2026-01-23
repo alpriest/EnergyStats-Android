@@ -1,9 +1,11 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
@@ -76,8 +78,11 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifi
 @Composable
 @Preview(widthDp = 340)
 fun StatsGraphVariableTogglesViewPreview() {
+    val application = LocalContext.current.applicationContext as Application
+
     StatsGraphVariableTogglesView(
         StatsTabViewModel(
+            application,
             MutableStateFlow(StatsDisplayMode.Day(LocalDate.now())),
             FakeConfigManager(),
             DemoNetworking(),

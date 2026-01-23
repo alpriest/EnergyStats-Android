@@ -13,6 +13,7 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.RefreshFrequency
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.shared.R as SharedR
 
 @Composable
 fun RefreshFrequencySettingsView(config: ConfigManaging) {
@@ -27,7 +28,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
                 val itemTitles = listOf(
                     stringResource(R.string._1_min),
                     stringResource(R.string._5_mins),
-                    stringResource(R.string.auto)
+                    stringResource(SharedR.string.auto)
                 )
 
                 SegmentedControl(

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.app.Application
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -23,6 +24,7 @@ enum class StatsScreen {
 }
 
 class NavigableStatsGraphTabView(
+    private val application: Application,
     private val topBarSettings: MutableState<TopBarSettings>,
     private val configManager: ConfigManaging,
     private val network: Networking,
@@ -42,6 +44,7 @@ class NavigableStatsGraphTabView(
         ) {
             composable(StatsScreen.Graph.name) {
                 StatsTabView(
+                    application,
                     viewModel.displayModeStream,
                     topBarSettings,
                     configManager,

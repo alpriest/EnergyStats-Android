@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -109,7 +110,11 @@ class BatteryHeatingScheduleSettingsView(
 
             is LoadState.Inactive -> {
                 when (viewData.available) {
-                    false -> Text(stringResource(R.string.not_supported))
+                    false -> Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) { Text(stringResource(R.string.not_supported)) }
+
                     true -> ScheduleAvailable(viewModel, modifier)
                 }
             }
@@ -177,7 +182,7 @@ class BatteryHeatingScheduleSettingsView(
         SettingsColumn(
             header = stringResource(R.string.temperatures),
             footer = stringResource(R.string.minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware)
-        ){
+        ) {
             RangeSlider(
                 value = sliderPosition,
                 steps = 19,

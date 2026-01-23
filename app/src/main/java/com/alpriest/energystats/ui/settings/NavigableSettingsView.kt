@@ -39,6 +39,7 @@ import com.alpriest.energystats.ui.settings.solar.SolarBandingSettingsView
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
 import com.example.energystats.FactoryResetAppSettingsView
+import com.alpriest.energystats.shared.R as SharedR
 
 @Composable
 fun NavigableSettingsView(
@@ -149,12 +150,12 @@ fun NavigableSettingsView(
         }
 
         composable(SettingsScreen.ConfigureExportLimit.name) {
-            topBarSettings.value = TopBarSettings(true, stringResource(id = R.string.export_limit), {}, { navController.popBackStack() })
+            topBarSettings.value = TopBarSettings(true, stringResource(id = SharedR.string.export_limit), {}, { navController.popBackStack() })
             DeviceSettingItemView(configManager, network, DeviceSettingsItem.ExportLimit, navController).Content(Modifier)
         }
 
         composable(SettingsScreen.ConfigureMaxSoc.name) {
-            topBarSettings.value = TopBarSettings(true, stringResource(id = R.string.max_soc), {}, { navController.popBackStack() })
+            topBarSettings.value = TopBarSettings(true, stringResource(id = SharedR.string.max_soc), {}, { navController.popBackStack() })
             DeviceSettingItemView(configManager, network, DeviceSettingsItem.MaxSoc, navController).Content(Modifier)
         }
 

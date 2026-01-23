@@ -31,6 +31,7 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
         ).Content(appSettingsStream = dependencies.appSettingsStream)
 
         1 -> NavigableStatsGraphTabView(
+            application,
             topBarSettings,
             dependencies.configManager,
             dependencies.network,
