@@ -145,7 +145,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var decimalPlaces: Int by preference(sharedPreferences, SharedPreferenceDisplayKey.DECIMAL_PLACES.name, 2)
     override var selectedDeviceSN: String? by preference(sharedPreferences, SharedPreferenceDeviceKey.SELECTED_DEVICE_SN.name, null)
     override var showBatteryTemperature: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_BATTERY_TEMPERATURE.name, false)
-    override var useColouredFlowLines: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_COLOURED_FLOW_LINES.name, false)
+    override var useColouredFlowLines: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_COLOURED_FLOW_LINES.name, true)
     override var useLargeDisplay: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.USE_LARGE_DISPLAY.name, false)
     override var isDemoUser: Boolean by preference(sharedPreferences, SharedPreferenceDeviceKey.IS_DEMO_USER.name, false)
     override var showFinancialSummary: Boolean by preference(sharedPreferences, SharedPreferenceDisplayKey.SHOW_ESTIMATED_EARNINGS.name, false)
