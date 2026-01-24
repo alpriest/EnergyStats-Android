@@ -43,6 +43,17 @@ android {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+
+        create("releaseDebug") {
+            initWith(getByName("release"))
+            isDebuggable = true
+
+            // Sign with debug so it's easy to install locally
+            signingConfig = signingConfigs.getByName("debug")
+
+            // Handy if you have variant-specific configs/resources
+            matchingFallbacks += listOf("release")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
