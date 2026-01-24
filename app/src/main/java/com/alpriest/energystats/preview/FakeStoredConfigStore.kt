@@ -100,4 +100,5 @@ class FakeStoredConfigStore(
     override var allowNegativeLoad: Boolean = false,
     override var batteryData: BatteryData? = null,
     override var detectedActiveTemplate: String? = null
-) : StoredConfig
+) : StoredConfig {
+}
