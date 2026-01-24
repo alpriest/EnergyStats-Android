@@ -95,7 +95,7 @@ fun SettingsFooterView(
                 contentDescription = "Donate via PayPal",
                 modifier = Modifier.padding(end = 6.dp)
             )
-        }, "Donate via PayPal") { uriHandler.openUri("https://www.paypal.me/alpriest") }
+        }, stringResource(R.string.donate_via_paypal)) { uriHandler.openUri("https://www.paypal.me/alpriest") }
 
         Text(
             "Version " + config.appVersion,

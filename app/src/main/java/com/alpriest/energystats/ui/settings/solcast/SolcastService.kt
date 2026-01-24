@@ -1,12 +1,12 @@
 package com.alpriest.energystats.ui.settings.solcast
 
 import com.alpriest.energystats.BuildConfig
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.SolcastSite
 import com.alpriest.energystats.shared.models.network.SolcastForecastResponseList
 import com.alpriest.energystats.shared.models.network.SolcastSiteResponseList
 import com.alpriest.energystats.shared.network.InvalidConfigurationException
 import com.alpriest.energystats.shared.network.TryLaterException
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
@@ -77,7 +77,7 @@ class Solcast(private val configManager: ConfigManaging) : SolarForecasting {
 
                 override fun onResponse(call: Call, response: Response) {
                     try {
-                        val text = response.body?.string()
+                        val text = response.body.string()
                         when (response.code) {
                             404 -> {
                                 val errorApiResponseType = object : TypeToken<ErrorApiResponse>() {}.type

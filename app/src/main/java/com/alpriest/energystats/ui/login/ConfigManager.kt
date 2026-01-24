@@ -176,7 +176,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             currentDevice.value?.let { device ->
                 device.battery?.let { battery ->
                     val updatedDevice = device.copy(battery = battery.copy(minSOC = value.roundedToString(decimalPlaces = 2, locale = Locale.UK)))
-                    devices = devices?.map {
+                    devices = devices.map {
                         if (it.deviceSN == updatedDevice.deviceSN) updatedDevice else it
                     }
                 }
@@ -200,7 +200,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
                 config.deviceBatteryOverrides = map
             }
 
-            devices = devices?.map { it }
+            devices = devices.map { it }
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
@@ -346,13 +346,14 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
-    final override var devices: List<Device>?
+    final override var devices: List<Device>
         get() {
             return config.devices
         }
         set(value) {
             config.devices = value
-            currentDevice.value = devices?.firstOrNull { it.deviceSN == selectedDeviceSN }
+            currentDevice.value = devices.firstOrNull { it.deviceSN == selectedDeviceSN }
+            selectedDeviceSN = currentDevice.value?.deviceSN
         }
 
     final override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(null)
@@ -366,7 +367,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
 
     override fun select(device: Device) {
         selectedDeviceSN = device.deviceSN
-        currentDevice.value = devices?.firstOrNull { it.deviceSN == selectedDeviceSN }
+        currentDevice.value = devices.firstOrNull { it.deviceSN == selectedDeviceSN }
     }
 
     override suspend fun fetchPowerStationDetail() {
@@ -400,7 +401,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
 
                         BatteryResponseMapper.map(batteryVariables, batterySettings)
                     } catch (_: Exception) {
-                        devices?.firstOrNull { it.deviceSN == networkDevice.deviceSN }?.let {
+                        devices.firstOrNull { it.deviceSN == networkDevice.deviceSN }?.let {
                             Battery(it.battery?.capacity, it.battery?.minSOC, true)
                         }
                     }
@@ -425,8 +426,8 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             devices = mappedDevices
 
             if (selectedDeviceSN == null || !mappedDevices.any { it.deviceSN == selectedDeviceSN }) {
-                selectedDeviceSN = devices?.firstOrNull()?.deviceSN
-                currentDevice.value = devices?.firstOrNull { it.deviceSN == selectedDeviceSN }
+                selectedDeviceSN = devices.firstOrNull()?.deviceSN
+                currentDevice.value = devices.firstOrNull { it.deviceSN == selectedDeviceSN }
             }
         } catch (ex: NoSuchElementException) {
             throw NoDeviceFoundException()
@@ -593,6 +594,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         when (capability) {
             DeviceCapability.ScheduleMaxSOC ->
                 deviceSupportsScheduleMaxSOC[deviceSN] = true
+
             DeviceCapability.PeakShaving ->
                 deviceSupportsPeakShaving[deviceSN] = true
         }
@@ -644,7 +646,21 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
     }
 
     init {
-        currentDevice = MutableStateFlow(devices?.firstOrNull { it.deviceSN == selectedDeviceSN })
+        val selectedSn = selectedDeviceSN
+        val initialDevice = if (selectedSn.isNullOrBlank()) {
+            devices.firstOrNull()
+        } else {
+            // Guard against any bad data where deviceSN might unexpectedly be null at runtime
+            devices.firstOrNull { it.deviceSN != null && it.deviceSN == selectedSn }
+                ?: devices.firstOrNull()
+        }
+
+        currentDevice = MutableStateFlow(initialDevice)
+
+        // Keep stored selection consistent if it was missing/invalid
+        if (selectedSn.isNullOrBlank() && initialDevice != null) {
+            selectedDeviceSN = initialDevice.deviceSN
+        }
     }
 }
 

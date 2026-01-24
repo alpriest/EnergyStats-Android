@@ -89,10 +89,10 @@ class InverterViewModel(
         get() = configManager.currentDevice.value?.deviceDisplayName ?: "Re-login to update"
 
     val devices: List<Device>
-        get() = configManager.devices ?: listOf()
+        get() = configManager.devices
 
     val hasMultipleDevices: Boolean
-        get() = (configManager.devices?.count() ?: 0) > 1
+        get() = configManager.devices.count() > 1
 
     fun select(device: Device) {
         configManager.select(device)

@@ -475,4 +475,5 @@
     <string name="battery_heater_schedule_summary">Cuando la temperatura de la batería se encuentra entre %1$s, la calefacción de la batería estará activa durante %2$s.</string>
     <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Los rangos de temperatura mínima y máxima están controlados por el firmware de su inversor.</string>
     <string name="exported_template_count">Se exportaron %1$d plantilla(s).</string>
+    <string name="donate_via_paypal">Donar a través de PayPal</string>
 </resources>

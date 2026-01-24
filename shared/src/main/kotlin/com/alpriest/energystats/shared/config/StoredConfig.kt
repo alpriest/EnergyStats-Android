@@ -52,7 +52,7 @@ interface StoredConfig {
     var showBatteryEstimate: Boolean
     var showSunnyBackground: Boolean
     var selectedDeviceSN: String?
-    var devices: List<Device>?
+    var devices: List<Device>
     var refreshFrequency: RefreshFrequency
     var showBatteryTemperature: Boolean
     var useColouredFlowLines: Boolean

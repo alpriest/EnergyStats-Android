@@ -37,7 +37,7 @@ fun InverterChoiceView(
     var expanded by remember { mutableStateOf(false) }
     val currentDevice = configManager.currentDevice.collectAsState()
 
-    if ((configManager.devices?.count() ?: 0) > 1) {
+    if (configManager.devices.isNotEmpty()) {
         SettingsColumn(header = stringResource(R.string.device_selection)) {
             currentDevice.value?.let {
                 Row(
@@ -70,7 +70,7 @@ fun InverterChoiceView(
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
-                            configManager.devices?.forEach { device ->
+                            configManager.devices.forEach { device ->
                                 DropdownMenuItem(onClick = {
                                     expanded = false
                                     configManager.select(device)

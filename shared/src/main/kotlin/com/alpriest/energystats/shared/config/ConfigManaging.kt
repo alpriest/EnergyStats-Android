@@ -55,7 +55,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var isDemoUser: Boolean
     var useColouredFlowLines: Boolean
     var refreshFrequency: RefreshFrequency
-    var devices: List<Device>?
+    var devices: List<Device>
     var currentDevice: MutableStateFlow<Device?>
     val selectedDeviceSN: String?
     var appVersion: String

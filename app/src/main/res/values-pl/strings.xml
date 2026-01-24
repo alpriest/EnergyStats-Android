@@ -476,4 +476,5 @@
     <string name="battery_heater_schedule_summary">Gdy temperatura baterii mieści się w zakresie %1$s, ogrzewanie baterii będzie aktywne w czasie %2$s.</string>
     <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Minimalne i maksymalne zakresy temperatur są kontrolowane przez oprogramowanie układowe falownika.</string>
     <string name="exported_template_count">Wyeksportowano %1$d szablon(ów).</string>
+    <string name="donate_via_paypal">Przekaż darowiznę przez PayPal</string>
 </resources>

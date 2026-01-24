@@ -476,4 +476,5 @@
     <string name="battery_heater_schedule_summary">Quando la temperatura della batteria è compresa tra %1$s, il riscaldamento della batteria sarà attivo durante %2$s.</string>
     <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Gli intervalli di temperatura minimo e massimo sono controllati dal firmware del tuo inverter.</string>
     <string name="exported_template_count">Esportati %1$d modelli.</string>
+    <string name="donate_via_paypal">Dona tramite PayPal</string>
 </resources>

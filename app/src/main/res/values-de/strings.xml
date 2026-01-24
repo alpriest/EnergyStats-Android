@@ -475,4 +475,5 @@
     <string name="battery_heater_schedule_summary">Wenn die Batterietemperatur zwischen %1$s liegt, ist die Batterieheizung während %2$s aktiv.</string>
     <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Die minimalen und maximalen Temperaturbereiche werden von der Firmware Ihres Wechselrichters gesteuert.</string>
     <string name="exported_template_count">%1$d Vorlage(n) exportiert.</string>
+    <string name="donate_via_paypal">Über PayPal spenden</string>
 </resources>

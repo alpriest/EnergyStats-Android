@@ -99,7 +99,7 @@ class FakeConfigManager : ConfigManaging {
     override var allowNegativeLoad: Boolean = false
     override fun loginAsDemo() {}
 
-    override var devices: List<Device>? = listOf(
+    override var devices: List<Device> = listOf(
         Device(
             deviceSN = "123123",
             stationName = "my station",

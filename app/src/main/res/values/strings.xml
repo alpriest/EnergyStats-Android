@@ -479,4 +479,5 @@ tring>
     <string name="battery_heater_schedule_summary">When the battery temperature is between %1$s the battery heater will be active during %2$s.</string>
     <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Minimum and maximum temperature ranges are controlled by your inverter firmware.</string>
     <string name="exported_template_count">Exported %1$d template(s).</string>
+    <string name="donate_via_paypal">Donate via PayPal</string>
 </resources>

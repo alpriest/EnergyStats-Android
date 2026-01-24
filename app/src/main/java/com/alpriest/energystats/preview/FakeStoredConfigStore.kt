@@ -38,7 +38,7 @@ class FakeStoredConfigStore(
     override var showBatteryTemperature: Boolean = true,
     override var refreshFrequency: RefreshFrequency = RefreshFrequency.Auto,
     override var selectedDeviceSN: String? = null,
-    override var devices: List<Device>? = listOf(
+    override var devices: List<Device> = listOf(
         Device(
             "03274209-486c-4ea3-9c28-159f25ee84cb",
             true,

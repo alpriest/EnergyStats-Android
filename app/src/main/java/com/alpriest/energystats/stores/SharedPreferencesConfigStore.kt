@@ -41,6 +41,7 @@ interface StoredConfigManaging: StoredConfig {
     fun clearDeviceSettings()
 }
 
+
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) :
     StoredConfigManaging {
 
@@ -285,7 +286,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SharedPreferenceDisplayKey.GENERATION_VIEW_DATA.name,
         object : TypeToken<GenerationViewData>() {})
     override var workModes: List<String> by jsonPreference(sharedPreferences, SharedPreferenceDisplayKey.INVERTER_WORK_MODES.name, emptyList(), object : TypeToken<List<String>>() {})
-    override var devices: List<Device>? by jsonNullablePreference(sharedPreferences, SharedPreferenceDeviceKey.DEVICES.name, object : TypeToken<List<Device>?>() {})
+    override var devices: List<Device> by jsonPreference(sharedPreferences, SharedPreferenceDeviceKey.DEVICES.name, emptyList(),object : TypeToken<List<Device>>() {})
     override var detectedActiveTemplate: String? = null // in memory only
 
     override var summaryDateRange: SummaryDateRange
