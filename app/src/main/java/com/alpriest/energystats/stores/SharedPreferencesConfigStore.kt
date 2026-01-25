@@ -27,6 +27,8 @@ import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.ui.summary.MonthYear
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.InstanceCreator
 import com.google.gson.reflect.TypeToken
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -442,13 +444,19 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var solcastSettings: SolcastSettings
         get() {
+            val gson = GsonBuilder()
+                .registerTypeAdapter(
+                    SolcastSettings::class.java,
+                    InstanceCreator<SolcastSettings> { SolcastSettings(apiKey = null, sites = emptyList()) }
+                ).create()
+
             var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SOLCAST_SETTINGS.name, null)
             if (data == null) {
-                data = Gson().toJson(SolcastSettings.defaults)
+                data = gson.toJson(SolcastSettings.defaults)
                 solcastSettings = SolcastSettings.defaults
             }
 
-            return Gson().fromJson(data, object : TypeToken<SolcastSettings>() {}.type)
+            return gson.fromJson(data, object : TypeToken<SolcastSettings>() {}.type)
         }
         set(value) {
             sharedPreferences.edit {

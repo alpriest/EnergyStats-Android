@@ -9,7 +9,7 @@ data class SolcastSettings(
     val sites: List<SolcastSite>
 ) {
     companion object {
-        val defaults: SolcastSettings = SolcastSettings(apiKey = null, sites = listOf())
+        val defaults: SolcastSettings = SolcastSettings(apiKey = null, sites = emptyList())
         val demo: SolcastSettings = SolcastSettings(
             apiKey = "123", sites = listOf(SolcastSite.preview())
         )
