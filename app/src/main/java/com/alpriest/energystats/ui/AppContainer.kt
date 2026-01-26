@@ -148,7 +148,7 @@ class AppContainer(private val context: Context) {
     }
 
     val userManager: UserManaging by lazy {
-        UserManager(context, configManager, credentialStore)
+        UserManager(context, configManager, credentialStore, solarForecastingProvider)
     }
 
     val bannerAlertManager: BannerAlertManaging by lazy {

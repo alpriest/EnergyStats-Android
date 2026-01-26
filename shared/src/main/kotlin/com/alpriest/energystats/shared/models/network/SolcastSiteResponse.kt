@@ -1,25 +1,28 @@
 package com.alpriest.energystats.shared.models.network
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SolcastSiteResponseList(
     val sites: List<SolcastSiteResponse>
 )
 
+@Serializable
 data class SolcastSiteResponse(
     val name: String,
-    @SerializedName("resource_id")
+    @SerialName("resource_id")
     val resourceId: String,
     val capacity: Double,
     val longitude: Double,
     val latitude: Double,
     val azimuth: Int,
     val tilt: Double,
-    @SerializedName("loss_factor")
+    @SerialName("loss_factor")
     val lossFactor: Double?,
-    @SerializedName("dc_capacity")
+    @SerialName("dc_capacity")
     val dcCapacity: Double?,
-    @SerializedName("install_date")
+    @SerialName("install_date")
     val installDate: String?
 )
 

@@ -24,7 +24,6 @@ import com.patrykandpatrick.vico.core.common.data.ExtraStore
 import kotlinx.coroutines.flow.StateFlow
 
 val VariableKey = ExtraStore.Key<Variable>()
-val VariablesKey = ExtraStore.Key<List<Variable>>()
 
 @Composable
 fun LoadStateParameterGraphVico(
@@ -64,7 +63,7 @@ fun LoadStateParameterGraphVico(
         }
     }
 
-    Box(contentAlignment = Alignment.Companion.Center) {
+    Box(contentAlignment = Alignment.Center) {
         ParameterGraphViewVico(
             modelProducer,
             chartColors,

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.gms.google.services)
+    kotlin("plugin.serialization") version "1.9.22"
     id("com.google.firebase.firebase-perf") version "2.0.2" apply false
 }
 
@@ -98,4 +99,5 @@ dependencies {
     implementation(libs.rollingnumbers)
     implementation(libs.firebase.perf)
     implementation(project(":shared"))
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
 interface SolcastCaching {
     suspend fun fetchSites(apiKey: String): SolcastSiteResponseList
     suspend fun fetchForecast(site: SolcastSite, apiKey: String, ignoreCache: Boolean): SolcastForecastList
+    fun clearCache()
 }
 
 class SolcastCache(
@@ -58,6 +59,15 @@ class SolcastCache(
                     SolcastForecastList(failure = null, forecasts = cachedResponseList.forecasts)
                 }
             } ?: fetchAndStore(site, apiKey)
+        }
+    }
+
+    override fun clearCache() {
+        val dir = context.filesDir
+        dir.listFiles()?.forEach {
+            if (it.name.startsWith("solcast-cache-")) {
+                it.delete()
+            }
         }
     }
 

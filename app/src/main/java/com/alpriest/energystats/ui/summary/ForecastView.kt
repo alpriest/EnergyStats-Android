@@ -9,7 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
@@ -55,7 +58,7 @@ fun ForecastView(
     appSettingsStream: StateFlow<AppSettings>
 ) {
     val appSettings = appSettingsStream.collectAsState().value
-
+    var hasData by remember { mutableStateOf(false) }
     val chartColors = listOf(
         ForecastDefaults.color90,
         ForecastDefaults.color10,
@@ -72,6 +75,10 @@ fun ForecastView(
                         x = seriesEntries.map { it.x.toDouble() },
                         y = seriesEntries.map { it.y.toDouble() }
                     )
+                }
+
+                if (model.any { it.isNotEmpty() }) {
+                    hasData = true
                 }
             }
         }
@@ -133,28 +140,30 @@ fun ForecastView(
             )
         }
 
-        CartesianChartHost(
-            chart = rememberCartesianChart(
-                lineLayer,
-                endAxis = VerticalAxis.rememberEnd(
-                    itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
-                    valueFormatter = yAxisValueFormatter
-                ),
-                bottomAxis = HorizontalAxis.rememberBottom(
-                    itemPlacer = HorizontalAxis.ItemPlacer.aligned(
-                        spacing = { 6 },
-                        addExtremeLabelPadding = true
+        if (hasData) {
+            CartesianChartHost(
+                chart = rememberCartesianChart(
+                    lineLayer,
+                    endAxis = VerticalAxis.rememberEnd(
+                        itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
+                        valueFormatter = yAxisValueFormatter
                     ),
-                    valueFormatter = { _, x, _ ->
-                        val hour = x.toInt() / 2
-                        "%d:%02d".format(hour, 0)
-                    },
-                    guideline = null
-                )
-            ),
-            modelProducer = modelProducer,
-            modifier = Modifier.fillMaxWidth(),
-            scrollState = rememberVicoScrollState(scrollEnabled = false)
-        )
+                    bottomAxis = HorizontalAxis.rememberBottom(
+                        itemPlacer = HorizontalAxis.ItemPlacer.aligned(
+                            spacing = { 6 },
+                            addExtremeLabelPadding = true
+                        ),
+                        valueFormatter = { _, x, _ ->
+                            val hour = x.toInt() / 2
+                            "%d:%02d".format(hour, 0)
+                        },
+                        guideline = null
+                    )
+                ),
+                modelProducer = modelProducer,
+                modifier = Modifier.fillMaxWidth(),
+                scrollState = rememberVicoScrollState(scrollEnabled = false)
+            )
+        }
     }
 }

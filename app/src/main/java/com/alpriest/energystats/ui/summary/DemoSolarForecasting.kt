@@ -1,17 +1,16 @@
 package com.alpriest.energystats.ui.summary
 
+import com.alpriest.energystats.shared.models.SolcastSite
 import com.alpriest.energystats.shared.models.network.SolcastForecastList
 import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
 import com.alpriest.energystats.shared.models.network.SolcastSiteResponse
 import com.alpriest.energystats.shared.models.network.SolcastSiteResponseList
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.shared.models.SolcastSite
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
-import kotlin.collections.map
 
 class DemoSolarForecasting : SolcastCaching {
     override suspend fun fetchSites(apiKey: String): SolcastSiteResponseList {
@@ -102,5 +101,8 @@ class DemoSolarForecasting : SolcastCaching {
         }
 
         return SolcastForecastList(null, today + tomorrow)
+    }
+
+    override fun clearCache() {
     }
 }
