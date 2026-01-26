@@ -135,8 +135,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     override suspend fun fetchErrorMessages() {
         val request = Request.Builder().url(URLs.getErrorMessages()).build()
 
-        val type = object : TypeToken<NetworkResponse<ErrorMessagesResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ErrorMessagesResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<ErrorMessagesResponse>> = fetchJSON(request)
         response.item.result?.messages?.let {
             val language = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
             this.errorMessages = it[language] ?: mutableMapOf()
@@ -152,8 +151,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .url(URLs.getOpenDeviceList())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
-        val result: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetchGSON(request, type)
+        val result: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetchJSON(request)
         return result.item.result?.data ?: throw MissingDataException()
     }
 

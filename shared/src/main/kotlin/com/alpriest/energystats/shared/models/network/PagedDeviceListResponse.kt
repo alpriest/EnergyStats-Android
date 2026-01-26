@@ -1,5 +1,8 @@
 package com.alpriest.energystats.shared.models.network
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class PagedDeviceListResponse(
     val currentPage: Int,
     val pageSize: Int,
@@ -7,6 +10,7 @@ data class PagedDeviceListResponse(
     val data: List<DeviceSummaryResponse>
 )
 
+@Serializable
 class DeviceSummaryResponse(
     val deviceSN: String,
     val moduleSN: String,
@@ -19,6 +23,7 @@ class DeviceSummaryResponse(
     val status: Int
 )
 
+@Serializable
 class DeviceDetailResponse(
     val deviceSN: String,
     val moduleSN: String,
@@ -37,12 +42,14 @@ class DeviceDetailResponse(
     val batteryList: List<DeviceBatteryResponse>?
 )
 
+@Serializable
 data class DeviceBatteryResponse(
     val batterySN: String,
     val type: String,
     val version: String
 )
 
+@Serializable
 data class DeviceFunction(
     val scheduler: Boolean
 )
