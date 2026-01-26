@@ -182,8 +182,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .url(URLs.getOpenHistoryData())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<List<OpenHistoryResponse>>>() {}.type
-        val result: NetworkTuple<NetworkResponse<List<OpenHistoryResponse>>> = fetchGSON(request, type)
+        val result: NetworkTuple<NetworkResponse<List<OpenHistoryResponse>>> = fetchJSON(request)
 
         return result.item.result?.let { list ->
             list.firstOrNull { it.deviceSN == deviceSN }
