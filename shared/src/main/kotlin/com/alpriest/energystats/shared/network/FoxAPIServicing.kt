@@ -24,6 +24,7 @@ import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import kotlinx.serialization.Serializable
 import okhttp3.HttpUrl
 
 class InvalidConfigurationException(message: String?) : Exception(message)
@@ -67,4 +68,5 @@ interface FoxAPIServicing {
     suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest)
 }
 
+@Serializable
 data class NetworkResponse<T>(override val errno: Int, val result: T?) : NetworkResponseInterface

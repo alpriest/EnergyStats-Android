@@ -50,6 +50,7 @@ import com.alpriest.energystats.shared.models.network.SetSchedulerFlagRequest
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Interceptor
@@ -82,6 +83,11 @@ data class RequestData(
 )
 
 class FoxAPIService(private val requestData: RequestData, interceptor: Interceptor? = null) : FoxAPIServicing {
+    private val json = Json {
+        ignoreUnknownKeys = true
+        explicitNulls = false
+        encodeDefaults = true
+    }
     private fun makeSignature(encodedPath: String, token: String, timestamp: Long): String {
         return listOf(encodedPath, token, timestamp.toString()).joinToString("\\r\\n").md5()
     }
@@ -130,7 +136,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getErrorMessages()).build()
 
         val type = object : TypeToken<NetworkResponse<ErrorMessagesResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ErrorMessagesResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<ErrorMessagesResponse>> = fetchGSON(request, type)
         response.item.result?.messages?.let {
             val language = Locale.getDefault().toLanguageTag().split("-")[0].ifEmpty { "en" }
             this.errorMessages = it[language] ?: mutableMapOf()
@@ -147,7 +153,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .build()
 
         val type = object : TypeToken<NetworkResponse<PagedDeviceListResponse>>() {}.type
-        val result: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetch(request, type)
+        val result: NetworkTuple<NetworkResponse<PagedDeviceListResponse>> = fetchGSON(request, type)
         return result.item.result?.data ?: throw MissingDataException()
     }
 
@@ -160,8 +166,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .url(URLs.getOpenRealData())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<List<OpenRealQueryResponse>>>() {}.type
-        val result: NetworkTuple<NetworkResponse<List<OpenRealQueryResponse>>> = fetch(request, type)
+        val result: NetworkTuple<NetworkResponse<List<OpenRealQueryResponse>>> = fetchJSON(request)
 
         return result.item.result?.let { list ->
             list.firstOrNull { it.deviceSN == deviceSN }
@@ -178,7 +183,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .build()
 
         val type = object : TypeToken<NetworkResponse<List<OpenHistoryResponse>>>() {}.type
-        val result: NetworkTuple<NetworkResponse<List<OpenHistoryResponse>>> = fetch(request, type)
+        val result: NetworkTuple<NetworkResponse<List<OpenHistoryResponse>>> = fetchGSON(request, type)
 
         return result.item.result?.let { list ->
             list.firstOrNull { it.deviceSN == deviceSN }
@@ -195,7 +200,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .build()
 
         val type = object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type
-        val response: NetworkTuple<NetworkResponse<List<OpenReportResponse>>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<List<OpenReportResponse>>> = fetchGSON(request, type)
 
         return response.item.result ?: throw MissingDataException()
     }
@@ -204,7 +209,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getOpenBatterySOC(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<BatterySOCResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatterySOCResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<BatterySOCResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -224,7 +229,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getOpenDeviceDetail(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<DeviceDetailResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<DeviceDetailResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<DeviceDetailResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -238,7 +243,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .build()
 
         val type = object : TypeToken<NetworkResponse<PagedPowerStationListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PagedPowerStationListResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<PagedPowerStationListResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -246,7 +251,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getOpenPlantDetail(stationID)).build()
 
         val type = object : TypeToken<NetworkResponse<PowerStationDetailResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PowerStationDetailResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<PowerStationDetailResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -254,7 +259,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getRequestCount()).build()
 
         val type = object : TypeToken<NetworkResponse<ApiRequestCountResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ApiRequestCountResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<ApiRequestCountResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -262,7 +267,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getOpenVariables()).build()
 
         val type = object : TypeToken<NetworkResponse<ApiVariableArray>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ApiVariableArray>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<ApiVariableArray>> = fetchGSON(request, type)
         return response.item.result?.array ?: throw MissingDataException()
     }
 
@@ -273,7 +278,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getOpenModuleList()).post(body).build()
 
         val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetchGSON(request, type)
         return response.item.result?.data ?: throw MissingDataException()
     }
 
@@ -281,7 +286,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getOpenBatteryChargeTimes(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetchGSON(request, type)
         val result = response.item.result ?: throw MissingDataException()
 
         return listOf(
@@ -325,7 +330,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .build()
 
         val type = object : TypeToken<NetworkResponse<FetchDeviceSettingsItemResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<FetchDeviceSettingsItemResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<FetchDeviceSettingsItemResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -351,7 +356,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .build()
 
         val type = object : TypeToken<NetworkResponse<FetchPeakShavingSettingsResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<FetchPeakShavingSettingsResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<FetchPeakShavingSettingsResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -371,7 +376,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.fetchPowerGeneration(deviceSN)).build()
 
         val type = object : TypeToken<NetworkResponse<PowerGenerationResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PowerGenerationResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<PowerGenerationResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -382,7 +387,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getOpenSchedulerFlag()).post(body).build()
 
         val type = object : TypeToken<NetworkResponse<GetSchedulerFlagResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<GetSchedulerFlagResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<GetSchedulerFlagResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -393,7 +398,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getOpenCurrentSchedule()).post(body).build()
 
         val type = object : TypeToken<NetworkResponse<ScheduleResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ScheduleResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<ScheduleResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -428,7 +433,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         val request = Request.Builder().url(URLs.getBatteryHeatingSchedule()).post(body).build()
 
         val type = object : TypeToken<NetworkResponse<BatteryHeatingScheduleResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatteryHeatingScheduleResponse>> = fetch(request, type)
+        val response: NetworkTuple<NetworkResponse<BatteryHeatingScheduleResponse>> = fetchGSON(request, type)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -446,10 +451,10 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
 
     private suspend fun executeWithoutResponse(request: Request) {
         val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetch<NetworkResponse<String>>(request, type)
+        fetchGSON<NetworkResponse<String>>(request, type)
     }
 
-    private suspend fun <T : NetworkResponseInterface> fetch(
+    private suspend fun <T : NetworkResponseInterface> fetchGSON(
         request: Request,
         type: Type
     ): NetworkTuple<T> {
@@ -485,6 +490,48 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
                             .registerTypeAdapter(ScheduleResponse::class.java, ScheduleResponse.Deserializer())
                             .create()
                         val body: T = builder.fromJson(text, type)
+                        val result: Result<T> = check(body)
+
+                        result.fold(
+                            onSuccess = { continuation.resume(NetworkTuple(it, text)) },
+                            onFailure = { continuation.resumeWithException(it) }
+                        )
+                    } catch (ex: Exception) {
+                        continuation.resumeWithException(ex)
+                    }
+                }
+            })
+        }
+    }
+
+    private suspend inline fun <reified T : NetworkResponseInterface> fetchJSON(
+        request: Request
+    ): NetworkTuple<T> {
+        return suspendCoroutine { continuation ->
+            okHttpClient.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    continuation.resumeWithException(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.code == 406) {
+                        continuation.resumeWithException(UnacceptableException())
+                        return
+                    }
+
+                    if (response.code == 401) {
+                        continuation.resumeWithException(BadCredentialsException())
+                        return
+                    }
+
+                    if (response.code !in 200..299) {
+                        continuation.resumeWithException(InvalidResponseError(request.url, response.code))
+                        return
+                    }
+
+                    try {
+                        val text = response.body.string()
+                        val body: T = json.decodeFromString(text)
                         val result: Result<T> = check(body)
 
                         result.fold(
