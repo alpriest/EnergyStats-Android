@@ -78,16 +78,16 @@ fun Double.energy(displayUnit: DisplayUnit, decimalPlaces: Int): String {
 }
 
 @Composable
-fun PowerText(amount: Double, themeStream: StateFlow<AppSettings>, backgroundColor: Color, textColor: Color) {
-    val theme by themeStream.collectAsStateWithLifecycle()
-    val fontSize: TextUnit = theme.fontSize()
+fun PowerText(amount: Double, appSettingsStream: StateFlow<AppSettings>, backgroundColor: Color, textColor: Color) {
+    val appSettings by appSettingsStream.collectAsStateWithLifecycle()
+    val fontSize: TextUnit = appSettings.fontSize()
 
     Card(
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
         Text(
-            text = amount.power(theme.displayUnit, theme.decimalPlaces),
+            text = amount.power(appSettings.displayUnit, appSettings.decimalPlaces),
             color = textColor,
             fontWeight = FontWeight.Bold,
             fontSize = fontSize,
@@ -101,13 +101,13 @@ fun PowerText(amount: Double, themeStream: StateFlow<AppSettings>, backgroundCol
 @Composable
 fun PowerFlowView(
     amount: Double,
-    themeStream: StateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     position: PowerFlowLinePosition,
     modifier: Modifier = Modifier,
     useColouredLines: Boolean = false,
     orientation: LineOrientation
 ) {
-    val theme by themeStream.collectAsStateWithLifecycle()
+    val theme by appSettingsStream.collectAsStateWithLifecycle()
     val inverterColor = Color.LightGray
     val lineColor = if (amount.isFlowing() && useColouredLines && theme.useColouredFlowLines) flowingColour(amount) else {
         PowerFlowNeutral
@@ -122,7 +122,7 @@ fun PowerFlowView(
         Line(amount, lineColor, Modifier, theme, orientation, amount.isFlowing())
 
         if (amount.isFlowing()) {
-            PowerText(amount, themeStream, lineColor, powerTextColor)
+            PowerText(amount, appSettingsStream, lineColor, powerTextColor)
         }
 
         Canvas(
@@ -195,19 +195,19 @@ fun PowerFlowViewPreview() {
     Row(Modifier.height(200.dp)) {
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppSettings.demo()),
+            appSettingsStream = MutableStateFlow(AppSettings.demo()),
             position = PowerFlowLinePosition.LEFT,
             orientation = LineOrientation.VERTICAL
         )
         PowerFlowView(
             5.255,
-            themeStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = true, showBatteryTemperature = true)),
+            appSettingsStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = true, showBatteryTemperature = true)),
             position = PowerFlowLinePosition.MIDDLE,
             orientation = LineOrientation.VERTICAL
         )
         PowerFlowView(
             -3.0,
-            themeStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = false, showBatteryTemperature = false)),
+            appSettingsStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = false, showBatteryTemperature = false)),
             position = PowerFlowLinePosition.RIGHT,
             orientation = LineOrientation.VERTICAL
         )

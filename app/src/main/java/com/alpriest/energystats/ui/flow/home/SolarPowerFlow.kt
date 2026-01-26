@@ -16,14 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.ui.SunIconWithThresholds
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -40,7 +40,7 @@ fun SolarPowerFlow(amount: Double, modifier: Modifier, iconHeight: Dp, appSettin
 
         PowerFlowView(
             amount = amount,
-            themeStream = appSettingsStream,
+            appSettingsStream = appSettingsStream,
             position = PowerFlowLinePosition.NONE,
             orientation = LineOrientation.VERTICAL
         )

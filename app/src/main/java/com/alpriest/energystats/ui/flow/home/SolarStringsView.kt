@@ -16,23 +16,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.helpers.asPercent
+import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.CT2DisplayMode
+import com.alpriest.energystats.shared.models.TotalYieldModel
+import com.alpriest.energystats.shared.ui.PowerFlowNeutralText
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.power
-import com.alpriest.energystats.shared.models.TotalYieldModel
-import com.alpriest.energystats.shared.models.CT2DisplayMode
-import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.shared.ui.PowerFlowNeutralText
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SolarStringsView(
     configManaging: ConfigManaging,
-    themeStream: StateFlow<AppSettings>,
+    appSettingsStream: StateFlow<AppSettings>,
     viewModel: LoadedPowerFlowViewModel
 ) {
-    val theme by themeStream.collectAsState()
+    val theme by appSettingsStream.collectAsState()
     val displayStrings = viewModel.displayStrings.collectAsState().value
     val todaysGeneration = viewModel.todaysGeneration.collectAsState().value
 

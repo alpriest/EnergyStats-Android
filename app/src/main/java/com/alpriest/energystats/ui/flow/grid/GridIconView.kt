@@ -77,11 +77,12 @@ fun GridIconView(viewModel: LoadedPowerFlowViewModel, iconHeight: Dp, appSetting
 private fun GridTotals(
     viewModel: LoadedPowerFlowViewModel,
     decimalPlaces: Int,
-    themeStream: StateFlow<AppSettings>
+    appSettingsStream: StateFlow<AppSettings>
 ) {
-    val displayUnit = themeStream.collectAsStateWithLifecycle().value.displayUnit
-    val fontSize = themeStream.collectAsStateWithLifecycle().value.fontSize()
-    val smallFontSize = themeStream.collectAsStateWithLifecycle().value.smallFontSize()
+    val appSettings = appSettingsStream.collectAsStateWithLifecycle().value
+    val displayUnit = appSettings.displayUnit
+    val fontSize = appSettings.fontSize()
+    val smallFontSize = appSettings.smallFontSize()
     val gridImportTotal = viewModel.gridImportTotal.collectAsStateWithLifecycle().value
     val gridExportTotal = viewModel.gridExportTotal.collectAsStateWithLifecycle().value
 

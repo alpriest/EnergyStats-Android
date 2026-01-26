@@ -24,7 +24,7 @@ fun HomePowerFlowView(amount: Double, modifier: Modifier, appSettingsStream: Sta
         Box(modifier = Modifier.weight(1f)) {
             PowerFlowView(
                 amount = amount,
-                themeStream = appSettingsStream,
+                appSettingsStream = appSettingsStream,
                 position = position,
                 orientation = LineOrientation.VERTICAL
             )

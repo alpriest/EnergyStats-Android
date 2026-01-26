@@ -61,14 +61,14 @@ data class ApproximationsViewModel(
 
 @Composable
 fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modifier = Modifier, viewModel: ApproximationsViewModel, showingApproximations: MutableState<Boolean>) {
-    val appTheme = appSettingsStream.collectAsState().value
-    val fontSize = appTheme.fontSize()
-    val selfSufficiency = when (appTheme.selfSufficiencyEstimateMode) {
+    val appSettings = appSettingsStream.collectAsState().value
+    val fontSize = appSettings.fontSize()
+    val selfSufficiency = when (appSettings.selfSufficiencyEstimateMode) {
         SelfSufficiencyEstimateMode.Off -> null
         SelfSufficiencyEstimateMode.Net -> viewModel.netSelfSufficiencyEstimate
         SelfSufficiencyEstimateMode.Absolute -> viewModel.absoluteSelfSufficiencyEstimate
     }
-    val selfSufficiencyCalculations = when (appTheme.selfSufficiencyEstimateMode) {
+    val selfSufficiencyCalculations = when (appSettings.selfSufficiencyEstimateMode) {
         SelfSufficiencyEstimateMode.Off -> null
         SelfSufficiencyEstimateMode.Net -> viewModel.netSelfSufficiencyEstimateCalculationBreakdown
         SelfSufficiencyEstimateMode.Absolute -> viewModel.absoluteSelfSufficiencyEstimateCalculationBreakdown
@@ -94,7 +94,7 @@ fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modif
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                if (appTheme.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && selfSufficiency != null) {
+                if (appSettings.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off && selfSufficiency != null) {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -124,7 +124,7 @@ fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modif
                             fontSize = fontSize
                         )
                         Text(
-                            it.exportIncome.formattedAmount(appTheme.currencySymbol),
+                            it.exportIncome.formattedAmount(appSettings.currencySymbol),
                             fontSize = fontSize
                         )
                     }
@@ -139,7 +139,7 @@ fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modif
                             fontSize = fontSize
                         )
                         Text(
-                            it.solarSaving.formattedAmount(appTheme.currencySymbol),
+                            it.solarSaving.formattedAmount(appSettings.currencySymbol),
                             fontSize = fontSize
                         )
                     }
@@ -154,7 +154,7 @@ fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modif
                             fontSize = fontSize
                         )
                         Text(
-                            it.total.formattedAmount(appTheme.currencySymbol),
+                            it.total.formattedAmount(appSettings.currencySymbol),
                             fontSize = fontSize
                         )
                     }

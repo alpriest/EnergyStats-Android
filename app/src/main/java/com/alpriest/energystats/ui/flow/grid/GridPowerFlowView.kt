@@ -24,7 +24,7 @@ fun GridPowerFlowView(amount: Double, modifier: Modifier = Modifier, appSettings
             PowerFlowView(
                 modifier = Modifier,
                 amount = amount,
-                themeStream = appSettingsStream,
+                appSettingsStream = appSettingsStream,
                 position = PowerFlowLinePosition.RIGHT,
                 useColouredLines = true,
                 orientation = LineOrientation.VERTICAL

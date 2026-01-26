@@ -80,9 +80,10 @@ class SolarBandingSettingsView(
     fun Content(viewModel: SolarBandingSettingsViewModel = viewModel(factory = SolarBandingSettingsViewModelFactory(configManager))) {
         val amount = remember { mutableFloatStateOf(2.0f) }
         val viewData = viewModel.viewDataStream.collectAsState().value
-        val mutatedAppTheme = remember { MutableStateFlow(configManager.appSettingsStream.value) }
+        val mutatedAppSettings = remember { MutableStateFlow(configManager.appSettingsStream.value) }
         val context = LocalContext.current
         trackScreenView("Sun display variation thresholds", "SolarBandingSettingsView")
+        val message = stringResource(R.string.thresholds_were_saved)
 
         ContentWithBottomButtonPair(
             navController,
@@ -92,7 +93,7 @@ class SolarBandingSettingsView(
                     threshold2 = viewData.threshold2.toDouble(),
                     threshold3 = viewData.threshold3.toDouble()
                 )
-                Toast.makeText(context, context.getString(R.string.thresholds_were_saved), Toast.LENGTH_LONG).show()
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             },
             dirtyStateFlow = viewModel.dirtyState,
             content = { innerModifier ->
@@ -127,7 +128,7 @@ class SolarBandingSettingsView(
                                     .width(100.dp)
                                     .height(100.dp),
                                 iconHeight = 40.dp,
-                                appSettingsStream = mutatedAppTheme
+                                appSettingsStream = mutatedAppSettings
                             )
 
                             Slider(

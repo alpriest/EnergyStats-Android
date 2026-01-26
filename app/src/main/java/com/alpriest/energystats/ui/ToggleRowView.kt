@@ -36,8 +36,8 @@ fun <T : GraphVariable> ToggleRowView(
     boundsValue: GraphBounds?
 ) {
     val textColor = if (it.enabled) MaterialTheme.colorScheme.onBackground else DimmedTextColor
-    val appTheme = appSettingsStream.collectAsState().value
-    val fontSize = appTheme.fontSize()
+    val appSettings = appSettingsStream.collectAsState().value
+    val fontSize = appSettings.fontSize()
     val colour = it.colour(appSettingsStream).copy(alpha = if (it.enabled) 1.0f else 0.5f)
 
     Row(
@@ -48,7 +48,7 @@ fun <T : GraphVariable> ToggleRowView(
                 toggleVisibility(it)
             }
     ) {
-        Box(modifier = Modifier.padding(top = if (appTheme.useLargeDisplay) 10.dp else 1.dp)) {
+        Box(modifier = Modifier.padding(top = if (appSettings.useLargeDisplay) 10.dp else 1.dp)) {
             Canvas(modifier = Modifier.size(16.dp)) {
                 drawCircle(
                     color = colour,
@@ -74,12 +74,12 @@ fun <T : GraphVariable> ToggleRowView(
                         fontSize = fontSize
                     )
 
-                    if (appTheme.showGraphValueDescriptions) {
+                    if (appSettings.showGraphValueDescriptions) {
                         description?.let {
                             Text(
                                 it,
                                 color = DimmedTextColor,
-                                fontSize = appTheme.smallFontSize()
+                                fontSize = appSettings.smallFontSize()
                             )
                         }
                     }
@@ -99,7 +99,7 @@ fun <T : GraphVariable> ToggleRowView(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            it.min.toDouble().roundedToString(appTheme.decimalPlaces),
+                            it.min.toDouble().roundedToString(appSettings.decimalPlaces),
                             color = textColor,
                             fontSize = fontSize,
                         )
@@ -114,7 +114,7 @@ fun <T : GraphVariable> ToggleRowView(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            it.max.toDouble().roundedToString(appTheme.decimalPlaces),
+                            it.max.toDouble().roundedToString(appSettings.decimalPlaces),
                             color = textColor,
                             fontSize = fontSize,
                         )
@@ -128,7 +128,7 @@ fun <T : GraphVariable> ToggleRowView(
                         horizontalAlignment = Alignment.End
                     ) {
                         Text(
-                            it.now.toDouble().roundedToString(appTheme.decimalPlaces),
+                            it.now.toDouble().roundedToString(appSettings.decimalPlaces),
                             color = textColor,
                             fontSize = fontSize,
                         )

@@ -127,7 +127,7 @@ fun InverterView(
     viewModel: InverterViewModel,
     orientation: Int = LocalConfiguration.current.orientation
 ) {
-    val appTheme = appSettingsStream.collectAsState().value
+    val appSettings = appSettingsStream.collectAsState().value
     val message = viewModel.alertDialogMessage.collectAsState().value
     val context = LocalContext.current
 
@@ -144,7 +144,7 @@ fun InverterView(
                 .offset(y = (-24).dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (appTheme.showInverterIcon) {
+            if (appSettings.showInverterIcon) {
                 Box {
                     InverterIconView(
                         modifier = Modifier
@@ -166,7 +166,7 @@ fun InverterView(
 
             InverterPortraitTitles(appSettingsStream, viewModel)
 
-            if (appTheme.showInverterTemperatures) {
+            if (appSettings.showInverterTemperatures) {
                 viewModel.temperatures?.let {
                     Row(modifier = Modifier.background(colorScheme.background)) {
                         InverterTemperatures(it)
@@ -204,13 +204,13 @@ private fun PanelColor(hasFault: Boolean): Color {
 }
 
 @Composable
-private fun PanelView(themeStream: StateFlow<AppSettings>, hasFault: Boolean) {
+private fun PanelView(appSettingsStream: StateFlow<AppSettings>, hasFault: Boolean) {
     val infiniteTransition = rememberInfiniteTransition(label = "inverter-panel")
 
     if (hasFault) {
         val color by infiniteTransition.animateColor(
             initialValue = PanelColor(hasFault),
-            targetValue = iconBackgroundColor(isDarkMode(themeStream)),
+            targetValue = iconBackgroundColor(isDarkMode(appSettingsStream)),
             animationSpec = infiniteRepeatable(
                 animation = tween(600, 200, easing = EaseInOut),
                 repeatMode = RepeatMode.Reverse
@@ -235,8 +235,8 @@ private fun PanelView(themeStream: StateFlow<AppSettings>, hasFault: Boolean) {
 }
 
 @Composable
-private fun InverterPortraitTitles(themeStream: StateFlow<AppSettings>, viewModel: InverterViewModel) {
-    val appTheme = themeStream.collectAsState().value
+private fun InverterPortraitTitles(appSettingsStream: StateFlow<AppSettings>, viewModel: InverterViewModel) {
+    val appSettings = appSettingsStream.collectAsState().value
     var expanded by remember { mutableStateOf(false) }
 
     Column(
@@ -264,14 +264,14 @@ private fun InverterPortraitTitles(themeStream: StateFlow<AppSettings>, viewMode
                                 contentDescription = null,
                             )
                         }
-                        if (appTheme.showInverterStationNameOnPowerflow) {
+                        if (appSettings.showInverterStationNameOnPowerflow) {
                             OptionalView(viewModel.deviceStationName) {
                                 Row {
                                     Text(it)
                                 }
                             }
                         }
-                        if (appTheme.showInverterTypeNameOnPowerflow) {
+                        if (appSettings.showInverterTypeNameOnPowerflow) {
                             OptionalView(viewModel.deviceTypeName) {
                                 Row {
                                     Text(it)
@@ -298,12 +298,12 @@ private fun InverterPortraitTitles(themeStream: StateFlow<AppSettings>, viewMode
                 }
             }
         } else {
-            if (appTheme.showInverterStationNameOnPowerflow) {
+            if (appSettings.showInverterStationNameOnPowerflow) {
                 OptionalView(viewModel.deviceStationName) {
                     Text(it)
                 }
             }
-            if (appTheme.showInverterTypeNameOnPowerflow) {
+            if (appSettings.showInverterTypeNameOnPowerflow) {
                 OptionalView(viewModel.deviceTypeName) {
                     Text(it)
                 }
@@ -313,10 +313,10 @@ private fun InverterPortraitTitles(themeStream: StateFlow<AppSettings>, viewMode
 }
 
 @Composable
-private fun InverterLandscapeTitles(themeStream: StateFlow<AppSettings>, inverterTemperaturesViewModel: InverterViewModel) {
-    val appTheme = themeStream.collectAsState().value
+private fun InverterLandscapeTitles(appSettingsStream: StateFlow<AppSettings>, inverterTemperaturesViewModel: InverterViewModel) {
+    val appSettings = appSettingsStream.collectAsState().value
 
-    if (appTheme.showInverterStationNameOnPowerflow) {
+    if (appSettings.showInverterStationNameOnPowerflow) {
         OptionalView(inverterTemperaturesViewModel.deviceStationName) {
             Text(
                 modifier = Modifier

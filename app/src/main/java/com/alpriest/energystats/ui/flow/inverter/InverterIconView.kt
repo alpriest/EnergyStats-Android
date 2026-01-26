@@ -18,21 +18,21 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun InverterIconView(modifier: Modifier = Modifier, themeStream: StateFlow<AppSettings>) {
+fun InverterIconView(modifier: Modifier = Modifier, appSettingsStream: StateFlow<AppSettings>) {
     val painter = rememberVectorPainter(Icons.Default.ElectricBolt)
-    val inverterBackground = iconBackgroundColor(isDarkMode(themeStream))
-    val boltTint = iconForegroundColor(isDarkMode(themeStream))
+    val inverterBackground = iconBackgroundColor(isDarkMode(appSettingsStream))
+    val boltTint = iconForegroundColor(isDarkMode(appSettingsStream))
 
     Canvas(
         modifier = modifier

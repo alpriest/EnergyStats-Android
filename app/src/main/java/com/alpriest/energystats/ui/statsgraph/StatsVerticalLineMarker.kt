@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 fun SelectedStatsValuesLineMarker(
     displayMode: StatsDisplayMode,
     model: StatsGraphLineMarkerModel,
-    themeStream: StateFlow<AppSettings>
+    appSettingsStream: StateFlow<AppSettings>
 ) {
     val leadingMargin = model.dimensions.startPadding
 
@@ -34,7 +34,7 @@ fun SelectedStatsValuesLineMarker(
     // Left of the snapped bar
     val left = leadingMargin + (barIndex * model.dimensions.xSpacing) - (barWidth / 2.0f)
 
-    val color = lineMarkerColor(isDarkMode(themeStream))
+    val color = lineMarkerColor(isDarkMode(appSettingsStream))
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         drawRect(

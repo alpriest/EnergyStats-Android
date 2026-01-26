@@ -35,9 +35,9 @@ private fun SubLabelledView(value: String, label: String, alignment: Alignment.H
 }
 
 @Composable
-fun EarningsView(themeStream: StateFlow<AppSettings>, viewModel: EnergyStatsFinancialModel?) {
+fun EarningsView(appSettingsStream: StateFlow<AppSettings>, viewModel: EnergyStatsFinancialModel?) {
     val context = LocalContext.current
-    val appTheme = themeStream.collectAsState().value
+    val appSettings = appSettingsStream.collectAsState().value
     val amounts = viewModel?.amountsFlow?.collectAsState()
 
     Row(
@@ -52,7 +52,7 @@ fun EarningsView(themeStream: StateFlow<AppSettings>, viewModel: EnergyStatsFina
         amounts?.let { amounts ->
             amounts.value.forEach {
                 SubLabelledView(
-                    value = it.formattedAmount(appTheme.currencySymbol),
+                    value = it.formattedAmount(appSettings.currencySymbol),
                     label = it.title(context),
                     alignment = Alignment.CenterHorizontally
                 )

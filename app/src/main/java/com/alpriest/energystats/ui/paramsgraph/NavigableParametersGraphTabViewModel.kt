@@ -123,7 +123,7 @@ class NavigableParametersGraphTabView(
                     navController,
                     filePathChooser,
                     solarForecastProvider
-                ).Content(themeStream = appSettingsStream)
+                ).Content(appSettingsStream = appSettingsStream)
             }
 
             composable(ParametersScreen.ParameterChooser.name) {

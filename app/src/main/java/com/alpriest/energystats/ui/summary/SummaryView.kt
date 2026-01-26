@@ -113,7 +113,7 @@ class SummaryView(
         modifier: Modifier
     ) {
         val scrollState = rememberScrollState()
-        val appTheme = appSettingsStream.collectAsStateWithLifecycle().value
+        val appSettings = appSettingsStream.collectAsStateWithLifecycle().value
         val approximations = viewModel.approximationsViewModelStream.collectAsStateWithLifecycle().value
         val oldestDataDate = viewModel.oldestDataDate.collectAsStateWithLifecycle().value
         val isLoading = viewModel.loadStateStream.collectAsStateWithLifecycle().value.state
@@ -139,7 +139,7 @@ class SummaryView(
                         LoadedView(
                             hasPV = hasPV,
                             approximationsViewModel = it,
-                            appSettings = appTheme,
+                            appSettings = appSettings,
                             oldestDataDate = oldestDataDate,
                             latestDataDate = latestDataDate
                         )

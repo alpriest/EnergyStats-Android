@@ -113,13 +113,13 @@ fun TabbedView(dependencies: TabbedViewDependencies) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun TabbedViewPreview() {
-    val themeStream = MutableStateFlow(AppSettings.Companion.demo())
+    val appSettingsStream = MutableStateFlow(AppSettings.Companion.demo())
     val dependencies = TabbedViewDependencies(
         FakeConfigManager(),
         network = DemoNetworking(),
         userManager = FakeUserManager(),
         {},
-        appSettingsStream = themeStream,
+        appSettingsStream = appSettingsStream,
         {},
         {},
         { _, _ -> null },

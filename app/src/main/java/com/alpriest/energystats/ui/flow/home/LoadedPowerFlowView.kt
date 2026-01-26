@@ -241,7 +241,7 @@ private fun CT2FlowView(
 
             PowerFlowView(
                 amount = loadedPowerFlowViewModel.ct2,
-                themeStream = appSettingsStream,
+                appSettingsStream = appSettingsStream,
                 position = PowerFlowLinePosition.NONE,
                 orientation = LineOrientation.VERTICAL,
                 modifier = Modifier
@@ -266,7 +266,7 @@ private fun CT2FlowView(
 
                 PowerFlowView(
                     amount = loadedPowerFlowViewModel.ct2,
-                    themeStream = appSettingsStream,
+                    appSettingsStream = appSettingsStream,
                     position = PowerFlowLinePosition.NONE,
                     orientation = LineOrientation.HORIZONTAL,
                     modifier = Modifier
@@ -280,9 +280,9 @@ private fun CT2FlowView(
 }
 
 @Composable
-fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: StateFlow<AppSettings>) {
+fun UpdateMessage(viewModel: PowerFlowTabViewModel, appSettingsStream: StateFlow<AppSettings>) {
     val updateState by viewModel.updateMessage.collectAsState()
-    val appTheme = themeStream.collectAsState().value
+    val appSettings = appSettingsStream.collectAsState().value
     var showLastUpdateTimestamp by remember { mutableStateOf(false) }
 
     Row(
@@ -290,7 +290,7 @@ fun UpdateMessage(viewModel: PowerFlowTabViewModel, themeStream: StateFlow<AppSe
             .padding(top = 12.dp)
             .padding(bottom = 4.dp)
     ) {
-        if (appTheme.showLastUpdateTimestamp) {
+        if (appSettings.showLastUpdateTimestamp) {
             Text(
                 updateState.updateState.lastUpdateMessage(),
                 Modifier.padding(end = 10.dp),

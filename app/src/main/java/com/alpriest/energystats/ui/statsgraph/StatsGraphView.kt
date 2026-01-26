@@ -67,7 +67,7 @@ import com.alpriest.energystats.shared.R as SharedR
 @Composable
 fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
     val displayMode = viewModel.displayModeStream.collectAsStateWithLifecycle().value
-    val appSettingsStream = viewModel.themeStream
+    val appSettingsStream = viewModel.appSettingsStream
     val viewData = viewModel.viewDataStateFlow.collectAsStateWithLifecycle().value
     val selectedValue = viewModel.selectedValueStream.collectAsStateWithLifecycle().value
     val chartColors = viewData.stats.keys.map { it.colour(appSettingsStream) }

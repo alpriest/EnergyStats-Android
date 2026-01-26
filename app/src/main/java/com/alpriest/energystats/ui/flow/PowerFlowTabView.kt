@@ -46,10 +46,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryViewModel
@@ -280,14 +280,14 @@ fun PowerFlowTabViewPreview() {
         network = DemoNetworking(),
         BannerAlertManager()
     )
-    val themeStream = MutableStateFlow(AppSettings.demo())
+    val appSettingsStream = MutableStateFlow(AppSettings.demo())
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         LoadedView(
             viewModel = powerFlowTabViewModel,
             FakeConfigManager(),
             loadedPowerFlowViewModel,
-            themeStream,
+            appSettingsStream,
             DemoNetworking(),
             FakeUserManager(),
             TemplateStore(FakeConfigManager())

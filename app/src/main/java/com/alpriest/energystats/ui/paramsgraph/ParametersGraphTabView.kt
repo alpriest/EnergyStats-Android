@@ -93,7 +93,7 @@ class ParametersGraphTabView(
                 solarForecastProvider
             )
         ),
-        themeStream: StateFlow<AppSettings>
+        appSettingsStream: StateFlow<AppSettings>
     ) {
         val scrollState = rememberScrollState()
         val hasData = viewModel.hasDataStream.collectAsState().value
@@ -133,7 +133,7 @@ class ParametersGraphTabView(
 
                 is LoadState.Inactive -> {
                     if (hasData) {
-                        LoadedData(selectedDateTime, viewModel, themeStream)
+                        LoadedData(selectedDateTime, viewModel, appSettingsStream)
                     } else {
                         Text(
                             modifier = Modifier.fillMaxWidth(),

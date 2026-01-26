@@ -55,7 +55,7 @@ fun BatteryPowerFlow(
     ) {
         PowerFlowView(
             amount = viewModel.chargePowerkWH,
-            themeStream = appSettingsStream,
+            appSettingsStream = appSettingsStream,
             position = PowerFlowLinePosition.LEFT,
             useColouredLines = true,
             modifier = Modifier.fillMaxHeight(),

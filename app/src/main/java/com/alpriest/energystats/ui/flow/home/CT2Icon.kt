@@ -10,16 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
 import com.alpriest.energystats.ui.flow.battery.isDarkMode
-import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun CT2Icon(modifier: Modifier, themeStream: StateFlow<AppSettings>) {
-    val foregroundColor = iconForegroundColor(isDarkMode(themeStream))
-    val backgroundColor = iconBackgroundColor(isDarkMode(themeStream))
+fun CT2Icon(modifier: Modifier, appSettingsStream: StateFlow<AppSettings>) {
+    val foregroundColor = iconForegroundColor(isDarkMode(appSettingsStream))
+    val backgroundColor = iconBackgroundColor(isDarkMode(appSettingsStream))
 
     Box(
         modifier = modifier

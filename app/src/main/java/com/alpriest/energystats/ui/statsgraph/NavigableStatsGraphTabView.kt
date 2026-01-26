@@ -30,7 +30,7 @@ class NavigableStatsGraphTabView(
     private val network: Networking,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
-    private val themeStream: StateFlow<AppSettings>,
+    private val appSettingsStream: StateFlow<AppSettings>,
     private val userManager: UserManaging
 ) {
     @Composable
@@ -51,7 +51,7 @@ class NavigableStatsGraphTabView(
                     network,
                     onWriteTempFile,
                     filePathChooser,
-                    themeStream,
+                    appSettingsStream,
                     userManager,
                     navController
                 ).Content()

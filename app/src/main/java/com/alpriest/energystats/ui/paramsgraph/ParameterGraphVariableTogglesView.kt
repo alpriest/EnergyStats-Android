@@ -27,24 +27,13 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-data class SelectedValue(
-    val type: Variable,
-    val value: Double,
-    val timestamp: Double
-) {
-    var dateTime: LocalDateTime = LocalDateTime.ofInstant(
-        Instant.ofEpochSecond(timestamp.toLong()),
-        ZoneId.systemDefault()
-    )
-}
-
 @SuppressLint("DiscouragedApi")
 @Composable
 fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, unit: String?, appSettingsStream: StateFlow<AppSettings>, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val boundsValues = viewModel.boundsStream.collectAsState().value
-    val appTheme = appSettingsStream.collectAsState().value
+    val appSettings = appSettingsStream.collectAsState().value
     val context = LocalContext.current
 
     Column(modifier) {
@@ -82,7 +71,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
                     ToggleRowView(it, appSettingsStream, { viewModel.toggleVisibility(it, unit) }, title, description, null, graphBounds)
                 } else {
                     val formattedValue = when (it.type.unit) {
-                        "kW" -> selectedValue.y.toDouble().kW(appTheme.decimalPlaces)
+                        "kW" -> selectedValue.y.toDouble().kW(appSettings.decimalPlaces)
                         else -> "${selectedValue.y} ${selectedValue.type.unit}"
                     }
                     ToggleRowView(it, appSettingsStream, { viewModel.toggleVisibility(it, unit) }, title, description, formattedValue, null)

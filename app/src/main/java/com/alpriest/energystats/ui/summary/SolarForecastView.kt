@@ -50,7 +50,7 @@ class SolarForecastView(
         val data = viewModel.dataStream.collectAsState().value
         val loadState: LoadState = viewModel.loadStateStream.collectAsState().value
         val context = LocalContext.current
-        val appTheme = appSettingsStream.collectAsState().value
+        val appSettings = appSettingsStream.collectAsState().value
 
         LaunchedEffect(null) {
             viewModel.load(context)
@@ -73,11 +73,13 @@ class SolarForecastView(
                         loadState.reason,
                         color = colorScheme.onSecondary
                     )
+
+                    RefreshSolcastButton(viewModel, appSettings)
                 }
             }
 
             is LoadState.Inactive -> {
-                LoadedView(modifier, data, viewModel, appTheme)
+                LoadedView(modifier, data, viewModel, appSettings)
             }
         }
     }

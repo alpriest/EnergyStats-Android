@@ -19,8 +19,8 @@ class SolarBandingSettingsViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private val _themeStream: MutableStateFlow<AppSettings> = MutableStateFlow(config.appSettingsStream.value)
-    val themeStream: StateFlow<AppSettings> = _themeStream
+    private val _appSettingsStream: MutableStateFlow<AppSettings> = MutableStateFlow(config.appSettingsStream.value)
+    val appSettingsStream: StateFlow<AppSettings> = _appSettingsStream
 
     private var originalValue: SolarBandingSettingsViewData? = null
 
@@ -60,7 +60,7 @@ class SolarBandingSettingsViewModel(
         )
     }
 
-    private fun makeAppTheme(): AppSettings {
+    private fun makeAppSettings(): AppSettings {
         return AppSettings.demo()
             .copy(
                 solarRangeDefinitions = SolarRangeDefinitions(
@@ -92,6 +92,6 @@ class SolarBandingSettingsViewModel(
         )
 
         _viewDataStream.value = normalized
-        _themeStream.value = makeAppTheme()
+        _appSettingsStream.value = makeAppSettings()
     }
 }

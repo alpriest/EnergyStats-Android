@@ -27,7 +27,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifi
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
     val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
     val totals = viewModel.totalsStream.collectAsState()
-    val appTheme = viewModel.themeStream.collectAsState().value
+    val appSettings = viewModel.appSettingsStream.collectAsState().value
 
     Column(modifier) {
         graphVariables.value.map { graphVariable ->
@@ -60,8 +60,8 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifi
 
             if (selectedValue == null) {
                 val total = totals.value[graphVariable.type]
-                val value = total?.energy(appTheme.displayUnit, 1)
-                ToggleRowView(graphVariable, viewModel.themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
+                val value = total?.energy(appSettings.displayUnit, 1)
+                ToggleRowView(graphVariable, viewModel.appSettingsStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
             } else {
                 val selectedValue = selectedValue.y.toDouble()
                 val value = when (graphVariable.type) {
@@ -69,7 +69,7 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifi
                     else -> selectedValue.kWh(1)
                 }
 
-                ToggleRowView(graphVariable, viewModel.themeStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
+                ToggleRowView(graphVariable, viewModel.appSettingsStream, { viewModel.toggleVisibility(it) }, title, description, value, null)
             }
         }
     }
@@ -86,7 +86,7 @@ fun StatsGraphVariableTogglesViewPreview() {
             MutableStateFlow(StatsDisplayMode.Day(LocalDate.now())),
             FakeConfigManager(),
             DemoNetworking(),
-            themeStream = MutableStateFlow(AppSettings.demo())
+            appSettingsStream = MutableStateFlow(AppSettings.demo())
         ) { _, _ -> null }
     )
 }

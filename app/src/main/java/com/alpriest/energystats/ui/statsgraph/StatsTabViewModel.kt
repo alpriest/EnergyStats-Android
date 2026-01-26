@@ -55,7 +55,7 @@ class StatsTabViewModel(
     val displayModeStream: MutableStateFlow<StatsDisplayMode>,
     val configManager: ConfigManaging,
     private val networking: Networking,
-    val themeStream: StateFlow<AppSettings>,
+    val appSettingsStream: StateFlow<AppSettings>,
     val onWriteTempFile: (String, String) -> Uri?
 ) : AndroidViewModel(application), ExportProviding, AlertDialogMessageProviding {
     val graphVariablesStream = MutableStateFlow<List<StatsGraphVariable>>(listOf())
@@ -96,7 +96,7 @@ class StatsTabViewModel(
         }
 
         viewModelScope.launch {
-            themeStream.collect {
+            appSettingsStream.collect {
                 configManager.currentDevice.value?.let {
                     updateGraphVariables(it)
                 }
