@@ -1,11 +1,15 @@
 package com.alpriest.energystats.shared.models.network
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class OpenReportResponse(
     val variable: String,
     val unit: String,
     val values: List<OpenReportResponseData>
 )
 
+@Serializable
 data class OpenReportResponseData(
     val index: Int,
     val value: Double

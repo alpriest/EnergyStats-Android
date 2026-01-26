@@ -1,5 +1,8 @@
 package com.alpriest.energystats.shared.models.network
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class BatterySOCResponse(
     val minSocOnGrid: Int,
     val minSoc: Int
@@ -8,4 +11,3 @@ data class BatterySOCResponse(
         return minSocOnGrid.toDouble() / 100.0
     }
 }
-

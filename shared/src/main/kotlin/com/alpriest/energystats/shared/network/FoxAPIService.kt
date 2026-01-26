@@ -196,8 +196,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .url(URLs.getOpenReportData())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type
-        val response: NetworkTuple<NetworkResponse<List<OpenReportResponse>>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<List<OpenReportResponse>>> = fetchJSON(request)
 
         return response.item.result ?: throw MissingDataException()
     }
@@ -205,8 +204,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
         val request = Request.Builder().url(URLs.getOpenBatterySOC(deviceSN)).build()
 
-        val type = object : TypeToken<NetworkResponse<BatterySOCResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatterySOCResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<BatterySOCResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 
@@ -447,8 +445,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     private suspend fun executeWithoutResponse(request: Request) {
-        val type = object : TypeToken<NetworkResponse<String>>() {}.type
-        fetchGSON<NetworkResponse<String>>(request, type)
+        fetchJSON<NetworkResponse<String>>(request)
     }
 
     private suspend fun <T : NetworkResponseInterface> fetchGSON(
