@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.network
 
+import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.ApiVariableArray
 import com.alpriest.energystats.shared.models.network.DataLoggerStatus
@@ -83,3 +84,29 @@ class DataLoggerStatusDeserializer : JsonDeserializer<DataLoggerStatus> {
 //        return OpenRealQueryResponse(time, deviceSN, values)
 //    }
 //}
+
+class ParameterGroupDeserializer : JsonDeserializer<ParameterGroup> {
+    override fun deserialize(
+        json: JsonElement,
+        typeOfT: Type,
+        context: JsonDeserializationContext
+    ): ParameterGroup {
+        val obj = json.asJsonObject
+
+        val id = obj["id"]?.asString ?: ""
+        val title = obj["title"]?.asString ?: ""
+
+        val names: List<String> =
+            obj["parameterNames"]
+                ?.takeIf { it.isJsonArray }
+                ?.asJsonArray
+                ?.mapNotNull { it.takeIf(JsonElement::isJsonPrimitive)?.asString }
+                ?: emptyList()
+
+        return ParameterGroup(
+            id = id,
+            title = title,
+            parameterNames = names
+        )
+    }
+}

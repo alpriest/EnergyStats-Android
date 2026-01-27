@@ -24,6 +24,7 @@ import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.WidgetTapAction
+import com.alpriest.energystats.shared.network.ParameterGroupDeserializer
 import com.alpriest.energystats.ui.summary.MonthYear
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.google.gson.Gson
@@ -34,7 +35,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-interface StoredConfigManaging: StoredConfig {
+interface StoredConfigManaging : StoredConfig {
     fun clearDisplaySettings()
     fun clearDeviceSettings()
 }
@@ -428,12 +429,17 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
     override var parameterGroups: List<ParameterGroup>
         get() {
             var data = sharedPreferences.getString(SharedPreferenceDisplayKey.PARAMETER_GROUPS.name, null)
+            val gson = GsonBuilder()
+                .registerTypeAdapter(
+                    ParameterGroupDeserializer::class.java, ParameterGroupDeserializer()
+                ).create()
+
             if (data == null) {
-                data = Gson().toJson(ParameterGroup.defaults)
+                data = gson.toJson(ParameterGroup.defaults)
                 parameterGroups = ParameterGroup.defaults
             }
 
-            return Gson().fromJson(data, object : TypeToken<List<ParameterGroup>>() {}.type)
+            return gson.fromJson(data, object : TypeToken<List<ParameterGroup>>() {}.type)
         }
         set(value) {
             sharedPreferences.edit {
@@ -684,7 +690,12 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         }
 
     override var batteryTemperatureDisplayMode: BatteryTemperatureDisplayMode
-        get() = BatteryTemperatureDisplayMode.fromInt(sharedPreferences.getInt(SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, BatteryTemperatureDisplayMode.Automatic.value))
+        get() = BatteryTemperatureDisplayMode.fromInt(
+            sharedPreferences.getInt(
+                SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name,
+                BatteryTemperatureDisplayMode.Automatic.value
+            )
+        )
         set(value) {
             sharedPreferences.edit {
                 putInt(SharedPreferenceDisplayKey.BATTERY_TEMPERATURE_DISPLAY_MODE.name, value.value)
