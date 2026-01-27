@@ -108,6 +108,7 @@ class SolarForecastViewModel(
 
         } catch (ex: Exception) {
             loadStateStream.value = LoadState.Error(ex, context.getString(R.string.unknown_error))
+            solarForecastProvider().clearCache()
         }
     }
 

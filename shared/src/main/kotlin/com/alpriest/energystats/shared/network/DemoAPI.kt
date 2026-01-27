@@ -307,9 +307,9 @@ class DemoAPI : FoxAPIServicing {
     private fun makeGson(): Gson {
         return GsonBuilder()
             .registerTypeAdapter(ApiVariableArray::class.java, OpenApiVariableDeserializer())
-            .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
+//            .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
             .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
-            .registerTypeAdapter(OpenRealQueryResponseDeserializer::class.java, OpenRealQueryResponseDeserializer())
+//            .registerTypeAdapter(OpenRealQueryResponseDeserializer::class.java, OpenRealQueryResponseDeserializer())
             .create()
     }
 }

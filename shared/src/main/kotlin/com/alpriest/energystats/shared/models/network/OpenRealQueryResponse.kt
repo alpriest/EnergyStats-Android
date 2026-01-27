@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.models.network
 
+import OpenRealQueryResponseDeserializer
 import kotlinx.serialization.Serializable
 
 data class OpenRealQueryRequest(
@@ -7,7 +8,7 @@ data class OpenRealQueryRequest(
     val variables: List<String>
 )
 
-@Serializable
+@Serializable(with = OpenRealQueryResponseDeserializer::class)
 data class OpenRealQueryResponse(
     val time: String,
     val deviceSN: String,
