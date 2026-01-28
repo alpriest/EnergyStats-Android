@@ -3,10 +3,7 @@ package com.alpriest.energystats
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,7 +21,6 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 fun MainAppView(appContainer: AppContainer) {
     val theme = appContainer.configManager.appSettingsStream.collectAsStateWithLifecycle()
     val loginState = appContainer.userManager.loggedInState.collectAsStateWithLifecycle()
-    var showingApiKey by remember { mutableStateOf(false) }
     val dependencies = remember {
         TabbedViewDependencies(
             configManager = appContainer.configManager,
@@ -55,10 +51,9 @@ fun MainAppView(appContainer: AppContainer) {
 
                 is LoggedOut ->
                     WelcomeView(
-                        showingApiKey,
                         appContainer.userManager,
                         appSettingsStream = appContainer.configManager.appSettingsStream
-                    ) { showingApiKey = !showingApiKey }
+                    )
 
                 is LoggingIn -> LoadingView(stringResource(R.string.logging_in), stringResource(R.string.still_logging_in))
             }

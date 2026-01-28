@@ -23,6 +23,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -48,13 +51,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun WelcomeView(
-    showingApiKey: Boolean,
     userManager: UserManaging,
-    appSettingsStream: StateFlow<AppSettings>,
-    onClick: () -> Unit
+    appSettingsStream: StateFlow<AppSettings>
 ) {
     val maxHeight: Dp = if (isLandscape()) 200.dp else 800.dp
     val scrollState = rememberScrollState()
+    var showingApiKeyEntry by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = CenterHorizontally,
@@ -63,11 +65,11 @@ fun WelcomeView(
             .verticalScroll(scrollState)
     ) {
         WelcomeLogoView(
-            showingApiKey,
+            showingApiKeyEntry,
             modifier = Modifier.heightIn(100.dp, maxHeight)
         )
 
-        if (showingApiKey) {
+        if (showingApiKeyEntry) {
             APIKeyLoginView(userManager = userManager).Content(appSettingsStream = appSettingsStream)
         } else {
             Text(
@@ -79,7 +81,7 @@ fun WelcomeView(
             )
 
             ESButton(
-                onClick = onClick,
+                onClick = { showingApiKeyEntry = true },
                 modifier = Modifier
                     .padding(top = 44.dp)
                     .defaultMinSize(minWidth = 200.dp)
@@ -129,6 +131,6 @@ fun isLandscape(): Boolean {
 @Composable
 fun WelcomeViewPreview() {
     EnergyStatsTheme {
-        WelcomeView(false, userManager = FakeUserManager(), MutableStateFlow(AppSettings.demo())) {}
+        WelcomeView(userManager = FakeUserManager(), MutableStateFlow(AppSettings.demo()))
     }
 }
