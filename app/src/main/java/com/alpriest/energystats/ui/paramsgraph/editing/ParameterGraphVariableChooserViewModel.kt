@@ -84,9 +84,11 @@ class ParameterGraphVariableChooserViewModel(val configManager: ConfigManaging, 
 
     private fun determineSelectedGroup() {
         val viewData = viewDataStream.value
+        val sortedViewDataVariables = viewData.variables.filter { it.isSelected }.map { it.type.variable }.sorted()
+
         _viewDataStream.value = viewDataStream.value.copy(
             selectedId = configManager.parameterGroups.firstOrNull { group ->
-                group.parameterNames.sorted() == viewData.variables.filter { it.isSelected }.map { it.type.variable }.sorted()
+                group.parameterNames.sorted() == sortedViewDataVariables
             }?.id
         )
     }

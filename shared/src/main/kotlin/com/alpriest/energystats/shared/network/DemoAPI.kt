@@ -38,6 +38,7 @@ import com.alpriest.energystats.shared.models.network.Time
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.json.Json
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -98,11 +99,11 @@ class DemoAPI : FoxAPIServicing {
             "res/raw/stats_history.json"
         }
 
-        val fileContent = this::class.java.classLoader?.getResource(filename)?.readText()
+        val fileContent = this::class.java.classLoader?.getResource(filename)?.readText() ?: throw InvalidTokenException()
         val formatter = DateTimeFormatter.ofPattern(networkDateFormat)
         val now = LocalDate.now()
 
-        val data: NetworkResponse<List<OpenHistoryResponse>> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<List<OpenHistoryResponse>>>() {}.type)
+        val data: NetworkResponse<List<OpenHistoryResponse>> = json.decodeFromString(fileContent)
 
         return data.result?.map { response ->
             response.copy(datas = response.datas.map { datas ->
@@ -135,10 +136,9 @@ class DemoAPI : FoxAPIServicing {
                 ReportType.month -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
                 ReportType.year -> this::class.java.classLoader?.getResource("res/raw/report_month.json")?.readText()
             }
-        }
+        } ?: throw InvalidTokenException()
 
-        val data: NetworkResponse<List<OpenReportResponse>> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<List<OpenReportResponse>>>() {}.type)
-
+        val data: NetworkResponse<List<OpenReportResponse>> = json.decodeFromString(fileContent)
         return data.result ?: throw InvalidTokenException()
     }
 
@@ -304,12 +304,15 @@ class DemoAPI : FoxAPIServicing {
     override suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest) {
     }
 
+    private val json = Json {
+        ignoreUnknownKeys = true
+        explicitNulls = false
+        encodeDefaults = true
+    }
+
     private fun makeGson(): Gson {
         return GsonBuilder()
             .registerTypeAdapter(ApiVariableArray::class.java, OpenApiVariableDeserializer())
-//            .registerTypeAdapter(OpenReportResponse::class.java, OpenReportResponseDeserializer())
-            .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
-//            .registerTypeAdapter(OpenRealQueryResponseDeserializer::class.java, OpenRealQueryResponseDeserializer())
             .create()
     }
 }
