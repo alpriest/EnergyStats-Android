@@ -431,7 +431,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             var data = sharedPreferences.getString(SharedPreferenceDisplayKey.PARAMETER_GROUPS.name, null)
             val gson = GsonBuilder()
                 .registerTypeAdapter(
-                    ParameterGroupDeserializer::class.java, ParameterGroupDeserializer()
+                    ParameterGroup::class.java, ParameterGroupDeserializer()
                 ).create()
 
             if (data == null) {
