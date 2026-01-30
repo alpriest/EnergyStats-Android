@@ -223,8 +223,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
         val request = Request.Builder().url(URLs.getOpenDeviceDetail(deviceSN)).build()
 
-        val type = object : TypeToken<NetworkResponse<DeviceDetailResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<DeviceDetailResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<DeviceDetailResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 

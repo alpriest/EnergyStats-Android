@@ -33,12 +33,12 @@ fun CalculationBreakdownView(visible: Boolean, calculationBreakdown: Calculation
             Modifier
                 .padding(bottom = 8.dp)
                 .background(
-                    ApproximationBackground(appSettingsStream),
+                    approximationBackground(appSettingsStream),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .border(
                     width = 1.dp,
-                    color = ApproximationHeader(appSettingsStream),
+                    color = approximationHeader(appSettingsStream),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .padding(4.dp)

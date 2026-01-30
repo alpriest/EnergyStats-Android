@@ -53,12 +53,12 @@ import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.InverterTemperatures
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.ui.PowerFlowNegative
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.battery.asTemperature
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.inverter.InverterIconView
 import com.alpriest.energystats.ui.helpers.OptionalView
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle

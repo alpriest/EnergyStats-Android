@@ -26,8 +26,8 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost

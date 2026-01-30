@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.ui.helpers.lineMarkerColor
 import kotlinx.coroutines.flow.StateFlow
 

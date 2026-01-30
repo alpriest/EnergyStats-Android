@@ -11,9 +11,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable

@@ -36,13 +36,13 @@ import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.TotalsViewModel
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.ui.ApproximationHeaderText
 import com.alpriest.energystats.shared.ui.DarkApproximationBackground
 import com.alpriest.energystats.shared.ui.DarkApproximationHeader
 import com.alpriest.energystats.shared.ui.LightApproximationBackground
 import com.alpriest.energystats.shared.ui.LightApproximationHeader
 import com.alpriest.energystats.ui.flow.earnings.EnergyStatsFinancialModel
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -78,12 +78,12 @@ fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modif
         Column(
             Modifier
                 .background(
-                    ApproximationBackground(appSettingsStream).copy(alpha = 0.5f),
+                    approximationBackground(appSettingsStream).copy(alpha = 0.5f),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .border(
                     width = 1.dp,
-                    color = ApproximationHeader(appSettingsStream),
+                    color = approximationHeader(appSettingsStream),
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .fillMaxWidth()
@@ -167,7 +167,7 @@ fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modif
             Modifier
                 .offset(x = 8.dp, y = (-11).dp)
                 .background(
-                    ApproximationHeader(appSettingsStream),
+                    approximationHeader(appSettingsStream),
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 1.dp),
@@ -183,7 +183,7 @@ fun ApproximationView(appSettingsStream: StateFlow<AppSettings>, modifier: Modif
                 .offset(x = (-8).dp, y = (-11).dp)
                 .height(21.dp)
                 .background(
-                    ApproximationHeader(appSettingsStream),
+                    approximationHeader(appSettingsStream),
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 1.dp)
@@ -225,11 +225,11 @@ fun StatsApproximationViewPreview() {
 }
 
 @Composable
-fun ApproximationHeader(appSettingsStream: StateFlow<AppSettings>): Color {
+fun approximationHeader(appSettingsStream: StateFlow<AppSettings>): Color {
     return if (isDarkMode(appSettingsStream)) DarkApproximationHeader else LightApproximationHeader
 }
 
 @Composable
-fun ApproximationBackground(appSettingsStream: StateFlow<AppSettings>): Color {
+fun approximationBackground(appSettingsStream: StateFlow<AppSettings>): Color {
     return if (isDarkMode(appSettingsStream)) DarkApproximationBackground else LightApproximationBackground
 }

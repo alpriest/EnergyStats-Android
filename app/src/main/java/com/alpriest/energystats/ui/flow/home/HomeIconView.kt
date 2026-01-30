@@ -15,9 +15,9 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.ui.HouseView
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.isDarkMode
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable

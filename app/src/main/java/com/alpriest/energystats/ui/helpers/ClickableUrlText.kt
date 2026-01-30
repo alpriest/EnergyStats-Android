@@ -11,9 +11,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.ui.WebLinkColorInDarkTheme
 import com.alpriest.energystats.shared.ui.WebLinkColorInLightTheme
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import kotlinx.coroutines.flow.StateFlow
 
 fun makeUrlAnnotatedString(text: String, linkColor: Color): AnnotatedString {

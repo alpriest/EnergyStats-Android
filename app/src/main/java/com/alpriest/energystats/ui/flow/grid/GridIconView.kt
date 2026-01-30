@@ -27,7 +27,6 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.ui.PylonView
 import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.shared.services.CurrentValues
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.ShimmerText
@@ -37,6 +36,7 @@ import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.isDarkMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

@@ -39,6 +39,7 @@ import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -61,20 +62,6 @@ fun BatteryPowerFlow(
             modifier = Modifier.fillMaxHeight(),
             orientation = LineOrientation.VERTICAL
         )
-    }
-}
-
-@Composable
-fun isDarkMode(appSettingsStream: StateFlow<AppSettings>): Boolean {
-    return isDarkMode(colorTheme = appSettingsStream.collectAsStateWithLifecycle().value.colorTheme)
-}
-
-@Composable
-fun isDarkMode(colorTheme: ColorThemeMode): Boolean {
-    return when (colorTheme) {
-        ColorThemeMode.Light -> false
-        ColorThemeMode.Dark -> true
-        ColorThemeMode.Auto -> isSystemInDarkTheme()
     }
 }
 

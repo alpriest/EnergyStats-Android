@@ -22,7 +22,7 @@ data class ParameterGraphVariable(
 ) : GraphVariable {
     @Composable
     override fun colour(appSettingsStream: StateFlow<AppSettings>): Color {
-        return type.colour()
+        return type.colour(appSettingsStream)
     }
 }
 

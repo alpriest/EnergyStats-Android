@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
@@ -52,7 +51,7 @@ data class ParametersGraphViewState(
 
 data class ParametersGraphViewData(
     val producers: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>,
-    val colors: Map<String, List<Color>>
+    val graphVariables: List<ParameterGraphVariable>,
 )
 
 class ParametersGraphTabViewModel(
@@ -66,7 +65,7 @@ class ParametersGraphTabViewModel(
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
-    private val _viewDataState = MutableStateFlow(ParametersGraphViewData(mapOf(), mapOf()))
+    private val _viewDataState = MutableStateFlow(ParametersGraphViewData(mapOf(), graphVariablesStream.value))
     val viewDataState = _viewDataState.asStateFlow()
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     private var rawData: List<ParametersGraphValue> = listOf()
@@ -273,20 +272,7 @@ class ParametersGraphTabViewModel(
                 }
                 .toMap()
 
-            val chartColorsStream = graphVariablesStream.value
-                .filter { it.isSelected }
-                .groupBy { it.type.unit }
-                .mapValues { (_, varsForUnit) ->
-                    varsForUnit.map { variable ->
-                        if (variable.enabled) {
-                            variable.type.colour()
-                        } else {
-                            Color.Transparent
-                        }
-                    }
-                }
-
-            _viewDataState.value = ParametersGraphViewData(producers, chartColorsStream)
+            _viewDataState.value = ParametersGraphViewData(producers, graphVariablesStream.value)
         }
 
         prepareExport(rawData, displayModeStream.value)

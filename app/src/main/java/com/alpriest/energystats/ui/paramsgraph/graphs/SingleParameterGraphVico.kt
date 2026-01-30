@@ -6,11 +6,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.DateTimeFloatEntry
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariableTogglesView
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
-import com.alpriest.energystats.shared.models.AppSettings
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -20,7 +20,7 @@ fun SingleParameterGraphVico(
     userManager: UserManaging,
     producerAxisScalePairs: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>
 ) {
-    val chartColors = viewModel.viewDataState.collectAsState().value.colors.values.flatten()
+    val chartColors = colorsForVariables(viewModel.viewDataState.collectAsState().value.graphVariables, appSettingsStream).flatMap { it.value }
     val valuesAtTimeState = viewModel.valuesAtTimeStream.collectAsState().value
     val valuesForThisUnit: List<DateTimeFloatEntry> = remember(valuesAtTimeState) {
         valuesAtTimeState.values.flatten()

@@ -9,7 +9,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.ui.flow.battery.isDarkMode
+import com.alpriest.energystats.shared.models.isDarkMode
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable

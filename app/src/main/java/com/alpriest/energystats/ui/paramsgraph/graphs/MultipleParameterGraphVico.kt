@@ -20,7 +20,7 @@ fun MultipleParameterGraphVico(
     userManager: UserManaging,
     producerAxisScalePairs: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>
 ) {
-    val allChartColors = viewModel.viewDataState.collectAsState().value.colors
+    val allChartColors = colorsForVariables(viewModel.viewDataState.collectAsState().value.graphVariables, appSettingsStream)
     val valuesAtTimeState = viewModel.valuesAtTimeStream.collectAsState().value
 
     producerAxisScalePairs.forEach { (unit, producerAxisScale) ->
