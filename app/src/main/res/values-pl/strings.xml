@@ -477,4 +477,6 @@
     <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Minimalne i maksymalne zakresy temperatur są kontrolowane przez oprogramowanie układowe falownika.</string>
     <string name="exported_template_count">Wyeksportowano %1$d szablon(ów).</string>
     <string name="donate_via_paypal">Przekaż darowiznę przez PayPal</string>
+    <string name="fox_restricts_the_number_of_network_requests_you_can_make_within_a_24_hr_period_find_out_how_many_you_have_left">Fox ogranicza liczbę żądań sieciowych, które możesz wykonać w ciągu 24 godzin. Sprawdź, ile ich jeszcze pozostało.</string>
+    <string name="requests_remaining_out_of_total">Pozostało %1$d z %2$d łącznie</string>
 </resources>

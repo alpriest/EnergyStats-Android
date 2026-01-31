@@ -476,4 +476,6 @@
     <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Los rangos de temperatura mínima y máxima están controlados por el firmware de su inversor.</string>
     <string name="exported_template_count">Se exportaron %1$d plantilla(s).</string>
     <string name="donate_via_paypal">Donar a través de PayPal</string>
+    <string name="fox_restricts_the_number_of_network_requests_you_can_make_within_a_24_hr_period_find_out_how_many_you_have_left">Fox limita el número de solicitudes de red que puedes realizar en un período de 24 horas. Descubre cuántas te quedan.</string>
+    <string name="requests_remaining_out_of_total">Quedan %1$d de %2$d en total</string>
 </resources>

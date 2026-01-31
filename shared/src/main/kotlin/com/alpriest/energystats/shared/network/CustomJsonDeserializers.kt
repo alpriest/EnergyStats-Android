@@ -74,7 +74,6 @@ object OpenRealQueryResponseDeserializer : KSerializer<OpenRealQueryResponse> {
             val variable = details["variable"]?.jsonPrimitive?.contentOrNull
                 ?: throw SerializationException("Missing 'variable' in OpenRealQueryResponse.details[$index]")
             val unit = details["unit"]?.jsonPrimitive?.contentOrNull
-                ?: throw SerializationException("Missing 'unit' in OpenRealQueryResponse.details[$index]")
             var value: Double? = null
             var valueString: String? = null
             val jsonElement = details["value"]

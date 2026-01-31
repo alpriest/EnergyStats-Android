@@ -236,24 +236,21 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .url(URLs.getOpenPlantList())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<PagedPowerStationListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PagedPowerStationListResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<PagedPowerStationListResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchPowerStationDetail(stationID: String): PowerStationDetailResponse {
         val request = Request.Builder().url(URLs.getOpenPlantDetail(stationID)).build()
 
-        val type = object : TypeToken<NetworkResponse<PowerStationDetailResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PowerStationDetailResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<PowerStationDetailResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
         val request = Request.Builder().url(URLs.getRequestCount()).build()
 
-        val type = object : TypeToken<NetworkResponse<ApiRequestCountResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ApiRequestCountResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<ApiRequestCountResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 

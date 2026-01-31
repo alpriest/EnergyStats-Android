@@ -476,4 +476,6 @@
     <string name="minimum_and_maximum_temperature_ranges_are_controlled_by_your_inverter_firmware">Die minimalen und maximalen Temperaturbereiche werden von der Firmware Ihres Wechselrichters gesteuert.</string>
     <string name="exported_template_count">%1$d Vorlage(n) exportiert.</string>
     <string name="donate_via_paypal">Über PayPal spenden</string>
+    <string name="fox_restricts_the_number_of_network_requests_you_can_make_within_a_24_hr_period_find_out_how_many_you_have_left">Fox beschränkt die Anzahl der Netzwerkanfragen, die Sie innerhalb eines 24-Stunden-Zeitraums stellen können. Finden Sie heraus, wie viele Ihnen noch zur Verfügung stehen.</string>
+    <string name="requests_remaining_out_of_total">%1$d verbleibend von insgesamt %2$d</string>
 </resources>

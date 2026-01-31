@@ -1,5 +1,8 @@
 package com.alpriest.energystats.ui.settings
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -15,9 +18,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.alpriest.energystats.R
+import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.theme.ESButton
@@ -51,32 +54,36 @@ fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
         })
     }
 
-    SettingsColumn(modifier) {
+    SettingsPage(modifier) {
         SettingsColumnWithChild {
-            ESButton(onClick = {
-                val intent = Chucker.getLaunchIntent(context)
-                context.startActivity(intent)
-            }) {
-                Text(stringResource(R.string.launch_chucker))
-            }
-
             Text(stringResource(R.string.chucker_description))
 
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                ESButton(onClick = {
+                    val intent = Chucker.getLaunchIntent(context)
+                    context.startActivity(intent)
+                }) {
+                    Text(stringResource(R.string.launch_chucker))
+                }
+            }
         }
 
-        SettingsColumnWithChild(modifier) {
-            ESButton(onClick = {
-                scope.launch {
-                    try {
-                        val counts = network.fetchRequestCount()
+        SettingsColumnWithChild {
+            Text(stringResource(R.string.fox_restricts_the_number_of_network_requests_you_can_make_within_a_24_hr_period_find_out_how_many_you_have_left))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                ESButton(onClick = {
+                    scope.launch {
+                        try {
+                            val counts = network.fetchRequestCount()
 
-                        alertDialogMessage.value = "${counts.remaining} remaining out of ${counts.total} total"
-                    } catch (ex: Exception) {
-                        alertDialogMessage.value = "API Timeout"
+                            alertDialogMessage.value = context.getString(R.string.requests_remaining_out_of_total, counts.remaining, counts.total)
+                        } catch (ex: Exception) {
+                            alertDialogMessage.value = "API Timeout"
+                        }
                     }
+                }) {
+                    Text(stringResource(R.string.view_request_count))
                 }
-            }) {
-                Text(stringResource(R.string.view_request_count))
             }
         }
     }
