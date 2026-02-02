@@ -34,7 +34,6 @@ import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberShowOnPress
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
@@ -49,12 +48,9 @@ import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
-import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
-import com.patrykandpatrick.vico.core.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarkerController
-import com.patrykandpatrick.vico.core.common.component.LineComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -85,7 +81,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     LaunchedEffect(statsGraphData) {
         modelProducer.runTransaction {
             if (statsGraphData.any { it.isNotEmpty() }) {
-                columnSeries {
+                lineSeries {
                     statsGraphData.forEach { seriesEntries: List<StatsChartEntry> ->
                         series(
                             x = seriesEntries.map { it.x },
@@ -235,21 +231,19 @@ fun StatsGraphViewPreview() {
 }
 
 @Composable
-private fun rememberStatsLayer(chartColors: List<Color>): ColumnCartesianLayer {
-    val statsColumnProvider = remember(chartColors) {
-        ColumnCartesianLayer.ColumnProvider.series(
+private fun rememberStatsLayer(chartColors: List<Color>): LineCartesianLayer {
+    val lineColumnProvider = remember(chartColors) {
+        LineCartesianLayer.LineProvider.series(
             *chartColors.map { color ->
-                LineComponent(
-                    fill(color),
-                    thicknessDp = 8.0f,
-                    strokeFill = fill(color)
+                LineCartesianLayer.Line(
+                    LineCartesianLayer.LineFill.single(fill(color))
                 )
             }.toTypedArray()
         )
     }
 
-    return rememberColumnCartesianLayer(
-        statsColumnProvider,
+    return rememberLineCartesianLayer(
+        lineColumnProvider,
         verticalAxisPosition = Axis.Position.Vertical.End
     )
 }
