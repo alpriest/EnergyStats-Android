@@ -199,8 +199,8 @@
     <string name="energy_stats_earnings_calculation_description">Shows financial estimates for today only on the flow page, and for the selected time period on the stats page.</string>
     <string name="foxess_earnings_calculation_description">This unit price is managed on the FoxESS cloud.\n\nShows earnings today, this month, this year, and all -time based on a calculation of feed - in kWh * unit price.</string>
     <string name="show_financial_summary">Show estimated earnings</string>
-    <string name="hide_graph">Hide graph</string>
-    <string name="show_graph">Show graph</string>
+    <string name="hide_time_graph">Hide time graph</string>
+    <string name="show_time_graph">Show time graph</string>
     <string name="show_graph_value_descriptions">Show graph value descriptions</string>
     <string name="solar_generated">Solar generated</string>
     <string name="export_income">Export income</string>
@@ -482,4 +482,6 @@ tring>
     <string name="donate_via_paypal">Donate via PayPal</string>
     <string name="fox_restricts_the_number_of_network_requests_you_can_make_within_a_24_hr_period_find_out_how_many_you_have_left">Fox restricts the number of network requests you can make within a 24-hr period. Find out how many you have left.</string>
     <string name="requests_remaining_out_of_total">%1$d remaining out of %2$d total</string>
+    <string name="allow_negative_house_load">Allow negative house load</string>
+    <string name="show_output_energy_on_stats">Show output energy on stats</string>
 </resources>

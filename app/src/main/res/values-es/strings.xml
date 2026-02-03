@@ -197,8 +197,8 @@
     <string name="energy_stats_earnings_calculation_description">Muestra estimaciones financieras solo para hoy en la página de flujo, y para el período de tiempo seleccionado en la página de estadísticas.</string>
     <string name="foxess_earnings_calculation_description">Este precio unitario se gestiona en la nube de FoxESS.</string>
     <string name="show_financial_summary">Mostrar ganancias estimadas</string>
-    <string name="hide_graph">Ocultar gráfico</string>
-    <string name="show_graph">Mostrar gráfico</string>
+    <string name="hide_time_graph">Ocultar gráfico</string>
+    <string name="show_time_graph">Mostrar gráfico</string>
     <string name="show_graph_value_descriptions">Mostrar descripciones de los valores del gráfico</string>
     <string name="solar_generated">Generado por energía solar</string>
     <string name="export_income">Exportar ingresos</string>

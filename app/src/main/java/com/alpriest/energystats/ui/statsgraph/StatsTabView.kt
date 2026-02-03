@@ -90,6 +90,7 @@ class StatsTabView(
         val scrollState = rememberScrollState()
         val context = LocalContext.current
         val graphShowing = viewModel.showingGraphStream.collectAsState().value
+        val energyBreakdownShowing = viewModel.energyGraphShowingState.collectAsState().value
         val showingApproximations = remember { mutableStateOf(false) }
         val loadState = viewModel.uiState.collectAsState().value.state
 
@@ -98,7 +99,8 @@ class StatsTabView(
                 displayModeStream,
                 { navController.navigate(StatsScreen.CustomDateRangeEditor.name) }
             ).Content(
-                graphShowingState = viewModel.showingGraphStream
+                graphShowingState = viewModel.showingGraphStream,
+                energyGraphShowingState = viewModel.energyGraphShowingState
             )
         }, null)
 
@@ -114,29 +116,49 @@ class StatsTabView(
                 .verticalScroll(scrollState)
                 .padding(12.dp)
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                if (graphShowing) {
+            if (graphShowing) {
+                Box(contentAlignment = Alignment.Center) {
                     StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
-                }
 
-                when (loadState) {
-                    is LoadState.Error -> Text(stringResource(R.string.error))
+                    when (loadState) {
+                        is LoadState.Error -> Text(stringResource(R.string.error))
 
-                    is LoadState.Active ->
-                        Box(
-                            modifier = Modifier
-                                .height(200.dp)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            LoadingOverlayView()
-                        }
+                        is LoadState.Active ->
+                            Box(
+                                modifier = Modifier
+                                    .height(200.dp)
+                                    .fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                LoadingOverlayView()
+                            }
 
-                    is LoadState.Inactive -> {}
+                        is LoadState.Inactive -> {}
+                    }
                 }
             }
 
-            EnergyBreakdownGraphView(viewModel)
+            if (energyBreakdownShowing) {
+                Box(contentAlignment = Alignment.Center) {
+                    EnergyBreakdownGraphView(viewModel)
+
+                    when (loadState) {
+                        is LoadState.Error -> Text(stringResource(R.string.error))
+
+                        is LoadState.Active ->
+                            Box(
+                                modifier = Modifier
+                                    .height(200.dp)
+                                    .fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                LoadingOverlayView()
+                            }
+
+                        is LoadState.Inactive -> {}
+                    }
+                }
+            }
 
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp))
 

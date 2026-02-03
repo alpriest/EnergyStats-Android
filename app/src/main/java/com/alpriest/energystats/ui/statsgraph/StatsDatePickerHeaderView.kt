@@ -68,8 +68,7 @@ class StatsDatePickerHeaderViewModelFactory(
 }
 
 class StatsDatePickerHeaderView(
-    private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
-    private val onShowCustomDateRangePicker: () -> Unit
+    private val displayModeStream: MutableStateFlow<StatsDisplayMode>, private val onShowCustomDateRangePicker: () -> Unit
 ) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -77,6 +76,7 @@ class StatsDatePickerHeaderView(
         modifier: Modifier = Modifier,
         viewModel: StatsDatePickerHeaderViewModel = viewModel(factory = StatsDatePickerHeaderViewModelFactory(displayModeStream)),
         graphShowingState: MutableStateFlow<Boolean>,
+        energyGraphShowingState: MutableStateFlow<Boolean>
     ) {
         val range = viewModel.rangeStream.collectAsState().value
         val canIncrease = viewModel.canIncreaseStream.collectAsState().value
@@ -86,13 +86,12 @@ class StatsDatePickerHeaderView(
             DateRangeMenu(
                 viewModel = viewModel,
                 range = range,
-                graphShowingState = graphShowingState,
+                timeGraphShowingState = graphShowingState,
+                energyGraphShowingState = energyGraphShowingState,
                 onShowCustomDateRangePickerChange = onShowCustomDateRangePicker
             )
             Title(
-                viewModel = viewModel,
-                range = range,
-                onShowCustomRangePicker = onShowCustomDateRangePicker
+                viewModel = viewModel, range = range, onShowCustomRangePicker = onShowCustomDateRangePicker
             )
             Spacer(modifier = Modifier.weight(1.0f))
 
@@ -107,24 +106,17 @@ class StatsDatePickerHeaderView(
                     enabled = canDecrease
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ChevronLeft,
-                        contentDescription = "Left",
-                        modifier = Modifier.size(32.dp)
+                        imageVector = Icons.Default.ChevronLeft, contentDescription = "Left", modifier = Modifier.size(32.dp)
                     )
                 }
 
                 ESButton(
                     modifier = Modifier
                         .padding(vertical = 6.dp)
-                        .size(36.dp),
-                    onClick = { viewModel.increase() },
-                    contentPadding = PaddingValues(0.dp),
-                    enabled = canIncrease
+                        .size(36.dp), onClick = { viewModel.increase() }, contentPadding = PaddingValues(0.dp), enabled = canIncrease
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ChevronRight,
-                        contentDescription = "Right",
-                        modifier = Modifier.size(32.dp)
+                        imageVector = Icons.Default.ChevronRight, contentDescription = "Right", modifier = Modifier.size(32.dp)
                     )
                 }
             }
@@ -134,9 +126,7 @@ class StatsDatePickerHeaderView(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Title(
-        viewModel: StatsDatePickerHeaderViewModel,
-        range: DatePickerRange,
-        onShowCustomRangePicker: () -> Unit
+        viewModel: StatsDatePickerHeaderViewModel, range: DatePickerRange, onShowCustomRangePicker: () -> Unit
     ) {
         val month = viewModel.monthStream.collectAsState().value
         val year = viewModel.yearStream.collectAsState().value
@@ -150,8 +140,7 @@ class StatsDatePickerHeaderView(
 
             is DatePickerRange.YEAR -> YearPicker(year, onPrimary = true) { viewModel.yearStream.value = it }
             is DatePickerRange.CUSTOM -> CustomDateRangeTitle(
-                viewModel = viewModel,
-                onChangeClick = onShowCustomRangePicker
+                viewModel = viewModel, onChangeClick = onShowCustomRangePicker
             )
         }
     }
@@ -162,11 +151,13 @@ class StatsDatePickerHeaderView(
 private fun DateRangeMenu(
     viewModel: StatsDatePickerHeaderViewModel,
     range: DatePickerRange,
-    graphShowingState: MutableStateFlow<Boolean>,
+    timeGraphShowingState: MutableStateFlow<Boolean>,
+    energyGraphShowingState: MutableStateFlow<Boolean>,
     onShowCustomDateRangePickerChange: () -> Unit
 ) {
     var showingDropdown by remember { mutableStateOf(false) }
-    val graphShowing = graphShowingState.collectAsState()
+    val timeGraphShowing = timeGraphShowingState.collectAsState()
+    val energyGraphShowing = energyGraphShowingState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -175,22 +166,17 @@ private fun DateRangeMenu(
             .padding(start = 4.dp)
     ) {
         ESButton(
-            onClick = { showingDropdown = true },
-            modifier = Modifier
+            onClick = { showingDropdown = true }, modifier = Modifier
                 .padding(vertical = 4.dp)
-                .size(36.dp),
-            contentPadding = PaddingValues(0.dp)
+                .size(36.dp), contentPadding = PaddingValues(0.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.CalendarMonth,
-                contentDescription = null
+                imageVector = Icons.Default.CalendarMonth, contentDescription = null
             )
         }
 
         DropdownMenu(
-            expanded = showingDropdown,
-            onDismissRequest = { showingDropdown = false }
-        ) {
+            expanded = showingDropdown, onDismissRequest = { showingDropdown = false }) {
             DropdownMenuItem(onClick = {
                 viewModel.rangeStream.value = DatePickerRange.DAY
                 showingDropdown = false
@@ -237,10 +223,19 @@ private fun DateRangeMenu(
 
             HorizontalDivider(thickness = 4.dp)
             DropdownMenuItem(onClick = {
-                graphShowingState.value = !graphShowing.value
+                timeGraphShowingState.value = !timeGraphShowing.value
                 showingDropdown = false
             }, text = {
-                Text(if (graphShowing.value) stringResource(R.string.hide_graph) else stringResource(R.string.show_graph))
+                Text(if (timeGraphShowing.value) stringResource(R.string.hide_time_graph) else stringResource(R.string.show_time_graph))
+            }, trailingIcon = {
+                Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
+            })
+
+            DropdownMenuItem(onClick = {
+                energyGraphShowingState.value = !energyGraphShowing.value
+                showingDropdown = false
+            }, text = {
+                Text(if (energyGraphShowing.value) "Hide energy breakdown" else "Show energy breakdown")
             }, trailingIcon = {
                 Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
             })
@@ -251,8 +246,7 @@ private fun DateRangeMenu(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CustomDateRangeTitle(
-    viewModel: StatsDatePickerHeaderViewModel,
-    onChangeClick: () -> Unit
+    viewModel: StatsDatePickerHeaderViewModel, onChangeClick: () -> Unit
 ) {
     val customStartDateString = viewModel.customStartDateString.collectAsStateWithLifecycle().value
     val customEndDateString = viewModel.customEndDateString.collectAsStateWithLifecycle().value
@@ -262,20 +256,13 @@ private fun CustomDateRangeTitle(
     ) {
         Spacer(Modifier.weight(1.0f))
         Text(
-            customStartDateString,
-            style = MaterialTheme.typography.headlineSmall,
-            color = Color.White
+            customStartDateString, style = MaterialTheme.typography.headlineSmall, color = Color.White
         )
         Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-            contentDescription = null,
-            modifier = Modifier.padding(horizontal = 8.dp),
-            tint = Color.White
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.padding(horizontal = 8.dp), tint = Color.White
         )
         Text(
-            customEndDateString,
-            style = MaterialTheme.typography.headlineSmall,
-            color = Color.White
+            customEndDateString, style = MaterialTheme.typography.headlineSmall, color = Color.White
         )
         Spacer(Modifier.weight(1.0f))
 
@@ -292,6 +279,6 @@ private fun CustomDateRangeTitle(
 @Composable
 fun StatsDatePickerViewPreview() {
     StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now(), CustomDateRangeDisplayUnit.DAYS)), { }).Content(
-        graphShowingState = MutableStateFlow(false)
+        graphShowingState = MutableStateFlow(false), energyGraphShowingState = MutableStateFlow(false)
     )
 }

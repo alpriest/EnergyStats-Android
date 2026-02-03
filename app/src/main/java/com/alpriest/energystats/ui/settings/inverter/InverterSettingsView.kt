@@ -12,14 +12,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
-import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.services.trackScreenView
-import com.alpriest.energystats.shared.models.CT2DisplayMode
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
@@ -44,6 +44,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
     val ct2DisplayModeState = rememberSaveable { mutableStateOf(configManager.ct2DisplayMode) }
     val showInverterConsumptionState = rememberSaveable { mutableStateOf(configManager.showInverterConsumption) }
     val allowNegativeLoadState = rememberSaveable { mutableStateOf(configManager.allowNegativeLoad) }
+    val showOutputEnergyOnStats = rememberSaveable { mutableStateOf(configManager.showOutputEnergyOnStats) }
     val context = LocalContext.current
 
     trackScreenView("Inverter", "InverterSettingsView")
@@ -74,7 +75,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 }
             }
 
-            SettingsColumn(header = stringResource(R.string.display_options),) {
+            SettingsColumn(header = stringResource(R.string.display_options)) {
                 SettingsCheckbox(
                     title = stringResource(R.string.show_inverter_temperatures),
                     state = showInverterTemperaturesState,
@@ -112,9 +113,15 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 )
 
                 SettingsCheckbox(
-                    title = "Allow negative house load",
+                    title = stringResource(R.string.allow_negative_house_load),
                     state = allowNegativeLoadState,
                     onUpdate = { configManager.allowNegativeLoad = it }
+                )
+
+                SettingsCheckbox(
+                    title = stringResource(R.string.show_output_energy_on_stats),
+                    state = showOutputEnergyOnStats,
+                    onUpdate = { configManager.showOutputEnergyOnStats = it }
                 )
             }
 

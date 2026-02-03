@@ -198,8 +198,8 @@
     <string name="energy_stats_earnings_calculation_description">Pokazuje szacunki finansowe tylko na stronie przepływu, a także dla wybranego okresu czasu na stronie statystyk.</string>
     <string name="foxess_earnings_calculation_description">Ta cena jednostkowa jest zarządzana w chmurze FoxESS.</string>
     <string name="show_financial_summary">Pokaż szacowane zyski</string>
-    <string name="hide_graph">Ukryj wykres</string>
-    <string name="show_graph">Pokaż wykres</string>
+    <string name="hide_time_graph">Ukryj wykres</string>
+    <string name="show_time_graph">Pokaż wykres</string>
     <string name="show_graph_value_descriptions">Pokaż opisy wartości na wykresie</string>
     <string name="solar_generated">Generowany przez energię słoneczną</string>
     <string name="export_income">Eksportuj dochody</string>

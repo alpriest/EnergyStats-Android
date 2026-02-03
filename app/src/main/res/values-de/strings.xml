@@ -197,8 +197,8 @@
     <string name="energy_stats_earnings_calculation_description">Zeigt Finanzschätzungen nur für heute auf der Leistungsfluss-Seite und für den ausgewählten Zeitraum auf der Statistik-Seite.</string>
     <string name="foxess_earnings_calculation_description">Dieser Einheitspreis wird in der FoxESS Cloud verwaltet.</string>
     <string name="show_financial_summary">Zeige geschätzten Ertrag</string>
-    <string name="hide_graph">Diagramm ausblenden</string>
-    <string name="show_graph">Diagramm anzeigen</string>
+    <string name="hide_time_graph">Diagramm ausblenden</string>
+    <string name="show_time_graph">Diagramm anzeigen</string>
     <string name="show_graph_value_descriptions">Werte-Beschreibungen im Diagramm anzeigen</string>
     <string name="solar_generated">Solar erzeugt</string>
     <string name="export_income">Exporteinnahmen</string>
