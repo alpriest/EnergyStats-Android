@@ -146,12 +146,14 @@ class StatsTabViewModel(
     private fun updateGraphVariables(device: Device) {
         graphVariablesStream.value = listOf(
             if (device.hasPV) ReportVariable.PvEnergyToTal else null,
-            ReportVariable.Generation,
-            ReportVariable.FeedIn,
             ReportVariable.GridConsumption,
-            if (device.hasBattery) ReportVariable.ChargeEnergyToTal else null,
             if (device.hasBattery) ReportVariable.DischargeEnergyToTal else null,
+
             ReportVariable.Loads,
+            ReportVariable.FeedIn,
+            if (device.hasBattery) ReportVariable.ChargeEnergyToTal else null,
+
+            if (configManager.showOutputEnergyOnStats) ReportVariable.Generation else null,
             if (configManager.showSelfSufficiencyStatsGraphOverlay && configManager.selfSufficiencyEstimateMode != SelfSufficiencyEstimateMode.Off) ReportVariable.SelfSufficiency else null,
             if (configManager.showInverterConsumption) ReportVariable.InverterConsumption else null,
             if (configManager.showBatterySOCOnDailyStats) ReportVariable.BatterySOC else null

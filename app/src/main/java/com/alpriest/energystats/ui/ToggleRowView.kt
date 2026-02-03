@@ -43,7 +43,7 @@ fun <T : GraphVariable> ToggleRowView(
     Row(
         verticalAlignment = Alignment.Top,
         modifier = Modifier
-            .padding(bottom = 5.dp)
+            .padding(vertical = 5.dp)
             .clickable {
                 toggleVisibility(it)
             }

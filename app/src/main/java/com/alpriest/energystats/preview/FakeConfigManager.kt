@@ -98,6 +98,7 @@ class FakeConfigManager : ConfigManaging {
     override var showBatterySOCOnDailyStats: Boolean = false
     override var allowNegativeLoad: Boolean = false
     override fun loginAsDemo() {}
+    override var showOutputEnergyOnStats: Boolean = false
 
     override var devices: List<Device> = listOf(
         Device(

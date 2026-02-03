@@ -641,6 +641,13 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
+    override var showOutputEnergyOnStats: Boolean
+        get() = config.showOutputEnergyOnStats
+        set(value) {
+            config.showOutputEnergyOnStats = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
     override fun loginAsDemo() {
         appSettingsStore.update(AppSettings.demo())
     }

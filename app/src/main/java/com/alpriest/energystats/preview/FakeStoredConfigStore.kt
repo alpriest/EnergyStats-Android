@@ -99,6 +99,6 @@ class FakeStoredConfigStore(
     override var workModes: List<String> = listOf(),
     override var allowNegativeLoad: Boolean = false,
     override var batteryData: BatteryData? = null,
-    override var detectedActiveTemplate: String? = null
-) : StoredConfig {
-}
+    override var detectedActiveTemplate: String? = null,
+    override var showOutputEnergyOnStats: Boolean = false
+) : StoredConfig

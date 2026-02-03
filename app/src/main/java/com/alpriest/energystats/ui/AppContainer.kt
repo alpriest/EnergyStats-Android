@@ -13,6 +13,7 @@ import androidx.core.net.toUri
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.AppSettingsStore
+import com.alpriest.energystats.shared.models.toAppSettings
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
 import com.alpriest.energystats.shared.network.NetworkFacade
@@ -60,52 +61,7 @@ class AppContainer(private val context: Context) {
     val config = SharedPreferencesConfigStore(sharedPreferences)
     var filePathChooser: ActivityResultLauncher<String>? = null
     var filePathChooserCallback: ((Uri) -> Unit)? = null
-    val appSettingsStore: AppSettingsStore = AppSettingsStore(
-        AppSettings(
-            useLargeDisplay = config.useLargeDisplay,
-            useColouredFlowLines = config.useColouredFlowLines,
-            showBatteryTemperature = config.showBatteryTemperature,
-            showBatteryEstimate = config.showBatteryEstimate,
-            decimalPlaces = config.decimalPlaces,
-            showSunnyBackground = config.showSunnyBackground,
-            showUsableBatteryOnly = config.showUsableBatteryOnly,
-            selfSufficiencyEstimateMode = config.selfSufficiencyEstimateMode,
-            showFinancialSummary = config.showFinancialSummary,
-            displayUnit = config.displayUnit,
-            showInverterTemperatures = config.showInverterTemperatures,
-            showInverterIcon = config.showInverterIcon,
-            showHomeTotal = config.showHomeTotal,
-            shouldInvertCT2 = config.shouldInvertCT2,
-            showGridTotals = config.showGridTotals,
-            showInverterTypeNameOnPowerflow = config.showInverterTypeNameOnPowerflow,
-            showInverterStationNameOnPowerflow = config.showInverterStationNameOnPowerflow,
-            showLastUpdateTimestamp = config.showLastUpdateTimestamp,
-            solarRangeDefinitions = config.solarRangeDefinitions,
-            shouldCombineCT2WithPVPower = config.shouldCombineCT2WithPVPower,
-            showGraphValueDescriptions = config.showGraphValueDescriptions,
-            parameterGroups = config.parameterGroups,
-            colorTheme = config.colorTheme,
-            solcastSettings = config.solcastSettings,
-            dataCeiling = config.dataCeiling,
-            totalYieldModel = config.totalYieldModel,
-            showFinancialSummaryOnFlowPage = config.showFinancialSummaryOnFlowPage,
-            separateParameterGraphsByUnit = config.separateParameterGraphsByUnit,
-            currencySymbol = config.currencySymbol,
-            showBatterySOCAsPercentage = config.showBatterySOCAsPercentage,
-            shouldCombineCT2WithLoadsPower = config.shouldCombineCT2WithLoadsPower,
-            powerFlowStrings = config.powerFlowStrings,
-            truncatedYAxisOnParameterGraphs = config.truncatedYAxisOnParameterGraphs,
-            showInverterScheduleQuickLink = config.showInverterScheduleQuickLink,
-            ct2DisplayMode = config.ct2DisplayMode,
-            showStringTotalsAsPercentage = config.showStringTotalsAsPercentage,
-            detectedActiveTemplate = null,
-            showInverterConsumption = config.showInverterConsumption,
-            showBatterySOCOnDailyStats = config.showBatterySOCOnDailyStats,
-            allowNegativeLoad = config.allowNegativeLoad,
-            feedInUnitPrice = config.feedInUnitPrice,
-            gridImportUnitPrice = config.gridImportUnitPrice,
-        )
-    )
+    val appSettingsStore: AppSettingsStore = AppSettingsStore(AppSettings.toAppSettings(config))
 
     val networking: Networking by lazy {
         val chucker = ChuckerInterceptor.Builder(context)

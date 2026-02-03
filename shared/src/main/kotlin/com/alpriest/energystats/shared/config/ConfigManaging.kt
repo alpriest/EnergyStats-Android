@@ -94,6 +94,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var showBatterySOCOnDailyStats: Boolean
     var showStringTotalsAsPercentage: Boolean
     var showGridTotals: Boolean
+    var showOutputEnergyOnStats: Boolean
 }
 
 interface ScheduleTemplateConfigManager {

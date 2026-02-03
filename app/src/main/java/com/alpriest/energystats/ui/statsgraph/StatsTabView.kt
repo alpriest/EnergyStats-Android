@@ -136,6 +136,8 @@ class StatsTabView(
                 }
             }
 
+            EnergyBreakdownGraphView(viewModel)
+
             StatsGraphVariableTogglesView(viewModel = viewModel, modifier = Modifier.padding(bottom = 44.dp, top = 6.dp))
 
             viewModel.approximationsViewModelStream.collectAsState().value?.let {

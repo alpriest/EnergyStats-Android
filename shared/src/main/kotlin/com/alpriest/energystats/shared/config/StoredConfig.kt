@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDateTime
 
 interface StoredConfig {
+    var showOutputEnergyOnStats: Boolean
     var batteryData: BatteryData?
     var workModes: List<String>
     var fetchSolcastOnAppLaunch: Boolean

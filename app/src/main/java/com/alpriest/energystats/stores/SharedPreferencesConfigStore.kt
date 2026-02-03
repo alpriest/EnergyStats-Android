@@ -109,7 +109,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_INVERTER_CONSUMPTION,
         SHOW_BATTERY_SOC_ON_DAILY_STATS,
         INVERTER_WORK_MODES,
-        ALLOW_NEGATIVE_LOADS
+        ALLOW_NEGATIVE_LOADS,
+        SHOW_OUTPUT_ENERGY_ON_STATS
     }
 
     // Local in-memory only
@@ -788,6 +789,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceDisplayKey.ALLOW_NEGATIVE_LOADS.name, value)
+            }
+        }
+
+    override var showOutputEnergyOnStats: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_OUTPUT_ENERGY_ON_STATS.name, false)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.SHOW_OUTPUT_ENERGY_ON_STATS.name, value)
             }
         }
 }
