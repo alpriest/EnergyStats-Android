@@ -142,20 +142,22 @@ class StatsTabView(
                 Box(contentAlignment = Alignment.Center) {
                     EnergyBreakdownGraphView(viewModel)
 
-                    when (loadState) {
-                        is LoadState.Error -> Text(stringResource(R.string.error))
+                    if (!graphShowing) {
+                        when (loadState) {
+                            is LoadState.Error -> Text(stringResource(R.string.error))
 
-                        is LoadState.Active ->
-                            Box(
-                                modifier = Modifier
-                                    .height(200.dp)
-                                    .fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                LoadingOverlayView()
-                            }
+                            is LoadState.Active ->
+                                Box(
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    LoadingOverlayView()
+                                }
 
-                        is LoadState.Inactive -> {}
+                            is LoadState.Inactive -> {}
+                        }
                     }
                 }
             }

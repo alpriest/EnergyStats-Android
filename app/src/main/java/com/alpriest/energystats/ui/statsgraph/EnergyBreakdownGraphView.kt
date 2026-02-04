@@ -3,10 +3,10 @@ package com.alpriest.energystats.ui.statsgraph
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.models.colour
 import com.alpriest.energystats.shared.helpers.kW
-import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
@@ -25,7 +25,6 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.core.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.core.common.component.LineComponent
-import kotlinx.coroutines.flow.StateFlow
 
 enum class EnergyBreakdownType {
     Inputs,
@@ -62,7 +61,7 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberVicoScrollState(scrollEnabled = false)
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = Zoom.Content)
-    val chartColors = (EnergyBreakdownType.Inputs.types + EnergyBreakdownType.Outputs.types).map { it }
+    val chartColors = (EnergyBreakdownType.Inputs.types + EnergyBreakdownType.Outputs.types).map { it.colour(appSettingsStream) }
     val totals = mutableMapOf<EnergyBreakdownType, Double>()
 
     LaunchedEffect(totalsStream) {
@@ -86,7 +85,7 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
     if (totalsStream.isNotEmpty()) {
         CartesianChartHost(
             chart = rememberCartesianChart(
-                rememberColumnsLayer(chartColors, appSettingsStream),
+                rememberColumnsLayer(chartColors),
                 bottomAxis = HorizontalAxis.rememberBottom(
                     guideline = null,
                     valueFormatter = EnergyBreakdownBottomAxisValueFormatter(totals)
@@ -119,11 +118,10 @@ private class EnergyBreakdownBottomAxisValueFormatter(private val totals: Mutabl
 }
 
 @Composable
-private fun rememberColumnsLayer(chartColors: List<ReportVariable>, appSettingsStream: StateFlow<AppSettings>): ColumnCartesianLayer {
-    val colors2 = chartColors.map { it.colour(appSettingsStream) }
+private fun rememberColumnsLayer(chartColors: List<Color>): ColumnCartesianLayer {
     val lineColumnProvider = remember(chartColors) {
         ColumnCartesianLayer.ColumnProvider.series(
-            *colors2.map { color ->
+            *chartColors.map { color ->
                 LineComponent(
                     fill(color),
                     thicknessDp = 25.0f,
