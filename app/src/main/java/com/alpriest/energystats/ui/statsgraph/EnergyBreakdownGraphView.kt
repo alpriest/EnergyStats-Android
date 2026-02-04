@@ -9,7 +9,9 @@ import com.alpriest.energystats.models.colour
 import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.stacked
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
@@ -20,6 +22,7 @@ import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.core.cartesian.Zoom
 import com.patrykandpatrick.vico.core.cartesian.axis.Axis
 import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
@@ -86,6 +89,9 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
         CartesianChartHost(
             chart = rememberCartesianChart(
                 rememberColumnsLayer(chartColors),
+                endAxis = VerticalAxis.rememberEnd(
+                    guideline = rememberAxisGuidelineComponent()
+                ),
                 bottomAxis = HorizontalAxis.rememberBottom(
                     guideline = null,
                     valueFormatter = EnergyBreakdownBottomAxisValueFormatter(totals)
