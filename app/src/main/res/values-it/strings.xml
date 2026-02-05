@@ -479,4 +479,6 @@
     <string name="donate_via_paypal">Dona tramite PayPal</string>
     <string name="fox_restricts_the_number_of_network_requests_you_can_make_within_a_24_hr_period_find_out_how_many_you_have_left">Fox limita il numero di richieste di rete che puoi effettuare nell’arco di 24 ore. Scopri quante te ne restano.</string>
     <string name="requests_remaining_out_of_total">%1$d rimanenti su %2$d totali</string>
+    <string name="allow_negative_house_load">Consenti carico domestico negativo</string>
+    <string name="show_output_energy_on_stats">Mostra l’energia in uscita nelle statistiche</string>
 </resources>

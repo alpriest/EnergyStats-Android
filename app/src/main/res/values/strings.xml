@@ -206,7 +206,6 @@
     <string name="export_income">Export income</string>
     <string name="grid_import_avoided">Grid import avoided</string>
     <string name="total_benefit">Total benefit</string>
-tring>
     <string name="export_save_to_a_local_file">Save to a local file</string>
     <string name="export_share_or_open_with_another_app">Share or open with another app</string>
     <string name="choose_export_method">Choose export method</string>
@@ -484,4 +483,6 @@ tring>
     <string name="requests_remaining_out_of_total">%1$d remaining out of %2$d total</string>
     <string name="allow_negative_house_load">Allow negative house load</string>
     <string name="show_output_energy_on_stats">Show output energy on stats</string>
+    <string name="energy_breakdown_sources">Sources %1$s</string>
+    <string name="energy_breakdown_uses">Uses %1$s</string>
 </resources>

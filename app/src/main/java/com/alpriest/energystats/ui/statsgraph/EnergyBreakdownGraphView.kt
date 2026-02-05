@@ -1,13 +1,18 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.alpriest.energystats.R
 import com.alpriest.energystats.models.colour
 import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.ui.helpers.lightenColor
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
@@ -28,15 +33,16 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.core.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.core.common.component.LineComponent
+import com.patrykandpatrick.vico.core.common.shader.ShaderProvider
 
 enum class EnergyBreakdownType {
     Inputs,
     Outputs;
 
-    fun title(value: Double): String {
+    fun title(context: Context, value: Double): String {
         return when (this) {
-            Inputs -> "Energy Sources ${value.kW(1)}"
-            Outputs -> "Energy Uses ${value.kW(1)}"
+            Inputs -> context.getString(R.string.energy_breakdown_sources, value.kW(1))
+            Outputs -> context.getString(R.string.energy_breakdown_uses, value.kW(1))
         }
     }
 
@@ -65,7 +71,8 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
     val scrollState = rememberVicoScrollState(scrollEnabled = false)
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = Zoom.Content)
     val chartColors = (EnergyBreakdownType.Inputs.types + EnergyBreakdownType.Outputs.types).map { it.colour(appSettingsStream) }
-    val totals = mutableMapOf<EnergyBreakdownType, Double>()
+    val totals = mutableMapOf<EnergyBreakdownType, String>()
+    val context = LocalContext.current
 
     LaunchedEffect(totalsStream) {
         modelProducer.runTransaction {
@@ -79,8 +86,15 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
                     }
                 }
 
-                totals[EnergyBreakdownType.Inputs] = totalsStream.filter { EnergyBreakdownType.Inputs.types.contains(it.key) }.values.sum()
-                totals[EnergyBreakdownType.Outputs] = totalsStream.filter { EnergyBreakdownType.Outputs.types.contains(it.key) }.values.sum()
+                totals[EnergyBreakdownType.Inputs] = totalsStream.filter { EnergyBreakdownType.Inputs.types.contains(it.key) }
+                    .values
+                    .sum()
+                    .run { EnergyBreakdownType.Inputs.title(context, this) }
+
+                totals[EnergyBreakdownType.Outputs] = totalsStream.filter { EnergyBreakdownType.Outputs.types.contains(it.key) }
+                    .values
+                    .sum()
+                    .run { EnergyBreakdownType.Outputs.title(context, this) }
             }
         }
     }
@@ -106,20 +120,18 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
     }
 }
 
-private class EnergyBreakdownBottomAxisValueFormatter(private val totals: MutableMap<EnergyBreakdownType, Double>) : CartesianValueFormatter {
+private class EnergyBreakdownBottomAxisValueFormatter(private val totals: MutableMap<EnergyBreakdownType, String>) : CartesianValueFormatter {
     override fun format(
         context: CartesianMeasuringContext,
         value: Double,
         verticalAxisPosition: Axis.Position.Vertical?,
     ): CharSequence {
         val type = when (value) {
-            0.0 -> EnergyBreakdownType.Inputs
+            EnergyBreakdownType.Inputs.graphX.first() -> EnergyBreakdownType.Inputs
             else -> EnergyBreakdownType.Outputs
         }
 
-        return totals[type]?.let {
-            return type.title(it)
-        } ?: "loading"
+        return totals[type] ?: "loading"
     }
 }
 
@@ -129,9 +141,17 @@ private fun rememberColumnsLayer(chartColors: List<Color>): ColumnCartesianLayer
         ColumnCartesianLayer.ColumnProvider.series(
             *chartColors.map { color ->
                 LineComponent(
-                    fill(color),
+                    fill(
+                        shaderProvider = ShaderProvider.verticalGradient(
+                            intArrayOf(
+                                lightenColor(color, 0.2f).toArgb(),
+                                color.copy(alpha = 1.0f).toArgb()
+                            ),
+                            positions = floatArrayOf(0.0f, 0.25f),
+                        )
+                    ),
                     thicknessDp = 25.0f,
-                    strokeFill = fill(color)
+                    strokeFill = fill(color.copy(alpha = 0.95f))
                 )
             }.toTypedArray(),
         )
