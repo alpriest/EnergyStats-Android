@@ -480,4 +480,8 @@
     <string name="requests_remaining_out_of_total">%1$d verbleibend von insgesamt %2$d</string>
     <string name="allow_negative_house_load">Negativen Hausverbrauch zulassen</string>
     <string name="show_output_energy_on_stats">Ausgangsenergie in den Statistiken anzeigen</string>
+    <string name="energy_breakdown_sources">Quellen %1$s</string>
+    <string name="energy_breakdown_uses">Verbrauch %1$s</string>
+    <string name="just_added">Gerade hinzugefügt</string>
+    <string name="statsPageEnergyBalanceChartAdded_description">Ein Energiebilanzdiagramm wurde hinzugefügt, das Energiequellen und -verbräuche zeigt. Verwenden Sie die Schaltfläche oben links, um die Sichtbarkeit der Diagramme zu konfigurieren.</string>
 </resources>

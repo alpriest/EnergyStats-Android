@@ -481,4 +481,8 @@
     <string name="requests_remaining_out_of_total">%1$d rimanenti su %2$d totali</string>
     <string name="allow_negative_house_load">Consenti carico domestico negativo</string>
     <string name="show_output_energy_on_stats">Mostra l’energia in uscita nelle statistiche</string>
+    <string name="energy_breakdown_sources">Fonti %1$s</string>
+    <string name="energy_breakdown_uses">Utilizzi %1$s</string>
+    <string name="just_added">Appena aggiunto</string>
+    <string name="statsPageEnergyBalanceChartAdded_description">È stato aggiunto un grafico del bilancio energetico che mostra le fonti e gli utilizzi di energia. Usa il pulsante in alto a sinistra per configurare la visibilità dei grafici.</string>
 </resources>

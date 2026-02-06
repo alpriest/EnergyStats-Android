@@ -485,4 +485,6 @@
     <string name="show_output_energy_on_stats">Show output energy on stats</string>
     <string name="energy_breakdown_sources">Sources %1$s</string>
     <string name="energy_breakdown_uses">Uses %1$s</string>
+    <string name="just_added">Just added</string>
+    <string name="statsPageEnergyBalanceChartAdded_description">An energy balance chart has been added showing energy sources and uses. Use the top-left button to configure the graph visibility.</string>
 </resources>

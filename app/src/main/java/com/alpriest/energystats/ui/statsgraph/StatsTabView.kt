@@ -71,6 +71,22 @@ class StatsTabViewModelFactory(
     }
 }
 
+@Composable
+fun ShowTipIfUnseen(type: TipType) {
+    val context = LocalContext.current
+    val tipKitManager = remember { TipKitManager() }
+
+    LaunchedEffect(Unit) {
+        tipKitManager.checkAndShow(type, context)
+    }
+
+    tipKitManager.activeTip.value?.let { tip ->
+        TipDialog(tip, context) {
+            tipKitManager.dismiss()
+        }
+    }
+}
+
 class StatsTabView(
     private val application: Application,
     private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
@@ -109,6 +125,8 @@ class StatsTabView(
         LaunchedEffect(viewModel.displayModeStream) {
             viewModel.displayModeStream.collectLatest { viewModel.load() }
         }
+
+        ShowTipIfUnseen(TipType.statsPageEnergyBalanceChartAdded)
 
         Column(
             modifier = Modifier

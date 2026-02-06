@@ -481,4 +481,8 @@
     <string name="requests_remaining_out_of_total">Pozostało %1$d z %2$d łącznie</string>
     <string name="allow_negative_house_load">Zezwalaj na ujemne zużycie domu</string>
     <string name="show_output_energy_on_stats">Pokaż energię wyjściową w statystykach</string>
+    <string name="energy_breakdown_sources">Źródła %1$s</string>
+    <string name="energy_breakdown_uses">Zużycie %1$s</string>
+    <string name="just_added">Właśnie dodano</string>
+    <string name="statsPageEnergyBalanceChartAdded_description">Dodano wykres bilansu energetycznego pokazujący źródła i zużycie energii. Użyj przycisku w lewym górnym rogu, aby skonfigurować widoczność wykresów.</string>
 </resources>

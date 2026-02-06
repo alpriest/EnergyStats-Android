@@ -480,4 +480,8 @@
     <string name="requests_remaining_out_of_total">Quedan %1$d de %2$d en total</string>
     <string name="allow_negative_house_load">Permitir carga doméstica negativa</string>
     <string name="show_output_energy_on_stats">Mostrar la energía de salida en las estadísticas</string>
+    <string name="energy_breakdown_sources">Fuentes %1$s</string>
+    <string name="energy_breakdown_uses">Usos %1$s</string>
+    <string name="just_added">Recién añadido</string>
+    <string name="statsPageEnergyBalanceChartAdded_description">Se ha añadido un gráfico de balance energético que muestra las fuentes y los usos de energía. Utiliza el botón de la esquina superior izquierda para configurar la visibilidad de los gráficos.</string>
 </resources>

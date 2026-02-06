@@ -8,22 +8,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.core.content.edit
 import com.alpriest.energystats.R
 
 enum class TipType(val key: String) {
     statsGraphDecimalPlacesFixedTo1(
         "statsGraphDecimalPlacesFixedTo1"
+    ),
+    statsPageEnergyBalanceChartAdded(
+        "statsPageEnergyBalanceChartAdded"
     );
 
     fun title(context: Context): String {
         return when (this) {
             statsGraphDecimalPlacesFixedTo1 -> context.getString(R.string.tipkit_statsGraphDecimalPlacesFixedTo1_title)
+            statsPageEnergyBalanceChartAdded -> context.getString(R.string.just_added)
         }
     }
 
     fun body(context: Context): String {
         return when (this) {
             statsGraphDecimalPlacesFixedTo1 -> context.getString(R.string.tipkit_statsGraphDecimalPlacesFixedTo1_body)
+            statsPageEnergyBalanceChartAdded -> context.getString(R.string.statsPageEnergyBalanceChartAdded_description)
         }
     }
 
@@ -55,7 +61,7 @@ class TipKitManager {
 
     private fun markAsSeen(tip: TipType, context: Context) {
         val prefs = context.getSharedPreferences(tip.sharedPreferenceKey, Context.MODE_PRIVATE)
-        prefs.edit().putBoolean(tip.sharedPreferenceKey, true).apply()
+        prefs.edit { putBoolean(tip.sharedPreferenceKey, true) }
     }
 }
 
