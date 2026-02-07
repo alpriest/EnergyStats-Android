@@ -54,7 +54,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
-        val key = makeKey(currentFunctionName(), deviceSN, variables.sorted().joinToString { it })
+        val key = makeKey(currentFunctionName(), deviceSN, variables.joinToString { it })
 
         val cached = cache[key]
         return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && cached.item is OpenRealQueryResponse) {
@@ -67,7 +67,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        val key = makeKey(currentFunctionName(), deviceSN, variables.sorted().joinToString { it }, start.toString(), end.toString())
+        val key = makeKey(currentFunctionName(), deviceSN, variables.joinToString { it }, start.toString(), end.toString())
 
         val cached = cache[key]
         return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && cached.item is OpenHistoryResponse) {
@@ -94,7 +94,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        val key = makeKey(currentFunctionName(), deviceSN, variables.sorted().joinToString { it.networkTitle() }, queryDate.toString(), reportType.toString())
+        val key = makeKey(currentFunctionName(), deviceSN, variables.joinToString { it.networkTitle() }, queryDate.toString(), reportType.toString())
 
         val cached = cache[key]
         return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && isListOf<OpenReportResponse>(cached.item)) {
