@@ -37,8 +37,8 @@
     <string name="power">potenza</string>
     <string name="energy">energia</string>
     <string name="grid_consumption">"Consumo di rete "</string>
-    <string name="charge">"Carica "</string>
-    <string name="discharge">"Scarica "</string>
+    <string name="charge">Carica della batteria</string>
+    <string name="discharge">Scarica della batteria</string>
     <string name="reportvariable_feedin">Energia esportata alla rete</string>
     <string name="reportvariable_gridconsumption">Energia importata dalla rete</string>
     <string name="reportvariable_generation">Energia fornita dall\'inverter</string>
@@ -96,7 +96,7 @@
     <string name="rawvariable_powerfactor">Rapporto tra la potenza reale in kilowatt (kW) e la potenza apparente in kilovolt-ampere (kVA)</string>
     <string name="groups">Gruppi</string>
     <string name="all">Tutto</string>
-    <string name="loads">"Carichi "</string>
+    <string name="loads">Consumo domestico</string>
     <string name="self_sufficiency_estimates">Stime di autosufficienza</string>
     <string name="reportvariable_loads">Energia utilizzata dalla casa</string>
     <string name="net_self_sufficiency">Si presume che se il tuo consumo netto è positivo, sei autosufficiente.\n\nAutosufficienza = (esportazione - importazione + caricaBatteria - scaricaBatteria) / usoAbitazione</string>

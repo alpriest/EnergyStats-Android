@@ -39,9 +39,9 @@
     <string name="power">Leistung</string>
     <string name="energy">Energie</string>
     <string name="grid_consumption">Netzbezugs-</string>
-    <string name="charge">Lade-</string>
-    <string name="discharge">Entlade-</string>
-    <string name="loads">Last-</string>
+    <string name="charge">Batterieladung-</string>
+    <string name="discharge">Batterieentladung-</string>
+    <string name="loads">Hausverbrauch</string>
     <string name="reportvariable_feedin">Ins Netz eingespeiste Energie</string>
     <string name="reportvariable_gridconsumption">Aus dem Netz entnommene Energie</string>
     <string name="reportvariable_generation">Vom Wechselrichter gelieferte Energie</string>

@@ -39,8 +39,8 @@
     <string name="power">potencia</string>
     <string name="energy">energía</string>
     <string name="grid_consumption">"Consumo de red "</string>
-    <string name="charge">"Carga "</string>
-    <string name="discharge">"Descarga "</string>
+    <string name="charge">Carga de la batería</string>
+    <string name="discharge">Descarga de la batería</string>
     <string name="reportvariable_feedin">Energía exportada a la red</string>
     <string name="reportvariable_gridconsumption">Energía importada de la red</string>
     <string name="reportvariable_generation">Energía suministrada por el inversor</string>
@@ -96,7 +96,7 @@
     <string name="groups">Grupos</string>
     <string name="all">Todo</string>
     <string name="self_sufficiency_estimates">Estimaciones de autosuficiencia</string>
-    <string name="loads">"Cargas "</string>
+    <string name="loads">Consumo del hogar</string>
     <string name="reportvariable_loads">Energía utilizada por la casa</string>
     <string name="net_self_sufficiency">Supone que si tu consumo neto es positivo, entonces eres autosuficiente.\n\nAutosuficiencia = (exportación - importación + cargaDeBatería - descargaDeBatería) / consumoDeCasa</string>
     <string name="absolute_self_sufficiency">Supone que cualquier cantidad tomada de la red reduce tu autosuficiencia.\n\nAutosuficiencia = red / consumoDeCasa</string>
