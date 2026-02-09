@@ -12,7 +12,7 @@ import com.alpriest.energystats.shared.models.TotalsViewModel
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
-import com.alpriest.energystats.shared.network.NetworkFacade
+import com.alpriest.energystats.shared.network.NetworkDemoSwitchingFacade
 import com.alpriest.energystats.shared.network.NetworkService
 import com.alpriest.energystats.shared.network.NetworkValueCleaner
 import com.alpriest.energystats.shared.network.RequestData
@@ -52,7 +52,7 @@ class WearDataRefresher(
             )
             val networking = NetworkService(
                 NetworkValueCleaner(
-                    NetworkFacade(
+                    NetworkDemoSwitchingFacade(
                         api = NetworkCache(api = FoxAPIService(requestData)),
                         isDemoUser = { store.apiKey == "demo" }
                     ),

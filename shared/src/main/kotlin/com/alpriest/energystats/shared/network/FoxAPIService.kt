@@ -550,6 +550,10 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
                 return Result.failure(TryLaterException())
             }
 
+            40402 -> {
+                return Result.failure(APIRequestLimitExhausted())
+            }
+
             30000 -> {
                 return Result.failure(MaintenanceModeException())
             }

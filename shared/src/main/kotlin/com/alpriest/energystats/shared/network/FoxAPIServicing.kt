@@ -37,6 +37,7 @@ class FoxServerError(val errno: Int, message: String?) : Exception("Fox OpenAPI 
 class UnacceptableException: Exception("Unacceptable")
 class ProhibitedActionException: Exception("Schedules")
 class InvalidResponseError(url: HttpUrl, responseCode: Int): Exception("HTTP $responseCode from $url")
+class APIRequestLimitExhausted: Exception("API request limit exhausted")
 
 interface FoxAPIServicing {
     suspend fun fetchErrorMessages()

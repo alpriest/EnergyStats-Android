@@ -27,7 +27,7 @@ import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import kotlinx.coroutines.delay
 import java.util.concurrent.ConcurrentHashMap
 
-class NetworkFacade(private val api: FoxAPIServicing, private val isDemoUser: () -> Boolean) : FoxAPIServicing {
+class NetworkDemoSwitchingFacade(private val api: FoxAPIServicing, private val isDemoUser: () -> Boolean) : FoxAPIServicing {
     private val demoAPI = DemoAPI()
     private val throttler = ThrottleManager()
     private val writeAPIkey = "writeable-method"

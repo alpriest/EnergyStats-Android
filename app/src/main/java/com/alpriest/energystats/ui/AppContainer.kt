@@ -16,7 +16,7 @@ import com.alpriest.energystats.shared.models.AppSettingsStore
 import com.alpriest.energystats.shared.models.toAppSettings
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
-import com.alpriest.energystats.shared.network.NetworkFacade
+import com.alpriest.energystats.shared.network.NetworkDemoSwitchingFacade
 import com.alpriest.energystats.shared.network.NetworkService
 import com.alpriest.energystats.shared.network.NetworkValueCleaner
 import com.alpriest.energystats.shared.network.Networking
@@ -81,7 +81,7 @@ class AppContainer(private val context: Context) {
 
         NetworkService(
             NetworkValueCleaner(
-                NetworkFacade(
+                NetworkDemoSwitchingFacade(
                     api = NetworkCache(api = FoxAPIService(requestData, chucker)),
                     isDemoUser = { config.isDemoUser }
                 ),

@@ -92,11 +92,11 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
     }
 
     override suspend fun fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
-        return api.openapi_fetchRealData(deviceSN, variables)
+        return api.openapi_fetchRealData(deviceSN, variables.sorted())
     }
 
     override suspend fun fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        return api.openapi_fetchHistory(deviceSN, variables, start, end)
+        return api.openapi_fetchHistory(deviceSN, variables.sorted(), start, end)
     }
 
     override suspend fun fetchVariables(): List<ApiVariable> {
@@ -104,7 +104,7 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
     }
 
     override suspend fun fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        return api.openapi_fetchReport(deviceSN, variables, queryDate, reportType)
+        return api.openapi_fetchReport(deviceSN, variables.sorted(), queryDate, reportType)
     }
 
     override suspend fun fetchBatterySettings(deviceSN: String): BatterySOCResponse {
