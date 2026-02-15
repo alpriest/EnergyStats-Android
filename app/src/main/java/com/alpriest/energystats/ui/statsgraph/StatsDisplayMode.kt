@@ -19,7 +19,7 @@ sealed class StatsDisplayMode {
         }
     }
 
-    val segmentCount: Int
+    val xPlotCount: Int
         get() {
             return when (this) {
                 is Day -> 24

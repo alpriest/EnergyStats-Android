@@ -2,7 +2,9 @@ package com.alpriest.energystats.ui.statsgraph
 
 import com.alpriest.energystats.shared.models.ReportVariable
 import java.text.DateFormatSymbols
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 data class StatsGraphValue(val type: ReportVariable, val graphPoint: Int, val graphValue: Double)
@@ -46,3 +48,23 @@ fun periodDescription(graphPoint: Int, displayMode: StatsDisplayMode): String {
         }
     }
 }
+
+private fun StatsGraphValue.isInRangeFor(
+    displayMode: StatsDisplayMode,
+    now: LocalDateTime = LocalDateTime.now(ZoneId.systemDefault())
+): Boolean =
+    when (displayMode) {
+        is StatsDisplayMode.Day -> {
+            if (displayMode.date == now.toLocalDate()) {
+                graphPoint <= now.hour
+            } else true
+        }
+        is StatsDisplayMode.Month -> graphPoint <= now.dayOfMonth
+        is StatsDisplayMode.Year -> graphPoint <= now.monthValue
+        else -> true
+    }
+
+fun List<StatsGraphValue>.filterToNow(
+    displayMode: StatsDisplayMode,
+    now: LocalDateTime = LocalDateTime.now(ZoneId.systemDefault())
+): List<StatsGraphValue> = filter { it.isInRangeFor(displayMode, now) }

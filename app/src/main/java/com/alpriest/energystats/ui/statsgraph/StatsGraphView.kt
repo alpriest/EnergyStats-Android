@@ -79,6 +79,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val isSystemInDarkTheme = isDarkMode(appSettingsStream)
     val axisGuidelineColor = if (isSystemInDarkTheme) Color.DarkGray else Color.LightGray.copy(alpha = 0.5f)
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = Zoom.Content)
+    val maxX = displayMode.xPlotCount
 
     LaunchedEffect(statsGraphData) {
         modelProducer.runTransaction {
@@ -119,6 +120,13 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                     )
                 }
             }
+
+            lineSeries {
+                series(
+                    x = listOf(maxX.toFloat()),
+                    y = listOf(0.0)
+                )
+            }
         }
     }
 
@@ -144,11 +152,13 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             if (selfSufficiencyGraphData.isNotEmpty()) add(selfSufficiencyLayer)
             if (inverterConsumptionData.isNotEmpty()) add(inverterConsumptionLayer)
             if (batterySOCData.isNotEmpty()) add(batterySOCLayer)
+
+            add(rememberLineLayer(color = Color.Transparent, verticalAxisPosition = Axis.Position.Vertical.Start))
         }
 
-        val color = axisLabelColor(isDarkMode(appSettingsStream))
+        val textColor = axisLabelColor(isDarkMode(appSettingsStream))
         val graphLabel = rememberTextComponent(
-            color = color,
+            color = textColor,
             textSize = 10.sp,
         )
 

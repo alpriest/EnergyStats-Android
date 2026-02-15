@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.text.DateFormatSymbols
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.coroutines.cancellation.CancellationException
@@ -307,8 +306,12 @@ class StatsTabViewModel(
     }
 
     private fun refresh() {
+        val displayMode = displayModeStream.value
         val hiddenVariables = graphVariablesStream.value.filter { !it.enabled }.map { it.type }
+        val now = LocalDateTime.now(ZoneId.systemDefault())
+
         val statsEntries = rawData
+            .filterToNow(displayMode, now)
             .filter { it.type != ReportVariable.SelfSufficiency }
             .filter { it.type != ReportVariable.InverterConsumption }
             .filter { it.type != ReportVariable.BatterySOC }
@@ -324,13 +327,8 @@ class StatsTabViewModel(
                 }
             }
 
-        val now = LocalDateTime.now(ZoneId.systemDefault())
-        val displayMode = displayModeStream.value
-
         val selfSufficiencyData = rawDataFiltered(ReportVariable.SelfSufficiency, hiddenVariables, displayMode, now)
-
         val inverterData = rawDataFiltered(ReportVariable.InverterConsumption, hiddenVariables, displayMode, now)
-
         val batterySOCData = rawDataFiltered(ReportVariable.BatterySOC, hiddenVariables, displayMode, now)
 
         _viewDataStateFlow.value = StatsGraphViewData(
@@ -356,21 +354,7 @@ class StatsTabViewModel(
         return rawData
             .filter { it.type == type }
             .filter { !hiddenVariables.contains(it.type) }
-            .filter {
-                when (displayMode) {
-                    is Day -> {
-                        if (displayMode.date == LocalDate.now()) {
-                            it.graphPoint <= now.hour
-                        } else {
-                            true
-                        }
-                    }
-
-                    is StatsDisplayMode.Month -> it.graphPoint <= now.dayOfMonth
-                    is StatsDisplayMode.Year -> it.graphPoint <= now.monthValue
-                    else -> true
-                }
-            }
+            .filterToNow(displayMode, now)
             .map {
                 StatsChartEntry(
                     periodDescription = periodDescription(it.graphPoint, displayModeStream.value),
