@@ -22,10 +22,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -52,11 +51,11 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun WelcomeView(
     userManager: UserManaging,
-    appSettingsStream: StateFlow<AppSettings>
+    appSettingsStream: StateFlow<AppSettings>,
+    showingApiKeyEntry: MutableState<Boolean>
 ) {
     val maxHeight: Dp = if (isLandscape()) 200.dp else 800.dp
     val scrollState = rememberScrollState()
-    var showingApiKeyEntry by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = CenterHorizontally,
@@ -65,11 +64,11 @@ fun WelcomeView(
             .verticalScroll(scrollState)
     ) {
         WelcomeLogoView(
-            showingApiKeyEntry,
+            showingApiKeyEntry.value,
             modifier = Modifier.heightIn(100.dp, maxHeight)
         )
 
-        if (showingApiKeyEntry) {
+        if (showingApiKeyEntry.value) {
             APIKeyLoginView(userManager = userManager).Content(appSettingsStream = appSettingsStream)
         } else {
             Text(
@@ -81,7 +80,7 @@ fun WelcomeView(
             )
 
             ESButton(
-                onClick = { showingApiKeyEntry = true },
+                onClick = { showingApiKeyEntry.value = true },
                 modifier = Modifier
                     .padding(top = 44.dp)
                     .defaultMinSize(minWidth = 200.dp)
@@ -131,6 +130,10 @@ fun isLandscape(): Boolean {
 @Composable
 fun WelcomeViewPreview() {
     EnergyStatsTheme {
-        WelcomeView(userManager = FakeUserManager(), MutableStateFlow(AppSettings.demo()))
+        WelcomeView(
+            userManager = FakeUserManager(),
+            MutableStateFlow(AppSettings.demo()),
+            mutableStateOf(false)
+        )
     }
 }

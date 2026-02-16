@@ -59,8 +59,20 @@ private fun StatsGraphValue.isInRangeFor(
                 graphPoint <= now.hour
             } else true
         }
-        is StatsDisplayMode.Month -> graphPoint <= now.dayOfMonth
-        is StatsDisplayMode.Year -> graphPoint <= now.monthValue
+        is StatsDisplayMode.Month -> {
+            if (displayMode.month == now.monthValue) {
+                graphPoint <= now.dayOfMonth
+            } else {
+                true
+            }
+        }
+        is StatsDisplayMode.Year -> {
+            if (displayMode.year == now.year) {
+                graphPoint <= now.monthValue
+            } else {
+                true
+            }
+        }
         else -> true
     }
 

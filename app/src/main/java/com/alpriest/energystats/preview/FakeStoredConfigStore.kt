@@ -100,5 +100,7 @@ class FakeStoredConfigStore(
     override var allowNegativeLoad: Boolean = false,
     override var batteryData: BatteryData? = null,
     override var detectedActiveTemplate: String? = null,
-    override var showOutputEnergyOnStats: Boolean = false
+    override var showOutputEnergyOnStats: Boolean = false,
+    override var showEnergySourceUsageGraphOnStats: Boolean = true,
+    override var showTimePeriodGraphOnStats: Boolean = true
 ) : StoredConfig

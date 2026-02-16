@@ -3,6 +3,7 @@ package com.alpriest.energystats
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,6 +40,7 @@ fun MainAppView(appContainer: AppContainer) {
             { appContainer.credentialStore.getApiKey() }
         )
     }
+    val showingApiKeyEntry = remember { mutableStateOf(false) }
 
     EnergyStatsTheme(useLargeDisplay = theme.value.useLargeDisplay, colorThemeMode = theme.value.colorTheme) {
         Surface(
@@ -52,7 +54,8 @@ fun MainAppView(appContainer: AppContainer) {
                 is LoggedOut ->
                     WelcomeView(
                         appContainer.userManager,
-                        appSettingsStream = appContainer.configManager.appSettingsStream
+                        appSettingsStream = appContainer.configManager.appSettingsStream,
+                        showingApiKeyEntry = showingApiKeyEntry
                     )
 
                 is LoggingIn -> LoadingView(stringResource(R.string.logging_in), stringResource(R.string.still_logging_in))

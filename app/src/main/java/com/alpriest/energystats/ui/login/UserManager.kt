@@ -29,6 +29,7 @@ interface UserManaging {
 
     suspend fun logout(clearDisplaySettings: Boolean = true, clearDeviceSettings: Boolean = true)
     suspend fun loginDemo()
+
     @UiThread
     suspend fun login(apiKey: String)
 }
@@ -70,27 +71,38 @@ class UserManager(
             configManager.fetchDevices()
             try {
                 configManager.fetchPowerStationDetail()
-            } catch (_: Exception) {}
-            _loggedInState.value = LoginStateHolder(LoggedIn)
-        } catch (e: BadCredentialsException) {
-            logout()
-            if (apiKey.isValidApiKey) {
-                _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.wrong_credentials_try_again)))
-            } else {
-                _loggedInState.value = LoginStateHolder(LoggedOut(
-                    application.getString(R.string.invalid_api_key_format) + "\n\n" +
-                            application.getString(R.string.what_is_api_key_3)
-                ))
+            } catch (_: Exception) {
             }
-        } catch (e: InvalidTokenException) {
-            logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.invalid_token_logout_not_required)))
-        } catch (e: SocketTimeoutException) {
-            logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.foxess_timeout)))
+            _loggedInState.value = LoginStateHolder(LoggedIn)
         } catch (e: Exception) {
-            logout()
-            _loggedInState.value = LoginStateHolder(LoggedOut("Could not login. ${e.localizedMessage}"))
+            try {
+                logout()
+            } catch (e: Exception) {
+            }
+
+            when (e) {
+                is BadCredentialsException -> {
+                    if (apiKey.isValidApiKey) {
+                        _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.wrong_credentials_try_again)))
+                    } else {
+                        _loggedInState.value = LoginStateHolder(
+                            LoggedOut(
+                                application.getString(R.string.invalid_api_key_format) + "\n\n" +
+                                        application.getString(R.string.what_is_api_key_3)
+                            )
+                        )
+                    }
+                }
+
+                is InvalidTokenException ->
+                    _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.invalid_token_logout_not_required)))
+
+                is SocketTimeoutException ->
+                    _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.foxess_timeout)))
+
+                else ->
+                    _loggedInState.value = LoginStateHolder(LoggedOut("Could not login. ${e.localizedMessage}"))
+            }
         }
     }
 

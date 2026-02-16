@@ -91,6 +91,8 @@ interface StoredConfig {
     var shouldCombineCT2WithLoadsPower: Boolean
     var allowNegativeLoad: Boolean
     var detectedActiveTemplate: String?
+    var showTimePeriodGraphOnStats: Boolean
+    var showEnergySourceUsageGraphOnStats: Boolean
 }
 
 interface CurrentStatusCalculatorConfig {

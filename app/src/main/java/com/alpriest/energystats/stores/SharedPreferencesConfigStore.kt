@@ -110,7 +110,9 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_BATTERY_SOC_ON_DAILY_STATS,
         INVERTER_WORK_MODES,
         ALLOW_NEGATIVE_LOADS,
-        SHOW_OUTPUT_ENERGY_ON_STATS
+        SHOW_OUTPUT_ENERGY_ON_STATS,
+        SHOW_TIME_PERIOD_GRAPH_ON_STATS,
+        SHOW_ENERGY_SOURCE_USAGE_GRAPH_ON_STATS
     }
 
     // Local in-memory only
@@ -797,6 +799,22 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceDisplayKey.SHOW_OUTPUT_ENERGY_ON_STATS.name, value)
+            }
+        }
+
+    override var showTimePeriodGraphOnStats: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_TIME_PERIOD_GRAPH_ON_STATS.name, true)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.SHOW_TIME_PERIOD_GRAPH_ON_STATS.name, value)
+            }
+        }
+
+    override var showEnergySourceUsageGraphOnStats: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_ENERGY_SOURCE_USAGE_GRAPH_ON_STATS.name, true)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.SHOW_ENERGY_SOURCE_USAGE_GRAPH_ON_STATS.name, value)
             }
         }
 }

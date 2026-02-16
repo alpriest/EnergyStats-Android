@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     kotlin("plugin.serialization") version "1.9.22"
     id("com.google.firebase.firebase-perf") version "2.0.2" apply false
+    id("com.google.firebase.crashlytics")
 }
 
 val localProperties = Properties()
@@ -95,6 +96,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.inappmessaging.display)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.chucker)
     implementation(libs.rollingnumbers)
     implementation(libs.firebase.perf)

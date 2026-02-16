@@ -117,7 +117,7 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
 
             is StatsDisplayMode.Month -> {
                 val calendar = Calendar.getInstance()
-                val currentMonth = calendar.get(Calendar.MONTH) // Calendar.MONTH is zero-based
+                val currentMonth = calendar.get(Calendar.MONTH) + 1// Calendar.MONTH is zero-based
                 val currentYear = calendar.get(Calendar.YEAR)
                 canIncreaseStream.value = (displayMode.year < currentYear) || (displayMode.month < currentMonth && displayMode.year <= currentYear)
                 canDecreaseStream.value = true

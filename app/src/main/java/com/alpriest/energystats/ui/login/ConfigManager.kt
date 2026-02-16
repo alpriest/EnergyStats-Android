@@ -648,6 +648,20 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
+    override var showTimePeriodGraphOnStats: Boolean
+        get() = config.showTimePeriodGraphOnStats
+        set(value) {
+            config.showTimePeriodGraphOnStats = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
+    override var showEnergySourceUsageGraphOnStats: Boolean
+        get() = config.showEnergySourceUsageGraphOnStats
+        set(value) {
+            config.showEnergySourceUsageGraphOnStats = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
     override fun loginAsDemo() {
         appSettingsStore.update(AppSettings.demo())
     }
@@ -658,7 +672,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             devices.firstOrNull()
         } else {
             // Guard against any bad data where deviceSN might unexpectedly be null at runtime
-            devices.firstOrNull { it.deviceSN != null && it.deviceSN == selectedSn }
+            devices.firstOrNull { it.deviceSN == selectedSn }
                 ?: devices.firstOrNull()
         }
 
