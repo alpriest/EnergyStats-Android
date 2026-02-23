@@ -35,7 +35,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.kWh
@@ -51,7 +50,6 @@ import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.flow.earnings.FinanceAmount
-import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.ESButton
@@ -69,7 +67,6 @@ enum class SummaryScreen {
 
 class SummaryView(
     private val configManager: ConfigManaging,
-    private val userManager: UserManaging,
     private val network: Networking,
     private val solarForecastProvider: () -> SolcastCaching
 ) {
@@ -120,7 +117,7 @@ class SummaryView(
         val latestDataDate = viewModel.latestDataDate.collectAsStateWithLifecycle().value
         val hasPV = viewModel.hasPVStream.collectAsStateWithLifecycle().value
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
             viewModel.load()
@@ -288,7 +285,6 @@ fun SummaryViewPreview() {
 
         SummaryView(
             FakeConfigManager(),
-            FakeUserManager(),
             DemoNetworking()
         ) { DemoSolarForecasting() }
             .NavigableContent(

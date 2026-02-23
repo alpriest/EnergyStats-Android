@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,11 +38,9 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.BottomButtonConfiguration
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
@@ -71,7 +68,6 @@ data class EditPhaseErrorData(
 @Composable
 fun EditPhaseView(
     navController: NavHostController,
-    userManager: UserManaging,
     configManager: ConfigManaging,
     viewModel: EditPhaseViewModel = viewModel(factory = EditPhaseViewModelFactory(navController, configManager)),
     modifier: Modifier
@@ -91,7 +87,7 @@ fun EditPhaseView(
         ),
         content = { innerModifier ->
             SettingsPage(innerModifier) {
-                TimeAndWorkModeView(viewModel, userManager)
+                TimeAndWorkModeView(viewModel)
 
                 MinSOCView(viewModel)
 
@@ -121,7 +117,7 @@ fun EditPhaseView(
 }
 
 @Composable
-fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging) {
+fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
     val startTime = viewModel.startTimeStream.collectAsState().value
     val endTime = viewModel.endTimeStream.collectAsState().value
     val errorText = viewModel.errorStream.collectAsState().value
@@ -134,7 +130,7 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel, userManager: UserManaging
         else -> null
     }
 
-    MonitorAlertDialog(viewModel = viewModel, userManager = userManager)
+    MonitorAlertDialog(viewModel)
 
     SettingsColumnWithChild(
         footer = footerText
@@ -363,7 +359,6 @@ fun EditPhaseViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         EditPhaseView(
             NavHostController(LocalContext.current),
-            FakeUserManager(),
             modifier = Modifier,
             configManager = FakeConfigManager()
         )

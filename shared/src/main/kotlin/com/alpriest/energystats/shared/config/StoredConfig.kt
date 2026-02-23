@@ -93,6 +93,8 @@ interface StoredConfig {
     var detectedActiveTemplate: String?
     var showTimePeriodGraphOnStats: Boolean
     var showEnergySourceUsageGraphOnStats: Boolean
+    var readOnlyPasscode: String
+    var isReadOnly: Boolean
 }
 
 interface CurrentStatusCalculatorConfig {

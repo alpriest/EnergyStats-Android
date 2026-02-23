@@ -105,7 +105,7 @@ class ParametersGraphTabView(
             ParameterGraphHeaderView(viewModel = viewModel, navController = navController, configManager = configManager)
         }, null)
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(viewModel.displayModeStream) {
             viewModel.load()

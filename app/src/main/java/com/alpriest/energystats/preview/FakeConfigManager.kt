@@ -101,6 +101,8 @@ class FakeConfigManager : ConfigManaging {
     override var showOutputEnergyOnStats: Boolean = false
     override var showTimePeriodGraphOnStats: Boolean = true
     override var showEnergySourceUsageGraphOnStats: Boolean = true
+    override var readOnlyPasscode: String = ""
+    override var isReadOnly: Boolean = false
 
     override var devices: List<Device> = listOf(
         Device(

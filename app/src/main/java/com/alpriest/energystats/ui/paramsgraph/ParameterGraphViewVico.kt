@@ -14,7 +14,6 @@ import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.axisLabelColor
-import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.paramsgraph.graphs.VariableKey
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
@@ -55,7 +54,6 @@ fun ParameterGraphViewVico(
     viewModel: ParametersGraphTabViewModel,
     appSettingsStream: StateFlow<AppSettings>,
     showYAxisUnit: Boolean,
-    userManager: UserManaging,
     valuesAtTimeStream: List<DateTimeFloatEntry>
 ) {
     val entries = viewModel.entriesStream.collectAsState().value.firstOrNull() ?: listOf()
@@ -69,7 +67,7 @@ fun ParameterGraphViewVico(
     val truncatedYAxisOnParameterGraphs = appSettingsStream.collectAsState().value.truncatedYAxisOnParameterGraphs
     val startOfDay = displayMode.date.atStartOfDay().atZone(ZoneId.systemDefault()).toEpochSecond()
 
-    MonitorAlertDialog(viewModel, userManager)
+    MonitorAlertDialog(viewModel)
 
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {

@@ -662,6 +662,20 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
+    override var isReadOnly: Boolean
+        get() = config.isReadOnly
+        set(value) {
+            config.isReadOnly = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
+    override var readOnlyPasscode: String
+        get() = config.readOnlyPasscode
+        set(value) {
+            config.readOnlyPasscode = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
     override fun loginAsDemo() {
         appSettingsStore.update(AppSettings.demo())
     }

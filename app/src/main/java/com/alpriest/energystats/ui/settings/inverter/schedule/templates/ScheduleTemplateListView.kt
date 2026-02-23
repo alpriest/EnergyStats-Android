@@ -88,7 +88,7 @@ class ScheduleTemplateListView(
         val coroutineScope = rememberCoroutineScope()
         trackScreenView("Templates", "ScheduleTemplateListView")
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
             viewModel.load(context)

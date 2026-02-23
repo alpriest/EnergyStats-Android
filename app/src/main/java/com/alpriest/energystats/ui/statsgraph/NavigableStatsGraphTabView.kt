@@ -52,7 +52,6 @@ class NavigableStatsGraphTabView(
                     onWriteTempFile,
                     filePathChooser,
                     appSettingsStream,
-                    userManager,
                     navController
                 ).Content()
             }

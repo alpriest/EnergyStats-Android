@@ -37,7 +37,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ColorThemeMode
@@ -49,7 +48,6 @@ import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -96,7 +94,6 @@ class StatsTabView(
     private val onWriteTempFile: (String, String) -> Uri?,
     private val filePathChooser: (filename: String, action: (Uri) -> Unit) -> Unit?,
     private val appSettingsStream: StateFlow<AppSettings>,
-    private val userManager: UserManaging,
     private val navController: NavController
 ) {
     @Composable
@@ -120,7 +117,7 @@ class StatsTabView(
             )
         }, null)
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(viewModel.displayModeStream) {
             viewModel.displayModeStream.collectLatest { viewModel.load() }
@@ -237,7 +234,6 @@ fun StatsGraphTabViewPreview() {
             { _, _ -> null },
             { _, _ -> },
             MutableStateFlow(AppSettings.demo()),
-            FakeUserManager(),
             NavController(LocalContext.current)
         ).Content()
     }

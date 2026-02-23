@@ -71,7 +71,6 @@ fun LoadStateParameterGraphVico(
             viewModel = viewModel,
             appSettingsStream = appSettingsStream,
             showYAxisUnit = showYAxisUnit,
-            userManager = userManager,
             valuesAtTimeStream
         )
 

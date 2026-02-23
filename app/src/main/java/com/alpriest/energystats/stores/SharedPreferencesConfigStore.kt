@@ -112,7 +112,9 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         ALLOW_NEGATIVE_LOADS,
         SHOW_OUTPUT_ENERGY_ON_STATS,
         SHOW_TIME_PERIOD_GRAPH_ON_STATS,
-        SHOW_ENERGY_SOURCE_USAGE_GRAPH_ON_STATS
+        SHOW_ENERGY_SOURCE_USAGE_GRAPH_ON_STATS,
+        IS_READ_ONLY,
+        READ_ONLY_PASSCODE
     }
 
     // Local in-memory only
@@ -815,6 +817,22 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceDisplayKey.SHOW_ENERGY_SOURCE_USAGE_GRAPH_ON_STATS.name, value)
+            }
+        }
+
+    override var isReadOnly: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.IS_READ_ONLY.name, false)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.IS_READ_ONLY.name, value)
+            }
+        }
+
+    override var readOnlyPasscode: String
+        get() = sharedPreferences.getString(SharedPreferenceDisplayKey.READ_ONLY_PASSCODE.name, "") ?: ""
+        set(value) {
+            sharedPreferences.edit {
+                putString(SharedPreferenceDisplayKey.READ_ONLY_PASSCODE.name, value)
             }
         }
 }

@@ -60,7 +60,9 @@ fun PasscodeInput(
     ) {
         BasicTextField(
             value = normalised,
-            onValueChange = { onPasscodeChanged(it.filter { c -> c.isDigit() }.take(4)) },
+            onValueChange = {
+                onPasscodeChanged(it.filter { c -> c.isDigit() }.take(4))
+            },
             modifier = Modifier
                 .height(30.dp)
                 .fillMaxWidth()

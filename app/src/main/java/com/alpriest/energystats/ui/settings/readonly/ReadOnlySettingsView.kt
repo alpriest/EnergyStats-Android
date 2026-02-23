@@ -18,10 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -30,16 +27,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReadOnlySettingsView(
-    isReadOnly: Boolean,
-    passcode: String,
-    onPasscodeChanged: (String) -> Unit
+    configManager: ConfigManaging,
+    viewModel: ReadOnlySettingsViewModel = viewModel(factory = ReadOnlySettingsViewModelFactory(configManager))
 ) {
+    val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+
+    MonitorAlertDialog(viewModel)
 
     Column(
         modifier = Modifier
@@ -48,7 +52,7 @@ fun ReadOnlySettingsView(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         AnimatedContent(
-            targetState = isReadOnly,
+            targetState = viewData.isReadOnly,
             transitionSpec = {
                 if (targetState) {
                     slideInHorizontally(animationSpec = tween(250)) { fullWidth -> -fullWidth } + fadeIn(
@@ -84,7 +88,7 @@ fun ReadOnlySettingsView(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (isReadOnly) {
+            if (viewData.isReadOnly) {
                 Text(
                     text = "Enter current passcode",
                     style = MaterialTheme.typography.titleLarge,
@@ -113,8 +117,8 @@ fun ReadOnlySettingsView(
             }
 
             PasscodeInput(
-                passcode = passcode,
-                onPasscodeChanged = onPasscodeChanged,
+                passcode = viewData.passcode,
+                onPasscodeChanged = { viewModel.onPasscodeChanged(it) },
                 focusRequester = focusRequester,
                 onDone = { focusManager.clearFocus() }
             )
@@ -139,12 +143,8 @@ fun ReadOnlySettingsView(
 @Preview(showBackground = true)
 @Composable
 fun ReadOnlySettingsViewPreviewOnly() {
-    var isReadOnly by remember { mutableStateOf(false) }
-    var passcode by remember { mutableStateOf("") }
-
     ReadOnlySettingsView(
-        isReadOnly = isReadOnly,
-        passcode = passcode,
-        onPasscodeChanged = { passcode = it }
+        FakeConfigManager(),
+        ReadOnlySettingsViewModel(FakeConfigManager())
     )
 }

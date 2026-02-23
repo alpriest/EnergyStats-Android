@@ -30,7 +30,6 @@ import coil.compose.AsyncImage
 import com.alpriest.energystats.BuildConfig
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.monthYearString
@@ -38,7 +37,6 @@ import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.SolcastSite
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.ClickableUrlText
-import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
@@ -52,7 +50,6 @@ import com.alpriest.energystats.ui.theme.OutlinedESButton
 class SolcastSettingsView(
     private val navController: NavController,
     private val configManager: ConfigManaging,
-    private val userManager: UserManaging,
     private val solarForecastingProvider: () -> SolcastCaching
 ) {
     @Composable
@@ -69,7 +66,7 @@ class SolcastSettingsView(
         trackScreenView("Solar Prediction", "SolcastSettingsView")
         val fetchSolcastOnAppLaunch = rememberSaveable { mutableStateOf(configManager.fetchSolcastOnAppLaunch) }
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         ContentWithBottomButtonPair(
             navController,
@@ -210,7 +207,6 @@ fun SolcastSettingsViewPreview() {
         SolcastSettingsView(
             navController = NavHostController(LocalContext.current),
             FakeConfigManager(),
-            FakeUserManager(),
             { DemoSolarForecasting() }
         ).Content(modifier = Modifier)
     }

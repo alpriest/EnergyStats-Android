@@ -73,7 +73,7 @@ class BatteryChargeScheduleSettingsView(
         val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
         val coroutineScope = rememberCoroutineScope()
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
             viewModel.load(context)

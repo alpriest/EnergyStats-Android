@@ -142,7 +142,7 @@ class ScheduleSummaryView(
         val supportedError = viewModel.supportedErrorStream.collectAsState().value
         val coroutineScope = rememberCoroutineScope()
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
         trackScreenView("Work Schedule", "ScheduleSummaryView")
 
         LaunchedEffect(null) {

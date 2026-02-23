@@ -48,13 +48,13 @@ class EditScheduleView(
     private val userManager: UserManaging
 ) {
     @Composable
-    fun Content(viewModel: EditScheduleViewModel = viewModel(factory = EditScheduleViewModelFactory(configManager, network, navController)), modifier: Modifier) {
+    fun Content(viewModel: EditScheduleViewModel = viewModel(factory = EditScheduleViewModelFactory(configManager, network, navController))) {
         val schedule = viewModel.scheduleStream.collectAsState().value
         val loadState = viewModel.uiState.collectAsState().value.state
         val coroutineScope = rememberCoroutineScope()
         trackScreenView("Edit Schedule", "EditScheduleView")
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         when (loadState) {
             is LoadState.Active -> LoadingView(loadState)

@@ -24,10 +24,40 @@ class ReadOnlySettingsViewModelFactory(
 
 class ReadOnlySettingsViewModel(
     private val configManager: ConfigManaging
-): ViewModel(), AlertDialogMessageProviding {
+) : ViewModel(), AlertDialogMessageProviding {
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
 
-    private val _viewDataStream = MutableStateFlow(ReadOnlySettingsViewData("", false))
+    private val _viewDataStream = MutableStateFlow(ReadOnlySettingsViewData("", configManager.isReadOnly))
     val viewDataStream: StateFlow<ReadOnlySettingsViewData> = _viewDataStream
 
+    fun onPasscodeChanged(passcode: String) {
+        val viewData = _viewDataStream.value
+        if (passcode.length == 4) {
+            when (viewData.isReadOnly) {
+                true ->
+                    if (passcode == configManager.readOnlyPasscode) {
+                        configManager.isReadOnly = false
+                        _viewDataStream.value = _viewDataStream.value.copy(
+                            isReadOnly = false,
+                            passcode = ""
+                        )
+                        configManager.readOnlyPasscode = ""
+                    } else {
+                        alertDialogMessage.value = MonitorAlertDialogData(null, "Passcode was incorrect. Try again.", {
+                            _viewDataStream.value = _viewDataStream.value.copy(
+                                passcode = ""
+                            )
+                        })
+                    }
+
+                false -> {
+                    configManager.isReadOnly = true
+                    configManager.readOnlyPasscode = passcode
+                    _viewDataStream.value = _viewDataStream.value.copy(passcode = "", isReadOnly = true)
+                }
+            }
+        } else {
+            _viewDataStream.value = _viewDataStream.value.copy(passcode = passcode)
+        }
+    }
 }

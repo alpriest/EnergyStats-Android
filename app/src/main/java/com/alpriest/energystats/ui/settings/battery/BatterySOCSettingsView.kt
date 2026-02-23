@@ -58,7 +58,7 @@ class BatterySOCSettings(
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
             viewModel.load(context)

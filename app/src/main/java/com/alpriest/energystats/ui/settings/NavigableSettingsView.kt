@@ -125,7 +125,7 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.SolcastSolarPrediction.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.solcast_solar_prediction), {}, { navController.popBackStack() })
-            SolcastSettingsView(navController, configManager, userManager, solarForecastingProvider).Content(modifier = Modifier)
+            SolcastSettingsView(navController, configManager, solarForecastingProvider).Content(modifier = Modifier)
         }
 
         composable(SettingsScreen.APIKey.name) {
@@ -196,7 +196,7 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.ReadOnlyModeSettings.name) {
             topBarSettings.value = TopBarSettings(true, "Read-only mode: Off", {}, { navController.popBackStack() })
-            ReadOnlySettingsView(false, "", {})
+            ReadOnlySettingsView(configManager)
         }
     }
 }
@@ -226,12 +226,12 @@ fun NavGraphBuilder.inverterScheduleGraph(
             network,
             navController,
             userManager
-        ).Content(modifier = Modifier)
+        ).Content()
     }
 
     composable(SettingsScreen.EditPhase.name) {
         topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_phase), {}, { navController.popBackStack() })
-        EditPhaseView(navController, userManager, configManager, modifier = Modifier)
+        EditPhaseView(navController, configManager, modifier = Modifier)
     }
 
     composable(SettingsScreen.TemplateList.name) {

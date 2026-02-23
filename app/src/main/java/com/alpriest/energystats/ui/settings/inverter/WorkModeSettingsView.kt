@@ -55,7 +55,7 @@ class WorkModeSettingsView(
         val loadState = viewModel.uiState.collectAsState().value
         val coroutineScope = rememberCoroutineScope()
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
             viewModel.load(context)

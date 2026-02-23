@@ -121,7 +121,7 @@ class PreHomeViewModel(
 
 @Composable
 fun PreHomeView(appContainer: AppContainer, viewModel: PreHomeViewModel) {
-    MonitorAlertDialog(viewModel, appContainer.userManager)
+    MonitorAlertDialog(viewModel)
     val context = LocalContext.current
 
     LaunchedEffect(null) {

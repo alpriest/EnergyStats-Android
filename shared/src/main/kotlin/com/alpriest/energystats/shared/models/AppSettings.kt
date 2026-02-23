@@ -62,7 +62,8 @@ data class AppSettings(
     val allowNegativeLoad: Boolean,
     val gridImportUnitPrice: Double,
     val feedInUnitPrice: Double,
-    val showOutputEnergyOnStats: Boolean
+    val showOutputEnergyOnStats: Boolean,
+    val isReadOnly: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -133,7 +134,8 @@ fun AppSettings.Companion.demo(
     showInverterConsumption: Boolean = false,
     showBatterySOCOnDailyStats: Boolean = false,
     allowNegativeHouseLoad: Boolean = false,
-    showOutputEnergyOnStats: Boolean = false
+    showOutputEnergyOnStats: Boolean = false,
+    isReadOnly: Boolean = false
 ): AppSettings {
     return AppSettings(
         useLargeDisplay = useLargeDisplay,
@@ -178,7 +180,8 @@ fun AppSettings.Companion.demo(
         allowNegativeLoad = allowNegativeHouseLoad,
         gridImportUnitPrice = 0.0,
         feedInUnitPrice = 0.0,
-        showOutputEnergyOnStats = showOutputEnergyOnStats
+        showOutputEnergyOnStats = showOutputEnergyOnStats,
+        isReadOnly = isReadOnly
     )
 }
 
@@ -226,6 +229,7 @@ fun AppSettings.Companion.toAppSettings(config: StoredConfig): AppSettings {
         allowNegativeLoad = config.allowNegativeLoad,
         feedInUnitPrice = config.feedInUnitPrice,
         gridImportUnitPrice = config.gridImportUnitPrice,
-        showOutputEnergyOnStats = config.showOutputEnergyOnStats
+        showOutputEnergyOnStats = config.showOutputEnergyOnStats,
+        isReadOnly = config.isReadOnly
     )
 }

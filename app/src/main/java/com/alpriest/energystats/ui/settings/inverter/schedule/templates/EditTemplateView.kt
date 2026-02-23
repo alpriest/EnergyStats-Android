@@ -67,7 +67,7 @@ class EditTemplateView(
         val loadState = viewModel.uiState.collectAsState().value.state
         val coroutineScope = rememberCoroutineScope()
 
-        MonitorAlertDialog(viewModel, userManager)
+        MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
             viewModel.load()

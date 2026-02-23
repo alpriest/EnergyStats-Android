@@ -17,16 +17,16 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.shared.network.UnacceptableException
 import com.alpriest.energystats.ui.helpers.UnsupportedErrorView
-import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.theme.ESButton
 
 data class MonitorAlertDialogData(
     val ex: Exception?,
-    val message: String?
+    val message: String?,
+    val onDismiss: (() -> Unit)? = null
 )
 
 @Composable
-fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding, userManager: UserManaging) {
+fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding) {
     val message = viewModel.alertDialogMessage.collectAsState().value
 
     message?.let {
@@ -39,6 +39,7 @@ fun MonitorAlertDialog(viewModel: AlertDialogMessageProviding, userManager: User
 
             else -> {
                 AlertDialog(message = it.message ?: "Unknown error", onDismiss = {
+                    message.onDismiss?.invoke()
                     viewModel.resetDialogMessage()
                 })
             }

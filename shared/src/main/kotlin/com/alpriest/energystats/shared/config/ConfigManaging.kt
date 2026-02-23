@@ -97,6 +97,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var showOutputEnergyOnStats: Boolean
     var showTimePeriodGraphOnStats: Boolean
     var showEnergySourceUsageGraphOnStats: Boolean
+    var readOnlyPasscode: String
+    var isReadOnly: Boolean
 }
 
 interface ScheduleTemplateConfigManager {

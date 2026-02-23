@@ -102,5 +102,7 @@ class FakeStoredConfigStore(
     override var detectedActiveTemplate: String? = null,
     override var showOutputEnergyOnStats: Boolean = false,
     override var showEnergySourceUsageGraphOnStats: Boolean = true,
-    override var showTimePeriodGraphOnStats: Boolean = true
+    override var showTimePeriodGraphOnStats: Boolean = true,
+    override var isReadOnly: Boolean = false,
+    override var readOnlyPasscode: String = ""
 ) : StoredConfig
