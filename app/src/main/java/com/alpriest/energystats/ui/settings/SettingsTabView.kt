@@ -78,6 +78,12 @@ fun SettingsTabView(
 
         SettingsColumn {
             InlineSettingsNavButton(
+                title = "Read-only mode",
+                onClick = { navController.navigate(SettingsScreen.ReadOnlyModeSettings.name)  }
+            )
+            HorizontalDivider()
+
+            InlineSettingsNavButton(
                 title = stringResource(R.string.foxess_cloud_status),
                 disclosureIcon = { Icons.Default.OpenInBrowser },
                 onClick = { uriHandler.openUri("https://monitor.foxesscommunity.com/status/foxess") }

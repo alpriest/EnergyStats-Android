@@ -29,5 +29,6 @@ enum class SettingsScreen {
     ConfigurePeakShaving,
     FactoryResetAppSettings,
     ConfigureWorkMode,
-    Contact
+    Contact,
+    ReadOnlyModeSettings
 }

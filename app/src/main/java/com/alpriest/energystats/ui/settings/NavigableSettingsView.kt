@@ -35,6 +35,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryVie
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.EditTemplateView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.ScheduleTemplateListView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
+import com.alpriest.energystats.ui.settings.readonly.ReadOnlySettingsView
 import com.alpriest.energystats.ui.settings.solar.SolarBandingSettingsView
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.SolcastSettingsView
@@ -192,6 +193,11 @@ fun NavigableSettingsView(
         inverterScheduleGraph(navController, topBarSettings, configManager, userManager, network, templateStore)
 
         debugGraph(topBarSettings, network, navController)
+
+        composable(SettingsScreen.ReadOnlyModeSettings.name) {
+            topBarSettings.value = TopBarSettings(true, "Read-only mode: Off", {}, { navController.popBackStack() })
+            ReadOnlySettingsView(false, "", {})
+        }
     }
 }
 
