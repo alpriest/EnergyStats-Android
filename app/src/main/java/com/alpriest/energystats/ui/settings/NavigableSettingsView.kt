@@ -35,6 +35,7 @@ import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryVie
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.EditTemplateView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.ScheduleTemplateListView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
+import com.alpriest.energystats.ui.settings.readonly.ProtectedContent
 import com.alpriest.energystats.ui.settings.readonly.ReadOnlySettingsView
 import com.alpriest.energystats.ui.settings.solar.SolarBandingSettingsView
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
@@ -84,16 +85,20 @@ fun NavigableSettingsView(
         }
         composable(SettingsScreen.BatterySOC.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.battery_soc), {}, { navController.popBackStack() })
-            BatterySOCSettings(configManager = configManager, network = network, navController = navController, userManager = userManager).Content(modifier = Modifier)
+            ProtectedContent(configManager) {
+                BatterySOCSettings(configManager = configManager, network = network, navController = navController, userManager = userManager).Content(modifier = Modifier)
+            }
         }
         composable(SettingsScreen.BatteryChargeSchedule.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.battery_charge_schedule), {}, { navController.popBackStack() })
-            BatteryChargeScheduleSettingsView(
-                configManager = configManager,
-                network = network,
-                navController = navController,
-                userManager = userManager
-            ).Content(modifier = Modifier)
+            ProtectedContent(configManager) {
+                BatteryChargeScheduleSettingsView(
+                    configManager = configManager,
+                    network = network,
+                    navController = navController,
+                    userManager = userManager
+                ).Content(modifier = Modifier)
+            }
         }
         composable(SettingsScreen.Inverter.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.inverter), {}, { navController.popBackStack() })
@@ -130,7 +135,9 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.APIKey.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_api_key), {}, { navController.popBackStack() })
-            ConfigureAPIKeyView(userManager.store, navController, configManager.appSettingsStream, Modifier)
+            ProtectedContent(configManager) {
+                ConfigureAPIKeyView(userManager.store, navController, configManager.appSettingsStream, Modifier)
+            }
         }
 
         composable(SettingsScreen.PowerStation.name) {
@@ -152,17 +159,23 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.ConfigureExportLimit.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(id = SharedR.string.export_limit), {}, { navController.popBackStack() })
-            DeviceSettingItemView(configManager, network, DeviceSettingsItem.ExportLimit, navController).Content(Modifier)
+            ProtectedContent(configManager) {
+                DeviceSettingItemView(configManager, network, DeviceSettingsItem.ExportLimit, navController).Content(Modifier)
+            }
         }
 
         composable(SettingsScreen.ConfigureMaxSoc.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(id = SharedR.string.max_soc), {}, { navController.popBackStack() })
-            DeviceSettingItemView(configManager, network, DeviceSettingsItem.MaxSoc, navController).Content(Modifier)
+            ProtectedContent(configManager) {
+                DeviceSettingItemView(configManager, network, DeviceSettingsItem.MaxSoc, navController).Content(Modifier)
+            }
         }
 
         composable(SettingsScreen.ConfigurePeakShaving.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(id = R.string.peak_shaving), {}, { navController.popBackStack() })
-            PeakShavingSettingsView(configManager, network, navController).Content(Modifier)
+            ProtectedContent(configManager) {
+                PeakShavingSettingsView(configManager, network, navController).Content(Modifier)
+            }
         }
 
         composable(SettingsScreen.FactoryResetAppSettings.name) {
@@ -172,7 +185,9 @@ fun NavigableSettingsView(
 
         composable(SettingsScreen.ConfigureWorkMode.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.work_mode), {}, { navController.popBackStack() })
-            WorkModeSettingsView(network, configManager, navController, userManager).Content()
+            ProtectedContent(configManager) {
+                WorkModeSettingsView(network, configManager, navController, userManager).Content()
+            }
         }
 
         composable(SettingsScreen.Contact.name) {
@@ -181,21 +196,24 @@ fun NavigableSettingsView(
         }
 
         composable(SettingsScreen.BatteryHeatingSchedule.name) {
-            topBarSettings.value = TopBarSettings(true, "Heating schedule", {}, { navController.popBackStack() })
-            BatteryHeatingScheduleSettingsView(
-                configManager = configManager,
-                network = network,
-                navController = navController,
-                userManager = userManager
-            ).Content(modifier = Modifier)
+            topBarSettings.value = TopBarSettings(true, stringResource(R.string.heating_schedule), {}, { navController.popBackStack() })
+            ProtectedContent(configManager) {
+                BatteryHeatingScheduleSettingsView(
+                    configManager = configManager,
+                    network = network,
+                    navController = navController,
+                    userManager = userManager
+                ).Content(modifier = Modifier)
+            }
         }
 
         inverterScheduleGraph(navController, topBarSettings, configManager, userManager, network, templateStore)
 
-        debugGraph(topBarSettings, network, navController)
+        debugGraph(topBarSettings, network, navController, configManager)
 
         composable(SettingsScreen.ReadOnlyModeSettings.name) {
-            topBarSettings.value = TopBarSettings(true, "Read-only mode: Off", {}, { navController.popBackStack() })
+            val mode = if (configManager.isReadOnly) "On" else "Off"
+            topBarSettings.value = TopBarSettings(true, "Read-only mode: $mode", {}, { navController.popBackStack() })
             ReadOnlySettingsView(configManager)
         }
     }
@@ -211,36 +229,48 @@ fun NavGraphBuilder.inverterScheduleGraph(
 ) {
     composable(SettingsScreen.PopupInverterSchedule.name) {
         topBarSettings.value = TopBarSettings(true, stringResource(R.string.manage_schedules), {}, backButtonAction = null)
-        ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+        ProtectedContent(configManager) {
+            ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+        }
     }
 
     composable(SettingsScreen.InverterSchedule.name) {
         topBarSettings.value = TopBarSettings(true, stringResource(R.string.manage_schedules), {}, { navController.popBackStack() })
-        ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+        ProtectedContent(configManager) {
+            ScheduleSummaryView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+        }
     }
 
     composable(SettingsScreen.EditSchedule.name) {
         topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_schedule), {}, { navController.popBackStack() })
-        EditScheduleView(
-            configManager,
-            network,
-            navController,
-            userManager
-        ).Content()
+        ProtectedContent(configManager) {
+            EditScheduleView(
+                configManager,
+                network,
+                navController,
+                userManager
+            ).Content()
+        }
     }
 
     composable(SettingsScreen.EditPhase.name) {
         topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_phase), {}, { navController.popBackStack() })
-        EditPhaseView(navController, configManager, modifier = Modifier)
+        ProtectedContent(configManager) {
+            EditPhaseView(navController, configManager, modifier = Modifier)
+        }
     }
 
     composable(SettingsScreen.TemplateList.name) {
         topBarSettings.value = TopBarSettings(true, stringResource(R.string.templates), {}, { navController.popBackStack() })
-        ScheduleTemplateListView(configManager, templateStore, navController, userManager).Content(modifier = Modifier)
+        ProtectedContent(configManager) {
+            ScheduleTemplateListView(configManager, templateStore, navController, userManager).Content(modifier = Modifier)
+        }
     }
 
     composable(SettingsScreen.EditTemplate.name) {
         topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_template), {}, { navController.popBackStack() })
-        EditTemplateView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+        ProtectedContent(configManager) {
+            EditTemplateView(configManager, network, navController, userManager, templateStore).Content(modifier = Modifier)
+        }
     }
 }

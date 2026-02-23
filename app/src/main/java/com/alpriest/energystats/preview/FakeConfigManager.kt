@@ -159,4 +159,12 @@ class FakeConfigManager : ConfigManaging {
     override fun resetDisplaySettings() {}
 
     override var workModes: List<String> = listOf()
+
+    companion object {
+        fun make(update: (FakeConfigManager) -> Unit): FakeConfigManager {
+            val manager = FakeConfigManager()
+            update(manager)
+            return manager
+        }
+    }
 }

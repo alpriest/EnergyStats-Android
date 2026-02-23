@@ -19,10 +19,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.alpriest.energystats.R
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.AlertDialog
+import com.alpriest.energystats.ui.settings.readonly.ProtectedContent
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.chuckerteam.chucker.api.Chucker
@@ -31,12 +33,15 @@ import kotlinx.coroutines.launch
 fun NavGraphBuilder.debugGraph(
     topBarSettings: MutableState<TopBarSettings>,
     network: Networking,
-    navController: NavHostController
+    navController: NavHostController,
+    configManager: ConfigManaging
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.view_debug_data), {}, { navController.popBackStack() })
-            DebugDataSettingsView(network, Modifier)
+            ProtectedContent(configManager) {
+                DebugDataSettingsView(network, Modifier)
+            }
         }
     }
 }
