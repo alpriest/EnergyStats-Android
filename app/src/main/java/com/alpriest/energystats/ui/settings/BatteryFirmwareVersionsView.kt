@@ -101,7 +101,7 @@ class BatteryFirmwareVersionsView(
 }
 
 class BatteryFirmwareVersionsViewModel(
-    private val config: ConfigManaging,
+    private val configManager: ConfigManaging,
     private val network: Networking
 ) : ViewModel() {
 
@@ -112,7 +112,7 @@ class BatteryFirmwareVersionsViewModel(
     val modules: StateFlow<List<DeviceBatteryModule>> = _modules
 
     fun load() {
-        val selectedDeviceSN = config.selectedDeviceSN ?: return
+        val selectedDeviceSN = configManager.selectedDeviceSN ?: return
         if (_modules.value.isNotEmpty() || _state.value is LoadState.Error) return
 
         _state.value = LoadState.Active.Loading

@@ -30,7 +30,7 @@ class BatteryHeatingScheduleSettingsViewModelFactory(
 
 class BatteryHeatingScheduleSettingsViewModel(
     private val network: Networking,
-    private val config: ConfigManaging
+    private val configManager: ConfigManaging
 ) : ViewModel(), AlertDialogMessageProviding {
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
@@ -71,7 +71,7 @@ class BatteryHeatingScheduleSettingsViewModel(
         uiState.value = UiLoadState(LoadState.Active.Loading)
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
                 try {
@@ -155,7 +155,7 @@ class BatteryHeatingScheduleSettingsViewModel(
         val viewData = viewDataStream.value
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
                 try {

@@ -172,7 +172,7 @@ class WatchSyncManager() {
         }
     }
 
-    suspend fun sendWatchConfigData(context: Context, apiKey: String, config: ConfigManaging) {
+    suspend fun sendWatchConfigData(context: Context, apiKey: String, configManager: ConfigManaging) {
         val dataClient = Wearable.getDataClient(context)
 
         if (!WearableApiAvailability.isAvailable(dataClient)) {
@@ -180,7 +180,7 @@ class WatchSyncManager() {
         }
 
         val putDataMapRequest = PutDataMapRequest.create(CREDS_PATH)
-        addConfig(putDataMapRequest, apiKey, config)
+        addConfig(putDataMapRequest, apiKey, configManager)
         val putReq = putDataMapRequest.asPutDataRequest().setUrgent()
 
         try {

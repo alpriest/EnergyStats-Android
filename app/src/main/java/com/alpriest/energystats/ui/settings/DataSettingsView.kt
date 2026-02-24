@@ -22,10 +22,10 @@ import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun DataSettingsView(config: ConfigManaging, modifier: Modifier) {
-    val displayUnitState = rememberSaveable { mutableStateOf(config.displayUnit) }
-    val dataCeilingState = rememberSaveable { mutableStateOf(config.dataCeiling) }
-    val useTraditionalLoadFormulaState = rememberSaveable { mutableStateOf(config.useTraditionalLoadFormula) }
+fun DataSettingsView(configManager: ConfigManaging, modifier: Modifier) {
+    val displayUnitState = rememberSaveable { mutableStateOf(configManager.displayUnit) }
+    val dataCeilingState = rememberSaveable { mutableStateOf(configManager.dataCeiling) }
+    val useTraditionalLoadFormulaState = rememberSaveable { mutableStateOf(configManager.useTraditionalLoadFormula) }
     val context = LocalContext.current
     trackScreenView("Data", "DataSettingsView")
 
@@ -45,7 +45,7 @@ fun DataSettingsView(config: ConfigManaging, modifier: Modifier) {
                         color = colorScheme.primary
                     ) {
                         displayUnitState.value = items[it]
-                        config.displayUnit = items[it]
+                        configManager.displayUnit = items[it]
                     }
                 },
                 footer = buildAnnotatedString {
@@ -53,13 +53,13 @@ fun DataSettingsView(config: ConfigManaging, modifier: Modifier) {
                         DisplayUnit.Kilowatts -> append(
                             stringResource(
                                 R.string.display_unit_kilowatts_description,
-                                3.456.kW(config.decimalPlaces),
-                                0.123.kW(config.decimalPlaces)
+                                3.456.kW(configManager.decimalPlaces),
+                                0.123.kW(configManager.decimalPlaces)
                             )
                         )
 
                         DisplayUnit.Watts -> append(stringResource(R.string.display_unit_watts_description, 3.456.w(), 0.123.w()))
-                        DisplayUnit.Adaptive -> append(stringResource(R.string.display_unit_adaptive_description, 3.456.kW(config.decimalPlaces), 0.123.w()))
+                        DisplayUnit.Adaptive -> append(stringResource(R.string.display_unit_adaptive_description, 3.456.kW(configManager.decimalPlaces), 0.123.w()))
                     }
                 }
             )
@@ -76,7 +76,7 @@ fun DataSettingsView(config: ConfigManaging, modifier: Modifier) {
                         color = colorScheme.primary
                     ) {
                         dataCeilingState.value = items[it]
-                        config.dataCeiling = items[it]
+                        configManager.dataCeiling = items[it]
                     }
                 },
                 footer = buildAnnotatedString {
@@ -89,13 +89,13 @@ fun DataSettingsView(config: ConfigManaging, modifier: Modifier) {
             )
         }
 
-        RefreshFrequencySettingsView(config)
+        RefreshFrequencySettingsView(configManager)
 
         SettingsColumn {
             SettingsCheckbox(
                 title = stringResource(R.string.use_traditional_load_formula),
                 state = useTraditionalLoadFormulaState,
-                onUpdate = { config.useTraditionalLoadFormula = !it },
+                onUpdate = { configManager.useTraditionalLoadFormula = !it },
                 footer = buildAnnotatedString {
                     append(stringResource(R.string.use_traditional_load_formula_description))
                 }
@@ -110,7 +110,7 @@ fun DataSettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SettingsPage(Modifier) {
             DataSettingsView(
-                config = FakeConfigManager(),
+                configManager = FakeConfigManager(),
                 Modifier
             )
         }

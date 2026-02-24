@@ -16,7 +16,7 @@ import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun ContactView(navController: NavHostController, config: ConfigManaging) {
+fun ContactView(navController: NavHostController, configManager: ConfigManaging) {
     val uriHandler = LocalUriHandler.current
     val version: String
 
@@ -53,7 +53,7 @@ fun ContactView(navController: NavHostController, config: ConfigManaging) {
         ) {
             InlineSettingsNavButton(
                 title = stringResource(R.string.contact),
-                onClick = { uriHandler.openUri("mailto:energystatsapp@gmail.com?subject=Android%20App%20${config.appVersion}") }
+                onClick = { uriHandler.openUri("mailto:energystatsapp@gmail.com?subject=Android%20App%20${configManager.appVersion}") }
             )
         }
 

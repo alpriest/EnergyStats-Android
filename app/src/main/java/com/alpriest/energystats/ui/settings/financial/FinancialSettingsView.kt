@@ -45,26 +45,26 @@ import java.text.ParseException
 import java.util.Locale
 
 @Composable
-fun FinancialsSettingsView(config: ConfigManaging) {
-    val showFinancialSummaryState = rememberSaveable { mutableStateOf(config.showFinancialSummary) }
-    val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(config.showFinancialSummaryOnFlowPage) }
-    val unitPrice = rememberSaveable { mutableStateOf(config.feedInUnitPrice.toCurrency()) }
-    val gridImportUnitPrice = rememberSaveable { mutableStateOf(config.gridImportUnitPrice.toCurrency()) }
-    val earningsModel = rememberSaveable { mutableStateOf(config.earningsModel) }
+fun FinancialsSettingsView(configManager: ConfigManaging) {
+    val showFinancialSummaryState = rememberSaveable { mutableStateOf(configManager.showFinancialSummary) }
+    val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(configManager.showFinancialSummaryOnFlowPage) }
+    val unitPrice = rememberSaveable { mutableStateOf(configManager.feedInUnitPrice.toCurrency()) }
+    val gridImportUnitPrice = rememberSaveable { mutableStateOf(configManager.gridImportUnitPrice.toCurrency()) }
+    val earningsModel = rememberSaveable { mutableStateOf(configManager.earningsModel) }
     trackScreenView("Financial Model", "FinancialsSettingsView")
 
     SettingsColumn(footer = stringResource(R.string.energy_stats_earnings_calculation_description),) {
         SettingsCheckbox(title = stringResource(R.string.show_financial_summary), state = showFinancialSummaryState, onUpdate = {
-            config.showFinancialSummary = it
+            configManager.showFinancialSummary = it
 
-            if (!it) config.showFinancialSummaryOnFlowPage = false
+            if (!it) configManager.showFinancialSummaryOnFlowPage = false
         })
     }
 
     if (showFinancialSummaryState.value) {
         SettingsColumn {
             SettingsCheckbox(title = stringResource(R.string.show_on_flow_page), state = showFinancialSummaryOnFlowPageState, onUpdate = {
-                config.showFinancialSummaryOnFlowPage = it
+                configManager.showFinancialSummaryOnFlowPage = it
             })
         }
 
@@ -75,9 +75,9 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                 EarningsModel.CT2 -> stringResource(R.string.earnings_ct2_description)
             },
         ) {
-            MakeTextField(config, unitPrice, stringResource(R.string.unit_price)) {
+            MakeTextField(configManager, unitPrice, stringResource(R.string.unit_price)) {
                 unitPrice.value = it
-                config.feedInUnitPrice = it.safeToDouble()
+                configManager.feedInUnitPrice = it.safeToDouble()
             }
 
             SettingsSegmentedControl(
@@ -96,16 +96,16 @@ fun FinancialsSettingsView(config: ConfigManaging) {
                         color = colorScheme.primary
                     ) {
                         earningsModel.value = items[it]
-                        config.earningsModel = items[it]
+                        configManager.earningsModel = items[it]
                     }
                 }
             )
         }
 
         SettingsColumn(footer = stringResource(R.string.earnings_imported_description),) {
-            MakeTextField(config, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price)) {
+            MakeTextField(configManager, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price)) {
                 gridImportUnitPrice.value = it
-                config.gridImportUnitPrice = it.safeToDouble()
+                configManager.gridImportUnitPrice = it.safeToDouble()
             }
         }
     }
@@ -150,7 +150,7 @@ private fun String.safeToDouble(): Double {
 }
 
 @Composable
-fun MakeCurrencySymbolField(config: ConfigManaging, state: MutableState<String>) {
+fun MakeCurrencySymbolField(configManager: ConfigManaging, state: MutableState<String>) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -168,7 +168,7 @@ fun MakeCurrencySymbolField(config: ConfigManaging, state: MutableState<String>)
             value = state.value,
             onValueChange = {
                 state.value = it
-                config.currencySymbol = it
+                configManager.currencySymbol = it
             },
             modifier = Modifier
                 .width(90.dp)
@@ -185,7 +185,7 @@ fun MakeCurrencySymbolField(config: ConfigManaging, state: MutableState<String>)
 }
 
 @Composable
-private fun MakeTextField(config: ConfigManaging, state: MutableState<String>, label: String, onValueChange: (String) -> Unit) {
+private fun MakeTextField(configManager: ConfigManaging, state: MutableState<String>, label: String, onValueChange: (String) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -201,7 +201,7 @@ private fun MakeTextField(config: ConfigManaging, state: MutableState<String>, l
         )
 
         Text(
-            config.currencySymbol,
+            configManager.currencySymbol,
             color = colorScheme.onSecondary,
             modifier = Modifier.padding(end = 8.dp)
         )
@@ -254,7 +254,7 @@ fun FinancialsSettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SettingsPage(Modifier.padding(12.dp)) {
             FinancialsSettingsView(
-                config = FakeConfigManager()
+                configManager = FakeConfigManager()
             )
         }
     }

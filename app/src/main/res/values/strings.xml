@@ -487,4 +487,13 @@
     <string name="energy_breakdown_uses">Uses %1$s</string>
     <string name="just_added">Just added</string>
     <string name="statsPageEnergyBalanceChartAdded_description">An energy balance chart has been added showing energy sources and uses. Use the top-left button to configure the graph visibility.</string>
+    <string name="this_functionality_is_not_available_in_read_only_mode">This functionality is not available in read-only mode</string>
+    <string name="inverter_and_battery_changes_are_prevented">Inverter and battery changes are prevented.</string>
+    <string name="inverter_and_battery_changes_are_permitted">Inverter and battery changes are permitted.</string>
+    <string name="enter_current_passcode">Enter current passcode</string>
+    <string name="enter_your_4_digit_passcode_to_turn_off_read_only_mode">Enter your 4-digit passcode to turn off read-only mode.</string>
+    <string name="choose_a_passcode">Choose a passcode</string>
+    <string name="enter_a_4_digit_passcode_to_turn_on_read_only_mode">Enter a 4-digit passcode to turn on read-only mode.</string>
+    <string name="if_you_forget_your_passcode_you_can_log_out_and_in_again">If you forget your passcode you can log out and in again</string>
+    <string name="read_only_mode_title">Read-only mode: %1$s</string>
 </resources>

@@ -91,7 +91,7 @@ class ScheduleTemplateListView(
         MonitorAlertDialog(viewModel)
 
         LaunchedEffect(null) {
-            viewModel.load(context)
+            viewModel.load()
         }
 
         when (loadState) {
@@ -100,7 +100,7 @@ class ScheduleTemplateListView(
                 loadState.ex,
                 loadState.reason,
                 loadState.allowRetry,
-                onRetry = { viewModel.load(context) },
+                onRetry = { viewModel.load() },
                 onLogout = { coroutineScope.launch { userManager.logout() } },
             )
             is LoadState.Inactive -> {
@@ -271,7 +271,7 @@ fun CreateTemplateView(viewModel: ScheduleTemplateListViewModel) {
         TemplateNameAlertDialog(configuration = AlertConfiguration.CreateTemplate) {
             presentCreateAlert.value = false
             it?.let {
-                viewModel.createTemplate(it, context)
+                viewModel.createTemplate(it)
             }
         }
     }

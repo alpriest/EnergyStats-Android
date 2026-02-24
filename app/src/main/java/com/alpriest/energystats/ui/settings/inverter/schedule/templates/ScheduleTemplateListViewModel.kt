@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
 
 class ScheduleTemplateListViewModel(
-    private val config: ConfigManaging,
+    private val configManager: ConfigManaging,
     private val templateStore: TemplateStoring,
     private val navController: NavHostController
 ) : ViewModel(), AlertDialogMessageProviding {
@@ -27,23 +27,23 @@ class ScheduleTemplateListViewModel(
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val templateStream = MutableStateFlow<List<ScheduleTemplate>>(listOf())
 
-    fun load(context: Context) {
+    fun load() {
         if (uiState.value.state != LoadState.Inactive) {
             return
         }
 
-        config.currentDevice.value?.let { _ ->
+        configManager.currentDevice.value?.let { _ ->
             templateStream.value = templateStore.load()
         }
     }
 
-    fun createTemplate(templateName: String, context: Context) {
+    fun createTemplate(templateName: String) {
         if (uiState.value.state != LoadState.Inactive) {
             return
         }
 
         templateStore.create(templateName)
-        load(context)
+        load()
     }
 
     fun edit(template: ScheduleTemplate) {

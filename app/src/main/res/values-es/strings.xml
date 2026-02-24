@@ -484,4 +484,12 @@
     <string name="energy_breakdown_uses">Usos %1$s</string>
     <string name="just_added">Recién añadido</string>
     <string name="statsPageEnergyBalanceChartAdded_description">Se ha añadido un gráfico de balance energético que muestra las fuentes y los usos de energía. Utiliza el botón de la esquina superior izquierda para configurar la visibilidad de los gráficos.</string>
+    <string name="this_functionality_is_not_available_in_read_only_mode">Esta función no está disponible en el modo de solo lectura.</string>
+    <string name="inverter_and_battery_changes_are_prevented">Los cambios en el inversor y la batería están bloqueados.</string>
+    <string name="inverter_and_battery_changes_are_permitted">Los cambios en el inversor y la batería están permitidos.</string>
+    <string name="enter_current_passcode">Introduce el código actual</string>
+    <string name="enter_your_4_digit_passcode_to_turn_off_read_only_mode">Introduce tu código de 4 dígitos para desactivar el modo de solo lectura.</string>
+    <string name="choose_a_passcode">Elige un código de acceso</string>
+    <string name="enter_a_4_digit_passcode_to_turn_on_read_only_mode">Introduce un código de 4 dígitos para activar el modo de solo lectura.</string>
+    <string name="if_you_forget_your_passcode_you_can_log_out_and_in_again">Si olvidas tu código, puedes cerrar sesión y volver a iniciarla.</string>
 </resources>

@@ -24,22 +24,22 @@ import com.alpriest.energystats.ui.settings.solar.SolarStringsSettingsView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
-    val showBatteryTimeEstimateOnWidgetState = rememberSaveable { mutableStateOf(config.showBatteryTimeEstimateOnWidget) }
-    val largeDisplayState = rememberSaveable { mutableStateOf(config.useLargeDisplay) }
-    val colouredFlowLinesState = rememberSaveable { mutableStateOf(config.useColouredFlowLines) }
-    val showSunnyBackgroundState = rememberSaveable { mutableStateOf(config.showSunnyBackground) }
-    val decimalPlacesState = rememberSaveable { mutableIntStateOf(config.decimalPlaces) }
-    val totalYieldModelState = rememberSaveable { mutableStateOf(config.totalYieldModel == TotalYieldModel.EnergyStats) }
-    val showHomeTotalState = rememberSaveable { mutableStateOf(config.showHomeTotal) }
-    val showGridTotalsState = rememberSaveable { mutableStateOf(config.showGridTotals) }
-    val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(config.showLastUpdateTimestamp) }
-    val showGraphValueDescriptionsState = rememberSaveable { mutableStateOf(config.showGraphValueDescriptions) }
-    val separateParameterGraphsByUnitState = rememberSaveable { mutableStateOf(config.separateParameterGraphsByUnit) }
-    val colorThemeModeState = rememberSaveable { mutableStateOf(config.colorThemeMode) }
-    val showBatteryAsPercentageState = rememberSaveable { mutableStateOf(config.showBatteryAsPercentage) }
-    val widgetTapActionState = rememberSaveable { mutableStateOf(config.widgetTapAction) }
-    val currencySymbol = rememberSaveable { mutableStateOf(config.currencySymbol) }
+fun DisplaySettingsView(configManager: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
+    val showBatteryTimeEstimateOnWidgetState = rememberSaveable { mutableStateOf(configManager.showBatteryTimeEstimateOnWidget) }
+    val largeDisplayState = rememberSaveable { mutableStateOf(configManager.useLargeDisplay) }
+    val colouredFlowLinesState = rememberSaveable { mutableStateOf(configManager.useColouredFlowLines) }
+    val showSunnyBackgroundState = rememberSaveable { mutableStateOf(configManager.showSunnyBackground) }
+    val decimalPlacesState = rememberSaveable { mutableIntStateOf(configManager.decimalPlaces) }
+    val totalYieldModelState = rememberSaveable { mutableStateOf(configManager.totalYieldModel == TotalYieldModel.EnergyStats) }
+    val showHomeTotalState = rememberSaveable { mutableStateOf(configManager.showHomeTotal) }
+    val showGridTotalsState = rememberSaveable { mutableStateOf(configManager.showGridTotals) }
+    val showLastUpdateTimestampState = rememberSaveable { mutableStateOf(configManager.showLastUpdateTimestamp) }
+    val showGraphValueDescriptionsState = rememberSaveable { mutableStateOf(configManager.showGraphValueDescriptions) }
+    val separateParameterGraphsByUnitState = rememberSaveable { mutableStateOf(configManager.separateParameterGraphsByUnit) }
+    val colorThemeModeState = rememberSaveable { mutableStateOf(configManager.colorThemeMode) }
+    val showBatteryAsPercentageState = rememberSaveable { mutableStateOf(configManager.showBatteryAsPercentage) }
+    val widgetTapActionState = rememberSaveable { mutableStateOf(configManager.widgetTapAction) }
+    val currencySymbol = rememberSaveable { mutableStateOf(configManager.currencySymbol) }
     val context = LocalContext.current
 
     SettingsColumn(
@@ -50,35 +50,35 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         SettingsCheckbox(
             title = stringResource(R.string.increase_sizes_for_large_display),
             state = largeDisplayState,
-            onUpdate = { config.useLargeDisplay = it }
+            onUpdate = { configManager.useLargeDisplay = it }
         )
         HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_coloured_flow_lines),
             state = colouredFlowLinesState,
-            onUpdate = { config.useColouredFlowLines = it }
+            onUpdate = { configManager.useColouredFlowLines = it }
         )
         HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_home_usage_total),
             state = showHomeTotalState,
-            onUpdate = { config.showHomeTotal = it }
+            onUpdate = { configManager.showHomeTotal = it }
         )
         HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_daily_grid_totals),
             state = showGridTotalsState,
-            onUpdate = { config.showGridTotals = it }
+            onUpdate = { configManager.showGridTotals = it }
         )
         HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_sunny_background),
             state = showSunnyBackgroundState,
-            onUpdate = { config.showSunnyBackground = it }
+            onUpdate = { configManager.showSunnyBackground = it }
         )
         HorizontalDivider()
 
@@ -96,7 +96,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     color = colorScheme.primary
                 ) {
                     colorThemeModeState.value = items[it]
-                    config.colorThemeMode = items[it]
+                    configManager.colorThemeMode = items[it]
                 }
             }
         )
@@ -112,7 +112,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     color = colorScheme.primary
                 ) {
                     decimalPlacesState.intValue = items[it].toInt()
-                    config.decimalPlaces = items[it].toInt()
+                    configManager.decimalPlaces = items[it].toInt()
                 }
             }
         )
@@ -121,28 +121,28 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         SettingsCheckbox(
             title = stringResource(R.string.show_last_update_timestamp),
             state = showLastUpdateTimestampState,
-            onUpdate = { config.showLastUpdateTimestamp = it }
+            onUpdate = { configManager.showLastUpdateTimestamp = it }
         )
         HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_graph_value_descriptions),
             state = showGraphValueDescriptionsState,
-            onUpdate = { config.showGraphValueDescriptions = it }
+            onUpdate = { configManager.showGraphValueDescriptions = it }
         )
         HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.separate_parameter_graphs_by_unit),
             state = separateParameterGraphsByUnitState,
-            onUpdate = { config.separateParameterGraphsByUnit = it }
+            onUpdate = { configManager.separateParameterGraphsByUnit = it }
         )
         HorizontalDivider()
 
         SettingsCheckbox(
             title = stringResource(R.string.show_battery_percentage_remaining),
             state = showBatteryAsPercentageState,
-            onUpdate = { config.showBatteryAsPercentage = it }
+            onUpdate = { configManager.showBatteryAsPercentage = it }
         )
         HorizontalDivider()
 
@@ -150,11 +150,11 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             title = stringResource(R.string.show_solar_yield),
             state = totalYieldModelState,
             infoText = stringResource(R.string.solar_yield_description),
-            onUpdate = { config.totalYieldModel = if (it) TotalYieldModel.EnergyStats else TotalYieldModel.Off }
+            onUpdate = { configManager.totalYieldModel = if (it) TotalYieldModel.EnergyStats else TotalYieldModel.Off }
         )
         HorizontalDivider()
 
-        SolarStringsSettingsView(config)
+        SolarStringsSettingsView(configManager)
         HorizontalDivider()
 
         InlineSettingsNavButton(stringResource(R.string.sun_display_thresholds)) { navController.navigate(SettingsScreen.SolarBandings.name) }
@@ -163,7 +163,7 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
         SettingsCheckbox(
             title = stringResource(R.string.show_battery_estimate_on_widget),
             state = showBatteryTimeEstimateOnWidgetState,
-            onUpdate = { config.showBatteryTimeEstimateOnWidget = it }
+            onUpdate = { configManager.showBatteryTimeEstimateOnWidget = it }
         )
         HorizontalDivider()
 
@@ -177,14 +177,14 @@ fun DisplaySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     color = colorScheme.primary
                 ) {
                     widgetTapActionState.value = items[it]
-                    config.widgetTapAction = items[it]
+                    configManager.widgetTapAction = items[it]
                 }
             }
         )
 
         HorizontalDivider()
 
-        MakeCurrencySymbolField(config, currencySymbol)
+        MakeCurrencySymbolField(configManager, currencySymbol)
     }
 }
 
@@ -194,7 +194,7 @@ fun DisplaySettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SettingsPage(Modifier) {
             DisplaySettingsView(
-                config = FakeConfigManager(),
+                configManager = FakeConfigManager(),
                 modifier = Modifier.padding(horizontal = SettingsPadding.PANEL_OUTER_HORIZONTAL),
                 navController = NavHostController(context = LocalContext.current)
             )

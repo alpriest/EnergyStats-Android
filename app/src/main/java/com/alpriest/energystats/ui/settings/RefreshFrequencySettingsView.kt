@@ -16,8 +16,8 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.R as SharedR
 
 @Composable
-fun RefreshFrequencySettingsView(config: ConfigManaging) {
-    val refreshFrequency = rememberSaveable { mutableStateOf(config.refreshFrequency) }
+fun RefreshFrequencySettingsView(configManager: ConfigManaging) {
+    val refreshFrequency = rememberSaveable { mutableStateOf(configManager.refreshFrequency) }
 
     SettingsColumnWithChild {
         SettingsSegmentedControl(
@@ -37,7 +37,7 @@ fun RefreshFrequencySettingsView(config: ConfigManaging) {
                     color = colorScheme.primary
                 ) {
                     refreshFrequency.value = items[it]
-                    config.refreshFrequency = items[it]
+                    configManager.refreshFrequency = items[it]
                 }
             }, footer = buildAnnotatedString {
                 append(stringResource(R.string.foxess_cloud_data_is_updated_every_5_minutes_auto_attempts_to_synchronise_fetches_just_after_the_data_feed_uploads_to_minimise_server_load))

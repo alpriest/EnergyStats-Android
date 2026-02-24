@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -67,7 +68,7 @@ fun NavigableSettingsView(
             key(lastSettingsResetTimeViewKey) {
                 SettingsTabView(
                     navController,
-                    config = configManager,
+                    configManager = configManager,
                     onLogout = onLogout,
                     onRateApp = onRateApp,
                     onBuyMeCoffee = onBuyMeCoffee,
@@ -79,7 +80,7 @@ fun NavigableSettingsView(
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.battery), {}, { navController.popBackStack() })
             BatterySettingsView(
                 navController = navController,
-                config = configManager,
+                configManager = configManager,
                 modifier = Modifier
             )
         }
@@ -212,12 +213,16 @@ fun NavigableSettingsView(
         debugGraph(topBarSettings, network, navController, configManager)
 
         composable(SettingsScreen.ReadOnlyModeSettings.name) {
-            val mode = if (configManager.isReadOnly) "On" else "Off"
-            topBarSettings.value = TopBarSettings(true, "Read-only mode: $mode", {}, { navController.popBackStack() })
-            ReadOnlySettingsView(configManager)
+            val mode = configManager.appSettingsStream.collectAsState().value.isReadOnly.asOnOff()
+            topBarSettings.value = TopBarSettings(true, stringResource(R.string.read_only_mode_title, mode), {}, { navController.popBackStack() })
+            ProtectedContent(configManager) {
+                ReadOnlySettingsView(configManager)
+            }
         }
     }
 }
+
+fun Boolean.asOnOff(): String = if (this) "On" else "Off"
 
 fun NavGraphBuilder.inverterScheduleGraph(
     navController: NavHostController,

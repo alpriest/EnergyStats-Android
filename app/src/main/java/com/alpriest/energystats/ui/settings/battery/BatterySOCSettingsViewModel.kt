@@ -28,7 +28,7 @@ class BatterySOCSettingsViewModelFactory(
 
 class BatterySOCSettingsViewModel(
     private val network: Networking,
-    private val config: ConfigManaging
+    private val configManager: ConfigManaging
 ) : ViewModel(), AlertDialogMessageProviding {
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
@@ -60,7 +60,7 @@ class BatterySOCSettingsViewModel(
         uiState.value = UiLoadState(LoadState.Active.Loading)
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
                 try {
@@ -82,7 +82,7 @@ class BatterySOCSettingsViewModel(
         uiState.value = UiLoadState(LoadState.Active.Saving)
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
                 val viewData = viewDataStream.value
 

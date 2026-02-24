@@ -23,12 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
@@ -72,9 +74,9 @@ fun ReadOnlySettingsView(
         ) { readOnly ->
             Text(
                 text = if (readOnly) {
-                    "Inverter and battery changes are prevented."
+                    stringResource(R.string.inverter_and_battery_changes_are_prevented)
                 } else {
-                    "Inverter and battery changes are permitted."
+                    stringResource(R.string.inverter_and_battery_changes_are_permitted)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
@@ -90,26 +92,26 @@ fun ReadOnlySettingsView(
         ) {
             if (viewData.isReadOnly) {
                 Text(
-                    text = "Enter current passcode",
+                    text = stringResource(R.string.enter_current_passcode),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
 
                 Text(
-                    text = "Enter your 4-digit passcode to turn off read-only mode.",
+                    text = stringResource(R.string.enter_your_4_digit_passcode_to_turn_off_read_only_mode),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
             } else {
                 Text(
-                    text = "Choose a passcode",
+                    text = stringResource(R.string.choose_a_passcode),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
 
                 Text(
-                    text = "Enter a 4-digit passcode to turn on read-only mode.",
+                    text = stringResource(R.string.enter_a_4_digit_passcode_to_turn_on_read_only_mode),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -127,7 +129,7 @@ fun ReadOnlySettingsView(
         Spacer(Modifier.weight(1f))
 
         Text(
-            text = "If you forget your passcode, you can log out and in again.",
+            text = stringResource(R.string.if_you_forget_your_passcode_you_can_log_out_and_in_again),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class SolarBandingSettingsViewModel(
-    config: ConfigManaging
+    configManager: ConfigManaging
 ) : ViewModel() {
     private val _viewDataStream = MutableStateFlow(SolarBandingSettingsViewData(0.0f, 0.0f, 0.0f))
     val viewDataStream: StateFlow<SolarBandingSettingsViewData> = _viewDataStream
@@ -19,7 +19,7 @@ class SolarBandingSettingsViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private val _appSettingsStream: MutableStateFlow<AppSettings> = MutableStateFlow(config.appSettingsStream.value)
+    private val _appSettingsStream: MutableStateFlow<AppSettings> = MutableStateFlow(configManager.appSettingsStream.value)
     val appSettingsStream: StateFlow<AppSettings> = _appSettingsStream
 
     private var originalValue: SolarBandingSettingsViewData? = null
@@ -32,9 +32,9 @@ class SolarBandingSettingsViewModel(
         }
 
         val viewData = SolarBandingSettingsViewData(
-            config.solarRangeDefinitions.threshold1.toFloat(),
-            config.solarRangeDefinitions.threshold2.toFloat(),
-            config.solarRangeDefinitions.threshold3.toFloat()
+            configManager.solarRangeDefinitions.threshold1.toFloat(),
+            configManager.solarRangeDefinitions.threshold2.toFloat(),
+            configManager.solarRangeDefinitions.threshold3.toFloat()
         )
         originalValue = viewData
         _viewDataStream.value = viewData

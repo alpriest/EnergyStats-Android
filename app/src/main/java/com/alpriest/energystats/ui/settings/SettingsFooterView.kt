@@ -62,14 +62,14 @@ fun SettingsFooterRowView(image: ImageVector, imageDescription: String, text: St
 
 @Composable
 fun SettingsFooterView(
-    config: ConfigManaging,
+    configManager: ConfigManaging,
     onLogout: suspend () -> Unit,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
-    val logoutButtonTitle = when (config.isDemoUser) {
+    val logoutButtonTitle = when (configManager.isDemoUser) {
         true -> stringResource(R.string.logout_from_demo)
         false -> stringResource(R.string.logout)
     }
@@ -98,7 +98,7 @@ fun SettingsFooterView(
         }, stringResource(R.string.donate_via_paypal)) { uriHandler.openUri("https://www.paypal.me/alpriest") }
 
         Text(
-            "Version " + config.appVersion,
+            "Version " + configManager.appVersion,
             modifier = Modifier.padding(top = 44.dp),
             fontSize = 12.sp,
             color = Color.Gray
@@ -111,7 +111,7 @@ fun SettingsFooterView(
 fun SettingsFooterViewPreview() {
     EnergyStatsTheme {
         SettingsFooterView(
-            config = FakeConfigManager(),
+            configManager = FakeConfigManager(),
             onLogout = {}, onRateApp = {}) {}
     }
 }

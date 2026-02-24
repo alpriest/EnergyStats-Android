@@ -14,16 +14,16 @@ import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Modifier) {
-    val selfSufficiencyEstimateModeState = rememberSaveable { mutableStateOf(config.selfSufficiencyEstimateMode) }
-    val showSelfSufficiencyStatsGraphOverlayState = rememberSaveable { mutableStateOf(config.showSelfSufficiencyStatsGraphOverlay) }
+fun SelfSufficiencySettingsView(configManager: ConfigManaging, modifier: Modifier = Modifier) {
+    val selfSufficiencyEstimateModeState = rememberSaveable { mutableStateOf(configManager.selfSufficiencyEstimateMode) }
+    val showSelfSufficiencyStatsGraphOverlayState = rememberSaveable { mutableStateOf(configManager.showSelfSufficiencyStatsGraphOverlay) }
     val description: String? = when (selfSufficiencyEstimateModeState.value) {
         SelfSufficiencyEstimateMode.Absolute -> stringResource(R.string.absolute_self_sufficiency)
         SelfSufficiencyEstimateMode.Net -> stringResource(R.string.net_self_sufficiency)
@@ -45,7 +45,7 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
                 color = colorScheme.primary
             ) {
                 selfSufficiencyEstimateModeState.value = items[it]
-                config.selfSufficiencyEstimateMode = items[it]
+                configManager.selfSufficiencyEstimateMode = items[it]
             }
         })
     }
@@ -56,7 +56,7 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
                 title = stringResource(R.string.show_self_sufficiency_percentage_on_stats_graph),
                 state = showSelfSufficiencyStatsGraphOverlayState,
                 onUpdate = {
-                    config.showSelfSufficiencyStatsGraphOverlay = it
+                    configManager.showSelfSufficiencyStatsGraphOverlay = it
                 }
             )
         }
@@ -70,6 +70,6 @@ fun SelfSufficiencySettingsView(config: ConfigManaging, modifier: Modifier = Mod
 @Composable
 fun SelfSufficiencySettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-        SelfSufficiencySettingsView(config = FakeConfigManager())
+        SelfSufficiencySettingsView(configManager = FakeConfigManager())
     }
 }

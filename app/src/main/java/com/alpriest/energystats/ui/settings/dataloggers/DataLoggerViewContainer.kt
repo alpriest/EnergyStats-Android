@@ -63,7 +63,7 @@ class DataLoggerViewModelFactory(
 
 class DataLoggerViewModel(
     val network: Networking,
-    val config: ConfigManaging,
+    val configManager: ConfigManaging,
     val navController: NavController
 ) : ViewModel() {
     var itemStream: MutableStateFlow<List<DataLogger>> = MutableStateFlow(listOf())

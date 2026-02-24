@@ -6,15 +6,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 
@@ -42,12 +44,12 @@ private fun DefaultReadOnlyBlocked(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            imageVector = Icons.Outlined.Block,
+            imageVector = Icons.Filled.Cancel,
             contentDescription = null,
             modifier = Modifier.size(96.dp),
             tint = MaterialTheme.colorScheme.error
         )
-        Text("This functionality is not available in read-only mode")
+        Text(stringResource(R.string.this_functionality_is_not_available_in_read_only_mode))
     }
 }
 

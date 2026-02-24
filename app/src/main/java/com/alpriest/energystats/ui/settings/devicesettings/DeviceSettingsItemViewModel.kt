@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class DeviceSettingsItemViewModel(
-    private val config: ConfigManaging,
+    private val configManager: ConfigManaging,
     private val network: Networking,
     val item: DeviceSettingsItem
 ) : ViewModel(), AlertDialogMessageProviding {
@@ -45,7 +45,7 @@ class DeviceSettingsItemViewModel(
 
     fun load(context: Context) {
         if (_uiState.value != LoadState.Inactive) { return }
-        val selectedDeviceSN = config.selectedDeviceSN ?: return
+        val selectedDeviceSN = configManager.selectedDeviceSN ?: return
         _uiState.value = LoadState.Active.Loading
 
         viewModelScope.launch {
@@ -64,7 +64,7 @@ class DeviceSettingsItemViewModel(
 
     fun save(context: Context) {
         if (_uiState.value != LoadState.Inactive) { return }
-        val selectedDeviceSN = config.selectedDeviceSN ?: return
+        val selectedDeviceSN = configManager.selectedDeviceSN ?: return
         _uiState.value = LoadState.Active.Saving
 
         viewModelScope.launch {

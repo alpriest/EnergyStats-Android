@@ -1,27 +1,15 @@
 package com.alpriest.energystats.ui.settings
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
@@ -29,24 +17,23 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsTabView(
     navController: NavHostController,
-    config: ConfigManaging,
+    configManager: ConfigManaging,
     onLogout: suspend () -> Unit,
     onRateApp: () -> Unit,
     onBuyMeCoffee: () -> Unit,
     modifier: Modifier,
 ) {
-    val currentDevice = config.currentDevice.collectAsState()
+    val currentDevice = configManager.currentDevice.collectAsState()
     val uriHandler = LocalUriHandler.current
     trackScreenView("Settings", "SettingsTabView")
 
     SettingsPage(modifier) {
         SettingsColumn {
-            config.powerStationDetail?.let {
+            configManager.powerStationDetail?.let {
                 InlineSettingsNavButton(stringResource(R.string.settings_power_station)) { navController.navigate(SettingsScreen.PowerStation.name) }
                 HorizontalDivider()
             }
@@ -64,7 +51,7 @@ fun SettingsTabView(
             InlineSettingsNavButton(stringResource(R.string.dataloggers)) { navController.navigate(SettingsScreen.Dataloggers.name) }
         }
 
-        DisplaySettingsView(config, navController = navController)
+        DisplaySettingsView(configManager, navController = navController)
 
         SettingsColumn {
             InlineSettingsNavButton(stringResource(R.string.settings_data)) { navController.navigate(SettingsScreen.DataSettings.name) }
@@ -77,8 +64,9 @@ fun SettingsTabView(
         }
 
         SettingsColumn {
+            val mode = configManager.appSettingsStream.collectAsState().value.isReadOnly.asOnOff()
             InlineSettingsNavButton(
-                title = "Read-only mode",
+                title = stringResource(R.string.read_only_mode_title, mode),
                 onClick = { navController.navigate(SettingsScreen.ReadOnlyModeSettings.name)  }
             )
             HorizontalDivider()
@@ -102,7 +90,7 @@ fun SettingsTabView(
             )
             HorizontalDivider()
 
-            ReloadDevicesButton(config)
+            ReloadDevicesButton(configManager)
 
             HorizontalDivider()
 
@@ -119,45 +107,8 @@ fun SettingsTabView(
             )
         }
 
-        SettingsFooterView(config, onLogout, onRateApp, onBuyMeCoffee)
+        SettingsFooterView(configManager, onLogout, onRateApp, onBuyMeCoffee)
     }
-}
-
-@Composable
-fun ReloadDevicesButton(config: ConfigManaging) {
-    val scope = rememberCoroutineScope()
-    var isLoading by remember { mutableStateOf(false) }
-
-    InlineSettingsNavButton(
-        title = stringResource(R.string.reload_devices_from_foxess_cloud),
-        disclosureIcon = null,
-        disclosureView = {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(22.dp)
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "Tap to refresh",
-                    modifier = Modifier.padding(end = 12.dp),
-                    tint = MaterialTheme.colorScheme.onSecondary
-                )
-            }
-        },
-        onClick = {
-            scope.launch {
-                try {
-                    isLoading = true
-                    config.fetchDevices()
-                    isLoading = false
-                } catch (ex: Exception) {
-                    isLoading = false
-                }
-            }
-        }
-    )
 }
 
 @Preview(showBackground = true, heightDp = 1200, widthDp = 400)
@@ -166,7 +117,7 @@ fun SettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SettingsTabView(
             navController = NavHostController(LocalContext.current),
-            config = FakeConfigManager(),
+            configManager = FakeConfigManager(),
             onLogout = {},
             onRateApp = {},
             {},

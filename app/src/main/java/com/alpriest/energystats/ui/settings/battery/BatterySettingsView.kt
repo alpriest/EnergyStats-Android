@@ -47,16 +47,16 @@ import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
+fun BatterySettingsView(configManager: ConfigManaging, modifier: Modifier = Modifier, navController: NavHostController) {
     val isEditingCapacity = rememberSaveable { mutableStateOf(false) }
-    var editingCapacity by rememberSaveable { mutableStateOf(config.batteryCapacity) }
-    val decimalPlaces = config.appSettingsStream.collectAsState().value.decimalPlaces
-    val showBatteryEstimateState = rememberSaveable { mutableStateOf(config.showBatteryEstimate) }
-    val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(config.showUsableBatteryOnly) }
-    val showBatteryTemperatureState = rememberSaveable { mutableStateOf(config.showBatteryTemperature) }
-    val showBatterySOCOnDailyStatsState = rememberSaveable { mutableStateOf(config.showBatterySOCOnDailyStats) }
-    val hasError = config.currentDevice.collectAsState().value?.battery?.hasError ?: false
-    val batteryTemperatureDisplayModeState = rememberSaveable { mutableStateOf(config.batteryTemperatureDisplayMode) }
+    var editingCapacity by rememberSaveable { mutableStateOf(configManager.batteryCapacity) }
+    val decimalPlaces = configManager.appSettingsStream.collectAsState().value.decimalPlaces
+    val showBatteryEstimateState = rememberSaveable { mutableStateOf(configManager.showBatteryEstimate) }
+    val showUsableBatteryOnlyState = rememberSaveable { mutableStateOf(configManager.showUsableBatteryOnly) }
+    val showBatteryTemperatureState = rememberSaveable { mutableStateOf(configManager.showBatteryTemperature) }
+    val showBatterySOCOnDailyStatsState = rememberSaveable { mutableStateOf(configManager.showBatterySOCOnDailyStats) }
+    val hasError = configManager.currentDevice.collectAsState().value?.battery?.hasError ?: false
+    val batteryTemperatureDisplayModeState = rememberSaveable { mutableStateOf(configManager.batteryTemperatureDisplayMode) }
     val context = LocalContext.current
 
     trackScreenView("Battery", "BatterySettingsView")
@@ -126,7 +126,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                     )
                 } else {
                     Text(
-                        text = config.batteryCapacityW.Wh(decimalPlaces),
+                        text = configManager.batteryCapacityW.Wh(decimalPlaces),
                         modifier = Modifier.clickable { isEditingCapacity.value = true },
                         color = colorScheme.onSecondary,
                     )
@@ -143,7 +143,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                             onClick = {
                                 try {
                                     val capacity = editingCapacity.toDouble().toInt().toString()
-                                    config.batteryCapacity = capacity
+                                    configManager.batteryCapacity = capacity
                                 } catch (_: NumberFormatException) {
                                 }
                                 isEditingCapacity.value = false
@@ -170,7 +170,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_full_empty_estimate),
                 state = showBatteryEstimateState,
-                onUpdate = { config.showBatteryEstimate = it },
+                onUpdate = { configManager.showBatteryEstimate = it },
             )
         }
 
@@ -180,7 +180,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             SettingsCheckbox(
                 title = stringResource(R.string.show_usable_battery_only),
                 state = showUsableBatteryOnlyState,
-                onUpdate = { config.showUsableBatteryOnly = it }
+                onUpdate = { configManager.showUsableBatteryOnly = it }
             )
         }
 
@@ -190,7 +190,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_temperature),
                 state = showBatteryTemperatureState,
-                onUpdate = { config.showBatteryTemperature = it }
+                onUpdate = { configManager.showBatteryTemperature = it }
             )
         }
 
@@ -207,7 +207,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
                         color = colorScheme.primary
                     ) {
                         batteryTemperatureDisplayModeState.value = items[it]
-                        config.batteryTemperatureDisplayMode = items[it]
+                        configManager.batteryTemperatureDisplayMode = items[it]
                     }
                 }
             )
@@ -219,7 +219,7 @@ fun BatterySettingsView(config: ConfigManaging, modifier: Modifier = Modifier, n
             SettingsCheckbox(
                 title = stringResource(R.string.show_battery_soc_on_daily_stats),
                 state = showBatterySOCOnDailyStatsState,
-                onUpdate = { config.showBatterySOCOnDailyStats = it }
+                onUpdate = { configManager.showBatterySOCOnDailyStats = it }
             )
         }
 
@@ -245,7 +245,7 @@ private fun batteryTemperateDisplayModeFooter(value: BatteryTemperatureDisplayMo
 fun BatterySettingsViewPreview() {
     EnergyStatsTheme {
         BatterySettingsView(
-            config = FakeConfigManager(),
+            configManager = FakeConfigManager(),
             navController = NavHostController(LocalContext.current)
         )
     }

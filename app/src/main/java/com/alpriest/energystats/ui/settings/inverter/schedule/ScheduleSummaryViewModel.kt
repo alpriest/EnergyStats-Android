@@ -8,16 +8,16 @@ import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.models.DeviceFirmwareVersion
-import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.network.ScheduleResponse
-import com.alpriest.energystats.shared.models.ScheduleTemplate
-import com.alpriest.energystats.shared.models.WorkModes
-import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.DeviceCapability
-import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.WorkModes
+import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import com.alpriest.energystats.shared.network.FoxServerError
+import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
@@ -38,7 +38,7 @@ class ScheduleSummaryViewModelFactory(
 
 class ScheduleSummaryViewModel(
     val network: Networking,
-    val config: ConfigManaging,
+    val configManager: ConfigManaging,
     val navController: NavController,
     val templateStore: TemplateStoring
 ) : ViewModel(), AlertDialogMessageProviding {
@@ -52,7 +52,7 @@ class ScheduleSummaryViewModel(
 
     private suspend fun preload(context: Context) {
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
                 uiState.value = UiLoadState(LoadState.Active.Loading)
 
@@ -100,7 +100,7 @@ class ScheduleSummaryViewModel(
         }
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
                 uiState.value = UiLoadState(LoadState.Active.Loading)
@@ -112,13 +112,13 @@ class ScheduleSummaryViewModel(
                     val schedule = Schedule.create(scheduleResponse)
                     scheduleStream.value = schedule
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
-                    config.workModes = scheduleResponse.workModes
+                    configManager.workModes = scheduleResponse.workModes
 
                     if (schedule.supportsMaxSOC()) {
-                        config.setDeviceSupports(DeviceCapability.ScheduleMaxSOC, deviceSN)
+                        configManager.setDeviceSupports(DeviceCapability.ScheduleMaxSOC, deviceSN)
                     }
                     if (scheduleResponse.supportsPeakShaving()) {
-                        config.setDeviceSupports(DeviceCapability.PeakShaving, deviceSN)
+                        configManager.setDeviceSupports(DeviceCapability.PeakShaving, deviceSN)
                     }
 
                     uiState.value = UiLoadState(LoadState.Inactive)
@@ -156,7 +156,7 @@ class ScheduleSummaryViewModel(
 
         viewModelScope.launch {
             runCatching {
-                config.currentDevice.value?.let { device ->
+                configManager.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
 
                     if (schedulerEnabled) {
@@ -198,7 +198,7 @@ class ScheduleSummaryViewModel(
 
         viewModelScope.launch {
             runCatching {
-                config.currentDevice.value?.let { device ->
+                configManager.currentDevice.value?.let { device ->
                     val deviceSN = device.deviceSN
                     try {
                         uiState.value = UiLoadState(LoadState.Active.Activating)

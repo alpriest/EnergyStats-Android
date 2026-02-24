@@ -7,13 +7,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.models.WorkModes
-import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.settings.inverter.schedule.networkTitle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +36,7 @@ data class WorkModeViewData(
 
 class WorkModeViewModel(
     val network: Networking,
-    val config: ConfigManaging,
+    val configManager: ConfigManaging,
     val navController: NavController
 ) : ViewModel(), AlertDialogMessageProviding {
     var uiState = MutableStateFlow<LoadState>(LoadState.Inactive)
@@ -61,15 +61,15 @@ class WorkModeViewModel(
 
     suspend fun load(context: Context) {
         uiState.value = LoadState.Active.Loading
-        items = config.workModes
+        items = configManager.workModes
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
                 try {
                     if (items.isEmpty()) {
-                        config.workModes = fetchWorkModes(deviceSN)
+                        configManager.workModes = fetchWorkModes(deviceSN)
                     }
 
                     val result = network.fetchDeviceSettingsItem(deviceSN, DeviceSettingsItem.WorkMode)
@@ -95,7 +95,7 @@ class WorkModeViewModel(
         uiState.value = LoadState.Active.Saving
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
                 try {

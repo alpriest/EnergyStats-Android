@@ -33,7 +33,7 @@ class BatteryChargeScheduleSettingsViewModelFactory(
 
 class BatteryChargeScheduleSettingsViewModel(
     private val network: Networking,
-    private val config: ConfigManaging
+    private val configManager: ConfigManaging
 ) : ViewModel(), AlertDialogMessageProviding {
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val summaryStream = MutableStateFlow("")
@@ -65,7 +65,7 @@ class BatteryChargeScheduleSettingsViewModel(
         uiState.value = UiLoadState(LoadState.Active.Loading)
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
 
                 try {
@@ -160,7 +160,7 @@ class BatteryChargeScheduleSettingsViewModel(
         val viewData = viewDataStream.value
 
         runCatching {
-            config.currentDevice.value?.let { device ->
+            configManager.currentDevice.value?.let { device ->
                 val deviceSN = device.deviceSN
                 val times = listOf(viewData.chargeTimePeriod1, viewData.chargeTimePeriod2).map { it.asChargeTime() }
 

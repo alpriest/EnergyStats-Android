@@ -39,7 +39,7 @@ class PowerStationSettingsView(private val configManager: ConfigManaging) {
 }
 
 class PowerStationSettingsViewModel(
-    val config: ConfigManaging
+    val configManager: ConfigManaging
 ) : ViewModel() {
     var uiState = MutableStateFlow<LoadState>(LoadState.Inactive)
 
@@ -48,7 +48,7 @@ class PowerStationSettingsViewModel(
 
         runCatching {
             try {
-                config.fetchPowerStationDetail()
+                configManager.fetchPowerStationDetail()
             } catch (ex: Exception) {
                 uiState.value = LoadState.Error(ex, ex.localizedMessage ?: context.getString(R.string.failed_to_load_settings))
             }

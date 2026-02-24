@@ -29,26 +29,26 @@ import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SolarStringsSettingsView(config: ConfigManaging) {
-    val showSeparateStringsOnPowerFlowState = rememberSaveable { mutableStateOf(config.powerFlowStrings.enabled) }
-    val pv1 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv1Enabled) }
-    val pv2 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv2Enabled) }
-    val pv3 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv3Enabled) }
-    val pv4 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv4Enabled) }
-    val pv5 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv5Enabled) }
-    val pv6 = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv6Enabled) }
-    val pv1Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv1Name) }
-    val pv2Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv2Name) }
-    val pv3Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv3Name) }
-    val pv4Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv4Name) }
-    val pv5Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv5Name) }
-    val pv6Name = rememberSaveable { mutableStateOf(config.powerFlowStrings.pv6Name) }
+fun SolarStringsSettingsView(configaManager: ConfigManaging) {
+    val showSeparateStringsOnPowerFlowState = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.enabled) }
+    val pv1 = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv1Enabled) }
+    val pv2 = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv2Enabled) }
+    val pv3 = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv3Enabled) }
+    val pv4 = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv4Enabled) }
+    val pv5 = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv5Enabled) }
+    val pv6 = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv6Enabled) }
+    val pv1Name = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv1Name) }
+    val pv2Name = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv2Name) }
+    val pv3Name = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv3Name) }
+    val pv4Name = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv4Name) }
+    val pv5Name = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv5Name) }
+    val pv6Name = rememberSaveable { mutableStateOf(configaManager.powerFlowStrings.pv6Name) }
 
     SettingsCheckbox(
         title = stringResource(R.string.show_pv_power_by_strings),
         state = showSeparateStringsOnPowerFlowState,
         infoText = stringResource(R.string.solar_strings_description),
-        onUpdate = { config.powerFlowStrings = config.powerFlowStrings.copy(enabled = it) }
+        onUpdate = { configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(enabled = it) }
     )
 
     AnimatedVisibility(
@@ -61,11 +61,11 @@ fun SolarStringsSettingsView(config: ConfigManaging) {
                 stringName = "PV1",
                 toggleState = pv1,
                 onToggle = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv1Enabled = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv1Enabled = it)
                 },
                 name = pv1Name,
                 onNameChange = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv1Name = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv1Name = it)
                 }
             )
 
@@ -73,11 +73,11 @@ fun SolarStringsSettingsView(config: ConfigManaging) {
                 stringName = "PV2",
                 toggleState = pv2,
                 onToggle = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv2Enabled = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv2Enabled = it)
                 },
                 name = pv2Name,
                 onNameChange = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv2Name = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv2Name = it)
                 }
             )
 
@@ -85,11 +85,11 @@ fun SolarStringsSettingsView(config: ConfigManaging) {
                 stringName = "PV3",
                 toggleState = pv3,
                 onToggle = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv3Enabled = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv3Enabled = it)
                 },
                 name = pv3Name,
                 onNameChange = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv3Name = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv3Name = it)
                 }
             )
 
@@ -97,11 +97,11 @@ fun SolarStringsSettingsView(config: ConfigManaging) {
                 stringName = "PV4",
                 toggleState = pv4,
                 onToggle = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv4Enabled = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv4Enabled = it)
                 },
                 name = pv4Name,
                 onNameChange = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv4Name = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv4Name = it)
                 }
             )
 
@@ -109,11 +109,11 @@ fun SolarStringsSettingsView(config: ConfigManaging) {
                 stringName = "PV5",
                 toggleState = pv5,
                 onToggle = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv5Enabled = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv5Enabled = it)
                 },
                 name = pv5Name,
                 onNameChange = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv5Name = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv5Name = it)
                 }
             )
 
@@ -121,11 +121,11 @@ fun SolarStringsSettingsView(config: ConfigManaging) {
                 stringName = "PV6",
                 toggleState = pv6,
                 onToggle = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv6Enabled = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv6Enabled = it)
                 },
                 name = pv6Name,
                 onNameChange = {
-                    config.powerFlowStrings = config.powerFlowStrings.copy(pv6Name = it)
+                    configaManager.powerFlowStrings = configaManager.powerFlowStrings.copy(pv6Name = it)
                 }
             )
         }
@@ -164,7 +164,7 @@ fun SolarCheckbox(stringName: String, toggleState: MutableState<Boolean>, onTogg
 fun SolarStringsSettingsPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SettingsColumn {
-            SolarStringsSettingsView(config = FakeConfigManager())
+            SolarStringsSettingsView(configaManager = FakeConfigManager())
         }
     }
 }
