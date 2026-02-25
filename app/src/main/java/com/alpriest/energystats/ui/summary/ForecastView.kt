@@ -68,17 +68,19 @@ fun ForecastView(
     val modelProducer = remember { CartesianChartModelProducer() }
 
     LaunchedEffect(model) {
-        modelProducer.runTransaction {
-            lineSeries {
-                model.forEach { seriesEntries ->
-                    series(
-                        x = seriesEntries.map { it.x.toDouble() },
-                        y = seriesEntries.map { it.y.toDouble() }
-                    )
-                }
+        if (model.isNotEmpty()) {
+            modelProducer.runTransaction {
+                lineSeries {
+                    model.forEach { seriesEntries ->
+                        series(
+                            x = seriesEntries.map { it.x.toDouble() },
+                            y = seriesEntries.map { it.y.toDouble() }
+                        )
+                    }
 
-                if (model.any { it.isNotEmpty() }) {
-                    hasData = true
+                    if (model.any { it.isNotEmpty() }) {
+                        hasData = true
+                    }
                 }
             }
         }

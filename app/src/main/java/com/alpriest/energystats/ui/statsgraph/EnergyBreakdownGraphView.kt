@@ -3,7 +3,12 @@ package com.alpriest.energystats.ui.statsgraph
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -67,16 +72,57 @@ enum class EnergyBreakdownType {
 fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
     val appSettingsStream = viewModel.appSettingsStream
     val totalsStream = viewModel.totalsStream.collectAsStateWithLifecycle().value
+    val valuesAtTimeStream = viewModel.valuesAtTimeStream.collectAsStateWithLifecycle().value
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberVicoScrollState(scrollEnabled = false)
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = Zoom.Content)
     val chartColors = (EnergyBreakdownType.Inputs.types + EnergyBreakdownType.Outputs.types).map { it.colour(appSettingsStream) }
-    val totals = mutableMapOf<EnergyBreakdownType, String>()
+    val totals = remember { mutableStateMapOf<EnergyBreakdownType, String>() }
     val context = LocalContext.current
+    var modelReady by remember { mutableStateOf(false) }
+    var hasRenderedOnce by rememberSaveable { mutableStateOf(false) }
+    val hasData = totalsStream.isNotEmpty() || valuesAtTimeStream.isNotEmpty()
 
-    LaunchedEffect(totalsStream) {
+    LaunchedEffect(totalsStream, valuesAtTimeStream) {
+        totals.clear()
+
+        // If we have no data, hide the chart only if we've never shown it.
+        if (!hasData) {
+            if (!hasRenderedOnce) {
+                modelReady = false
+            }
+            return@LaunchedEffect
+        }
+
+        // Only gate visibility on the very first render to avoid the initial wide-column layout.
+        if (!hasRenderedOnce) {
+            modelReady = false
+        }
+
         modelProducer.runTransaction {
-            if (totalsStream.isNotEmpty()) {
+            if (valuesAtTimeStream.isNotEmpty()) {
+                columnSeries {
+                    EnergyBreakdownType.Inputs.types.forEach {
+                        series(x = EnergyBreakdownType.Inputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
+                    }
+                    EnergyBreakdownType.Outputs.types.forEach {
+                        series(x = EnergyBreakdownType.Outputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
+                    }
+                }
+
+                totals[EnergyBreakdownType.Inputs] = valuesAtTimeStream.filter { EnergyBreakdownType.Inputs.types.contains(it.key) }
+                    .values
+                    .mapNotNull { it.firstOrNull()?.y }
+                    .sum()
+                    .run { EnergyBreakdownType.Inputs.title(context, this.toDouble()) }
+
+                totals[EnergyBreakdownType.Outputs] = valuesAtTimeStream.filter { EnergyBreakdownType.Outputs.types.contains(it.key) }
+                    .values
+                    .mapNotNull { it.firstOrNull()?.y }
+                    .sum()
+                    .run { EnergyBreakdownType.Outputs.title(context, this.toDouble()) }
+
+            } else if (totalsStream.isNotEmpty()) {
                 columnSeries {
                     EnergyBreakdownType.Inputs.types.forEach {
                         series(x = EnergyBreakdownType.Inputs.graphX, listOfNotNull(totalsStream[it]))
@@ -97,9 +143,12 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
                     .run { EnergyBreakdownType.Outputs.title(context, this) }
             }
         }
+
+        modelReady = true
+        hasRenderedOnce = true
     }
 
-    if (totalsStream.isNotEmpty()) {
+    if (modelReady || hasRenderedOnce) {
         CartesianChartHost(
             chart = rememberCartesianChart(
                 rememberColumnsLayer(chartColors),
@@ -131,7 +180,7 @@ private class EnergyBreakdownBottomAxisValueFormatter(private val totals: Mutabl
             else -> EnergyBreakdownType.Outputs
         }
 
-        return totals[type] ?: "loading"
+        return totals[type] ?: " "
     }
 }
 

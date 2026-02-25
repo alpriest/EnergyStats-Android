@@ -36,7 +36,6 @@ fun MultipleParameterGraphVico(
                 viewModel = viewModel,
                 appSettingsStream = appSettingsStream,
                 showYAxisUnit = true,
-                userManager = userManager,
                 valuesAtTimeStream = valuesForThisUnit
             )
 

@@ -25,13 +25,13 @@ import java.time.LocalDate
 @Composable
 fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) {
     val graphVariables = viewModel.graphVariablesStream.collectAsState()
-    val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
+    val valuesAtTimeStream = viewModel.valuesAtTimeStream.collectAsState().value
     val totals = viewModel.totalsStream.collectAsState()
     val appSettings = viewModel.appSettingsStream.collectAsState().value
 
     Column(modifier) {
-        graphVariables.value.map { graphVariable ->
-            val selectedValue = selectedValues[graphVariable.type]?.firstOrNull()
+        graphVariables.value.forEach { graphVariable ->
+            val selectedValue = valuesAtTimeStream[graphVariable.type]?.firstOrNull()
             val title = when (graphVariable.type) {
                 ReportVariable.FeedIn -> stringResource(R.string.feed_in) + title(ValueUsage.TOTAL)
                 ReportVariable.Generation -> stringResource(R.string.output) + title(ValueUsage.TOTAL)

@@ -44,7 +44,6 @@ fun SingleParameterGraphVico(
         viewModel = viewModel,
         appSettingsStream = appSettingsStream,
         showYAxisUnit = false,
-        userManager = userManager,
         valuesForThisUnit
     )
 
