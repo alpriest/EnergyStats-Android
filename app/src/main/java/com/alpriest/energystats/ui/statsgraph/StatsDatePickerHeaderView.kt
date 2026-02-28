@@ -1,15 +1,17 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
@@ -20,7 +22,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,9 +44,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
+import com.alpriest.energystats.ui.flow.home.DeviceState.Online
 import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.PopupCalendarView
+import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.helpers.YearPicker
+import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.settings.SlimButton
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.Typography
@@ -67,6 +78,24 @@ class StatsDatePickerHeaderViewModelFactory(
     }
 }
 
+enum class StatsTimeUsageGraphStyle(val value: Int) {
+    Bar(0),
+    Line(1),
+    Off(2);
+
+    fun title(context: Context): String {
+        return when (this) {
+            StatsTimeUsageGraphStyle.Bar -> "Bar"
+            StatsTimeUsageGraphStyle.Line -> "Line"
+            StatsTimeUsageGraphStyle.Off -> "Hidden"
+        }
+    }
+
+    companion object {
+        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: Online
+    }
+}
+
 class StatsDatePickerHeaderView(
     private val displayModeStream: MutableStateFlow<StatsDisplayMode>, private val onShowCustomDateRangePicker: () -> Unit
 ) {
@@ -75,7 +104,7 @@ class StatsDatePickerHeaderView(
     fun Content(
         modifier: Modifier = Modifier,
         viewModel: StatsDatePickerHeaderViewModel = viewModel(factory = StatsDatePickerHeaderViewModelFactory(displayModeStream)),
-        graphShowingState: MutableStateFlow<Boolean>,
+        timeUsageGraphStyle: MutableStateFlow<StatsTimeUsageGraphStyle>,
         energyGraphShowingState: MutableStateFlow<Boolean>
     ) {
         val range = viewModel.rangeStream.collectAsState().value
@@ -86,7 +115,7 @@ class StatsDatePickerHeaderView(
             DateRangeMenu(
                 viewModel = viewModel,
                 range = range,
-                timeGraphShowingState = graphShowingState,
+                timeUsageGraphStyleState = timeUsageGraphStyle,
                 energyGraphShowingState = energyGraphShowingState,
                 onShowCustomDateRangePickerChange = onShowCustomDateRangePicker
             )
@@ -146,18 +175,16 @@ class StatsDatePickerHeaderView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DateRangeMenu(
     viewModel: StatsDatePickerHeaderViewModel,
     range: DatePickerRange,
-    timeGraphShowingState: MutableStateFlow<Boolean>,
+    timeUsageGraphStyleState: MutableStateFlow<StatsTimeUsageGraphStyle>,
     energyGraphShowingState: MutableStateFlow<Boolean>,
     onShowCustomDateRangePickerChange: () -> Unit
 ) {
     var showingDropdown by remember { mutableStateOf(false) }
-    val timeGraphShowing = timeGraphShowingState.collectAsState()
-    val energyGraphShowing = energyGraphShowingState.collectAsState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -223,24 +250,82 @@ private fun DateRangeMenu(
 
             HorizontalDivider(thickness = 4.dp)
             DropdownMenuItem(onClick = {
-                timeGraphShowingState.value = !timeGraphShowing.value
                 showingDropdown = false
+                showBottomSheet = true
             }, text = {
-                Text(if (timeGraphShowing.value) stringResource(R.string.hide_time_graph) else stringResource(R.string.show_time_graph))
-            }, trailingIcon = {
-                Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
-            })
-
-            DropdownMenuItem(onClick = {
-                energyGraphShowingState.value = !energyGraphShowing.value
-                showingDropdown = false
-            }, text = {
-                Text(if (energyGraphShowing.value) "Hide energy breakdown" else "Show energy breakdown")
-            }, trailingIcon = {
-                Icon(imageVector = Icons.Default.BarChart, contentDescription = "graph")
+                Text("Graph settings...")
             })
         }
+
+        if (showBottomSheet) {
+            GraphSettingsBottomSheet(
+                onDismiss = { showBottomSheet = false },
+                timeUsageGraphStyleState,
+                energyGraphShowingState
+            )
+        }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun GraphSettingsBottomSheet(
+    onDismiss: () -> Unit,
+    timeUsageGraphStyleState: MutableStateFlow<StatsTimeUsageGraphStyle>,
+    energyGraphShowingState: MutableStateFlow<Boolean>
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    val context = LocalContext.current
+    val timeUsageGraphStyle = timeUsageGraphStyleState.collectAsState().value
+    val energyGraphShowing = energyGraphShowingState.collectAsState().value
+
+    ModalBottomSheet(
+        onDismissRequest = { onDismiss() },
+        sheetState = sheetState,
+        contentWindowInsets = { WindowInsets.safeDrawing }
+    ) {
+        SettingsPage {
+            SettingsColumn(
+                content = {
+                    SettingsSegmentedControl(
+                        "Time usage graph",
+                        segmentedControl = {
+                            val items = StatsTimeUsageGraphStyle.entries
+                            SegmentedControl(
+                                items = items.map { it.title(context) },
+                                defaultSelectedItemIndex = items.indexOf(timeUsageGraphStyle),
+                                color = colorScheme.primary
+                            ) {
+                                timeUsageGraphStyleState.value = items[it]
+                            }
+                        }
+                    )
+                },
+                footer = "Shows how your energy changes over the selected time period."
+            )
+
+            SettingsColumn(
+                content = {
+                    SettingsSegmentedControl(
+                        "Energy source usage graph",
+                        segmentedControl = {
+                            val items = listOf(false, true)
+                            val titles = listOf("Hidden", "Shown")
+
+                            SegmentedControl(
+                                items = titles.map { it },
+                                defaultSelectedItemIndex = items.indexOf(energyGraphShowing),
+                                color = colorScheme.primary
+                            ) {
+                                energyGraphShowingState.value = items[it]
+                            }
+                        })
+                },
+                footer = "Shows total energy generation and usage for the selected period."
+            )
+        }
+    }
+}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -279,6 +364,6 @@ private fun CustomDateRangeTitle(
 @Composable
 fun StatsDatePickerViewPreview() {
     StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now(), CustomDateRangeDisplayUnit.DAYS)), { }).Content(
-        graphShowingState = MutableStateFlow(false), energyGraphShowingState = MutableStateFlow(false)
+        timeUsageGraphStyle = MutableStateFlow(StatsTimeUsageGraphStyle.Line), energyGraphShowingState = MutableStateFlow(false)
     )
 }

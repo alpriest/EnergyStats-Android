@@ -106,13 +106,14 @@ class StatsTabView(
         val energyBreakdownShowing = viewModel.energyGraphShowingState.collectAsState().value
         val showingApproximations = remember { mutableStateOf(false) }
         val loadState = viewModel.uiState.collectAsState().value.state
+        val temp = remember { MutableStateFlow(StatsTimeUsageGraphStyle.Line) }
 
         topBarSettings.value = TopBarSettings(true, null, {
             StatsDatePickerHeaderView(
                 displayModeStream,
                 { navController.navigate(StatsScreen.CustomDateRangeEditor.name) }
             ).Content(
-                graphShowingState = viewModel.showingGraphStream,
+                timeUsageGraphStyle = temp, // TODO,viewModel.showingGraphStream,
                 energyGraphShowingState = viewModel.energyGraphShowingState
             )
         }, null)
@@ -122,8 +123,6 @@ class StatsTabView(
         LaunchedEffect(viewModel.displayModeStream) {
             viewModel.displayModeStream.collectLatest { viewModel.load() }
         }
-
-        ShowTipIfUnseen(TipType.statsPageEnergyBalanceChartAdded)
 
         Column(
             modifier = Modifier
