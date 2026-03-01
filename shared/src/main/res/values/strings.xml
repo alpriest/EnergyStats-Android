@@ -40,4 +40,7 @@
     <string name="hours">hours</string>
     <string name="fullIn">Full in</string>
     <string name="emptyIn">Empty in</string>
+    <string name="hidden">Hidden</string>
+    <string name="line">Line</string>
+    <string name="bar">Bar</string>
 </resources>

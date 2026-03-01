@@ -492,4 +492,12 @@
     <string name="choose_a_passcode">Elige un código de acceso</string>
     <string name="enter_a_4_digit_passcode_to_turn_on_read_only_mode">Introduce un código de 4 dígitos para activar el modo de solo lectura.</string>
     <string name="if_you_forget_your_passcode_you_can_log_out_and_in_again">Si olvidas tu código, puedes cerrar sesión y volver a iniciarla.</string>
+    <string name="read_only_mode_title">Modo de solo lectura: %1$s</string>
+    <string name="time_usage_graph">Gráfico de uso en el tiempo</string>
+    <string name="energy_source_usage_graph">Gráfico del uso de energía por fuente</string>
+    <string name="shows_how_your_energy_changes_over_the_selected_time_period">Muestra cómo cambia tu energía durante el período seleccionado.</string>
+    <string name="shows_total_energy_generation_and_usage_for_the_selected_period">Muestra la generación y el consumo total de energía durante el período seleccionado.</string>
+    <string name="hidden">Oculto</string>
+    <string name="shown">Mostrado</string>
+    <string name="graph_settings">Configuración del gráfico...</string>
 </resources>

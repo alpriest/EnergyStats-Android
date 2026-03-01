@@ -237,7 +237,7 @@ private fun DateRangeMenu(
                 showingDropdown = false
                 showBottomSheet = true
             }, text = {
-                Text("Graph settings...")
+                Text(stringResource(R.string.graph_settings))
             })
         }
 
@@ -272,7 +272,7 @@ private fun GraphSettingsBottomSheet(
             SettingsColumn(
                 content = {
                     SettingsSegmentedControl(
-                        "Time usage graph",
+                        stringResource(R.string.time_usage_graph),
                         segmentedControl = {
                             val items = StatsTimeUsageGraphStyle.entries
                             SegmentedControl(
@@ -285,16 +285,16 @@ private fun GraphSettingsBottomSheet(
                         }
                     )
                 },
-                footer = "Shows how your energy changes over the selected time period."
+                footer = stringResource(R.string.shows_how_your_energy_changes_over_the_selected_time_period)
             )
 
             SettingsColumn(
                 content = {
                     SettingsSegmentedControl(
-                        "Energy source usage graph",
+                        stringResource(R.string.energy_source_usage_graph),
                         segmentedControl = {
                             val items = listOf(false, true)
-                            val titles = listOf("Hidden", "Shown")
+                            val titles = listOf(stringResource(R.string.hidden), stringResource(R.string.shown))
 
                             SegmentedControl(
                                 items = titles.map { it },
@@ -305,7 +305,7 @@ private fun GraphSettingsBottomSheet(
                             }
                         })
                 },
-                footer = "Shows total energy generation and usage for the selected period."
+                footer = stringResource(R.string.shows_total_energy_generation_and_usage_for_the_selected_period)
             )
         }
     }

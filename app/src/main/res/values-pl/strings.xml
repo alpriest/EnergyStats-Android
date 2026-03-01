@@ -493,4 +493,12 @@
     <string name="choose_a_passcode">Wybierz kod dostępu</string>
     <string name="enter_a_4_digit_passcode_to_turn_on_read_only_mode">Wprowadź 4-cyfrowy kod dostępu, aby włączyć tryb tylko do odczytu.</string>
     <string name="if_you_forget_your_passcode_you_can_log_out_and_in_again">Jeśli zapomnisz kodu dostępu, możesz się wylogować i zalogować ponownie.</string>
+    <string name="read_only_mode_title">Tryb tylko do odczytu: %1$s</string>
+    <string name="time_usage_graph">Wykres zużycia w czasie</string>
+    <string name="energy_source_usage_graph">Wykres zużycia energii według źródła</string>
+    <string name="shows_how_your_energy_changes_over_the_selected_time_period">Pokazuje, jak zmienia się energia w wybranym okresie.</string>
+    <string name="shows_total_energy_generation_and_usage_for_the_selected_period">Pokazuje całkowitą produkcję i zużycie energii w wybranym okresie.</string>
+    <string name="hidden">Ukryte</string>
+    <string name="shown">Wyświetlane</string>
+    <string name="graph_settings">Ustawienia wykresu...</string>
 </resources>

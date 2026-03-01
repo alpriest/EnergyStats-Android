@@ -496,4 +496,11 @@
     <string name="enter_a_4_digit_passcode_to_turn_on_read_only_mode">Enter a 4-digit passcode to turn on read-only mode.</string>
     <string name="if_you_forget_your_passcode_you_can_log_out_and_in_again">If you forget your passcode you can log out and in again</string>
     <string name="read_only_mode_title">Read-only mode: %1$s</string>
+    <string name="time_usage_graph">Time usage graph</string>
+    <string name="energy_source_usage_graph">Energy source usage graph</string>
+    <string name="shows_how_your_energy_changes_over_the_selected_time_period">Shows how your energy changes over the selected time period.</string>
+    <string name="shows_total_energy_generation_and_usage_for_the_selected_period">Shows total energy generation and usage for the selected period.</string>
+    <string name="hidden">Hidden</string>
+    <string name="shown">Shown</string>
+    <string name="graph_settings">Graph settings...</string>
 </resources>

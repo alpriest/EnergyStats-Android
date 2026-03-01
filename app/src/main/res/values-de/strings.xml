@@ -492,4 +492,12 @@
     <string name="choose_a_passcode">Passcode wählen</string>
     <string name="enter_a_4_digit_passcode_to_turn_on_read_only_mode">Gib einen 4-stelligen Passcode ein, um den Nur-Lese-Modus zu aktivieren.</string>
     <string name="if_you_forget_your_passcode_you_can_log_out_and_in_again">Wenn du deinen Passcode vergisst, kannst du dich abmelden und erneut anmelden.</string>
+    <string name="read_only_mode_title">Nur-Lese-Modus: %1$s</string>
+    <string name="time_usage_graph">Zeitnutzungsdiagramm</string>
+    <string name="energy_source_usage_graph">Diagramm der Energienutzung nach Quelle</string>
+    <string name="shows_how_your_energy_changes_over_the_selected_time_period">Zeigt, wie sich deine Energie im ausgewählten Zeitraum verändert.</string>
+    <string name="shows_total_energy_generation_and_usage_for_the_selected_period">Zeigt die gesamte Energieerzeugung und den gesamten Energieverbrauch im ausgewählten Zeitraum.</string>
+    <string name="hidden">Ausgeblendet</string>
+    <string name="shown">Angezeigt</string>
+    <string name="graph_settings">Diagrammeinstellungen...</string>
 </resources>
