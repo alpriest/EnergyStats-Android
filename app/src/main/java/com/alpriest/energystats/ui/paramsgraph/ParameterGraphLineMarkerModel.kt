@@ -1,10 +1,10 @@
 package com.alpriest.energystats.ui.paramsgraph
 
-import android.graphics.RectF
+import androidx.compose.ui.geometry.Rect
 import java.time.LocalDateTime
 
 data class ParameterGraphLineMarkerModel(
-    val bounds: RectF,
+    val bounds: Rect,
     val canvasX: Float,
     val x: Double,
     val time: LocalDateTime?

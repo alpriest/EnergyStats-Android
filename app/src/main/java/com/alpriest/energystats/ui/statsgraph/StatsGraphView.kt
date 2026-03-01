@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,32 +37,28 @@ import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.statsgraph.StatsDisplayMode.Day
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.CartesianMeasuringContext
+import com.patrykandpatrick.vico.compose.cartesian.Zoom
+import com.patrykandpatrick.vico.compose.cartesian.axis.Axis
+import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
+import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
+import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
-import com.patrykandpatrick.vico.compose.cartesian.marker.rememberShowOnPress
+import com.patrykandpatrick.vico.compose.cartesian.marker.CartesianMarkerController
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
+import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.common.component.LineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
-import com.patrykandpatrick.vico.compose.common.fill
-import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
-import com.patrykandpatrick.vico.core.cartesian.Zoom
-import com.patrykandpatrick.vico.core.cartesian.axis.Axis
-import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
-import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
-import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
-import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
-import com.patrykandpatrick.vico.core.cartesian.layer.ColumnCartesianLayer
-import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
-import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarkerController
-import com.patrykandpatrick.vico.core.common.component.LineComponent
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -180,8 +177,7 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
 
         val textColor = axisLabelColor(isDarkMode(appSettingsStream))
         val graphLabel = rememberTextComponent(
-            color = textColor,
-            textSize = 10.sp,
+            style = TextStyle.Default.copy(color = textColor, fontSize = 10.sp),
         )
 
         Column(modifier = modifier.fillMaxWidth()) {
@@ -195,8 +191,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
                             endAxis = VerticalAxis.rememberEnd(
                                 label = graphLabel,
                                 itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
-                                valueFormatter = remember { CartesianValueFormatter.decimal(DecimalFormat("#.#")) },
-                                guideline = rememberAxisGuidelineComponent(fill = fill(axisGuidelineColor))
+                                valueFormatter = remember { CartesianValueFormatter.decimal(1) },
+                                guideline = rememberAxisGuidelineComponent(fill = Fill(axisGuidelineColor))
                             ),
                             bottomAxis = HorizontalAxis.rememberBottom(
                                 label = graphLabel,
@@ -272,7 +268,7 @@ private fun rememberStatsLineLayer(chartColors: List<Color>): LineCartesianLayer
         LineCartesianLayer.LineProvider.series(
             *chartColors.map { color ->
                 LineCartesianLayer.Line(
-                    LineCartesianLayer.LineFill.single(fill(color))
+                    LineCartesianLayer.LineFill.single(Fill(color))
                 )
             }.toTypedArray()
         )
@@ -290,9 +286,9 @@ private fun rememberStatsColumnLayer(chartColors: List<Color>): ColumnCartesianL
         ColumnCartesianLayer.ColumnProvider.series(
             *chartColors.map { color ->
                 LineComponent(
-                    fill(color),
-                    thicknessDp = 8.0f,
-                    strokeFill = fill(color)
+                    Fill(color),
+                    strokeThickness = 8.0.dp,
+                    strokeFill = Fill(color)
                 )
             }.toTypedArray()
         )
@@ -312,7 +308,7 @@ private fun rememberLineLayer(
     val lineProvider = remember(color) {
         LineCartesianLayer.LineProvider.series(
             LineCartesianLayer.Line(
-                LineCartesianLayer.LineFill.single(fill(color))
+                LineCartesianLayer.LineFill.single(Fill(color))
             )
         )
     }

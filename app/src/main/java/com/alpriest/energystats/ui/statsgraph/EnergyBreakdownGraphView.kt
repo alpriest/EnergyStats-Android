@@ -9,9 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.colour
@@ -19,26 +20,22 @@ import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.ui.helpers.lightenColor
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.CartesianMeasuringContext
+import com.patrykandpatrick.vico.compose.cartesian.Zoom
+import com.patrykandpatrick.vico.compose.cartesian.axis.Axis
+import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
+import com.patrykandpatrick.vico.compose.cartesian.data.columnSeries
+import com.patrykandpatrick.vico.compose.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
-import com.patrykandpatrick.vico.compose.cartesian.layer.stacked
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
-import com.patrykandpatrick.vico.compose.common.fill
-import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
-import com.patrykandpatrick.vico.core.cartesian.Zoom
-import com.patrykandpatrick.vico.core.cartesian.axis.Axis
-import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
-import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
-import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
-import com.patrykandpatrick.vico.core.cartesian.layer.ColumnCartesianLayer
-import com.patrykandpatrick.vico.core.common.component.LineComponent
-import com.patrykandpatrick.vico.core.common.shader.ShaderProvider
+import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.common.component.LineComponent
 
 enum class EnergyBreakdownType {
     Inputs,
@@ -190,17 +187,18 @@ private fun rememberColumnsLayer(chartColors: List<Color>): ColumnCartesianLayer
         ColumnCartesianLayer.ColumnProvider.series(
             *chartColors.map { color ->
                 LineComponent(
-                    fill(
-                        shaderProvider = ShaderProvider.verticalGradient(
-                            intArrayOf(
-                                lightenColor(color, 0.2f).toArgb(),
-                                color.copy(alpha = 1.0f).toArgb()
+                    Fill(
+                        brush = Brush.verticalGradient(
+                            listOf(
+                                lightenColor(color, 0.2f),
+                                color.copy(alpha = 1.0f)
                             ),
-                            positions = floatArrayOf(0.0f, 0.25f),
+                            startY = 0.0f,
+                            endY = 0.25f
                         )
                     ),
-                    thicknessDp = 25.0f,
-                    strokeFill = fill(color.copy(alpha = 0.95f))
+                    strokeThickness = 25.0.dp,
+                    strokeFill = Fill(color.copy(alpha = 0.95f))
                 )
             }.toTypedArray(),
         )
@@ -209,6 +207,6 @@ private fun rememberColumnsLayer(chartColors: List<Color>): ColumnCartesianLayer
     return rememberColumnCartesianLayer(
         lineColumnProvider,
         verticalAxisPosition = Axis.Position.Vertical.End,
-        mergeMode = { ColumnCartesianLayer.MergeMode.stacked() }
+        mergeMode = { ColumnCartesianLayer.MergeMode.Stacked }
     )
 }

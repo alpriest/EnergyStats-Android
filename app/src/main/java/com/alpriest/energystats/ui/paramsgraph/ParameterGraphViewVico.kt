@@ -10,6 +10,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.isDarkMode
@@ -18,25 +19,21 @@ import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.paramsgraph.graphs.VariableKey
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
-import com.patrykandpatrick.vico.compose.cartesian.marker.rememberShowOnPress
+import com.patrykandpatrick.vico.compose.cartesian.CartesianMeasuringContext
+import com.patrykandpatrick.vico.compose.cartesian.axis.Axis
+import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianLayerRangeProvider
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
+import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.marker.CartesianMarkerController
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
+import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
-import com.patrykandpatrick.vico.compose.common.fill
-import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
-import com.patrykandpatrick.vico.core.cartesian.axis.Axis
-import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
-import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianLayerRangeProvider
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
-import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
-import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarkerController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.Locale
@@ -63,7 +60,7 @@ fun ParameterGraphViewVico(
     val max = (bounds.maxByOrNull { it.max }?.max) ?: 0f
     val min = (bounds.minByOrNull { it.min }?.min) ?: 0f
     val range = max - min
-    val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter(range) else CartesianValueFormatter.decimal(DecimalFormat("#.#"))
+    val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter(range) else CartesianValueFormatter.decimal(1)
     val truncatedYAxisOnParameterGraphs = appSettingsStream.collectAsState().value.truncatedYAxisOnParameterGraphs
     val startOfDay = displayMode.date.atStartOfDay().atZone(ZoneId.systemDefault()).toEpochSecond()
 
@@ -137,7 +134,7 @@ private fun ParameterGraphViewWithCustomMarker(
         LineCartesianLayer.LineProvider.series(
             *chartColors.map { color ->
                 LineCartesianLayer.Line(
-                    fill = LineCartesianLayer.LineFill.single(fill(color))
+                    fill = LineCartesianLayer.LineFill.single(Fill(color))
                 )
             }.toTypedArray()
         )
@@ -152,8 +149,7 @@ private fun ParameterGraphViewWithCustomMarker(
 
     val color = axisLabelColor(isDarkMode(appSettingsStream))
     val graphLabel = rememberTextComponent(
-        color = color,
-        textSize = 10.sp,
+        style = TextStyle.Default.copy(color = color, fontSize = 10.sp)
     )
 
     Column(
@@ -219,7 +215,7 @@ private val BottomAxisValueFormatter =
 
 private class ParameterGraphEndAxisValueFormatter(private val range: Float) : CartesianValueFormatter {
     override fun format(context: CartesianMeasuringContext, value: Double, verticalAxisPosition: Axis.Position.Vertical?): CharSequence {
-        val unit = context.model.extraStore.getOrNull(VariableKey)?.unit
+        val unit: String? = context.model.extraStore.getOrNull(VariableKey)?.unit
 
         return if (unit == "%") {
             String.format(Locale.getDefault(), "%d %s", value.toInt(), "%")

@@ -2,14 +2,14 @@ package com.alpriest.energystats.ui.statsgraph
 
 import android.annotation.SuppressLint
 import com.alpriest.energystats.ui.paramsgraph.averageOf
-import com.patrykandpatrick.vico.core.cartesian.CartesianDrawingContext
-import com.patrykandpatrick.vico.core.cartesian.CartesianMeasuringContext
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModel
-import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerDimensions
-import com.patrykandpatrick.vico.core.cartesian.layer.CartesianLayerMargins
-import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
-import com.patrykandpatrick.vico.core.cartesian.marker.ColumnCartesianLayerMarkerTarget
-import com.patrykandpatrick.vico.core.cartesian.marker.LineCartesianLayerMarkerTarget
+import com.patrykandpatrick.vico.compose.cartesian.CartesianDrawingContext
+import com.patrykandpatrick.vico.compose.cartesian.CartesianMeasuringContext
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModel
+import com.patrykandpatrick.vico.compose.cartesian.layer.CartesianLayerDimensions
+import com.patrykandpatrick.vico.compose.cartesian.layer.CartesianLayerMargins
+import com.patrykandpatrick.vico.compose.cartesian.marker.CartesianMarker
+import com.patrykandpatrick.vico.compose.cartesian.marker.ColumnCartesianLayerMarkerTarget
+import com.patrykandpatrick.vico.compose.cartesian.marker.LineCartesianLayerMarkerTarget
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.Instant
 import java.time.LocalDateTime
@@ -64,7 +64,7 @@ class StatsGraphLineMarker(
         selectedValueStream.value = StatsGraphLineMarkerModel(
             dimensions = context.layerDimensions,
             width = context.layerDimensions.getContentWidth(context),
-            height = context.layerBounds.height(),
+            height = context.layerBounds.height,
             canvasX = targetX,
             x = entryX,
             time = LocalDateTime.ofInstant(

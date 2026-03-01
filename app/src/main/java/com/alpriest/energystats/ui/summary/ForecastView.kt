@@ -27,20 +27,18 @@ import com.alpriest.energystats.shared.ui.Red
 import com.alpriest.energystats.shared.ui.TintColor
 import com.alpriest.energystats.ui.flow.energy
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
+import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianLayerRangeProvider
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
+import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
-import com.patrykandpatrick.vico.compose.common.fill
-import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
-import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianLayerRangeProvider
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
-import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
-import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
+import com.patrykandpatrick.vico.compose.common.Fill
 import kotlinx.coroutines.flow.StateFlow
 
 object ForecastDefaults {
@@ -95,17 +93,17 @@ fun ForecastView(
     val lineProvider = LineCartesianLayer.LineProvider.series(
         // 0: high (90%) – line only
         LineCartesianLayer.rememberLine(
-            fill = LineCartesianLayer.LineFill.single(fill(chartColors[0])),
+            fill = LineCartesianLayer.LineFill.single(Fill(chartColors[0])),
             areaFill = null
         ),
         // 1: low (10%) – line only
         LineCartesianLayer.rememberLine(
-            fill = LineCartesianLayer.LineFill.single(fill(chartColors[1])),
+            fill = LineCartesianLayer.LineFill.single(Fill(chartColors[1])),
             areaFill = null
         ),
         // 2: prediction – line only
         LineCartesianLayer.rememberLine(
-            fill = LineCartesianLayer.LineFill.single(fill(chartColors[2])),
+            fill = LineCartesianLayer.LineFill.single(Fill(chartColors[2])),
             areaFill = null
         )
     )
