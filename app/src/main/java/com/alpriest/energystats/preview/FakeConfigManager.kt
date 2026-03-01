@@ -20,6 +20,7 @@ import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
 import com.alpriest.energystats.shared.models.SolcastSite
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
@@ -99,10 +100,10 @@ class FakeConfigManager : ConfigManaging {
     override var allowNegativeLoad: Boolean = false
     override fun loginAsDemo() {}
     override var showOutputEnergyOnStats: Boolean = false
-    override var showTimePeriodGraphOnStats: Boolean = true
     override var showEnergySourceUsageGraphOnStats: Boolean = true
     override var readOnlyPasscode: String = ""
     override var isReadOnly: Boolean = false
+    override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar
 
     override var devices: List<Device> = listOf(
         Device(

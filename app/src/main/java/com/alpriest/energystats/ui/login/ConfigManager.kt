@@ -20,6 +20,7 @@ import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
@@ -648,13 +649,6 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
-    override var showTimePeriodGraphOnStats: Boolean
-        get() = config.showTimePeriodGraphOnStats
-        set(value) {
-            config.showTimePeriodGraphOnStats = value
-            appSettingsStore.update(AppSettings.toAppSettings(config))
-        }
-
     override var showEnergySourceUsageGraphOnStats: Boolean
         get() = config.showEnergySourceUsageGraphOnStats
         set(value) {
@@ -673,6 +667,13 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         get() = config.readOnlyPasscode
         set(value) {
             config.readOnlyPasscode = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
+    override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle
+        get() = config.statsTimeUsageGraphStyle
+        set(value) {
+            config.statsTimeUsageGraphStyle = value
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 

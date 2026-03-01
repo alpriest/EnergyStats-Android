@@ -62,8 +62,6 @@ class StatsTabViewModel(
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
     var approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
-    var showingGraphStream = MutableStateFlow(configManager.showTimePeriodGraphOnStats)
-    var energyGraphShowingState = MutableStateFlow(configManager.showEnergySourceUsageGraphOnStats)
 
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))

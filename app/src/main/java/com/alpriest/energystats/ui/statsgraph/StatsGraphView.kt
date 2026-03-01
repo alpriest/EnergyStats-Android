@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +29,7 @@ import com.alpriest.energystats.models.colour
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ReportVariable
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.network.DemoNetworking
@@ -36,6 +39,7 @@ import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberAxisGuidelineComponent
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberShowOnPress
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
@@ -50,9 +54,12 @@ import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
+import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.core.cartesian.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarkerController
+import com.patrykandpatrick.vico.core.common.component.LineComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -73,7 +80,8 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val inverterConsumptionData = viewData.inverterUsage
     val batterySOCData = viewData.batterySOC
     val statsGraphData = viewData.stats.values
-    val modelProducer = remember { CartesianChartModelProducer() }
+    val timeUsageGraphStyle = appSettingsStream.collectAsState().value.statsTimeUsageGraphStyle
+    val modelProducer = remember(timeUsageGraphStyle) { CartesianChartModelProducer() }
     val bottomAxisFormatter = remember(displayMode) { BottomAxisValueFormatter(displayMode) }
     val scrollState = rememberVicoScrollState(scrollEnabled = false)
     val isSystemInDarkTheme = isDarkMode(appSettingsStream)
@@ -81,15 +89,26 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = Zoom.Content)
     val maxX = displayMode.xPlotCount
 
-    LaunchedEffect(statsGraphData) {
+    LaunchedEffect(statsGraphData, timeUsageGraphStyle) {
         modelProducer.runTransaction {
             if (statsGraphData.any { it.isNotEmpty() }) {
-                lineSeries {
-                    statsGraphData.forEach { seriesEntries: List<StatsChartEntry> ->
-                        series(
-                            x = seriesEntries.map { it.x },
-                            y = seriesEntries.map { it.y.toDouble() }
-                        )
+                if (timeUsageGraphStyle == StatsTimeUsageGraphStyle.Line) {
+                    lineSeries {
+                        statsGraphData.forEach { seriesEntries: List<StatsChartEntry> ->
+                            series(
+                                x = seriesEntries.map { it.x },
+                                y = seriesEntries.map { it.y.toDouble() }
+                            )
+                        }
+                    }
+                } else if (timeUsageGraphStyle == StatsTimeUsageGraphStyle.Bar) {
+                    columnSeries {
+                        statsGraphData.forEach { seriesEntries: List<StatsChartEntry> ->
+                            series(
+                                x = seriesEntries.map { it.x },
+                                y = seriesEntries.map { it.y.toDouble() }
+                            )
+                        }
                     }
                 }
             }
@@ -136,8 +155,6 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             color = MaterialTheme.colorScheme.onSecondary
         )
     } else {
-        val statsLayer = rememberStatsLayer(chartColors)
-
         val selfSufficiencyColor = selfSufficiencyLineColor(isDarkMode(appSettingsStream))
         val selfSufficiencyLayer = rememberLineLayer(color = selfSufficiencyColor, verticalAxisPosition = Axis.Position.Vertical.Start)
 
@@ -148,7 +165,12 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
         val batterySOCLayer = rememberLineLayer(color = batterySOCColor, verticalAxisPosition = Axis.Position.Vertical.Start)
 
         val layers = buildList {
-            if (statsGraphData.isNotEmpty()) add(statsLayer)
+            if (statsGraphData.isNotEmpty() && timeUsageGraphStyle == StatsTimeUsageGraphStyle.Line) {
+                add(rememberStatsLineLayer(chartColors))
+            }
+            if (statsGraphData.isNotEmpty() && timeUsageGraphStyle == StatsTimeUsageGraphStyle.Bar) {
+                add(rememberStatsColumnLayer(chartColors))
+            }
             if (selfSufficiencyGraphData.isNotEmpty()) add(selfSufficiencyLayer)
             if (inverterConsumptionData.isNotEmpty()) add(inverterConsumptionLayer)
             if (batterySOCData.isNotEmpty()) add(batterySOCLayer)
@@ -166,35 +188,37 @@ fun StatsGraphView(viewModel: StatsTabViewModel, modifier: Modifier = Modifier) 
             TimeSelectionText(viewModel)
 
             Box(modifier = Modifier.fillMaxSize()) {
-                CartesianChartHost(
-                    chart = rememberCartesianChart(
-                        *layers.toTypedArray(),
-                        endAxis = VerticalAxis.rememberEnd(
-                            label = graphLabel,
-                            itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
-                            valueFormatter = remember { CartesianValueFormatter.decimal(DecimalFormat("#.#")) },
-                            guideline = rememberAxisGuidelineComponent(fill = fill(axisGuidelineColor))
-                        ),
-                        bottomAxis = HorizontalAxis.rememberBottom(
-                            label = graphLabel,
-                            itemPlacer = HorizontalAxis.ItemPlacer.aligned(
-                                spacing = { 2 }
+                key(timeUsageGraphStyle) {
+                    CartesianChartHost(
+                        chart = rememberCartesianChart(
+                            *layers.toTypedArray(),
+                            endAxis = VerticalAxis.rememberEnd(
+                                label = graphLabel,
+                                itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
+                                valueFormatter = remember { CartesianValueFormatter.decimal(DecimalFormat("#.#")) },
+                                guideline = rememberAxisGuidelineComponent(fill = fill(axisGuidelineColor))
                             ),
-                            valueFormatter = bottomAxisFormatter,
-                            guideline = null
+                            bottomAxis = HorizontalAxis.rememberBottom(
+                                label = graphLabel,
+                                itemPlacer = HorizontalAxis.ItemPlacer.aligned(
+                                    spacing = { 2 }
+                                ),
+                                valueFormatter = bottomAxisFormatter,
+                                guideline = null
+                            ),
+                            marker = remember {
+                                StatsGraphLineMarker(viewModel.selectedValueStream)
+                            },
+                            markerController = CartesianMarkerController.rememberShowOnPress()
                         ),
-                        marker = remember {
-                            StatsGraphLineMarker(viewModel.selectedValueStream)
-                        },
-                        markerController = CartesianMarkerController.rememberShowOnPress()
-                    ),
-                    modelProducer = modelProducer,
-                    modifier = Modifier.height(200.dp),
-                    scrollState = scrollState,
-                    animateIn = false,
-                    animationSpec = null,
-                    zoomState = zoomState
-                )
+                        modelProducer = modelProducer,
+                        modifier = Modifier.height(200.dp),
+                        scrollState = scrollState,
+                        animateIn = false,
+                        animationSpec = null,
+                        zoomState = zoomState
+                    )
+                }
 
                 selectedValue?.let {
                     SelectedStatsValuesLineMarker(
@@ -243,7 +267,7 @@ fun StatsGraphViewPreview() {
 }
 
 @Composable
-private fun rememberStatsLayer(chartColors: List<Color>): LineCartesianLayer {
+private fun rememberStatsLineLayer(chartColors: List<Color>): LineCartesianLayer {
     val lineColumnProvider = remember(chartColors) {
         LineCartesianLayer.LineProvider.series(
             *chartColors.map { color ->
@@ -256,6 +280,26 @@ private fun rememberStatsLayer(chartColors: List<Color>): LineCartesianLayer {
 
     return rememberLineCartesianLayer(
         lineColumnProvider,
+        verticalAxisPosition = Axis.Position.Vertical.End
+    )
+}
+
+@Composable
+private fun rememberStatsColumnLayer(chartColors: List<Color>): ColumnCartesianLayer {
+    val columnColumnProvider = remember(chartColors) {
+        ColumnCartesianLayer.ColumnProvider.series(
+            *chartColors.map { color ->
+                LineComponent(
+                    fill(color),
+                    thicknessDp = 8.0f,
+                    strokeFill = fill(color)
+                )
+            }.toTypedArray()
+        )
+    }
+
+    return rememberColumnCartesianLayer(
+        columnColumnProvider,
         verticalAxisPosition = Axis.Position.Vertical.End
     )
 }

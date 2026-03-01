@@ -18,6 +18,7 @@ import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
@@ -102,7 +103,7 @@ class FakeStoredConfigStore(
     override var detectedActiveTemplate: String? = null,
     override var showOutputEnergyOnStats: Boolean = false,
     override var showEnergySourceUsageGraphOnStats: Boolean = true,
-    override var showTimePeriodGraphOnStats: Boolean = true,
     override var isReadOnly: Boolean = false,
-    override var readOnlyPasscode: String = ""
+    override var readOnlyPasscode: String = "",
+    override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar
 ) : StoredConfig

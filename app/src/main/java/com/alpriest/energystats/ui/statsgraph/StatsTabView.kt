@@ -41,6 +41,7 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
@@ -102,20 +103,17 @@ class StatsTabView(
     ) {
         val scrollState = rememberScrollState()
         val context = LocalContext.current
-        val graphShowing = viewModel.showingGraphStream.collectAsState().value
-        val energyBreakdownShowing = viewModel.energyGraphShowingState.collectAsState().value
+        val appSettings = configManager.appSettingsStream.collectAsState().value
         val showingApproximations = remember { mutableStateOf(false) }
         val loadState = viewModel.uiState.collectAsState().value.state
         val temp = remember { MutableStateFlow(StatsTimeUsageGraphStyle.Line) }
 
         topBarSettings.value = TopBarSettings(true, null, {
             StatsDatePickerHeaderView(
+                configManager,
                 displayModeStream,
                 { navController.navigate(StatsScreen.CustomDateRangeEditor.name) }
-            ).Content(
-                timeUsageGraphStyle = temp, // TODO,viewModel.showingGraphStream,
-                energyGraphShowingState = viewModel.energyGraphShowingState
-            )
+            ).Content()
         }, null)
 
         MonitorAlertDialog(viewModel)
@@ -130,7 +128,7 @@ class StatsTabView(
                 .verticalScroll(scrollState)
                 .padding(12.dp)
         ) {
-            if (graphShowing) {
+            if (appSettings.statsTimeUsageGraphStyle != StatsTimeUsageGraphStyle.Off) {
                 Box(contentAlignment = Alignment.Center) {
                     StatsGraphView(viewModel = viewModel, modifier = Modifier.padding(bottom = 24.dp))
 
@@ -152,11 +150,11 @@ class StatsTabView(
                 }
             }
 
-            if (energyBreakdownShowing) {
+            if (appSettings.showEnergySourceUsageGraphOnStats) {
                 Box(contentAlignment = Alignment.Center) {
                     EnergyBreakdownGraphView(viewModel)
 
-                    if (!graphShowing) {
+                    if (appSettings.statsTimeUsageGraphStyle == StatsTimeUsageGraphStyle.Off) {
                         when (loadState) {
                             is LoadState.Error -> Text(stringResource(R.string.error))
 

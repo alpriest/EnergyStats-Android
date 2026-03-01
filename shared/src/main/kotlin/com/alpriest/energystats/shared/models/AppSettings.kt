@@ -63,7 +63,9 @@ data class AppSettings(
     val gridImportUnitPrice: Double,
     val feedInUnitPrice: Double,
     val showOutputEnergyOnStats: Boolean,
-    val isReadOnly: Boolean
+    val isReadOnly: Boolean,
+    val statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle,
+    val showEnergySourceUsageGraphOnStats: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -181,7 +183,9 @@ fun AppSettings.Companion.demo(
         gridImportUnitPrice = 0.0,
         feedInUnitPrice = 0.0,
         showOutputEnergyOnStats = showOutputEnergyOnStats,
-        isReadOnly = isReadOnly
+        isReadOnly = isReadOnly,
+        statsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Line,
+        showEnergySourceUsageGraphOnStats = false
     )
 }
 
@@ -230,6 +234,8 @@ fun AppSettings.Companion.toAppSettings(config: StoredConfig): AppSettings {
         feedInUnitPrice = config.feedInUnitPrice,
         gridImportUnitPrice = config.gridImportUnitPrice,
         showOutputEnergyOnStats = config.showOutputEnergyOnStats,
-        isReadOnly = config.isReadOnly
+        isReadOnly = config.isReadOnly,
+        statsTimeUsageGraphStyle = config.statsTimeUsageGraphStyle,
+        showEnergySourceUsageGraphOnStats = config.showEnergySourceUsageGraphOnStats
     )
 }

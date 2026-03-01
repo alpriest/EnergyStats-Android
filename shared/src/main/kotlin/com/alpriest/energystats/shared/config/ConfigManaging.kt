@@ -16,6 +16,7 @@ import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
@@ -95,7 +96,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var showStringTotalsAsPercentage: Boolean
     var showGridTotals: Boolean
     var showOutputEnergyOnStats: Boolean
-    var showTimePeriodGraphOnStats: Boolean
+    var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle
     var showEnergySourceUsageGraphOnStats: Boolean
     var readOnlyPasscode: String
     var isReadOnly: Boolean

@@ -2,14 +2,16 @@ package com.alpriest.energystats.ui.statsgraph
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.shared.config.ConfigManaging
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 import java.util.Calendar
 
-class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
+class StatsDatePickerHeaderViewModel(configManager: ConfigManaging, val displayModeStream: MutableStateFlow<StatsDisplayMode>) : ViewModel() {
     var rangeStream = MutableStateFlow<DatePickerRange>(DatePickerRange.DAY)
     var monthStream = MutableStateFlow(0)
     var yearStream = MutableStateFlow(0)
@@ -22,45 +24,47 @@ class StatsDatePickerHeaderViewModel(val displayModeStream: MutableStateFlow<Sta
     var customRangeDisplayUnit: CustomDateRangeDisplayUnit = CustomDateRangeDisplayUnit.MONTHS
     var canDecreaseStream = MutableStateFlow(false)
     var canIncreaseStream = MutableStateFlow(false)
+    var timeUsageGraphStyleStream = MutableStateFlow(configManager.statsTimeUsageGraphStyle)
+    var energySourceUsageGraphShowingState = MutableStateFlow(configManager.showEnergySourceUsageGraphOnStats)
 
     init {
-        viewModelScope.launch {
-            monthStream.value = dateStream.value.monthValue
-            yearStream.value = dateStream.value.year
+        monthStream.value = dateStream.value.monthValue
+        yearStream.value = dateStream.value.year
 
-            combine(rangeStream, dateStream, monthStream, yearStream) { _, _, _, _ ->
-                updateDisplayMode()
-            }.collect { }
-        }
+        combine(rangeStream, dateStream, monthStream, yearStream) { _, _, _, _ -> Unit }
+            .onEach { if (isInitialised) updateDisplayMode() }
+            .launchIn(viewModelScope)
 
-        viewModelScope.launch {
-            combine(customStartDate, customEndDate) { _, _ ->
-                updateDisplayMode()
-            }.collect { }
-        }
+        combine(customStartDate, customEndDate) { _, _ -> Unit }
+            .onEach { if (isInitialised) updateDisplayMode() }
+            .launchIn(viewModelScope)
 
-        viewModelScope.launch {
-            displayModeStream.collectLatest { updateDatePickerRange(it) }
-        }
+        displayModeStream
+            .onEach { updateDatePickerRange(it) }
+            .launchIn(viewModelScope)
 
-        viewModelScope.launch {
-            updateDatePickerRange(displayModeStream.value)
+        customStartDate
+            .map { it.toString() }
+            .onEach { customStartDateString.value = it }
+            .launchIn(viewModelScope)
 
-            updateIncreaseDecreaseButtons()
-            isInitialised = true
-        }
+        customEndDate
+            .map { it.toString() }
+            .onEach { customEndDateString.value = it }
+            .launchIn(viewModelScope)
 
-        viewModelScope.launch {
-            customStartDate.collect {
-                customStartDateString.value = it.toString()
-            }
-        }
+        timeUsageGraphStyleStream
+            .onEach { configManager.statsTimeUsageGraphStyle = it }
+            .launchIn(viewModelScope)
 
-        viewModelScope.launch {
-            customEndDate.collect {
-                customEndDateString.value = it.toString()
-            }
-        }
+        energySourceUsageGraphShowingState
+            .onEach { configManager.showEnergySourceUsageGraphOnStats = it }
+            .launchIn(viewModelScope)
+
+        updateDatePickerRange(displayModeStream.value)
+
+        updateIncreaseDecreaseButtons()
+        isInitialised = true
     }
 
     private fun updateDatePickerRange(displayMode: StatsDisplayMode) {

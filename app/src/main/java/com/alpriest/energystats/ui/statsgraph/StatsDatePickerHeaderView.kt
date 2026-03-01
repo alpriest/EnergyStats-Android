@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.statsgraph
 
-import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -44,7 +43,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.ui.flow.home.DeviceState.Online
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.PopupCalendarView
 import com.alpriest.energystats.ui.helpers.SegmentedControl
@@ -70,42 +71,25 @@ sealed class DatePickerRange {
 }
 
 class StatsDatePickerHeaderViewModelFactory(
+    private val configManager: ConfigManaging,
     private val displayModeStream: MutableStateFlow<StatsDisplayMode>
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StatsDatePickerHeaderViewModel(displayModeStream) as T
-    }
-}
-
-enum class StatsTimeUsageGraphStyle(val value: Int) {
-    Bar(0),
-    Line(1),
-    Off(2);
-
-    fun title(context: Context): String {
-        return when (this) {
-            StatsTimeUsageGraphStyle.Bar -> "Bar"
-            StatsTimeUsageGraphStyle.Line -> "Line"
-            StatsTimeUsageGraphStyle.Off -> "Hidden"
-        }
-    }
-
-    companion object {
-        fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: Online
+        return StatsDatePickerHeaderViewModel(configManager, displayModeStream) as T
     }
 }
 
 class StatsDatePickerHeaderView(
-    private val displayModeStream: MutableStateFlow<StatsDisplayMode>, private val onShowCustomDateRangePicker: () -> Unit
+    private val configManager: ConfigManaging,
+    private val displayModeStream: MutableStateFlow<StatsDisplayMode>,
+    private val onShowCustomDateRangePicker: () -> Unit
 ) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
-        viewModel: StatsDatePickerHeaderViewModel = viewModel(factory = StatsDatePickerHeaderViewModelFactory(displayModeStream)),
-        timeUsageGraphStyle: MutableStateFlow<StatsTimeUsageGraphStyle>,
-        energyGraphShowingState: MutableStateFlow<Boolean>
+        viewModel: StatsDatePickerHeaderViewModel = viewModel(factory = StatsDatePickerHeaderViewModelFactory(configManager, displayModeStream))
     ) {
         val range = viewModel.rangeStream.collectAsState().value
         val canIncrease = viewModel.canIncreaseStream.collectAsState().value
@@ -115,8 +99,8 @@ class StatsDatePickerHeaderView(
             DateRangeMenu(
                 viewModel = viewModel,
                 range = range,
-                timeUsageGraphStyleState = timeUsageGraphStyle,
-                energyGraphShowingState = energyGraphShowingState,
+                timeUsageGraphStyleStateStream = viewModel.timeUsageGraphStyleStream,
+                energyGraphShowingStateStream = viewModel.energySourceUsageGraphShowingState,
                 onShowCustomDateRangePickerChange = onShowCustomDateRangePicker
             )
             Title(
@@ -179,8 +163,8 @@ class StatsDatePickerHeaderView(
 private fun DateRangeMenu(
     viewModel: StatsDatePickerHeaderViewModel,
     range: DatePickerRange,
-    timeUsageGraphStyleState: MutableStateFlow<StatsTimeUsageGraphStyle>,
-    energyGraphShowingState: MutableStateFlow<Boolean>,
+    timeUsageGraphStyleStateStream: MutableStateFlow<StatsTimeUsageGraphStyle>,
+    energyGraphShowingStateStream: MutableStateFlow<Boolean>,
     onShowCustomDateRangePickerChange: () -> Unit
 ) {
     var showingDropdown by remember { mutableStateOf(false) }
@@ -260,8 +244,8 @@ private fun DateRangeMenu(
         if (showBottomSheet) {
             GraphSettingsBottomSheet(
                 onDismiss = { showBottomSheet = false },
-                timeUsageGraphStyleState,
-                energyGraphShowingState
+                timeUsageGraphStyleStateStream,
+                energyGraphShowingStateStream
             )
         }
     }
@@ -271,13 +255,13 @@ private fun DateRangeMenu(
 @Composable
 private fun GraphSettingsBottomSheet(
     onDismiss: () -> Unit,
-    timeUsageGraphStyleState: MutableStateFlow<StatsTimeUsageGraphStyle>,
-    energyGraphShowingState: MutableStateFlow<Boolean>
+    timeUsageGraphStyleStateStream: MutableStateFlow<StatsTimeUsageGraphStyle>,
+    energyGraphShowingStateStream: MutableStateFlow<Boolean>
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     val context = LocalContext.current
-    val timeUsageGraphStyle = timeUsageGraphStyleState.collectAsState().value
-    val energyGraphShowing = energyGraphShowingState.collectAsState().value
+    val timeUsageGraphStyle = timeUsageGraphStyleStateStream.collectAsState().value
+    val energyGraphShowing = energyGraphShowingStateStream.collectAsState().value
 
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
@@ -296,7 +280,7 @@ private fun GraphSettingsBottomSheet(
                                 defaultSelectedItemIndex = items.indexOf(timeUsageGraphStyle),
                                 color = colorScheme.primary
                             ) {
-                                timeUsageGraphStyleState.value = items[it]
+                                timeUsageGraphStyleStateStream.value = items[it]
                             }
                         }
                     )
@@ -317,7 +301,7 @@ private fun GraphSettingsBottomSheet(
                                 defaultSelectedItemIndex = items.indexOf(energyGraphShowing),
                                 color = colorScheme.primary
                             ) {
-                                energyGraphShowingState.value = items[it]
+                                energyGraphShowingStateStream.value = items[it]
                             }
                         })
                 },
@@ -325,7 +309,6 @@ private fun GraphSettingsBottomSheet(
             )
         }
     }
-}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -363,7 +346,9 @@ private fun CustomDateRangeTitle(
 @Preview(widthDp = 500, heightDp = 500)
 @Composable
 fun StatsDatePickerViewPreview() {
-    StatsDatePickerHeaderView(MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now(), CustomDateRangeDisplayUnit.DAYS)), { }).Content(
-        timeUsageGraphStyle = MutableStateFlow(StatsTimeUsageGraphStyle.Line), energyGraphShowingState = MutableStateFlow(false)
-    )
+    StatsDatePickerHeaderView(
+        FakeConfigManager(),
+        MutableStateFlow(StatsDisplayMode.Custom(LocalDate.now(), LocalDate.now(), CustomDateRangeDisplayUnit.DAYS)),
+        { }
+    ).Content()
 }

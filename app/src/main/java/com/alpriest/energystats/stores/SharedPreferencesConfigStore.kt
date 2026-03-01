@@ -20,6 +20,7 @@ import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
@@ -111,10 +112,10 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         INVERTER_WORK_MODES,
         ALLOW_NEGATIVE_LOADS,
         SHOW_OUTPUT_ENERGY_ON_STATS,
-        SHOW_TIME_PERIOD_GRAPH_ON_STATS,
         SHOW_ENERGY_SOURCE_USAGE_GRAPH_ON_STATS,
         IS_READ_ONLY,
-        READ_ONLY_PASSCODE
+        READ_ONLY_PASSCODE,
+        TIME_PERIOD_GRAPH_STYLE_ON_STATS,
     }
 
     // Local in-memory only
@@ -804,11 +805,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var showTimePeriodGraphOnStats: Boolean
-        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_TIME_PERIOD_GRAPH_ON_STATS.name, true)
+    override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle
+        get() {
+            val value = sharedPreferences.getInt(SharedPreferenceDisplayKey.TIME_PERIOD_GRAPH_STYLE_ON_STATS.name, StatsTimeUsageGraphStyle.Bar.value)
+            return StatsTimeUsageGraphStyle.fromInt(value)
+        }
         set(value) {
             sharedPreferences.edit {
-                putBoolean(SharedPreferenceDisplayKey.SHOW_TIME_PERIOD_GRAPH_ON_STATS.name, value)
+                putInt(SharedPreferenceDisplayKey.TIME_PERIOD_GRAPH_STYLE_ON_STATS.name, value.value)
             }
         }
 

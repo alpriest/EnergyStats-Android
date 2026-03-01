@@ -18,6 +18,7 @@ import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
+import com.alpriest.energystats.shared.models.StatsTimeUsageGraphStyle
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
@@ -91,10 +92,10 @@ interface StoredConfig {
     var shouldCombineCT2WithLoadsPower: Boolean
     var allowNegativeLoad: Boolean
     var detectedActiveTemplate: String?
-    var showTimePeriodGraphOnStats: Boolean
     var showEnergySourceUsageGraphOnStats: Boolean
     var readOnlyPasscode: String
     var isReadOnly: Boolean
+    var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle
 }
 
 interface CurrentStatusCalculatorConfig {
