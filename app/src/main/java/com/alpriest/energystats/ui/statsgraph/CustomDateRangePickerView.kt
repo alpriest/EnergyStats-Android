@@ -213,7 +213,7 @@ fun MonthYearPicker(header: String, date: LocalDate, onChange: (LocalDate) -> Un
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = false, locale = "de")
+@Preview(showBackground = false)
 @Composable
 private fun CustomDateRangePickerViewPreview() {
     val settings = remember { mutableStateOf(TopBarSettings(topBarVisible = true, title = "Choose", actions = {}, backButtonAction = null)) }

@@ -130,6 +130,7 @@ class BatteryChargeScheduleSettingsView(
     fun BatteryTimePeriodView(timePeriod: ChargeTimePeriod, periodTitle: String, onChange: (ChargeTimePeriod) -> Unit) {
         val textColor = remember { mutableStateOf(Color.Black) }
         val state = remember { mutableStateOf(timePeriod.enabled) }
+        val timeTypeShowing = remember { mutableStateOf<TimeType?>(null) }
 
         SettingsColumn(
             header = periodTitle
@@ -147,9 +148,10 @@ class BatteryChargeScheduleSettingsView(
                 TimeType.START,
                 stringResource(R.string.start),
                 labelStyle = TextStyle(color = textColor.value),
-                includeSeconds = false
-            ) { hour, minute ->
-                onChange(ChargeTimePeriod(start = Time(hour, minute), end = timePeriod.end, enabled = timePeriod.enabled))
+                includeSeconds = false,
+                timeTypeShowing = timeTypeShowing
+            ) { time ->
+                onChange(ChargeTimePeriod(start = time, end = timePeriod.end, enabled = timePeriod.enabled))
             }
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
@@ -159,9 +161,10 @@ class BatteryChargeScheduleSettingsView(
                 TimeType.END,
                 stringResource(R.string.end),
                 labelStyle = TextStyle(color = textColor.value),
-                includeSeconds = false
-            ) { hour, minute ->
-                onChange(ChargeTimePeriod(start = timePeriod.start, end = Time(hour, minute), enabled = timePeriod.enabled))
+                includeSeconds = false,
+                timeTypeShowing = timeTypeShowing
+            ) { time ->
+                onChange(ChargeTimePeriod(start = timePeriod.start, end = time, enabled = timePeriod.enabled))
             }
 
             OutlinedButton(

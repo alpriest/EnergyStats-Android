@@ -36,25 +36,24 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.TimeType
+import com.alpriest.energystats.shared.models.WorkModes
+import com.alpriest.energystats.shared.ui.PaleWhite
+import com.alpriest.energystats.shared.ui.PowerFlowNegative
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.settings.BottomButtonConfiguration
-import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.ErrorTextView
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
-import com.alpriest.energystats.shared.models.TimeType
-import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.ui.PaleWhite
-import com.alpriest.energystats.shared.ui.PowerFlowNegative
 import com.alpriest.energystats.shared.R as SharedR
 
 data class EditPhaseErrorData(
@@ -129,6 +128,7 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
         WorkModes.ForceDischarge -> stringResource(R.string.workmode_force_discharge_description)
         else -> null
     }
+    val timeTypeShowing = remember { mutableStateOf<TimeType?>(null) }
 
     MonitorAlertDialog(viewModel)
 
@@ -143,8 +143,11 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
             includeSeconds = false,
             modifier = Modifier
                 .background(colorScheme.surface)
-                .padding(vertical = 14.dp)
-        ) { hour, minute -> viewModel.startTimeStream.value = Time(hour, minute) }
+                .padding(vertical = 14.dp),
+            timeTypeShowing = timeTypeShowing
+        ) { time -> viewModel.startTimeStream.value = time }
+
+        HorizontalDivider()
 
         TimePeriodView(
             endTime,
@@ -154,8 +157,9 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
             includeSeconds = false,
             modifier = Modifier
                 .background(colorScheme.surface)
-                .padding(vertical = 14.dp)
-        ) { hour, minute -> viewModel.endTimeStream.value = Time(hour, minute) }
+                .padding(vertical = 14.dp),
+            timeTypeShowing = timeTypeShowing
+        ) { time -> viewModel.endTimeStream.value = time }
 
         ErrorTextView(errorText.timeError)
 

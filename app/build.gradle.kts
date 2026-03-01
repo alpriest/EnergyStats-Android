@@ -102,4 +102,5 @@ dependencies {
     implementation(libs.firebase.perf)
     implementation(project(":shared"))
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.picktime.compose)
 }
