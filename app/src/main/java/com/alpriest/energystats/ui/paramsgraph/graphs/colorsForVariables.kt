@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun colorsForVariables(graphVariables: List<ParameterGraphVariable>, appSettingsStream: StateFlow<AppSettings>): Map<String, List<Color>> {
     return graphVariables
-        .filter { it.isSelected }
+        .filter { it.enabled }
         .groupBy { it.type.unit }
         .mapValues { (_, varsForUnit) ->
             varsForUnit.map { variable ->

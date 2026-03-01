@@ -40,7 +40,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
         graphVariables.value
             .filter { it.isSelected }
             .filter { unit == null || it.type.unit == unit }
-            .map {
+            .forEach {
                 val selectedValue = selectedValues
                     .filter { it.key.unit == unit }
                     .map { it.value }

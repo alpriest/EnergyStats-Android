@@ -47,7 +47,6 @@ import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.graphs.MultipleParameterGraphVico
 import com.alpriest.energystats.ui.paramsgraph.graphs.SingleParameterGraphVico
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
@@ -75,7 +74,6 @@ class ParametersGraphTabView(
     private val topBarSettings: MutableState<TopBarSettings>,
     private val network: Networking,
     private val configManager: ConfigManaging,
-    private val userManager: UserManaging,
     private val onWriteTempFile: (String, String) -> Uri?,
     private val graphVariablesStream: MutableStateFlow<List<ParameterGraphVariable>>,
     private val navController: NavHostController,
@@ -203,12 +201,11 @@ class ParametersGraphTabView(
         }
 
         if (configManager.separateParameterGraphsByUnit) {
-            MultipleParameterGraphVico(viewModel, appSettingsStream, userManager, producerAxisScalePairs)
+            MultipleParameterGraphVico(viewModel, appSettingsStream, producerAxisScalePairs)
         } else {
             SingleParameterGraphVico(
                 viewModel,
                 appSettingsStream,
-                userManager,
                 producerAxisScalePairs
             )
         }

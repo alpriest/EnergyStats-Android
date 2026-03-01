@@ -7,7 +7,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.AppSettings
@@ -27,7 +26,6 @@ val VariableKey = ExtraStore.Key<Variable>()
 @Composable
 fun LoadStateParameterGraphVico(
     data: List<List<DateTimeFloatEntry>>,
-    chartColors: List<Color>,
     yAxisScale: AxisScale,
     viewModel: ParametersGraphTabViewModel,
     appSettingsStream: StateFlow<AppSettings>,
@@ -35,8 +33,9 @@ fun LoadStateParameterGraphVico(
     valuesAtTimeStream: List<DateTimeFloatEntry>
 ) {
     val loadState = viewModel.uiState.collectAsState().value.state
-    val modelProducer = remember {
-        CartesianChartModelProducer()
+    val modelProducer = remember { CartesianChartModelProducer() }
+    val chartColors = data.map {
+        it.first().type.colour(appSettingsStream)
     }
 
     LaunchedEffect(data) {
@@ -55,7 +54,6 @@ fun LoadStateParameterGraphVico(
                                 x = seriesEntries.map { it.graphPoint },
                                 y = seriesEntries.map { it.y.toDouble() }
                             )
-
                         }
                     }
                 }

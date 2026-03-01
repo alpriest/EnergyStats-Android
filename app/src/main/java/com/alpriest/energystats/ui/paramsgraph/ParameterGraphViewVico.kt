@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +20,6 @@ import com.alpriest.energystats.ui.paramsgraph.graphs.VariableKey
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberEnd
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberShowOnPress
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
@@ -143,10 +143,12 @@ private fun ParameterGraphViewWithCustomMarker(
         )
     }
 
-    val lineLayer = rememberLineCartesianLayer(
-        lineProvider = lineProvider,
-        rangeProvider = rangeProvider
-    )
+    val lineLayer = remember(lineProvider, rangeProvider) {
+        LineCartesianLayer(
+            lineProvider = lineProvider,
+            rangeProvider = rangeProvider
+        )
+    }
 
     val color = axisLabelColor(isDarkMode(appSettingsStream))
     val graphLabel = rememberTextComponent(
@@ -161,34 +163,36 @@ private fun ParameterGraphViewWithCustomMarker(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            CartesianChartHost(
-                chart = rememberCartesianChart(
-                    lineLayer,
-                    endAxis = VerticalAxis.rememberEnd(
-                        label = graphLabel,
-                        itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
-                        valueFormatter = endAxisFormatter
-                    ),
-                    bottomAxis = HorizontalAxis.rememberBottom(
-                        label = graphLabel,
-                        itemPlacer = HorizontalAxis.ItemPlacer.aligned(
-                            spacing = { SECONDS_IN_DAY / 24 },
-                            addExtremeLabelPadding = true
+            key(rangeProvider) {
+                CartesianChartHost(
+                    chart = rememberCartesianChart(
+                        lineLayer,
+                        endAxis = VerticalAxis.rememberEnd(
+                            label = graphLabel,
+                            itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
+                            valueFormatter = endAxisFormatter
                         ),
-                        valueFormatter = bottomAxisFormatter,
-                        guideline = null
+                        bottomAxis = HorizontalAxis.rememberBottom(
+                            label = graphLabel,
+                            itemPlacer = HorizontalAxis.ItemPlacer.aligned(
+                                spacing = { SECONDS_IN_DAY / 24 },
+                                addExtremeLabelPadding = true
+                            ),
+                            valueFormatter = bottomAxisFormatter,
+                            guideline = null
+                        ),
+                        marker = remember {
+                            ParameterGraphLineMarker(selectedValueStream)
+                        },
+                        markerController = CartesianMarkerController.rememberShowOnPress()
                     ),
-                    marker = remember {
-                        ParameterGraphLineMarker(selectedValueStream)
-                    },
-                    markerController = CartesianMarkerController.rememberShowOnPress()
-                ),
-                modelProducer = producer,
-                modifier = Modifier.fillMaxSize(),
-                scrollState = rememberVicoScrollState(scrollEnabled = false),
-                animateIn = false,
-                animationSpec = null
-            )
+                    modelProducer = producer,
+                    modifier = Modifier.fillMaxSize(),
+                    scrollState = rememberVicoScrollState(scrollEnabled = false),
+                    animateIn = false,
+                    animationSpec = null
+                )
+            }
 
             selectedValue?.let {
                 ParameterValuesPopupVico(

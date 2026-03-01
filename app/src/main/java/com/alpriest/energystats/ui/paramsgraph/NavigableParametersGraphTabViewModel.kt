@@ -117,7 +117,6 @@ class NavigableParametersGraphTabView(
                     topBarSettings,
                     network,
                     configManager,
-                    userManager,
                     onWriteTempFile,
                     viewModel.graphVariablesStream,
                     navController,

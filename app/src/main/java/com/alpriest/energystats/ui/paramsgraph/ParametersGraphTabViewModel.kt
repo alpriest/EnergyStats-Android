@@ -49,8 +49,22 @@ data class ParametersGraphViewState(
     val variables: List<ParameterGraphVariable>
 )
 
+data class ParametersGraphProducerData(
+    val unit: String,
+    val entries: List<List<DateTimeFloatEntry>>
+)
+
+fun ParametersGraphProducerData.yScale(): AxisScale {
+    return if (entries.isNotEmpty()) {
+        AxisScale(entries.minOf { it.minOf { it.y } } * 0.9f, entries.maxOf { it.maxOf { it.y } } * 1.1f)
+    } else {
+        // Default scale when no visible data exists for this unit.
+        AxisScale(0f, 1f)
+    }
+}
+
 data class ParametersGraphViewData(
-    val producers: Map<String, Pair<List<List<DateTimeFloatEntry>>, AxisScale>>,
+    val producers: List<ParametersGraphProducerData>, //NEW
     val graphVariables: List<ParameterGraphVariable>,
 )
 
@@ -65,7 +79,7 @@ class ParametersGraphTabViewModel(
     var exportFileName: String = ""
     override var exportFileUri: Uri? = null
     val hasDataStream = MutableStateFlow(false)
-    private val _viewDataState = MutableStateFlow(ParametersGraphViewData(mapOf(), graphVariablesStream.value))
+    private val _viewDataState = MutableStateFlow(ParametersGraphViewData(emptyList(), graphVariablesStream.value))
     val viewDataState = _viewDataState.asStateFlow()
     val displayModeStream = MutableStateFlow(ParametersDisplayMode(LocalDate.now(), 24))
     private var rawData: List<ParametersGraphValue> = listOf()
@@ -200,15 +214,14 @@ class ParametersGraphTabViewModel(
     }
 
     private fun refresh() {
+        val enabledGraphVariables = graphVariablesStream.value.filter { it.enabled }.map { it.type }
         val hours = displayModeStream.value.hours
         val now = LocalDateTime.now()
         val oldest = displayModeStream.value.date.atTime(now.hour, now.minute).minusHours(hours.toLong())
-        val grouped = rawData
-            .filter {
-                it.time > oldest
-            }
+        val groupedByType = rawData
+            .filter { it.time > oldest }
             .groupBy { it.type }
-        val entries = grouped
+        val entries = groupedByType
             .map { group ->
                 group.value.map {
                     DateTimeFloatEntry(
@@ -220,12 +233,14 @@ class ParametersGraphTabViewModel(
                 }
             }
 
-        boundsStream.value = entries.map { entryList ->
-            val max = (entryList.maxBy { it.y }.y)
-            val min = (entryList.minBy { it.y }.y)
+        boundsStream.value = entries
+            .filter { it.first().type in enabledGraphVariables }
+            .map { entryList ->
+                val max = (entryList.maxBy { it.y }.y)
+                val min = (entryList.minBy { it.y }.y)
 
-            ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
-        }
+                ParameterGraphBounds(entryList.first().type, min, max, entryList.last().y)
+            }
 
         if (entries.isEmpty()) {
             hasDataStream.value = false
@@ -234,29 +249,18 @@ class ParametersGraphTabViewModel(
             hasDataStream.value = true
             entriesStream.value = entries
 
-            // Build producers for all variables
-            val allVariables = graphVariablesStream.value
-                .filter { it.isSelected }
-                .map { it.type }
-
-            val producers = allVariables
+            // Build producers for all enabled variables
+            val producers = enabledGraphVariables
                 .map { variable ->
-                    val valuesForVariable: List<ParametersGraphValue> = grouped[variable] ?: emptyList()
+                    val valuesForVariable: List<ParametersGraphValue> = groupedByType[variable] ?: emptyList()
                     Pair(variable.unit, valuesForVariable)
                 }
                 .groupBy { it.first } // group by unit
                 .map { (unit, pairsForUnit) ->
                     val groupedValues: List<List<ParametersGraphValue>> = pairsForUnit.map { it.second }
-                    val allValues = groupedValues.flatMap { list -> list.map { it.value } }
 
-                    val yAxisScale = if (allValues.isNotEmpty()) {
-                        AxisScale(allValues.min().toFloat() * 0.9f, allValues.max().toFloat() * 1.1f)
-                    } else {
-                        // Default scale when no visible data exists for this unit.
-                        AxisScale(0f, 1f)
-                    }
-
-                    unit to Pair(
+                    ParametersGraphProducerData(
+                        unit,
                         groupedValues.filter { it.isNotEmpty() }.map { group ->
                             group.map { graphValue ->
                                 DateTimeFloatEntry(
@@ -266,11 +270,9 @@ class ParametersGraphTabViewModel(
                                     y = graphValue.value.toFloat()
                                 )
                             }
-                        },
-                        yAxisScale
+                        }
                     )
                 }
-                .toMap()
 
             _viewDataState.value = ParametersGraphViewData(producers, graphVariablesStream.value)
         }
