@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.monthYearString
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.QueryDate
@@ -15,7 +15,7 @@ import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponseData
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.parse
-import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
@@ -114,7 +114,10 @@ class SummaryTabViewModel(
                         is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).plusMonths(1).monthYearString()
                         is SummaryDateRange.Manual -> dateRange.from.monthYearString()
                     }
-                    hasFinished = true
+
+                    if (year == fromYear) {
+                        hasFinished = true
+                    }
                 }
 
                 yearlyTotals.forEach { (variable, value) ->

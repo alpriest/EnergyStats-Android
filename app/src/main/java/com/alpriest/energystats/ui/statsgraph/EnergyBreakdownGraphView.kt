@@ -197,7 +197,7 @@ private fun rememberColumnsLayer(chartColors: List<Color>): ColumnCartesianLayer
                             endY = 0.25f
                         )
                     ),
-                    strokeThickness = 25.0.dp,
+                    thickness = 25.0.dp,
                     strokeFill = Fill(color.copy(alpha = 0.95f))
                 )
             }.toTypedArray(),

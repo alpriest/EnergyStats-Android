@@ -76,7 +76,7 @@ private fun StatsGraphValue.isInRangeFor(
         else -> true
     }
 
-fun List<StatsGraphValue>.filterToNow(
+fun List<StatsGraphValue>.filterTimeRelevantEntries(
     displayMode: StatsDisplayMode,
     now: LocalDateTime = LocalDateTime.now(ZoneId.systemDefault())
 ): List<StatsGraphValue> = filter { it.isInRangeFor(displayMode, now) }

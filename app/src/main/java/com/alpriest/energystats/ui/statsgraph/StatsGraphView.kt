@@ -287,7 +287,7 @@ private fun rememberStatsColumnLayer(chartColors: List<Color>): ColumnCartesianL
             *chartColors.map { color ->
                 LineComponent(
                     Fill(color),
-                    strokeThickness = 8.0.dp,
+                    thickness = 4.dp,
                     strokeFill = Fill(color)
                 )
             }.toTypedArray()

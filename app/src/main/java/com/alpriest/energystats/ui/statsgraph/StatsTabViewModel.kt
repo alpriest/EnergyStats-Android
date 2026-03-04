@@ -307,11 +307,13 @@ class StatsTabViewModel(
         val now = LocalDateTime.now(ZoneId.systemDefault())
 
         val statsEntries = rawData
-            .filterToNow(displayMode, now)
+            .filterTimeRelevantEntries(displayMode, now)
+            .asSequence()
             .filter { it.type != ReportVariable.SelfSufficiency }
             .filter { it.type != ReportVariable.InverterConsumption }
             .filter { it.type != ReportVariable.BatterySOC }
-            .filter { !hiddenVariables.contains(it.type) }.groupBy { it.type }
+            .filter { !hiddenVariables.contains(it.type) }
+            .groupBy { it.type }
             .mapValues { (_, values) ->
                 values.map { value ->
                     StatsChartEntry(
@@ -322,6 +324,7 @@ class StatsTabViewModel(
                     )
                 }
             }
+            .filterValues { it.isNotEmpty() }
 
         val selfSufficiencyData = rawDataFiltered(ReportVariable.SelfSufficiency, hiddenVariables, displayMode, now)
         val inverterData = rawDataFiltered(ReportVariable.InverterConsumption, hiddenVariables, displayMode, now)
@@ -350,7 +353,7 @@ class StatsTabViewModel(
         return rawData
             .filter { it.type == type }
             .filter { !hiddenVariables.contains(it.type) }
-            .filterToNow(displayMode, now)
+            .filterTimeRelevantEntries(displayMode, now)
             .map {
                 StatsChartEntry(
                     periodDescription = periodDescription(it.graphPoint, displayModeStream.value),
@@ -450,7 +453,7 @@ class StatsTabViewModel(
 
     private fun generateInverterConsumption(rawData: List<StatsGraphValue>): List<StatsGraphValue> {
         return if (configManager.showInverterConsumption) {
-            return calculateInverterConsumptionAcrossTimePeriod(rawData)
+            calculateInverterConsumptionAcrossTimePeriod(rawData)
         } else {
             listOf()
         }
