@@ -28,7 +28,7 @@ class CurrentStatusCalculator(
     val response: OpenRealQueryResponse,
     val device: Device,
     val config: CurrentStatusCalculatorConfig,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope?
 ) {
     private val _currentValuesStream =
         MutableStateFlow(CurrentValues(solarPower = 0.0, solarStringsPower = listOf(), grid = 0.0, homeConsumption = 0.0, temperatures = null, ct2 = 0.0))
@@ -36,7 +36,7 @@ class CurrentStatusCalculator(
     var lastUpdate: LocalDateTime = LocalDateTime.now()
 
     init {
-        coroutineScope.launch {
+        coroutineScope?.launch {
             config.appSettingsStream.collect {
                 updateCurrentValues()
             }

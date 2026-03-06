@@ -110,11 +110,10 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
 
         val refresher = WearDataRefresher(
             context = application,
-            store = store,
-            scope = viewModelScope
+            store = store
         )
 
-        when (val result = refresher.refresh()) {
+        when (val result = refresher.refresh(false)) {
             is WearDataRefreshResult.Success -> {
                 _state.value = _state.value.copy(state = LoadState.Inactive)
                 MainComplicationService.requestRefresh(application)

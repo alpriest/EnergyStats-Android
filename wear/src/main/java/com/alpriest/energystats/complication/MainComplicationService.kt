@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.PlainComplicationText
@@ -17,8 +18,9 @@ import com.alpriest.energystats.presentation.WearDataRefresher
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.sync.SharedPreferencesConfigStore
 import com.alpriest.energystats.sync.make
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.coroutines.cancellation.CancellationException
 
 class MainComplicationService : SuspendingComplicationDataSourceService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData? {
@@ -48,15 +50,22 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
         val configStore = SharedPreferencesConfigStore.make(this)
 
         // Best-effort refresh; always return quickly with cached values if the network is slow.
-        coroutineScope {
-            val refresher = WearDataRefresher(
-                context = this@MainComplicationService,
-                store = configStore,
-                scope = this
-            )
-            withTimeoutOrNull(3_000) {
-                refresher.refresh()
+        try {
+            supervisorScope {
+                val refresher = WearDataRefresher(
+                    context = this@MainComplicationService,
+                    store = configStore
+                )
+                withTimeoutOrNull(60_000) {
+                    refresher.refresh(false)
+                }
             }
+        } catch (ce: CancellationException) {
+            Log.e("WearDataRefresher", "onComplicationRequest CANCELLED", ce)
+            throw ce
+        } catch (t: Throwable) {
+            Log.e("WearDataRefresher", "onComplicationRequest FAILED", t)
+            // optionally fall back to cached values
         }
 
         val batteryLevel = configStore.batteryChargeLevel
