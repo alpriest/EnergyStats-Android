@@ -73,12 +73,18 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberVicoScrollState(scrollEnabled = false)
     val zoomState = rememberVicoZoomState(zoomEnabled = false, initialZoom = Zoom.Content)
-    val chartColors = (EnergyBreakdownType.Inputs.types + EnergyBreakdownType.Outputs.types).map { it.colour(appSettingsStream) }
     val totals = remember { mutableStateMapOf<EnergyBreakdownType, String>() }
     val context = LocalContext.current
     var modelReady by remember { mutableStateOf(false) }
     var hasRenderedOnce by rememberSaveable { mutableStateOf(false) }
-    val hasData = totalsStream.isNotEmpty() || valuesAtTimeStream.isNotEmpty()
+    val inputVariablesWithData = EnergyBreakdownType.Inputs.types.filter {
+        (valuesAtTimeStream[it]?.isNotEmpty() ?: false) || (totalsStream[it] != null)
+    }
+    val outputVariablesWithData = EnergyBreakdownType.Outputs.types.filter {
+        (valuesAtTimeStream[it]?.isNotEmpty() ?: false) || (totalsStream[it] != null)
+    }
+    val chartColors = (inputVariablesWithData + outputVariablesWithData).map { it.colour(appSettingsStream) }
+    val hasData = (inputVariablesWithData + outputVariablesWithData).isNotEmpty() || totalsStream.isNotEmpty() || valuesAtTimeStream.isNotEmpty()
 
     LaunchedEffect(totalsStream, valuesAtTimeStream) {
         totals.clear()
@@ -99,10 +105,10 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
         modelProducer.runTransaction {
             if (valuesAtTimeStream.isNotEmpty()) {
                 columnSeries {
-                    EnergyBreakdownType.Inputs.types.forEach {
+                    inputVariablesWithData.forEach {
                         series(x = EnergyBreakdownType.Inputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
                     }
-                    EnergyBreakdownType.Outputs.types.forEach {
+                    outputVariablesWithData.forEach {
                         series(x = EnergyBreakdownType.Outputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
                     }
                 }
@@ -119,12 +125,12 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
                     .sum()
                     .run { EnergyBreakdownType.Outputs.title(context, this.toDouble()) }
 
-            } else if (totalsStream.isNotEmpty()) {
+            } else if ((inputVariablesWithData + outputVariablesWithData).isNotEmpty()) {
                 columnSeries {
-                    EnergyBreakdownType.Inputs.types.forEach {
+                    inputVariablesWithData.forEach {
                         series(x = EnergyBreakdownType.Inputs.graphX, listOfNotNull(totalsStream[it]))
                     }
-                    EnergyBreakdownType.Outputs.types.forEach {
+                    outputVariablesWithData.forEach {
                         series(x = EnergyBreakdownType.Outputs.graphX, listOfNotNull(totalsStream[it]))
                     }
                 }

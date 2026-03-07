@@ -22,9 +22,7 @@ class StatsGraphLineMarker(
         context: CartesianDrawingContext,
         targets: List<CartesianMarker.Target>,
     ) {
-        with(context) {
-            drawLabel(context, targets)
-        }
+        drawLabel(context, targets)
     }
 
     @SuppressLint("RestrictedApi")
@@ -36,17 +34,11 @@ class StatsGraphLineMarker(
         val columnTargets = targets.mapNotNull { it as? ColumnCartesianLayerMarkerTarget }
 
         // Find first entry with points among line targets
-        val lineEntry = lineTargets
-            .asSequence()
-            .mapNotNull { target -> target.points.firstOrNull()?.entry?.x }
-            .firstOrNull()
+        val lineEntry = lineTargets.firstNotNullOfOrNull { target -> target.points.firstOrNull()?.entry?.x }
 
         // If no suitable line entry, try column targets
         val columnEntry = if (lineEntry == null) {
-            columnTargets
-                .asSequence()
-                .mapNotNull { target -> target.columns.firstOrNull()?.entry?.x }
-                .firstOrNull()
+            columnTargets.firstNotNullOfOrNull { target -> target.columns.firstOrNull()?.entry?.x }
         } else {
             null
         }
