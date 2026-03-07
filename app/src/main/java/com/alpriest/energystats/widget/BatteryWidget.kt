@@ -78,9 +78,8 @@ class BatteryWidget : GlanceAppWidget() {
 
 @Composable
 fun BatteryWidgetContent(amount: Float, chargeDescription: String?, tapAction: WidgetTapAction) {
-    val launchIntent = Intent(LocalContext.current, MainActivity::class.java)
     val action: Action = when (tapAction) {
-        WidgetTapAction.Launch -> actionStartActivity(launchIntent)
+        WidgetTapAction.Launch -> androidx.glance.action.actionStartActivity<MainActivity>()
         WidgetTapAction.Refresh -> actionRunCallback<BatteryRefreshAction>()
     }
 

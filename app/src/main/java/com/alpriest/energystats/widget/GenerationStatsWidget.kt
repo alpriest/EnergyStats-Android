@@ -2,7 +2,6 @@ package com.alpriest.energystats.widget
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -21,12 +20,12 @@ import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.action.Action
 import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
-import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Column
@@ -68,9 +67,8 @@ class GenerationStatsWidget : GlanceAppWidget() {
         repository.updateFromSharedConfig(context)
 
         provideContent {
-            val launchIntent = Intent(LocalContext.current, MainActivity::class.java)
             val action: Action = when (repository.tapAction) {
-                WidgetTapAction.Launch -> actionStartActivity(launchIntent)
+                WidgetTapAction.Launch -> actionStartActivity<MainActivity>()
                 WidgetTapAction.Refresh -> actionRunCallback<GenerationStatsRefreshAction>()
             }
 
