@@ -102,13 +102,24 @@ class APIKeyLoginView(private val userManager: UserManaging) {
             )
 
             errorMessage?.let {
-                Text(
-                    it,
-                    Modifier
-                        .padding(top = 24.dp)
-                        .padding(horizontal = 24.dp),
-                    color = Color.Red
-                )
+                Column(
+                    Modifier.padding(horizontal = 24.dp),
+                ) {
+                    Text(
+                        it,
+                        Modifier
+                            .padding(top = 24.dp)
+                            .padding(bottom = 12.dp),
+                        color = Color.Red
+                    )
+
+                    ClickableUrlText(
+                        stringResource(R.string.contact_energystatsapp_gmail_com_for_support),
+                        textStyle = TextStyle(colorScheme.onSecondary).copy(color = Color.Red),
+                        appSettingsStream = appSettingsStream,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
             }
 
             Row(
