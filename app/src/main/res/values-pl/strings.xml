@@ -467,7 +467,7 @@
     <string name="battery_capacity_calculation_description">Obliczane jako _battery_residual / (Min SOC / 100)_, gdzie wartość rezydualna jest szacowana przez instalację i może nie być dokładna. Stuknij pojemność powyżej, aby wprowadzić ręczną wartość rozmiaru baterii, jeśli wyświetlana wartość jest nieprawidłowa.</string>
     <string name="heating_schedule_enabled">Harmonogram ogrzewania włączony</string>
     <string name="heating_schedule">Harmonogram ogrzewania</string>
-    <string name="battery_heating_footer">Energia słoneczna może być wykorzystywana do ogrzewania. Jeśli poziom SoC przekracza 40%, bateria może być używana do ogrzewania. Jeśli SoC spadnie poniżej 40%, do ogrzewania wykorzystywana jest sieć energetyczna. Gdy bateria jest używana do ogrzewania, może się rozładowywać, ale nie będzie się ładować. Gdy do ogrzewania wykorzystywana jest sieć lub energia słoneczna, bateria nie będzie się ani ładować, ani rozładowywać.</string>
+    <string name="battery_heating_footer">Energia słoneczna może być wykorzystywana do ogrzewania. Jeśli poziom SoC przekracza 40%%, bateria może być używana do ogrzewania. Jeśli SoC spadnie poniżej 40%%, do ogrzewania wykorzystywana jest sieć energetyczna. Gdy bateria jest używana do ogrzewania, może się rozładowywać, ale nie będzie się ładować. Gdy do ogrzewania wykorzystywana jest sieć lub energia słoneczna, bateria nie będzie się ani ładować, ani rozładowywać.</string>
     <string name="not_supported">Nieobsługiwane</string>
     <string name="enable_heating">Włącz ogrzewanie</string>
     <string name="battery_schedule_active_schedule_clash">Nie można zapisać ustawień, ponieważ masz aktywny harmonogram. Musisz usunąć harmonogram i spróbować ponownie.</string>

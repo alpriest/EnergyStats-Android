@@ -10,22 +10,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.GraphBounds
-import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.helpers.kW
-import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.models.ValueUsage
-import com.alpriest.energystats.ui.ToggleRowView
-import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
-import com.alpriest.energystats.ui.statsgraph.title
-import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.ValueUsage
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.ui.ToggleRowView
+import com.alpriest.energystats.ui.statsgraph.title
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -84,13 +76,7 @@ fun ParameterGraphVariableTogglesView(viewModel: ParametersGraphTabViewModel, un
 @Preview(widthDp = 340)
 fun ParameterGraphVariableTogglesViewPreview() {
     ParameterGraphVariableTogglesView(
-        ParametersGraphTabViewModel(
-            DemoNetworking(),
-            FakeConfigManager(),
-            onWriteTempFile = { _, _ -> null },
-            MutableStateFlow(previewParameterGraphVariables()),
-            solarForecastProvider = { DemoSolarForecasting() }
-        ),
+        previewParametersGraphTabViewModel,
         null,
         appSettingsStream = MutableStateFlow(AppSettings.demo(useLargeDisplay = false))
     )

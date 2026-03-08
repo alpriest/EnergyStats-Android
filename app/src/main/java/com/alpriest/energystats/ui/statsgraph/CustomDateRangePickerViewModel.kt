@@ -23,6 +23,8 @@ enum class CustomDateRangePickerError {
     TIME_PERIOD_NEEDS_MONTHS
 }
 
+val previewCustomDateRangePickerViewModel = CustomDateRangePickerViewModel()
+
 class CustomDateRangePickerViewModel : ViewModel() {
     private val _initialStart = MutableStateFlow<LocalDate?>(null)
     private val _initialEnd = MutableStateFlow<LocalDate?>(null)

@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
@@ -221,6 +222,15 @@ class EditTemplateView(
 @Preview(showBackground = true)
 @Composable
 fun EditTemplateViewPreview() {
+    val navController = rememberNavController()
+    val viewModel = remember(navController) {
+        EditTemplateViewModel(
+            FakeConfigManager(),
+            DemoNetworking(),
+            navController,
+            PreviewTemplateStore()
+        )
+    }
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         EditTemplateView(
             configManager = FakeConfigManager(),
@@ -234,12 +244,7 @@ fun EditTemplateViewPreview() {
                 name = "Winter routine",
                 phases = listOf()
             ),
-            viewModel = EditTemplateViewModel(
-                FakeConfigManager(),
-                DemoNetworking(),
-                NavHostController(LocalContext.current),
-                PreviewTemplateStore()
-            ),
+            viewModel = viewModel,
             Modifier
         )
     }

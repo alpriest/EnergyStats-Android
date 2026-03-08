@@ -27,8 +27,9 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.flow.home.SolarPowerFlow
 import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.SolarRangeDefinitions
+import com.alpriest.energystats.ui.flow.home.SolarPowerFlow
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumn
@@ -36,7 +37,6 @@ import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 
@@ -167,9 +167,8 @@ class SolarBandingSettingsView(
 @Preview(showBackground = true, widthDp = 400, heightDp = 1000)
 @Composable
 fun SolarBandingSettingsPreview() {
-    val viewModel = SolarBandingSettingsViewModel(FakeConfigManager())
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SolarBandingSettingsView(FakeConfigManager(), NavHostController(LocalContext.current))
-            .Content(viewModel)
+            .Content(previewSolarBandingSettingsViewModel)
     }
 }

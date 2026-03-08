@@ -43,7 +43,6 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.celsius
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.TimeType
-import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.LoadingView
@@ -294,10 +293,6 @@ fun BatteryHeatingScheduleSettingsViewPreview() {
     EnergyStatsTheme {
         BatteryHeatingScheduleSettingsView(
             network = DemoNetworking(), configManager = FakeConfigManager(), navController = NavController(LocalContext.current), FakeUserManager()
-        ).ScheduleAvailable(
-            BatteryHeatingScheduleSettingsViewModel(
-                DemoNetworking(), FakeConfigManager()
-            ), Modifier
-        )
+        ).ScheduleAvailable(previewBatteryHeatingScheduleSettingsViewModel, Modifier)
     }
 }

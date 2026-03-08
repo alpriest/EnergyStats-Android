@@ -5,8 +5,8 @@ import android.os.CountDownTimer
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.WatchSyncManager
+import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryData
@@ -203,7 +203,6 @@ class PowerFlowTabViewModel(
                 WatchSyncManager().sendWatchStatsData(application, currentViewModel.currentValuesStream, battery, configManager, apiKeyProvider())
 
                 val summary = LoadedPowerFlowViewModel(
-                    application,
                     currentValuesStream = currentViewModel.currentValuesStream,
                     hasBattery = battery.hasBattery,
                     battery = battery,

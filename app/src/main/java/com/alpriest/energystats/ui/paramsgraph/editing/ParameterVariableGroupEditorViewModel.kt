@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.paramsgraph.editing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphVariable
@@ -16,6 +17,8 @@ data class ParameterVariableGroupEditorViewData(
     val groups: List<ParameterGroup>,
     val canDelete: Boolean
 )
+
+val previewParameterVariableGroupEditorViewModel = ParameterVariableGroupEditorViewModel(FakeConfigManager(), MutableStateFlow(previewParameterGraphVariables()))
 
 class ParameterVariableGroupEditorViewModel(
     val configManager: ConfigManaging,

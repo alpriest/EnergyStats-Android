@@ -244,7 +244,7 @@ fun TextEntryDialog(
 fun ParameterVariableGroupEditorViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ParameterVariableGroupEditorView(
-            viewModel = ParameterVariableGroupEditorViewModel(FakeConfigManager(), MutableStateFlow(previewParameterGraphVariables())),
+            previewParameterVariableGroupEditorViewModel,
             NavHostController(LocalContext.current)
         )
     }

@@ -315,9 +315,9 @@ fun ScheduleTemplate.asSchedule(): Schedule {
 @Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun ScheduleSummaryViewPreview() {
-    val viewModel = ScheduleSummaryViewModel(DemoNetworking(), FakeConfigManager(), NavHostController(LocalContext.current), PreviewTemplateStore())
     val context = LocalContext.current
-    LaunchedEffect(null) { viewModel.load(context) }
+    val previewScheduleSummaryViewModel = makePreviewScheduleSummaryViewModel(context)
+    LaunchedEffect(null) { previewScheduleSummaryViewModel.load(context) }
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         ScheduleSummaryView(
@@ -328,7 +328,7 @@ fun ScheduleSummaryViewPreview() {
             templateStore = PreviewTemplateStore()
         ).Loaded(
             Schedule.preview(),
-            viewModel,
+            previewScheduleSummaryViewModel,
             Modifier
         )
     }

@@ -4,21 +4,22 @@ import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.alpriest.energystats.R
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.helpers.asPercent
+import com.alpriest.energystats.shared.helpers.kWh
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.ValueUsage
-import com.alpriest.energystats.shared.helpers.kWh
-import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.ui.ToggleRowView
 import com.alpriest.energystats.ui.flow.energy
-import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 
@@ -79,14 +80,16 @@ fun StatsGraphVariableTogglesView(viewModel: StatsTabViewModel, modifier: Modifi
 @Preview(widthDp = 340)
 fun StatsGraphVariableTogglesViewPreview() {
     val application = LocalContext.current.applicationContext as Application
-
-    StatsGraphVariableTogglesView(
+    val viewModel = remember(application) {
         StatsTabViewModel(
             application,
             MutableStateFlow(StatsDisplayMode.Day(LocalDate.now())),
             FakeConfigManager(),
             DemoNetworking(),
-            appSettingsStream = MutableStateFlow(AppSettings.demo())
-        ) { _, _ -> null }
-    )
+            appSettingsStream = MutableStateFlow(AppSettings.demo()),
+            { _, _ -> null }
+        )
+    }
+
+    StatsGraphVariableTogglesView(viewModel)
 }

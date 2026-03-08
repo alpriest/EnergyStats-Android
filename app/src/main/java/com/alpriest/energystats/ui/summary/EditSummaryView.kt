@@ -10,11 +10,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.config.ConfigManaging
@@ -81,7 +83,7 @@ class EditSummaryView(
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        SettingsCheckbox(title = "Automatic", state = mutableStateOf(viewData.automatic), onUpdate = { viewModel.didChangeAutomatic(it) })
+                        SettingsCheckbox(title = stringResource(R.string.automatic), state = mutableStateOf(viewData.automatic), onUpdate = { viewModel.didChangeAutomatic(it) })
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
@@ -115,14 +117,10 @@ class EditSummaryView(
 @Composable
 fun EditSummaryViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
-        val viewModel = EditSummaryViewModel(
-            FakeConfigManager(),
-            { }
-        )
         EditSummaryView(
             FakeConfigManager(),
             navController = NavHostController(LocalContext.current),
             { }
-        ).Content(viewModel)
+        ).Content(previewEditSummaryViewModel)
     }
 }

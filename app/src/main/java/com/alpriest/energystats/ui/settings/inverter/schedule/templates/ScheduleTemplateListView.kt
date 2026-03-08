@@ -38,6 +38,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.preview.FakeUserManager
@@ -103,6 +104,7 @@ class ScheduleTemplateListView(
                 onRetry = { viewModel.load() },
                 onLogout = { coroutineScope.launch { userManager.logout() } },
             )
+
             is LoadState.Inactive -> {
                 Loaded(templates, viewModel, modifier)
             }
@@ -280,6 +282,14 @@ fun CreateTemplateView(viewModel: ScheduleTemplateListViewModel) {
 @Preview(heightDp = 600, widthDp = 400)
 @Composable
 fun EditPhaseViewPreview() {
+    val navController = rememberNavController()
+    val viewModel = remember(navController) {
+        ScheduleTemplateListViewModel(
+            FakeConfigManager(),
+            PreviewTemplateStore(),
+            navController
+        )
+    }
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         ScheduleTemplateListView(
             configManager = FakeConfigManager(),
@@ -291,11 +301,7 @@ fun EditPhaseViewPreview() {
                 ScheduleTemplate("1", "Summer saving", listOf()),
                 ScheduleTemplate("2", "Winter overnight charge", listOf())
             ),
-            viewModel = ScheduleTemplateListViewModel(
-                FakeConfigManager(),
-                PreviewTemplateStore(),
-                NavHostController(LocalContext.current)
-            ),
+            viewModel = viewModel,
             Modifier
         )
     }

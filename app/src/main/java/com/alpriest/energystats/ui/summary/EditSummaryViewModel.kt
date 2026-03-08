@@ -3,12 +3,15 @@ package com.alpriest.energystats.ui.summary
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.alpriest.energystats.shared.models.SummaryDateRange
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.SummaryDateRange
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+
+val previewEditSummaryViewModel = EditSummaryViewModel(FakeConfigManager(), {})
 
 class EditSummaryViewModelFactory(
     private val configManager: ConfigManaging,

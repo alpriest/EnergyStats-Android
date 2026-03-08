@@ -38,4 +38,7 @@
     <string name="automatic">Automático</string>
     <string name="fullIn">Lleno en</string>
     <string name="emptyIn">Vacia en</string>
+    <string name="hidden">Oculto</string>
+    <string name="line">Línea</string>
+    <string name="bar">Barras</string>
 </resources>

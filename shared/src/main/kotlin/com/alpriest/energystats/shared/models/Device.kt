@@ -12,3 +12,7 @@ data class Device(
 ) {
     companion object
 }
+
+fun Device.Companion.preview(): Device {
+    return Device("", true, "", "", true, "", null, "")
+}

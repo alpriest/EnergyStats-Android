@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.settings.solar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
@@ -9,6 +10,8 @@ import com.alpriest.energystats.shared.models.demo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
+val previewSolarBandingSettingsViewModel = SolarBandingSettingsViewModel(FakeConfigManager())
 
 class SolarBandingSettingsViewModel(
     configManager: ConfigManaging

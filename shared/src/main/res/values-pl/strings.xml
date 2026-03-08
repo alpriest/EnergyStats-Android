@@ -38,4 +38,7 @@
     <string name="automatic">Automatyczny</string>
     <string name="fullIn">Pełny za</string>
     <string name="emptyIn">Pusty za</string>
+    <string name="hidden">Ukryte</string>
+    <string name="line">Linia</string>
+    <string name="bar">Słupki</string>
 </resources>

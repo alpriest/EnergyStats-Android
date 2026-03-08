@@ -1,18 +1,27 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import androidx.lifecycle.ViewModel
-import com.alpriest.energystats.shared.models.BatteryTemperatures
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
+import com.alpriest.energystats.shared.models.BatteryTemperatures
 import com.alpriest.energystats.shared.services.BatteryCapacityCalculator
 import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
+
+val previewBatteryPowerViewModel = BatteryPowerViewModel(
+    FakeConfigManager().apply {
+        showUsableBatteryOnly = true
+    },
+    actualStateOfCharge = 0.25,
+    chargePowerkWH = 0.5,
+    batteryTemperatures = BatteryTemperatures(13.6, null, null)
+)
 
 class BatteryPowerViewModel(
     private val configManager: ConfigManaging,
     private val actualStateOfCharge: Double,
     val chargePowerkWH: Double,
-    private val batteryTemperatures: BatteryTemperatures,
-    val residual: Int
+    private val batteryTemperatures: BatteryTemperatures
 ) : ViewModel() {
     val temperatures: List<Double>
         get() {

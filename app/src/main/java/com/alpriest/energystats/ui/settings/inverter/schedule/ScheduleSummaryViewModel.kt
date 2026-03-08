@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.models.DeviceFirmwareVersion
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.shared.models.LoadState
@@ -15,14 +17,25 @@ import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.ScheduleTemplate
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.settings.SettingsScreen
+import com.alpriest.energystats.ui.settings.inverter.schedule.templates.PreviewTemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+
+fun makePreviewScheduleSummaryViewModel(context: Context): ScheduleSummaryViewModel {
+    return ScheduleSummaryViewModel(
+        DemoNetworking(),
+        FakeConfigManager(),
+        NavHostController(context),
+        PreviewTemplateStore()
+    )
+}
 
 class ScheduleSummaryViewModelFactory(
     private val network: Networking,
@@ -236,6 +249,7 @@ fun errorMessage(exception: Exception, context: Context): String {
                 exception.localizedMessage ?: context.getString(R.string.unknown_error)
             }
         }
+
         else -> exception.localizedMessage ?: context.getString(R.string.unknown_error)
     }
 }

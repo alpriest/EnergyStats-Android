@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -30,13 +31,13 @@ import com.alpriest.energystats.shared.services.CurrentValues
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.flow.home.ShimmerText
-import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.models.isDarkMode
+import com.alpriest.energystats.shared.models.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -120,19 +121,24 @@ private fun GridTotals(
 @Preview(showBackground = true, heightDp = 400)
 @Composable
 fun GridIconViewPreview() {
-    val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
-        LocalContext.current,
-        currentValuesStream = MutableStateFlow(CurrentValues(2.45, 2.45, null, 0.4, 1.0, listOf(
-            StringPower("pv1", 0.3),
-            StringPower("pv2", 0.7)
-        ))),
-        hasBattery = true,
-        battery = BatteryViewModel(),
-        FakeConfigManager(),
-        currentDevice = Device.preview(),
-        network = DemoNetworking(),
-        BannerAlertManager()
-    )
+    val loadedPowerFlowViewModel = remember {
+        LoadedPowerFlowViewModel(
+            currentValuesStream = MutableStateFlow(
+                CurrentValues(
+                    2.45, 2.45, null, 0.4, 1.0, listOf(
+                        StringPower("pv1", 0.3),
+                        StringPower("pv2", 0.7)
+                    )
+                )
+            ),
+            hasBattery = true,
+            battery = BatteryViewModel(),
+            FakeConfigManager(),
+            currentDevice = Device.preview(),
+            network = DemoNetworking(),
+            BannerAlertManager()
+        )
+    }
 
     EnergyStatsTheme {
         GridIconView(

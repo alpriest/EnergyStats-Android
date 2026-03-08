@@ -36,11 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.helpers.PopupCalendarView
-import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
-import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.Typography
 import kotlinx.coroutines.delay
@@ -210,13 +207,7 @@ private fun HourPickerItems(hours: Int, showing: MutableState<Boolean>, onHoursC
 @Preview(heightDp = 400)
 fun ParameterGraphHeaderViewPreview() {
     ParameterGraphHeaderView(
-        ParametersGraphTabViewModel(
-            DemoNetworking(),
-            FakeConfigManager(),
-            onWriteTempFile = { _, _ -> null },
-            MutableStateFlow(previewParameterGraphVariables()),
-            solarForecastProvider = { DemoSolarForecasting() }
-        ),
+        previewParametersGraphTabViewModel,
         navController = NavHostController(LocalContext.current),
         configManager = FakeConfigManager(),
     )

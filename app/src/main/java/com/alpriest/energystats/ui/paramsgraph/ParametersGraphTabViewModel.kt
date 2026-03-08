@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.kW
 import com.alpriest.energystats.shared.helpers.timeUntilNow
@@ -21,15 +22,18 @@ import com.alpriest.energystats.shared.models.network.UnitData
 import com.alpriest.energystats.shared.models.solcastPrediction
 import com.alpriest.energystats.shared.models.toDate
 import com.alpriest.energystats.shared.models.toUtcMillis
+import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.networkDateFormat
 import com.alpriest.energystats.shared.network.parseToLocalDateTime
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.AppLifecycleObserver
 import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,8 +68,16 @@ fun ParametersGraphProducerData.yScale(): AxisScale {
 }
 
 data class ParametersGraphViewData(
-    val producers: List<ParametersGraphProducerData>, //NEW
+    val producers: List<ParametersGraphProducerData>,
     val graphVariables: List<ParameterGraphVariable>,
+)
+
+val previewParametersGraphTabViewModel = ParametersGraphTabViewModel(
+    DemoNetworking(),
+    FakeConfigManager(),
+    onWriteTempFile = { _, _ -> null },
+    MutableStateFlow(previewParameterGraphVariables()),
+    solarForecastProvider = { DemoSolarForecasting() }
 )
 
 class ParametersGraphTabViewModel(

@@ -226,7 +226,7 @@ private fun CustomDateRangePickerViewPreview() {
             initialViewBy = CustomDateRangeDisplayUnit.MONTHS,
             onDismiss = {},
             onConfirm = { _, _, _ -> },
-            viewModel = CustomDateRangePickerViewModel()
+            viewModel = previewCustomDateRangePickerViewModel
         )
     }
 }

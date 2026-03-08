@@ -147,6 +147,6 @@ fun ReadOnlySettingsView(
 fun ReadOnlySettingsViewPreviewOnly() {
     ReadOnlySettingsView(
         FakeConfigManager(),
-        ReadOnlySettingsViewModel(FakeConfigManager())
+        previewReadOnlySettingsViewModel
     )
 }

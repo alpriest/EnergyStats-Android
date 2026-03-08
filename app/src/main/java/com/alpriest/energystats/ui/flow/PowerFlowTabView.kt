@@ -68,6 +68,7 @@ import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowView
 import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.previewLoadedPowerFlowViewModel
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.inverter.schedule.PopupScheduleSummaryView
@@ -253,7 +254,6 @@ fun LoadedView(
 fun PowerFlowTabViewPreview() {
     val context = LocalContext.current
     val application = context.applicationContext as Application
-
     val powerFlowTabViewModel = PowerFlowTabViewModel(
         application,
         DemoNetworking(),
@@ -263,40 +263,19 @@ fun PowerFlowTabViewPreview() {
         BannerAlertManager(),
         { "apiKeyProvider" }
     )
-    val loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
-        LocalContext.current,
-        currentValuesStream = MutableStateFlow(
-            CurrentValues(
-                2.45, 2.45, null, 0.4, 1.0, listOf(
-                    StringPower("pv1", 0.3),
-                    StringPower("pv2", 0.7)
-                )
-            )
-        ),
-        hasBattery = true,
-        battery = BatteryViewModel(),
-        FakeConfigManager(),
-        currentDevice = Device.preview(),
-        network = DemoNetworking(),
-        BannerAlertManager()
-    )
     val appSettingsStream = MutableStateFlow(AppSettings.demo())
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         LoadedView(
             viewModel = powerFlowTabViewModel,
             FakeConfigManager(),
-            loadedPowerFlowViewModel,
+            previewLoadedPowerFlowViewModel,
             appSettingsStream,
             DemoNetworking(),
             FakeUserManager(),
             TemplateStore(FakeConfigManager())
         )
     }
-}
-
-fun Device.Companion.preview(): Device {
-    return Device("", true, "", "", true, "", null, "")
 }
 
 data class UiPowerFlowLoadState(

@@ -2,7 +2,6 @@ package com.alpriest.energystats.ui.flow.battery
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,22 +24,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.shared.R
-import com.alpriest.energystats.shared.models.BatteryTemperatures
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.helpers.kWh
-import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.models.AppSettings
+import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.isDarkMode
+import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
 import com.alpriest.energystats.shared.ui.BatteryView
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
 import com.alpriest.energystats.ui.flow.LineOrientation
 import com.alpriest.energystats.ui.flow.PowerFlowLinePosition
 import com.alpriest.energystats.ui.flow.PowerFlowView
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.demo
-import com.alpriest.energystats.shared.models.isDarkMode
-import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -193,18 +189,10 @@ fun duration(estimate: BatteryCapacityEstimate): String {
 @Preview(name = "Dark Mode", showBackground = true, widthDp = 300, heightDp = 300, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BatteryPowerFlowViewPreview() {
-    val configManager = FakeConfigManager()
-    configManager.showUsableBatteryOnly = true
 
     EnergyStatsTheme {
         BatteryIconView(
-            viewModel = BatteryPowerViewModel(
-                configManager,
-                actualStateOfCharge = 0.25,
-                chargePowerkWH = 0.5,
-                batteryTemperatures = BatteryTemperatures(13.6, null, null),
-                residual = 5678
-            ),
+            viewModel = previewBatteryPowerViewModel,
             appSettingsStream = MutableStateFlow(AppSettings.demo(showBatteryTemperature = true, showBatteryEstimate = true)),
             iconHeight = 24.dp
         )

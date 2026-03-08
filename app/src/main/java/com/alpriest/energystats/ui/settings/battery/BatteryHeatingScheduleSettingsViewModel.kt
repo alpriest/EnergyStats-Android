@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.celsius
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.network.Time
+import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -17,6 +19,9 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
+val previewBatteryHeatingScheduleSettingsViewModel =
+    BatteryHeatingScheduleSettingsViewModel(DemoNetworking(), FakeConfigManager())
 
 class BatteryHeatingScheduleSettingsViewModelFactory(
     private val network: Networking,

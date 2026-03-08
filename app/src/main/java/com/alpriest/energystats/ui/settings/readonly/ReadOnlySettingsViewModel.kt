@@ -3,6 +3,7 @@ package com.alpriest.energystats.ui.settings.readonly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,6 +13,8 @@ data class ReadOnlySettingsViewData(
     val passcode: String,
     val isReadOnly: Boolean
 )
+
+val previewReadOnlySettingsViewModel = ReadOnlySettingsViewModel(FakeConfigManager())
 
 class ReadOnlySettingsViewModelFactory(
     private val configManager: ConfigManaging

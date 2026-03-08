@@ -1,8 +1,8 @@
 package com.alpriest.energystats.ui.flow.home
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.shared.models.CT2DisplayMode
@@ -18,10 +18,13 @@ import com.alpriest.energystats.shared.models.network.OpenHistoryResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.network.currentData
+import com.alpriest.energystats.shared.models.preview
 import com.alpriest.energystats.shared.models.toUtcMillis
+import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.services.CurrentValues
+import com.alpriest.energystats.ui.flow.BannerAlertManager
 import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.flow.battery.BatteryPowerViewModel
 import com.alpriest.energystats.ui.flow.earnings.EnergyStatsFinancialModel
@@ -30,8 +33,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
+val previewLoadedPowerFlowViewModel = LoadedPowerFlowViewModel(
+    currentValuesStream = MutableStateFlow(
+        CurrentValues(
+            2.45, 2.45, null, 0.4, 1.0, listOf(
+                StringPower("pv1", 0.3),
+                StringPower("pv2", 0.7)
+            )
+        )
+    ),
+    hasBattery = true,
+    battery = BatteryViewModel(),
+    FakeConfigManager(),
+    currentDevice = Device.preview(),
+    network = DemoNetworking(),
+    BannerAlertManager()
+)
+
 class LoadedPowerFlowViewModel(
-    val context: Context,
     currentValuesStream: StateFlow<CurrentValues>,
     val hasBattery: Boolean,
     val battery: BatteryViewModel,
@@ -182,7 +201,7 @@ class LoadedPowerFlowViewModel(
     }
 
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
-        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperatures, battery.residual)
+        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperatures)
     else
         null
 }

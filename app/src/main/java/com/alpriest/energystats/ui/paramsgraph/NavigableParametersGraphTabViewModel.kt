@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
@@ -17,11 +18,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.services.trackScreenView
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.solcastPrediction
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.services.trackScreenView
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableChooserView
@@ -29,7 +31,6 @@ import com.alpriest.energystats.ui.paramsgraph.editing.ParameterGraphVariableCho
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorView
 import com.alpriest.energystats.ui.paramsgraph.editing.ParameterVariableGroupEditorViewModel
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.ui.theme.ESButton
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -107,6 +108,9 @@ class NavigableParametersGraphTabView(
     fun Content(viewModel: NavigableParametersGraphTabViewModel = viewModel(factory = NavigableParametersGraphTabViewModelFactory(configManager))) {
         trackScreenView("Parameters Tab", "NavigableParametersGraphTabView")
         val navController = rememberNavController()
+        val parameterVariableGroupEditorViewModel = remember {
+            ParameterVariableGroupEditorViewModel(configManager, viewModel.graphVariablesStream)
+        }
 
         NavHost(
             navController = navController,
@@ -147,7 +151,7 @@ class NavigableParametersGraphTabView(
                 topBarSettings.value = TopBarSettings(true, stringResource(R.string.edit_parameter_group), {}, { navController.popBackStack() })
 
                 ParameterVariableGroupEditorView(
-                    ParameterVariableGroupEditorViewModel(configManager, viewModel.graphVariablesStream),
+                    parameterVariableGroupEditorViewModel,
                     navController = navController
                 )
             }

@@ -504,4 +504,5 @@
     <string name="shown">Shown</string>
     <string name="graph_settings">Graph settings…</string>
     <string name="contact_energystatsapp_gmail_com_for_support">Contact energystatsapp@gmail.com for support.</string>
+    <string name="automatic">Automatic</string>
 </resources>

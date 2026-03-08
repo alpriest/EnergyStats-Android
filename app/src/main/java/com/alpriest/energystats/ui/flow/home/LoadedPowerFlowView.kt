@@ -46,6 +46,7 @@ import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.preview
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.services.CurrentValues
 import com.alpriest.energystats.shared.ui.PowerFlowNeutralText
@@ -62,7 +63,6 @@ import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
-import com.alpriest.energystats.ui.flow.preview
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -341,7 +341,6 @@ fun SummaryPowerFlowViewPreview() {
                 { "apiKeyProvider" }
             ),
             loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
-                LocalContext.current,
                 currentValuesStream = MutableStateFlow(
                     CurrentValues(
                         2.45, 2.45, null, 0.4, 1.0, listOf(
