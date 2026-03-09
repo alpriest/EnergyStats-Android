@@ -1,10 +1,9 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.gms.google.services)
     kotlin("plugin.serialization") version "1.9.22"
@@ -60,11 +59,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
     }
 }
 
