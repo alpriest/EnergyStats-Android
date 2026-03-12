@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
 import com.alpriest.energystats.models.colour
-import com.alpriest.energystats.shared.helpers.kW
+import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.ui.helpers.lightenColor
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
@@ -43,8 +43,8 @@ enum class EnergyBreakdownType {
 
     fun title(context: Context, value: Double): String {
         return when (this) {
-            Inputs -> context.getString(R.string.energy_breakdown_sources, value.kW(1))
-            Outputs -> context.getString(R.string.energy_breakdown_uses, value.kW(1))
+            Inputs -> context.getString(R.string.energy_breakdown_sources, value.kWh(1))
+            Outputs -> context.getString(R.string.energy_breakdown_uses, value.kWh(1))
         }
     }
 
