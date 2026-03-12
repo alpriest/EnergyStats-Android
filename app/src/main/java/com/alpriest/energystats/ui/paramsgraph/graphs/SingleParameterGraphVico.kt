@@ -31,8 +31,8 @@ fun SingleParameterGraphVico(
     val allData = remember(producerData) {
         producerData
             .filter {
-                val entryTypes = it.entries.mapNotNull { it.firstOrNull()?.type }
-                entryTypes.any { enabledGraphVariables.contains(it) }
+                val entryTypes = it.entries.mapNotNull { entryType -> entryType.firstOrNull()?.type }
+                entryTypes.any { entryType -> enabledGraphVariables.contains(entryType) }
             }
             .flatMap { it.entries }
     }
@@ -40,14 +40,14 @@ fun SingleParameterGraphVico(
     val yAxisScale = remember(producerData, enabledGraphVariables) {
         val allAxisScales = producerData
             .filter {
-                val entryTypes = it.entries.mapNotNull { it.firstOrNull()?.type }
-                entryTypes.any { enabledGraphVariables.contains(it) }
+                val entryTypes = it.entries.mapNotNull { entryType -> entryType.firstOrNull()?.type }
+                entryTypes.any { entryType -> enabledGraphVariables.contains(entryType) }
             }
             .map { it.yScale() }
 
         AxisScale(
-            min = allAxisScales.minOf { it.min ?: 10000.0f },
-            max = allAxisScales.maxOf { it.max ?: -10000.0f }
+            min = allAxisScales.minOfOrNull { it.min ?: 10000.0f } ?: 10000.0f,
+            max = allAxisScales.maxOfOrNull { it.max ?: -10000.0f } ?: -10000.0f
         )
     }
 
