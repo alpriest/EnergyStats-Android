@@ -14,14 +14,16 @@ val previewBatteryPowerViewModel = BatteryPowerViewModel(
     },
     actualStateOfCharge = 0.25,
     chargePowerkWH = 0.5,
-    batteryTemperatures = BatteryTemperatures(13.6, null, null)
+    batteryTemperatures = BatteryTemperatures(13.6, null, null),
+    maxCurrentCharge = 0.0
 )
 
 class BatteryPowerViewModel(
     private val configManager: ConfigManaging,
     private val actualStateOfCharge: Double,
     val chargePowerkWH: Double,
-    private val batteryTemperatures: BatteryTemperatures
+    private val batteryTemperatures: BatteryTemperatures,
+    val maxCurrentCharge: Double
 ) : ViewModel() {
     val temperatures: List<Double>
         get() {

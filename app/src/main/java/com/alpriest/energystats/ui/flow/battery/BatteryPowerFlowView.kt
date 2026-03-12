@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.helpers.kWh
+import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.models.isDarkMode
@@ -39,6 +40,7 @@ import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlin.math.roundToLong
 
 @Composable
 fun BatteryPowerFlow(
@@ -75,6 +77,7 @@ fun BatteryIconView(
     val decimalPlaces = appSettingsStream.collectAsStateWithLifecycle().value.decimalPlaces
     val showBatteryEstimate = appSettingsStream.collectAsStateWithLifecycle().value.showBatteryEstimate
     val isDarkMode = isDarkMode(appSettingsStream)
+    val showBatteryMaxCurrentCharge = appSettingsStream.collectAsStateWithLifecycle().value.showBatteryMaxCurrentCharge
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -112,6 +115,15 @@ fun BatteryIconView(
                             fontSize = 12.sp
                         )
                     }
+                }
+            }
+
+            if (showBatteryMaxCurrentCharge) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        stringResource(com.alpriest.energystats.R.string.max_battery_charge_rate_a, viewModel.maxCurrentCharge.truncated(1)),
+                        fontSize = smallFontSize
+                    )
                 }
             }
         }
@@ -173,9 +185,9 @@ fun duration(estimate: BatteryCapacityEstimate): String {
     return when (estimate.duration) {
         in 0..60 -> "$text ${estimate.duration} $mins"
         in 61..119 -> "$text ${estimate.duration / 60} $hour"
-        in 120..1440 -> "$text ${Math.round(estimate.duration / 60.0)} $hours"
+        in 120..1440 -> "$text ${(estimate.duration / 60.0).roundToLong()} $hours"
         else -> {
-            val dayNumber = Math.round(estimate.duration / 1440.0)
+            val dayNumber = (estimate.duration / 1440.0).roundToLong()
             if (dayNumber == 1L) {
                 "$text $dayNumber $day"
             } else {

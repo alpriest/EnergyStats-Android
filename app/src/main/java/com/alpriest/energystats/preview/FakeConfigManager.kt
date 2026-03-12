@@ -104,6 +104,7 @@ class FakeConfigManager : ConfigManaging {
     override var readOnlyPasscode: String = ""
     override var isReadOnly: Boolean = false
     override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar
+    override var showBatteryMaxCurrentCharge: Boolean = false
 
     override var devices: List<Device> = listOf(
         Device(

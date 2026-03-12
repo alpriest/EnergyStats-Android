@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -18,6 +19,9 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.axisLabelColor
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.paramsgraph.graphs.VariableKey
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
+import com.google.firebase.crashlytics.setCustomKeys
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.compose.cartesian.axis.Axis
@@ -63,6 +67,19 @@ fun ParameterGraphViewVico(
     val endAxisFormatter = if (showYAxisUnit) ParameterGraphEndAxisValueFormatter(range) else CartesianValueFormatter.decimal(1)
     val truncatedYAxisOnParameterGraphs = appSettingsStream.collectAsState().value.truncatedYAxisOnParameterGraphs
     val startOfDay = displayMode.date.atStartOfDay().atZone(ZoneId.systemDefault()).toEpochSecond()
+
+    LaunchedEffect(entries) {
+        Firebase.crashlytics.setCustomKeys {
+            entries
+                .map {
+                    it.type.variable
+                }
+                .distinct()
+                .forEach { variable ->
+                    key(variable, "on")
+                }
+        }
+    }
 
     MonitorAlertDialog(viewModel)
 
@@ -218,7 +235,7 @@ private class ParameterGraphEndAxisValueFormatter(private val range: Float) : Ca
         val unit: String? = context.model.extraStore.getOrNull(VariableKey)?.unit
 
         return if (unit == "%") {
-            String.format(Locale.getDefault(), "%d %s", value.toInt(), "%")
+            String.format(Locale.getDefault(), "%d %s", value.toInt(), unit)
         } else {
             if (abs(range.toDouble()) < 1.0) {
                 String.format(Locale.getDefault(), "%.2f %s", value, unit)

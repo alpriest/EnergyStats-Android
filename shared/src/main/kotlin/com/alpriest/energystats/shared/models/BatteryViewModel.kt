@@ -11,15 +11,17 @@ data class BatteryViewModel(
     var chargePower: Double = 0.0,
     var temperatures: BatteryTemperatures = BatteryTemperatures(batTemperature = 0.0, batTemperature1 = null, batTemperature2 = null),
     var residual: Int = 0,
-    var hasError: Boolean = false
+    var hasError: Boolean = false,
+    var maxChargeCurrent: Double = 0.0
 ) {
-    constructor(power: Double, soc: Int, residual: Double, temperatures: BatteryTemperatures) : this(
+    constructor(power: Double, soc: Int, residual: Double, temperatures: BatteryTemperatures, maxChargeCurrent: Double) : this(
         hasBattery = true,
         chargeLevel = soc / 100.0,
         chargePower = power,
         temperatures = temperatures,
         residual = residual.toInt(),
-        hasError = false
+        hasError = false,
+        maxChargeCurrent = maxChargeCurrent
     )
 
     companion object {
@@ -46,6 +48,7 @@ data class BatteryViewModel(
                     soc = real.datas.SoC().toInt(),
                     residual = real.datas.currentValue("ResidualEnergy") * 10.0,
                     temperatures = temps,
+                    maxChargeCurrent = real.datas.currentValue("maxChargeCurrent")
                 )
             } else {
                 noBattery()

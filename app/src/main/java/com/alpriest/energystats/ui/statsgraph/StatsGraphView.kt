@@ -328,7 +328,7 @@ class BottomAxisValueFormatter(private val displayMode: StatsDisplayMode) : Cart
                 val calendar = Calendar.getInstance()
                 calendar.set(Calendar.MONTH, value.toInt() - 1)
                 val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
-                return monthFormat.format(calendar.time)
+                monthFormat.format(calendar.time)
             }
 
             is StatsDisplayMode.Custom -> {
@@ -339,7 +339,7 @@ class BottomAxisValueFormatter(private val displayMode: StatsDisplayMode) : Cart
                         val offset = value.toLong()
                         val date = displayMode.start.plusMonths(offset)
                         val formatter = DateTimeFormatter.ofPattern("MMM", Locale.getDefault())
-                        return date.format(formatter)
+                        date.format(formatter)
                     }
                 }
             }

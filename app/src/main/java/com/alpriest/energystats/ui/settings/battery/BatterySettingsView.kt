@@ -57,6 +57,7 @@ fun BatterySettingsView(configManager: ConfigManaging, modifier: Modifier = Modi
     val showBatterySOCOnDailyStatsState = rememberSaveable { mutableStateOf(configManager.showBatterySOCOnDailyStats) }
     val hasError = configManager.currentDevice.collectAsState().value?.battery?.hasError ?: false
     val batteryTemperatureDisplayModeState = rememberSaveable { mutableStateOf(configManager.batteryTemperatureDisplayMode) }
+    val showBatteryMaxCurrentCharge = rememberSaveable { mutableStateOf(configManager.showBatteryMaxCurrentCharge) }
     val context = LocalContext.current
 
     trackScreenView("Battery", "BatterySettingsView")
@@ -210,6 +211,16 @@ fun BatterySettingsView(configManager: ConfigManaging, modifier: Modifier = Modi
                         configManager.batteryTemperatureDisplayMode = items[it]
                     }
                 }
+            )
+        }
+
+        SettingsColumn(
+            footer = stringResource(R.string.show_battery_max_charge_current_description),
+        ) {
+            SettingsCheckbox(
+                title = stringResource(R.string.show_battery_max_charge_current),
+                state = showBatteryMaxCurrentCharge,
+                onUpdate = { configManager.showBatteryMaxCurrentCharge = it }
             )
         }
 

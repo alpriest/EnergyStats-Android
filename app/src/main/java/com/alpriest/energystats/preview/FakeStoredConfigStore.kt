@@ -105,5 +105,6 @@ class FakeStoredConfigStore(
     override var showEnergySourceUsageGraphOnStats: Boolean = true,
     override var isReadOnly: Boolean = false,
     override var readOnlyPasscode: String = "",
-    override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar
+    override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar,
+    override var showBatteryMaxCurrentCharge: Boolean = false
 ) : StoredConfig

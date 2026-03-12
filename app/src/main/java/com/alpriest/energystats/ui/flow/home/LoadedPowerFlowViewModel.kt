@@ -201,7 +201,7 @@ class LoadedPowerFlowViewModel(
     }
 
     val batteryViewModel: BatteryPowerViewModel? = if (hasBattery)
-        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperatures)
+        BatteryPowerViewModel(configManager, battery.chargeLevel, battery.chargePower, battery.temperatures, battery.maxChargeCurrent)
     else
         null
 }

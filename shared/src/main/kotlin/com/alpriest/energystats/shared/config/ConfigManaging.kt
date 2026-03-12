@@ -100,6 +100,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var showEnergySourceUsageGraphOnStats: Boolean
     var readOnlyPasscode: String
     var isReadOnly: Boolean
+    var showBatteryMaxCurrentCharge: Boolean
 }
 
 interface ScheduleTemplateConfigManager {

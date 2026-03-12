@@ -677,6 +677,13 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
+    override var showBatteryMaxCurrentCharge: Boolean
+        get() = config.showBatteryMaxCurrentCharge
+        set(value) {
+            config.showBatteryMaxCurrentCharge = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
     override fun loginAsDemo() {
         appSettingsStore.update(AppSettings.demo())
     }

@@ -149,7 +149,8 @@ class PowerFlowTabViewModel(
             "batTemperature",
             "batTemperature_1",
             "batTemperature_2",
-            "ResidualEnergy"
+            "ResidualEnergy",
+            "maxChargeCurrent"
         )
 
         if (configManager.powerFlowStrings.enabled) {

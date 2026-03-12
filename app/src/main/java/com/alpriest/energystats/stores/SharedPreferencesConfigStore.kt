@@ -116,6 +116,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         IS_READ_ONLY,
         READ_ONLY_PASSCODE,
         TIME_PERIOD_GRAPH_STYLE_ON_STATS,
+        SHOW_BATTERY_MAX_CURRENT_CHARGE
     }
 
     // Local in-memory only
@@ -837,6 +838,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putString(SharedPreferenceDisplayKey.READ_ONLY_PASSCODE.name, value)
+            }
+        }
+
+    override var showBatteryMaxCurrentCharge: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_MAX_CURRENT_CHARGE.name, false)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_MAX_CURRENT_CHARGE.name, value)
             }
         }
 }

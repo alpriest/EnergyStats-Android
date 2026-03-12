@@ -96,6 +96,7 @@ interface StoredConfig {
     var readOnlyPasscode: String
     var isReadOnly: Boolean
     var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle
+    var showBatteryMaxCurrentCharge: Boolean
 }
 
 interface CurrentStatusCalculatorConfig {
