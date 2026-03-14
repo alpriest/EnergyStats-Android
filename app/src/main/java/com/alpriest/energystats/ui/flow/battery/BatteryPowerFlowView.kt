@@ -104,6 +104,16 @@ fun BatteryIconView(
                     }
                 }
             }
+
+            if (showBatteryMaxCurrentCharge) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        stringResource(com.alpriest.energystats.R.string.max_battery_charge_rate_a, viewModel.maxCurrentCharge.truncated(1)),
+                        fontSize = smallFontSize,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
         } else {
             BatteryStateOfChargeView({ viewModel.setBatteryAsPercentage(it) }, percentage, viewModel, fontSize, decimalPlaces)
 
@@ -122,7 +132,8 @@ fun BatteryIconView(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         stringResource(com.alpriest.energystats.R.string.max_battery_charge_rate_a, viewModel.maxCurrentCharge.truncated(1)),
-                        fontSize = smallFontSize
+                        fontSize = smallFontSize,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -197,11 +208,10 @@ fun duration(estimate: BatteryCapacityEstimate): String {
     }
 }
 
-@Preview(showBackground = true, widthDp = 300, heightDp = 300)
+@Preview(showBackground = true, widthDp = 200, heightDp = 300)
 @Preview(name = "Dark Mode", showBackground = true, widthDp = 300, heightDp = 300, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BatteryPowerFlowViewPreview() {
-
     EnergyStatsTheme {
         BatteryIconView(
             viewModel = previewBatteryPowerViewModel,

@@ -502,4 +502,8 @@
     <string name="shown">Mostrato</string>
     <string name="graph_settings">Impostazioni del grafico...</string>
     <string name="contact_energystatsapp_gmail_com_for_support">Contatta energystatsapp@gmail.com per assistenza.</string>
+    <string name="automatic">Automatico</string>
+    <string name="show_battery_max_charge_current">Mostra la corrente massima di carica della batteria</string>
+    <string name="show_battery_max_charge_current_description">Mostra la corrente massima di carica attualmente consentita dal sistema di gestione della batteria (BMS). Può essere ridotta quando la batteria è fredda o quasi piena.</string>
+    <string name="max_battery_charge_rate_a">Corrente max di carica %1$sA</string>
 </resources>

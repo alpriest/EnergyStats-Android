@@ -441,7 +441,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
                     ParameterGroup::class.java, ParameterGroupDeserializer()
                 ).create()
 
-            if (data == null) {
+            if (data.isNullOrEmpty()) {
                 data = gson.toJson(ParameterGroup.defaults)
                 parameterGroups = ParameterGroup.defaults
             }

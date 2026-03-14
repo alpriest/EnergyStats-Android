@@ -501,4 +501,8 @@
     <string name="shown">Angezeigt</string>
     <string name="graph_settings">Diagrammeinstellungen...</string>
     <string name="contact_energystatsapp_gmail_com_for_support">Kontaktieren Sie energystatsapp@gmail.com für Support.</string>
+    <string name="automatic">Automatisch</string>
+    <string name="show_battery_max_charge_current">Maximalen Batterieladestrom anzeigen</string>
+    <string name="show_battery_max_charge_current_description">Shows the maximum charge current currently allowed by the battery management system (BMS). This may be reduced when the battery is cold or nearly full.</string>
+    <string name="max_battery_charge_rate_a">Max. Ladestrom %1$sA</string>
 </resources>
