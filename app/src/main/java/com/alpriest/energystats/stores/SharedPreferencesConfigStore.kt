@@ -441,12 +441,18 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
                     ParameterGroup::class.java, ParameterGroupDeserializer()
                 ).create()
 
-            if (data.isNullOrEmpty()) {
+            if (data == null) {
                 data = gson.toJson(ParameterGroup.defaults)
                 parameterGroups = ParameterGroup.defaults
             }
+            var returnValue: List<ParameterGroup> = gson.fromJson(data, object : TypeToken<List<ParameterGroup>>() {}.type)
 
-            return gson.fromJson(data, object : TypeToken<List<ParameterGroup>>() {}.type)
+            if (returnValue.isEmpty()) {
+                returnValue = ParameterGroup.defaults
+                parameterGroups = returnValue
+            }
+
+            return returnValue
         }
         set(value) {
             sharedPreferences.edit {

@@ -20,11 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
-import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.alpriest.energystats.shared.ui.Orange
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier) {
@@ -62,7 +62,6 @@ fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier
             Text(text = "16:00", fontSize = 12.sp, color = colorScheme.onSecondary)
             Text(text = "23:59", fontSize = 12.sp, color = colorScheme.onSecondary)
         }
-
     }
 }
 

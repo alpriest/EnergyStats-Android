@@ -215,7 +215,13 @@ class ScheduleSummaryView(
                         contentPadding = PaddingValues(),
                         shape = RectangleShape
                     ) {
-                        ScheduleView(schedule, modifier = Modifier.weight(1.0f))
+                        ScheduleView(
+                            schedule,
+                            PhaseEnabledToggleMode.Enabled({ phase, flag ->
+                                viewModel.phaseChanged(phase, schedule, flag)
+                            }),
+                            modifier = Modifier.weight(1.0f)
+                        )
 
                         Icon(
                             imageVector = Icons.Default.ChevronRight,
@@ -248,7 +254,7 @@ class ScheduleSummaryView(
                         contentPadding = PaddingValues(),
                         shape = RectangleShape
                     ) {
-                        ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
+                        ScheduleView(it.asSchedule(), PhaseEnabledToggleMode.Disabled, modifier = Modifier.weight(1.0f))
 
                         Icon(
                             imageVector = Icons.Default.ChevronRight,

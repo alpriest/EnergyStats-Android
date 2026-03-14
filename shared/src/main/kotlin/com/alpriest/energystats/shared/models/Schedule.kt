@@ -57,6 +57,7 @@ data class Schedule(
 
 data class SchedulePhase(
     val id: String,
+    val enabled: Boolean,
     val start: Time,
     val end: Time,
     val mode: WorkMode,
@@ -66,6 +67,7 @@ data class SchedulePhase(
     val maxSOC: Int?
 ) {
     constructor(
+        enabled: Boolean,
         start: Time,
         end: Time,
         mode: WorkMode,
@@ -73,11 +75,12 @@ data class SchedulePhase(
         forceDischargeSOC: Int,
         minSocOnGrid: Int,
         maxSOC: Int?
-    ) : this(UUID.randomUUID().toString(), start, end, mode, forceDischargePower, forceDischargeSOC, minSocOnGrid, maxSOC)
+    ) : this(UUID.randomUUID().toString(), enabled, start, end, mode, forceDischargePower, forceDischargeSOC, minSocOnGrid, maxSOC)
 
     companion object {
         fun create(
             id: String? = null,
+            enabled: Boolean,
             start: Time,
             end: Time,
             mode: WorkMode?,
@@ -90,6 +93,7 @@ data class SchedulePhase(
 
             return SchedulePhase(
                 id ?: UUID.randomUUID().toString(),
+                enabled,
                 start,
                 end,
                 mode,
@@ -105,8 +109,9 @@ data class SchedulePhase(
 
             return SchedulePhase(
                 UUID.randomUUID().toString(),
-                Time.Companion.now(),
-                Time.Companion.now().adding(1),
+                true,
+                Time.now(),
+                Time.now().adding(1),
                 mode,
                 0,
                 minSOC,
@@ -117,6 +122,7 @@ data class SchedulePhase(
 
         fun preview(): SchedulePhase {
             return create(
+                enabled = true,
                 start = Time(hour = 19, minute = 30),
                 end = Time(hour = 23, minute = 30),
                 mode = WorkModes.SelfUse,
@@ -144,7 +150,7 @@ data class SchedulePhase(
 
     fun toPhaseResponse(): SchedulePhaseNetworkModel {
         return SchedulePhaseNetworkModel(
-            enable = true.intValue,
+            enable = enabled.intValue,
             startHour = start.hour,
             startMinute = start.minute,
             endHour = end.hour,
@@ -168,6 +174,7 @@ internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
     if (enable == 0) { return null }
 
     return SchedulePhase.create(
+        enabled = enable.toBoolean,
         start = Time(hour = startHour, minute = startMinute),
         end = Time(hour = endHour, minute = endMinute),
         mode = workMode,
@@ -177,3 +184,8 @@ internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
         maxSOC = maxSoc
     )
 }
+
+val Int.toBoolean: Boolean
+    get() {
+        return this == 1
+    }

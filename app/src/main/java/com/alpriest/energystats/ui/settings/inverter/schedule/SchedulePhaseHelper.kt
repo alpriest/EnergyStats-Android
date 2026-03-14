@@ -3,8 +3,8 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
-import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.models.WorkMode
+import com.alpriest.energystats.shared.models.network.Time
 
 class SchedulePhaseHelper {
     companion object {
@@ -71,6 +71,7 @@ class SchedulePhaseHelper {
 
         private fun makePhase(start: Time, end: Time, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): SchedulePhase {
             return SchedulePhase(
+                enabled = true,
                 start = start,
                 end = end,
                 mode = mode,

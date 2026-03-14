@@ -32,4 +32,5 @@ data class ScheduleResponse(
 
             return ScheduleResponse(enable, groups, workModes)
         }
-    }}
+    }
+}

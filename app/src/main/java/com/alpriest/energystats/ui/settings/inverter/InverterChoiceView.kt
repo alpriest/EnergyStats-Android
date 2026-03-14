@@ -37,7 +37,7 @@ fun InverterChoiceView(
     var expanded by remember { mutableStateOf(false) }
     val currentDevice = configManager.currentDevice.collectAsState()
 
-    if (configManager.devices.isNotEmpty()) {
+    if (configManager.devices.size > 1) {
         SettingsColumn(header = stringResource(R.string.device_selection)) {
             currentDevice.value?.let {
                 Row(
@@ -46,7 +46,7 @@ fun InverterChoiceView(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        "Inverter",
+                        stringResource(R.string.inverter),
                         color = colorScheme.onSecondary
                     )
 

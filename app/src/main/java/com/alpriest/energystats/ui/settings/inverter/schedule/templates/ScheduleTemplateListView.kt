@@ -54,6 +54,7 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.inverter.schedule.PhaseEnabledToggleMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.theme.ESButton
@@ -130,7 +131,7 @@ class ScheduleTemplateListView(
                         contentPadding = PaddingValues(),
                         shape = RectangleShape
                     ) {
-                        ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
+                        ScheduleView(it.asSchedule(), toggleMode = PhaseEnabledToggleMode.Disabled, modifier = Modifier.weight(1.0f))
 
                         Icon(
                             imageVector = Icons.Default.ChevronRight,

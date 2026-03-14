@@ -24,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.models.Schedule
 
 @Composable
 fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
@@ -74,6 +74,7 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
                     ) {
                         SchedulePhaseListItemView(
                             phase,
+                            PhaseEnabledToggleMode.Disabled,
                             modifier = Modifier
                         )
 

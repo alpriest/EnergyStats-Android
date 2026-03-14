@@ -30,6 +30,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -259,6 +260,39 @@ fun InfoButton(text: String) {
             message = null
         })
     }
+}
+
+@Composable
+fun SettingsCheckbox(
+    title: String,
+    infoText: String? = null,
+    checked: Boolean,
+    enabled: Boolean = true,
+    onUpdate: (Boolean) -> Unit,
+    footer: AnnotatedString? = null
+) {
+    val bridgedState = remember(checked, onUpdate) {
+        object : MutableState<Boolean> {
+            override var value: Boolean
+                get() = checked
+                set(value) {
+                    onUpdate(value)
+                }
+
+            override fun component1(): Boolean = value
+
+            override fun component2(): (Boolean) -> Unit = { value = it }
+        }
+    }
+
+    SettingsCheckbox(
+        title = title,
+        infoText = infoText,
+        state = bridgedState,
+        enabled = enabled,
+        onUpdate = onUpdate,
+        footer = footer
+    )
 }
 
 @Composable

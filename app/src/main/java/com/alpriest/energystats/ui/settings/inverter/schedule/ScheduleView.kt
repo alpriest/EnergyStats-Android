@@ -8,19 +8,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.shared.models.Schedule
 import com.alpriest.energystats.shared.models.SchedulePhase
-import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.shared.models.WorkModes
+import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
+sealed interface PhaseEnabledToggleMode {
+    val isEnabled: Boolean
+
+    data object Disabled : PhaseEnabledToggleMode {
+        override val isEnabled = false
+    }
+
+    class Enabled(
+        val onPhaseEnabledChange: (SchedulePhase, Boolean) -> Unit
+    ) : PhaseEnabledToggleMode {
+        override val isEnabled = true
+    }
+
+    fun onChange(phase: SchedulePhase, value: Boolean) {
+        if (this is Enabled) {
+            onPhaseEnabledChange(phase, value)
+        }
+    }
+}
+
 @Composable
-fun ScheduleView(schedule: Schedule, modifier: Modifier = Modifier) {
+fun ScheduleView(schedule: Schedule, toggleMode: PhaseEnabledToggleMode, modifier: Modifier = Modifier) {
     Column(modifier) {
         TimePeriodBarView(schedule.phases, modifier = Modifier.padding(bottom = 8.dp))
 
-        Column {
-            schedule.phases.forEach {
-                SchedulePhaseListItemView(it)
-            }
+        schedule.phases.forEach {
+            SchedulePhaseListItemView(it, toggleMode)
         }
     }
 }
@@ -29,7 +47,7 @@ fun ScheduleView(schedule: Schedule, modifier: Modifier = Modifier) {
 @Composable
 fun ScheduleViewPreview() {
     EnergyStatsTheme {
-        ScheduleView(Schedule.preview())
+        ScheduleView(Schedule.preview(), toggleMode = PhaseEnabledToggleMode.Disabled)
     }
 }
 
@@ -38,6 +56,7 @@ internal fun Schedule.Companion.preview(): Schedule {
         name = "Summer running",
         phases = listOfNotNull(
             SchedulePhase.create(
+                enabled = true,
                 start = Time(hour = 1, minute = 0),
                 end = Time(hour = 2, minute = 0),
                 mode = WorkModes.ForceCharge,
@@ -47,6 +66,7 @@ internal fun Schedule.Companion.preview(): Schedule {
                 maxSOC = 100
             ),
             SchedulePhase.create(
+                enabled = false,
                 start = Time(hour = 8, minute = 0),
                 end = Time(hour = 14, minute = 30),
                 mode = WorkModes.ForceDischarge,
@@ -56,6 +76,7 @@ internal fun Schedule.Companion.preview(): Schedule {
                 maxSOC = 100
             ),
             SchedulePhase.create(
+                enabled = true,
                 start = Time(hour = 19, minute = 30),
                 end = Time(hour = 23, minute = 30),
                 mode = WorkModes.SelfUse,

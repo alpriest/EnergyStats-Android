@@ -51,6 +51,7 @@ import com.alpriest.energystats.ui.settings.ErrorTextView
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -86,6 +87,8 @@ fun EditPhaseView(
         ),
         content = { innerModifier ->
             SettingsPage(innerModifier) {
+                SettingsTitleView("Define your phase here. Press back to view your entire schedule.")
+
                 TimeAndWorkModeView(viewModel)
 
                 MinSOCView(viewModel)
