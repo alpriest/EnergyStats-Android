@@ -190,13 +190,13 @@ fun SettingsDiscreteText(
 }
 
 @Composable
-fun ErrorTextView(text: String?) {
+fun ErrorTextView(text: String?, modifier: Modifier = Modifier) {
     text?.let {
         Text(
             it,
             style = typography.bodyMedium,
             color = colorScheme.error,
-            modifier = Modifier.padding(8.dp)
+            modifier = modifier
         )
     }
 }

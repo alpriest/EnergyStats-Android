@@ -200,10 +200,24 @@ class ScheduleSummaryViewModel(
     }
 
     fun activate(template: ScheduleTemplate, context: Context) {
+        val schedule = template.asSchedule()
+        save(schedule, context)
+    }
+
+    fun clearError() {
+        uiState.value = UiLoadState(LoadState.Inactive)
+    }
+
+    fun phaseChanged(phase: SchedulePhase, schedule: Schedule, flag: Boolean, context: Context) {
+        val schedule = SchedulePhaseHelper.update(phase.copy(enabled = flag), schedule)
+
+        save(schedule, context)
+    }
+
+    private fun save(schedule: Schedule, context: Context) {
         if (uiState.value.state != LoadState.Inactive) {
             return
         }
-        val schedule = template.asSchedule()
 
         if (!schedule.isValid()) {
             alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.battery_periods_overlap))
@@ -226,14 +240,6 @@ class ScheduleSummaryViewModel(
                 }
             }
         }
-    }
-
-    fun clearError() {
-        uiState.value = UiLoadState(LoadState.Inactive)
-    }
-
-    fun phaseChanged(phase: SchedulePhase, schedule: Schedule, flag: Boolean) {
-        // save it
     }
 }
 

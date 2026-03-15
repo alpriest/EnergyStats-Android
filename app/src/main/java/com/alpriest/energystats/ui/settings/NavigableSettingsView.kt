@@ -142,10 +142,8 @@ fun NavigableSettingsView(
         }
 
         composable(SettingsScreen.PowerStation.name) {
-            configManager.powerStationDetail?.let { powerStationDetail ->
-                topBarSettings.value = TopBarSettings(true, stringResource(R.string.settings_power_station), {}, { navController.popBackStack() })
-                PowerStationSettingsView(configManager)
-            }
+            topBarSettings.value = TopBarSettings(true, stringResource(R.string.settings_power_station), {}, { navController.popBackStack() })
+            PowerStationSettingsView(configManager).Content()
         }
 
         composable(SettingsScreen.DataSettings.name) {

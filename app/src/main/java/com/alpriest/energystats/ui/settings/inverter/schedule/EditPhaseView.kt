@@ -87,8 +87,6 @@ fun EditPhaseView(
         ),
         content = { innerModifier ->
             SettingsPage(innerModifier) {
-                SettingsTitleView("Define your phase here. Press back to view your entire schedule.")
-
                 TimeAndWorkModeView(viewModel)
 
                 MinSOCView(viewModel)
@@ -138,6 +136,8 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
     SettingsColumnWithChild(
         footer = footerText
     ) {
+        SettingsTitleView(stringResource(R.string.define_your_phase))
+
         TimePeriodView(
             startTime,
             TimeType.START,
@@ -164,7 +164,7 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
             timeTypeShowing = timeTypeShowing
         ) { time -> viewModel.endTimeStream.value = time }
 
-        ErrorTextView(errorText.timeError)
+        ErrorTextView(errorText.timeError, modifier = Modifier.padding(8.dp))
 
         HorizontalDivider()
 

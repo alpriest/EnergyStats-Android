@@ -218,7 +218,7 @@ class ScheduleSummaryView(
                         ScheduleView(
                             schedule,
                             PhaseEnabledToggleMode.Enabled({ phase, flag ->
-                                viewModel.phaseChanged(phase, schedule, flag)
+                                viewModel.phaseChanged(phase, schedule, flag, context)
                             }),
                             modifier = Modifier.weight(1.0f)
                         )
@@ -314,7 +314,7 @@ class ScheduleSummaryView(
 fun ScheduleTemplate.asSchedule(): Schedule {
     return Schedule(
         name = name,
-        phases = phases,
+        phases = phases
     )
 }
 

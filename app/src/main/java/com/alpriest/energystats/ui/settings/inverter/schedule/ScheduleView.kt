@@ -47,7 +47,7 @@ fun ScheduleView(schedule: Schedule, toggleMode: PhaseEnabledToggleMode, modifie
 @Composable
 fun ScheduleViewPreview() {
     EnergyStatsTheme {
-        ScheduleView(Schedule.preview(), toggleMode = PhaseEnabledToggleMode.Disabled)
+        ScheduleView(Schedule.preview(), toggleMode = PhaseEnabledToggleMode.Enabled({ _, _ -> }))
     }
 }
 

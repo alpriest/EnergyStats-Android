@@ -15,12 +15,14 @@ data class Schedule(
     val phases: List<SchedulePhase>
 ) {
     fun isValid(): Boolean {
-        for ((index, phase) in phases.withIndex()) {
+        val enabledPhases = phases.filter { it.enabled }
+
+        for ((index, phase) in enabledPhases.withIndex()) {
             val phaseStart = phase.start.toMinutes()
             val phaseEnd = phase.end.toMinutes()
 
             // Check for overlap with other phases
-            for (otherPhase in phases.subList(index + 1, phases.size)) {
+            for (otherPhase in enabledPhases.subList(index + 1, enabledPhases.size)) {
                 val otherStart = otherPhase.start.toMinutes()
                 val otherEnd = otherPhase.end.toMinutes()
 
@@ -89,7 +91,7 @@ data class SchedulePhase(
             batterySOC: Int,
             maxSOC: Int?
         ): SchedulePhase? {
-            mode ?: return null
+            if (mode == null || start == end) { return null }
 
             return SchedulePhase(
                 id ?: UUID.randomUUID().toString(),
@@ -108,7 +110,6 @@ data class SchedulePhase(
             val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
 
             return SchedulePhase(
-                UUID.randomUUID().toString(),
                 true,
                 Time.now(),
                 Time.now().adding(1),
@@ -171,7 +172,7 @@ data class ScheduleTemplate(
 )
 
 internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
-    if (enable == 0) { return null }
+    if (startHour == 0 && endHour == 0 && startMinute == 0 && endMinute == 0) { return null }
 
     return SchedulePhase.create(
         enabled = enable.toBoolean,

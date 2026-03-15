@@ -40,7 +40,7 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, toggleMode: PhaseEnabledTogg
         WorkModes.SelfUse -> {
             var result = " with ${phase.minSocOnGrid}% min SOC"
             phase.maxSOC?.let {
-                result += " with max SOC ${it}%"
+                result += ", max SOC ${it}%"
             }
             result
         }
