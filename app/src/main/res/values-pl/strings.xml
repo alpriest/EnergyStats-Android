@@ -506,4 +506,6 @@
     <string name="show_battery_max_charge_current">Pokaż maksymalny prąd ładowania baterii</string>
     <string name="show_battery_max_charge_current_description">Pokazuje maksymalny prąd ładowania aktualnie dozwolony przez system zarządzania baterią (BMS). Może on zostać ograniczony, gdy bateria jest zimna lub prawie pełna.</string>
     <string name="max_battery_charge_rate_a">Maks. prąd ładowania %1$sA</string>
+    <string name="enabled">Włączone</string>
+    <string name="define_your_phase">Definisci la tua fase</string>
 </resources>

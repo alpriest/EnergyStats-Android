@@ -506,4 +506,6 @@
     <string name="show_battery_max_charge_current">Mostra la corrente massima di carica della batteria</string>
     <string name="show_battery_max_charge_current_description">Mostra la corrente massima di carica attualmente consentita dal sistema di gestione della batteria (BMS). Può essere ridotta quando la batteria è fredda o quasi piena.</string>
     <string name="max_battery_charge_rate_a">Corrente max di carica %1$sA</string>
+    <string name="enabled">Abilitato</string>
+    <string name="define_your_phase">Definisci la tua fase</string>
 </resources>

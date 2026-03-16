@@ -505,4 +505,6 @@
     <string name="show_battery_max_charge_current">Maximalen Batterieladestrom anzeigen</string>
     <string name="show_battery_max_charge_current_description">Shows the maximum charge current currently allowed by the battery management system (BMS). This may be reduced when the battery is cold or nearly full.</string>
     <string name="max_battery_charge_rate_a">Max. Ladestrom %1$sA</string>
+    <string name="enabled">Aktiviert</string>
+    <string name="define_your_phase">Definieren Sie Ihre Phase</string>
 </resources>
