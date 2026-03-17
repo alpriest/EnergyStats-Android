@@ -83,6 +83,14 @@ fun ParameterGraphViewVico(
 
     MonitorAlertDialog(viewModel)
 
+    val minY = yAxisScale.min?.toDouble()
+    var maxY = yAxisScale.max?.toDouble()
+    minY?.let {
+        if (minY == maxY) {
+            maxY = minY + 1.0
+        }
+    }
+
     if (entries.isNotEmpty()) {
         when (displayMode.hours) {
             24 -> ParameterGraphViewWithCustomMarker(
@@ -95,8 +103,8 @@ fun ParameterGraphViewVico(
                 CartesianLayerRangeProvider.fixed(
                     minX = startOfDay.toDouble(),
                     maxX = max(startOfDay + 86400.0, entries.count().toDouble()),
-                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
-                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
+                    minY = if (truncatedYAxisOnParameterGraphs) minY else null,
+                    maxY = if (truncatedYAxisOnParameterGraphs) maxY else null
                 ),
                 appSettingsStream
             )
@@ -109,8 +117,8 @@ fun ParameterGraphViewVico(
                 chartColors,
                 endAxisFormatter,
                 CartesianLayerRangeProvider.fixed(
-                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
-                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
+                    minY = if (truncatedYAxisOnParameterGraphs) minY else null,
+                    maxY = if (truncatedYAxisOnParameterGraphs) maxY else null
                 ),
                 appSettingsStream
             )
@@ -123,8 +131,8 @@ fun ParameterGraphViewVico(
                 chartColors,
                 endAxisFormatter,
                 CartesianLayerRangeProvider.fixed(
-                    minY = if (truncatedYAxisOnParameterGraphs) yAxisScale.min?.toDouble() else null,
-                    maxY = if (truncatedYAxisOnParameterGraphs) yAxisScale.max?.toDouble() else null
+                    minY = if (truncatedYAxisOnParameterGraphs) minY else null,
+                    maxY = if (truncatedYAxisOnParameterGraphs) maxY else null
                 ),
                 appSettingsStream
             )
