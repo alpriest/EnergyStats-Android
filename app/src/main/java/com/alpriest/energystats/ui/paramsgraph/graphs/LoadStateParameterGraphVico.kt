@@ -12,7 +12,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.Variable
-import com.alpriest.energystats.ui.dialog.LoadingOverlayView
+import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.paramsgraph.DateTimeFloatEntry
 import com.alpriest.energystats.ui.paramsgraph.ParameterGraphViewVico
 import com.alpriest.energystats.ui.paramsgraph.ParametersGraphTabViewModel
@@ -74,7 +74,7 @@ fun LoadStateParameterGraphVico(
 
         when (loadState) {
             is LoadState.Error -> Text(stringResource(R.string.error))
-            is LoadState.Active -> LoadingOverlayView()
+            is LoadState.Active -> LoadingView(LoadState.Active.Loading)
             is LoadState.Inactive -> {}
         }
     }

@@ -510,4 +510,5 @@
     <string name="max_battery_charge_rate_a">Max charge %1$sA</string>
     <string name="enabled">Enabled</string>
     <string name="define_your_phase">Define your phase</string>
+    <string name="no_data_try_changing_your_filters">No data. Try changing your filters</string>
 </resources>

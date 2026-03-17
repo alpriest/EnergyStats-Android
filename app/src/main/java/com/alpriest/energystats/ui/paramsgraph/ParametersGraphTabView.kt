@@ -6,12 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -40,12 +38,10 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.tabs.TopBarSettings
-import com.alpriest.energystats.ui.dialog.LoadingOverlayView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.paramsgraph.graphs.MultipleParameterGraphVico
 import com.alpriest.energystats.ui.paramsgraph.graphs.SingleParameterGraphVico
@@ -98,7 +94,6 @@ class ParametersGraphTabView(
         val selectedValues = viewModel.valuesAtTimeStream.collectAsState().value
         val selectedDateTime = selectedValues.values.firstOrNull()?.firstOrNull()?.localDateTime
         val context = LocalContext.current
-        val loadState = viewModel.uiState.collectAsState().value.state
         topBarSettings.value = TopBarSettings(true, null, {
             ParameterGraphHeaderView(viewModel = viewModel, navController = navController, configManager = configManager)
         }, null)
@@ -115,31 +110,14 @@ class ParametersGraphTabView(
                 .verticalScroll(scrollState)
                 .padding(12.dp)
         ) {
-            when (loadState) {
-                is LoadState.Error ->
-                    Text(stringResource(R.string.error))
-
-                is LoadState.Active ->
-                    Box(
-                        modifier = Modifier
-                            .height(200.dp)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        LoadingOverlayView()
-                    }
-
-                is LoadState.Inactive -> {
-                    if (hasData) {
-                        LoadedData(selectedDateTime, viewModel, appSettingsStream)
-                    } else {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "No data. Try changing your filters",
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
+            if (hasData) {
+                LoadedData(selectedDateTime, viewModel, appSettingsStream)
+            } else {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.no_data_try_changing_your_filters),
+                    textAlign = TextAlign.Center
+                )
             }
 
             Text(

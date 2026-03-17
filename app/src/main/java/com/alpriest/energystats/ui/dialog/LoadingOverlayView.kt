@@ -2,6 +2,7 @@ package com.alpriest.energystats.ui.dialog
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -17,7 +18,10 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 fun LoadingOverlayView() {
     Card(
         border = BorderStroke(1.dp, Color.LightGray),
-        shape = RectangleShape
+        shape = RectangleShape,
+        colors = CardDefaults.cardColors().copy(
+            containerColor = CardDefaults.cardColors().containerColor.copy(alpha = 0.4f)
+        )
     ) {
         LoadingView(title = stringResource(R.string.loading), longOperationTitle = stringResource(R.string.still_loading))
     }

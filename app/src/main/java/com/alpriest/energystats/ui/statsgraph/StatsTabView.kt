@@ -47,7 +47,7 @@ import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.tabs.TopBarSettings
-import com.alpriest.energystats.ui.dialog.LoadingOverlayView
+import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.paramsgraph.showExportMethodSelection
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -106,7 +106,6 @@ class StatsTabView(
         val appSettings = configManager.appSettingsStream.collectAsState().value
         val showingApproximations = remember { mutableStateOf(false) }
         val loadState = viewModel.uiState.collectAsState().value.state
-        val temp = remember { MutableStateFlow(StatsTimeUsageGraphStyle.Line) }
 
         topBarSettings.value = TopBarSettings(true, null, {
             StatsDatePickerHeaderView(
@@ -142,7 +141,7 @@ class StatsTabView(
                                     .fillMaxWidth(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                LoadingOverlayView()
+                                LoadingView(LoadState.Active.Loading)
                             }
 
                         is LoadState.Inactive -> {}
@@ -154,7 +153,7 @@ class StatsTabView(
                 Box(contentAlignment = Alignment.Center) {
                     EnergyBreakdownGraphView(viewModel)
 
-                    if (appSettings.statsTimeUsageGraphStyle == StatsTimeUsageGraphStyle.Off) {
+                    if (appSettings.statsTimeUsageGraphStyle != StatsTimeUsageGraphStyle.Off) {
                         when (loadState) {
                             is LoadState.Error -> Text(stringResource(R.string.error))
 
@@ -165,7 +164,7 @@ class StatsTabView(
                                         .fillMaxWidth(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    LoadingOverlayView()
+                                    LoadingView(LoadState.Active.Loading)
                                 }
 
                             is LoadState.Inactive -> {}
