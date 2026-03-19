@@ -10,5 +10,6 @@ data class SchedulePhaseNetworkModel(
     val minSocOnGrid: Int,
     val fdSoc: Int,
     val fdPwr: Int?,
-    val maxSoc: Int?
+    val maxSoc: Int?,
+    val importLimit: Int?
 )

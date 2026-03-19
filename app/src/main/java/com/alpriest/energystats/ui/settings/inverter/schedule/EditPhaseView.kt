@@ -51,7 +51,6 @@ import com.alpriest.energystats.ui.settings.ErrorTextView
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
-import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -136,8 +135,6 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
     SettingsColumnWithChild(
         footer = footerText
     ) {
-        SettingsTitleView(stringResource(R.string.define_your_phase))
-
         TimePeriodView(
             startTime,
             TimeType.START,
@@ -182,31 +179,14 @@ fun MinSOCView(viewModel: EditPhaseViewModel) {
     }
     val errorText = viewModel.errorStream.collectAsState().value
 
-    SettingsColumnWithChild(
-        footer = footerText,
-        error = errorText.minSOCError,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .background(colorScheme.surface)
-                .padding(vertical = 4.dp)
-        ) {
-            Text(
-                stringResource(R.string.min_soc),
-                Modifier.weight(1.0f),
-                color = colorScheme.onSecondary
-            )
-            OutlinedTextField(
-                value = minSOC,
-                onValueChange = { viewModel.minSOCStream.value = it.filter { it.isDigit() } },
-                modifier = Modifier.width(100.dp),
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                trailingIcon = { Text("%", color = colorScheme.onSecondary) },
-                singleLine = true
-            )
-        }
-    }
+    EditableItemView(
+        minSOC,
+        errorText.minSOCError,
+        footerText,
+        stringResource(R.string.min_soc),
+        "%",
+        { viewModel.minSOCStream.value = it.filter { it.isDigit() } }
+    )
 }
 
 @Composable
@@ -214,30 +194,14 @@ fun MaxSOCView(viewModel: EditPhaseViewModel) {
     val maxSOC = viewModel.maxSocStream.collectAsState().value
     val errorText = viewModel.errorStream.collectAsState().value
 
-    SettingsColumnWithChild(
-        error = errorText.maxSOCError,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .background(colorScheme.surface)
-                .padding(vertical = 4.dp)
-        ) {
-            Text(
-                stringResource(SharedR.string.max_soc),
-                Modifier.weight(1.0f),
-                color = colorScheme.onSecondary
-            )
-            OutlinedTextField(
-                value = maxSOC,
-                onValueChange = { viewModel.maxSocStream.value = it.filter { it.isDigit() } },
-                modifier = Modifier.width(100.dp),
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                trailingIcon = { Text("%", color = colorScheme.onSecondary) },
-                singleLine = true
-            )
-        }
-    }
+    EditableItemView(
+        maxSOC,
+        errorText.maxSOCError,
+        footerText = null,
+        stringResource(SharedR.string.max_soc),
+        "%",
+        { viewModel.maxSocStream.value = it.filter { it.isDigit() } }
+    )
 }
 
 @Composable
@@ -250,31 +214,14 @@ fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
     }
     val errorText = viewModel.errorStream.collectAsState().value
 
-    SettingsColumnWithChild(
-        footer = footerText,
-        error = errorText.fdSOCError,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .background(colorScheme.surface)
-                .padding(vertical = 4.dp)
-        ) {
-            Text(
-                stringResource(R.string.force_discharge_soc),
-                Modifier.weight(1.0f),
-                color = colorScheme.onSecondary
-            )
-            OutlinedTextField(
-                value = fdSOC,
-                onValueChange = { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } },
-                modifier = Modifier.width(100.dp),
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                trailingIcon = { Text("%", color = colorScheme.onSecondary) },
-                singleLine = true
-            )
-        }
-    }
+    EditableItemView(
+        fdSOC,
+        errorText.fdSOCError,
+        footerText,
+        stringResource(R.string.force_discharge_soc),
+        "%",
+        { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } }
+    )
 }
 
 @Composable
@@ -287,31 +234,14 @@ fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
     }
     val errorText = viewModel.errorStream.collectAsState().value
 
-    SettingsColumnWithChild(
-        footer = footerText,
-        error = errorText.forceDischargePowerError,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .background(colorScheme.surface)
-                .padding(vertical = 4.dp)
-        ) {
-            Text(
-                stringResource(R.string.force_discharge_power),
-                Modifier.weight(1.0f),
-                color = colorScheme.onSecondary
-            )
-            OutlinedTextField(
-                value = fdPower,
-                onValueChange = { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } },
-                modifier = Modifier.width(100.dp),
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                trailingIcon = { Text("W", color = colorScheme.onSecondary) },
-                singleLine = true
-            )
-        }
-    }
+    EditableItemView(
+        fdPower,
+        errorText.forceDischargePowerError,
+        footerText,
+        stringResource(R.string.force_discharge_power),
+        "W",
+        { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } }
+    )
 }
 
 @Composable
@@ -356,6 +286,42 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
                     })
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun EditableItemView(
+    value: String,
+    errorText: String?,
+    footerText: String?,
+    title: String,
+    unit: String,
+    onValueChange: (String) -> Unit
+) {
+    SettingsColumnWithChild(
+        error = errorText,
+        footer = footerText
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .background(colorScheme.surface)
+                .padding(vertical = 4.dp)
+        ) {
+            Text(
+                title,
+                Modifier.weight(1.0f),
+                color = colorScheme.onSecondary
+            )
+            OutlinedTextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier.width(120.dp),
+                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
+                trailingIcon = { Text(unit, color = colorScheme.onSecondary) },
+                singleLine = true
+            )
         }
     }
 }

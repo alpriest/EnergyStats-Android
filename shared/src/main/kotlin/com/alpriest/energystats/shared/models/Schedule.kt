@@ -15,14 +15,16 @@ data class Schedule(
     val phases: List<SchedulePhase>
 ) {
     fun isValid(): Boolean {
-        val enabledPhases = phases.filter { it.enabled }
+        val phasesToCheck = phases.filter {
+            it.enabled && !it.isAllDaySynthesized()
+        }
 
-        for ((index, phase) in enabledPhases.withIndex()) {
+        for ((index, phase) in phasesToCheck.withIndex()) {
             val phaseStart = phase.start.toMinutes()
             val phaseEnd = phase.end.toMinutes()
 
             // Check for overlap with other phases
-            for (otherPhase in enabledPhases.subList(index + 1, enabledPhases.size)) {
+            for (otherPhase in phasesToCheck.subList(index + 1, phasesToCheck.size)) {
                 val otherStart = otherPhase.start.toMinutes()
                 val otherEnd = otherPhase.end.toMinutes()
 
@@ -149,6 +151,10 @@ data class SchedulePhase(
         return minSocOnGrid <= forceDischargeSOC && end > start
     }
 
+    fun isAllDaySynthesized(): Boolean {
+        return start.hour == 0 && start.minute == 0 && end.hour == 23 && end.minute == 59
+    }
+
     fun toPhaseResponse(): SchedulePhaseNetworkModel {
         return SchedulePhaseNetworkModel(
             enable = enabled.intValue,
@@ -160,7 +166,8 @@ data class SchedulePhase(
             minSocOnGrid = minSocOnGrid,
             fdSoc = forceDischargeSOC,
             fdPwr = forceDischargePower,
-            maxSoc = maxSOC
+            maxSoc = maxSOC,
+            importLimit = if (mode == WorkModes.ForceDischarge) 0 else null
         )
     }
 }

@@ -2,7 +2,7 @@
 agp = "9.0.1"
 firebaseBom = "34.10.0"
 composeBom = "2026.03.00"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 coreKtx = "1.18.0"
 appcompat = "1.7.1"
 glance = "1.1.1"

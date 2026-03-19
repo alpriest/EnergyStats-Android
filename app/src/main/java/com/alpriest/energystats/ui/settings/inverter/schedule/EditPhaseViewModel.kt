@@ -95,13 +95,13 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
         var maxSOCError: String? = null
 
         minSOCStream.value.toIntOrNull()?.let {
-            if (it < 10 || it > 100) {
+            if (it !in 10..100) {
                 minSOCError = context.getString(R.string.please_enter_a_number_between_10_and_100)
             }
         }
 
         forceDischargeSOCStream.value.toIntOrNull()?.let {
-            if (it < 10 || it > 100) {
+            if (it !in 10..100) {
                 fdSOCError = context.getString(R.string.please_enter_a_number_between_10_and_100)
             }
         }
@@ -124,7 +124,7 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
 
         maxSocStream.value.toIntOrNull()?.let {maxSoc ->
             minSOCStream.value.toIntOrNull()?.let { minSoc ->
-                if (maxSoc < minSoc || maxSoc > 100) {
+                if (maxSoc !in minSoc..100) {
                     maxSOCError = context.getString(R.string.please_enter_a_number_between_10_and_100)
                 }
             }

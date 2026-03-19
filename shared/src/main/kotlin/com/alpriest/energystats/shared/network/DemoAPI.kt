@@ -193,7 +193,8 @@ class DemoAPI : FoxAPIServicing {
                     minSocOnGrid = 20,
                     fdSoc = 100,
                     fdPwr = 0,
-                    maxSoc = 100
+                    maxSoc = 100,
+                    importLimit = null
                 ),
                 SchedulePhaseNetworkModel(
                     enable = 1,
@@ -205,7 +206,8 @@ class DemoAPI : FoxAPIServicing {
                     minSocOnGrid = 20,
                     fdSoc = 20,
                     fdPwr = 3500,
-                    maxSoc = 100
+                    maxSoc = 100,
+                    importLimit = null
                 )
             ),
             workModes = listOf(

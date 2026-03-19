@@ -88,7 +88,7 @@ class WorkModeViewModel(
 
     suspend fun fetchWorkModes(deviceSN: String): List<String> {
         val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-        return scheduleResponse.workModes
+        return scheduleResponse.workModes.filter { it != WorkModes.ForceDischarge && it != WorkModes.ForceCharge }
     }
 
     suspend fun save(context: Context) {
