@@ -77,17 +77,19 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
     val context = LocalContext.current
     var modelReady by remember { mutableStateOf(false) }
     var hasRenderedOnce by rememberSaveable { mutableStateOf(false) }
-    val inputVariablesWithData = EnergyBreakdownType.Inputs.types.filter {
-        (valuesAtTimeStream[it]?.isNotEmpty() ?: false) || (totalsStream[it] != null)
-    }
-    val outputVariablesWithData = EnergyBreakdownType.Outputs.types.filter {
-        (valuesAtTimeStream[it]?.isNotEmpty() ?: false) || (totalsStream[it] != null)
-    }
+    var inputVariablesWithData by remember { mutableStateOf<List<ReportVariable>>(emptyList()) }
+    var outputVariablesWithData by remember { mutableStateOf<List<ReportVariable>>(emptyList()) }
     val chartColors = (inputVariablesWithData + outputVariablesWithData).map { it.colour(appSettingsStream) }
-    val hasData = (inputVariablesWithData + outputVariablesWithData).isNotEmpty() || totalsStream.isNotEmpty() || valuesAtTimeStream.isNotEmpty()
 
     LaunchedEffect(totalsStream, valuesAtTimeStream) {
         totals.clear()
+        inputVariablesWithData = EnergyBreakdownType.Inputs.types.filter {
+            (valuesAtTimeStream[it]?.isNotEmpty() ?: false) || (totalsStream[it] != null)
+        }
+        outputVariablesWithData = EnergyBreakdownType.Outputs.types.filter {
+            (valuesAtTimeStream[it]?.isNotEmpty() ?: false) || (totalsStream[it] != null)
+        }
+        val hasData = (inputVariablesWithData + outputVariablesWithData).isNotEmpty() || totalsStream.isNotEmpty() || valuesAtTimeStream.isNotEmpty()
 
         // If we have no data, hide the chart only if we've never shown it.
         if (!hasData) {
@@ -106,10 +108,14 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
             if (valuesAtTimeStream.isNotEmpty()) {
                 columnSeries {
                     inputVariablesWithData.forEach {
-                        series(x = EnergyBreakdownType.Inputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
+                        if (valuesAtTimeStream[it]?.isNotEmpty() == true) {
+                            series(x = EnergyBreakdownType.Inputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
+                        }
                     }
                     outputVariablesWithData.forEach {
-                        series(x = EnergyBreakdownType.Outputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
+                        if (valuesAtTimeStream[it]?.isNotEmpty() == true) {
+                            series(x = EnergyBreakdownType.Outputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
+                        }
                     }
                 }
 
@@ -183,7 +189,7 @@ private class EnergyBreakdownBottomAxisValueFormatter(private val totals: Mutabl
             else -> EnergyBreakdownType.Outputs
         }
 
-        return totals[type] ?: " "
+        return totals[type] ?: "..."
     }
 }
 
