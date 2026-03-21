@@ -441,7 +441,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     private suspend fun executeWithoutResponse(request: Request) {
-        fetchJSON<NetworkResponse<String>>(request)
+        fetchJSON<NetworkResponse<Unit>>(request)
     }
 
     private suspend fun <T : NetworkResponseInterface> fetchGSON(
