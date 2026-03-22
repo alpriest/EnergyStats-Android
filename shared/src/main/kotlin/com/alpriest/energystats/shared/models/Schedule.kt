@@ -93,7 +93,9 @@ data class SchedulePhase(
             batterySOC: Int,
             maxSOC: Int?
         ): SchedulePhase? {
-            if (mode == null || start == end) { return null }
+            if (mode == null || start == end) {
+                return null
+            }
 
             return SchedulePhase(
                 id ?: UUID.randomUUID().toString(),
@@ -179,7 +181,9 @@ data class ScheduleTemplate(
 )
 
 internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
-    if (startHour == 0 && endHour == 0 && startMinute == 0 && endMinute == 0) { return null }
+    if (startHour == 0 && endHour == 0 && startMinute == 0 && endMinute == 0) {
+        return null
+    }
 
     return SchedulePhase.create(
         enabled = enable.toBoolean,
