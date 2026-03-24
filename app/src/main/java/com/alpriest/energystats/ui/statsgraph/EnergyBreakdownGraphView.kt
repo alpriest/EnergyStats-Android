@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.statsgraph
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -76,6 +77,7 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
     val totals = remember { mutableStateMapOf<EnergyBreakdownType, String>() }
     val context = LocalContext.current
     var modelReady by remember { mutableStateOf(false) }
+    var hasAnyData by remember { mutableStateOf(false) }
     var hasRenderedOnce by rememberSaveable { mutableStateOf(false) }
     var inputVariablesWithData by remember { mutableStateOf<List<ReportVariable>>(emptyList()) }
     var outputVariablesWithData by remember { mutableStateOf<List<ReportVariable>>(emptyList()) }
@@ -83,19 +85,28 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
 
     LaunchedEffect(totalsStream, valuesAtTimeStream) {
         totals.clear()
-        inputVariablesWithData = EnergyBreakdownType.Inputs.types.filter {
-            (valuesAtTimeStream[it]?.isNotEmpty() ?: false) || (totalsStream[it] != null)
-        }
-        outputVariablesWithData = EnergyBreakdownType.Outputs.types.filter {
-            (valuesAtTimeStream[it]?.isNotEmpty() ?: false) || (totalsStream[it] != null)
-        }
-        val hasData = (inputVariablesWithData + outputVariablesWithData).isNotEmpty() || totalsStream.isNotEmpty() || valuesAtTimeStream.isNotEmpty()
-
-        // If we have no data, hide the chart only if we've never shown it.
-        if (!hasData) {
-            if (!hasRenderedOnce) {
-                modelReady = false
+        if (valuesAtTimeStream.isNotEmpty()) {
+            inputVariablesWithData = EnergyBreakdownType.Inputs.types.filter {
+                valuesAtTimeStream[it]?.isNotEmpty() ?: false
             }
+            outputVariablesWithData = EnergyBreakdownType.Outputs.types.filter {
+                valuesAtTimeStream[it]?.isNotEmpty() ?: false
+            }
+        } else {
+            inputVariablesWithData = EnergyBreakdownType.Inputs.types.filter {
+                totalsStream[it] != null
+            }
+            outputVariablesWithData = EnergyBreakdownType.Outputs.types.filter {
+                totalsStream[it] != null
+            }
+        }
+        val hasData = (inputVariablesWithData + outputVariablesWithData).isNotEmpty()
+        hasAnyData = hasData
+
+        // If we have no data, hide the chart and avoid rendering a layer/model mismatch
+        // with an empty chartColors list.
+        if (!hasData) {
+            modelReady = false
             return@LaunchedEffect
         }
 
@@ -108,11 +119,13 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
             if (valuesAtTimeStream.isNotEmpty()) {
                 columnSeries {
                     inputVariablesWithData.forEach {
+                        Log.d("AWP", "${it.name} ${valuesAtTimeStream[it]?.isNotEmpty()}")
                         if (valuesAtTimeStream[it]?.isNotEmpty() == true) {
                             series(x = EnergyBreakdownType.Inputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
                         }
                     }
                     outputVariablesWithData.forEach {
+                        Log.d("AWP", "${it.name} ${valuesAtTimeStream[it]?.isNotEmpty()}")
                         if (valuesAtTimeStream[it]?.isNotEmpty() == true) {
                             series(x = EnergyBreakdownType.Outputs.graphX, listOfNotNull(valuesAtTimeStream[it]?.firstOrNull()?.y))
                         }
@@ -157,7 +170,7 @@ fun EnergyBreakdownGraphView(viewModel: StatsTabViewModel) {
         hasRenderedOnce = true
     }
 
-    if (modelReady || hasRenderedOnce) {
+    if (hasAnyData && (modelReady || hasRenderedOnce)) {
         CartesianChartHost(
             chart = rememberCartesianChart(
                 rememberColumnsLayer(chartColors),
