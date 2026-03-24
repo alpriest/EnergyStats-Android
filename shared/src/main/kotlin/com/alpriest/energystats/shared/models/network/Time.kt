@@ -1,8 +1,10 @@
 package com.alpriest.energystats.shared.models.network
 
 import com.alpriest.energystats.shared.models.TimeType
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
+@Serializable
 data class Time(
     val hour: Int,
     val minute: Int

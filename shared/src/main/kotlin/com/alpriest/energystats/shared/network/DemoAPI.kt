@@ -314,7 +314,6 @@ class DemoAPI : FoxAPIServicing {
 
     private fun makeGson(): Gson {
         return GsonBuilder()
-            .registerTypeAdapter(ApiVariableArray::class.java, OpenApiVariableDeserializer())
             .create()
     }
 }

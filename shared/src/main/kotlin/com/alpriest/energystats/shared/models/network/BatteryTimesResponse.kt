@@ -1,5 +1,8 @@
 package com.alpriest.energystats.shared.models.network
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class BatteryTimesResponse(
     val enable1: Boolean,
     val startTime1: Time,

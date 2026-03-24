@@ -29,12 +29,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.network.DataLoggerStatus
-import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.network.DataLoggerStatus
+import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
@@ -67,7 +67,7 @@ class DataLoggerViewModel(
     val navController: NavController
 ) : ViewModel() {
     var itemStream: MutableStateFlow<List<DataLogger>> = MutableStateFlow(listOf())
-    var uiState = MutableStateFlow<UiLoadState>(UiLoadState(LoadState.Inactive))
+    var uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
 
     suspend fun load(context: Context) {
         uiState.value = UiLoadState(LoadState.Active.Loading)

@@ -14,7 +14,6 @@ import com.alpriest.energystats.shared.models.network.BatteryTimesResponse
 import com.alpriest.energystats.shared.models.network.ChargeTime
 import com.alpriest.energystats.shared.models.network.DataLoggerListRequest
 import com.alpriest.energystats.shared.models.network.DataLoggerResponse
-import com.alpriest.energystats.shared.models.network.DataLoggerStatus
 import com.alpriest.energystats.shared.models.network.DeviceDetailResponse
 import com.alpriest.energystats.shared.models.network.DeviceListRequest
 import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
@@ -88,6 +87,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         explicitNulls = false
         encodeDefaults = true
     }
+
     private fun makeSignature(encodedPath: String, token: String, timestamp: Long): String {
         return listOf(encodedPath, token, timestamp.toString()).joinToString("\\r\\n").md5()
     }
@@ -257,8 +257,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     override suspend fun openapi_fetchVariables(): List<ApiVariable> {
         val request = Request.Builder().url(URLs.getOpenVariables()).build()
 
-        val type = object : TypeToken<NetworkResponse<ApiVariableArray>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ApiVariableArray>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<ApiVariableArray>> = fetchJSON(request)
         return response.item.result?.array ?: throw MissingDataException()
     }
 
@@ -268,16 +267,14 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
 
         val request = Request.Builder().url(URLs.getOpenModuleList()).post(body).build()
 
-        val type = object : TypeToken<NetworkResponse<PagedDataLoggerListResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<PagedDataLoggerListResponse>> = fetchJSON(request)
         return response.item.result?.data ?: throw MissingDataException()
     }
 
     override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
         val request = Request.Builder().url(URLs.getOpenBatteryChargeTimes(deviceSN)).build()
 
-        val type = object : TypeToken<NetworkResponse<BatteryTimesResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<BatteryTimesResponse>> = fetchJSON(request)
         val result = response.item.result ?: throw MissingDataException()
 
         return listOf(
@@ -444,14 +441,23 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         fetchJSON<NetworkResponse<Unit>>(request)
     }
 
+    @Deprecated("Use fetchJSON instead")
     private suspend fun <T : NetworkResponseInterface> fetchGSON(
         request: Request,
         type: Type
     ): NetworkTuple<T> {
+        val requestOrigin = Throwable("FoxAPIService request origin: ${request.method} ${request.url}")
         return suspendCoroutine { continuation ->
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    continuation.resumeWithException(e)
+                    continuation.resumeWithException(
+                        FoxNetworkRequestException(
+                            method = request.method,
+                            url = request.url.toString(),
+                            origin = requestOrigin,
+                            cause = e,
+                        )
+                    )
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -473,8 +479,6 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
                     try {
                         val text = response.body.string()
                         val builder = GsonBuilder()
-                            .registerTypeAdapter(ApiVariableArray::class.java, OpenApiVariableDeserializer())
-                            .registerTypeAdapter(DataLoggerStatus::class.java, DataLoggerStatusDeserializer())
                             .registerTypeAdapter(ScheduleResponse::class.java, ScheduleResponse.Deserializer())
                             .create()
                         val body: T = builder.fromJson(text, type)
@@ -485,7 +489,14 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
                             onFailure = { continuation.resumeWithException(it) }
                         )
                     } catch (ex: Exception) {
-                        continuation.resumeWithException(ex)
+                        continuation.resumeWithException(
+                            FoxNetworkRequestException(
+                                method = request.method,
+                                url = request.url.toString(),
+                                origin = requestOrigin,
+                                cause = ex,
+                            )
+                        )
                     }
                 }
             })
@@ -495,10 +506,18 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     private suspend inline fun <reified T : NetworkResponseInterface> fetchJSON(
         request: Request
     ): NetworkTuple<T> {
+        val requestOrigin = Throwable("FoxAPIService request origin: ${request.method} ${request.url}")
         return suspendCoroutine { continuation ->
             okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    continuation.resumeWithException(e)
+                    continuation.resumeWithException(
+                        FoxNetworkRequestException(
+                            method = request.method,
+                            url = request.url.toString(),
+                            origin = requestOrigin,
+                            cause = e,
+                        )
+                    )
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -527,7 +546,14 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
                             onFailure = { continuation.resumeWithException(it) }
                         )
                     } catch (ex: Exception) {
-                        continuation.resumeWithException(ex)
+                        continuation.resumeWithException(
+                            FoxNetworkRequestException(
+                                method = request.method,
+                                url = request.url.toString(),
+                                origin = requestOrigin,
+                                cause = ex,
+                            )
+                        )
                     }
                 }
             })
@@ -566,6 +592,18 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         }
 
         return Result.success(item)
+    }
+}
+
+
+class FoxNetworkRequestException(
+    method: String,
+    url: String,
+    origin: Throwable,
+    cause: Throwable,
+) : IOException("Fox API request failed: $method $url", cause) {
+    init {
+        addSuppressed(origin)
     }
 }
 
