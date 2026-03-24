@@ -184,7 +184,6 @@ class DemoAPI : FoxAPIServicing {
             1,
             listOf(
                 SchedulePhaseNetworkModel(
-                    enable = 1,
                     startHour = 15,
                     startMinute = 0,
                     endHour = 17,
@@ -197,7 +196,6 @@ class DemoAPI : FoxAPIServicing {
                     importLimit = null
                 ),
                 SchedulePhaseNetworkModel(
-                    enable = 1,
                     startHour = 7,
                     startMinute = 0,
                     endHour = 18,

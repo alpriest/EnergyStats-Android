@@ -74,7 +74,6 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
                     ) {
                         SchedulePhaseListItemView(
                             phase,
-                            PhaseEnabledToggleMode.Disabled,
                             modifier = Modifier
                         )
 

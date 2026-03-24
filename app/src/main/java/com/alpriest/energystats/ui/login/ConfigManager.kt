@@ -512,12 +512,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         }
 
     override var scheduleTemplates: List<ScheduleTemplate>
-        get() {
-            // Template phases must always be enabled
-            return config.scheduleTemplates.map { template ->
-                template.copy(phases = template.phases.map { it.copy(enabled = true) })
-            }
-        }
+        get() = config.scheduleTemplates
         set(value) {
             config.scheduleTemplates = value
             appSettingsStore.update(AppSettings.toAppSettings(config))

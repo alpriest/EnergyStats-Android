@@ -71,7 +71,6 @@ class SchedulePhaseHelper {
 
         private fun makePhase(start: Time, end: Time, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): SchedulePhase {
             return SchedulePhase(
-                enabled = true,
                 start = start,
                 end = end,
                 mode = mode,

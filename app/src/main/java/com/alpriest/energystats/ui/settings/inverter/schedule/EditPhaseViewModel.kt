@@ -137,7 +137,6 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
 
         val phase = SchedulePhase.create(
             id = originalPhaseId,
-            enabled = true,
             start = startTimeStream.value,
             end = endTimeStream.value,
             mode = workModeStream.value,

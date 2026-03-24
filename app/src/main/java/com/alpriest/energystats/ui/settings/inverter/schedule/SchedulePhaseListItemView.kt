@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +27,7 @@ import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SchedulePhaseListItemView(phase: SchedulePhase, toggleMode: PhaseEnabledToggleMode, modifier: Modifier = Modifier) {
+fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     val extra = when (phase.mode) {
@@ -73,16 +72,6 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, toggleMode: PhaseEnabledTogg
                 Text(extra, color = colorScheme.onSecondary.copy(alpha = 0.5f))
             }
         }
-
-        if (toggleMode.isEnabled) {
-            Spacer(Modifier.weight(1.0f))
-
-            Checkbox(
-                checked = phase.enabled,
-                onCheckedChange = { toggleMode.onChange(phase, it) },
-                modifier = Modifier.padding(end = 8.dp)
-            )
-        }
     }
 }
 
@@ -91,8 +80,7 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, toggleMode: PhaseEnabledTogg
 fun SchedulePhaseListItemViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SchedulePhaseListItemView(
-            phase = Schedule.preview().phases[0],
-            toggleMode = PhaseEnabledToggleMode.Enabled(onPhaseEnabledChange = { _, _ -> })
+            phase = Schedule.preview().phases[0]
         )
     }
 }

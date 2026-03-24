@@ -595,13 +595,12 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 }
 
-
 class FoxNetworkRequestException(
     method: String,
     url: String,
     origin: Throwable,
     cause: Throwable,
-) : IOException("Fox API request failed: $method $url", cause) {
+) : IOException("Fox API request failed: $method $url ${cause.message}", cause) {
     init {
         addSuppressed(origin)
     }
