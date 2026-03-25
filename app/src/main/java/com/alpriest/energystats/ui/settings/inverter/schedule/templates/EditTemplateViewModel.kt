@@ -15,7 +15,7 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.errorMessage
@@ -52,7 +52,7 @@ class EditTemplateViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var originalValue: ScheduleTemplate? = EditScheduleStore.shared.templateStream.value
+    private var originalValue: ScheduleTemplateV3? = EditScheduleStore.shared.templateStream.value
 
     init {
         viewModelScope.launch {
@@ -72,7 +72,7 @@ class EditTemplateViewModel(
             templateStream.value = template
             EditScheduleStore.shared.scheduleStream.value = template.asSchedule()
         } else if (sharedSchedule != null && sharedTemplate != null) {
-            EditScheduleStore.shared.templateStream.value = ScheduleTemplate(templateID, sharedTemplate.name, sharedSchedule.phases)
+            EditScheduleStore.shared.templateStream.value = ScheduleTemplateV3(templateID, sharedTemplate.name, sharedSchedule.phases)
         }
 
         uiState.value = UiLoadState(LoadState.Inactive)
@@ -83,11 +83,9 @@ class EditTemplateViewModel(
         val device = configManager.currentDevice.value ?: return
         val updatedSchedule = SchedulePhaseHelper.addNewTimePeriod(
             template.asSchedule(),
-            modes,
-            device,
-            configManager.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
+            modes
         )
-        val updatedTemplate = ScheduleTemplate(templateID, template.name, updatedSchedule.phases)
+        val updatedTemplate = ScheduleTemplateV3(templateID, template.name, updatedSchedule.phases)
         EditScheduleStore.shared.templateStream.value = updatedTemplate
     }
 
@@ -101,7 +99,7 @@ class EditTemplateViewModel(
             device,
             configManager.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
-        val updatedTemplate = ScheduleTemplate(templateID, template.name, updatedSchedule.phases)
+        val updatedTemplate = ScheduleTemplateV3(templateID, template.name, updatedSchedule.phases)
         EditScheduleStore.shared.templateStream.value = updatedTemplate
     }
 

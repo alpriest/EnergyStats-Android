@@ -2,7 +2,7 @@ package com.alpriest.energystats.shared.network
 
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
@@ -64,7 +64,7 @@ interface FoxAPIServicing {
     suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse
     suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse
     suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean)
-    suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule)
+    suspend fun openapi_saveSchedule(deviceSN: String, schedule: ScheduleV3)
     suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse
     suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest)
 }

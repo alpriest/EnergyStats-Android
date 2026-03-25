@@ -15,7 +15,7 @@ import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.RefreshFrequency
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
@@ -80,7 +80,7 @@ class FakeConfigManager : ConfigManaging {
     override var powerStationDetail: PowerStationDetail? = null
     override var showBatteryTimeEstimateOnWidget: Boolean = true
     override var showSelfSufficiencyStatsGraphOverlay: Boolean = true
-    override var scheduleTemplates: List<ScheduleTemplate> = listOf()
+    override var scheduleTemplates: List<ScheduleTemplateV3> = listOf()
     override var truncatedYAxisOnParameterGraphs: Boolean = true
     override var earningsModel: EarningsModel = EarningsModel.Exported
     override var summaryDateRange: SummaryDateRange = SummaryDateRange.Automatic

@@ -35,7 +35,7 @@ import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.ui.PaleWhite
@@ -97,7 +97,7 @@ class EditTemplateView(
     }
 
     @Composable
-    fun Loaded(template: ScheduleTemplate, viewModel: EditTemplateViewModel, modifier: Modifier) {
+    fun Loaded(template: ScheduleTemplateV3, viewModel: EditTemplateViewModel, modifier: Modifier) {
         val context = LocalContext.current
         val presentDuplicateAlert = remember { mutableStateOf(false) }
         val presentRenameAlert = remember { mutableStateOf(false) }
@@ -239,7 +239,7 @@ fun EditTemplateViewPreview() {
             userManager = FakeUserManager(),
             templateStore = PreviewTemplateStore()
         ).Loaded(
-            template = ScheduleTemplate(
+            template = ScheduleTemplateV3(
                 id = "123",
                 name = "Winter routine",
                 phases = listOf()

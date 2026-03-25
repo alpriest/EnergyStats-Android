@@ -9,7 +9,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.settings.SettingsScreen
@@ -25,7 +25,7 @@ class ScheduleTemplateListViewModel(
 ) : ViewModel(), AlertDialogMessageProviding {
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
-    val templateStream = MutableStateFlow<List<ScheduleTemplate>>(listOf())
+    val templateStream = MutableStateFlow<List<ScheduleTemplateV3>>(listOf())
 
     fun load() {
         if (uiState.value.state != LoadState.Inactive) {
@@ -46,7 +46,7 @@ class ScheduleTemplateListViewModel(
         load()
     }
 
-    fun edit(template: ScheduleTemplate) {
+    fun edit(template: ScheduleTemplateV3) {
         if (uiState.value.state != LoadState.Inactive) {
             return
         }
@@ -150,5 +150,5 @@ class ScheduleTemplateListViewModel(
 
 private data class ExportedTemplateList(
     val version: Int,
-    val templates: List<ScheduleTemplate>
+    val templates: List<ScheduleTemplateV3>
 )

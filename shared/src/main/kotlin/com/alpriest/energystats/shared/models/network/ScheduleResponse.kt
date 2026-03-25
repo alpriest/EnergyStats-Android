@@ -8,29 +8,41 @@ import java.lang.reflect.Type
 
 data class ScheduleResponse(
     val enable: Int,
-    val groups: List<SchedulePhaseNetworkModel>,
-    val workModes: List<String>
+    val groups: List<SchedulePhaseResponse>,
+    val workModes: List<String>,
+    val maxGroupCount: Int,
+    val properties: Map<String, SchedulePropertyDefinition>
 ) {
     class Deserializer : JsonDeserializer<ScheduleResponse> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ScheduleResponse {
             val jsonObject = json.asJsonObject
 
             val enable = jsonObject["enable"].asInt
-            val groups = context.deserialize<List<SchedulePhaseNetworkModel>>(
+            val groups = context.deserialize<List<SchedulePhaseResponse>>(
                 jsonObject["groups"],
-                object : TypeToken<List<SchedulePhaseNetworkModel>>() {}.type
+                object : TypeToken<List<SchedulePhaseResponse>>() {}.type
             )
 
-            // Use the registered WorkMode deserializer automatically
-            val workModes = context.deserialize<List<String>>(
-                jsonObject
-                    .getAsJsonObject("properties")
-                    .getAsJsonObject("workmode")
-                    .getAsJsonArray("enumList"),
-                object : TypeToken<List<String>>() {}.type
+            val maxGroupCount = jsonObject["maxGroupCount"].asInt
+            val properties = context.deserialize<Map<String, SchedulePropertyDefinition>>(
+                jsonObject["properties"],
+                object : TypeToken<Map<String, SchedulePropertyDefinition>>() {}.type
             )
+            val workModes = properties["enumList"]?.enumList ?: emptyList()
 
-            return ScheduleResponse(enable, groups, workModes)
+            return ScheduleResponse(enable, groups, workModes, maxGroupCount, properties)
         }
     }
 }
+
+data class SchedulePropertyDefinition(
+    val enumList: List<String>?,
+    val precision: Double,
+    val range: SchedulePropertyDefinitionRange?,
+    val unit: String
+)
+
+data class SchedulePropertyDefinitionRange(
+    val max: Double,
+    val min: Double
+)

@@ -46,7 +46,7 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.helpers.ErrorView
@@ -83,7 +83,6 @@ class ScheduleTemplateListView(
         viewModel: ScheduleTemplateListViewModel = viewModel(factory = ScheduleTemplateListViewModelFactory(configManager, templateStore, navController)),
         modifier: Modifier
     ) {
-        val context = LocalContext.current
         val loadState = viewModel.uiState.collectAsState().value.state
         val templates = viewModel.templateStream.collectAsState().value
         val coroutineScope = rememberCoroutineScope()
@@ -112,7 +111,7 @@ class ScheduleTemplateListView(
     }
 
     @Composable
-    fun Loaded(templates: List<ScheduleTemplate>, viewModel: ScheduleTemplateListViewModel, modifier: Modifier) {
+    fun Loaded(templates: List<ScheduleTemplateV3>, viewModel: ScheduleTemplateListViewModel, modifier: Modifier) {
         SettingsPage(modifier) {
             templates.forEach {
                 SettingsColumn {
@@ -298,8 +297,8 @@ fun EditPhaseViewPreview() {
             userManager = FakeUserManager()
         ).Loaded(
             templates = listOf(
-                ScheduleTemplate("1", "Summer saving", listOf()),
-                ScheduleTemplate("2", "Winter overnight charge", listOf())
+                ScheduleTemplateV3("1", "Summer saving", listOf()),
+                ScheduleTemplateV3("2", "Winter overnight charge", listOf())
             ),
             viewModel = viewModel,
             Modifier

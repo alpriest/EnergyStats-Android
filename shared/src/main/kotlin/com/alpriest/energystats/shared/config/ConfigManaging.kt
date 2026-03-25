@@ -12,7 +12,7 @@ import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.RefreshFrequency
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
@@ -104,5 +104,5 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
 }
 
 interface ScheduleTemplateConfigManager {
-    var scheduleTemplates: List<ScheduleTemplate>
+    var scheduleTemplates: List<ScheduleTemplateV3>
 }

@@ -13,8 +13,8 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleV3
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.network.DemoNetworking
@@ -55,9 +55,9 @@ class ScheduleSummaryViewModel(
     val navController: NavController,
     val templateStore: TemplateStoring
 ) : ViewModel(), AlertDialogMessageProviding {
-    val scheduleStream = MutableStateFlow<Schedule?>(null)
+    val scheduleStream = MutableStateFlow<ScheduleV3?>(null)
     val supportedErrorStream = MutableStateFlow<String?>(null)
-    val templateStream = MutableStateFlow<List<ScheduleTemplate>>(listOf())
+    val templateStream = MutableStateFlow<List<ScheduleTemplateV3>>(listOf())
     val uiState = MutableStateFlow(UiLoadState(LoadState.Inactive))
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     private var hasPreloaded = false
@@ -122,7 +122,7 @@ class ScheduleSummaryViewModel(
                     templateStream.value = templateStore.load()
 
                     val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-                    val schedule = Schedule.create(scheduleResponse)
+                    val schedule = ScheduleV3.create(scheduleResponse)
                     scheduleStream.value = schedule
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
                     configManager.workModes = scheduleResponse.workModes
@@ -190,7 +190,7 @@ class ScheduleSummaryViewModel(
         }
     }
 
-    fun editTemplate(template: ScheduleTemplate) {
+    fun editTemplate(template: ScheduleTemplateV3) {
         EditScheduleStore.shared.reset()
         EditScheduleStore.shared.templateStream.value = template
         EditScheduleStore.shared.allowDeletion = true
@@ -198,7 +198,7 @@ class ScheduleSummaryViewModel(
         navController.navigate(SettingsScreen.EditTemplate.name)
     }
 
-    fun activate(template: ScheduleTemplate, context: Context) {
+    fun activate(template: ScheduleTemplateV3, context: Context) {
         val schedule = template.asSchedule()
         save(schedule, context)
     }
@@ -207,7 +207,7 @@ class ScheduleSummaryViewModel(
         uiState.value = UiLoadState(LoadState.Inactive)
     }
 
-    private fun save(schedule: Schedule, context: Context) {
+    private fun save(schedule: ScheduleV3, context: Context) {
         if (uiState.value.state != LoadState.Inactive) {
             return
         }
@@ -240,7 +240,7 @@ private fun ScheduleResponse.supportsPeakShaving(): Boolean {
     return workModes.any { it == WorkModes.PeakShaving }
 }
 
-private fun Schedule.supportsMaxSOC(): Boolean {
+private fun ScheduleV3.supportsMaxSOC(): Boolean {
     return phases.any { it.maxSOC != null }
 }
 

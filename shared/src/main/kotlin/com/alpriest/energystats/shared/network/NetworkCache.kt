@@ -2,7 +2,7 @@ package com.alpriest.energystats.shared.network
 
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
@@ -149,7 +149,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         api.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
     }
 
-    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: ScheduleV3) {
         api.openapi_saveSchedule(deviceSN, schedule)
     }
 

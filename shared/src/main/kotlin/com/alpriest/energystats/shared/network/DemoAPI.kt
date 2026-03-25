@@ -5,7 +5,7 @@ import android.content.Context
 import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
@@ -31,7 +31,7 @@ import com.alpriest.energystats.shared.models.network.PagedPowerStationListRespo
 import com.alpriest.energystats.shared.models.network.PowerGenerationResponse
 import com.alpriest.energystats.shared.models.network.PowerStationDetailResponse
 import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.network.SchedulePhaseNetworkModel
+import com.alpriest.energystats.shared.models.network.SchedulePhaseResponse
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.models.network.SettingItem
 import com.alpriest.energystats.shared.models.network.Time
@@ -183,43 +183,47 @@ class DemoAPI : FoxAPIServicing {
         return ScheduleResponse(
             1,
             listOf(
-                SchedulePhaseNetworkModel(
+                SchedulePhaseResponse(
                     startHour = 15,
                     startMinute = 0,
                     endHour = 17,
                     endMinute = 0,
                     workMode = WorkModes.ForceCharge,
-                    minSocOnGrid = 20,
-                    fdSoc = 100,
-                    fdPwr = 0,
-                    maxSoc = 100,
-                    importLimit = null
+                    extraParam = mapOf(
+                        "minSocOnGrid" to 20.0,
+                        "fdSoc" to 100.0,
+                        "fdPwr" to 0.0,
+                        "maxSoc" to 100.0
+                    )
                 ),
-                SchedulePhaseNetworkModel(
+                SchedulePhaseResponse(
                     startHour = 7,
                     startMinute = 0,
                     endHour = 18,
                     endMinute = 30,
                     workMode = WorkModes.ForceDischarge,
-                    minSocOnGrid = 20,
-                    fdSoc = 20,
-                    fdPwr = 3500,
-                    maxSoc = 100,
-                    importLimit = null
+                    extraParam = mapOf(
+                        "minSocOnGrid" to 20.0,
+                        "fdSoc" to 20.0,
+                        "fdPwr" to 3500.0,
+                        "maxSoc" to 100.0
+                    )
                 )
             ),
+            maxGroupCount = 24,
             workModes = listOf(
                 WorkModes.SelfUse,
                 WorkModes.Feedin,
                 WorkModes.Backup,
                 WorkModes.ForceCharge,
                 WorkModes.ForceDischarge
-            )
+            ),
+            properties = emptyMap()
         )
     }
 
     override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {}
-    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {}
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: ScheduleV3) {}
     override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
         return DeviceDetailResponse(
             deviceSN = "998877",

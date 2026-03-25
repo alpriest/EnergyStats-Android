@@ -3,7 +3,7 @@ package com.alpriest.energystats.shared.network
 import com.alpriest.energystats.shared.helpers.md5
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.ApiVariableArray
@@ -402,7 +402,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
         executeWithoutResponse(request)
     }
 
-    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: Schedule) {
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: ScheduleV3) {
         val body = Gson().toJson(SetCurrentScheduleRequest(deviceSN, schedule.phases.map { it.toPhaseResponse() }))
             .toRequestBody("application/json".toMediaTypeOrNull())
 

@@ -1,41 +1,45 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.SchedulePhaseV3
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.models.network.Time
 
 class SchedulePhaseHelper {
     companion object {
-        fun addNewTimePeriod(schedule: Schedule, modes: List<WorkMode>, device: Device?, initialiseMaxSOC: Boolean): Schedule {
+        fun addNewTimePeriod(schedule: ScheduleV3, modes: List<WorkMode>): ScheduleV3 {
             val mode = modes.firstOrNull() ?: return schedule
-            val newPhase = SchedulePhase.create(mode = mode, device = device, initialiseMaxSOC)
-            val sortedPhases = schedule.phases + newPhase
-            sortedPhases.sortedBy { it.start }
+            val newPhase = SchedulePhaseV3.create(
+                start = Time.now(),
+                end = Time.now().adding(1),
+                mode = mode,
+                extraParam = emptyMap()
+            )
+            val sortedPhases = (schedule.phases + newPhase).filterNotNull().sortedBy { it.start }
 
-            return Schedule(
+            return ScheduleV3(
                 name = schedule.name,
                 phases = sortedPhases
             )
         }
 
-        fun appendPhasesInGaps(schedule: Schedule, mode: WorkMode, device: Device?, initialiseMaxSOC: Boolean): Schedule {
+        fun appendPhasesInGaps(schedule: ScheduleV3, mode: WorkMode, device: Device?, initialiseMaxSOC: Boolean): ScheduleV3 {
             val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
             val newPhases = schedule.phases + createPhasesInGaps(schedule, mode, minSOC, initialiseMaxSOC)
 
-            return Schedule(
+            return ScheduleV3(
                 name = schedule.name,
                 phases = newPhases.sortedBy { it.start }
             )
         }
 
-        private fun createPhasesInGaps(schedule: Schedule, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): List<SchedulePhase> {
+        private fun createPhasesInGaps(schedule: ScheduleV3, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): List<SchedulePhaseV3> {
             val sortedPhases = schedule.phases.sortedBy { it.start }
 
             val scheduleStartTime = Time(0, 0)
             val scheduleEndTime = Time(23, 59)
-            val newPhases = mutableListOf<SchedulePhase>()
+            val newPhases = mutableListOf<SchedulePhaseV3>()
             var lastEnd: Time? = null
 
             for (phase in sortedPhases) {
@@ -69,20 +73,27 @@ class SchedulePhaseHelper {
             return newPhases
         }
 
-        private fun makePhase(start: Time, end: Time, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): SchedulePhase {
-            return SchedulePhase(
+        private fun makePhase(start: Time, end: Time, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): SchedulePhaseV3 {
+            val params = mutableMapOf(
+                "minSocOnGrid" to soc.toDouble(),
+                "forceDischargePower" to 0.0,
+                "forceDischargeSOC" to soc.toDouble(),
+            )
+
+            if (initialiseMaxSOC) {
+                params["maxSOC"] = 100.0
+            }
+
+            return SchedulePhaseV3(
                 start = start,
                 end = end,
                 mode = mode,
-                forceDischargePower = 0,
-                forceDischargeSOC = soc,
-                minSocOnGrid = soc,
-                maxSOC = if (initialiseMaxSOC) 100 else null
+                extraParam = params
             )
         }
 
-        fun update(phase: SchedulePhase, schedule: Schedule): Schedule {
-            return Schedule(
+        fun update(phase: SchedulePhaseV3, schedule: ScheduleV3): ScheduleV3 {
+            return ScheduleV3(
                 name = schedule.name,
                 phases = schedule.phases.map {
                     if (it.id == phase.id) {
@@ -94,8 +105,8 @@ class SchedulePhaseHelper {
             )
         }
 
-        fun delete(phaseID: String, schedule: Schedule): Schedule {
-            return Schedule(
+        fun delete(phaseID: String, schedule: ScheduleV3): ScheduleV3 {
+            return ScheduleV3(
                 name = schedule.name,
                 phases = schedule.phases.mapNotNull {
                     if (it.id == phaseID) {

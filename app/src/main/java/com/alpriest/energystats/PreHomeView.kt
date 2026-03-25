@@ -11,8 +11,8 @@ import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.helpers.WearableApiAvailability
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.BatteryViewModel
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.SchedulePhaseV3
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.SharedDataKeys
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.services.CurrentValues
@@ -91,7 +91,7 @@ class PreHomeViewModel(
         val deviceSN = configManager.selectedDeviceSN ?: return
         try {
             val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
-            val schedule = Schedule.create(scheduleResponse)
+            val schedule = ScheduleV3.create(scheduleResponse)
 
             configManager.scheduleTemplates.forEach { template ->
                 val templatePhases = template.asSchedule().phases
@@ -108,14 +108,10 @@ class PreHomeViewModel(
         }
     }
 
-    private fun SchedulePhase.isEqualConfiguration(other: SchedulePhase): Boolean {
+    private fun SchedulePhaseV3.isEqualConfiguration(other: SchedulePhaseV3): Boolean {
         return start == other.start &&
                 end == other.end &&
-                mode == other.mode &&
-                minSocOnGrid == other.minSocOnGrid &&
-                forceDischargePower == other.forceDischargePower &&
-                forceDischargeSOC == other.forceDischargeSOC &&
-                maxSOC == other.maxSOC
+                mode == other.mode
     }
 }
 

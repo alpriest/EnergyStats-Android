@@ -26,7 +26,7 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.LoadingView
@@ -73,7 +73,7 @@ class EditScheduleView(
 }
 
 @Composable
-private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navController: NavHostController, modifier: Modifier) {
+private fun Loaded(schedule: ScheduleV3, viewModel: EditScheduleViewModel, navController: NavHostController, modifier: Modifier) {
     val context = LocalContext.current
 
     ContentWithBottomButtonPair(
@@ -118,7 +118,7 @@ private fun Loaded(schedule: Schedule, viewModel: EditScheduleViewModel, navCont
 }
 
 @Composable
-fun UnusedSchedulePeriodWarning(schedule: Schedule) {
+fun UnusedSchedulePeriodWarning(schedule: ScheduleV3) {
     if (schedule.hasTooManyPhases) {
         Row(modifier = Modifier.padding(top = 16.dp)) {
             Box(
@@ -143,7 +143,7 @@ fun UnusedSchedulePeriodWarning(schedule: Schedule) {
 fun EditScheduleViewPreview() {
     EnergyStatsTheme {
         Loaded(
-            schedule = Schedule.preview(),
+            schedule = ScheduleV3.preview(),
             viewModel = EditScheduleViewModel(
                 FakeConfigManager(),
                 DemoNetworking(),

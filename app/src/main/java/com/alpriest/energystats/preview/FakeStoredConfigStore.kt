@@ -14,7 +14,7 @@ import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.RefreshFrequency
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
@@ -26,7 +26,7 @@ import com.alpriest.energystats.shared.models.WidgetTapAction
 import java.time.LocalDateTime
 
 class FakeStoredConfigStore(
-    override var scheduleTemplates: List<ScheduleTemplate> = listOf(),
+    override var scheduleTemplates: List<ScheduleTemplateV3> = listOf(),
     override var colorTheme: ColorThemeMode = ColorThemeMode.Auto,
     override var showGraphValueDescriptions: Boolean = true,
     override var shouldCombineCT2WithPVPower: Boolean = false,

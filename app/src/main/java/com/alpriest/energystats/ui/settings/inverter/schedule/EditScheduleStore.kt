@@ -3,8 +3,8 @@ package com.alpriest.energystats.ui.settings.inverter.schedule
 import android.content.Context
 import androidx.compose.ui.graphics.Color
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleV3
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.config.ConfigManaging
@@ -13,8 +13,8 @@ import com.alpriest.energystats.shared.ui.PowerFlowPositive
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EditScheduleStore(
-    var scheduleStream: MutableStateFlow<Schedule?> = MutableStateFlow(null),
-    var templateStream: MutableStateFlow<ScheduleTemplate?> = MutableStateFlow(null),
+    var scheduleStream: MutableStateFlow<ScheduleV3?> = MutableStateFlow(null),
+    var templateStream: MutableStateFlow<ScheduleTemplateV3?> = MutableStateFlow(null),
     var phaseId: String? = null,
     var allowDeletion: Boolean = false
 ) {

@@ -1,7 +1,7 @@
 package com.alpriest.energystats.shared.models
 
-import com.alpriest.energystats.shared.models.network.SchedulePhaseNetworkModel
-import com.alpriest.energystats.shared.models.network.ScheduleResponse
+import com.alpriest.energystats.shared.models.ScheduleV3.Companion.MAX_PHASES_COUNT
+import com.alpriest.energystats.shared.models.network.SchedulePhaseRequest
 import com.alpriest.energystats.shared.models.network.Time
 import java.util.UUID
 
@@ -10,9 +10,9 @@ private val Boolean.intValue: Int
         return if (this) 1 else 0
     }
 
-data class Schedule(
+data class ScheduleV1(
     val name: String,
-    val phases: List<SchedulePhase>
+    val phases: List<SchedulePhaseV1>
 ) {
     fun isValid(): Boolean {
         val phasesToCheck = phases.filter {
@@ -44,22 +44,9 @@ data class Schedule(
     }
 
     val hasTooManyPhases: Boolean = phases.size > MAX_PHASES_COUNT
-
-    companion object {
-        fun create(name: String? = null, phases: List<SchedulePhase>): Schedule {
-            return Schedule(name ?: "Schedule", phases)
-        }
-
-        fun create(scheduleResponse: ScheduleResponse): Schedule {
-            val phases = scheduleResponse.groups.mapNotNull { it.toSchedulePhase() }
-            return Schedule(name = "", phases = phases)
-        }
-
-        const val MAX_PHASES_COUNT = 8
-    }
 }
 
-data class SchedulePhase(
+data class SchedulePhaseV1(
     val id: String,
     val start: Time,
     val end: Time,
@@ -89,12 +76,12 @@ data class SchedulePhase(
             forceDischargeSOC: Int,
             batterySOC: Int,
             maxSOC: Int?
-        ): SchedulePhase? {
+        ): SchedulePhaseV1? {
             if (mode == null || start == end) {
                 return null
             }
 
-            return SchedulePhase(
+            return SchedulePhaseV1(
                 id ?: UUID.randomUUID().toString(),
                 start,
                 end,
@@ -106,10 +93,10 @@ data class SchedulePhase(
             )
         }
 
-        fun create(mode: WorkMode, device: Device?, initialiseMaxSOC: Boolean): SchedulePhase {
+        fun create(mode: WorkMode, device: Device?, initialiseMaxSOC: Boolean): SchedulePhaseV1 {
             val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
 
-            return SchedulePhase(
+            return SchedulePhaseV1(
                 Time.now(),
                 Time.now().adding(1),
                 mode,
@@ -120,7 +107,7 @@ data class SchedulePhase(
             )
         }
 
-        fun preview(): SchedulePhase {
+        fun preview(): SchedulePhaseV1 {
             return create(
                 start = Time(hour = 19, minute = 30),
                 end = Time(hour = 23, minute = 30),
@@ -150,44 +137,13 @@ data class SchedulePhase(
     fun isAllDaySynthesized(): Boolean {
         return start.hour == 0 && start.minute == 0 && end.hour == 23 && end.minute == 59
     }
-
-    fun toPhaseResponse(): SchedulePhaseNetworkModel {
-        return SchedulePhaseNetworkModel(
-            startHour = start.hour,
-            startMinute = start.minute,
-            endHour = end.hour,
-            endMinute = end.minute,
-            workMode = mode,
-            minSocOnGrid = minSocOnGrid,
-            fdSoc = forceDischargeSOC,
-            fdPwr = forceDischargePower,
-            maxSoc = maxSOC,
-            importLimit = if (mode == WorkModes.ForceDischarge) 0 else null
-        )
-    }
 }
 
-data class ScheduleTemplate(
+data class ScheduleTemplateV1(
     val id: String,
     val name: String,
-    val phases: List<SchedulePhase>
+    val phases: List<SchedulePhaseV1>
 )
-
-internal fun SchedulePhaseNetworkModel.toSchedulePhase(): SchedulePhase? {
-    if (startHour == 0 && endHour == 0 && startMinute == 0 && endMinute == 0) {
-        return null
-    }
-
-    return SchedulePhase.create(
-        start = Time(hour = startHour, minute = startMinute),
-        end = Time(hour = endHour, minute = endMinute),
-        mode = workMode,
-        forceDischargePower = fdPwr ?: 0,
-        forceDischargeSOC = fdSoc,
-        batterySOC = minSocOnGrid,
-        maxSOC = maxSoc
-    )
-}
 
 val Int.toBoolean: Boolean
     get() {

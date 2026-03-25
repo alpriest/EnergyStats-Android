@@ -20,14 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.ScheduleV3
+import com.alpriest.energystats.shared.models.SchedulePhaseV3
 import com.alpriest.energystats.shared.models.TimeType
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifier) {
+fun SchedulePhaseListItemView(phase: SchedulePhaseV3, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     val extra = when (phase.mode) {
@@ -80,7 +80,7 @@ fun SchedulePhaseListItemView(phase: SchedulePhase, modifier: Modifier = Modifie
 fun SchedulePhaseListItemViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SchedulePhaseListItemView(
-            phase = Schedule.preview().phases[0]
+            phase = ScheduleV3.preview().phases[0]
         )
     }
 }

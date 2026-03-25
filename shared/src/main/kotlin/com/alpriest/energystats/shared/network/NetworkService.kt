@@ -4,7 +4,7 @@ import com.alpriest.energystats.shared.models.BatteryHeatingSchedule
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.QueryDate
 import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.network.ApiRequestCountResponse
 import com.alpriest.energystats.shared.models.network.ApiVariable
 import com.alpriest.energystats.shared.models.network.BatteryHeatingScheduleRequest
@@ -57,7 +57,7 @@ interface Networking {
     suspend fun fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse
     suspend fun fetchCurrentSchedule(deviceSN: String): ScheduleResponse
     suspend fun setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean)
-    suspend fun saveSchedule(deviceSN: String, schedule: Schedule)
+    suspend fun saveSchedule(deviceSN: String, schedule: ScheduleV3)
     suspend fun fetchDevice(deviceSN: String): DeviceDetailResponse
     suspend fun fetchPowerStationDetail(): PowerStationDetail?
     suspend fun fetchRequestCount(): ApiRequestCountResponse
@@ -139,7 +139,7 @@ open class NetworkService(val api: FoxAPIServicing) : Networking {
         api.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
     }
 
-    override suspend fun saveSchedule(deviceSN: String, schedule: Schedule) {
+    override suspend fun saveSchedule(deviceSN: String, schedule: ScheduleV3) {
         api.openapi_saveSchedule(deviceSN, schedule)
     }
 

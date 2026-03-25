@@ -24,14 +24,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPadding
 import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
+fun ScheduleDetailView(navController: NavHostController, schedule: ScheduleV3) {
     SettingsColumn(padding = PaddingValues(),) {
         if (schedule.name.isNotEmpty()) {
             Column(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp))) {
@@ -61,7 +61,7 @@ fun ScheduleDetailView(navController: NavHostController, schedule: Schedule) {
     if (schedule.phases.isNotEmpty()) {
         SettingsColumn(modifier = Modifier.fillMaxWidth(), padding = PaddingValues(),) {
             schedule.phases.forEachIndexed { index, phase ->
-                Box(Modifier.diagonalLinesIf(index >= Schedule.MAX_PHASES_COUNT)) {
+                Box(Modifier.diagonalLinesIf(index >= ScheduleV3.MAX_PHASES_COUNT)) {
                     OutlinedButton(
                         onClick = {
                             EditScheduleStore.shared.scheduleStream.value = schedule
@@ -97,7 +97,7 @@ fun ScheduleDetailViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         ScheduleDetailView(
             navController = NavHostController(LocalContext.current),
-            schedule = Schedule.preview()
+            schedule = ScheduleV3.preview()
         )
     }
 }

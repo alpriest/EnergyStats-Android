@@ -21,13 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.SchedulePhase
+import com.alpriest.energystats.shared.models.ScheduleV3
+import com.alpriest.energystats.shared.models.SchedulePhaseV3
 import com.alpriest.energystats.shared.ui.Orange
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier) {
+fun TimePeriodBarView(phases: List<SchedulePhaseV3>, modifier: Modifier = Modifier) {
     val height = 20.dp
 
     Column(
@@ -69,6 +69,6 @@ fun TimePeriodBarView(phases: List<SchedulePhase>, modifier: Modifier = Modifier
 @Composable
 fun TimePeriodBarViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
-        TimePeriodBarView(Schedule.preview().phases)
+        TimePeriodBarView(ScheduleV3.preview().phases)
     }
 }

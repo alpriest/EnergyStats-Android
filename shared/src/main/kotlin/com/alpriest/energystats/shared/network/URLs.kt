@@ -81,7 +81,7 @@ object URLs {
     }
 
     fun getOpenCurrentSchedule(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v1/device/scheduler/get"
+        return "https://www.foxesscloud.com/op/v3/device/scheduler/get"
             .toHttpUrl()
     }
 
@@ -91,7 +91,7 @@ object URLs {
     }
 
     fun setOpenCurrentSchedule(): HttpUrl {
-        return "https://www.foxesscloud.com/op/v1/device/scheduler/enable"
+        return "https://www.foxesscloud.com/op/v3/device/scheduler/enable"
             .toHttpUrl()
     }
 

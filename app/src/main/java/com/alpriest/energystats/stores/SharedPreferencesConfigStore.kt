@@ -16,7 +16,7 @@ import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.RefreshFrequency
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.models.SolcastSettings
@@ -582,15 +582,15 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var scheduleTemplates: List<ScheduleTemplate>
+    override var scheduleTemplates: List<ScheduleTemplateV3>
         get() {
             var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, null)
             if (data == null) {
-                data = Gson().toJson(listOf<ScheduleTemplate>())
+                data = Gson().toJson(listOf<ScheduleTemplateV3>())
                 scheduleTemplates = listOf()
             }
 
-            return Gson().fromJson(data, object : TypeToken<List<ScheduleTemplate>>() {}.type)
+            return Gson().fromJson(data, object : TypeToken<List<ScheduleTemplateV3>>() {}.type)
         }
         set(value) {
             sharedPreferences.edit {

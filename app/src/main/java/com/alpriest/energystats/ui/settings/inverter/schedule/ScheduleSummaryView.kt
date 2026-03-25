@@ -47,8 +47,8 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.shared.models.Schedule
-import com.alpriest.energystats.shared.models.ScheduleTemplate
+import com.alpriest.energystats.shared.models.ScheduleV3
+import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.tabs.TopBarSettings
@@ -69,6 +69,7 @@ import com.alpriest.energystats.ui.settings.inverterScheduleGraph
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
+import kotlin.collections.first
 
 class PopupScheduleSummaryView(
     private val configManager: ConfigManaging,
@@ -184,7 +185,7 @@ class ScheduleSummaryView(
     }
 
     @Composable
-    fun Loaded(schedule: Schedule, viewModel: ScheduleSummaryViewModel, modifier: Modifier) {
+    fun Loaded(schedule: ScheduleV3, viewModel: ScheduleSummaryViewModel, modifier: Modifier) {
         val templates = viewModel.templateStream.collectAsState().value
         val context = LocalContext.current
         val schedulerEnabled = viewModel.schedulerEnabledStream.collectAsState().value
@@ -308,8 +309,8 @@ class ScheduleSummaryView(
     }
 }
 
-fun ScheduleTemplate.asSchedule(): Schedule {
-    return Schedule(
+fun ScheduleTemplateV3.asSchedule(): ScheduleV3 {
+    return ScheduleV3(
         name = name,
         phases = phases
     )
@@ -330,7 +331,7 @@ fun ScheduleSummaryViewPreview() {
             userManager = FakeUserManager(),
             templateStore = PreviewTemplateStore()
         ).Loaded(
-            Schedule.preview(),
+            ScheduleV3.preview(),
             previewScheduleSummaryViewModel,
             Modifier
         )

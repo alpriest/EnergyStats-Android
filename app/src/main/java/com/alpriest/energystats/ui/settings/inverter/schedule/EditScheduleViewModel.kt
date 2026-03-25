@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.models.Schedule
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.DeviceCapability
@@ -44,7 +44,7 @@ class EditScheduleViewModel(
     private val _dirtyState = MutableStateFlow(false)
     val dirtyState: StateFlow<Boolean> = _dirtyState
 
-    private var originalValue: Schedule? = null
+    private var originalValue: ScheduleV3? = null
 
     init {
         originalValue = scheduleStream.value
@@ -86,9 +86,7 @@ class EditScheduleViewModel(
 
         scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(
             schedule,
-            modes,
-            device,
-            initialiseMaxSOC = configManager.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
+            modes
         )
     }
 
