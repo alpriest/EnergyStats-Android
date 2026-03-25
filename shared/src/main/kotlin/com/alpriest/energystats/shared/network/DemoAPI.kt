@@ -35,9 +35,6 @@ import com.alpriest.energystats.shared.models.network.SchedulePhaseNetworkModel
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.models.network.SettingItem
 import com.alpriest.energystats.shared.models.network.Time
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -153,9 +150,10 @@ class DemoAPI : FoxAPIServicing {
     override suspend fun openapi_fetchVariables(): List<ApiVariable> {
         val fileContent = this::class.java.classLoader?.getResource("res/raw/variables.json")?.readText()
 
-        val data: NetworkResponse<ApiVariableArray> = makeGson().fromJson(fileContent, object : TypeToken<NetworkResponse<ApiVariableArray>>() {}.type)
-
-        return data.result?.array ?: listOf()
+        return fileContent?.let {
+            val data: NetworkResponse<ApiVariableArray> = makeJson().decodeFromString(fileContent)
+            data.result?.array
+        } ?: listOf()
     }
 
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
@@ -312,9 +310,12 @@ class DemoAPI : FoxAPIServicing {
         encodeDefaults = true
     }
 
-    private fun makeGson(): Gson {
-        return GsonBuilder()
-            .create()
+    private fun makeJson(): Json {
+        return Json {
+            ignoreUnknownKeys = true
+            explicitNulls = false
+            encodeDefaults = true
+        }
     }
 }
 
