@@ -26,6 +26,7 @@ import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.network.SchedulePropertyDefinition
 import com.alpriest.energystats.shared.models.preview
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDateTime
@@ -93,8 +94,6 @@ class FakeConfigManager : ConfigManaging {
     override fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean {
         return false
     }
-
-    override fun setDeviceSupports(capability: DeviceCapability, deviceSN: String) {}
     override var showStringTotalsAsPercentage: Boolean = false
     override var showBatterySOCOnDailyStats: Boolean = false
     override var allowNegativeLoad: Boolean = false
@@ -105,6 +104,7 @@ class FakeConfigManager : ConfigManaging {
     override var isReadOnly: Boolean = false
     override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar
     override var showBatteryMaxCurrentCharge: Boolean = false
+    override var scheduleProperties: Map<String, SchedulePropertyDefinition> = emptyMap()
 
     override var devices: List<Device> = listOf(
         Device(
@@ -115,7 +115,8 @@ class FakeConfigManager : ConfigManaging {
             moduleSN = "module123",
             hasPV = true,
             hasBattery = true,
-            deviceType = "F1-3000"
+            deviceType = "F1-3000",
+            capacity = 3.68
         ),
         Device(
             deviceSN = "123123",
@@ -125,7 +126,8 @@ class FakeConfigManager : ConfigManaging {
             moduleSN = "module123",
             hasPV = true,
             hasBattery = true,
-            deviceType = "H1-5A"
+            deviceType = "H1-5A",
+            capacity = 5.68
         )
     )
     override var currentDevice: MutableStateFlow<Device?> = MutableStateFlow(
@@ -137,7 +139,8 @@ class FakeConfigManager : ConfigManaging {
             moduleSN = "module123",
             hasPV = true,
             hasBattery = true,
-            deviceType = "F1-3000"
+            deviceType = "F1-3000",
+            capacity = 3.68
         )
     )
     override val selectedDeviceSN: String? = "f3000_deviceid"

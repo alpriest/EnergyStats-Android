@@ -48,7 +48,8 @@ class FakeStoredConfigStore(
             true,
             "H1-3.7-E",
             null,
-            moduleSN = "abc123"
+            moduleSN = "abc123",
+            capacity = 3.68
         )
     ),
     override var showSunnyBackground: Boolean = true,

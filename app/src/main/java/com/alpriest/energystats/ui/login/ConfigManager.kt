@@ -26,6 +26,7 @@ import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.network.SchedulePropertyDefinition
 import com.alpriest.energystats.shared.models.toAppSettings
 import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.shared.network.Networking
@@ -42,8 +43,7 @@ import java.util.Locale
 
 open class ConfigManager(var config: StoredConfigManaging, val networking: Networking, override var appVersion: String, private val appSettingsStore: AppSettingsStore) :
     ConfigManaging {
-    private var deviceSupportsScheduleMaxSOC: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
-    private var deviceSupportsPeakShaving: MutableMap<String, Boolean> = mutableMapOf() // In-memory only
+    override var scheduleProperties: Map<String, SchedulePropertyDefinition> = emptyMap() // In-memory only
     override var lastSettingsResetTime: LocalDateTime? = null
     override val appSettingsStream: StateFlow<AppSettings>
         get() = appSettingsStore.appSettingStream
@@ -419,7 +419,8 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
                         moduleSN = networkDevice.moduleSN,
                         hasPV = networkDevice.hasPV,
                         hasBattery = networkDevice.hasBattery,
-                        deviceType = networkDevice.deviceType
+                        deviceType = networkDevice.deviceType,
+                        capacity = networkDevice.capacity
                     )
                 )
             }.collect()
@@ -582,23 +583,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         }
 
     override fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean {
-        return when (capability) {
-            DeviceCapability.ScheduleMaxSOC ->
-                deviceSupportsScheduleMaxSOC[deviceSN] ?: false
-
-            DeviceCapability.PeakShaving ->
-                deviceSupportsPeakShaving[deviceSN] ?: false
-        }
-    }
-
-    override fun setDeviceSupports(capability: DeviceCapability, deviceSN: String) {
-        when (capability) {
-            DeviceCapability.ScheduleMaxSOC ->
-                deviceSupportsScheduleMaxSOC[deviceSN] = true
-
-            DeviceCapability.PeakShaving ->
-                deviceSupportsPeakShaving[deviceSN] = true
-        }
+        return scheduleProperties.containsKey(capability.schedulePropertyKey())
     }
 
     override fun resetDisplaySettings() {

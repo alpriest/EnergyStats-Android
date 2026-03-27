@@ -20,7 +20,8 @@ class DeviceSummaryResponse(
     val deviceType: String,
     val hasBattery: Boolean,
     val hasPV: Boolean,
-    val status: Int
+    val status: Int,
+    val capacity: Double
 )
 
 @Serializable

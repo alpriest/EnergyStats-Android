@@ -11,7 +11,6 @@ import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.models.DeviceFirmwareVersion
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.ScheduleV3
@@ -126,13 +125,7 @@ class ScheduleSummaryViewModel(
                     scheduleStream.value = schedule
                     schedulerEnabledStream.value = scheduleResponse.enable == 1
                     configManager.workModes = scheduleResponse.workModes
-
-                    if (schedule.supportsMaxSOC()) {
-                        configManager.setDeviceSupports(DeviceCapability.ScheduleMaxSOC, deviceSN)
-                    }
-                    if (scheduleResponse.supportsPeakShaving()) {
-                        configManager.setDeviceSupports(DeviceCapability.PeakShaving, deviceSN)
-                    }
+                    configManager.scheduleProperties = scheduleResponse.properties
 
                     uiState.value = UiLoadState(LoadState.Inactive)
                 } catch (ex: Exception) {

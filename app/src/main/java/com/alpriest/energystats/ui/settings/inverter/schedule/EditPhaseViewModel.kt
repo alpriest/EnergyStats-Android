@@ -1,6 +1,5 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
-import android.R.attr.mode
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -62,7 +61,8 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
 
     init {
         EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
-            originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
+            val originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
+            this.originalPhase = originalPhase
             _viewDataStream.value = EditPhaseViewData(
                 originalPhase.id,
                 originalPhase.start,
@@ -316,7 +316,7 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
 
 
 class FieldDefinitionBuilder(
-    val properties: Map<String, SchedulePropertyDefinition>
+    val properties: Map<String, SchedulePropertyDefinition>,
     val phase: SchedulePhaseV3
 ) {
     fun make(
