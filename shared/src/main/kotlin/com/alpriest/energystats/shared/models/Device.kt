@@ -8,11 +8,12 @@ data class Device(
     val hasBattery: Boolean,
     val deviceType: String,
     val battery: Battery?,
-    val moduleSN: String
+    val moduleSN: String,
+    val capacity: Double?
 ) {
     companion object
 }
 
 fun Device.Companion.preview(): Device {
-    return Device("", true, "", "", true, "", null, "")
+    return Device("", true, "", "", true, "", null, "", capacity = null)
 }

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
+import android.R.attr.mode
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,7 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.SchedulePhaseV3
 import com.alpriest.energystats.shared.models.WorkMode
 import com.alpriest.energystats.shared.models.WorkModes
+import com.alpriest.energystats.shared.models.network.SchedulePropertyDefinition
 import com.alpriest.energystats.shared.models.network.SchedulePropertyDefinitionRange
 import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
@@ -47,21 +49,20 @@ class EditPhaseViewModelFactory(val navController: NavHostController, val config
     }
 }
 
-class EditPhaseViewModel(val navController: NavHostController, configManager: ConfigManaging) : ViewModel(), AlertDialogMessageProviding {
+class EditPhaseViewModel(val navController: NavHostController, val configManager: ConfigManaging) : ViewModel(), AlertDialogMessageProviding {
     val modes: List<WorkMode>
 
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
-    val showMaxSocStream = MutableStateFlow(false)
-    val maxSocStream = MutableStateFlow("100")
     private val _viewDataStream = MutableStateFlow(EditPhaseViewData(id = "", Time.now(), Time.now(), WorkModes.SelfUse, listOf(), listOf(), false))
     val viewDataStream: StateFlow<EditPhaseViewData> = _viewDataStream
 
     private val _errorStream = MutableStateFlow<Map<String, String>>(emptyMap())
     val errorStream: StateFlow<Map<String, String>> = _errorStream
+    private var originalPhase: SchedulePhaseV3? = null
 
     init {
         EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
-            val originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
+            originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
             _viewDataStream.value = EditPhaseViewData(
                 originalPhase.id,
                 originalPhase.start,
@@ -190,4 +191,153 @@ class EditPhaseViewModel(val navController: NavHostController, configManager: Co
         return fieldNames.firstOrNull { it.lowercase() == key } ?: key
     }
 
+    fun startTimeChanged(time: Time) {
+        _viewDataStream.value = viewDataStream.value.copy(startTime = time)
+    }
+
+    fun endTimeChanged(time: Time) {
+        _viewDataStream.value = viewDataStream.value.copy(endTime = time)
+    }
+
+    fun workModeChanged(value: WorkMode) {
+        _viewDataStream.value = viewDataStream.value.copy(workMode = value)
+        determineVisibleFields()
+    }
+
+    fun phaseFieldChanged(phaseFieldDefinition: SchedulePhaseFieldDefinition, value: String) {
+        val fields = viewDataStream.value.fields.map {
+            if (it.key == phaseFieldDefinition.key) {
+                it.copy(value = value.toDoubleOrNull())
+            } else {
+                it
+            }
+        }
+        _viewDataStream.value = viewDataStream.value.copy(fields = fields)
+    }
+
+    fun determineVisibleFields() {
+        val phase = originalPhase ?: return
+        val viewData = _viewDataStream.value
+        val mode = viewData.workMode
+        val builder = FieldDefinitionBuilder(properties = configManager.scheduleProperties, phase = phase)
+
+        val hiddenFieldKeys = mutableSetOf("maxSoc")
+        val standardField: SchedulePhaseFieldDefinition?
+
+        when (mode) {
+            WorkModes.SelfUse -> {
+                hiddenFieldKeys.add("fdpwr")
+                hiddenFieldKeys.add("fdsoc")
+                standardField = builder.make(key = "minsocongrid", isStandard = true, title = "Min SoC", description = null, defaultValue = 10.0)
+            }
+
+            WorkModes.Feedin -> {
+                hiddenFieldKeys.add("fdpwr")
+                hiddenFieldKeys.add("fdsoc")
+                standardField = builder.make(key = "minsocongrid", isStandard = true, title = "Min SoC", description = null, defaultValue = 10.0)
+            }
+
+            WorkModes.Backup -> {
+                hiddenFieldKeys.add("fdpwr")
+                hiddenFieldKeys.add("fdsoc")
+                standardField = builder.make(key = "minsocongrid", isStandard = true, title = "Min SoC", description = null, defaultValue = 10.0)
+            }
+
+            WorkModes.ForceCharge -> {
+                standardField = builder.make(
+                    key = "fdsoc",
+                    isStandard = true,
+                    title = "Charge to SoC",
+                    description = "When the battery reaches this level, charging will stop.",
+                    defaultValue = 100.0
+                )
+            }
+
+            WorkModes.ForceDischarge ->
+                standardField = builder.make(
+                    key = "fdsoc",
+                    isStandard = true,
+                    title = "Discharge to SoC",
+                    description = "When the battery reaches this level, discharging will stop. If you wanted to save some battery power for later, perhaps set it to 50%.",
+                    defaultValue = 10.0
+                )
+
+            else -> standardField = null
+        }
+
+        val standardFields = listOfNotNull(standardField)
+        hiddenFieldKeys.addAll(standardFields.map { it.key.lowercase() })
+        hiddenFieldKeys.addAll(configManager.scheduleProperties.mapNotNull {
+            if (it.value.unit.isEmpty()) it.key.lowercase() else null
+        })
+
+        val advancedFields: List<SchedulePhaseFieldDefinition> =
+            configManager.scheduleProperties
+                .keys
+                .filter { allKey -> hiddenFieldKeys.firstOrNull({ standardKey -> standardKey == allKey.lowercase() }) == null }
+                .map { key ->
+                    val defaultValue = defaultValue(mode, key)
+                    val description = description(mode, key)
+
+                    builder.make(key, isStandard = false, title = key, description = description, defaultValue = defaultValue)
+                }
+
+        _viewDataStream.value = viewData.copy(
+            fields = standardFields + advancedFields,
+            showAdvancedFields = !advancedFields.isEmpty()
+        )
+    }
+
+    fun description(mode: WorkMode, key: String): String? {
+        return when (mode) {
+            WorkModes.ForceCharge if key == "fdpwr" -> "The input power to charge your battery."
+            WorkModes.ForceDischarge if key == "fdpwr" -> "The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported."
+            else -> null
+        }
+    }
+
+    private fun defaultValue(mode: WorkMode, key: String): Double? {
+        when (key) {
+            "fdpwr" -> {
+                val capacity: Double? = configManager.currentDevice.value?.capacity
+                return capacity?.let {
+                    it * 1000.0
+                }
+            }
+            "importlimit" if mode == WorkModes.ForceDischarge -> {
+                return 0.0
+            }
+            else -> {
+                return null
+            }
+        }
+    }
+}
+
+
+class FieldDefinitionBuilder(
+    val properties: Map<String, SchedulePropertyDefinition>
+    val phase: SchedulePhaseV3
+) {
+    fun make(
+        key: String,
+        isStandard: Boolean,
+        title: String,
+        description: String?,
+        defaultValue: Double?,
+    ): SchedulePhaseFieldDefinition {
+        val property = properties[key]
+
+        return SchedulePhaseFieldDefinition(
+            key = key,
+            isStandard = isStandard,
+            title = title,
+            precision = (property?.precision) ?: 0.0,
+            range = property?.range,
+            unit = property?.unit,
+            value = phase.valueFor(key) ?: defaultValue,
+            error = null,
+            description = description
+        )
+    }
 }

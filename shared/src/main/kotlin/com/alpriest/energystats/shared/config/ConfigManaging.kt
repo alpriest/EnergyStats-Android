@@ -22,6 +22,7 @@ import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.models.WorkMode
+import com.alpriest.energystats.shared.models.network.SchedulePropertyDefinition
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDateTime
@@ -101,6 +102,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var readOnlyPasscode: String
     var isReadOnly: Boolean
     var showBatteryMaxCurrentCharge: Boolean
+    var scheduleProperties: Map<String, SchedulePropertyDefinition>
 }
 
 interface ScheduleTemplateConfigManager {

@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.SchedulePhaseV3
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -39,28 +39,31 @@ internal fun ScheduleV3.Companion.preview(): ScheduleV3 {
                 start = Time(hour = 1, minute = 0),
                 end = Time(hour = 2, minute = 0),
                 mode = WorkModes.ForceCharge,
-                forceDischargePower = 0,
-                forceDischargeSOC = 100,
-                batterySOC = 100,
-                maxSOC = 100
+                extraParam = mapOf(
+                    "fdPwr" to 0.0,
+                    "fdSoc" to 100.0,
+                    "minSoc" to 100.0
+                )
             ),
             SchedulePhaseV3.create(
                 start = Time(hour = 8, minute = 0),
                 end = Time(hour = 14, minute = 30),
                 mode = WorkModes.ForceDischarge,
-                forceDischargePower = 3500,
-                forceDischargeSOC = 20,
-                batterySOC = 20,
-                maxSOC = 100
+                extraParam = mapOf(
+                    "fdPwr" to 3500.0,
+                    "fdSoc" to 20.0,
+                    "minSoc" to 20.0
+                )
             ),
             SchedulePhaseV3.create(
                 start = Time(hour = 19, minute = 30),
                 end = Time(hour = 23, minute = 30),
                 mode = WorkModes.SelfUse,
-                forceDischargePower = 0,
-                forceDischargeSOC = 20,
-                batterySOC = 20,
-                maxSOC = 100
+                extraParam = mapOf(
+                    "fdPwr" to 0.0,
+                    "fdSoc" to 20.0,
+                    "minSoc" to 20.0
+                )
             )
         )
     )

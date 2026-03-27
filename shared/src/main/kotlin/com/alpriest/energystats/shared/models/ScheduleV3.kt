@@ -136,6 +136,16 @@ data class SchedulePhaseV3(
             extraParam = extraParam
         )
     }
+
+    fun hasExtraParam(key: String): Boolean =
+        extraParam.keys.map { it.lowercase() }.contains(key.lowercase())
+
+    fun valueFor(key: String): Double? {
+        return extraParam.entries.firstOrNull { it.key.equals(key, ignoreCase = true) }?.value
+    }
+
+    fun stringValueFor(key: String): String =
+        valueFor(key)?.toInt()?.toString() ?: "??"
 }
 
 data class ScheduleTemplateV3(

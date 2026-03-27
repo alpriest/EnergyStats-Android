@@ -20,11 +20,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpriest.energystats.shared.models.ColorThemeMode
-import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.SchedulePhaseV3
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.TimeType
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+
+val SchedulePhaseV3.forceDischargePower: String
+    get() = this.stringValueFor("fdPwr")
+
+val SchedulePhaseV3.forceDischargeSOC: String
+    get() = this.stringValueFor("fdSoc")
+
+val SchedulePhaseV3.minSocOnGrid: String
+    get() = this.stringValueFor("minSocOnGrid")
 
 @Composable
 fun SchedulePhaseListItemView(phase: SchedulePhaseV3, modifier: Modifier = Modifier) {
@@ -32,17 +41,8 @@ fun SchedulePhaseListItemView(phase: SchedulePhaseV3, modifier: Modifier = Modif
 
     val extra = when (phase.mode) {
         WorkModes.ForceDischarge -> " at ${phase.forceDischargePower}W down to ${phase.forceDischargeSOC}%"
-        WorkModes.ForceCharge, WorkModes.Backup ->
-            phase.maxSOC?.let {
-                " with max SOC ${it}%"
-            } ?: ""
-        WorkModes.SelfUse -> {
-            var result = " with ${phase.minSocOnGrid}% min SOC"
-            phase.maxSOC?.let {
-                result += ", max SOC ${it}%"
-            }
-            result
-        }
+        WorkModes.ForceCharge -> " at ${phase.forceDischargePower}W up to ${phase.forceDischargeSOC}%"
+        WorkModes.SelfUse -> " ${phase.minSocOnGrid}% min SOC"
         else -> ""
     }
 

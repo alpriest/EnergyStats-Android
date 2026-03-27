@@ -13,8 +13,8 @@ import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.ScheduleTemplateV3
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.network.DemoNetworking
@@ -241,7 +241,7 @@ private fun ScheduleResponse.supportsPeakShaving(): Boolean {
 }
 
 private fun ScheduleV3.supportsMaxSOC(): Boolean {
-    return phases.any { it.maxSOC != null }
+    return phases.any { it.hasExtraParam("maxSOC") }
 }
 
 fun errorMessage(exception: Exception, context: Context): String {

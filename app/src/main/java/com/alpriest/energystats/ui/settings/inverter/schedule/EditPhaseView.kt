@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -47,14 +48,13 @@ import com.alpriest.energystats.shared.ui.PowerFlowNegative
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.settings.BottomButtonConfiguration
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
-import com.alpriest.energystats.ui.settings.ErrorTextView
+import com.alpriest.energystats.ui.settings.InfoButton
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-import com.alpriest.energystats.shared.R as SharedR
 
 data class EditPhaseErrorData(
     val minSOCError: String?,
@@ -72,7 +72,6 @@ fun EditPhaseView(
     modifier: Modifier
 ) {
     val context = LocalContext.current
-    val showMaxSoc = viewModel.showMaxSocStream.collectAsState().value
 
     LaunchedEffect(null) {
         viewModel.load(context)
@@ -88,15 +87,17 @@ fun EditPhaseView(
             SettingsPage(innerModifier) {
                 TimeAndWorkModeView(viewModel)
 
-                MinSOCView(viewModel)
+                StandardViews(viewModel)
 
-                if (showMaxSoc) {
-                    MaxSOCView(viewModel)
-                }
-
-                ForceDischargeSOCView(viewModel)
-
-                ForceDischargePowerView(viewModel)
+//                MinSOCView(viewModel)
+//
+//                if (showMaxSoc) {
+//                    MaxSOCView(viewModel)
+//                }
+//
+//                ForceDischargeSOCView(viewModel)
+//
+//                ForceDischargePowerView(viewModel)
 
                 ESButton(
                     onClick = { viewModel.deletePhase() },
@@ -117,26 +118,15 @@ fun EditPhaseView(
 
 @Composable
 fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
-    val startTime = viewModel.startTimeStream.collectAsState().value
-    val endTime = viewModel.endTimeStream.collectAsState().value
+    val viewData = viewModel.viewDataStream.collectAsState().value
     val errorText = viewModel.errorStream.collectAsState().value
-    val footerText = when (viewModel.workModeStream.collectAsState().value) {
-        WorkModes.SelfUse -> stringResource(R.string.workmode_self_use_description)
-        WorkModes.Feedin -> stringResource(R.string.workmode_feed_in_first_description)
-        WorkModes.Backup -> stringResource(R.string.workmode_backup_description)
-        WorkModes.ForceCharge -> stringResource(R.string.workmode_force_charge_description)
-        WorkModes.ForceDischarge -> stringResource(R.string.workmode_force_discharge_description)
-        else -> null
-    }
     val timeTypeShowing = remember { mutableStateOf<TimeType?>(null) }
 
     MonitorAlertDialog(viewModel)
 
-    SettingsColumnWithChild(
-        footer = footerText
-    ) {
+    SettingsColumnWithChild {
         TimePeriodView(
-            startTime,
+            viewData.startTime,
             TimeType.START,
             stringResource(R.string.start_time),
             labelStyle = TextStyle.Default,
@@ -145,12 +135,12 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
                 .background(colorScheme.surface)
                 .padding(vertical = 14.dp),
             timeTypeShowing = timeTypeShowing
-        ) { time -> viewModel.startTimeStream.value = time }
+        ) { time -> viewModel.startTimeChanged(time) }
 
         HorizontalDivider()
 
         TimePeriodView(
-            endTime,
+            viewData.endTime,
             TimeType.END,
             stringResource(R.string.end_time),
             labelStyle = TextStyle.Default,
@@ -159,9 +149,9 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
                 .background(colorScheme.surface)
                 .padding(vertical = 14.dp),
             timeTypeShowing = timeTypeShowing
-        ) { time -> viewModel.endTimeStream.value = time }
+        ) { time -> viewModel.endTimeChanged(time) }
 
-        ErrorTextView(errorText.timeError, modifier = Modifier.padding(8.dp))
+//        ErrorTextView(errorText.timeError, modifier = Modifier.padding(8.dp))
 
         HorizontalDivider()
 
@@ -170,100 +160,127 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
 }
 
 @Composable
-fun MinSOCView(viewModel: EditPhaseViewModel) {
-    val workMode = viewModel.workModeStream.collectAsState().value
-    val minSOC = viewModel.minSOCStream.collectAsState().value
-    val footerText = when (workMode) {
-        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_minsoc_description)
-        else -> null
+fun StandardViews(viewModel: EditPhaseViewModel) {
+    viewModel.viewDataStream.collectAsState().value.fields.filter { it.isStandard }.forEach { phaseFieldDefinition ->
+        EditableItemView(
+            phaseFieldDefinition.value?.toInt().toString(),
+            phaseFieldDefinition.error,
+            null,
+            phaseFieldDefinition.title,
+            phaseFieldDefinition.unit
+        ) {
+            viewModel.phaseFieldChanged(phaseFieldDefinition, it)
+        }
     }
-    val errorText = viewModel.errorStream.collectAsState().value
-
-    EditableItemView(
-        minSOC,
-        errorText.minSOCError,
-        footerText,
-        stringResource(R.string.min_soc),
-        "%",
-        { viewModel.minSOCStream.value = it.filter { it.isDigit() } }
-    )
 }
 
-@Composable
-fun MaxSOCView(viewModel: EditPhaseViewModel) {
-    val maxSOC = viewModel.maxSocStream.collectAsState().value
-    val errorText = viewModel.errorStream.collectAsState().value
+//@Composable
+//fun MinSOCView(viewModel: EditPhaseViewModel) {
+//    val workMode = viewModel.workModeStream.collectAsState().value
+//    val minSOC = viewModel.minSOCStream.collectAsState().value
+//    val footerText = when (workMode) {
+//        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_minsoc_description)
+//        else -> null
+//    }
+//    val errorText = viewModel.errorStream.collectAsState().value
+//
+//    EditableItemView(
+//        minSOC,
+//        errorText.minSOCError,
+//        footerText,
+//        stringResource(R.string.min_soc),
+//        "%",
+//        { viewModel.minSOCStream.value = it.filter { it.isDigit() } }
+//    )
+//}
+//
+//@Composable
+//fun MaxSOCView(viewModel: EditPhaseViewModel) {
+//    val maxSOC = viewModel.maxSocStream.collectAsState().value
+//    val errorText = viewModel.errorStream.collectAsState().value
+//
+//    EditableItemView(
+//        maxSOC,
+//        errorText.maxSOCError,
+//        footerText = null,
+//        stringResource(SharedR.string.max_soc),
+//        "%",
+//        { viewModel.maxSocStream.value = it.filter { it.isDigit() } }
+//    )
+//}
+//
+//@Composable
+//fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
+//    val workMode = viewModel.workModeStream.collectAsState().value
+//    val fdSOC = viewModel.forceDischargeSOCStream.collectAsState().value
+//    val footerText = when (workMode) {
+//        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_fdsoc_description)
+//        else -> null
+//    }
+//    val errorText = viewModel.errorStream.collectAsState().value
+//
+//    EditableItemView(
+//        fdSOC,
+//        errorText.fdSOCError,
+//        footerText,
+//        stringResource(R.string.force_discharge_soc),
+//        "%",
+//        { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } }
+//    )
+//}
+//
+//@Composable
+//fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
+//    val workMode = viewModel.workModeStream.collectAsState().value
+//    val fdPower = viewModel.forceDischargePowerStream.collectAsState().value
+//    val footerText = when (workMode) {
+//        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_power_description)
+//        else -> null
+//    }
+//    val errorText = viewModel.errorStream.collectAsState().value
+//
+//    EditableItemView(
+//        fdPower,
+//        errorText.forceDischargePowerError,
+//        footerText,
+//        stringResource(R.string.force_discharge_power),
+//        "W",
+//        { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } }
+//    )
+//}
 
-    EditableItemView(
-        maxSOC,
-        errorText.maxSOCError,
-        footerText = null,
-        stringResource(SharedR.string.max_soc),
-        "%",
-        { viewModel.maxSocStream.value = it.filter { it.isDigit() } }
-    )
-}
-
-@Composable
-fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
-    val workMode = viewModel.workModeStream.collectAsState().value
-    val fdSOC = viewModel.forceDischargeSOCStream.collectAsState().value
-    val footerText = when (workMode) {
-        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_fdsoc_description)
-        else -> null
-    }
-    val errorText = viewModel.errorStream.collectAsState().value
-
-    EditableItemView(
-        fdSOC,
-        errorText.fdSOCError,
-        footerText,
-        stringResource(R.string.force_discharge_soc),
-        "%",
-        { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } }
-    )
-}
-
-@Composable
-fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
-    val workMode = viewModel.workModeStream.collectAsState().value
-    val fdPower = viewModel.forceDischargePowerStream.collectAsState().value
-    val footerText = when (workMode) {
-        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_power_description)
-        else -> null
-    }
-    val errorText = viewModel.errorStream.collectAsState().value
-
-    EditableItemView(
-        fdPower,
-        errorText.forceDischargePowerError,
-        footerText,
-        stringResource(R.string.force_discharge_power),
-        "W",
-        { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } }
-    )
-}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkModeView(viewModel: EditPhaseViewModel) {
     var expanded by remember { mutableStateOf(false) }
-    val workMode = viewModel.workModeStream.collectAsState().value
+    val viewData = viewModel.viewDataStream.collectAsState().value
     val context = LocalContext.current
+    val footerText = when (viewData.workMode) {
+        WorkModes.SelfUse -> stringResource(R.string.workmode_self_use_description)
+        WorkModes.Feedin -> stringResource(R.string.workmode_feed_in_first_description)
+        WorkModes.Backup -> stringResource(R.string.workmode_backup_description)
+        WorkModes.ForceCharge -> stringResource(R.string.workmode_force_charge_description)
+        WorkModes.ForceDischarge -> stringResource(R.string.workmode_force_discharge_description)
+        else -> null
+    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
-            stringResource(R.string.work_mode),
-            color = colorScheme.onSecondary
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                stringResource(R.string.work_mode),
+                color = colorScheme.onSecondary
+            )
+            footerText?.let { InfoButton(it) }
+        }
 
         Box(contentAlignment = Alignment.TopEnd) {
             ESButton(onClick = { expanded = !expanded }) {
                 Text(
-                    workMode.title(context),
+                    viewData.workMode.title(context),
                     color = colorScheme.onPrimary
                 )
                 Icon(
@@ -280,7 +297,7 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
                 viewModel.modes.forEach {
                     DropdownMenuItem(onClick = {
                         expanded = false
-                        viewModel.workModeStream.value = it
+                        viewModel.workModeChanged(it)
                     }, text = {
                         Text(it.title(context))
                     })
@@ -296,7 +313,7 @@ private fun EditableItemView(
     errorText: String?,
     footerText: String?,
     title: String,
-    unit: String,
+    unit: String?,
     onValueChange: (String) -> Unit
 ) {
     SettingsColumnWithChild(
@@ -319,7 +336,7 @@ private fun EditableItemView(
                 onValueChange = onValueChange,
                 modifier = Modifier.width(120.dp),
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                trailingIcon = { Text(unit, color = colorScheme.onSecondary) },
+                trailingIcon = { unit?.let { Text(it, color = colorScheme.onSecondary) } },
                 singleLine = true
             )
         }
@@ -329,7 +346,7 @@ private fun EditableItemView(
 @Preview(heightDp = 600, widthDp = 400)
 @Composable
 fun EditPhaseViewPreview() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         EditPhaseView(
             NavHostController(LocalContext.current),
             modifier = Modifier,
