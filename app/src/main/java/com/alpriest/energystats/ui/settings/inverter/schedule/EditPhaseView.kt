@@ -163,11 +163,11 @@ fun StandardViews(viewModel: EditPhaseViewModel) {
 
     viewModel.viewDataStream.collectAsState().value.fields.filter { it.isStandard }.forEach { phaseFieldDefinition ->
         EditableItemView(
-             if (phaseFieldDefinition.value == null) "" else phaseFieldDefinition.value.toInt().toString(),
-            fieldErrors[phaseFieldDefinition.key],
-            null,
+            if (phaseFieldDefinition.value == null) "" else phaseFieldDefinition.value.toInt().toString(),
+            errorMessage(fieldErrors[phaseFieldDefinition.key]),
             title(phaseFieldDefinition.key, viewData.workMode),
-            phaseFieldDefinition.unit
+            phaseFieldDefinition.unit,
+            description(phaseFieldDefinition.key, viewData.workMode)
         ) {
             viewModel.phaseFieldChanged(phaseFieldDefinition, it)
         }
@@ -200,10 +200,10 @@ fun AdvancedViews(viewModel: EditPhaseViewModel) {
             viewModel.viewDataStream.collectAsState().value.fields.filter { !it.isStandard }.forEach { phaseFieldDefinition ->
                 EditableItemView(
                     if (phaseFieldDefinition.value == null) "" else phaseFieldDefinition.value.toInt().toString(),
-                    fieldErrors[phaseFieldDefinition.key],
-                    null,
+                    errorMessage(fieldErrors[phaseFieldDefinition.key]),
                     title(phaseFieldDefinition.key, viewData.workMode),
-                    phaseFieldDefinition.unit
+                    phaseFieldDefinition.unit,
+                    description(phaseFieldDefinition.key, viewData.workMode)
                 ) {
                     viewModel.phaseFieldChanged(phaseFieldDefinition, it)
                 }
@@ -212,7 +212,7 @@ fun AdvancedViews(viewModel: EditPhaseViewModel) {
 
         if (showingAdvanced) {
             Text(
-                "These settings are optional and can usually be left as default.",
+                stringResource(R.string.these_settings_are_optional_and_can_usually_be_left_as_default),
                 Modifier.padding(SettingsPaddingValues.default())
             )
         }
@@ -222,7 +222,7 @@ fun AdvancedViews(viewModel: EditPhaseViewModel) {
 @Composable
 private fun title(key: String, workMode: String): String {
     return when (key) {
-        "minsocongrid" ->  stringResource(R.string.min_soc)
+        "minsocongrid" -> stringResource(R.string.min_soc)
         "fdsoc" if workMode == WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_soc)
         "fdpwr" if workMode == WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_power)
         "fdsoc" if workMode == WorkModes.ForceCharge -> stringResource(R.string.force_charge_soc)
@@ -231,80 +231,24 @@ private fun title(key: String, workMode: String): String {
     }
 }
 
-//@Composable
-//fun MinSOCView(viewModel: EditPhaseViewModel) {
-//    val workMode = viewModel.workModeStream.collectAsState().value
-//    val minSOC = viewModel.minSOCStream.collectAsState().value
-//    val footerText = when (workMode) {
-//        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_minsoc_description)
-//        else -> null
-//    }
-//    val errorText = viewModel.errorStream.collectAsState().value
-//
-//    EditableItemView(
-//        minSOC,
-//        errorText.minSOCError,
-//        footerText,
-//        stringResource(R.string.min_soc),
-//        "%",
-//        { viewModel.minSOCStream.value = it.filter { it.isDigit() } }
-//    )
-//}
-//
-//@Composable
-//fun MaxSOCView(viewModel: EditPhaseViewModel) {
-//    val maxSOC = viewModel.maxSocStream.collectAsState().value
-//    val errorText = viewModel.errorStream.collectAsState().value
-//
-//    EditableItemView(
-//        maxSOC,
-//        errorText.maxSOCError,
-//        footerText = null,
-//        stringResource(SharedR.string.max_soc),
-//        "%",
-//        { viewModel.maxSocStream.value = it.filter { it.isDigit() } }
-//    )
-//}
-//
-//@Composable
-//fun ForceDischargeSOCView(viewModel: EditPhaseViewModel) {
-//    val workMode = viewModel.workModeStream.collectAsState().value
-//    val fdSOC = viewModel.forceDischargeSOCStream.collectAsState().value
-//    val footerText = when (workMode) {
-//        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_fdsoc_description)
-//        else -> null
-//    }
-//    val errorText = viewModel.errorStream.collectAsState().value
-//
-//    EditableItemView(
-//        fdSOC,
-//        errorText.fdSOCError,
-//        footerText,
-//        stringResource(R.string.force_discharge_soc),
-//        "%",
-//        { viewModel.forceDischargeSOCStream.value = it.filter { it.isDigit() } }
-//    )
-//}
-//
-//@Composable
-//fun ForceDischargePowerView(viewModel: EditPhaseViewModel) {
-//    val workMode = viewModel.workModeStream.collectAsState().value
-//    val fdPower = viewModel.forceDischargePowerStream.collectAsState().value
-//    val footerText = when (workMode) {
-//        WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_timeperiod_power_description)
-//        else -> null
-//    }
-//    val errorText = viewModel.errorStream.collectAsState().value
-//
-//    EditableItemView(
-//        fdPower,
-//        errorText.forceDischargePowerError,
-//        footerText,
-//        stringResource(R.string.force_discharge_power),
-//        "W",
-//        { viewModel.forceDischargePowerStream.value = it.filter { it.isDigit() } }
-//    )
-//}
+@Composable
+private fun errorMessage(error: SchedulePhaseValidationReason?): String? {
+    return when (error) {
+        SchedulePhaseValidationReason.InvalidNumber -> stringResource(R.string.please_enter_a_number)
+        is SchedulePhaseValidationReason.InvalidRange -> "Please enter a number between ${error.min.toInt()} and ${error.max.toInt()}"
+        SchedulePhaseValidationReason.MinSocLessThanFdSoc -> stringResource(R.string.min_soc_must_be_less_than_or_equal_to_force_discharge_soc)
+        else -> null
+    }
+}
+
+@Composable
+private fun description(key: String, workMode: String): String? {
+    return when (workMode) {
+        WorkModes.ForceCharge if key == "fdpwr" -> stringResource(R.string.the_input_power_to_charge_your_battery)
+        WorkModes.ForceDischarge if key == "fdpwr" -> stringResource(R.string.the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported)
+        else -> null
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -368,14 +312,13 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
 private fun EditableItemView(
     value: String,
     errorText: String?,
-    footerText: String?,
     title: String,
     unit: String?,
+    description: String?,
     onValueChange: (String) -> Unit
 ) {
     SettingsColumnWithChild(
-        error = errorText,
-        footer = footerText
+        error = errorText
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -383,14 +326,17 @@ private fun EditableItemView(
                 .background(colorScheme.surface)
                 .padding(vertical = 4.dp)
         ) {
-            Text(
-                title,
-                Modifier.weight(1.0f),
-                color = colorScheme.onSecondary
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    title,
+                    Modifier.weight(1.0f),
+                    color = colorScheme.onSecondary
+                )
+                description?.let { InfoButton(it) }
+            }
             OutlinedTextField(
                 value = value,
-                onValueChange = onValueChange,
+                onValueChange = { onValueChange(it.filter { it.isDigit() }) },
                 modifier = Modifier.width(120.dp),
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
                 trailingIcon = { unit?.let { Text(it, color = colorScheme.onSecondary) } },

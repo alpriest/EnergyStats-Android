@@ -513,4 +513,8 @@
     <string name="enabled">Enabled</string>
     <string name="define_your_phase">Define your phase</string>
     <string name="no_data_try_changing_your_filters">No data. Try changing your filters</string>
+    <string name="please_enter_a_number">Please enter a number</string>
+    <string name="these_settings_are_optional_and_can_usually_be_left_as_default">These settings are optional and can usually be left as default.</string>
+    <string name="the_input_power_to_charge_your_battery">The input power to charge your battery.</string>
+    <string name="the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported">The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported.</string>
 </resources>

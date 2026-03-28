@@ -19,14 +19,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+sealed class SchedulePhaseValidationReason {
+    object InvalidNumber : SchedulePhaseValidationReason()
+    data class InvalidRange(val min: Double, val max: Double) : SchedulePhaseValidationReason()
+    object MinSocLessThanFdSoc : SchedulePhaseValidationReason()
+}
+
 data class SchedulePhaseFieldDefinition(
     val key: String,
     val isStandard: Boolean,
     val precision: Double,
     val range: SchedulePropertyDefinitionRange?,
     val unit: String?,
-    val value: Double?,
-    val description: String?
+    val value: Double?
 )
 
 data class EditPhaseViewData(
@@ -53,8 +58,8 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
     private val _viewDataStream = MutableStateFlow(EditPhaseViewData(id = "", Time.now(), Time.now(), WorkModes.SelfUse, listOf(), listOf(), false))
     val viewDataStream: StateFlow<EditPhaseViewData> = _viewDataStream
 
-    private val _errorStream = MutableStateFlow<Map<String, String>>(emptyMap())
-    val errorStream: StateFlow<Map<String, String>> = _errorStream
+    private val _errorStream = MutableStateFlow<Map<String, SchedulePhaseValidationReason>>(emptyMap())
+    val errorStream: StateFlow<Map<String, SchedulePhaseValidationReason>> = _errorStream
 
     private val _timeErrorStream = MutableStateFlow<String?>(null)
     val timeErrorStream: StateFlow<String?> = _timeErrorStream
@@ -93,14 +98,14 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
         navController.popBackStack()
     }
 
-    private fun failedValidationReason(field: SchedulePhaseFieldDefinition): String? {
+    private fun failedValidationReason(field: SchedulePhaseFieldDefinition): SchedulePhaseValidationReason? {
         return if (field.value == null) {
-            "Please enter a number"
+            SchedulePhaseValidationReason.InvalidNumber
         } else {
             if (field.range != null &&
                 (field.value < field.range.min || field.value > field.range.max)
             ) {
-                "Please enter a number between ${field.range.min.toInt()} and ${field.range.max.toInt()}"
+                SchedulePhaseValidationReason.InvalidRange(field.range.min, field.range.max)
             } else {
                 null
             }
@@ -108,7 +113,7 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
     }
 
     private fun validate(context: Context) {
-        val fieldErrors = mutableMapOf<String, String>()
+        val fieldErrors = mutableMapOf<String, SchedulePhaseValidationReason>()
         val viewData = viewDataStream.value
 
         for (field in viewData.fields) {
@@ -120,7 +125,7 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
             val fdSoc = viewData.fields.firstOrNull { it.key == "fdsoc" }?.value
 
             if (minSoc != null && fdSoc != null && minSoc > fdSoc) {
-                fieldErrors["minsocongrid"] = "Min SoC must be less than or equal to Discharge SoC"
+                fieldErrors["minsocongrid"] = SchedulePhaseValidationReason.MinSocLessThanFdSoc
             }
         }
 
@@ -224,26 +229,25 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
             WorkModes.SelfUse -> {
                 hiddenFieldKeys.add("fdpwr")
                 hiddenFieldKeys.add("fdsoc")
-                standardField = builder.make(key = "minsocongrid", isStandard = true, description = null, defaultValue = 10.0)
+                standardField = builder.make(key = "minsocongrid", isStandard = true, defaultValue = 10.0)
             }
 
             WorkModes.Feedin -> {
                 hiddenFieldKeys.add("fdpwr")
                 hiddenFieldKeys.add("fdsoc")
-                standardField = builder.make(key = "minsocongrid", isStandard = true, description = null, defaultValue = 10.0)
+                standardField = builder.make(key = "minsocongrid", isStandard = true, defaultValue = 10.0)
             }
 
             WorkModes.Backup -> {
                 hiddenFieldKeys.add("fdpwr")
                 hiddenFieldKeys.add("fdsoc")
-                standardField = builder.make(key = "minsocongrid", isStandard = true, description = null, defaultValue = 10.0)
+                standardField = builder.make(key = "minsocongrid", isStandard = true, defaultValue = 10.0)
             }
 
             WorkModes.ForceCharge -> {
                 standardField = builder.make(
                     key = "fdsoc",
                     isStandard = true,
-                    description = "When the battery reaches this level, charging will stop.",
                     defaultValue = 100.0
                 )
             }
@@ -252,7 +256,6 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
                 standardField = builder.make(
                     key = "fdsoc",
                     isStandard = true,
-                    description = "When the battery reaches this level, discharging will stop. If you wanted to save some battery power for later, perhaps set it to 50%.",
                     defaultValue = 10.0
                 )
 
@@ -271,23 +274,14 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
                 .filter { allKey -> hiddenFieldKeys.firstOrNull({ standardKey -> standardKey == allKey.lowercase() }) == null }
                 .map { key ->
                     val defaultValue = defaultValue(mode, key)
-                    val description = description(mode, key)
 
-                    builder.make(key, isStandard = false, description = description, defaultValue = defaultValue)
+                    builder.make(key, isStandard = false, defaultValue = defaultValue)
                 }
 
         _viewDataStream.value = viewData.copy(
             fields = standardFields + advancedFields,
             showAdvancedFields = !advancedFields.isEmpty()
         )
-    }
-
-    fun description(mode: WorkMode, key: String): String? {
-        return when (mode) {
-            WorkModes.ForceCharge if key == "fdpwr" -> "The input power to charge your battery."
-            WorkModes.ForceDischarge if key == "fdpwr" -> "The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported."
-            else -> null
-        }
     }
 
     private fun defaultValue(mode: WorkMode, key: String): Double? {
@@ -317,7 +311,6 @@ class FieldDefinitionBuilder(
     fun make(
         key: String,
         isStandard: Boolean,
-        description: String?,
         defaultValue: Double?,
     ): SchedulePhaseFieldDefinition {
         val property = properties[key]
@@ -328,8 +321,7 @@ class FieldDefinitionBuilder(
             precision = (property?.precision) ?: 0.0,
             range = property?.range,
             unit = property?.unit,
-            value = phase.valueFor(key) ?: defaultValue,
-            description = description
+            value = phase.valueFor(key) ?: defaultValue
         )
     }
 }
