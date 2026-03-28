@@ -16,6 +16,8 @@ import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.RefreshFrequency
+import com.alpriest.energystats.shared.models.SchedulePhaseV3
+import com.alpriest.energystats.shared.models.ScheduleTemplateV1
 import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.SelfSufficiencyEstimateMode
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
@@ -25,6 +27,7 @@ import com.alpriest.energystats.shared.models.SummaryDateRange
 import com.alpriest.energystats.shared.models.TotalYieldModel
 import com.alpriest.energystats.shared.models.Variable
 import com.alpriest.energystats.shared.models.WidgetTapAction
+import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.network.ParameterGroupDeserializer
 import com.alpriest.energystats.ui.summary.MonthYear
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
@@ -98,6 +101,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         EARNINGS_MODEl,
         SUMMARY_DATE_RANGE,
         SCHEDULE_TEMPLATES,
+        SCHEDULE_TEMPLATES_V3,
         LAST_SOLCAST_REFRESH,
         WIDGET_TAP_ACTION,
         BATTERY_DATA,
@@ -584,13 +588,47 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var scheduleTemplates: List<ScheduleTemplateV3>
         get() {
-            var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, null)
-            if (data == null) {
-                data = Gson().toJson(listOf<ScheduleTemplateV3>())
-                scheduleTemplates = listOf()
-            }
+            val v1Data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, null)
+            if (v1Data != null) {
+                val v1Templates: List<ScheduleTemplateV1> = Gson().fromJson(v1Data, object : TypeToken<List<ScheduleTemplateV1>>() {}.type)
+                val v3Templates: List<ScheduleTemplateV3> = v1Templates.map { v1 ->
+                    val v3phases: List<SchedulePhaseV3> = v1.phases.map { v1Phase ->
+                        val params: MutableMap<String, Double> = mutableMapOf(
+                            "minSocOnGrid" to v1Phase.minSocOnGrid.toDouble()
+                        )
 
-            return Gson().fromJson(data, object : TypeToken<List<ScheduleTemplateV3>>() {}.type)
+                        if (v1Phase.mode in listOf(WorkModes.ForceCharge, WorkModes.ForceDischarge)) {
+                            params["fdPwr"] = v1Phase.forceDischargePower.toDouble()
+                            params["fdSoc"] = v1Phase.forceDischargePower.toDouble()
+                        }
+
+                        return@map SchedulePhaseV3(
+                            start = v1Phase.start,
+                            end = v1Phase.end,
+                            mode = v1Phase.mode,
+                            extraParam = params
+                        )
+                    }
+
+                    ScheduleTemplateV3(id = v1.id, name = v1.name, phases = v3phases)
+                }
+
+                // Save to v3
+                this.scheduleTemplates = v3Templates
+
+                // Remove v1
+                sharedPreferences.edit { remove(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name) }
+
+                return v3Templates
+            } else {
+                val v3Data = sharedPreferences.getString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES_V3.name, null)
+                if (v3Data == null) {
+                    scheduleTemplates = emptyList()
+                    return emptyList()
+                } else {
+                    return Gson().fromJson(v3Data, object : TypeToken<List<ScheduleTemplateV3>>() {}.type)
+                }
+            }
         }
         set(value) {
             sharedPreferences.edit {

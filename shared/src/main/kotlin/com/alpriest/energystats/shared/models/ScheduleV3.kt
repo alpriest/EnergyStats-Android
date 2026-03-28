@@ -86,17 +86,6 @@ data class SchedulePhaseV3(
             )
         }
 
-//        fun create(mode: WorkMode, device: Device?, initialiseMaxSOC: Boolean): SchedulePhaseV3 {
-//            val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
-//
-//            return SchedulePhaseV3(
-//                Time.now(),
-//                Time.now().adding(1),
-//                mode,
-//                extraParam
-//            )
-//        }
-
         fun preview(): SchedulePhaseV3 {
             return create(
                 start = Time(hour = 19, minute = 30),
