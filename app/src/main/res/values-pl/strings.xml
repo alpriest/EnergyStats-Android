@@ -260,8 +260,10 @@
     <string name="force_discharge_timeperiod_minsoc_description">Minimalny stan naładowania baterii. Musi to być co najwyżej wartość SoC Wymuszonego Rozładowania.</string>
     <string name="force_discharge_timeperiod_fdsoc_description">Gdy bateria osiągnie ten poziom, rozładowanie się zatrzyma. Jeśli chcesz zachować trochę mocy baterii na później, być może ustaw ją na 50%.</string>
     <string name="force_discharge_soc">Wymuś rozładowanie SoC</string>
+    <string name="force_charge_soc">Docelowy SoC ładowania</string>
     <string name="force_discharge_timeperiod_power_description">Poziom mocy wyjściowej do dostarczenia, włącznie z obciążeniem domu i eksportem do sieci. Na przykład, jeśli masz inwerter 5kW, ustaw go na 5000, a jeśli obciążenie domu wynosi 750W, pozostałe 4.25kW zostaną wyeksportowane.</string>
     <string name="force_discharge_power">Wymuś moc rozładowania</string>
+    <string name="force_charge_power">Moc ładowania</string>
     <string name="work_mode">Tryb pracy</string>
     <string name="please_enter_a_number_between_10_and_100">Proszę wpisać liczbę między 10 a 100.</string>
     <string name="min_soc_must_be_less_than_or_equal_to_force_discharge_soc">Min SoC musi być mniejszy lub równy SoC Wymuszonego Rozładowania</string>
@@ -508,4 +510,9 @@
     <string name="max_battery_charge_rate_a">Maks. prąd ładowania %1$sA</string>
     <string name="enabled">Włączone</string>
     <string name="define_your_phase">Definisci la tua fase</string>
+    <string name="no_data_try_changing_your_filters">Brak danych. Spróbuj zmienić filtry</string>
+    <string name="please_enter_a_number">Wprowadź liczbę</string>
+    <string name="these_settings_are_optional_and_can_usually_be_left_as_default">Te ustawienia są opcjonalne i zazwyczaj mogą pozostać domyślne.</string>
+    <string name="the_input_power_to_charge_your_battery">Moc wejściowa do ładowania baterii.</string>
+    <string name="the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported">Poziom mocy do dostarczenia, w tym zużycie domowe i eksport do sieci. Na przykład, jeśli masz falownik 5 kW, ustaw 5000; jeśli zużycie domu wynosi 750 W, pozostałe 4,25 kW zostanie oddane do sieci.</string>
 </resources>

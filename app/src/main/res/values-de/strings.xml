@@ -259,8 +259,10 @@
     <string name="force_discharge_timeperiod_minsoc_description">Der minimale Ladezustand der Batterie. Dies darf höchstens der Force Discharge SOC-Wert sein.</string>
     <string name="force_discharge_timeperiod_fdsoc_description">Wenn der Akku diesen Stand erreicht, wird die Entladung stoppen. Wenn du etwas Akkuleistung für später sparen möchtest, stelle ihn vielleicht auf 50%.</string>
     <string name="force_discharge_soc">SoC-Entladung erzwingen</string>
+    <string name="force_charge_soc">Ladeziel-SoC</string>
     <string name="force_discharge_timeperiod_power_description">Das zu liefernde Ausgangsleistungsniveau, einschließlich Ihres Hausverbrauchs und der Netzeinspeisung. Z.B. wenn Sie einen 5kW Wechselrichter haben, stellen Sie diesen auf 5000 ein, dann, wenn die Hauslast 750W beträgt, werden die anderen 4.25kW exportiert.</string>
     <string name="force_discharge_power">Entladungsleistung erzwingen</string>
+    <string name="force_charge_power">Ladeleistung</string>
     <string name="work_mode">Arbeitsmodus</string>
     <string name="please_enter_a_number_between_10_and_100">Bitte geben Sie eine Zahl zwischen 10 und 100 ein.</string>
     <string name="min_soc_must_be_less_than_or_equal_to_force_discharge_soc">Min SoC muss kleiner oder gleich dem Force Discharge SoC sein</string>
@@ -507,4 +509,9 @@
     <string name="max_battery_charge_rate_a">Max. Ladestrom %1$sA</string>
     <string name="enabled">Aktiviert</string>
     <string name="define_your_phase">Definieren Sie Ihre Phase</string>
+    <string name="no_data_try_changing_your_filters">Keine Daten. Versuchen Sie, Ihre Filter zu ändern</string>
+    <string name="please_enter_a_number">Bitte geben Sie eine Zahl ein</string>
+    <string name="these_settings_are_optional_and_can_usually_be_left_as_default">Diese Einstellungen sind optional und können in der Regel unverändert bleiben.</string>
+    <string name="the_input_power_to_charge_your_battery">Die Eingangsleistung zum Laden Ihrer Batterie.</string>
+    <string name="the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported">Die auszugebende Leistung, einschließlich Ihres Hausverbrauchs und der Netzeinspeisung. Wenn Sie z. B. einen 5-kW-Wechselrichter haben, stellen Sie diesen auf 5000 ein. Wenn der Hausverbrauch 750 W beträgt, werden die restlichen 4,25 kW ins Netz eingespeist.</string>
 </resources>

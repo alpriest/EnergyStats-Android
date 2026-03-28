@@ -259,8 +259,10 @@
     <string name="force_discharge_timeperiod_minsoc_description">El estado de carga mínimo de la batería. Esto debe ser como máximo el valor de SoC de Descarga Forzada.</string>
     <string name="force_discharge_timeperiod_fdsoc_description">Cuando la batería alcance este nivel, la descarga se detendrá. Si quieres guardar algo de energía de la batería para más tarde, quizás configúralo al 50%.</string>
     <string name="force_discharge_soc">Fuerza de descarga del SoC</string>
+    <string name="force_charge_soc">SoC de carga forzada</string>
     <string name="force_discharge_timeperiod_power_description">El nivel de potencia de salida a entregar, incluyendo la carga de su casa y la exportación a la red. Por ejemplo, si tienes un inversor de 5kW, configúralo en 5000, entonces si la carga de la casa es de 750W, los otros 4.25kW serán exportados.</string>
     <string name="force_discharge_power">Fuerza de descarga de potencia</string>
+    <string name="force_charge_power">Potencia de carga forzada</string>
     <string name="work_mode">Modo de trabajo</string>
     <string name="please_enter_a_number_between_10_and_100">Por favor, introduce un número entre 10 y 100.</string>
     <string name="min_soc_must_be_less_than_or_equal_to_force_discharge_soc">El SoC mínimo debe ser menor o igual al SoC de Descarga Forzada</string>
@@ -507,4 +509,9 @@
     <string name="max_battery_charge_rate_a">Corriente máx. de carga %1$sA</string>
     <string name="enabled">Activado</string>
     <string name="define_your_phase">Define tu fase</string>
+    <string name="no_data_try_changing_your_filters">Sin datos. Intenta cambiar los filtros</string>
+    <string name="please_enter_a_number">Introduce un número</string>
+    <string name="these_settings_are_optional_and_can_usually_be_left_as_default">Estos ajustes son opcionales y normalmente pueden dejarse por defecto.</string>
+    <string name="the_input_power_to_charge_your_battery">La potencia de entrada para cargar la batería.</string>
+    <string name="the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported">El nivel de potencia a suministrar, incluyendo el consumo del hogar y la exportación a la red. Por ejemplo, si tienes un inversor de 5 kW, configúralo en 5000; si el consumo del hogar es de 750 W, los 4,25 kW restantes se exportarán a la red.</string>
 </resources>
