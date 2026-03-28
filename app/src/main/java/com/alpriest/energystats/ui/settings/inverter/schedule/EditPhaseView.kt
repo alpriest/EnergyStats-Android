@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.settings.inverter.schedule
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -51,7 +54,9 @@ import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
 import com.alpriest.energystats.ui.settings.InfoButton
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
+import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
+import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -88,16 +93,7 @@ fun EditPhaseView(
                 TimeAndWorkModeView(viewModel)
 
                 StandardViews(viewModel)
-
-//                MinSOCView(viewModel)
-//
-//                if (showMaxSoc) {
-//                    MaxSOCView(viewModel)
-//                }
-//
-//                ForceDischargeSOCView(viewModel)
-//
-//                ForceDischargePowerView(viewModel)
+                AdvancedViews(viewModel)
 
                 ESButton(
                     onClick = { viewModel.deletePhase() },
@@ -170,6 +166,50 @@ fun StandardViews(viewModel: EditPhaseViewModel) {
             phaseFieldDefinition.unit
         ) {
             viewModel.phaseFieldChanged(phaseFieldDefinition, it)
+        }
+    }
+}
+
+@Composable
+fun AdvancedViews(viewModel: EditPhaseViewModel) {
+    var showingAdvanced by remember { mutableStateOf(false) }
+    val viewData = viewModel.viewDataStream.collectAsState().value
+
+    if (viewData.showAdvancedFields) {
+        SettingsColumnWithChild(
+            modifier = Modifier.clickable { showingAdvanced = !showingAdvanced }
+        ) {
+            SettingsTitleView(
+                "Advanced",
+                modifier = Modifier.clickable { showingAdvanced = !showingAdvanced },
+                extra = {
+                    Icon(
+                        imageVector = if (showingAdvanced) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                    )
+                }
+            )
+        }
+
+        if (showingAdvanced) {
+            viewModel.viewDataStream.collectAsState().value.fields.filter { !it.isStandard }.forEach { phaseFieldDefinition ->
+                EditableItemView(
+                    phaseFieldDefinition.value?.toInt().toString(),
+                    phaseFieldDefinition.error,
+                    null,
+                    phaseFieldDefinition.title,
+                    phaseFieldDefinition.unit
+                ) {
+                    viewModel.phaseFieldChanged(phaseFieldDefinition, it)
+                }
+            }
+        }
+
+        if (showingAdvanced) {
+            Text(
+                "These settings are optional and can usually be left as default.",
+                Modifier.padding(SettingsPaddingValues.default())
+            )
         }
     }
 }

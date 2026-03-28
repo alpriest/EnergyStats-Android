@@ -222,7 +222,7 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
         val mode = viewData.workMode
         val builder = FieldDefinitionBuilder(properties = configManager.scheduleProperties, phase = phase)
 
-        val hiddenFieldKeys = mutableSetOf("maxSoc")
+        val hiddenFieldKeys = mutableSetOf("maxsoc")
         val standardField: SchedulePhaseFieldDefinition?
 
         when (mode) {

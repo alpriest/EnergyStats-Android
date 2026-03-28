@@ -203,7 +203,10 @@ fun ErrorTextView(text: String?, modifier: Modifier = Modifier) {
 
 @Composable
 fun SettingsTitleView(title: String, modifier: Modifier = Modifier, extra: @Composable () -> Unit = {}) {
-    Row(modifier = modifier.fillMaxWidth()) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             text = title.uppercase(),
             style = TextStyle.Default.copy(color = colorScheme.onSecondary, fontWeight = Bold),
