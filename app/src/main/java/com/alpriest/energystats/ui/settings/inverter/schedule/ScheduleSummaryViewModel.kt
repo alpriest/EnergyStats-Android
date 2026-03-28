@@ -14,8 +14,6 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.ScheduleV3
-import com.alpriest.energystats.shared.models.WorkModes
-import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.network.Networking
@@ -227,14 +225,6 @@ class ScheduleSummaryViewModel(
             }
         }
     }
-}
-
-private fun ScheduleResponse.supportsPeakShaving(): Boolean {
-    return workModes.any { it == WorkModes.PeakShaving }
-}
-
-private fun ScheduleV3.supportsMaxSOC(): Boolean {
-    return phases.any { it.hasExtraParam("maxSOC") }
 }
 
 fun errorMessage(exception: Exception, context: Context): String {

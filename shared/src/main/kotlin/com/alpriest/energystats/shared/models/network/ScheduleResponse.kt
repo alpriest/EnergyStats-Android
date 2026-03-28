@@ -28,7 +28,7 @@ data class ScheduleResponse(
                 jsonObject["properties"],
                 object : TypeToken<Map<String, SchedulePropertyDefinition>>() {}.type
             )
-            val workModes = properties["enumList"]?.enumList ?: emptyList()
+            val workModes = properties["workmode"]?.enumList ?: emptyList()
 
             return ScheduleResponse(enable, groups, workModes, maxGroupCount, properties)
         }

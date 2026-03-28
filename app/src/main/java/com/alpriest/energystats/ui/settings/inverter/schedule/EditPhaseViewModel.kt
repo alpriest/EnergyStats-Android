@@ -72,6 +72,7 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
                 emptyList(),
                 false
             )
+            determineVisibleFields()
         }
 
         modes = EditScheduleStore.modes(configManager)
