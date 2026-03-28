@@ -163,7 +163,7 @@ fun StandardViews(viewModel: EditPhaseViewModel) {
 
     viewModel.viewDataStream.collectAsState().value.fields.filter { it.isStandard }.forEach { phaseFieldDefinition ->
         EditableItemView(
-            phaseFieldDefinition.value?.toInt().toString(),
+             if (phaseFieldDefinition.value == null) "" else phaseFieldDefinition.value.toInt().toString(),
             fieldErrors[phaseFieldDefinition.key],
             null,
             title(phaseFieldDefinition.key, viewData.workMode),
@@ -199,7 +199,7 @@ fun AdvancedViews(viewModel: EditPhaseViewModel) {
         if (showingAdvanced) {
             viewModel.viewDataStream.collectAsState().value.fields.filter { !it.isStandard }.forEach { phaseFieldDefinition ->
                 EditableItemView(
-                    phaseFieldDefinition.value?.toInt().toString(),
+                    if (phaseFieldDefinition.value == null) "" else phaseFieldDefinition.value.toInt().toString(),
                     fieldErrors[phaseFieldDefinition.key],
                     null,
                     title(phaseFieldDefinition.key, viewData.workMode),

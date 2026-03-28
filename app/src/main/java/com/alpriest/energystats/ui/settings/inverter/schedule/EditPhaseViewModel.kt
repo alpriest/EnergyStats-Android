@@ -93,23 +93,33 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
         navController.popBackStack()
     }
 
+    private fun failedValidationReason(field: SchedulePhaseFieldDefinition): String? {
+        return if (field.value == null) {
+            "Please enter a number"
+        } else {
+            if (field.range != null &&
+                (field.value < field.range.min || field.value > field.range.max)
+            ) {
+                "Please enter a number between ${field.range.min.toInt()} and ${field.range.max.toInt()}"
+            } else {
+                null
+            }
+        }
+    }
+
     private fun validate(context: Context) {
         val fieldErrors = mutableMapOf<String, String>()
         val viewData = viewDataStream.value
 
         for (field in viewData.fields) {
-            if (field.value != null && field.range != null) {
-                if (field.value < field.range.min || field.value > field.range.max) {
-                    fieldErrors[field.key] = "Please enter a number between ${field.range.min.toInt()} and ${field.range.max.toInt()}"
-                }
-            }
+            failedValidationReason(field)?.let { fieldErrors[field.key] = it }
         }
 
         if (viewData.workMode == WorkModes.ForceDischarge) {
             val minSoc = viewData.fields.firstOrNull { it.key == "minsocongrid" }?.value
             val fdSoc = viewData.fields.firstOrNull { it.key == "fdsoc" }?.value
 
-            if (minSoc != null && fdSoc != null) {
+            if (minSoc != null && fdSoc != null && minSoc > fdSoc) {
                 fieldErrors["minsocongrid"] = "Min SoC must be less than or equal to Discharge SoC"
             }
         }
@@ -288,16 +298,17 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
                     it * 1000.0
                 }
             }
+
             "importlimit" if mode == WorkModes.ForceDischarge -> {
                 return 0.0
             }
+
             else -> {
-                return null
+                return 0.0
             }
         }
     }
 }
-
 
 class FieldDefinitionBuilder(
     val properties: Map<String, SchedulePropertyDefinition>,
