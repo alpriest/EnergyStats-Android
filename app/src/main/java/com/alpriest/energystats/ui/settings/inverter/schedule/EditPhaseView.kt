@@ -51,6 +51,7 @@ import com.alpriest.energystats.shared.ui.PowerFlowNegative
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
 import com.alpriest.energystats.ui.settings.BottomButtonConfiguration
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtons
+import com.alpriest.energystats.ui.settings.ErrorTextView
 import com.alpriest.energystats.ui.settings.InfoButton
 import com.alpriest.energystats.ui.settings.SettingsBottomSpace
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
@@ -115,7 +116,7 @@ fun EditPhaseView(
 @Composable
 fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
     val viewData = viewModel.viewDataStream.collectAsState().value
-    val errorText = viewModel.errorStream.collectAsState().value
+    val errorText = viewModel.timeErrorStream.collectAsState().value
     val timeTypeShowing = remember { mutableStateOf<TimeType?>(null) }
 
     MonitorAlertDialog(viewModel)
@@ -147,7 +148,7 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
             timeTypeShowing = timeTypeShowing
         ) { time -> viewModel.endTimeChanged(time) }
 
-//        ErrorTextView(errorText.timeError, modifier = Modifier.padding(8.dp))
+        ErrorTextView(errorText, modifier = Modifier.padding(8.dp))
 
         HorizontalDivider()
 
@@ -157,12 +158,15 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
 
 @Composable
 fun StandardViews(viewModel: EditPhaseViewModel) {
+    val fieldErrors = viewModel.errorStream.collectAsState().value
+    val viewData = viewModel.viewDataStream.collectAsState().value
+
     viewModel.viewDataStream.collectAsState().value.fields.filter { it.isStandard }.forEach { phaseFieldDefinition ->
         EditableItemView(
             phaseFieldDefinition.value?.toInt().toString(),
-            phaseFieldDefinition.error,
+            fieldErrors[phaseFieldDefinition.key],
             null,
-            phaseFieldDefinition.title,
+            title(phaseFieldDefinition.key, viewData.workMode),
             phaseFieldDefinition.unit
         ) {
             viewModel.phaseFieldChanged(phaseFieldDefinition, it)
@@ -174,6 +178,7 @@ fun StandardViews(viewModel: EditPhaseViewModel) {
 fun AdvancedViews(viewModel: EditPhaseViewModel) {
     var showingAdvanced by remember { mutableStateOf(false) }
     val viewData = viewModel.viewDataStream.collectAsState().value
+    val fieldErrors = viewModel.errorStream.collectAsState().value
 
     if (viewData.showAdvancedFields) {
         SettingsColumnWithChild(
@@ -195,9 +200,9 @@ fun AdvancedViews(viewModel: EditPhaseViewModel) {
             viewModel.viewDataStream.collectAsState().value.fields.filter { !it.isStandard }.forEach { phaseFieldDefinition ->
                 EditableItemView(
                     phaseFieldDefinition.value?.toInt().toString(),
-                    phaseFieldDefinition.error,
+                    fieldErrors[phaseFieldDefinition.key],
                     null,
-                    phaseFieldDefinition.title,
+                    title(phaseFieldDefinition.key, viewData.workMode),
                     phaseFieldDefinition.unit
                 ) {
                     viewModel.phaseFieldChanged(phaseFieldDefinition, it)
@@ -211,6 +216,18 @@ fun AdvancedViews(viewModel: EditPhaseViewModel) {
                 Modifier.padding(SettingsPaddingValues.default())
             )
         }
+    }
+}
+
+@Composable
+private fun title(key: String, workMode: String): String {
+    return when (key) {
+        "minsocongrid" ->  stringResource(R.string.min_soc)
+        "fdsoc" if workMode == WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_soc)
+        "fdpwr" if workMode == WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_power)
+        "fdsoc" if workMode == WorkModes.ForceCharge -> stringResource(R.string.force_charge_soc)
+        "fdpwr" if workMode == WorkModes.ForceCharge -> stringResource(R.string.force_charge_power)
+        else -> key
     }
 }
 

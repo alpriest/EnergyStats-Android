@@ -261,8 +261,10 @@
     <string name="force_discharge_timeperiod_minsoc_description">The minimum battery state of charge. This must be at most the Force Discharge SOC value.</string>
     <string name="force_discharge_timeperiod_fdsoc_description">When the battery reaches this level, discharging will stop. If you wanted to save some battery power for later, perhaps set it to 50%.</string>
     <string name="force_discharge_soc">Force Discharge SoC</string>
+    <string name="force_charge_soc">Force Charge SoC</string>
     <string name="force_discharge_timeperiod_power_description">The output power level to be delivered, including your house load and grid export. E.g. If you have 5kW inverter then set this to 5000, then if the house load is 750W the other 4.25kW will be exported.</string>
     <string name="force_discharge_power">Force Discharge Power</string>
+    <string name="force_charge_power">Force Charge Power</string>
     <string name="work_mode">Work Mode</string>
     <string name="please_enter_a_number_between_10_and_100">Please enter a number between 10 and 100</string>
     <string name="min_soc_must_be_less_than_or_equal_to_force_discharge_soc">Min SoC must be less than or equal to Force Discharge SoC</string>
