@@ -54,8 +54,7 @@ class DemoAPI : FoxAPIServicing {
                 deviceType = "h1",
                 hasBattery = true,
                 hasPV = true,
-                productType = "produ1",
-                capacity = 3.68
+                productType = "produ1"
             ),
             DeviceSummaryResponse(
                 deviceSN = "123123",
@@ -66,8 +65,7 @@ class DemoAPI : FoxAPIServicing {
                 deviceType = "f3000",
                 hasBattery = true,
                 hasPV = true,
-                productType = "produ2",
-                capacity = 3.68
+                productType = "produ2"
             )
         )
     }
@@ -240,7 +238,8 @@ class DemoAPI : FoxAPIServicing {
             hardwareVersion = "hardware1",
             function = DeviceFunction(scheduler = true),
             stationName = "my station",
-            batteryList = null
+            batteryList = null,
+            capacity = 3.68
         )
     }
 

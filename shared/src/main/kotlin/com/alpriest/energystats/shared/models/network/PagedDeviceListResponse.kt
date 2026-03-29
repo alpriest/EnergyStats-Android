@@ -20,8 +20,7 @@ class DeviceSummaryResponse(
     val deviceType: String,
     val hasBattery: Boolean,
     val hasPV: Boolean,
-    val status: Int,
-    val capacity: Double
+    val status: Int
 )
 
 @Serializable
@@ -40,7 +39,8 @@ class DeviceDetailResponse(
     val deviceType: String,
     val hasBattery: Boolean,
     val hasPV: Boolean,
-    val batteryList: List<DeviceBatteryResponse>?
+    val batteryList: List<DeviceBatteryResponse>?,
+    val capacity: Double
 )
 
 @Serializable

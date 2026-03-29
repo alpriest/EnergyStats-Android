@@ -395,6 +395,8 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
 
             val mappedDevices = ArrayList<Device>()
             deviceList.asFlow().map { networkDevice ->
+                val deviceDetail = networking.fetchDevice(deviceSN = networkDevice.deviceSN)
+
                 val deviceBattery: Battery? = if (networkDevice.hasBattery) {
                     try {
                         val batteryVariables = networking.fetchRealData(networkDevice.deviceSN, listOf("ResidualEnergy", "SoC", "SoC_1"))
@@ -420,7 +422,7 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
                         hasPV = networkDevice.hasPV,
                         hasBattery = networkDevice.hasBattery,
                         deviceType = networkDevice.deviceType,
-                        capacity = networkDevice.capacity
+                        capacity = deviceDetail.capacity
                     )
                 )
             }.collect()
