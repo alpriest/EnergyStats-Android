@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.settings.inverter.schedule
+package com.alpriest.energystats.ui.settings.inverter.schedule.phase
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -18,9 +17,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -59,16 +55,9 @@ import com.alpriest.energystats.ui.settings.SettingsPaddingValues
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.settings.SettingsTitleView
 import com.alpriest.energystats.ui.settings.battery.TimePeriodView
+import com.alpriest.energystats.ui.settings.inverter.schedule.title
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
-
-data class EditPhaseErrorData(
-    val minSOCError: String?,
-    val fdSOCError: String?,
-    val timeError: String?,
-    val forceDischargePowerError: String?,
-    val maxSOCError: String?
-)
 
 @Composable
 fun EditPhaseView(
@@ -308,44 +297,6 @@ fun WorkModeView(viewModel: EditPhaseViewModel) {
     }
 }
 
-@Composable
-private fun EditableItemView(
-    value: String,
-    errorText: String?,
-    title: String,
-    unit: String?,
-    description: String?,
-    onValueChange: (String) -> Unit
-) {
-    SettingsColumnWithChild(
-        error = errorText
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .background(colorScheme.surface)
-                .padding(vertical = 4.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    title,
-                    Modifier.weight(1.0f),
-                    color = colorScheme.onSecondary
-                )
-                description?.let { InfoButton(it) }
-            }
-            OutlinedTextField(
-                value = value,
-                onValueChange = { onValueChange(it.filter { it.isDigit() }) },
-                modifier = Modifier.width(120.dp),
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End, color = colorScheme.onSecondary),
-                trailingIcon = { unit?.let { Text(it, color = colorScheme.onSecondary) } },
-                singleLine = true
-            )
-        }
-    }
-}
-
 @Preview(heightDp = 600, widthDp = 400)
 @Composable
 fun EditPhaseViewPreview() {
@@ -357,4 +308,3 @@ fun EditPhaseViewPreview() {
         )
     }
 }
-

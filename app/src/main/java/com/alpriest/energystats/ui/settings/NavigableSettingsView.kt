@@ -30,7 +30,7 @@ import com.alpriest.energystats.ui.settings.financial.FinancialsSettingsView
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.PeakShavingSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeSettingsView
-import com.alpriest.energystats.ui.settings.inverter.schedule.EditPhaseView
+import com.alpriest.energystats.ui.settings.inverter.schedule.phase.EditPhaseView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.EditTemplateView

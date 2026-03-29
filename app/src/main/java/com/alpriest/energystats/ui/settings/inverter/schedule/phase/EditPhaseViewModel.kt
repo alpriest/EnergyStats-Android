@@ -1,4 +1,4 @@
-package com.alpriest.energystats.ui.settings.inverter.schedule
+package com.alpriest.energystats.ui.settings.inverter.schedule.phase
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -15,6 +15,8 @@ import com.alpriest.energystats.shared.models.network.SchedulePropertyDefinition
 import com.alpriest.energystats.shared.models.network.SchedulePropertyDefinitionRange
 import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -34,16 +36,6 @@ data class SchedulePhaseFieldDefinition(
     val value: Double?
 )
 
-data class EditPhaseViewData(
-    val id: String,
-    val startTime: Time,
-    val endTime: Time,
-    val workMode: WorkMode,
-    val modes: List<WorkMode>,
-    val fields: List<SchedulePhaseFieldDefinition>,
-    val showAdvancedFields: Boolean
-)
-
 class EditPhaseViewModelFactory(val navController: NavHostController, val configManager: ConfigManaging) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -55,7 +47,7 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
     val modes: List<WorkMode>
 
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
-    private val _viewDataStream = MutableStateFlow(EditPhaseViewData(id = "", Time.now(), Time.now(), WorkModes.SelfUse, listOf(), listOf(), false))
+    private val _viewDataStream = MutableStateFlow(EditPhaseViewData(id = "", Time.Companion.now(), Time.Companion.now(), WorkModes.SelfUse, listOf(), listOf(), false))
     val viewDataStream: StateFlow<EditPhaseViewData> = _viewDataStream
 
     private val _errorStream = MutableStateFlow<Map<String, SchedulePhaseValidationReason>>(emptyMap())
@@ -67,22 +59,22 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
     private var originalPhase: SchedulePhaseV3? = null
 
     init {
-        EditScheduleStore.shared.scheduleStream.value?.let { schedule ->
-            val originalPhase = schedule.phases.first { it.id == EditScheduleStore.shared.phaseId }
+        EditScheduleStore.Companion.shared.scheduleStream.value?.let { schedule ->
+            val originalPhase = schedule.phases.first { it.id == EditScheduleStore.Companion.shared.phaseId }
             this.originalPhase = originalPhase
             _viewDataStream.value = EditPhaseViewData(
                 originalPhase.id,
                 originalPhase.start,
                 originalPhase.end,
                 originalPhase.mode,
-                EditScheduleStore.modes(configManager),
+                EditScheduleStore.Companion.modes(configManager),
                 emptyList(),
                 false
             )
             determineVisibleFields()
         }
 
-        modes = EditScheduleStore.modes(configManager)
+        modes = EditScheduleStore.Companion.modes(configManager)
     }
 
     fun load(context: Context) {
@@ -92,9 +84,9 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
     }
 
     fun deletePhase() {
-        val schedule = EditScheduleStore.shared.scheduleStream.value ?: return
+        val schedule = EditScheduleStore.Companion.shared.scheduleStream.value ?: return
         val originalPhaseID = viewDataStream.value.id ?: return
-        EditScheduleStore.shared.scheduleStream.value = SchedulePhaseHelper.delete(originalPhaseID, schedule)
+        EditScheduleStore.Companion.shared.scheduleStream.value = SchedulePhaseHelper.Companion.delete(originalPhaseID, schedule)
         navController.popBackStack()
     }
 
@@ -173,11 +165,11 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
 
         validate(context)
 
-        val schedule = EditScheduleStore.shared.scheduleStream.value
+        val schedule = EditScheduleStore.Companion.shared.scheduleStream.value
         if (schedule != null) {
-            val updatedSchedule = SchedulePhaseHelper.update(phase, schedule)
+            val updatedSchedule = SchedulePhaseHelper.Companion.update(phase, schedule)
             if (updatedSchedule.isValid()) {
-                EditScheduleStore.shared.scheduleStream.value = updatedSchedule
+                EditScheduleStore.Companion.shared.scheduleStream.value = updatedSchedule
                 navController.popBackStack()
             } else {
                 alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.this_schedule_phase_contains_invalid_phases_please_correct_and_try_again))
