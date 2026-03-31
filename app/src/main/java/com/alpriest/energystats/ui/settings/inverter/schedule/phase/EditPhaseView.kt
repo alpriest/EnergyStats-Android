@@ -210,7 +210,7 @@ fun AdvancedViews(viewModel: EditPhaseViewModel) {
 
 @Composable
 private fun title(key: String, workMode: String): String {
-    return when (key) {
+    return when (key.lowercase()) {
         "minsocongrid" -> stringResource(R.string.min_soc)
         "fdsoc" if workMode == WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_soc)
         "fdpwr" if workMode == WorkModes.ForceDischarge -> stringResource(R.string.force_discharge_power)
@@ -233,8 +233,8 @@ private fun errorMessage(error: SchedulePhaseValidationReason?): String? {
 @Composable
 private fun description(key: String, workMode: String): String? {
     return when (workMode) {
-        WorkModes.ForceCharge if key == "fdpwr" -> stringResource(R.string.the_input_power_to_charge_your_battery)
-        WorkModes.ForceDischarge if key == "fdpwr" -> stringResource(R.string.the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported)
+        WorkModes.ForceCharge if key.lowercase() == "fdpwr" -> stringResource(R.string.the_input_power_to_charge_your_battery)
+        WorkModes.ForceDischarge if key.lowercase() == "fdpwr" -> stringResource(R.string.the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported)
         else -> null
     }
 }

@@ -8,15 +8,16 @@ import com.alpriest.energystats.shared.models.network.Time
 
 class SchedulePhaseHelper {
     companion object {
-        fun addNewTimePeriod(schedule: ScheduleV3, modes: List<WorkMode>): ScheduleV3 {
+        fun addNewTimePeriod(schedule: ScheduleV3, device: Device, modes: List<WorkMode>, initialiseMaxSOC: Boolean): ScheduleV3 {
             val mode = modes.firstOrNull() ?: return schedule
-            val newPhase = SchedulePhaseV3.create(
+            val newPhase = makePhase(
                 start = Time.now(),
                 end = Time.now().adding(1),
                 mode = mode,
-                extraParam = emptyMap()
+                device = device,
+                initialiseMaxSOC = initialiseMaxSOC
             )
-            val sortedPhases = (schedule.phases + newPhase).filterNotNull().sortedBy { it.start }
+            val sortedPhases = (schedule.phases + newPhase).sortedBy { it.start }
 
             return ScheduleV3(
                 name = schedule.name,
@@ -24,9 +25,8 @@ class SchedulePhaseHelper {
             )
         }
 
-        fun appendPhasesInGaps(schedule: ScheduleV3, mode: WorkMode, device: Device?, initialiseMaxSOC: Boolean): ScheduleV3 {
-            val minSOC = ((device?.battery?.minSOC ?: "0.1").toDouble() * 100.0).toInt()
-            val newPhases = schedule.phases + createPhasesInGaps(schedule, mode, minSOC, initialiseMaxSOC)
+        fun appendPhasesInGaps(schedule: ScheduleV3, mode: WorkMode, device: Device, initialiseMaxSOC: Boolean): ScheduleV3 {
+            val newPhases = schedule.phases + createPhasesInGaps(schedule, mode, device, initialiseMaxSOC)
 
             return ScheduleV3(
                 name = schedule.name,
@@ -34,7 +34,7 @@ class SchedulePhaseHelper {
             )
         }
 
-        private fun createPhasesInGaps(schedule: ScheduleV3, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): List<SchedulePhaseV3> {
+        private fun createPhasesInGaps(schedule: ScheduleV3, mode: WorkMode, device: Device, initialiseMaxSOC: Boolean): List<SchedulePhaseV3> {
             val sortedPhases = schedule.phases.sortedBy { it.start }
 
             val scheduleStartTime = Time(0, 0)
@@ -48,14 +48,14 @@ class SchedulePhaseHelper {
                         val newPhaseStart = it.adding(minutes = 1)
                         val newPhaseEnd = phase.start.adding(minutes = -1)
 
-                        val newPhase = makePhase(newPhaseStart, newPhaseEnd, mode, soc, initialiseMaxSOC)
+                        val newPhase = makePhase(newPhaseStart, newPhaseEnd, mode, device, initialiseMaxSOC)
                         newPhases.add(newPhase)
                     }
                 } ?: run {
                     if (phase.start > scheduleStartTime) {
                         val newPhaseEnd = phase.start.adding(minutes = -1)
 
-                        val newPhase = makePhase(scheduleStartTime, newPhaseEnd, mode, soc, initialiseMaxSOC)
+                        val newPhase = makePhase(scheduleStartTime, newPhaseEnd, mode, device, initialiseMaxSOC)
                         newPhases.add(newPhase)
                     }
                 }
@@ -65,7 +65,7 @@ class SchedulePhaseHelper {
             lastEnd?.let {
                 if (it < scheduleEndTime) {
                     val finalPhaseStart = it.adding(minutes = 1)
-                    val finalPhase = makePhase(finalPhaseStart, scheduleEndTime, mode, soc, initialiseMaxSOC)
+                    val finalPhase = makePhase(finalPhaseStart, scheduleEndTime, mode, device, initialiseMaxSOC)
                     newPhases.add(finalPhase)
                 }
             }
@@ -73,15 +73,17 @@ class SchedulePhaseHelper {
             return newPhases
         }
 
-        private fun makePhase(start: Time, end: Time, mode: WorkMode, soc: Int, initialiseMaxSOC: Boolean): SchedulePhaseV3 {
+        private fun makePhase(start: Time, end: Time, mode: WorkMode, device: Device, initialiseMaxSOC: Boolean): SchedulePhaseV3 {
+            val soc = (device.battery?.minSOC?.toIntOrNull() ?: 10)
+            val inverterCapacity = (device.capacity ?: 0.0) * 1000.0
+
             val params = mutableMapOf(
-                "minSocOnGrid" to soc.toDouble(),
-                "forceDischargePower" to 0.0,
-                "forceDischargeSOC" to soc.toDouble(),
+                "fdPwr" to inverterCapacity,
+                "fdSoc" to soc.toDouble(),
             )
 
             if (initialiseMaxSOC) {
-                params["maxSOC"] = 100.0
+                params["maxSoc"] = 100.0
             }
 
             return SchedulePhaseV3(

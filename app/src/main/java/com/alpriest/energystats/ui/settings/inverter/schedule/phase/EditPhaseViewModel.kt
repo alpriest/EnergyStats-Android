@@ -123,53 +123,49 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
 
         if (viewData.startTime >= viewData.endTime) {
             _timeErrorStream.value = context.getString(R.string.end_time_must_be_after_start_time)
+        } else {
+            _timeErrorStream.value = null
         }
 
         _errorStream.value = fieldErrors
     }
 
     fun save(context: Context) {
+        var allFields = originalPhase?.extraParam ?: return
         val viewData = viewDataStream.value
         val userSpecifiedFields = viewData.fields
-        val fdSocValue = userSpecifiedFields.firstOrNull { it.key == "fdsoc" }?.value
 
-        val fieldsWithSensibleDefaults = userSpecifiedFields.map { field ->
+        allFields = allFields.map { field ->
             when {
-                viewData.workMode == WorkModes.ForceCharge && field.key == "maxsoc" ->
-                    field.copy(value = fdSocValue)
+                viewData.workMode == WorkModes.ForceCharge && field.key.lowercase() == "maxsoc" ->
+                    field.key to (userSpecifiedFields.firstOrNull { it.key.lowercase() == "fdsoc" }?.value ?: 0.0)
 
-                viewData.workMode == WorkModes.ForceDischarge && field.key == "importlimit" ->
-                    field.copy(value = 0.0)
+                viewData.workMode == WorkModes.ForceDischarge && field.key.lowercase() == "importlimit" ->
+                    field.key to 0.0
 
-                field.key == "maxsoc" ->
-                    field.copy(value = 100.0)
+                field.key.lowercase() == "maxsoc" ->
+                    field.key to 100.0
 
                 else ->
-                    field
+                    field.key to field.value
             }
-        }
+        }.toMap()
 
         val phase = SchedulePhaseV3(
             id = viewData.id,
             start = viewData.startTime,
             end = viewData.endTime,
             mode = viewData.workMode,
-            extraParam = fieldsWithSensibleDefaults
-                .mapNotNull { field ->
-                    field.value?.let { value ->
-                        keyAsExtraParamKey(field.key) to value
-                    }
-                }
-                .toMap()
+            extraParam = allFields
         )
 
         validate(context)
 
-        val schedule = EditScheduleStore.Companion.shared.scheduleStream.value
+        val schedule = EditScheduleStore.shared.scheduleStream.value
         if (schedule != null) {
-            val updatedSchedule = SchedulePhaseHelper.Companion.update(phase, schedule)
+            val updatedSchedule = SchedulePhaseHelper.update(phase, schedule)
             if (updatedSchedule.isValid()) {
-                EditScheduleStore.Companion.shared.scheduleStream.value = updatedSchedule
+                EditScheduleStore.shared.scheduleStream.value = updatedSchedule
                 navController.popBackStack()
             } else {
                 alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.this_schedule_phase_contains_invalid_phases_please_correct_and_try_again))
@@ -177,11 +173,6 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
         } else {
             alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.this_schedule_phase_contains_invalid_phases_please_correct_and_try_again))
         }
-    }
-
-    private fun keyAsExtraParamKey(key: String): String {
-        val fieldNames = setOf("fdSoc", "fdPwr", "maxSoc", "minSocOnGrid")
-        return fieldNames.firstOrNull { it.lowercase() == key } ?: key
     }
 
     fun startTimeChanged(time: Time) {
@@ -214,31 +205,31 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
         val mode = viewData.workMode
         val builder = FieldDefinitionBuilder(properties = configManager.scheduleProperties, phase = phase)
 
-        val hiddenFieldKeys = mutableSetOf("maxsoc")
+        val hiddenFieldKeys = mutableSetOf("maxSoc")
         val standardField: SchedulePhaseFieldDefinition?
 
         when (mode) {
             WorkModes.SelfUse -> {
-                hiddenFieldKeys.add("fdpwr")
-                hiddenFieldKeys.add("fdsoc")
-                standardField = builder.make(key = "minsocongrid", isStandard = true, defaultValue = 10.0)
+                hiddenFieldKeys.add("fdPwr")
+                hiddenFieldKeys.add("fdSoc")
+                standardField = builder.make(key = "minSocOnGrid", isStandard = true, defaultValue = 10.0)
             }
 
             WorkModes.Feedin -> {
-                hiddenFieldKeys.add("fdpwr")
-                hiddenFieldKeys.add("fdsoc")
-                standardField = builder.make(key = "minsocongrid", isStandard = true, defaultValue = 10.0)
+                hiddenFieldKeys.add("fdPwr")
+                hiddenFieldKeys.add("fdSoc")
+                standardField = builder.make(key = "minSocOnGrid", isStandard = true, defaultValue = 10.0)
             }
 
             WorkModes.Backup -> {
-                hiddenFieldKeys.add("fdpwr")
-                hiddenFieldKeys.add("fdsoc")
-                standardField = builder.make(key = "minsocongrid", isStandard = true, defaultValue = 10.0)
+                hiddenFieldKeys.add("fdPwr")
+                hiddenFieldKeys.add("fdSoc")
+                standardField = builder.make(key = "minSocOnGrid", isStandard = true, defaultValue = 10.0)
             }
 
             WorkModes.ForceCharge -> {
                 standardField = builder.make(
-                    key = "fdsoc",
+                    key = "fdSoc",
                     isStandard = true,
                     defaultValue = 100.0
                 )
@@ -246,7 +237,7 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
 
             WorkModes.ForceDischarge ->
                 standardField = builder.make(
-                    key = "fdsoc",
+                    key = "fdSoc",
                     isStandard = true,
                     defaultValue = 10.0
                 )
@@ -255,20 +246,19 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
         }
 
         val standardFields = listOfNotNull(standardField)
-        hiddenFieldKeys.addAll(standardFields.map { it.key.lowercase() })
+        hiddenFieldKeys.addAll(standardFields.map { it.key })
         hiddenFieldKeys.addAll(configManager.scheduleProperties.mapNotNull {
-            if (it.value.unit.isEmpty()) it.key.lowercase() else null
+            if (it.value.unit.isEmpty()) it.key else null
         })
 
-        val advancedFields: List<SchedulePhaseFieldDefinition> =
-            configManager.scheduleProperties
-                .keys
-                .filter { allKey -> hiddenFieldKeys.firstOrNull({ standardKey -> standardKey == allKey.lowercase() }) == null }
-                .map { key ->
-                    val defaultValue = defaultValue(mode, key)
+        val advancedFields: List<SchedulePhaseFieldDefinition> = phase.extraParam
+            .keys
+            .filter { allKey -> hiddenFieldKeys.firstOrNull({ standardKey -> standardKey.equals(allKey, ignoreCase = true) }) == null }
+            .map { key ->
+                val defaultValue = defaultValue(mode, key)
 
-                    builder.make(key, isStandard = false, defaultValue = defaultValue)
-                }
+                builder.make(key, isStandard = false, defaultValue = defaultValue)
+            }
 
         _viewDataStream.value = viewData.copy(
             fields = standardFields + advancedFields,
@@ -305,7 +295,7 @@ class FieldDefinitionBuilder(
         isStandard: Boolean,
         defaultValue: Double?,
     ): SchedulePhaseFieldDefinition {
-        val property = properties[key]
+        val property = properties[key.lowercase()]
 
         return SchedulePhaseFieldDefinition(
             key = key,
@@ -313,7 +303,7 @@ class FieldDefinitionBuilder(
             precision = (property?.precision) ?: 0.0,
             range = property?.range,
             unit = property?.unit,
-            value = phase.valueFor(key) ?: defaultValue
+            value = phase.valueFor(key.lowercase()) ?: defaultValue
         )
     }
 }

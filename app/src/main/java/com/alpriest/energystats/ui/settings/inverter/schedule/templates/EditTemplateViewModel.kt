@@ -6,23 +6,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.DeviceCapability
-import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.ui.flow.UiLoadState
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
-import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
-import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
 import com.alpriest.energystats.shared.models.ScheduleTemplateV3
 import com.alpriest.energystats.shared.models.WorkMode
+import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import com.alpriest.energystats.ui.flow.UiLoadState
+import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleStore
+import com.alpriest.energystats.ui.settings.inverter.schedule.SchedulePhaseHelper
 import com.alpriest.energystats.ui.settings.inverter.schedule.asSchedule
 import com.alpriest.energystats.ui.settings.inverter.schedule.errorMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.collections.firstOrNull
 
 class EditTemplateViewModelFactory(
     private val configManager: ConfigManaging,
@@ -83,7 +82,9 @@ class EditTemplateViewModel(
         val device = configManager.currentDevice.value ?: return
         val updatedSchedule = SchedulePhaseHelper.addNewTimePeriod(
             template.asSchedule(),
-            modes
+            device,
+            modes,
+            initialiseMaxSOC = configManager.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
         val updatedTemplate = ScheduleTemplateV3(templateID, template.name, updatedSchedule.phases)
         EditScheduleStore.shared.templateStream.value = updatedTemplate
