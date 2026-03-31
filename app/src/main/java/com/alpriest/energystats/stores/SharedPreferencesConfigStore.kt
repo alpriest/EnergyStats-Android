@@ -603,6 +603,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
                         }
 
                         return@map SchedulePhaseV3(
+                            id = v1Phase.id,
                             start = v1Phase.start,
                             end = v1Phase.end,
                             mode = v1Phase.mode,
