@@ -634,7 +634,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 val jsonString = Gson().toJson(value)
-                putString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES.name, jsonString)
+                putString(SharedPreferenceDisplayKey.SCHEDULE_TEMPLATES_V3.name, jsonString)
             }
         }
 
