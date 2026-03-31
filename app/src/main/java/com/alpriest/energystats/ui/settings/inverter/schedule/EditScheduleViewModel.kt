@@ -87,7 +87,6 @@ class EditScheduleViewModel(
         scheduleStream.value = SchedulePhaseHelper.addNewTimePeriod(
             schedule,
             device,
-            modes,
             initialiseMaxSOC = configManager.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
     }

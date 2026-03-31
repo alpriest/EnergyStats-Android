@@ -57,6 +57,10 @@ class PreHomeViewModel(
         }
 
         viewModelScope.launch {
+            fetchDeviceCapacity()
+        }
+
+        viewModelScope.launch {
             credentialStore.getApiKey()?.let {
                 WatchSyncManager().sendWatchConfigData(context, it, configManager)
             }
@@ -68,6 +72,12 @@ class PreHomeViewModel(
                     WatchSyncManager().sendWatchConfigData(context, it, configManager)
                 }
             }
+        }
+    }
+
+    private suspend fun fetchDeviceCapacity() {
+        if (configManager.currentDevice.value?.capacity == null) {
+            configManager.fetchDevices()
         }
     }
 

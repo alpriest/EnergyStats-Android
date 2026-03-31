@@ -12,6 +12,7 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
+import com.alpriest.energystats.shared.models.InverterGeneration
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
@@ -669,6 +670,12 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         set(value) {
             config.showBatteryMaxCurrentCharge = value
             appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
+    override var inverterGeneration: InverterGeneration
+        get() = config.inverterGeneration
+        set(value) {
+            config.inverterGeneration = value
         }
 
     override fun loginAsDemo() {

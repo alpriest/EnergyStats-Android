@@ -83,7 +83,6 @@ class EditTemplateViewModel(
         val updatedSchedule = SchedulePhaseHelper.addNewTimePeriod(
             template.asSchedule(),
             device,
-            modes,
             initialiseMaxSOC = configManager.getDeviceSupports(DeviceCapability.ScheduleMaxSOC, device.deviceSN)
         )
         val updatedTemplate = ScheduleTemplateV3(templateID, template.name, updatedSchedule.phases)

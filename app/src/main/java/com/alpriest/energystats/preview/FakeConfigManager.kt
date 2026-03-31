@@ -11,6 +11,7 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
+import com.alpriest.energystats.shared.models.InverterGeneration
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
@@ -105,6 +106,7 @@ class FakeConfigManager : ConfigManaging {
     override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar
     override var showBatteryMaxCurrentCharge: Boolean = false
     override var scheduleProperties: Map<String, SchedulePropertyDefinition> = emptyMap()
+    override var inverterGeneration: InverterGeneration = InverterGeneration.Unknown
 
     override var devices: List<Device> = listOf(
         Device(

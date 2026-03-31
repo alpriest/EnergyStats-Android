@@ -4,16 +4,16 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.SchedulePhaseV3
 import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.WorkMode
+import com.alpriest.energystats.shared.models.WorkModes
 import com.alpriest.energystats.shared.models.network.Time
 
 class SchedulePhaseHelper {
     companion object {
-        fun addNewTimePeriod(schedule: ScheduleV3, device: Device, modes: List<WorkMode>, initialiseMaxSOC: Boolean): ScheduleV3 {
-            val mode = modes.firstOrNull() ?: return schedule
+        fun addNewTimePeriod(schedule: ScheduleV3, device: Device, initialiseMaxSOC: Boolean): ScheduleV3 {
             val newPhase = makePhase(
                 start = Time.now(),
                 end = Time.now().adding(1),
-                mode = mode,
+                mode = WorkModes.SelfUse,
                 device = device,
                 initialiseMaxSOC = initialiseMaxSOC
             )

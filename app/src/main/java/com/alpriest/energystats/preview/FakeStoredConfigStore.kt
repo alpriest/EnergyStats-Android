@@ -10,6 +10,7 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
+import com.alpriest.energystats.shared.models.InverterGeneration
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
@@ -107,5 +108,6 @@ class FakeStoredConfigStore(
     override var isReadOnly: Boolean = false,
     override var readOnlyPasscode: String = "",
     override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar,
-    override var showBatteryMaxCurrentCharge: Boolean = false
+    override var showBatteryMaxCurrentCharge: Boolean = false,
+    override var inverterGeneration: InverterGeneration = InverterGeneration.Unknown
 ) : StoredConfig

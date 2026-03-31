@@ -12,6 +12,7 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
+import com.alpriest.energystats.shared.models.InverterGeneration
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
@@ -120,7 +121,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         IS_READ_ONLY,
         READ_ONLY_PASSCODE,
         TIME_PERIOD_GRAPH_STYLE_ON_STATS,
-        SHOW_BATTERY_MAX_CURRENT_CHARGE
+        SHOW_BATTERY_MAX_CURRENT_CHARGE,
+        INVERTER_GENERATION
     }
 
     // Local in-memory only
@@ -891,6 +893,17 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceDisplayKey.SHOW_BATTERY_MAX_CURRENT_CHARGE.name, value)
+            }
+        }
+
+    override var inverterGeneration: InverterGeneration
+        get() {
+            val value = sharedPreferences.getInt(SharedPreferenceDisplayKey.INVERTER_GENERATION.name, InverterGeneration.Unknown.value)
+            return InverterGeneration.fromInt(value)
+        }
+        set(value) {
+            sharedPreferences.edit {
+                putInt(SharedPreferenceDisplayKey.INVERTER_GENERATION.name, value.value)
             }
         }
 }

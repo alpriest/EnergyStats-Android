@@ -10,6 +10,7 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
 import com.alpriest.energystats.shared.models.GenerationViewData
+import com.alpriest.energystats.shared.models.InverterGeneration
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerFlowStringsSettings
 import com.alpriest.energystats.shared.models.PowerStationDetail
@@ -97,6 +98,7 @@ interface StoredConfig {
     var isReadOnly: Boolean
     var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle
     var showBatteryMaxCurrentCharge: Boolean
+    var inverterGeneration: InverterGeneration
 }
 
 interface CurrentStatusCalculatorConfig {

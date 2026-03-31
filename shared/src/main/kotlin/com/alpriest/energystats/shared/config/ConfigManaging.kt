@@ -9,6 +9,7 @@ import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.DeviceCapability
 import com.alpriest.energystats.shared.models.DisplayUnit
 import com.alpriest.energystats.shared.models.EarningsModel
+import com.alpriest.energystats.shared.models.InverterGeneration
 import com.alpriest.energystats.shared.models.ParameterGroup
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import com.alpriest.energystats.shared.models.RefreshFrequency
@@ -102,6 +103,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var isReadOnly: Boolean
     var showBatteryMaxCurrentCharge: Boolean
     var scheduleProperties: Map<String, SchedulePropertyDefinition>
+    var inverterGeneration: InverterGeneration
 }
 
 interface ScheduleTemplateConfigManager {
