@@ -15,6 +15,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.double
+import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -35,8 +36,8 @@ object OpenReportResponseSerializer : KSerializer<OpenReportResponse> {
         val values = obj["values"]
             ?.jsonArray
             ?.mapIndexed { index, valueEl ->
-                val value = valueEl.jsonPrimitive.double
-                OpenReportResponseData(index = index + 1, value = value)
+                val value = valueEl.jsonPrimitive.doubleOrNull
+                OpenReportResponseData(index = index + 1, value = value ?: 0.0)
             }
             ?: emptyList()
 

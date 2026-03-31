@@ -196,8 +196,10 @@ class PowerFlowTabViewModel(
                         }
                     }
                 }
-                val chargeDescription = BatteryCapacityCalculator(configManager.batteryCapacityW, configManager.minSOC)
-                    .batteryPercentageRemaining(battery.chargePower, battery.chargeLevel / 100.0)?.batteryPercentageRemainingDuration(application)
+
+                val percentageRemaining = BatteryCapacityCalculator(configManager.batteryCapacity.toDouble().toInt(), configManager.minSOC)
+                    .batteryPercentageRemaining(battery.chargePower, battery.chargeLevel)
+                val chargeDescription = percentageRemaining?.batteryPercentageRemainingDuration(application)
 
                 widgetDataSharer.batteryData = BatteryData(chargeDescription = chargeDescription, battery.chargeLevel)
                 BatteryWidget().updateAll(application)
@@ -242,4 +244,6 @@ class PowerFlowTabViewModel(
             }
         }
     }
+
+    private val TAG = "BatteryDataRepository"
 }

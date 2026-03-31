@@ -44,9 +44,9 @@ class BatteryDataRepository private constructor() {
             )
 
             val battery = BatteryViewModel.make(device, real)
-
-            val chargeDescription = BatteryCapacityCalculator(appContainer.configManager.batteryCapacityW, appContainer.configManager.minSOC)
-                .batteryPercentageRemaining(battery.chargePower, battery.chargeLevel / 100.0)?.batteryPercentageRemainingDuration(context)
+            val percentageRemaining = BatteryCapacityCalculator(appContainer.configManager.batteryCapacity.toDouble().toInt(), appContainer.configManager.minSOC)
+                .batteryPercentageRemaining(battery.chargePower, battery.chargeLevel)
+            val chargeDescription = percentageRemaining?.batteryPercentageRemainingDuration(context)
 
             val batteryData = BatteryData(chargeDescription, battery.chargeLevel)
             appContainer.widgetDataSharer.batteryData = batteryData

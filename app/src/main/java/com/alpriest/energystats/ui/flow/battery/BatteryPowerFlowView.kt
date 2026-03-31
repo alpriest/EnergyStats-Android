@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,14 +24,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.alpriest.energystats.shared.R
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.helpers.truncated
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.models.isDarkMode
-import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
 import com.alpriest.energystats.shared.ui.BatteryView
 import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.ui.iconForegroundColor
@@ -40,7 +39,6 @@ import com.alpriest.energystats.ui.flow.PowerFlowView
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlin.math.roundToLong
 
 @Composable
 fun BatteryPowerFlow(
@@ -78,6 +76,7 @@ fun BatteryIconView(
     val showBatteryEstimate = appSettingsStream.collectAsStateWithLifecycle().value.showBatteryEstimate
     val isDarkMode = isDarkMode(appSettingsStream)
     val showBatteryMaxCurrentCharge = appSettingsStream.collectAsStateWithLifecycle().value.showBatteryMaxCurrentCharge
+    val context = LocalContext.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -142,7 +141,7 @@ fun BatteryIconView(
         if (showBatteryEstimate) {
             viewModel.batteryExtra?.let {
                 Text(
-                    duration(estimate = it) + (if (viewModel.showUsableBatteryOnly) "*" else ""),
+                    it.batteryPercentageRemainingDuration(context) + (if (viewModel.showUsableBatteryOnly) "*" else ""),
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     color = Color.Gray,
@@ -182,30 +181,6 @@ private fun BatteryStateOfChargeView(
 
 fun Double.asTemperature(): String {
     return "${this}°C"
-}
-
-@Composable
-fun duration(estimate: BatteryCapacityEstimate): String {
-    val text = stringResource(estimate.stringId)
-    val mins = stringResource(R.string.mins)
-    val hour = stringResource(R.string.hour)
-    val hours = stringResource(R.string.hours)
-    val day = stringResource(com.alpriest.energystats.R.string.day)
-    val days = stringResource(com.alpriest.energystats.R.string.days)
-
-    return when (estimate.duration) {
-        in 0..60 -> "$text ${estimate.duration} $mins"
-        in 61..119 -> "$text ${estimate.duration / 60} $hour"
-        in 120..1440 -> "$text ${(estimate.duration / 60.0).roundToLong()} $hours"
-        else -> {
-            val dayNumber = (estimate.duration / 1440.0).roundToLong()
-            if (dayNumber == 1L) {
-                "$text $dayNumber $day"
-            } else {
-                "$text $dayNumber $days"
-            }
-        }
-    }
 }
 
 @Preview(showBackground = true, widthDp = 200, heightDp = 300)
