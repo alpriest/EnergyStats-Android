@@ -129,7 +129,7 @@ class ScheduleTemplateListView(
                         contentPadding = PaddingValues(),
                         shape = RectangleShape
                     ) {
-                        ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
+                        ScheduleView(it.asSchedule(), configManager, modifier = Modifier.weight(1.0f))
 
                         Icon(
                             imageVector = Icons.Default.ChevronRight,

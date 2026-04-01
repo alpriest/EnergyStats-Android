@@ -17,6 +17,7 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.CT2DisplayMode
 import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.InverterGeneration
 import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
@@ -148,7 +149,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                 )
 
                 SettingsSegmentedControl(
-                    title = "CT2 display",
+                    title = stringResource(R.string.ct2_display),
                     segmentedControl = {
                         val items = listOf(
                             CT2DisplayMode.Hidden,
@@ -163,9 +164,11 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
                             ct2DisplayModeState.value = items[it]
                             configManager.ct2DisplayMode = items[it]
                         }
-                    })
+                    }
+                )
             }
 
+            GenerationView(configManager)
             FirmwareVersionView(device, network)
             DeviceVersionView(device)
         }
@@ -175,11 +178,36 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 @Composable
 fun DeviceVersionView(device: Device) {
     SettingsColumnWithChild {
-        SettingsRow("Station Name", device.stationName)
-        SettingsRow("Device Serial No.", device.deviceSN)
-        SettingsRow("Module Serial No", device.moduleSN)
-        SettingsRow("Has Battery", if (device.hasBattery) "true" else "false")
-        SettingsRow("Has Solar", if (device.hasPV) "true" else "false")
+        SettingsRow(stringResource(R.string.station_name), device.stationName)
+        SettingsRow(stringResource(R.string.device_serial_no), device.deviceSN)
+        SettingsRow(stringResource(R.string.module_serial_no), device.moduleSN)
+        SettingsRow(stringResource(R.string.has_battery), if (device.hasBattery) "true" else "false")
+        SettingsRow(stringResource(R.string.has_solar), if (device.hasPV) "true" else "false")
+    }
+}
+
+@Composable
+fun GenerationView(configManager: ConfigManaging) {
+    val context = LocalContext.current
+    val inverterGenerationState = rememberSaveable { mutableStateOf(configManager.inverterGeneration) }
+
+    SettingsColumn(
+        header = stringResource(R.string.inverter_generation),
+        footer = stringResource(R.string.inverter_generation_footnote)
+    ) {
+        SettingsSegmentedControl(
+            segmentedControl = {
+                val items = InverterGeneration.entries
+                SegmentedControl(
+                    items = items.map { it.title(context) },
+                    defaultSelectedItemIndex = items.indexOf(inverterGenerationState.value),
+                    color = MaterialTheme.colorScheme.primary
+                ) {
+                    inverterGenerationState.value = items[it]
+                    configManager.inverterGeneration = items[it]
+                }
+            }
+        )
     }
 }
 

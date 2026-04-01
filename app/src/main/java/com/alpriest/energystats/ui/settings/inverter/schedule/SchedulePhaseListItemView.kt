@@ -19,7 +19,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
+import com.alpriest.energystats.shared.models.InverterGeneration
 import com.alpriest.energystats.shared.models.SchedulePhaseV3
 import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.TimeType
@@ -35,13 +38,22 @@ val SchedulePhaseV3.forceDischargeSOC: String
 val SchedulePhaseV3.minSocOnGrid: String
     get() = this.stringValueFor("minSocOnGrid")
 
+val SchedulePhaseV3.maxSoc: String
+    get() = this.stringValueFor("maxSoc")
+
 @Composable
-fun SchedulePhaseListItemView(phase: SchedulePhaseV3, modifier: Modifier = Modifier) {
+fun SchedulePhaseListItemView(phase: SchedulePhaseV3, configManager: ConfigManaging, modifier: Modifier = Modifier) {
     val context = LocalContext.current
+
+    val forceChargeSoc = if (configManager.inverterGeneration == InverterGeneration.Generation1) {
+        phase.maxSoc
+    } else {
+        phase.forceDischargeSOC
+    }
 
     val extra = when (phase.mode) {
         WorkModes.ForceDischarge -> " at ${phase.forceDischargePower}W down to ${phase.forceDischargeSOC}%"
-        WorkModes.ForceCharge -> " at ${phase.forceDischargePower}W up to ${phase.forceDischargeSOC}%"
+        WorkModes.ForceCharge -> " at ${phase.forceDischargePower}W up to ${forceChargeSoc}%"
         WorkModes.SelfUse -> " ${phase.minSocOnGrid}% min SOC"
         else -> ""
     }
@@ -80,7 +92,8 @@ fun SchedulePhaseListItemView(phase: SchedulePhaseV3, modifier: Modifier = Modif
 fun SchedulePhaseListItemViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         SchedulePhaseListItemView(
-            phase = ScheduleV3.preview().phases[0]
+            phase = ScheduleV3.preview().phases[0],
+            configManager = FakeConfigManager()
         )
     }
 }

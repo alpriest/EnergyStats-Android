@@ -515,4 +515,12 @@
     <string name="these_settings_are_optional_and_can_usually_be_left_as_default">Queste impostazioni sono facoltative e di solito possono essere lasciate come predefinite.</string>
     <string name="the_input_power_to_charge_your_battery">La potenza in ingresso per caricare la batteria.</string>
     <string name="the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported">Il livello di potenza da erogare, inclusi il consumo domestico e l’energia immessa in rete. Ad esempio, se hai un inverter da 5 kW, impostalo su 5000; se il consumo domestico è 750 W, i restanti 4,25 kW verranno immessi in rete.</string>
+    <string name="station_name">Nome stazione</string>
+    <string name="device_serial_no">Numero di serie del dispositivo</string>
+    <string name="module_serial_no">Numero di serie del modulo</string>
+    <string name="has_battery">Ha batteria</string>
+    <string name="has_solar">Ha solare</string>
+    <string name="ct2_display">Visualizzazione CT2</string>
+    <string name="inverter_generation_footnote">Gli inverter di generazione 1 utilizzano impostazioni diverse per la carica/scarica forzata. Questa impostazione cercherà di **visualizzare** i valori corretti per il tuo inverter. Non influisce sulla configurazione delle pianificazioni.</string>
+    <string name="inverter_generation">Generazione inverter</string>
 </resources>

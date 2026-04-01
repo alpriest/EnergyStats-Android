@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.SchedulePhaseV3
 import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.WorkModes
@@ -13,12 +15,12 @@ import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun ScheduleView(schedule: ScheduleV3, modifier: Modifier = Modifier) {
+fun ScheduleView(schedule: ScheduleV3, configManager: ConfigManaging, modifier: Modifier = Modifier) {
     Column(modifier) {
         TimePeriodBarView(schedule.phases, modifier = Modifier.padding(bottom = 8.dp))
 
         schedule.phases.forEach {
-            SchedulePhaseListItemView(it)
+            SchedulePhaseListItemView(it, configManager)
         }
     }
 }
@@ -27,7 +29,7 @@ fun ScheduleView(schedule: ScheduleV3, modifier: Modifier = Modifier) {
 @Composable
 fun ScheduleViewPreview() {
     EnergyStatsTheme {
-        ScheduleView(ScheduleV3.preview())
+        ScheduleView(ScheduleV3.preview(), FakeConfigManager())
     }
 }
 

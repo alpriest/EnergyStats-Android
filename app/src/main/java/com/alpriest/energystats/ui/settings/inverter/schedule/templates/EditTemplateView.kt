@@ -108,7 +108,7 @@ class EditTemplateView(
             dirtyStateFlow = viewModel.dirtyState,
             content = { innerModifier ->
                 SettingsPage(innerModifier) {
-                    ScheduleDetailView(viewModel.navController, template.asSchedule())
+                    ScheduleDetailView(viewModel.navController, template.asSchedule(), viewModel.configManager)
 
                     Column(
                         modifier = Modifier

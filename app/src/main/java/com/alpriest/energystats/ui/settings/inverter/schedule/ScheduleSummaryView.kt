@@ -47,8 +47,8 @@ import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.models.ScheduleTemplateV3
+import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.tabs.TopBarSettings
@@ -69,7 +69,6 @@ import com.alpriest.energystats.ui.settings.inverterScheduleGraph
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.launch
-import kotlin.collections.first
 
 class PopupScheduleSummaryView(
     private val configManager: ConfigManaging,
@@ -218,6 +217,7 @@ class ScheduleSummaryView(
                     ) {
                         ScheduleView(
                             schedule,
+                            configManager,
                             modifier = Modifier.weight(1.0f)
                         )
 
@@ -252,7 +252,7 @@ class ScheduleSummaryView(
                         contentPadding = PaddingValues(),
                         shape = RectangleShape
                     ) {
-                        ScheduleView(it.asSchedule(), modifier = Modifier.weight(1.0f))
+                        ScheduleView(it.asSchedule(), configManager, modifier = Modifier.weight(1.0f))
 
                         Icon(
                             imageVector = Icons.Default.ChevronRight,

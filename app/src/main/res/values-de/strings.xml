@@ -514,4 +514,12 @@
     <string name="these_settings_are_optional_and_can_usually_be_left_as_default">Diese Einstellungen sind optional und können in der Regel unverändert bleiben.</string>
     <string name="the_input_power_to_charge_your_battery">Die Eingangsleistung zum Laden Ihrer Batterie.</string>
     <string name="the_output_power_level_to_be_delivered_including_your_house_load_and_grid_export_e_g_if_you_have_5kw_inverter_then_set_this_to_5000_then_if_the_house_load_is_750w_the_other_4_25kw_will_be_exported">Die auszugebende Leistung, einschließlich Ihres Hausverbrauchs und der Netzeinspeisung. Wenn Sie z. B. einen 5-kW-Wechselrichter haben, stellen Sie diesen auf 5000 ein. Wenn der Hausverbrauch 750 W beträgt, werden die restlichen 4,25 kW ins Netz eingespeist.</string>
+    <string name="station_name">Stationsname</string>
+    <string name="device_serial_no">Geräte-Seriennummer</string>
+    <string name="module_serial_no">Modul-Seriennummer</string>
+    <string name="has_battery">Hat Batterie</string>
+    <string name="has_solar">Hat Solar</string>
+    <string name="ct2_display">CT2-Anzeige</string>
+    <string name="inverter_generation_footnote">Wechselrichter der Generation 1 verwenden andere Einstellungen für das erzwungene Laden/Entladen. Diese Einstellung versucht, die korrekten Werte für Ihren Wechselrichter **anzuzeigen**. Sie hat keinen Einfluss auf das Einstellen von Zeitplänen.</string>
+    <string name="inverter_generation">Wechselrichter-Generation</string>
 </resources>

@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
+import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.ScheduleV3
 import com.alpriest.energystats.ui.settings.SettingsColumn
@@ -31,7 +33,7 @@ import com.alpriest.energystats.ui.settings.SettingsScreen
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun ScheduleDetailView(navController: NavHostController, schedule: ScheduleV3) {
+fun ScheduleDetailView(navController: NavHostController, schedule: ScheduleV3, configManager: ConfigManaging) {
     SettingsColumn(padding = PaddingValues(),) {
         if (schedule.name.isNotEmpty()) {
             Column(modifier = Modifier.padding(PaddingValues(top = 10.dp, bottom = 8.dp))) {
@@ -74,6 +76,7 @@ fun ScheduleDetailView(navController: NavHostController, schedule: ScheduleV3) {
                     ) {
                         SchedulePhaseListItemView(
                             phase,
+                            configManager,
                             modifier = Modifier
                         )
 
@@ -97,7 +100,8 @@ fun ScheduleDetailViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
         ScheduleDetailView(
             navController = NavHostController(LocalContext.current),
-            schedule = ScheduleV3.preview()
+            schedule = ScheduleV3.preview(),
+            configManager = FakeConfigManager()
         )
     }
 }

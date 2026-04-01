@@ -83,7 +83,7 @@ private fun Loaded(schedule: ScheduleV3, viewModel: EditScheduleViewModel, navCo
         dirtyStateFlow = viewModel.dirtyState,
         content = { innerModifier ->
             SettingsPage(innerModifier) {
-                ScheduleDetailView(viewModel.navController, schedule)
+                ScheduleDetailView(viewModel.navController, schedule, viewModel.configManager)
 
                 Row(
                     modifier = Modifier
