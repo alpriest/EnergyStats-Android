@@ -384,8 +384,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
 
         val request = Request.Builder().url(URLs.getOpenCurrentSchedule()).post(body).build()
 
-        val type = object : TypeToken<NetworkResponse<ScheduleResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<ScheduleResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<ScheduleResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 

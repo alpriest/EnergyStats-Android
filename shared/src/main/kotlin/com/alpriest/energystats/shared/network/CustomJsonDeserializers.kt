@@ -1,10 +1,17 @@
+package com.alpriest.energystats.shared.network
 
 import com.alpriest.energystats.shared.models.network.OpenQueryResponseData
 import com.alpriest.energystats.shared.models.network.OpenRealQueryResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponse
 import com.alpriest.energystats.shared.models.network.OpenReportResponseData
+import com.alpriest.energystats.shared.models.network.SchedulePhaseResponse
+import com.alpriest.energystats.shared.models.network.SchedulePropertyDefinition
+import com.alpriest.energystats.shared.models.network.ScheduleResponse
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -18,6 +25,55 @@ import kotlinx.serialization.json.double
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
+
+object ScheduleResponseSerializer : KSerializer<ScheduleResponse> {
+    override fun deserialize(decoder: Decoder): ScheduleResponse {
+        val jsonDecoder = decoder as? JsonDecoder
+            ?: throw SerializationException("ScheduleResponseSerializer can only be used with JSON")
+
+        val obj = jsonDecoder.decodeJsonElement().asJsonObjectOrNull()
+            ?: throw SerializationException("Expected a JSON object for ScheduleResponse")
+
+        val enable = obj["enable"]?.jsonPrimitive?.contentOrNull?.toIntOrNull()
+            ?: throw SerializationException("Missing or invalid 'enable' in ScheduleResponse")
+
+        val groups = obj["groups"]?.let { groupsElement ->
+            jsonDecoder.json.decodeFromJsonElement(
+                ListSerializer(SchedulePhaseResponse.serializer()),
+                groupsElement
+            )
+        } ?: throw SerializationException("Missing 'groups' in ScheduleResponse")
+
+        val maxGroupCount = obj["maxGroupCount"]?.jsonPrimitive?.contentOrNull?.toIntOrNull()
+            ?: throw SerializationException("Missing or invalid 'maxGroupCount' in ScheduleResponse")
+
+        val properties = obj["properties"]?.let { propertiesElement ->
+            jsonDecoder.json.decodeFromJsonElement(
+                MapSerializer(String.serializer(), SchedulePropertyDefinition.serializer()),
+                propertiesElement
+            )
+        } ?: throw SerializationException("Missing 'properties' in ScheduleResponse")
+
+        val workModes = properties["workmode"]?.enumList ?: emptyList()
+
+        return ScheduleResponse(
+            enable = enable,
+            groups = groups,
+            workModes = workModes,
+            maxGroupCount = maxGroupCount,
+            properties = properties
+        )
+    }
+
+    override val descriptor: SerialDescriptor =
+        buildClassSerialDescriptor("ScheduleResponse") {
+            // Parsed manually.
+        }
+
+    override fun serialize(encoder: Encoder, value: ScheduleResponse) {
+        throw SerializationException("ScheduleResponseSerializer is decode-only")
+    }
+}
 
 object OpenReportResponseSerializer : KSerializer<OpenReportResponse> {
     override fun deserialize(decoder: Decoder): OpenReportResponse {

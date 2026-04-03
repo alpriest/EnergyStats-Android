@@ -1,6 +1,6 @@
 package com.alpriest.energystats.shared.models.network
 
-import OpenReportResponseSerializer
+import com.alpriest.energystats.shared.network.OpenReportResponseSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable(with = OpenReportResponseSerializer::class)

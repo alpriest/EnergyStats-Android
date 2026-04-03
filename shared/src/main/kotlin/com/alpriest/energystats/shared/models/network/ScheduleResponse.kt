@@ -1,11 +1,14 @@
 package com.alpriest.energystats.shared.models.network
 
+import com.alpriest.energystats.shared.network.ScheduleResponseSerializer
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.Serializable
 import java.lang.reflect.Type
+import com.google.gson.JsonElement
 
+@Serializable(with = ScheduleResponseSerializer::class)
 data class ScheduleResponse(
     val enable: Int,
     val groups: List<SchedulePhaseResponse>,
@@ -35,6 +38,7 @@ data class ScheduleResponse(
     }
 }
 
+@Serializable
 data class SchedulePropertyDefinition(
     val enumList: List<String>?,
     val precision: Double,
@@ -42,6 +46,7 @@ data class SchedulePropertyDefinition(
     val unit: String
 )
 
+@Serializable
 data class SchedulePropertyDefinitionRange(
     val max: Double,
     val min: Double

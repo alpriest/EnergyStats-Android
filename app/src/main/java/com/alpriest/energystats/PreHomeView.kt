@@ -77,7 +77,11 @@ class PreHomeViewModel(
 
     private suspend fun fetchDeviceCapacity() {
         if (configManager.currentDevice.value?.capacity == null) {
-            configManager.fetchDevices()
+            try {
+                configManager.fetchDevices()
+            } catch (_: Exception) {
+                // Ignore
+            }
         }
     }
 

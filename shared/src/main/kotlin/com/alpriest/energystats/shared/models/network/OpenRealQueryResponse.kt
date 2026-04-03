@@ -1,6 +1,6 @@
 package com.alpriest.energystats.shared.models.network
 
-import OpenRealQueryResponseDeserializer
+import com.alpriest.energystats.shared.network.OpenRealQueryResponseDeserializer
 import kotlinx.serialization.Serializable
 
 data class OpenRealQueryRequest(
