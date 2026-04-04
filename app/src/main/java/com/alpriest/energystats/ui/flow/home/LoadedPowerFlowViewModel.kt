@@ -21,6 +21,7 @@ import com.alpriest.energystats.shared.models.network.currentData
 import com.alpriest.energystats.shared.models.preview
 import com.alpriest.energystats.shared.models.toUtcMillis
 import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.FoxNetworkRequestException
 import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.services.CurrentValues
@@ -179,7 +180,7 @@ class LoadedPowerFlowViewModel(
                     generation?.updatePvTotal(totals.solar)
 
                     todaysGeneration.value = generation
-                } catch (ex: FoxServerError) {
+                } catch (ex: FoxNetworkRequestException) {
                     bannerAlertManager.showToast("Failed to load totals: ${ex.message}")
                 }
             }
