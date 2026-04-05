@@ -228,7 +228,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchPowerStationList(): PagedPowerStationListResponse {
-        val body = Gson().toJson(PowerStationListRequest())
+        val body = json.encodeToString(PowerStationListRequest())
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -262,7 +262,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
-        val body = Gson().toJson(DataLoggerListRequest())
+        val body = json.encodeToString(DataLoggerListRequest())
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder().url(URLs.getOpenModuleList()).post(body).build()
@@ -288,7 +288,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             return
         }
 
-        val body = Gson().toJson(
+        val body = json.encodeToString(
             SetBatteryTimesRequest(
                 sn = deviceSN,
                 enable1 = times[0].enable,
@@ -309,7 +309,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse {
-        val body = Gson().toJson(FetchDeviceSettingsItemRequest(deviceSN, item.rawValue))
+        val body = json.encodeToString(FetchDeviceSettingsItemRequest(deviceSN, item.rawValue))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -322,7 +322,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
-        val body = Gson().toJson(SetDeviceSettingsItemRequest(deviceSN, item.rawValue, value))
+        val body = json.encodeToString(SetDeviceSettingsItemRequest(deviceSN, item.rawValue, value))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -334,7 +334,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
-        val body = Gson().toJson(FetchPeakShavingSettingsRequest(deviceSN))
+        val body = json.encodeToString(FetchPeakShavingSettingsRequest(deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -342,13 +342,12 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .url(URLs.getDevicePeakShavingSettings())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<FetchPeakShavingSettingsResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<FetchPeakShavingSettingsResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<FetchPeakShavingSettingsResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
-        val body = Gson().toJson(SetPeakShavingSettingsRequest(deviceSN, importLimit, soc))
+        val body = json.encodeToString(SetPeakShavingSettingsRequest(deviceSN, importLimit, soc))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -362,8 +361,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
         val request = Request.Builder().url(URLs.fetchPowerGeneration(deviceSN)).build()
 
-        val type = object : TypeToken<NetworkResponse<PowerGenerationResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<PowerGenerationResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<PowerGenerationResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 

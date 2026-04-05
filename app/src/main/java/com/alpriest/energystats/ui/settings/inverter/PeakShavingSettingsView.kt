@@ -34,7 +34,7 @@ import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
-import com.alpriest.energystats.ui.settings.SettingsColumn
+import com.alpriest.energystats.ui.settings.ErrorTextView
 import com.alpriest.energystats.ui.settings.SettingsColumnWithChild
 import com.alpriest.energystats.ui.settings.SettingsPage
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -66,7 +66,12 @@ class PeakShavingSettingsView(
                     Loaded(viewModel, navController)
                 } else {
                     SettingsPage(modifier) {
-                        SettingsColumn(error = stringResource(R.string.peak_shaving_is_not_available)) { }
+                        SettingsColumnWithChild {
+                            ErrorTextView(
+                                stringResource(R.string.peak_shaving_is_not_available),
+                                modifier = Modifier.padding(vertical = 24.dp)
+                            )
+                        }
                     }
                 }
             }

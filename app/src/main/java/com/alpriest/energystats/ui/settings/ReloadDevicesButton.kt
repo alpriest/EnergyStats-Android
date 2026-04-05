@@ -48,6 +48,7 @@ fun ReloadDevicesButton(configManager: ConfigManaging) {
                 try {
                     isLoading = true
                     configManager.fetchDevices()
+                    configManager.fetchPowerStationDetail()
                     isLoading = false
                 } catch (ex: Exception) {
                     isLoading = false

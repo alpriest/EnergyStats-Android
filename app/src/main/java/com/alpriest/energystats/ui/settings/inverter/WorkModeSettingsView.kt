@@ -70,6 +70,7 @@ class WorkModeSettingsView(
                 onLogout = { coroutineScope.launch { userManager.logout() } },
                 allowRetry = true
             )
+
             is LoadState.Inactive ->
                 ContentWithBottomButtonPair(
                     navController,
@@ -115,7 +116,8 @@ class WorkModeSettingsView(
 
                             FindOutMoreView(uriHandler, "https://github.com/TonyM1958/HA-FoxESS-Modbus/wiki/Inverter-Work-Modes")
                         }
-                    })
+                    }
+                )
         }
     }
 }

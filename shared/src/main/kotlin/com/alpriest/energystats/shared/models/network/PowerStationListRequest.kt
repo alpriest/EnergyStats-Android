@@ -3,6 +3,7 @@ package com.alpriest.energystats.shared.models.network
 import com.alpriest.energystats.shared.models.PowerStationDetail
 import kotlinx.serialization.Serializable
 
+@Serializable
 data class PowerStationListRequest(
     val currentPage: Int = 1,
     val pageSize: Int = 100

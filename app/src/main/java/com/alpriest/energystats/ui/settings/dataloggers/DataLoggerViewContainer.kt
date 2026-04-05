@@ -34,6 +34,8 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.network.DataLoggerStatus
 import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.shared.ui.PowerFlowNegative
+import com.alpriest.energystats.shared.ui.PowerFlowPositive
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.helpers.ErrorView
@@ -131,9 +133,9 @@ fun DataLoggerView(dataLogger: DataLogger) {
         SettingsRow("Signal") { SignalStrengthView(dataLogger.signal) }
         SettingsRow("Status") {
             if (dataLogger.status == DataLoggerStatus.ONLINE) {
-                Icon(imageVector = Icons.Default.CheckCircle, tint = Color.Green, contentDescription = "Connected")
+                Icon(imageVector = Icons.Default.CheckCircle, tint = PowerFlowPositive, contentDescription = "Connected")
             } else {
-                Icon(imageVector = Icons.Default.Cancel, tint = Color.Red, contentDescription = "Disconnected")
+                Icon(imageVector = Icons.Default.Cancel, tint = PowerFlowNegative, contentDescription = "Disconnected")
             }
         }
     }

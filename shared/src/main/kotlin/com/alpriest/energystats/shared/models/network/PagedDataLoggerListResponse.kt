@@ -29,12 +29,14 @@ enum class DataLoggerStatus(val value: Int) {
     OFFLINE(2)
 }
 
+@Serializable
 data class DataLoggerListRequest(
     val pageSize: Int = 20,
     val currentPage: Int = 1,
     val total: Int = 0,
     val condition: Condition = Condition()
 ) {
+    @Serializable
     data class Condition(
         val communication: Int = 0,
         val moduleSN: String = "",

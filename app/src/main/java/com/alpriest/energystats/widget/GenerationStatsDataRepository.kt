@@ -2,9 +2,9 @@ package com.alpriest.energystats.widget
 
 import android.content.Context
 import androidx.glance.appwidget.updateAll
-import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.shared.models.Device
 import com.alpriest.energystats.shared.models.GenerationViewData
+import com.alpriest.energystats.shared.models.WidgetTapAction
 import com.alpriest.energystats.ui.AppContainer
 
 class GenerationStatsDataRepository private constructor() {
@@ -29,7 +29,7 @@ class GenerationStatsDataRepository private constructor() {
             deviceSN = device.deviceSN
         )
 
-        var generationViewData = GenerationViewData(
+        val generationViewData = GenerationViewData(
             today = result.today,
             month = result.month,
             cumulative = result.cumulative
