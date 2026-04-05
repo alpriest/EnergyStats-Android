@@ -525,4 +525,7 @@
     <string name="ct2_display">CT2 display</string>
     <string name="inverter_generation_footnote">Generation 1 inverters use different settings for force charge / discharge. This setting will attempt to **display** the correct values for your inverter. It will not affect setting any schedules.  Examples of a generation 1 are H1, H3, AIO, generation 2 are KH H1-G2, H3 Smart, EVO.</string>
     <string name="inverter_generation">Inverter generation</string>
+    <string name="saved">Saved</string>
+    <string name="failed_to_save_data">Failed to save data</string>
+    <string name="failed_to_load_data">Failed to load data</string>
 </resources>

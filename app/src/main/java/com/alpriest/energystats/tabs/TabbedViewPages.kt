@@ -67,7 +67,8 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.onBuyMeCoffee,
             dependencies.network,
             dependencies.solarForecastingProvider,
-            dependencies.templateStore
+            dependencies.templateStore,
+            dependencies.bannerAlertManager
         )
     }
 }

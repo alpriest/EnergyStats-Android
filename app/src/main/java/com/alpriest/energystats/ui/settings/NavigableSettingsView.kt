@@ -19,6 +19,7 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.tabs.TopBarSettings
+import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.battery.BatteryChargeScheduleSettingsView
 import com.alpriest.energystats.ui.settings.battery.BatteryHeatingScheduleSettingsView
@@ -54,7 +55,8 @@ fun NavigableSettingsView(
     onBuyMeCoffee: () -> Unit,
     network: Networking,
     solarForecastingProvider: () -> SolcastCaching,
-    templateStore: TemplateStoring
+    templateStore: TemplateStoring,
+    bannerAlertManager: BannerAlertManaging
 ) {
     val lastSettingsResetTimeViewKey by remember { mutableStateOf(configManager.lastSettingsResetTime) }
     val navController = rememberNavController()
@@ -159,14 +161,14 @@ fun NavigableSettingsView(
         composable(SettingsScreen.ConfigureExportLimit.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(id = SharedR.string.export_limit), {}, { navController.popBackStack() })
             ProtectedContent(configManager) {
-                DeviceSettingItemView(configManager, network, DeviceSettingsItem.ExportLimit, navController).Content(Modifier)
+                DeviceSettingItemView(configManager, network, DeviceSettingsItem.ExportLimit, navController, bannerAlertManager).Content(Modifier)
             }
         }
 
         composable(SettingsScreen.ConfigureMaxSoc.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(id = SharedR.string.max_soc), {}, { navController.popBackStack() })
             ProtectedContent(configManager) {
-                DeviceSettingItemView(configManager, network, DeviceSettingsItem.MaxSoc, navController).Content(Modifier)
+                DeviceSettingItemView(configManager, network, DeviceSettingsItem.MaxSoc, navController, bannerAlertManager).Content(Modifier)
             }
         }
 

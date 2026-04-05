@@ -27,14 +27,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.preview.FakeConfigManager
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.AlertDialog
-import com.alpriest.energystats.shared.models.LoadState
+import com.alpriest.energystats.ui.flow.BannerAlertManager
+import com.alpriest.energystats.ui.flow.BannerAlertManaging
 import com.alpriest.energystats.ui.helpers.ErrorView
 import com.alpriest.energystats.ui.settings.ContentWithBottomButtonPair
 import com.alpriest.energystats.ui.settings.SettingsColumn
@@ -51,10 +53,11 @@ class DeviceSettingItemView(
     private val configManager: ConfigManaging,
     private val network: Networking,
     private val item: DeviceSettingsItem,
-    private val navController: NavHostController
+    private val navController: NavHostController,
+    private val bannerAlertManager: BannerAlertManaging
 ) {
     @Composable
-    fun Content(modifier: Modifier, viewModel: DeviceSettingsItemViewModel = viewModel(factory = DeviceSettingsItemViewModelFactory(configManager, network, item))) {
+    fun Content(modifier: Modifier, viewModel: DeviceSettingsItemViewModel = viewModel(factory = DeviceSettingsItemViewModelFactory(configManager, network, item, bannerAlertManager))) {
         val message = viewModel.alertDialogMessage.collectAsState().value
         val context = LocalContext.current
 
@@ -139,7 +142,8 @@ fun DeviceSettingItemViewPreview() {
                 network = DemoNetworking(),
                 configManager = FakeConfigManager(),
                 item = DeviceSettingsItem.MaxSoc,
-                navController = NavHostController(LocalContext.current)
+                navController = NavHostController(LocalContext.current),
+                bannerAlertManager = BannerAlertManager()
             ).Content(Modifier)
         }
     }

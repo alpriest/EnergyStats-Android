@@ -2,6 +2,7 @@ package com.alpriest.energystats.shared.models.network
 
 import android.content.Context
 import com.alpriest.energystats.shared.R
+import kotlinx.serialization.Serializable
 
 enum class DeviceSettingsItem(val rawValue: String) {
     ExportLimit("ExportLimit"),
@@ -43,23 +44,27 @@ enum class DeviceSettingsItem(val rawValue: String) {
     }
 }
 
+@Serializable
 data class FetchDeviceSettingsItemRequest(
     val sn: String,
     val key: String
 )
 
+@Serializable
 data class FetchDeviceSettingsItemResponse(
     val value: String,
     val unit: String?,
     val precision: Double?,
     val range: Range?
 ) {
+    @Serializable
     data class Range(
         val min: Double,
         val max: Double
     )
 }
 
+@Serializable
 data class SetDeviceSettingsItemRequest(
     val sn: String,
     val key: String,

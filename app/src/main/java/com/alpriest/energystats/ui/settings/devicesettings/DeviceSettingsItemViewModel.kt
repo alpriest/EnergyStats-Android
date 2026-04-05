@@ -3,12 +3,13 @@ package com.alpriest.energystats.ui.settings.devicesettings
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.R
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
+import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.network.DeviceSettingsItem
 import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
-import com.alpriest.energystats.shared.models.LoadState
-import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -57,7 +58,7 @@ class DeviceSettingsItemViewModel(
                 _viewDataStream.value = viewData
                 _uiState.value = LoadState.Inactive
             } catch (e: Exception) {
-                _uiState.value = LoadState.Error(e, "Failed to load data")
+                _uiState.value = LoadState.Error(e, context.getString(R.string.failed_to_load_data))
             }
         }
     }
@@ -72,8 +73,9 @@ class DeviceSettingsItemViewModel(
                 network.setDeviceSettingsItem(selectedDeviceSN, item, viewDataStream.value.value)
                 resetDirtyState()
                 _uiState.value = LoadState.Inactive
+                alertDialogMessage.value = MonitorAlertDialogData(null, context.getString(R.string.saved))
             } catch (e: Exception) {
-                _uiState.value = LoadState.Error(e, "Failed to save data")
+                _uiState.value = LoadState.Error(e, context.getString(R.string.failed_to_save_data))
             }
         }
     }

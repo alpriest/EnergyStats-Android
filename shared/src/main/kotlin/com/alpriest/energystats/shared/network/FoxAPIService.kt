@@ -317,8 +317,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
             .url(URLs.fetchDeviceSettingsItem())
             .build()
 
-        val type = object : TypeToken<NetworkResponse<FetchDeviceSettingsItemResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<FetchDeviceSettingsItemResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<FetchDeviceSettingsItemResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 

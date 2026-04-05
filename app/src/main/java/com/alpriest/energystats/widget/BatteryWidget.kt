@@ -21,7 +21,6 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
-import androidx.glance.LocalContext
 import androidx.glance.action.Action
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
@@ -43,9 +42,9 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.alpriest.energystats.MainActivity
 import com.alpriest.energystats.shared.models.WidgetTapAction
-import com.alpriest.energystats.shared.ui.Sunny
 import com.alpriest.energystats.shared.ui.Green
 import com.alpriest.energystats.shared.ui.Red
+import com.alpriest.energystats.shared.ui.Sunny
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,15 +70,21 @@ class BatteryWidget : GlanceAppWidget() {
         repository.updateFromSharedConfig(context)
 
         provideContent {
-            BatteryWidgetContent(repository.batteryPercentage, repository.chargeDescription, repository.tapAction)
+            BatteryWidgetContent(context, repository.batteryPercentage, repository.chargeDescription, repository.tapAction)
         }
     }
 }
 
 @Composable
-fun BatteryWidgetContent(amount: Float, chargeDescription: String?, tapAction: WidgetTapAction) {
+fun BatteryWidgetContent(context: Context, amount: Float, chargeDescription: String?, tapAction: WidgetTapAction) {
     val action: Action = when (tapAction) {
-        WidgetTapAction.Launch -> androidx.glance.action.actionStartActivity<MainActivity>()
+        WidgetTapAction.Launch -> {
+            val intent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra("source", "widget")
+            }
+            actionStartActivity(intent)
+        }
         WidgetTapAction.Refresh -> actionRunCallback<BatteryRefreshAction>()
     }
 
