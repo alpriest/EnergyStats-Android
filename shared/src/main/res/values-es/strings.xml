@@ -41,4 +41,7 @@
     <string name="hidden">Oculto</string>
     <string name="line">Línea</string>
     <string name="bar">Barras</string>
+    <string name="unknown">Desconocido</string>
+    <string name="generation_1">Generación 1</string>
+    <string name="generation_2">Generación 2</string>
 </resources>

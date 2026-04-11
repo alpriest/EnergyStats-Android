@@ -16,7 +16,7 @@ data class SolcastSiteResponse(
     val capacity: Double,
     val longitude: Double,
     val latitude: Double,
-    val azimuth: Int,
+    val azimuth: Double,
     val tilt: Double,
     @SerialName("loss_factor")
     val lossFactor: Double?,

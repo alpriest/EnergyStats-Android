@@ -522,4 +522,10 @@
     <string name="ct2_display">Visualización CT2</string>
     <string name="inverter_generation_footnote">Los inversores de generación 1 utilizan configuraciones diferentes para la carga/descarga forzada. Este ajuste intentará **mostrar** los valores correctos para tu inversor. No afectará a la configuración de horarios.</string>
     <string name="inverter_generation">Generación del inversor</string>
+    <string name="saved">Guardado</string>
+    <string name="failed_to_save_data">Error al guardar los datos</string>
+    <string name="failed_to_load_data">Error al cargar los datos</string>
+    <string name="fetch_solar_on_load">Tus predicciones de Solcast se obtendrán cuando se cargue Energy Stats (como máximo una vez cada 8 horas).</string>
+    <string name="fetch_solar_on_summary_tab">Tus predicciones de Solcast se obtendrán cuando visites la pestaña Resumen (como máximo una vez cada 8 horas). Solcast solo proporciona datos futuros.</string>
+    <string name="fetch_solar_footer">Puedes habilitar \"Predicción solar de Solcast\" en el selector de variables de la pestaña Parámetros. Dado que Solcast solo proporciona datos futuros, debes haber abierto la aplicación ayer para ver la predicción de hoy.</string>
 </resources>

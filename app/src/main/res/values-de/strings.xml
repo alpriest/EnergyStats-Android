@@ -522,4 +522,10 @@
     <string name="ct2_display">CT2-Anzeige</string>
     <string name="inverter_generation_footnote">Wechselrichter der Generation 1 verwenden andere Einstellungen für das erzwungene Laden/Entladen. Diese Einstellung versucht, die korrekten Werte für Ihren Wechselrichter **anzuzeigen**. Sie hat keinen Einfluss auf das Einstellen von Zeitplänen.</string>
     <string name="inverter_generation">Wechselrichter-Generation</string>
+    <string name="saved">Gespeichert</string>
+    <string name="failed_to_save_data">Speichern der Daten fehlgeschlagen</string>
+    <string name="failed_to_load_data">Laden der Daten fehlgeschlagen</string>
+    <string name="fetch_solar_on_load">Deine Solcast-Prognosen werden beim Laden von Energy Stats abgerufen (höchstens alle 8 Stunden).</string>
+    <string name="fetch_solar_on_summary_tab">Deine Solcast-Prognosen werden abgerufen, wenn du den Tab „Übersicht“ öffnest (höchstens alle 8 Stunden). Solcast stellt nur zukünftige Daten bereit.</string>
+    <string name="fetch_solar_footer">Du kannst „Solcast-Solarprognose“ im Variablenauswahlmenü auf dem Parameter-Tab aktivieren. Da Solcast nur zukünftige Daten bereitstellt, musst du die App gestern geöffnet haben, um die heutige Prognose zu sehen.</string>
 </resources>

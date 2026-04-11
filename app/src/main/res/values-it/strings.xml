@@ -523,4 +523,10 @@
     <string name="ct2_display">Visualizzazione CT2</string>
     <string name="inverter_generation_footnote">Gli inverter di generazione 1 utilizzano impostazioni diverse per la carica/scarica forzata. Questa impostazione cercherà di **visualizzare** i valori corretti per il tuo inverter. Non influisce sulla configurazione delle pianificazioni.</string>
     <string name="inverter_generation">Generazione inverter</string>
+    <string name="saved">Salvato</string>
+    <string name="failed_to_save_data">Salvataggio dei dati non riuscito</string>
+    <string name="failed_to_load_data">Caricamento dei dati non riuscito</string>
+    <string name="fetch_solar_on_load">Le tue previsioni Solcast verranno recuperate quando Energy Stats viene caricato (al massimo una volta ogni 8 ore).</string>
+    <string name="fetch_solar_on_summary_tab">Le tue previsioni Solcast verranno recuperate quando visiti la scheda Riepilogo (al massimo una volta ogni 8 ore). Solcast fornisce solo dati futuri.</string>
+    <string name="fetch_solar_footer">Puoi abilitare \"Previsione solare Solcast\" nel selettore delle variabili nella scheda Parametri. Poiché Solcast fornisce solo dati futuri, devi aver aperto l’app ieri per visualizzare la previsione di oggi.</string>
 </resources>

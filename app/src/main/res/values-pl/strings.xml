@@ -523,4 +523,10 @@
     <string name="ct2_display">Wyświetlanie CT2</string>
     <string name="inverter_generation_footnote">Inwertery generacji 1 używają innych ustawień dla wymuszonego ładowania/rozładowania. To ustawienie spróbuje **wyświetlić** poprawne wartości dla Twojego inwertera. Nie wpływa na ustawianie harmonogramów.</string>
     <string name="inverter_generation">Generacja falownika</string>
+    <string name="saved">Zapisano</string>
+    <string name="failed_to_save_data">Nie udało się zapisać danych</string>
+    <string name="failed_to_load_data">Nie udało się załadować danych</string>
+    <string name="fetch_solar_on_load">Twoje prognozy Solcast zostaną pobrane podczas uruchamiania Energy Stats (maksymalnie raz na 8 godzin).</string>
+    <string name="fetch_solar_on_summary_tab">Twoje prognozy Solcast zostaną pobrane, gdy odwiedzisz zakładkę Podsumowanie (maksymalnie raz na 8 godzin). Solcast udostępnia tylko dane dotyczące przyszłości.</string>
+    <string name="fetch_solar_footer">Możesz włączyć „Prognozę solarną Solcast” w selektorze zmiennych na karcie Parametry. Ponieważ Solcast udostępnia tylko dane dotyczące przyszłości, musisz otworzyć aplikację wczoraj, aby zobaczyć dzisiejszą prognozę.</string>
 </resources>

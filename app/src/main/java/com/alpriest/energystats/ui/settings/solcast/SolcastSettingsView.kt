@@ -65,6 +65,12 @@ class SolcastSettingsView(
         val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
         trackScreenView("Solar Prediction", "SolcastSettingsView")
         val fetchSolcastOnAppLaunch = rememberSaveable { mutableStateOf(configManager.fetchSolcastOnAppLaunch) }
+        val fetchDescription = if (configManager.fetchSolcastOnAppLaunch) {
+            stringResource(R.string.fetch_solar_on_load)
+        } else {
+            stringResource(R.string.fetch_solar_on_summary_tab)
+        }
+        val fetchDescription2 = stringResource(R.string.fetch_solar_footer)
 
         MonitorAlertDialog(viewModel)
 
@@ -94,7 +100,7 @@ class SolcastSettingsView(
                     }
 
                     SettingsColumn(
-                        footer = stringResource(R.string.solcast_fetch_on_launch),
+                        footer = fetchDescription + "\n\n" + fetchDescription2,
                         padding = SettingsPaddingValues.withVertical(),
                     ) {
                         SettingsCheckbox(
@@ -200,7 +206,7 @@ private fun Row(title: String, value: String) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 500)
+@Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun SolcastSettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {

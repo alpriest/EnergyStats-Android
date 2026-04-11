@@ -528,4 +528,7 @@
     <string name="saved">Saved</string>
     <string name="failed_to_save_data">Failed to save data</string>
     <string name="failed_to_load_data">Failed to load data</string>
+    <string name="fetch_solar_on_load">Your Solcast predictions will be fetched when Energy Stats loads (at most once every 8 hours).</string>
+    <string name="fetch_solar_on_summary_tab">Your Solcast predictions will be fetched when you visit the Summary tab (at most once every 8 hours). Solcast only provides future data.</string>
+    <string name="fetch_solar_footer">You can enable \'Solcast solar prediction\' on the parameters tab variable chooser. Since Solcast only provides future data, you must have opened the app yesterday to view today’s prediction.</string>
 </resources>

@@ -76,7 +76,7 @@ class PreHomeViewModel(
     }
 
     private suspend fun fetchDeviceCapacity() {
-        if (configManager.currentDevice.value?.capacity == null) {
+        if (configManager.currentDevice.value?.capacity == null && credentialStore.hasCredentials()) {
             try {
                 configManager.fetchDevices()
             } catch (_: Exception) {
