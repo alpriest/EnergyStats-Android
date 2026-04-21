@@ -147,7 +147,7 @@ class EditPhaseViewModel(val navController: NavHostController, val configManager
                     field.key to 100.0
 
                 else ->
-                    field.key to field.value
+                    field.key to (userSpecifiedFields.firstOrNull { it.key.equals(field.key, ignoreCase = true) }?.value ?: field.value)
             }
         }.toMap()
 
