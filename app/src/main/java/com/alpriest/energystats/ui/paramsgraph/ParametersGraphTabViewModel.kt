@@ -60,9 +60,14 @@ data class ParametersGraphProducerData(
 
 fun ParametersGraphProducerData.yScale(): AxisScale {
     return if (entries.isNotEmpty()) {
-        AxisScale(entries.minOf { it.minOf { it.y } } * 1.1f, entries.maxOf { it.maxOf { it.y } } * 1.1f)
+        val minY = entries.minOf { it.minOf { it.y } }
+        val maxY = entries.maxOf { it.maxOf { it.y } }
+
+        AxisScale(
+            if (minY < 0f) minY * 1.1f else minY * 0.9f,
+            if (maxY < 0f) maxY * 0.9f else maxY * 1.1f
+        )
     } else {
-        // Default scale when no visible data exists for this unit.
         AxisScale(0f, 1f)
     }
 }
