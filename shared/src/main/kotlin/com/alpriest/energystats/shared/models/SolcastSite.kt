@@ -5,6 +5,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Serializer
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
@@ -17,18 +19,56 @@ import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.double
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.serializer
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@Serializable
+@Serializable(with = SolcastSettingsSerializer::class)
 data class SolcastSettings(
-    val apiKey: String?,
-    val sites: List<SolcastSite>
+    val apiKey: String? = null,
+    val sites: List<SolcastSite> = emptyList()
 ) {
     companion object {
         val defaults: SolcastSettings = SolcastSettings(apiKey = null, sites = emptyList())
         val demo: SolcastSettings = SolcastSettings(
             apiKey = "123", sites = listOf(SolcastSite.preview())
+        )
+    }
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@Serializer(forClass = SolcastSettings::class)
+object SolcastSettingsSerializer : KSerializer<SolcastSettings> {
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("SolcastSettings") {
+        element<String?>("apiKey", isOptional = true)
+        element<List<SolcastSite>>("sites", isOptional = true)
+    }
+
+    override fun serialize(encoder: kotlinx.serialization.encoding.Encoder, value: SolcastSettings) {
+        encoder.encodeStructure(descriptor) {
+            value.apiKey?.let { encodeStringElement(descriptor, 0, it) }
+            encodeSerializableElement(descriptor, 1, ListSerializer(SolcastSiteSerializer), value.sites)
+        }
+    }
+
+    override fun deserialize(decoder: kotlinx.serialization.encoding.Decoder): SolcastSettings {
+        var apiKey: String? = null
+        var sites: List<SolcastSite> = emptyList()
+
+        decoder.decodeStructure(descriptor) {
+            while (true) {
+                when (val index = decodeElementIndex(descriptor)) {
+                    CompositeDecoder.DECODE_DONE -> break
+                    0 -> apiKey = decodeNullableSerializableElement(descriptor, index, serializer<String>().nullable)
+                    1 -> sites = decodeSerializableElement(descriptor, index, ListSerializer(SolcastSiteSerializer))
+                    else -> error("Unexpected index: $index")
+                }
+            }
+        }
+
+        return SolcastSettings(
+            apiKey = apiKey,
+            sites = sites
         )
     }
 }
