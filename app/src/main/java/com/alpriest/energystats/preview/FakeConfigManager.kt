@@ -107,6 +107,7 @@ class FakeConfigManager : ConfigManaging {
     override var showBatteryMaxCurrentCharge: Boolean = false
     override var scheduleProperties: Map<String, SchedulePropertyDefinition> = emptyMap()
     override var inverterGeneration: InverterGeneration = InverterGeneration.Unknown
+    override var showTodayPercentageSolarForecastAchieved: Boolean = true
 
     override var devices: List<Device> = listOf(
         Device(

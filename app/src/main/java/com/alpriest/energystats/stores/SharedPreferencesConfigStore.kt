@@ -34,8 +34,8 @@ import com.alpriest.energystats.ui.summary.MonthYear
 import com.alpriest.energystats.ui.summary.SummaryDateRangeSerialised
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.InstanceCreator
 import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.json.Json
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -122,7 +122,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         READ_ONLY_PASSCODE,
         TIME_PERIOD_GRAPH_STYLE_ON_STATS,
         SHOW_BATTERY_MAX_CURRENT_CHARGE,
-        INVERTER_GENERATION
+        INVERTER_GENERATION,
+        SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED
     }
 
     // Local in-memory only
@@ -469,23 +470,18 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     override var solcastSettings: SolcastSettings
         get() {
-            val gson = GsonBuilder()
-                .registerTypeAdapter(
-                    SolcastSettings::class.java,
-                    InstanceCreator<SolcastSettings> { SolcastSettings(apiKey = null, sites = emptyList()) }
-                ).create()
-
             var data = sharedPreferences.getString(SharedPreferenceDisplayKey.SOLCAST_SETTINGS.name, null)
+
             if (data == null) {
-                data = gson.toJson(SolcastSettings.defaults)
+                data = Json.encodeToString(SolcastSettings.defaults)
                 solcastSettings = SolcastSettings.defaults
             }
 
-            return gson.fromJson(data, object : TypeToken<SolcastSettings>() {}.type)
+            return Json.decodeFromString<SolcastSettings>(data)
         }
         set(value) {
             sharedPreferences.edit {
-                val jsonString = Gson().toJson(value)
+                val jsonString = Json.encodeToString(value)
                 putString(SharedPreferenceDisplayKey.SOLCAST_SETTINGS.name, jsonString)
             }
         }
@@ -904,6 +900,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putInt(SharedPreferenceDisplayKey.INVERTER_GENERATION.name, value.value)
+            }
+        }
+
+    override var showTodayPercentageSolarForecastAchieved: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED.name, true)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED.name, value)
             }
         }
 }

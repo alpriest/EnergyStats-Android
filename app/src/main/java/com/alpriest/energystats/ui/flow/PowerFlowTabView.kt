@@ -74,6 +74,9 @@ import com.alpriest.energystats.ui.login.UserManaging
 import com.alpriest.energystats.ui.settings.inverter.schedule.PopupScheduleSummaryView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStore
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
+import com.alpriest.energystats.ui.settings.solcast.SolcastCache
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -86,11 +89,12 @@ class PowerFlowTabViewModelFactory(
     private val appSettingsStream: StateFlow<AppSettings>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
-    private val apiKeyProvider: () -> String?
+    private val apiKeyProvider: () -> String?,
+    private val solarForecastProvider: () -> SolcastCaching
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PowerFlowTabViewModel(application, network, configManager, appSettingsStream, widgetDataSharer, bannerAlertManager, apiKeyProvider) as T
+        return PowerFlowTabViewModel(application, network, configManager, appSettingsStream, widgetDataSharer, bannerAlertManager, apiKeyProvider, solarForecastProvider) as T
     }
 }
 
@@ -114,6 +118,7 @@ class PowerFlowTabView(
     private val bannerAlertManager: BannerAlertManaging,
     private val templateStore: TemplateStoring,
     private val apiKeyProvider: () -> String?,
+    private val solarForecastProvider: () -> SolcastCaching
 ) {
     private fun largeRadialGradient(colors: List<Color>) = object : ShaderBrush() {
         override fun createShader(size: Size): Shader {
@@ -130,7 +135,7 @@ class PowerFlowTabView(
     @Composable
     fun Content(
         viewModel: PowerFlowTabViewModel = viewModel(
-            factory = PowerFlowTabViewModelFactory(application, network, configManager, this.appSettingsStream, widgetDataSharer, bannerAlertManager, apiKeyProvider)
+            factory = PowerFlowTabViewModelFactory(application, network, configManager, this.appSettingsStream, widgetDataSharer, bannerAlertManager, apiKeyProvider, solarForecastProvider)
         ),
         appSettingsStream: StateFlow<AppSettings>
     ) {
@@ -261,7 +266,8 @@ fun PowerFlowTabViewPreview() {
         MutableStateFlow(AppSettings.demo()),
         WidgetDataSharer.preview(),
         BannerAlertManager(),
-        { "apiKeyProvider" }
+        { "apiKeyProvider" },
+        { DemoSolarForecasting() }
     )
     val appSettingsStream = MutableStateFlow(AppSettings.demo())
 

@@ -139,7 +139,8 @@ fun AppSettings.Companion.demo(
     allowNegativeHouseLoad: Boolean = false,
     showOutputEnergyOnStats: Boolean = false,
     isReadOnly: Boolean = false,
-    showBatteryMaxCurrentCharge: Boolean = false
+    showBatteryMaxCurrentCharge: Boolean = false,
+    showTodayPercentageSolarForecastAchieved: Boolean = true
 ): AppSettings {
     return AppSettings(
         useLargeDisplay = useLargeDisplay,

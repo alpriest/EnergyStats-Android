@@ -682,6 +682,13 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
         appSettingsStore.update(AppSettings.demo())
     }
 
+    override var showTodayPercentageSolarForecastAchieved: Boolean
+        get() = config.showTodayPercentageSolarForecastAchieved
+        set(value) {
+            config.showTodayPercentageSolarForecastAchieved = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
     init {
         val selectedSn = selectedDeviceSN
         val initialDevice = if (selectedSn.isNullOrBlank()) {

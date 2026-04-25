@@ -71,6 +71,7 @@ class SolcastSettingsView(
             stringResource(R.string.fetch_solar_on_summary_tab)
         }
         val fetchDescription2 = stringResource(R.string.fetch_solar_footer)
+        val showTodayPercentageSolarForecastAchievedState = rememberSaveable { mutableStateOf(configManager.showTodayPercentageSolarForecastAchieved) }
 
         MonitorAlertDialog(viewModel)
 
@@ -109,6 +110,15 @@ class SolcastSettingsView(
                             onUpdate = { configManager.fetchSolcastOnAppLaunch = it }
                         )
                     }
+
+                    SettingsColumn {
+                        SettingsCheckbox(
+                            title = stringResource(R.string.show_percentage_of_solar_forecast_achieved),
+                            state = showTodayPercentageSolarForecastAchievedState,
+                            onUpdate = { configManager.showTodayPercentageSolarForecastAchieved = it }
+                        )
+                    }
+
 
                     viewData.sites.forEach {
                         SolcastSiteView(it)

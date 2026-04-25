@@ -48,7 +48,8 @@ val previewLoadedPowerFlowViewModel = LoadedPowerFlowViewModel(
     FakeConfigManager(),
     currentDevice = Device.preview(),
     network = DemoNetworking(),
-    BannerAlertManager()
+    BannerAlertManager(),
+    78.0
 )
 
 class LoadedPowerFlowViewModel(
@@ -58,7 +59,8 @@ class LoadedPowerFlowViewModel(
     val configManager: ConfigManaging,
     val currentDevice: Device,
     val network: Networking,
-    private val bannerAlertManager: BannerAlertManaging
+    private val bannerAlertManager: BannerAlertManaging,
+    val todaySolarForecast: Double?
 ) : ViewModel() {
     var solarStrings: List<StringPower> = listOf()
     var inverterTemperatures: InverterTemperatures? = null
@@ -74,6 +76,7 @@ class LoadedPowerFlowViewModel(
     val todaysGeneration = MutableStateFlow<GenerationViewModel?>(null)
     val faults = MutableStateFlow<List<String>>(listOf())
     val displayStrings = MutableStateFlow<List<StringPower>>(listOf())
+    val todayPercentageSolarForecastAchieved = MutableStateFlow<Double?>(null)
 
     init {
         loadDeviceStatus()
@@ -180,6 +183,14 @@ class LoadedPowerFlowViewModel(
                     generation?.updatePvTotal(totals.solar)
 
                     todaysGeneration.value = generation
+
+                    todaySolarForecast?.let {
+                        generation?.let {
+                            if (totals.solar > 0) {
+                                todayPercentageSolarForecastAchieved.value = (generation.todayGeneration / todaySolarForecast) * 100.0
+                            }
+                        }
+                    }
                 } catch (ex: FoxNetworkRequestException) {
                     bannerAlertManager.showToast("Failed to load totals: ${ex.message}")
                 }

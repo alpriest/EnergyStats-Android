@@ -156,20 +156,9 @@ class SolarForecastViewModel(
         } ?: 0.0
     }
 
-    private fun isSameDay(date1: Date, date2: Date): Boolean {
-        val localDate1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-        val localDate2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-
-        return localDate1 == localDate2
-    }
 
     private fun getTomorrow(): Date {
         val date = LocalDate.now().plusDays(1)
-        return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
-    }
-
-    private fun getToday(): Date {
-        val date = LocalDate.now()
         return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
     }
 
@@ -187,6 +176,18 @@ class SolarForecastViewModel(
             canRefreshStream.value = System.currentTimeMillis() - lastSolcastRefresh.toInstant(ZoneOffset.UTC).toEpochMilli() > oneHourInMillis
         }
     }
+}
+
+fun getToday(): Date {
+    val date = LocalDate.now()
+    return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+}
+
+fun isSameDay(date1: Date, date2: Date): Boolean {
+    val localDate1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+    val localDate2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+
+    return localDate1 == localDate2
 }
 
 data class DateFloatEntry(

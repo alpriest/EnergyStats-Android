@@ -109,5 +109,6 @@ class FakeStoredConfigStore(
     override var readOnlyPasscode: String = "",
     override var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Bar,
     override var showBatteryMaxCurrentCharge: Boolean = false,
-    override var inverterGeneration: InverterGeneration = InverterGeneration.Unknown
+    override var inverterGeneration: InverterGeneration = InverterGeneration.Unknown,
+    override var showTodayPercentageSolarForecastAchieved: Boolean = true
 ) : StoredConfig

@@ -14,30 +14,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.models.BatteryViewModel
 import com.alpriest.energystats.preview.FakeConfigManager
-import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.models.Device
-import com.alpriest.energystats.shared.ui.PylonView
-import com.alpriest.energystats.ui.flow.BannerAlertManager
-import com.alpriest.energystats.shared.services.CurrentValues
-import com.alpriest.energystats.ui.flow.energy
-import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
-import com.alpriest.energystats.ui.flow.home.ShimmerText
-import com.alpriest.energystats.shared.models.StringPower
-import com.alpriest.energystats.shared.ui.iconBackgroundColor
 import com.alpriest.energystats.shared.models.AppSettings
-import com.alpriest.energystats.ui.theme.EnergyStatsTheme
+import com.alpriest.energystats.shared.models.BatteryViewModel
+import com.alpriest.energystats.shared.models.Device
+import com.alpriest.energystats.shared.models.StringPower
 import com.alpriest.energystats.shared.models.demo
 import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.models.preview
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.services.CurrentValues
+import com.alpriest.energystats.shared.ui.PylonView
+import com.alpriest.energystats.shared.ui.iconBackgroundColor
+import com.alpriest.energystats.ui.flow.BannerAlertManager
+import com.alpriest.energystats.ui.flow.energy
+import com.alpriest.energystats.ui.flow.home.LoadedPowerFlowViewModel
+import com.alpriest.energystats.ui.flow.home.ShimmerText
+import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -136,7 +135,8 @@ fun GridIconViewPreview() {
             FakeConfigManager(),
             currentDevice = Device.preview(),
             network = DemoNetworking(),
-            BannerAlertManager()
+            BannerAlertManager(),
+            5.0
         )
     }
 

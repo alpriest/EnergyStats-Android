@@ -23,6 +23,8 @@ import com.alpriest.energystats.ui.flow.powerflowstate.EmptyUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.LoadingNowUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
+import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
+import com.alpriest.energystats.ui.summary.isSameDay
 import com.alpriest.energystats.widget.BatteryWidget
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.Date
 import java.util.concurrent.CancellationException
 import java.util.concurrent.locks.ReentrantLock
 
@@ -42,7 +45,8 @@ class PowerFlowTabViewModel(
     private val appSettingsStream: StateFlow<AppSettings>,
     private val widgetDataSharer: WidgetDataSharing,
     private val bannerAlertManager: BannerAlertManaging,
-    private val apiKeyProvider: () -> String?
+    private val apiKeyProvider: () -> String?,
+    private val solarForecastProvider: () -> SolcastCaching
 ) : AndroidViewModel(application) {
 
     private var currentViewModel: CurrentStatusCalculator? = null
@@ -200,6 +204,7 @@ class PowerFlowTabViewModel(
                 val percentageRemaining = BatteryCapacityCalculator(configManager.batteryCapacity.toDouble().toInt(), configManager.minSOC)
                     .batteryPercentageRemaining(battery.chargePower, battery.chargeLevel)
                 val chargeDescription = percentageRemaining?.batteryPercentageRemainingDuration(application)
+                val todaySolarForecast = loadSolcastTotalForToday()
 
                 widgetDataSharer.batteryData = BatteryData(chargeDescription = chargeDescription, battery.chargeLevel)
                 BatteryWidget().updateAll(application)
@@ -212,7 +217,8 @@ class PowerFlowTabViewModel(
                     configManager = configManager,
                     currentDevice = currentDevice,
                     network = network,
-                    bannerAlertManager
+                    bannerAlertManager,
+                    todaySolarForecast
                 )
                 uiState.value = UiPowerFlowLoadState(PowerFlowLoadState.Loaded(summary))
                 updateMessage.value = UiUpdateMessageState(EmptyUpdateMessageState)
@@ -245,5 +251,23 @@ class PowerFlowTabViewModel(
         }
     }
 
-    private val TAG = "BatteryDataRepository"
+    private suspend fun loadSolcastTotalForToday(): Double? {
+        val settings = configManager.solcastSettings
+        val apiKey = settings.apiKey ?: return null
+        if (settings.sites.isEmpty()) {
+             return null
+        }
+        val nowDate = Date()
+        val service = solarForecastProvider()
+        val siteTotals = settings.sites.map { site ->
+            val data = service.fetchForecast(site, apiKey, false)
+            val todayForecasts = data.forecasts
+                .filter { isSameDay(it.periodEnd, nowDate) }
+                .filter { it.periodEnd < nowDate }
+
+            todayForecasts.map { it.pvEstimate }
+        }
+
+        return siteTotals.sumOf { it.sum() }
+    }
 }

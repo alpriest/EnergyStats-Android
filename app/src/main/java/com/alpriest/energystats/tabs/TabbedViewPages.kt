@@ -27,7 +27,8 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
             dependencies.widgetDataSharer,
             dependencies.bannerAlertManager,
             dependencies.templateStore,
-            dependencies.apiKeyProvider
+            dependencies.apiKeyProvider,
+            dependencies.solarForecastingProvider
         ).Content(appSettingsStream = dependencies.appSettingsStream)
 
         1 -> NavigableStatsGraphTabView(

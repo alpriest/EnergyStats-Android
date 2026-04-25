@@ -104,6 +104,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var showBatteryMaxCurrentCharge: Boolean
     var scheduleProperties: Map<String, SchedulePropertyDefinition>
     var inverterGeneration: InverterGeneration
+    var showTodayPercentageSolarForecastAchieved: Boolean
 }
 
 interface ScheduleTemplateConfigManager {

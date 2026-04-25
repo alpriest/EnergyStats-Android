@@ -99,6 +99,7 @@ interface StoredConfig {
     var statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle
     var showBatteryMaxCurrentCharge: Boolean
     var inverterGeneration: InverterGeneration
+    var showTodayPercentageSolarForecastAchieved: Boolean
 }
 
 interface CurrentStatusCalculatorConfig {

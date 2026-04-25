@@ -63,6 +63,7 @@ import com.alpriest.energystats.ui.flow.battery.BatteryPowerFlow
 import com.alpriest.energystats.ui.flow.energy
 import com.alpriest.energystats.ui.flow.grid.GridIconView
 import com.alpriest.energystats.ui.flow.grid.GridPowerFlowView
+import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -85,19 +86,30 @@ fun LoadedPowerFlowView(
     val earnings = loadedPowerFlowViewModel.earnings.collectAsState().value
     val solarTotal = loadedPowerFlowViewModel.todaysGeneration.collectAsState().value
     val faults = loadedPowerFlowViewModel.faults.collectAsState().value
+    val todayPercentageSolarForecastAchieved = loadedPowerFlowViewModel.todayPercentageSolarForecastAchieved.collectAsState().value
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
     ) {
         if (theme.totalYieldModel != TotalYieldModel.Off) {
-            ShimmerText(
-                shimmering = solarTotal == null,
-                text = stringResource(
-                    id = R.string.solarYieldToday,
-                    (solarTotal?.todayGeneration ?: 0.0).energy(theme.displayUnit, 1)
+            Row {
+                ShimmerText(
+                    shimmering = solarTotal == null,
+                    text = stringResource(
+                        id = R.string.solarYieldToday,
+                        (solarTotal?.todayGeneration ?: 0.0).energy(theme.displayUnit, 1)
+                    )
                 )
-            )
+
+                todayPercentageSolarForecastAchieved?.let {
+                    if (configManager.showTodayPercentageSolarForecastAchieved) {
+                        Text(
+                            ", ${"%.0f".format(todayPercentageSolarForecastAchieved)}% of forecast"
+                        )
+                    }
+                }
+            }
         }
 
         if (theme.showFinancialSummaryOnFlowPage) {
@@ -338,7 +350,8 @@ fun SummaryPowerFlowViewPreview() {
                 MutableStateFlow(AppSettings.demo().copy(decimalPlaces = 3)),
                 WidgetDataSharer.preview(),
                 BannerAlertManager(),
-                { "apiKeyProvider" }
+                { "apiKeyProvider" },
+                { DemoSolarForecasting() }
             ),
             loadedPowerFlowViewModel = LoadedPowerFlowViewModel(
                 currentValuesStream = MutableStateFlow(
@@ -354,7 +367,8 @@ fun SummaryPowerFlowViewPreview() {
                 FakeConfigManager(),
                 currentDevice = Device.preview(),
                 network = DemoNetworking(),
-                BannerAlertManager()
+                BannerAlertManager(),
+                5.0
             ),
             appSettingsStream = MutableStateFlow(
                 AppSettings.demo(
