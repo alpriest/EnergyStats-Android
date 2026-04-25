@@ -102,8 +102,11 @@ class SolarForecastView(
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
-                data.map { site ->
+                data.forEach { site ->
                     ForecastView(site.today, site.todayTotal, site.name, stringResource(R.string.forecast_today), appSettingsStream)
+                }
+
+                data.forEach { site ->
                     ForecastView(site.tomorrow, site.tomorrowTotal, site.name, stringResource(R.string.forecast_tomorrow), appSettingsStream)
                 }
             }

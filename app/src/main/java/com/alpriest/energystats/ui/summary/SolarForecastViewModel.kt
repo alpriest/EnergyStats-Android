@@ -85,9 +85,9 @@ class SolarForecastViewModel(
                     SolarForecastViewData(
                         error = null,
                         today = asGraphData(todayData),
-                        todayTotal = total(todayData),
+                        todayTotal = todayData.total(),
                         tomorrow = asGraphData(tomorrowData),
-                        tomorrowTotal = total(tomorrowData),
+                        tomorrowTotal = tomorrowData.total(),
                         name = site.name,
                         resourceId = site.resourceId
                     )
@@ -138,25 +138,6 @@ class SolarForecastViewModel(
         )
     }
 
-    fun total(forecasts: List<SolcastForecastResponse>): Double {
-        return forecasts.fold(0.0) { total, forecast ->
-            val periodHours = convertPeriodToHours(period = forecast.period)
-            total + (forecast.pvEstimate * periodHours)
-        }
-    }
-
-    private fun convertPeriodToHours(period: String): Double {
-        // Regular expression to extract the numeric value from the period string (assuming format "PT30M")
-        val regex = """(\d+)""".toRegex()
-        val matchResult = regex.find(period)
-
-        return matchResult?.let {
-            val periodMinutes = it.groupValues[1].toDoubleOrNull()
-            periodMinutes?.div(60.0) ?: 0.0  // Convert minutes to hours, defaulting to 0.0 if null
-        } ?: 0.0
-    }
-
-
     private fun getTomorrow(): Date {
         val date = LocalDate.now().plusDays(1)
         return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
@@ -195,3 +176,22 @@ data class DateFloatEntry(
     val x: Float,
     val y: Float
 )
+
+
+fun List<SolcastForecastResponse>.total(): Double {
+    return this.fold(0.0) { total, forecast ->
+        val periodHours = convertPeriodToHours(period = forecast.period)
+        total + (forecast.pvEstimate * periodHours)
+    }
+}
+
+private fun convertPeriodToHours(period: String): Double {
+    // Regular expression to extract the numeric value from the period string (assuming format "PT30M")
+    val regex = """(\d+)""".toRegex()
+    val matchResult = regex.find(period)
+
+    return matchResult?.let {
+        val periodMinutes = it.groupValues[1].toDoubleOrNull()
+        periodMinutes?.div(60.0) ?: 0.0  // Convert minutes to hours, defaulting to 0.0 if null
+    } ?: 0.0
+}

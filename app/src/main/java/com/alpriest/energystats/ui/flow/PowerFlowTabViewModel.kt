@@ -25,6 +25,7 @@ import com.alpriest.energystats.ui.flow.powerflowstate.PendingUpdateMessageState
 import com.alpriest.energystats.ui.flow.powerflowstate.UiUpdateMessageState
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.summary.isSameDay
+import com.alpriest.energystats.ui.summary.total
 import com.alpriest.energystats.widget.BatteryWidget
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -265,9 +266,9 @@ class PowerFlowTabViewModel(
                 .filter { isSameDay(it.periodEnd, nowDate) }
                 .filter { it.periodEnd < nowDate }
 
-            todayForecasts.map { it.pvEstimate }
+            todayForecasts.total()
         }
 
-        return siteTotals.sumOf { it.sum() }
+        return siteTotals.sumOf { it }
     }
 }
