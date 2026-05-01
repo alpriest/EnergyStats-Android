@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
-import com.alpriest.energystats.shared.helpers.w
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
+import com.alpriest.energystats.shared.helpers.w
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.ui.settings.inverter.SettingsRow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,9 +29,9 @@ class PowerStationSettingsView(private val configManager: ConfigManaging) {
         configManager.powerStationDetail?.let {
             SettingsPage {
                 SettingsColumn {
-                    SettingsRow(stringResource(R.string.name), it.stationName)
-                    SettingsRow(stringResource(R.string.capacity), it.capacity.w())
-                    SettingsRow(stringResource(R.string.timezone), it.timezone)
+                    SettingsRow(stringResource(R.string.name), value = it.stationName)
+                    SettingsRow(stringResource(R.string.capacity), value = it.capacity.w())
+                    SettingsRow(stringResource(R.string.timezone), value = it.timezone)
                 }
             }
         }

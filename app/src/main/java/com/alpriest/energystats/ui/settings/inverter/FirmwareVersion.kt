@@ -79,9 +79,9 @@ fun FirmwareVersionView(device: Device, network: Networking) {
                     uriHandler.openUri("https://foxesscommunity.com/viewforum.php?f=29")
                 },
         ) {
-            SettingsRow("Manager", it.manager)
-            SettingsRow("Slave", it.slave)
-            SettingsRow("Master", it.master)
+            SettingsRow("Manager", value = it.manager)
+            SettingsRow("Slave", value = it.slave)
+            SettingsRow("Master", value = it.master)
         }
     } ?: SettingsColumn {
         if (isLoading) {

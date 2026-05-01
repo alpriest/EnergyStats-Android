@@ -128,8 +128,8 @@ class DataLoggerViewContainer(
 @Composable
 fun DataLoggerView(dataLogger: DataLogger) {
     SettingsColumnWithChild {
-        SettingsRow("Module SN", dataLogger.moduleSN)
-        SettingsRow("Station ID", dataLogger.stationID)
+        SettingsRow("Module SN", value = dataLogger.moduleSN)
+        SettingsRow("Station ID", value = dataLogger.stationID)
         SettingsRow("Signal") { SignalStrengthView(dataLogger.signal) }
         SettingsRow("Status") {
             if (dataLogger.status == DataLoggerStatus.ONLINE) {

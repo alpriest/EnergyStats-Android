@@ -195,7 +195,7 @@ class SolarForecastView(
                 .fillMaxWidth()
         ) {
             if (tooManyRequests) {
-                Text("You have exceeded your free daily limit of requests. Please try tomorrow.")
+                Text(stringResource(R.string.you_have_exceeded_your_free_daily_limit_of_requests_please_try_tomorrow))
             } else {
                 ESButton(
                     enabled = canRefresh,
@@ -205,12 +205,12 @@ class SolarForecastView(
                         }
                     }
                 ) {
-                    Text("Refresh Solcast now")
+                    Text(stringResource(R.string.refresh_solcast_now))
                 }
 
                 if (!canRefresh) {
                     Text(
-                        "Due to Solcast API rate limiting, please wait for an hour before refreshing again.",
+                        stringResource(R.string.due_to_solcast_api_rate_limiting_please_wait_for_an_hour_before_refreshing_again),
                         color = DimmedTextColor,
                         fontSize = appSettings.smallFontSize()
                     )

@@ -178,11 +178,11 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 @Composable
 fun DeviceVersionView(device: Device) {
     SettingsColumnWithChild {
-        SettingsRow(stringResource(R.string.station_name), device.stationName)
-        SettingsRow(stringResource(R.string.device_serial_no), device.deviceSN)
-        SettingsRow(stringResource(R.string.module_serial_no), device.moduleSN)
-        SettingsRow(stringResource(R.string.has_battery), if (device.hasBattery) "true" else "false")
-        SettingsRow(stringResource(R.string.has_solar), if (device.hasPV) "true" else "false")
+        SettingsRow(stringResource(R.string.station_name), value = device.stationName)
+        SettingsRow(stringResource(R.string.device_serial_no), value = device.deviceSN)
+        SettingsRow(stringResource(R.string.module_serial_no), value = device.moduleSN)
+        SettingsRow(stringResource(R.string.has_battery), value = if (device.hasBattery) "true" else "false")
+        SettingsRow(stringResource(R.string.has_solar), value = if (device.hasPV) "true" else "false")
     }
 }
 

@@ -19,6 +19,19 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.Date
 
+enum class SolarForecastPeriod {
+    SevenDays,
+    Yesterday
+}
+
+data class PercentageSolarForecastAchievedData(
+    val totalSolarForecast: Double,
+    val totalSolarAchieved: Double,
+    val percentageSolarForecastAchieved: Double,
+    val description: String,
+    val forecastCompleteness: Double
+)
+
 data class SolarForecastViewData(
     val error: String?,
     val today: List<List<DateFloatEntry>>,
