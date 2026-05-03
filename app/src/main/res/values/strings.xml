@@ -535,4 +535,10 @@
     <string name="refresh_solcast_now">Refresh Solcast now</string>
     <string name="due_to_solcast_api_rate_limiting_please_wait_for_an_hour_before_refreshing_again">Due to Solcast API rate limiting, please wait for an hour before refreshing again.</string>
     <string name="you_have_exceeded_your_free_daily_limit_of_requests_please_try_tomorrow">You have exceeded your free daily limit of requests. Please try tomorrow.</string>
+    <string name="actual_generation">Actual generation</string>
+    <string name="forecast_total">Forecast total</string>
+    <string name="forecast_completeness">Forecast completeness</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="_7_days">7 days</string>
+    <string name="solar_vs_forecast_title">Solar vs forecast</string>
 </resources>

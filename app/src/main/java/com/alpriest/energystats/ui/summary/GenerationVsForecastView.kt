@@ -22,21 +22,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.helpers.asPercent
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
-fun GenerationVsForecastView(data: PercentageSolarForecastAchievedData, period: SolarForecastPeriod) {
+fun GenerationVsForecastView(data: PercentageSolarForecastAchievedData, period: SolarForecastPeriod, onTogglePeriod: () -> Unit) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                "Solar vs forecast",
+                stringResource(R.string.solar_vs_forecast_title),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSecondary,
             )
@@ -44,15 +46,15 @@ fun GenerationVsForecastView(data: PercentageSolarForecastAchievedData, period: 
             Spacer(Modifier.weight(1.0f))
 
             TextButton(
-                onClick = { }
+                onClick = onTogglePeriod
             ) {
-                Text(if (period == SolarForecastPeriod.Yesterday) "Yesterday" else "7 days")
+                Text(if (period == SolarForecastPeriod.Yesterday) stringResource(R.string.yesterday) else stringResource(R.string._7_days))
             }
         }
 
-        LabelledContent("Actual generation", data.totalSolarAchieved.kWh(0))
-        LabelledContent("Forecast total", data.totalSolarForecast.kWh(0))
-        LabelledContent("Forecast completeness") {
+        LabelledContent(stringResource(R.string.actual_generation), data.totalSolarAchieved.kWh(0))
+        LabelledContent(stringResource(R.string.forecast_total), data.totalSolarForecast.kWh(0))
+        LabelledContent(stringResource(R.string.forecast_completeness)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 PercentageBar(
                     percentage = data.forecastCompleteness,
@@ -153,7 +155,8 @@ fun GenerationVsForecastViewPreview() {
                 description = "$1 of required Solcast data is available. $2 of forecast generated.",
                 forecastCompleteness = 0.73
             ),
-            period = SolarForecastPeriod.Yesterday
+            period = SolarForecastPeriod.Yesterday,
+            onTogglePeriod = {}
         )
     }
 }
