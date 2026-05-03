@@ -56,6 +56,7 @@ fun TabbedViewPages(page: Int, dependencies: TabbedViewDependencies, topBarSetti
         3 -> SummaryView(
             dependencies.configManager,
             dependencies.network,
+            application,
             dependencies.solarForecastingProvider
         ).NavigableContent(topBarSettings, appSettingsStream = dependencies.appSettingsStream)
 

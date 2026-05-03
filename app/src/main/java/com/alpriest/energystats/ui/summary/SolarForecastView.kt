@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.summary
 
+import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +27,8 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.LoadState
 import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.network.DemoNetworking
+import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.settings.dataloggers.Rectangle
@@ -35,25 +37,25 @@ import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class SolarForecastView(
     private val solarForecastProvider: () -> SolcastCaching,
     val appSettingsStream: StateFlow<AppSettings>,
-    val configManager: ConfigManaging
+    val configManager: ConfigManaging,
+    val networking: Networking,
+    val application: Application
 ) {
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
-        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, appSettingsStream, configManager))
+        viewModel: SolarForecastViewModel = viewModel(factory = SolarForecastViewModelFactory(solarForecastProvider, appSettingsStream, configManager, networking, application))
     ) {
         val data = viewModel.dataStream.collectAsState().value
         val loadState: LoadState = viewModel.loadStateStream.collectAsState().value
-        val context = LocalContext.current
         val appSettings = appSettingsStream.collectAsState().value
 
         LaunchedEffect(null) {
-            viewModel.load(context)
+            viewModel.load()
         }
 
         when (loadState) {
@@ -87,6 +89,8 @@ class SolarForecastView(
     @Composable
     fun LoadedView(modifier: Modifier, data: List<SolarForecastViewData>, viewModel: SolarForecastViewModel, appSettings: AppSettings) {
         val lastUpdate = viewModel.lastFetchedStream.collectAsState().value
+        val solarForecastAchievedData = viewModel.solarForecastAchievedDataStream.collectAsState().value
+        val solarForecastComparisonPeriod = viewModel.periodStream.collectAsState().value
 
         Column(
             modifier = modifier
@@ -94,6 +98,12 @@ class SolarForecastView(
                 .padding(top = 22.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            solarForecastAchievedData?.let {
+                GenerationVsForecastView(it, solarForecastComparisonPeriod) {
+                    viewModel.toggleSolarVsGenerationPeriod()
+                }
+            }
+
             Text(
                 stringResource(R.string.solar_forecasts),
                 style = typography.titleLarge,
@@ -187,7 +197,6 @@ class SolarForecastView(
         val context = LocalContext.current
         val tooManyRequests = viewModel.tooManyRequestsStream.collectAsState().value
         val canRefresh = viewModel.canRefreshStream.collectAsState().value
-        val scope = rememberCoroutineScope()
 
         Column(
             modifier = Modifier
@@ -200,9 +209,7 @@ class SolarForecastView(
                 ESButton(
                     enabled = canRefresh,
                     onClick = {
-                        scope.launch {
-                            viewModel.refetchSolcast(context)
-                        }
+                        viewModel.refetchSolcast()
                     }
                 ) {
                     Text(stringResource(R.string.refresh_solcast_now))
@@ -227,7 +234,9 @@ fun SolarForecastViewPreview() {
         SolarForecastView(
             solarForecastProvider = { DemoSolarForecasting() },
             appSettingsStream = MutableStateFlow(AppSettings.demo()),
-            configManager = FakeConfigManager()
+            configManager = FakeConfigManager(),
+            networking = DemoNetworking(),
+            application = Application()
         ).Content()
     }
 }

@@ -70,7 +70,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         val key = makeKey(currentFunctionName(), deviceSN, variables.joinToString { it }, start.toString(), end.toString())
 
         val cached = cache[key]
-        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && cached.item is OpenHistoryResponse) {
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && cached.item is OpenHistoryResponse) {
             cached.item
         } else {
             val fresh = api.openapi_fetchHistory(deviceSN, variables, start, end)
@@ -97,7 +97,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         val key = makeKey(currentFunctionName(), deviceSN, variables.joinToString { it.networkTitle() }, queryDate.toString(), reportType.toString())
 
         val cached = cache[key]
-        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && isListOf<OpenReportResponse>(cached.item)) {
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && isListOf<OpenReportResponse>(cached.item)) {
             @Suppress("UNCHECKED_CAST")
             cached.item as List<OpenReportResponse>
         } else {
@@ -119,7 +119,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         val key = makeKey(currentFunctionName())
 
         val cached = cache[key]
-        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && isListOf<DataLoggerResponse>(cached.item)) {
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && isListOf<DataLoggerResponse>(cached.item)) {
             @Suppress("UNCHECKED_CAST")
             cached.item as List<DataLoggerResponse>
         } else {
@@ -157,7 +157,7 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         val key = makeKey(currentFunctionName(), deviceSN)
 
         val cached = cache[key]
-        return if (cached != null && cached.isFresherThan(seconds = shortCacheDurationInSeconds) && cached.item is DeviceDetailResponse) {
+        return if (cached != null && cached.isFresherThan(seconds = longCacheDurationInSeconds) && cached.item is DeviceDetailResponse) {
             cached.item
         } else {
             val fresh = api.openapi_fetchDevice(deviceSN)

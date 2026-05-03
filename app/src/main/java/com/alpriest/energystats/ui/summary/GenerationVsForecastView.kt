@@ -33,7 +33,7 @@ import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 
 @Composable
 fun GenerationVsForecastView(data: PercentageSolarForecastAchievedData, period: SolarForecastPeriod, onTogglePeriod: () -> Unit) {
-    Column {
+    Column(modifier = Modifier.padding(bottom = 28.dp)) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {

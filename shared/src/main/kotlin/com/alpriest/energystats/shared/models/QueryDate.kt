@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.models
 
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
@@ -13,6 +14,10 @@ data class QueryDate(val year: Int, val month: Int?, val day: Int?) {
                 month = calendar.get(Calendar.MONTH) + 1,
                 day = calendar.get(Calendar.DAY_OF_MONTH)
             )
+        }
+
+        fun from(date: LocalDate): QueryDate {
+            return QueryDate(date.year, date.monthValue, date.dayOfMonth)
         }
     }
 }

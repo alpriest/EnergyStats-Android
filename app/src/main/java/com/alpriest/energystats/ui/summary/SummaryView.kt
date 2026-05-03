@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.summary
 
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,6 +69,7 @@ enum class SummaryScreen {
 class SummaryView(
     private val configManager: ConfigManaging,
     private val network: Networking,
+    private val application: Application,
     private val solarForecastProvider: () -> SolcastCaching
 ) {
     @Composable
@@ -119,7 +121,7 @@ class SummaryView(
 
         MonitorAlertDialog(viewModel)
 
-        LaunchedEffect(null) {
+        LaunchedEffect(viewModel) {
             viewModel.load()
         }
 
@@ -145,8 +147,10 @@ class SummaryView(
                     SolarForecastView(
                         solarForecastProvider,
                         appSettingsStream,
-                        configManager
-                    ).Content(modifier = Modifier.padding(top = 44.dp))
+                        configManager,
+                        network,
+                        application
+                    ).Content(modifier = Modifier.padding(top = 28.dp))
                 }
             }
         }
@@ -285,7 +289,8 @@ fun SummaryViewPreview() {
 
         SummaryView(
             FakeConfigManager(),
-            DemoNetworking()
+            DemoNetworking(),
+            application = Application()
         ) { DemoSolarForecasting() }
             .NavigableContent(
                 topBarSettings,

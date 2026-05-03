@@ -121,7 +121,7 @@ class ParametersGraphTabViewModel(
             displayModeStream
                 .collect { it ->
                     val previousHours = hours
-                    val updatedDate = QueryDate(it.date.year, it.date.monthValue, it.date.dayOfMonth)
+                    val updatedDate = QueryDate.from(it.date)
 
                     if (queryDate != updatedDate) {
                         queryDate = updatedDate
