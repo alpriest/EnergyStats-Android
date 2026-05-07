@@ -35,9 +35,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.Date
 import java.util.concurrent.CancellationException
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.time.Clock
 
 class PowerFlowTabViewModel(
     private val application: Application,
@@ -258,7 +258,7 @@ class PowerFlowTabViewModel(
         if (settings.sites.isEmpty()) {
              return null
         }
-        val nowDate = Date()
+        val nowDate = Clock.System.now()
         val service = solarForecastProvider()
         val siteTotals = settings.sites.map { site ->
             val data = service.fetchForecast(site, apiKey, false)

@@ -2,7 +2,6 @@ package com.alpriest.energystats.shared.models
 
 import java.time.LocalDate
 import java.util.Calendar
-import java.util.Date
 import java.util.TimeZone
 
 data class QueryDate(val year: Int, val month: Int?, val day: Int?) {
@@ -36,14 +35,6 @@ fun QueryDate.toUtcMillis(): Long {
     return calendar.timeInMillis
 }
 
-fun QueryDate.toDate(): Date {
-    val calendar = Calendar.getInstance()
-    calendar.set(Calendar.YEAR, year)
-    calendar.set(Calendar.MONTH, (month ?: 1) - 1) // Month is 0-based in Calendar
-    calendar.set(Calendar.DAY_OF_MONTH, day ?: 1) // Default to 1st if null
-    calendar.set(Calendar.HOUR_OF_DAY, 0)
-    calendar.set(Calendar.MINUTE, 0)
-    calendar.set(Calendar.SECOND, 0)
-    calendar.set(Calendar.MILLISECOND, 0)
-    return calendar.time
+fun QueryDate.toDate(): LocalDate {
+    return LocalDate.of(year, month ?: 1, day ?: 1)
 }

@@ -17,7 +17,6 @@ import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.network.SolcastFailure
 import com.alpriest.energystats.shared.models.network.SolcastForecastResponse
-import com.alpriest.energystats.shared.models.network.toHalfHourOfDay
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +27,8 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import java.util.Date
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 
 enum class SolarForecastPeriod {
     LastWeek,
@@ -108,15 +109,15 @@ class SolarForecastViewModel(
                     if (forecast.failure == null) {
                         val forecasts = forecast.forecasts
                         allForecasts.addAll(forecasts)
-                        val today = getToday()
-                        val tomorrow = getTomorrow()
+                        val today = LocalDate.now()
+                        val tomorrow = today.plusDays(1)
 
                         val todayData = forecasts.filter { response ->
-                            isSameDay(response.periodEnd, today)
+                            response.periodEnd.toLocalDate(ZoneId.systemDefault()) == today
                         }
 
                         val tomorrowData = forecasts.filter { response ->
-                            isSameDay(response.periodEnd, tomorrow)
+                            response.periodEnd.toLocalDate(ZoneId.systemDefault()) == tomorrow
                         }
 
                         SolarForecastViewData(
@@ -196,8 +197,9 @@ class SolarForecastViewModel(
     ): SolarForecastTotalData {
         val startDate = startDate.atStartOfDay().toLocalDate()
         val endDate = endDate.atStartOfDay().toLocalDate()
+        val zone = ZoneId.systemDefault()
         val filtered = forecasts.filter { forecast ->
-            val forecastDay = LocalDate.of(forecast.periodEnd.year, forecast.periodEnd.month, forecast.periodEnd.day)
+            val forecastDay = forecast.periodEnd.toLocalDate(zone)
             forecastDay in startDate..endDate
         }
         val forecastsCount = filtered.count() / siteCount
@@ -279,22 +281,22 @@ class SolarForecastViewModel(
         return listOf(
             data.map { response ->
                 DateFloatEntry(
-                    date = response.periodEnd,
-                    x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                    date = Date.from(response.periodEnd.toJavaInstant()),
+                    x = response.periodEnd.toHalfHourOfDay(ZoneId.systemDefault()).toFloat(),
                     y = response.pvEstimate90.toFloat(),
                 )
             },
             data.map { response ->
                 DateFloatEntry(
-                    date = response.periodEnd,
-                    x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                    date = Date.from(response.periodEnd.toJavaInstant()),
+                    x = response.periodEnd.toHalfHourOfDay(ZoneId.systemDefault()).toFloat(),
                     y = response.pvEstimate10.toFloat(),
                 )
             },
             data.map { response ->
                 DateFloatEntry(
-                    date = response.periodEnd,
-                    x = response.periodEnd.toHalfHourOfDay().toFloat(),
+                    date = Date.from(response.periodEnd.toJavaInstant()),
+                    x = response.periodEnd.toHalfHourOfDay(ZoneId.systemDefault()).toFloat(),
                     y = response.pvEstimate.toFloat(),
                 )
             }
@@ -327,6 +329,31 @@ class SolarForecastViewModel(
 fun getToday(): Date {
     val date = LocalDate.now()
     return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+}
+
+fun Instant.toLocalDate(zone: ZoneId = ZoneId.systemDefault()): LocalDate {
+    return toJavaInstant().atZone(zone).toLocalDate()
+}
+
+fun Instant.toHalfHourOfDay(zone: ZoneId = ZoneId.systemDefault()): Int {
+    val localTime = toJavaInstant().atZone(zone).toLocalTime()
+    return localTime.hour * 2 + localTime.minute / 30
+}
+
+fun isSameDay(
+    instant: Instant,
+    localDate: LocalDate,
+    zone: ZoneId = ZoneId.systemDefault()
+): Boolean {
+    return instant.toLocalDate(zone) == localDate
+}
+
+fun isSameDay(
+    instant: Instant,
+    localDate: Instant,
+    zone: ZoneId = ZoneId.systemDefault()
+): Boolean {
+    return instant.toLocalDate(zone) == localDate.toLocalDate(zone)
 }
 
 fun isSameDay(date1: Date, date2: Date): Boolean {

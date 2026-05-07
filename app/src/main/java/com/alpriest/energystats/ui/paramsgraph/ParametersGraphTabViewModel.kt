@@ -32,7 +32,6 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.paramsgraph.editing.previewParameterGraphVariables
 import com.alpriest.energystats.ui.paramsgraph.graphs.AxisScale
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.ui.settings.solcast.toLocalDateTime
 import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,6 +46,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.concurrent.CancellationException
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 
 data class ParametersGraphViewState(
     val displayMode: ParametersDisplayMode,
@@ -355,7 +356,7 @@ class ParametersGraphTabViewModel(
             val data = sites.flatMap {
                 val forecasts = solarForecastProvider().fetchForecast(it, apiKey, false).forecasts
                 return@flatMap forecasts.filter { response ->
-                    isSameDay(response.periodEnd, queryDate)
+                    response.periodEnd == queryDate
                 }
             }
 
@@ -398,7 +399,7 @@ class ParametersGraphTabViewModel(
         return localDate1 == localDate2
     }
 
-    private fun getQueryDate(): Date {
+    private fun getQueryDate(): LocalDate {
         return queryDate.toDate()
     }
 
@@ -435,6 +436,12 @@ class ParametersGraphTabViewModel(
             data = backfilled + openHistoryResponseData.data
         )
     }
+}
+
+private fun Instant.toLocalDateTime(zone: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+    return toJavaInstant()
+        .atZone(zone)
+        .toLocalDateTime()
 }
 
 fun writeContentToUri(context: Context, uri: Uri, content: String) {

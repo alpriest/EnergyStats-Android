@@ -115,7 +115,7 @@ class SummaryTabViewModel(
                         is SummaryDateRange.Manual -> dateRange.from.monthYearString()
                     }
 
-                    if (year == fromYear) {
+                    if (year < toYear) {
                         hasFinished = true
                     }
                 }
