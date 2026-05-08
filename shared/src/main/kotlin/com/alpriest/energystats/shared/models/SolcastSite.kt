@@ -4,7 +4,6 @@ import com.alpriest.energystats.shared.models.network.SolcastSiteResponse
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -37,7 +36,7 @@ data class SolcastSettings(
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = SolcastSettings::class)
+@Serializable
 object SolcastSettingsSerializer : KSerializer<SolcastSettings> {
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor("SolcastSettings") {
         element<String?>("apiKey", isOptional = true)
@@ -105,7 +104,7 @@ data class SolcastSite(
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = SolcastSite::class)
+@Serializable
 object SolcastSiteSerializer : KSerializer<SolcastSite> {
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor("SolcastSite") {
         element<String>("name")
