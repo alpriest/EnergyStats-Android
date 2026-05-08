@@ -104,6 +104,9 @@ class PreHomeViewModel(
         if (!configManager.showInverterScheduleQuickLink) return
         val deviceSN = configManager.selectedDeviceSN ?: return
         try {
+            val isEnabled = network.fetchSchedulerFlag(deviceSN = deviceSN)
+            if (!isEnabled.enable) return
+
             val scheduleResponse = network.fetchCurrentSchedule(deviceSN)
             val schedule = ScheduleV3.create(scheduleResponse)
 
