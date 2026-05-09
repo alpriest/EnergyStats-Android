@@ -110,7 +110,7 @@ class WearDataRefresher(
                         store.allowNegativeLoad,
                         store.showGridTotals
                     )
-                    val device = Device(deviceSN, true, null, "", true, "", null, "")
+                    val device = Device(deviceSN, true, null, "", true, "", null, "", capacity = null)
 
                     val currentStatusCalculator = CurrentStatusCalculator(
                         reals,

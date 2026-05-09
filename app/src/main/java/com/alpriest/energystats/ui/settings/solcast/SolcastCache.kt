@@ -47,7 +47,14 @@ class SolcastCache(
         return lockFor(site.resourceId).withLock {
             getCachedData(site.resourceId)?.let { it ->
                 val type = object : TypeToken<SolcastForecastResponseList>() {}.type
-                val cachedResponseList: SolcastForecastResponseList = Gson().fromJson(it, type)
+                var cachedResponseList: SolcastForecastResponseList
+                try {
+                    cachedResponseList = Gson().fromJson(it, type)
+                } catch (_: Exception) {
+                    // Invalid cached data, so let's tidy up and next time we'll fetch fresh
+                    clearCache()
+                    cachedResponseList = SolcastForecastResponseList(forecasts = emptyList())
+                }
 
                 val eightHoursInMillis = 8 * 60 * 60 * 1000
                 val currentTime = System.currentTimeMillis()

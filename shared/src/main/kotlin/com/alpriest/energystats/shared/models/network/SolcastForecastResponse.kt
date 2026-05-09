@@ -30,8 +30,8 @@ object InstantAsStringSerializer : KSerializer<Instant> {
 
         // Solcast typically returns ISO-8601 with a timezone/offset (often a trailing 'Z').
         // Be tolerant of a few formats.
-        val instant = try {
-            Instant.parse(text)
+        val instant: Instant? = try {
+            Instant.parseOrNull(text)
         } catch (_: DateTimeParseException) {
             try {
                 OffsetDateTime.parse(text).toInstant().toKotlinInstant()
@@ -39,9 +39,11 @@ object InstantAsStringSerializer : KSerializer<Instant> {
                 // If no zone information is present, treat as UTC.
                 LocalDateTime.parse(text).toInstant(ZoneOffset.UTC).toKotlinInstant()
             }
+        } catch (_: IllegalStateException) {
+            return Instant.DISTANT_PAST
         }
 
-        return instant
+        return instant ?: Instant.DISTANT_PAST
     }
 
     override fun serialize(encoder: Encoder, value: Instant) {
