@@ -107,7 +107,9 @@ class SolcastCache(
         }.toMutableList()
 
         merged.addAll(latest)
-        merged = merged.filter { it.periodEnd.toLocalDate(zone) >= oldestCacheData }.toMutableList()
+        merged = merged.filter {
+            it.periodEnd.toLocalDate(zone)?.let { it >= oldestCacheData } ?: false
+        }.toMutableList()
 
         val result = SolcastForecastResponseList(merged)
         val jsonText = Gson().toJson(result)

@@ -113,11 +113,11 @@ class SolarForecastViewModel(
                         val tomorrow = today.plusDays(1)
 
                         val todayData = forecasts.filter { response ->
-                            response.periodEnd.toLocalDate(ZoneId.systemDefault()) == today
+                            response.periodEnd.toLocalDateOrNull(ZoneId.systemDefault()) == today
                         }
 
                         val tomorrowData = forecasts.filter { response ->
-                            response.periodEnd.toLocalDate(ZoneId.systemDefault()) == tomorrow
+                            response.periodEnd.toLocalDateOrNull(ZoneId.systemDefault()) == tomorrow
                         }
 
                         SolarForecastViewData(
@@ -199,8 +199,8 @@ class SolarForecastViewModel(
         val endDate = endDate.atStartOfDay().toLocalDate()
         val zone = ZoneId.systemDefault()
         val filtered = forecasts.filter { forecast ->
-            val forecastDay = forecast.periodEnd.toLocalDate(zone)
-            forecastDay in startDate..endDate
+            val forecastDay = forecast.periodEnd.toLocalDateOrNull(zone)
+            forecastDay != null && forecastDay in startDate..endDate
         }
         val forecastsCount = filtered.count() / siteCount
         val total = filtered.total()
@@ -278,25 +278,31 @@ class SolarForecastViewModel(
     }
 
     private fun asGraphData(data: List<SolcastForecastResponse>): List<List<DateFloatEntry>> {
+        val validData = data.mapNotNull { response ->
+            val periodEnd = response.periodEnd
+            val halfHourOfDay = periodEnd.toHalfHourOfDayOrNull(ZoneId.systemDefault()) ?: return@mapNotNull null
+            response to halfHourOfDay
+        }
+
         return listOf(
-            data.map { response ->
+            validData.map { (response, halfHourOfDay) ->
                 DateFloatEntry(
                     date = Date.from(response.periodEnd.toJavaInstant()),
-                    x = response.periodEnd.toHalfHourOfDay(ZoneId.systemDefault()).toFloat(),
+                    x = halfHourOfDay.toFloat(),
                     y = response.pvEstimate90.toFloat(),
                 )
             },
-            data.map { response ->
+            validData.map { (response, halfHourOfDay) ->
                 DateFloatEntry(
                     date = Date.from(response.periodEnd.toJavaInstant()),
-                    x = response.periodEnd.toHalfHourOfDay(ZoneId.systemDefault()).toFloat(),
+                    x = halfHourOfDay.toFloat(),
                     y = response.pvEstimate10.toFloat(),
                 )
             },
-            data.map { response ->
+            validData.map { (response, halfHourOfDay) ->
                 DateFloatEntry(
                     date = Date.from(response.periodEnd.toJavaInstant()),
-                    x = response.periodEnd.toHalfHourOfDay(ZoneId.systemDefault()).toFloat(),
+                    x = halfHourOfDay.toFloat(),
                     y = response.pvEstimate.toFloat(),
                 )
             }
@@ -326,28 +332,6 @@ class SolarForecastViewModel(
     }
 }
 
-fun getToday(): Date {
-    val date = LocalDate.now()
-    return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
-}
-
-fun Instant.toLocalDate(zone: ZoneId = ZoneId.systemDefault()): LocalDate {
-    return toJavaInstant().atZone(zone).toLocalDate()
-}
-
-fun Instant.toHalfHourOfDay(zone: ZoneId = ZoneId.systemDefault()): Int {
-    val localTime = toJavaInstant().atZone(zone).toLocalTime()
-    return localTime.hour * 2 + localTime.minute / 30
-}
-
-fun isSameDay(
-    instant: Instant,
-    localDate: LocalDate,
-    zone: ZoneId = ZoneId.systemDefault()
-): Boolean {
-    return instant.toLocalDate(zone) == localDate
-}
-
 fun isSameDay(
     instant: Instant,
     localDate: Instant,
@@ -356,11 +340,17 @@ fun isSameDay(
     return instant.toLocalDate(zone) == localDate.toLocalDate(zone)
 }
 
-fun isSameDay(date1: Date, date2: Date): Boolean {
-    val localDate1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-    val localDate2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+fun Instant.toLocalDate(zone: ZoneId = ZoneId.systemDefault()): LocalDate? {
+    return toJavaInstant().atZone(zone).toLocalDate()
+}
 
-    return localDate1 == localDate2
+fun Instant?.toLocalDateOrNull(zone: ZoneId = ZoneId.systemDefault()): LocalDate? {
+    return this?.toJavaInstant()?.atZone(zone)?.toLocalDate()
+}
+
+fun Instant?.toHalfHourOfDayOrNull(zone: ZoneId = ZoneId.systemDefault()): Int? {
+    val localTime = this?.toJavaInstant()?.atZone(zone)?.toLocalTime() ?: return null
+    return localTime.hour * 2 + localTime.minute / 30
 }
 
 data class DateFloatEntry(
