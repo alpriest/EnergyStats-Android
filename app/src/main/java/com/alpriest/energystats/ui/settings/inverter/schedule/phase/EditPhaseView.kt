@@ -120,7 +120,8 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
             modifier = Modifier
                 .background(colorScheme.surface)
                 .padding(vertical = 14.dp),
-            timeTypeShowing = timeTypeShowing
+            timeTypeShowing = timeTypeShowing,
+            appSettingsStream = viewModel.configManager.appSettingsStream
         ) { time -> viewModel.startTimeChanged(time) }
 
         HorizontalDivider()
@@ -134,7 +135,8 @@ fun TimeAndWorkModeView(viewModel: EditPhaseViewModel) {
             modifier = Modifier
                 .background(colorScheme.surface)
                 .padding(vertical = 14.dp),
-            timeTypeShowing = timeTypeShowing
+            timeTypeShowing = timeTypeShowing,
+            appSettingsStream = viewModel.configManager.appSettingsStream
         ) { time -> viewModel.endTimeChanged(time) }
 
         ErrorTextView(errorText, modifier = Modifier.padding(8.dp))

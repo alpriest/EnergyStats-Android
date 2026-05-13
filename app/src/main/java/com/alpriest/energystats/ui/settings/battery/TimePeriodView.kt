@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.settings.battery
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,12 +25,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.TimeType
+import com.alpriest.energystats.shared.models.demo
+import com.alpriest.energystats.shared.models.isDarkMode
 import com.alpriest.energystats.shared.models.network.Time
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import com.anhaki.picktime.PickHourMinute
 import com.anhaki.picktime.utils.PickTimeFocusIndicator
 import com.anhaki.picktime.utils.PickTimeTextStyle
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,8 +48,11 @@ fun TimePeriodView(
     textStyle: TextStyle = TextStyle.Default,
     includeSeconds: Boolean,
     timeTypeShowing: MutableState<TimeType?>,
+    appSettingsStream: StateFlow<AppSettings>,
     onChange: (Time) -> Unit
 ) {
+    val isDarkMode = isDarkMode(appSettingsStream)
+
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -73,6 +82,8 @@ fun TimePeriodView(
         }
 
         if (timeTypeShowing.value == timeType) {
+            val background = if (isDarkMode) Color.Black else Color.White
+
             PickHourMinute(
                 time.hour,
                 onHourChange = { hour ->
@@ -94,13 +105,14 @@ fun TimePeriodView(
                     background = Color(0xFFCCEDF9),
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(2.dp, Color(0xFF87CDE6)),
-                )
+                ),
+                containerColor = background
             )
         }
     }
 }
 
-@Preview(showBackground = true, widthDp = 400)
+@Preview(showBackground = true, widthDp = 400, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun TimePeriodViewPreview() {
     val state = remember { mutableStateOf<TimeType?>(TimeType.END) }
@@ -113,6 +125,7 @@ fun TimePeriodViewPreview() {
             labelStyle = TextStyle.Default,
             includeSeconds = false,
             timeTypeShowing = state,
+            appSettingsStream = MutableStateFlow(AppSettings.demo()),
             onChange = {}
         )
     }

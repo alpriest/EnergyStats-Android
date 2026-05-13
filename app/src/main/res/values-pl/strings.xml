@@ -529,4 +529,14 @@
     <string name="fetch_solar_on_load">Twoje prognozy Solcast zostaną pobrane podczas uruchamiania Energy Stats (maksymalnie raz na 8 godzin).</string>
     <string name="fetch_solar_on_summary_tab">Twoje prognozy Solcast zostaną pobrane, gdy odwiedzisz zakładkę Podsumowanie (maksymalnie raz na 8 godzin). Solcast udostępnia tylko dane dotyczące przyszłości.</string>
     <string name="fetch_solar_footer">Możesz włączyć „Prognozę solarną Solcast” w selektorze zmiennych na karcie Parametry. Ponieważ Solcast udostępnia tylko dane dotyczące przyszłości, musisz otworzyć aplikację wczoraj, aby zobaczyć dzisiejszą prognozę.</string>
+    <string name="show_percentage_of_solar_forecast_achieved">Pokaż procent osiągniętej prognozy solarnej</string>
+    <string name="refresh_solcast_now">Odśwież Solcast teraz</string>
+    <string name="due_to_solcast_api_rate_limiting_please_wait_for_an_hour_before_refreshing_again">Ze względu na limit żądań API Solcast poczekaj godzinę przed ponownym odświeżeniem.</string>
+    <string name="you_have_exceeded_your_free_daily_limit_of_requests_please_try_tomorrow">Przekroczono dzienny darmowy limit żądań. Spróbuj ponownie jutro.</string>
+    <string name="actual_generation">Rzeczywista produkcja</string>
+    <string name="forecast_total">Łączna prognoza</string>
+    <string name="forecast_completeness">Kompletność prognozy</string>
+    <string name="yesterday">Wczoraj</string>
+    <string name="_7_days">7 dni</string>
+    <string name="solar_vs_forecast_title">Energia słoneczna vs prognoza</string>
 </resources>

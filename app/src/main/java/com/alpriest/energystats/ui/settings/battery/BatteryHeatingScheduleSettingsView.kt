@@ -263,7 +263,8 @@ class BatteryHeatingScheduleSettingsView(
                         stringResource(R.string.start),
                         labelStyle = TextStyle(color = textColor.value),
                         includeSeconds = false,
-                        timeTypeShowing = timeTypeShowing
+                        timeTypeShowing = timeTypeShowing,
+                        appSettingsStream = configManager.appSettingsStream
                     ) { time ->
                         onChange(ChargeTimePeriod(start = time, end = timePeriod.end, enabled = timePeriod.enabled))
                     }
@@ -277,7 +278,8 @@ class BatteryHeatingScheduleSettingsView(
                         labelStyle = TextStyle(color = textColor.value),
                         includeSeconds = false,
                         modifier = Modifier.padding(bottom = 8.dp),
-                        timeTypeShowing = timeTypeShowing
+                        timeTypeShowing = timeTypeShowing,
+                        appSettingsStream = configManager.appSettingsStream
                     ) { time ->
                         onChange(ChargeTimePeriod(start = timePeriod.start, end = time, enabled = timePeriod.enabled))
                     }

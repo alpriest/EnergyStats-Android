@@ -127,7 +127,11 @@ class BatteryChargeScheduleSettingsView(
     }
 
     @Composable
-    fun BatteryTimePeriodView(timePeriod: ChargeTimePeriod, periodTitle: String, onChange: (ChargeTimePeriod) -> Unit) {
+    fun BatteryTimePeriodView(
+        timePeriod: ChargeTimePeriod,
+        periodTitle: String,
+        onChange: (ChargeTimePeriod) -> Unit
+    ) {
         val textColor = remember { mutableStateOf(Color.Black) }
         val state = remember { mutableStateOf(timePeriod.enabled) }
         val timeTypeShowing = remember { mutableStateOf<TimeType?>(null) }
@@ -149,7 +153,8 @@ class BatteryChargeScheduleSettingsView(
                 stringResource(R.string.start),
                 labelStyle = TextStyle(color = textColor.value),
                 includeSeconds = false,
-                timeTypeShowing = timeTypeShowing
+                timeTypeShowing = timeTypeShowing,
+                appSettingsStream = configManager.appSettingsStream
             ) { time ->
                 onChange(ChargeTimePeriod(start = time, end = timePeriod.end, enabled = timePeriod.enabled))
             }
@@ -162,7 +167,8 @@ class BatteryChargeScheduleSettingsView(
                 stringResource(R.string.end),
                 labelStyle = TextStyle(color = textColor.value),
                 includeSeconds = false,
-                timeTypeShowing = timeTypeShowing
+                timeTypeShowing = timeTypeShowing,
+                appSettingsStream = configManager.appSettingsStream
             ) { time ->
                 onChange(ChargeTimePeriod(start = timePeriod.start, end = time, enabled = timePeriod.enabled))
             }
