@@ -64,7 +64,7 @@ class SummaryTabViewModel(
 
         loadStateStream.value = UiLoadState(LoadState.Active.Loading)
         configManager.currentDevice.value?.let { device ->
-            solarGenerationByMonth = emptyList()
+            solarGenerationByMonth = mutableListOf()
             val totals = fetchAllYears(device)
             makeApproximationsViewModel(totals)?.let { approximationsViewModel ->
                 val financialData: SummaryViewData.FinancialData? = approximationsViewModel.financialModel?.let { financialModel ->
