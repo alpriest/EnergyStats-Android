@@ -20,10 +20,12 @@ import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.concurrent.CancellationException
+import kotlin.math.abs
 
 class SummaryTabViewModelFactory(
     private val network: Networking,
@@ -35,29 +37,57 @@ class SummaryTabViewModelFactory(
     }
 }
 
+
 class SummaryTabViewModel(
     private val networking: Networking,
     private val configManager: ConfigManaging,
 ) : ViewModel(), AlertDialogMessageProviding {
-    val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
-    val oldestDataDate = MutableStateFlow("")
-    val latestDataDate = MutableStateFlow("")
+    //    private val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
+    private var oldestDataDate = ""
+    private var latestDataDate = ""
     private val approximationsCalculator = ApproximationsCalculator(configManager, networking)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
     val loadStateStream = MutableStateFlow(UiLoadState(LoadState.Inactive))
     val summaryDateRangeStream = MutableStateFlow(configManager.summaryDateRange)
-    val hasPVStream = MutableStateFlow(false)
+    private var solarGenerationByMonth: MutableList<SolarGenerationPeriodAmount> = mutableListOf()
+
+    //    val hasPVStream = MutableStateFlow(false)
+    private var grouping: TimeGrouping = TimeGrouping.MONTH
+
+    private val _viewDataStream: MutableStateFlow<SummaryViewData?> = MutableStateFlow(null)
+    val viewDataStream: StateFlow<SummaryViewData?> = _viewDataStream
 
     suspend fun load() {
-        if (approximationsViewModelStream.value != null) {
+        if (viewDataStream.value != null) {
             return
         }
 
         loadStateStream.value = UiLoadState(LoadState.Active.Loading)
-        configManager.currentDevice.value?.let {
-            val totals = fetchAllYears(it)
-            approximationsViewModelStream.value = makeApproximationsViewModel(totals = totals)
-            hasPVStream.value = it.hasPV
+        configManager.currentDevice.value?.let { device ->
+            solarGenerationByMonth = emptyList()
+            val totals = fetchAllYears(device)
+            makeApproximationsViewModel(totals)?.let { approximationsViewModel ->
+                val financialData: SummaryViewData.FinancialData? = approximationsViewModel.financialModel?.let { financialModel ->
+                    SummaryViewData.FinancialData(
+                        exportIncome = financialModel.exportIncome.amount,
+                        gridImportAvoided = financialModel.solarSaving.amount,
+                        totalBenefit = financialModel.total.amount
+                    )
+                }
+
+                val bestSolarData: SummaryViewData.BestSolarData? = findBest(grouping, solarGenerationByMonth)
+
+                _viewDataStream.value = SummaryViewData(
+                    solar = approximationsViewModel.totalsViewModel?.solar,
+                    homeUsage = approximationsViewModel.totalsViewModel?.loads,
+                    financialData = financialData,
+                    bestSolar = bestSolarData,
+                    hasPV = device.hasPV,
+                    oldestDataDate = oldestDataDate,
+                    latestDataDate = latestDataDate,
+                    currencySymbol = configManager.currencySymbol
+                )
+            }
         }
         loadStateStream.value = UiLoadState(LoadState.Inactive)
     }
@@ -66,9 +96,26 @@ class SummaryTabViewModel(
         viewModelScope.launch {
             configManager.summaryDateRange = dateRange
             summaryDateRangeStream.value = dateRange
-            approximationsViewModelStream.value = null
+            _viewDataStream.value = null
             load()
         }
+    }
+
+    fun toggleBestSolarGrouping() {
+        val viewData = _viewDataStream.value ?: return
+
+        grouping = when (grouping) {
+            TimeGrouping.MONTH -> TimeGrouping.YEAR
+            TimeGrouping.YEAR -> TimeGrouping.MONTH
+        }
+
+        _viewDataStream.value = viewData.copy(
+            bestSolar = findBest(grouping, solarGenerationByMonth)
+        )
+    }
+
+    private fun findBest(grouping: TimeGrouping, list: List<SolarGenerationPeriodAmount>): SummaryViewData.BestSolarData? {
+        return null
     }
 
     private val fromYear: Int
@@ -98,8 +145,8 @@ class SummaryTabViewModel(
     private suspend fun fetchAllYears(device: Device): Map<ReportVariable, Double> {
         val totals = mutableMapOf<ReportVariable, Double>()
         var hasFinished = false
-        latestDataDate.value = toDateDescription
-        oldestDataDate.value = ""
+        latestDataDate = toDateDescription
+        oldestDataDate = ""
 
         for (year in (fromYear..toYear).reversed()) {
             if (hasFinished) {
@@ -110,7 +157,7 @@ class SummaryTabViewModel(
                 val (yearlyTotals, emptyMonth) = fetchYear(year, device)
 
                 emptyMonth?.let { month ->
-                    oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
+                    oldestDataDate = when (val dateRange = configManager.summaryDateRange) {
                         is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).plusMonths(1).monthYearString()
                         is SummaryDateRange.Manual -> dateRange.from.monthYearString()
                     }
@@ -131,8 +178,8 @@ class SummaryTabViewModel(
             }
         }
 
-        if (oldestDataDate.value.isEmpty()) {
-            oldestDataDate.value = when (val dateRange = configManager.summaryDateRange) {
+        if (oldestDataDate.isEmpty()) {
+            oldestDataDate = when (val dateRange = configManager.summaryDateRange) {
                 is SummaryDateRange.Automatic -> "Present"
                 is SummaryDateRange.Manual -> dateRange.from.monthYearString()
             }
@@ -163,7 +210,7 @@ class SummaryTabViewModel(
         reports.forEach { reportResponse ->
             val reportVariable = ReportVariable.parse(reportResponse.variable)
 
-            totals[reportVariable] = reportResponse.values.sumOf { kotlin.math.abs(it.value) }
+            totals[reportVariable] = reportResponse.values.sumOf { abs(it.value) }
         }
 
         val calendar = Calendar.getInstance()
@@ -174,8 +221,13 @@ class SummaryTabViewModel(
             var monthlyTotal = 0.0
 
             reportVariables.forEach { variable ->
-                reports.firstOrNull { it.variable == variable.networkTitle() }?.values?.firstOrNull { it.index == month }?.value?.let {
+                val report = reports.firstOrNull { it.variable == variable.networkTitle() }
+                report?.values?.firstOrNull { it.index == month }?.value?.let {
                     monthlyTotal += it
+
+                    if (report.variable == ReportVariable.PvEnergyToTal.networkTitle()) {
+                        solarGenerationByMonth.add(SolarGenerationPeriodAmount(year = year, month = month, amount = monthlyTotal))
+                    }
                 }
             }
 
@@ -201,9 +253,11 @@ class SummaryTabViewModel(
                                 year == dateRange.from.year && reportData.index < (dateRange.from.monthValue) -> {
                                     OpenReportResponseData(index = reportData.index, value = 0.0)
                                 }
+
                                 year == dateRange.to.year && reportData.index > (dateRange.to.monthValue) -> {
                                     OpenReportResponseData(index = reportData.index, value = 0.0)
                                 }
+
                                 else -> {
                                     OpenReportResponseData(index = reportData.index, value = reportData.value)
                                 }
@@ -239,3 +293,9 @@ class SummaryTabViewModel(
         )
     }
 }
+
+data class SolarGenerationPeriodAmount(
+    val year: Int,
+    val month: Int,
+    val amount: Double
+)

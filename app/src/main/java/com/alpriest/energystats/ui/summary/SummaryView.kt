@@ -47,18 +47,16 @@ import com.alpriest.energystats.shared.network.DemoNetworking
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.PreviewContextHolder
 import com.alpriest.energystats.shared.ui.DimmedTextColor
+import com.alpriest.energystats.shared.ui.roundedToString
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
-import com.alpriest.energystats.ui.flow.earnings.FinanceAmount
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
-import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import io.dontsayboj.rollingnumbers.RollingNumbers
 import io.dontsayboj.rollingnumbers.model.DefaultAnimationDuration
 import io.dontsayboj.rollingnumbers.ui.Utils
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 enum class SummaryScreen {
@@ -113,11 +111,8 @@ class SummaryView(
     ) {
         val scrollState = rememberScrollState()
         val appSettings = appSettingsStream.collectAsStateWithLifecycle().value
-        val approximations = viewModel.approximationsViewModelStream.collectAsStateWithLifecycle().value
-        val oldestDataDate = viewModel.oldestDataDate.collectAsStateWithLifecycle().value
+        val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
         val isLoading = viewModel.loadStateStream.collectAsStateWithLifecycle().value.state
-        val latestDataDate = viewModel.latestDataDate.collectAsStateWithLifecycle().value
-        val hasPV = viewModel.hasPVStream.collectAsStateWithLifecycle().value
 
         MonitorAlertDialog(viewModel)
 
@@ -134,13 +129,10 @@ class SummaryView(
                         .verticalScroll(scrollState)
                         .padding(12.dp)
                 ) {
-                    approximations?.let {
+                    viewData?.let {
                         LoadedView(
-                            hasPV = hasPV,
-                            approximationsViewModel = it,
-                            appSettings = appSettings,
-                            oldestDataDate = oldestDataDate,
-                            latestDataDate = latestDataDate
+                            viewData,
+                            appSettings = appSettings
                         )
                     }
 
@@ -157,18 +149,21 @@ class SummaryView(
     }
 
     @Composable
-    private fun LoadedView(approximationsViewModel: ApproximationsViewModel, hasPV: Boolean, appSettings: AppSettings, oldestDataDate: String, latestDataDate: String) {
+    fun LoadedView(viewData: SummaryViewData, appSettings: AppSettings) {
         val style = typography.titleLarge.copy(color = MaterialTheme.colorScheme.onSurface)
+        val oldestDataDate = viewData.oldestDataDate
+        val latestDataDate = viewData.latestDataDate
+        val hasPV = viewData.hasPV
 
         EnergySummaryRow(
             stringResource(R.string.home_usage),
-            approximationsViewModel.homeUsage,
+            viewData.homeUsage,
             textStyle = style
         )
         if (hasPV) {
             EnergySummaryRow(
                 stringResource(R.string.solar_generated),
-                approximationsViewModel.totalsViewModel?.solar,
+                viewData.solar,
                 textStyle = style
             )
         } else {
@@ -181,22 +176,22 @@ class SummaryView(
 
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 
-        approximationsViewModel.financialModel?.let { energyStatsModel ->
+        viewData.financialData?.let { financialData ->
             MoneySummaryRow(
                 title = stringResource(R.string.export_income),
-                amount = energyStatsModel.exportIncome,
+                amount = financialData.exportIncome,
                 textStyle = style,
                 currencySymbol = appSettings.currencySymbol
             )
             MoneySummaryRow(
                 title = stringResource(R.string.grid_import_avoided),
-                amount = energyStatsModel.solarSaving,
+                amount = financialData.gridImportAvoided,
                 textStyle = style,
                 currencySymbol = appSettings.currencySymbol
             )
             MoneySummaryRow(
                 title = stringResource(R.string.total_benefit),
-                amount = energyStatsModel.total,
+                amount = financialData.totalBenefit,
                 textStyle = style,
                 currencySymbol = appSettings.currencySymbol
             )
@@ -249,15 +244,15 @@ class SummaryView(
     }
 
     @Composable
-    private fun MoneySummaryRow(title: String, amount: FinanceAmount, textStyle: TextStyle, modifier: Modifier = Modifier, currencySymbol: String) {
+    private fun MoneySummaryRow(title: String, amount: Double, textStyle: TextStyle, modifier: Modifier = Modifier, currencySymbol: String) {
         var displayAmount by remember {
             mutableStateOf(
-                " ".repeat(amount.formattedAmount("").length)
+                " ".repeat(amount.roundedToString(2).length)
             )
         }
 
         LaunchedEffect(title) {
-            displayAmount = amount.formattedAmount("")
+            displayAmount = amount.roundedToString(2)
         }
 
         Row {
@@ -292,9 +287,22 @@ fun SummaryViewPreview() {
             DemoNetworking(),
             application = Application()
         ) { DemoSolarForecasting() }
-            .NavigableContent(
-                topBarSettings,
-                appSettingsStream = MutableStateFlow(AppSettings.demo().copy(showGridTotals = true))
+            .LoadedView(
+                SummaryViewData(
+                    solar = 54.90,
+                    homeUsage = 117.5,
+                    financialData = SummaryViewData.FinancialData(
+                        exportIncome = 231.10,
+                        gridImportAvoided = 10.50,
+                        totalBenefit = 99.81
+                    ),
+                    bestSolar = null,
+                    hasPV = true,
+                    oldestDataDate = "Aug 2022",
+                    latestDataDate = "Present",
+                    currencySymbol = "£"
+                ),
+                appSettings = AppSettings.demo().copy(showGridTotals = true)
             )
     }
 }
