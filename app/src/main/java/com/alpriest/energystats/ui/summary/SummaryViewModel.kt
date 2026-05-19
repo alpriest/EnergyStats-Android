@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.concurrent.CancellationException
 import kotlin.math.abs
@@ -114,7 +115,49 @@ class SummaryTabViewModel(
         )
     }
 
-    private fun findBest(grouping: TimeGrouping, list: List<SolarGenerationPeriodAmount>): SummaryViewData.BestSolarData? {
+    private fun findBest(grouping: TimeGrouping, periods: List<SolarGenerationPeriodAmount>): SummaryViewData.BestSolarData? {
+        val filteredPeriods = periods.filter { it.amount > 0.0 }.removingExtremeOutliers()
+
+        when (grouping) {
+            TimeGrouping.MONTH -> {
+                val maxMonth = filteredPeriods.maxByOrNull { it.amount }
+                maxMonth?.let { period ->
+                    val formatter = DateTimeFormatter.ofPattern("MMMM, yyyy")
+                    val date = LocalDate.of(
+                        period.year,
+                        period.month,
+                        1
+                    )
+
+                    return SummaryViewData.BestSolarData(
+                        description = date.format(formatter),
+                        amount = period.amount,
+                        period = grouping
+                    )
+                }
+            }
+
+            TimeGrouping.YEAR -> {
+                val amountsByYear = filteredPeriods
+                    .groupBy { it -> it.year }
+                    .map { group ->
+                        SolarGenerationPeriodAmount(
+                            year = group.key,
+                            month = 1,
+                            amount = group.value.map { it.amount }.reduce { acc, number -> acc + number }
+                        )
+                    }
+                val maxYear = amountsByYear.maxByOrNull { it.amount }
+                maxYear?.let {
+                    return SummaryViewData.BestSolarData(
+                        description = it.year.toString(),
+                        amount = it.amount,
+                        period = grouping
+                    )
+                }
+            }
+        }
+
         return null
     }
 
@@ -291,6 +334,20 @@ class SummaryTabViewModel(
             batteryDischarge = batteryDischarge,
             solar = solar
         )
+    }
+}
+
+private fun List<SolarGenerationPeriodAmount>.removingExtremeOutliers(): List<SolarGenerationPeriodAmount> {
+    return if (count() > 0) {
+        val values = map { it.amount }
+        val total = values.reduce { acc, number -> acc + number }
+        val average = total / count().toDouble()
+
+        filter {
+            it.amount > average * 3.0
+        }
+    } else {
+        this
     }
 }
 
