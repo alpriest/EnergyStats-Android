@@ -541,4 +541,5 @@
     <string name="yesterday">Yesterday</string>
     <string name="_7_days">7 days</string>
     <string name="solar_vs_forecast_title">Solar vs forecast</string>
+    <string name="best_solar">Best solar</string>
 </resources>

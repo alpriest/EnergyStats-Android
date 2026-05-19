@@ -1,5 +1,8 @@
 package com.alpriest.energystats.ui.summary
 
+import android.content.Context
+import com.alpriest.energystats.R
+
 data class SummaryViewData(
     val solar: Double?,
     val homeUsage: Double?,
@@ -26,5 +29,12 @@ data class SummaryViewData(
 
 enum class TimeGrouping {
     MONTH,
-    YEAR
+    YEAR;
+
+    fun title(context: Context): String {
+        return when (this) {
+            MONTH -> context.getString(R.string.month).lowercase()
+            YEAR -> context.getString(R.string.year).lowercase()
+        }
+    }
 }

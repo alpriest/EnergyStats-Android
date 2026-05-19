@@ -539,4 +539,5 @@
     <string name="yesterday">Wczoraj</string>
     <string name="_7_days">7 dni</string>
     <string name="solar_vs_forecast_title">Energia słoneczna vs prognoza</string>
+    <string name="best_solar">Najlepsza produkcja solarna</string>
 </resources>

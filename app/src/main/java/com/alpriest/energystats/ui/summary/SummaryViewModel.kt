@@ -269,7 +269,7 @@ class SummaryTabViewModel(
                     monthlyTotal += it
 
                     if (report.variable == ReportVariable.PvEnergyToTal.networkTitle()) {
-                        solarGenerationByMonth.add(SolarGenerationPeriodAmount(year = year, month = month, amount = monthlyTotal))
+                        solarGenerationByMonth.add(SolarGenerationPeriodAmount(year = year, month = month, amount = it))
                     }
                 }
             }
@@ -344,7 +344,7 @@ private fun List<SolarGenerationPeriodAmount>.removingExtremeOutliers(): List<So
         val average = total / count().toDouble()
 
         filter {
-            it.amount > average * 3.0
+            it.amount < (average * 3.0)
         }
     } else {
         this
