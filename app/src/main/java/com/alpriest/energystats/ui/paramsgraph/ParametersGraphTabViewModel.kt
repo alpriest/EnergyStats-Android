@@ -258,10 +258,10 @@ class ParametersGraphTabViewModel(
                 val min = (entryList.minBy { it.y }.y)
                 val now = when (entryList.first().type) {
                     Variable.solcastPrediction ->
-                        entryList.first { it.localDateTime > LocalDateTime.now() }.y
+                        entryList.firstOrNull { it.localDateTime > LocalDateTime.now() }?.y
                     else -> entryList.last().y
                 }
-                ParameterGraphBounds(entryList.first().type, min, max, now)
+                ParameterGraphBounds(entryList.first().type, min, max, now ?: 0.0f)
             }
 
         if (entries.isEmpty()) {
