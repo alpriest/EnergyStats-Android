@@ -689,6 +689,12 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
+    override var installationPurchasePrice: Double
+        get() = config.installationPurchasePrice
+        set(value) {
+            config.installationPurchasePrice = value
+        }
+
     init {
         val selectedSn = selectedDeviceSN
         val initialDevice = if (selectedSn.isNullOrBlank()) {

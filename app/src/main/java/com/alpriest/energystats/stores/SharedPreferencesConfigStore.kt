@@ -123,7 +123,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         TIME_PERIOD_GRAPH_STYLE_ON_STATS,
         SHOW_BATTERY_MAX_CURRENT_CHARGE,
         INVERTER_GENERATION,
-        SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED
+        SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED,
+        INSTALLATION_PURCHASE_PRICE
     }
 
     // Local in-memory only
@@ -908,6 +909,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceDisplayKey.SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED.name, value)
+            }
+        }
+
+    override var installationPurchasePrice: Double
+        get() = sharedPreferences.getFloat(SharedPreferenceDisplayKey.INSTALLATION_PURCHASE_PRICE.name, 0.0f).toDouble()
+        set(value) {
+            sharedPreferences.edit {
+                putFloat(SharedPreferenceDisplayKey.INSTALLATION_PURCHASE_PRICE.name, value.toFloat())
             }
         }
 }

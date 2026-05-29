@@ -100,6 +100,7 @@ interface StoredConfig {
     var showBatteryMaxCurrentCharge: Boolean
     var inverterGeneration: InverterGeneration
     var showTodayPercentageSolarForecastAchieved: Boolean
+    var installationPurchasePrice: Double
 }
 
 interface CurrentStatusCalculatorConfig {
