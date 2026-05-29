@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.statsgraph
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.net.Uri
@@ -35,7 +36,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
-import java.text.DateFormatSymbols
 import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.coroutines.cancellation.CancellationException
@@ -253,6 +253,7 @@ class StatsTabViewModel(
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun prepareExport(rawData: List<StatsGraphValue>, displayMode: StatsDisplayMode) {
         val headers = listOf("Type", "Date", "Value").joinToString(",")
         val rows = rawData.map {
@@ -266,17 +267,16 @@ class StatsTabViewModel(
                 val date = displayMode.date
 
                 val year = date.year
-                val month = date.month.name
-                val day = date.dayOfMonth
+                val month = String.format("%02d", date.month.value)
+                val day = String.format("%02d", date.dayOfMonth)
 
-                baseExportFileName = "energystats_${year}_${month}_$day"
+                baseExportFileName = "energystats_${year}_${month}_${day}"
             }
 
             is StatsDisplayMode.Month -> {
-                val dateFormatSymbols = DateFormatSymbols.getInstance()
-                val month = dateFormatSymbols.months.getOrNull(displayMode.month) ?: "${displayMode.month}"
-                val year = displayMode.year
-                baseExportFileName = "energystats_${year}_$month"
+                val month = String.format("%02d", displayMode.month)
+                val year = String.format("%02d", displayMode.year)
+                baseExportFileName = "energystats_${year}_${month}"
             }
 
             is StatsDisplayMode.Year -> {
@@ -286,9 +286,13 @@ class StatsTabViewModel(
 
             is StatsDisplayMode.Custom -> {
                 val start = displayMode.start
+                val startMonth = String.format("%02d", start.month)
+                val startDay = String.format("%02d", start.dayOfMonth)
                 val end = displayMode.end
+                val endMonth = String.format("%02d", end.month)
+                val endDay = String.format("%02d", end.dayOfMonth)
 
-                baseExportFileName = "energystats_${start.year}_${start.month}_$start.day_${end.year}_${end.month}_$end.day"
+                baseExportFileName = "energystats_${start.year}_${startMonth}_${startDay}._${end.year}_${endMonth}_${endDay}"
             }
         }
 

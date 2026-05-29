@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.paramsgraph
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -303,6 +304,7 @@ class ParametersGraphTabViewModel(
         storeVariables()
     }
 
+    @SuppressLint("DefaultLocale")
     private fun prepareExport(rawData: List<ParametersGraphValue>, displayMode: ParametersDisplayMode) {
         val headers = listOf("Type", "Date", "Value").joinToString(",")
         val rows = rawData.map {
@@ -311,8 +313,8 @@ class ParametersGraphTabViewModel(
 
         val date = displayMode.date
         val year = date.year
-        val month = date.month.name
-        val day = date.dayOfMonth
+        val month = String.format("%02d", date.month.value)
+        val day = String.format("%02d", date.dayOfMonth)
 
         exportText = (listOf(headers) + rows).joinToString(separator = "\n")
         val baseExportFileName = "energystats_${year}_${month}_$day"
