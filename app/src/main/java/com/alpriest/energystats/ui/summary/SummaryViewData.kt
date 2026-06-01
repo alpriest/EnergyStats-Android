@@ -34,10 +34,10 @@ data class SummaryViewData(
         val installationPurchasePrice: String,
         private val oldestDataDate: LocalDate
     ) {
-        fun text(infoTextFormatString: String) {
+        fun text(infoTextFormatString: String): String {
             val monthYear = oldestDataDate.monthYearString()
 
-            String.format(
+            return String.format(
                 infoTextFormatString,
                 monthYear,
                 installationPurchasePrice

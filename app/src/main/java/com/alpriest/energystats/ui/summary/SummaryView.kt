@@ -5,9 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -42,7 +44,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.services.trackScreenView
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.LoadState
@@ -55,6 +56,7 @@ import com.alpriest.energystats.shared.ui.roundedToString
 import com.alpriest.energystats.tabs.TopBarSettings
 import com.alpriest.energystats.ui.LoadingView
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialog
+import com.alpriest.energystats.ui.settings.InfoButton
 import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -230,7 +232,22 @@ class SummaryView(
                 textStyle = style,
                 currencySymbol = currencySymbol
             )
+
+            financialData.payback?.let { paybackData ->
+                SummaryRow(
+                    title = "Time to payback",
+                    amount = paybackYears(paybackData.paybackMonths),
+                    textStyle = style,
+                    decimalPlaces = 1,
+                    suffix = " years",
+                    infoButtonText = paybackData.text("Assuming system was purchased around %1s for %2s")
+                )
+            }
         }
+    }
+
+    private fun paybackYears(months: Int): Double {
+        return (months.toDouble() / 12.0)
     }
 
     @Composable
@@ -252,92 +269,94 @@ class SummaryView(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            Row {
-                Text(
-                    viewData.description,
-                    modifier = Modifier.weight(1.0f),
-                    style = textStyle
-                )
-
-                Row {
-                    RollingNumbers(
-                        viewData.amount.roundedToString(0),
-                        characterLists = listOf(" ,." + Utils.provideNumberString()),
-                        animationDuration = DefaultAnimationDuration.Fast.duration,
-                        textStyle = textStyle
-                    )
-                    Text(" kWh", style = textStyle)
-                }
-            }
+            EnergySummaryRow(
+                viewData.description,
+                viewData.amount,
+                textStyle,
+                paddingValues = PaddingValues(0.dp)
+            )
         }
     }
 }
 
 @Composable
-private fun EnergySummaryRow(title: String, amount: Double?, textStyle: TextStyle, modifier: Modifier = Modifier) {
-    amount?.let {
-        var displayAmount by remember {
-            mutableStateOf(
-                " ".repeat(amount.kWh(0, suffix = "").length)
-            )
-        }
+private fun SummaryRow(
+    title: String,
+    amount: Double,
+    textStyle: TextStyle,
+    paddingValues: PaddingValues = PaddingValues(8.dp),
+    decimalPlaces: Int,
+    prefix: String = "",
+    suffix: String = "",
+    infoButtonText: String? = null
+) {
+    var displayAmount by remember(amount, decimalPlaces) {
+        mutableStateOf(
+            " ".repeat(amount.roundedToString(decimalPlaces).length)
+        )
+    }
 
-        LaunchedEffect(title) {
-            displayAmount = amount.kWh(decimalPlaces = 0, suffix = "")
-        }
+    LaunchedEffect(title, amount, decimalPlaces) {
+        displayAmount = amount.roundedToString(decimalPlaces)
+    }
 
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(paddingValues).fillMaxWidth()
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(all = 8.dp)
+            modifier = Modifier.weight(1f)
         ) {
             Text(
                 title,
-                modifier = modifier.weight(1.0f),
                 style = textStyle
             )
-
-            Row {
-                RollingNumbers(
-                    displayAmount,
-                    characterLists = listOf(" ,." + Utils.provideNumberString()),
-                    animationDuration = DefaultAnimationDuration.Fast.duration,
-                    textStyle = textStyle
-                )
-                Text(" kWh", style = textStyle)
+            infoButtonText?.let {
+                InfoButton(it)
             }
+        }
+
+        if (prefix.isNotEmpty()) {
+            Text(prefix, style = textStyle)
+        }
+
+        RollingNumbers(
+            displayAmount,
+            characterLists = listOf(" ,." + Utils.provideNumberString()),
+            animationDuration = DefaultAnimationDuration.Fast.duration,
+            textStyle = textStyle
+        )
+
+        if (suffix.isNotEmpty()) {
+            Text(suffix, style = textStyle)
         }
     }
 }
 
 @Composable
-private fun MoneySummaryRow(title: String, amount: Double, textStyle: TextStyle, modifier: Modifier = Modifier, currencySymbol: String) {
-    var displayAmount by remember {
-        mutableStateOf(
-            " ".repeat(amount.roundedToString(2).length)
+private fun EnergySummaryRow(title: String, amount: Double?, textStyle: TextStyle, paddingValues: PaddingValues = PaddingValues(8.dp)) {
+    amount?.let {
+        SummaryRow(
+            title = title,
+            amount = it,
+            textStyle = textStyle,
+            paddingValues = paddingValues,
+            decimalPlaces = 0,
+            suffix = " kWh"
         )
     }
+}
 
-    LaunchedEffect(title) {
-        displayAmount = amount.roundedToString(2)
-    }
-
-    Row(modifier = Modifier.padding(all = 8.dp)) {
-        Text(
-            title,
-            modifier = modifier.weight(1.0f),
-            style = textStyle
-        )
-
-        Row {
-            Text(currencySymbol, style = textStyle)
-            RollingNumbers(
-                displayAmount,
-                characterLists = listOf(" ,." + Utils.provideNumberString()),
-                animationDuration = DefaultAnimationDuration.Fast.duration,
-                textStyle = textStyle
-            )
-        }
-    }
+@Composable
+private fun MoneySummaryRow(title: String, amount: Double, textStyle: TextStyle, currencySymbol: String) {
+    SummaryRow(
+        title = title,
+        amount = amount,
+        textStyle = textStyle,
+        decimalPlaces = 2,
+        prefix = currencySymbol
+    )
 }
 
 @Preview(showBackground = true)
@@ -360,7 +379,7 @@ fun SummaryViewPreview() {
                             exportIncome = 231.10,
                             gridImportAvoided = 10.50,
                             totalBenefit = 99.81,
-                            payback = SummaryViewData.PaybackData(2, "10000", LocalDate.now())
+                            payback = SummaryViewData.PaybackData(52, "£10,000", LocalDate.now())
                         ),
                         bestSolar = SummaryViewData.BestSolarData(
                             "2025",
