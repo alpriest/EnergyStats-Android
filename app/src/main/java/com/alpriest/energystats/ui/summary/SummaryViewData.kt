@@ -2,6 +2,8 @@ package com.alpriest.energystats.ui.summary
 
 import android.content.Context
 import com.alpriest.energystats.R
+import com.alpriest.energystats.shared.helpers.monthYearString
+import java.time.LocalDate
 
 data class SummaryViewData(
     val solar: Double?,
@@ -18,6 +20,7 @@ data class SummaryViewData(
         val exportIncome: Double,
         val gridImportAvoided: Double,
         val totalBenefit: Double,
+        val payback: PaybackData?
     )
 
     data class BestSolarData(
@@ -25,6 +28,38 @@ data class SummaryViewData(
         val amount: Double,
         val period: TimeGrouping,
     )
+
+    data class PaybackData(
+        val paybackMonths: Int,
+        val installationPurchasePrice: String,
+        private val oldestDataDate: LocalDate
+    ) {
+        fun text(infoTextFormatString: String) {
+            val monthYear = oldestDataDate.monthYearString()
+
+            String.format(
+                infoTextFormatString,
+                monthYear,
+                installationPurchasePrice
+            )
+        }
+
+        companion object {
+            fun create(
+                paybackMonths: Int?,
+                purchasePrice: String?,
+                oldestDataDate: LocalDate,
+            ): PaybackData? {
+                if (paybackMonths == null || purchasePrice == null) return null
+
+                return PaybackData(
+                    paybackMonths = paybackMonths,
+                    installationPurchasePrice = purchasePrice,
+                    oldestDataDate = oldestDataDate
+                )
+            }
+        }
+    }
 }
 
 enum class TimeGrouping {

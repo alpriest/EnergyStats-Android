@@ -34,6 +34,7 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.toCurrency
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.EarningsModel
+import com.alpriest.energystats.shared.ui.roundedToString
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
@@ -51,6 +52,7 @@ fun FinancialsSettingsView(configManager: ConfigManaging) {
     val unitPrice = rememberSaveable { mutableStateOf(configManager.feedInUnitPrice.toCurrency()) }
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(configManager.gridImportUnitPrice.toCurrency()) }
     val earningsModel = rememberSaveable { mutableStateOf(configManager.earningsModel) }
+    val installationPurchasePrice = rememberSaveable { mutableStateOf(configManager.installationPurchasePrice.roundedToString(decimalPlaces = 0, isGroupingUsed = false)) }
     trackScreenView("Financial Model", "FinancialsSettingsView")
 
     SettingsColumn(footer = stringResource(R.string.energy_stats_earnings_calculation_description),) {
@@ -102,21 +104,40 @@ fun FinancialsSettingsView(configManager: ConfigManaging) {
             )
         }
 
-        SettingsColumn(footer = stringResource(R.string.earnings_imported_description),) {
+        SettingsColumn(footer = stringResource(R.string.earnings_imported_description)) {
             MakeTextField(configManager, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price)) {
                 gridImportUnitPrice.value = it
                 configManager.gridImportUnitPrice = it.safeToDouble()
             }
         }
-    }
 
-    if (showFinancialSummaryState.value) {
+        SettingsColumn(footer = "Used for estimating when your system will be paid back on the summary page") {
+            MakeTextField(
+                configManager,
+                installationPurchasePrice,
+                "Installation purchase price"
+            ) {
+                installationPurchasePrice.value = it
+                configManager.installationPurchasePrice = it.safeToDouble()
+            }
+        }
+
+        Column(horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)) {
+            Text(
+                stringResource(R.string.financial_summary_descriptions),
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+
         CalculationDescription(
             stringResource(R.string.exported_income_short_title),
             when (earningsModel.value) {
-                EarningsModel.Generated -> "Approximate income received from generating electricity."
+                EarningsModel.Generated -> stringResource(R.string.approximate_income_received_from_generating_electricity)
                 EarningsModel.Exported -> stringResource(R.string.exported_income_description)
-                EarningsModel.CT2 -> "Approximate income received from exporting energy to the grid via another inverter tracked by CT2."
+                EarningsModel.CT2 -> stringResource(R.string.approximate_income_received_from_exporting_energy_to_the_grid_via_another_inverter_tracked_by_ct2)
             },
             stringResource(R.string.exported_income_formula)
         )
@@ -225,7 +246,7 @@ private fun MakeTextField(configManager: ConfigManaging, state: MutableState<Str
 
 @Composable
 fun CalculationDescription(title: String, description: String, formula: String) {
-    Column(modifier = Modifier.padding(horizontal = 22.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 12.dp)) {
         Text(
             title,
             style = TextStyle.Default.copy(color = colorScheme.onSecondary, fontWeight = FontWeight.Bold)

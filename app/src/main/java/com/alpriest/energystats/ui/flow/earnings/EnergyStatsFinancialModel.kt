@@ -11,8 +11,39 @@ import com.alpriest.energystats.shared.ui.roundedToString
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import kotlin.math.ceil
 
-class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, private val configManager: ConfigManaging): ViewModel() {
+data class InstallationPaybackEstimate(
+    val monthsRemaining: Int
+) {
+    companion object {
+        fun create(
+            installationPurchasePrice: Double,
+            totalSavingsToDate: Double,
+            installationDate: LocalDate
+        ): InstallationPaybackEstimate? {
+            val monthsSinceInstallation =
+                ChronoUnit.MONTHS.between(installationDate, LocalDate.now())
+
+            if (monthsSinceInstallation <= 0) return null
+            if (totalSavingsToDate <= 0.0) return null
+
+            val monthlyBenefit = totalSavingsToDate / monthsSinceInstallation
+            if (monthlyBenefit <= 0.0) return null
+
+            val remainingCost =
+                installationPurchasePrice - totalSavingsToDate
+
+            return InstallationPaybackEstimate(
+                monthsRemaining = ceil(remainingCost / monthlyBenefit).toInt()
+            )
+        }
+    }
+}
+
+class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, private val configManager: ConfigManaging) : ViewModel() {
     lateinit var exportIncome: FinanceAmount
     lateinit var solarSaving: FinanceAmount
     lateinit var total: FinanceAmount
@@ -30,6 +61,18 @@ class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, pr
                 _amountsFlow.value = amounts()
             }
         }
+    }
+
+    fun payback(installDate: LocalDate): InstallationPaybackEstimate? {
+        if (configManager.installationPurchasePrice > 0) {
+            InstallationPaybackEstimate.create(
+                configManager.installationPurchasePrice,
+                total.amount,
+                installDate
+            )
+        }
+
+        return null
     }
 
     fun update() {

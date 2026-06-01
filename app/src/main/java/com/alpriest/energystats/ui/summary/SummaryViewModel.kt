@@ -16,6 +16,7 @@ import com.alpriest.energystats.shared.models.network.OpenReportResponseData
 import com.alpriest.energystats.shared.models.network.ReportType
 import com.alpriest.energystats.shared.models.parse
 import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.shared.ui.roundedToString
 import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
 import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
@@ -43,8 +44,6 @@ class SummaryTabViewModel(
     private val networking: Networking,
     private val configManager: ConfigManaging,
 ) : ViewModel(), AlertDialogMessageProviding {
-    //    private val approximationsViewModelStream = MutableStateFlow<ApproximationsViewModel?>(null)
-    private var oldestDataDate = ""
     private var latestDataDate = ""
     private val approximationsCalculator = ApproximationsCalculator(configManager, networking)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
@@ -52,7 +51,6 @@ class SummaryTabViewModel(
     val summaryDateRangeStream = MutableStateFlow(configManager.summaryDateRange)
     private var solarGenerationByMonth: MutableList<SolarGenerationPeriodAmount> = mutableListOf()
 
-    //    val hasPVStream = MutableStateFlow(false)
     private var grouping: TimeGrouping = TimeGrouping.MONTH
 
     private val _viewDataStream: MutableStateFlow<SummaryViewData?> = MutableStateFlow(null)
@@ -66,25 +64,35 @@ class SummaryTabViewModel(
         loadStateStream.value = UiLoadState(LoadState.Active.Loading)
         configManager.currentDevice.value?.let { device ->
             solarGenerationByMonth = mutableListOf()
-            val totals = fetchAllYears(device)
-            makeApproximationsViewModel(totals)?.let { approximationsViewModel ->
-                val financialData: SummaryViewData.FinancialData? = approximationsViewModel.financialModel?.let { financialModel ->
+            val (totals, oldestDataDate) = fetchAllYears(device)
+            makeApproximationsViewModel(totals)?.let { model ->
+                val financialData: SummaryViewData.FinancialData? = model.financialModel?.let { financialModel ->
                     SummaryViewData.FinancialData(
                         exportIncome = financialModel.exportIncome.amount,
                         gridImportAvoided = financialModel.solarSaving.amount,
-                        totalBenefit = financialModel.total.amount
+                        totalBenefit = financialModel.total.amount,
+                        payback = SummaryViewData.PaybackData.create(
+                            financialModel.payback(
+                                installDate = oldestDataDate
+                            )?.monthsRemaining,
+                            purchasePrice = configManager.installationPurchasePrice.roundedToString(
+                                decimalPlaces = 0,
+                                currencySymbol = configManager.currencySymbol
+                            ),
+                            oldestDataDate = oldestDataDate
+                        )
                     )
                 }
 
                 val bestSolarData: SummaryViewData.BestSolarData? = findBest(grouping, solarGenerationByMonth)
 
                 _viewDataStream.value = SummaryViewData(
-                    solar = approximationsViewModel.totalsViewModel?.solar,
-                    homeUsage = approximationsViewModel.totalsViewModel?.loads,
+                    solar = model.totalsViewModel?.solar,
+                    homeUsage = model.totalsViewModel?.loads,
                     financialData = financialData,
                     bestSolar = bestSolarData,
                     hasPV = device.hasPV,
-                    oldestDataDate = oldestDataDate,
+                    oldestDataDate = oldestDataDate.monthYearString(),
                     latestDataDate = latestDataDate,
                     currencySymbol = configManager.currencySymbol
                 )
@@ -185,11 +193,11 @@ class SummaryTabViewModel(
             }
         }
 
-    private suspend fun fetchAllYears(device: Device): Map<ReportVariable, Double> {
+    private suspend fun fetchAllYears(device: Device): Pair<Map<ReportVariable, Double>, LocalDate> {
         val totals = mutableMapOf<ReportVariable, Double>()
         var hasFinished = false
         latestDataDate = toDateDescription
-        oldestDataDate = ""
+        var oldestDataDate = LocalDate.MIN
 
         for (year in (fromYear..toYear).reversed()) {
             if (hasFinished) {
@@ -201,8 +209,8 @@ class SummaryTabViewModel(
 
                 emptyMonth?.let { month ->
                     oldestDataDate = when (val dateRange = configManager.summaryDateRange) {
-                        is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).plusMonths(1).monthYearString()
-                        is SummaryDateRange.Manual -> dateRange.from.monthYearString()
+                        is SummaryDateRange.Automatic -> LocalDate.of(year, month, 1).plusMonths(1)
+                        is SummaryDateRange.Manual -> dateRange.from
                     }
 
                     if (year < toYear) {
@@ -221,14 +229,14 @@ class SummaryTabViewModel(
             }
         }
 
-        if (oldestDataDate.isEmpty()) {
-            oldestDataDate = when (val dateRange = configManager.summaryDateRange) {
-                is SummaryDateRange.Automatic -> "Present"
-                is SummaryDateRange.Manual -> dateRange.from.monthYearString()
-            }
-        }
+//        if (oldestDataDate.isEmpty()) {
+//            oldestDataDate = when (val dateRange = configManager.summaryDateRange) {
+//                is SummaryDateRange.Automatic -> "Present"
+//                is SummaryDateRange.Manual -> dateRange.from.monthYearString()
+//            }
+//        }
 
-        return totals
+        return Pair(totals, oldestDataDate)
     }
 
     private suspend fun fetchYear(year: Int, device: Device): Pair<Map<ReportVariable, Double>, Int?> {

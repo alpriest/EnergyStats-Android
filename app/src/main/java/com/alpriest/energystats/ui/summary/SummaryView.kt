@@ -62,6 +62,7 @@ import io.dontsayboj.rollingnumbers.RollingNumbers
 import io.dontsayboj.rollingnumbers.model.DefaultAnimationDuration
 import io.dontsayboj.rollingnumbers.ui.Utils
 import kotlinx.coroutines.flow.StateFlow
+import java.time.LocalDate
 
 enum class SummaryScreen {
     Overview,
@@ -193,26 +194,7 @@ class SummaryView(
         Spacer(modifier = Modifier.padding(bottom = 22.dp))
 
         viewData.financialData?.let { financialData ->
-            Card(modifier = Modifier.padding(bottom = 8.dp)) {
-                MoneySummaryRow(
-                    title = stringResource(R.string.export_income),
-                    amount = financialData.exportIncome,
-                    textStyle = style,
-                    currencySymbol = appSettings.currencySymbol
-                )
-                MoneySummaryRow(
-                    title = stringResource(R.string.grid_import_avoided),
-                    amount = financialData.gridImportAvoided,
-                    textStyle = style,
-                    currencySymbol = appSettings.currencySymbol
-                )
-                MoneySummaryRow(
-                    title = stringResource(R.string.total_benefit),
-                    amount = financialData.totalBenefit,
-                    textStyle = style,
-                    currencySymbol = appSettings.currencySymbol
-                )
-            }
+            FinancialSummaryView(financialData, style, appSettings.currencySymbol)
         }
 
         Text(
@@ -225,6 +207,30 @@ class SummaryView(
             color = DimmedTextColor,
             fontSize = appSettings.smallFontSize()
         )
+    }
+
+    @Composable
+    private fun FinancialSummaryView(financialData: SummaryViewData.FinancialData, style: TextStyle, currencySymbol: String) {
+        Card(modifier = Modifier.padding(bottom = 8.dp)) {
+            MoneySummaryRow(
+                title = stringResource(R.string.export_income),
+                amount = financialData.exportIncome,
+                textStyle = style,
+                currencySymbol = currencySymbol
+            )
+            MoneySummaryRow(
+                title = stringResource(R.string.grid_import_avoided),
+                amount = financialData.gridImportAvoided,
+                textStyle = style,
+                currencySymbol = currencySymbol
+            )
+            MoneySummaryRow(
+                title = stringResource(R.string.total_benefit),
+                amount = financialData.totalBenefit,
+                textStyle = style,
+                currencySymbol = currencySymbol
+            )
+        }
     }
 
     @Composable
@@ -353,7 +359,8 @@ fun SummaryViewPreview() {
                         financialData = SummaryViewData.FinancialData(
                             exportIncome = 231.10,
                             gridImportAvoided = 10.50,
-                            totalBenefit = 99.81
+                            totalBenefit = 99.81,
+                            payback = SummaryViewData.PaybackData(2, "10000", LocalDate.now())
                         ),
                         bestSolar = SummaryViewData.BestSolarData(
                             "2025",

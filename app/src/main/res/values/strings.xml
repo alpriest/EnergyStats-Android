@@ -542,4 +542,7 @@
     <string name="_7_days">7 days</string>
     <string name="solar_vs_forecast_title">Solar vs forecast</string>
     <string name="best_solar">Best solar</string>
+    <string name="approximate_income_received_from_generating_electricity">Approximate income received from generating electricity.</string>
+    <string name="approximate_income_received_from_exporting_energy_to_the_grid_via_another_inverter_tracked_by_ct2">Approximate income received from exporting energy to the grid via another inverter tracked by CT2.</string>
+    <string name="financial_summary_descriptions">Financial summary descriptions</string>
 </resources>
