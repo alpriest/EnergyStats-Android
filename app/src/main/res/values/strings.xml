@@ -545,4 +545,8 @@
     <string name="approximate_income_received_from_generating_electricity">Approximate income received from generating electricity.</string>
     <string name="approximate_income_received_from_exporting_energy_to_the_grid_via_another_inverter_tracked_by_ct2">Approximate income received from exporting energy to the grid via another inverter tracked by CT2.</string>
     <string name="financial_summary_descriptions">Financial summary descriptions</string>
+    <string name="used_for_estimating_when_your_system_will_be_paid_back_on_the_summary_page">Used for estimating when your system will be paid back on the summary page</string>
+    <string name="installation_purchase_price">Installation purchase price</string>
+    <string name="time_to_payback">Time to payback</string>
+    <string name="assuming_system_was_purchased_around_1s_for_2s">Assuming system was purchased around %1s for %2s</string>
 </resources>

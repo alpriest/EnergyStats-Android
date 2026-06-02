@@ -539,4 +539,11 @@
     <string name="_7_days">7 Tage</string>
     <string name="solar_vs_forecast_title">Solar vs. Prognose</string>
     <string name="best_solar">Beste Solarleistung</string>
+    <string name="used_for_estimating_when_your_system_will_be_paid_back_on_the_summary_page">Wird verwendet, um auf der Übersichtsseite abzuschätzen, wann sich Ihre Anlage amortisiert haben wird.</string>
+    <string name="installation_purchase_price">Anschaffungspreis der Anlage</string>
+    <string name="approximate_income_received_from_exporting_energy_to_the_grid_via_another_inverter_tracked_by_ct2">Ungefähre Einnahmen durch die Einspeisung von Energie ins Netz über einen anderen Wechselrichter, der über CT2 erfasst wird.</string>
+    <string name="financial_summary_descriptions">Beschreibungen der Finanzübersicht</string>
+    <string name="time_to_payback">Zeit bis zur Amortisation</string>
+    <string name="assuming_system_was_purchased_around_1s_for_2s">Annahme: Die Anlage wurde etwa um %1$s für %2$s gekauft.</string>
+    <string name="approximate_income_received_from_generating_electricity">Ungefähre Einnahmen durch die Erzeugung von Strom.</string>
 </resources>

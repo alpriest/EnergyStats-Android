@@ -111,11 +111,11 @@ fun FinancialsSettingsView(configManager: ConfigManaging) {
             }
         }
 
-        SettingsColumn(footer = "Used for estimating when your system will be paid back on the summary page") {
+        SettingsColumn(footer = stringResource(R.string.used_for_estimating_when_your_system_will_be_paid_back_on_the_summary_page)) {
             MakeTextField(
                 configManager,
                 installationPurchasePrice,
-                "Installation purchase price"
+                stringResource(R.string.installation_purchase_price)
             ) {
                 installationPurchasePrice.value = it
                 configManager.installationPurchasePrice = it.safeToDouble()

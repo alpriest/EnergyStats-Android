@@ -64,15 +64,15 @@ class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, pr
     }
 
     fun payback(installDate: LocalDate): InstallationPaybackEstimate? {
-        if (configManager.installationPurchasePrice > 0) {
+        return if (configManager.installationPurchasePrice > 0) {
             InstallationPaybackEstimate.create(
                 configManager.installationPurchasePrice,
                 total.amount,
                 installDate
             )
+        } else {
+            null
         }
-
-        return null
     }
 
     fun update() {

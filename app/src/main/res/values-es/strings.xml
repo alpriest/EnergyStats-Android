@@ -539,4 +539,11 @@
     <string name="_7_days">7 días</string>
     <string name="solar_vs_forecast_title">Solar vs previsión</string>
     <string name="best_solar">Mejor producción solar</string>
+    <string name="used_for_estimating_when_your_system_will_be_paid_back_on_the_summary_page">Se utiliza para estimar cuándo se habrá amortizado su sistema en la página de resumen.</string>
+    <string name="installation_purchase_price">Precio de compra de la instalación</string>
+    <string name="approximate_income_received_from_exporting_energy_to_the_grid_via_another_inverter_tracked_by_ct2">Ingresos aproximados obtenidos por la exportación de energía a la red mediante otro inversor monitorizado por CT2.</string>
+    <string name="financial_summary_descriptions">Descripciones del resumen financiero</string>
+    <string name="time_to_payback">Tiempo hasta la amortización</string>
+    <string name="assuming_system_was_purchased_around_1s_for_2s">Suponiendo que el sistema se adquirió alrededor de %1$s por %2$s.</string>
+    <string name="approximate_income_received_from_generating_electricity">Ingresos aproximados obtenidos por la generación de electricidad.</string>
 </resources>

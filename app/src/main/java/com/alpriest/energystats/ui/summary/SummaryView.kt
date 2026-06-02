@@ -235,12 +235,12 @@ class SummaryView(
 
             financialData.payback?.let { paybackData ->
                 SummaryRow(
-                    title = "Time to payback",
+                    title = stringResource(R.string.time_to_payback),
                     amount = paybackYears(paybackData.paybackMonths),
                     textStyle = style,
                     decimalPlaces = 1,
                     suffix = " years",
-                    infoButtonText = paybackData.text("Assuming system was purchased around %1s for %2s")
+                    infoButtonText = paybackData.text(stringResource(R.string.assuming_system_was_purchased_around_1s_for_2s))
                 )
             }
         }
@@ -302,7 +302,9 @@ private fun SummaryRow(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(paddingValues).fillMaxWidth()
+        modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxWidth()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
