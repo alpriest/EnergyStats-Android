@@ -549,4 +549,7 @@
     <string name="installation_purchase_price">Installation purchase price</string>
     <string name="time_to_payback">Time to payback</string>
     <string name="assuming_system_was_purchased_around_1s_for_2s">Assuming system was purchased around %1s for %2s</string>
+    <string name="years">years</string>
+    <string name="present">present</string>
+    <string name="manually_selected">%1$s (manually selected)</string>
 </resources>

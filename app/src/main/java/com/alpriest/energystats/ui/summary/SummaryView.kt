@@ -80,7 +80,7 @@ class SummaryView(
     @Composable
     fun NavigableContent(
         topBarSettings: MutableState<TopBarSettings>,
-        viewModel: SummaryTabViewModel = viewModel(factory = SummaryTabViewModelFactory(network, configManager)),
+        viewModel: SummaryTabViewModel = viewModel(factory = SummaryTabViewModelFactory(network, configManager, application)),
         appSettingsStream: StateFlow<AppSettings>
     ) {
         trackScreenView("Summary", "SummaryView")
@@ -239,7 +239,7 @@ class SummaryView(
                     amount = paybackYears(paybackData.paybackMonths),
                     textStyle = style,
                     decimalPlaces = 1,
-                    suffix = " years",
+                    suffix = " " + stringResource(R.string.years),
                     infoButtonText = paybackData.text(stringResource(R.string.assuming_system_was_purchased_around_1s_for_2s))
                 )
             }

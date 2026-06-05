@@ -546,4 +546,7 @@
     <string name="time_to_payback">Zeit bis zur Amortisation</string>
     <string name="assuming_system_was_purchased_around_1s_for_2s">Annahme: Die Anlage wurde etwa um %1$s für %2$s gekauft.</string>
     <string name="approximate_income_received_from_generating_electricity">Ungefähre Einnahmen durch die Erzeugung von Strom.</string>
+    <string name="years">Jahre</string>
+    <string name="present">Heute</string>
+    <string name="manually_selected">%1$s (manuell ausgewählt)</string>
 </resources>

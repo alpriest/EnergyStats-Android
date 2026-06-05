@@ -1,8 +1,12 @@
 package com.alpriest.energystats.ui.summary
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import com.alpriest.energystats.R
 import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.monthYearString
@@ -31,11 +35,12 @@ import kotlin.math.abs
 
 class SummaryTabViewModelFactory(
     private val network: Networking,
-    private val configManager: ConfigManaging
+    private val configManager: ConfigManaging,
+    private val application: Application
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SummaryTabViewModel(network, configManager) as T
+        return SummaryTabViewModel(network, configManager, application) as T
     }
 }
 
@@ -43,7 +48,8 @@ class SummaryTabViewModelFactory(
 class SummaryTabViewModel(
     private val networking: Networking,
     private val configManager: ConfigManaging,
-) : ViewModel(), AlertDialogMessageProviding {
+    application: Application
+) : AndroidViewModel(application), AlertDialogMessageProviding {
     private var latestDataDate = ""
     private val approximationsCalculator = ApproximationsCalculator(configManager, networking)
     override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
@@ -188,8 +194,8 @@ class SummaryTabViewModel(
     private val toDateDescription: String
         get() {
             return when (val dateRange = configManager.summaryDateRange) {
-                is SummaryDateRange.Automatic -> "present"
-                is SummaryDateRange.Manual -> "${dateRange.to.monthYearString()} (manually selected)"
+                is SummaryDateRange.Automatic -> application.getString(R.string.present)
+                is SummaryDateRange.Manual -> application.getString(R.string.manually_selected, dateRange.to.monthYearString())
             }
         }
 
@@ -197,7 +203,10 @@ class SummaryTabViewModel(
         val totals = mutableMapOf<ReportVariable, Double>()
         var hasFinished = false
         latestDataDate = toDateDescription
-        var oldestDataDate = LocalDate.MIN
+        var oldestDataDate = when (val dateRange = configManager.summaryDateRange) {
+            is SummaryDateRange.Automatic -> LocalDate.MIN
+            is SummaryDateRange.Manual -> dateRange.from
+        }
 
         for (year in (fromYear..toYear).reversed()) {
             if (hasFinished) {
@@ -228,13 +237,6 @@ class SummaryTabViewModel(
                 alertDialogMessage.value = MonitorAlertDialogData(ex, ex.toString())
             }
         }
-
-//        if (oldestDataDate.isEmpty()) {
-//            oldestDataDate = when (val dateRange = configManager.summaryDateRange) {
-//                is SummaryDateRange.Automatic -> "Present"
-//                is SummaryDateRange.Manual -> dateRange.from.monthYearString()
-//            }
-//        }
 
         return Pair(totals, oldestDataDate)
     }

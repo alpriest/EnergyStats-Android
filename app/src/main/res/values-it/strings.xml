@@ -285,7 +285,7 @@
     <string name="display_options">Opzioni di visualizzazione</string>
     <string name="unsupported">Non supportato</string>
     <string name="currency_symbol">Simbolo della valuta</string>
-    <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Include dati da %1$s a oggi. Le cifre sono approssimative e assumono che i prezzi di acquisto/vendita dell\'energia siano rimasti costanti per tutto il periodo di proprietà.</string>
+    <string name="includes_data_from_to_figures_are_approximate_and_assume_the_buy_sell_energy_prices_remained_constant_throughout_the_period_of_ownership">Include dati da %1$s a %2$s. Le cifre sono approssimative e assumono che i prezzi di acquisto/vendita dell\'energia siano rimasti costanti per tutto il periodo di proprietà.</string>
     <string name="templates_not_yet_available">I modelli di pianificazione non sono ancora disponibili tramite OpenAPI da FoxESS. Sono stati richiesti e verranno aggiunti quando disponibili.</string>
     <string name="enable_scheduler">Abilita pianificatore</string>
     <string name="edit_api_key">Modifica chiave API</string>
@@ -547,4 +547,7 @@
     <string name="time_to_payback">Tempo al rientro dell\'investimento</string>
     <string name="assuming_system_was_purchased_around_1s_for_2s">Si presume che l’impianto sia stato acquistato intorno a %1$s per %2$s.</string>
     <string name="approximate_income_received_from_generating_electricity">Entrate approssimative ottenute dalla produzione di energia elettrica.</string>
+    <string name="years">Anni</string>
+    <string name="present">Presente</string>
+    <string name="manually_selected">%1$s (selezionato manualmente)</string>
 </resources>
