@@ -372,7 +372,7 @@
     <string name="fetch_solar_forecast_on_app_launch">Pobierz prognozę słoneczną przy uruchomieniu aplikacji</string>
     <string name="clear">Czyste</string>
     <string name="no_data">Brak danych</string>
-    <string name="parameters">"Parametry…  "</string>
+    <string name="parameters">Parametry</string>
     <string name="reportvariable_pvenergytotal">Energia wygenerowana z PV</string>
     <string name="logout_from_demo">Wyloguj się z demo</string>
     <string name="show_ct2_value">Pokaż wartość CT2</string>

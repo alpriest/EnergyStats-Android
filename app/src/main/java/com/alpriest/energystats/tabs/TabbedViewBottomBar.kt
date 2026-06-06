@@ -17,10 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.settings.darkenedBackground
 import com.alpriest.energystats.ui.settings.darkenedBackgroundColor
-import com.alpriest.energystats.shared.ui.DimmedTextColor
 import kotlinx.coroutines.launch
 
 @Composable
@@ -57,7 +58,8 @@ fun TabbedViewBottomBar(pagerState: PagerState, titles: List<TitleItem>, depende
                                 Icon(imageVector = item.icon, contentDescription = null)
                                 Text(
                                     text = item.title,
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.Center
                                 )
                             }
 
