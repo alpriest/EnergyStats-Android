@@ -18,13 +18,17 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.double
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
 
 object ScheduleResponseSerializer : KSerializer<ScheduleResponse> {
     override fun deserialize(decoder: Decoder): ScheduleResponse {
@@ -110,7 +114,20 @@ object OpenReportResponseSerializer : KSerializer<OpenReportResponse> {
         }
 
     override fun serialize(encoder: Encoder, value: OpenReportResponse) {
-        throw SerializationException("OpenReportResponseSerializer is decode-only")
+        val jsonEncoder = encoder as? JsonEncoder
+            ?: throw SerializationException("OpenReportResponseSerializer can only be used with JSON")
+
+        val obj = buildJsonObject {
+            put("variable", value.variable)
+            put("unit", value.unit)
+            putJsonArray("values") {
+                value.values.forEach { data ->
+                    add(JsonPrimitive(data.value))
+                }
+            }
+        }
+
+        jsonEncoder.encodeJsonElement(obj)
     }
 }
 

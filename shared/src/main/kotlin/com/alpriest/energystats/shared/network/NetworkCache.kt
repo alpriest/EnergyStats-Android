@@ -107,13 +107,11 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         }
     }
 
-    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse {
-        return api.openapi_fetchBatterySettings(deviceSN)
-    }
+    override suspend fun openapi_fetchBatterySettings(deviceSN: String): BatterySOCResponse =
+        api.openapi_fetchBatterySettings(deviceSN)
 
-    override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
+    override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) =
         api.openapi_setBatterySoc(deviceSN, minSOCOnGrid, minSOC)
-    }
 
     override suspend fun openapi_fetchDataLoggers(): List<DataLoggerResponse> {
         val key = makeKey(currentFunctionName())
@@ -129,29 +127,23 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         }
     }
 
-    override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> {
-        return api.openapi_fetchBatteryTimes(deviceSN)
-    }
+    override suspend fun openapi_fetchBatteryTimes(deviceSN: String): List<ChargeTime> =
+        api.openapi_fetchBatteryTimes(deviceSN)
 
-    override suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>) {
+    override suspend fun openapi_setBatteryTimes(deviceSN: String, times: List<ChargeTime>) =
         api.openapi_setBatteryTimes(deviceSN, times)
-    }
 
-    override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
-        return api.openapi_fetchSchedulerFlag(deviceSN)
-    }
+    override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse =
+        api.openapi_fetchSchedulerFlag(deviceSN)
 
-    override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
-        return api.openapi_fetchCurrentSchedule(deviceSN)
-    }
+    override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse =
+        api.openapi_fetchCurrentSchedule(deviceSN)
 
-    override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
+    override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) =
         api.openapi_setScheduleFlag(deviceSN, schedulerEnabled)
-    }
 
-    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: ScheduleV3) {
+    override suspend fun openapi_saveSchedule(deviceSN: String, schedule: ScheduleV3) =
         api.openapi_saveSchedule(deviceSN, schedule)
-    }
 
     override suspend fun openapi_fetchDevice(deviceSN: String): DeviceDetailResponse {
         val key = makeKey(currentFunctionName(), deviceSN)
@@ -192,42 +184,33 @@ class NetworkCache(private val api: FoxAPIServicing) : FoxAPIServicing {
         }
     }
 
-    override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse {
-        return api.openapi_fetchRequestCount()
-    }
+    override suspend fun openapi_fetchRequestCount(): ApiRequestCountResponse =
+        api.openapi_fetchRequestCount()
 
-    override suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse {
-        return api.openapi_fetchDeviceSettingsItem(deviceSN, item)
-    }
+    override suspend fun openapi_fetchDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem): FetchDeviceSettingsItemResponse =
+        api.openapi_fetchDeviceSettingsItem(deviceSN, item)
 
-    override suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) {
-        return api.openapi_setDeviceSettingsItem(deviceSN, item, value)
-    }
+    override suspend fun openapi_setDeviceSettingsItem(deviceSN: String, item: DeviceSettingsItem, value: String) =
+        api.openapi_setDeviceSettingsItem(deviceSN, item, value)
 
-    override suspend fun fetchErrorMessages() {
+    override suspend fun fetchErrorMessages() =
         api.fetchErrorMessages()
-    }
 
-    override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse {
-        return api.openapi_fetchPeakShavingSettings(deviceSN)
-    }
+    override suspend fun openapi_fetchPeakShavingSettings(deviceSN: String): FetchPeakShavingSettingsResponse =
+        api.openapi_fetchPeakShavingSettings(deviceSN)
 
-    override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) {
-        return api.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
-    }
+    override suspend fun openapi_setPeakShavingSettings(deviceSN: String, importLimit: Double, soc: Int) =
+        api.openapi_setPeakShavingSettings(deviceSN, importLimit, soc)
 
-    override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse {
-        return api.openapi_fetchPowerGeneration(deviceSN)
-    }
+    override suspend fun openapi_fetchPowerGeneration(deviceSN: String): PowerGenerationResponse =
+        api.openapi_fetchPowerGeneration(deviceSN)
 
-    override suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse {
-        return api.openapi_getBatteryHeatingSchedule(deviceSN)
-    }
+    override suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse =
+        api.openapi_getBatteryHeatingSchedule(deviceSN)
 
-    override suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest) {
+    override suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest) =
         api.openapi_setBatteryHeatingSchedule(schedule)
-    }
-
+    
     private fun makeKey(base: String, vararg arguments: String): String {
         return listOf(base, *arguments).joinToString(separator = "_")
     }

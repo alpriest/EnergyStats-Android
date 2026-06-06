@@ -17,6 +17,7 @@ import com.alpriest.energystats.shared.models.toAppSettings
 import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
 import com.alpriest.energystats.shared.network.NetworkDemoSwitchingFacade
+import com.alpriest.energystats.shared.network.NetworkHistoricStore
 import com.alpriest.energystats.shared.network.NetworkService
 import com.alpriest.energystats.shared.network.NetworkThrottlerFacade
 import com.alpriest.energystats.shared.network.NetworkValueCleaner
@@ -41,6 +42,7 @@ import com.alpriest.energystats.ui.summary.DemoSolarForecasting
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
+import java.io.File
 
 class AppContainer(private val context: Context) {
     val templateStore: TemplateStoring by lazy {
@@ -82,8 +84,8 @@ class AppContainer(private val context: Context) {
 
         val service = FoxAPIService(requestData, chucker)
         val throttler = NetworkThrottlerFacade(service)
-        // TODO: val historicStore = NetworkHistoricStore(api: throttler)
-        val cache = NetworkCache(throttler)
+        val historicStore = NetworkHistoricStore(throttler, File(context.filesDir, "network-historic-store"))
+        val cache = NetworkCache(historicStore)
 
         NetworkService(
             NetworkValueCleaner(
