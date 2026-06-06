@@ -18,6 +18,7 @@ import com.alpriest.energystats.shared.network.FoxAPIService
 import com.alpriest.energystats.shared.network.NetworkCache
 import com.alpriest.energystats.shared.network.NetworkDemoSwitchingFacade
 import com.alpriest.energystats.shared.network.NetworkService
+import com.alpriest.energystats.shared.network.NetworkThrottlerFacade
 import com.alpriest.energystats.shared.network.NetworkValueCleaner
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.network.RequestData
@@ -79,10 +80,15 @@ class AppContainer(private val context: Context) {
             userAgent = "Energy Stats Android"
         )
 
+        val service = FoxAPIService(requestData, chucker)
+        val throttler = NetworkThrottlerFacade(service)
+        // TODO: val historicStore = NetworkHistoricStore(api: throttler)
+        val cache = NetworkCache(throttler)
+
         NetworkService(
             NetworkValueCleaner(
                 NetworkDemoSwitchingFacade(
-                    api = NetworkCache(api = FoxAPIService(requestData, chucker)),
+                    api = cache,
                     isDemoUser = { config.isDemoUser }
                 ),
                 { appSettingsStore.currentValue.dataCeiling }
