@@ -216,7 +216,8 @@ fun StatsApproximationViewPreview() {
                     feedIn = 2.0,
                     loads = 5.0,
                     solar = 0.9,
-                    ct2 = 0.0
+                    ct2 = 0.0,
+                    inverterConsumption = 1.2
                 )
             ),
             showingApproximations = showingApproximations

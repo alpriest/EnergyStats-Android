@@ -8,7 +8,6 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.network.BadCredentialsException
 import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.stores.CredentialStore
-import com.alpriest.energystats.ui.settings.solcast.SolcastCaching
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,7 +37,7 @@ class UserManager(
     private val application: Context,
     private var configManager: ConfigManaging,
     override val store: CredentialStore,
-    private val solarForecasting: () -> SolcastCaching
+    private val onLogout: () -> Unit?
 ) : UserManaging {
     private val _loggedInState = MutableStateFlow(LoginStateHolder(LoggedOut()))
     override val loggedInState: StateFlow<LoginStateHolder> = _loggedInState.asStateFlow()
@@ -107,9 +106,8 @@ class UserManager(
     }
 
     override suspend fun logout(clearDisplaySettings: Boolean, clearDeviceSettings: Boolean) {
-        store.logout()
+        onLogout()
         WatchSyncManager().sendWatchConfigData(application, "", configManager)
-        solarForecasting().clearCache()
 
         if (configManager.isDemoUser) {
             configManager.logout(clearDisplaySettings = true, clearDeviceSettings = true)

@@ -87,11 +87,11 @@ class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, pr
 
         solarSaving = FinanceAmount(
             shortTitleResId = R.string.grid_import_avoided_short_title,
-            amount = java.lang.Double.max(0.0, totalsViewModel.solar - totalsViewModel.feedIn) * configManager.gridImportUnitPrice
+            amount = java.lang.Double.max(0.0, totalsViewModel.solar - totalsViewModel.feedIn - totalsViewModel.inverterConsumption) * configManager.gridImportUnitPrice
         )
         solarSavingBreakdown = CalculationBreakdown(
-            formula = "max(0, solar - gridExport) * gridImportUnitPrice",
-            calculation = { "max(0, ${totalsViewModel.solar.roundedToString(it)} - ${totalsViewModel.feedIn.roundedToString(it)}) * ${configManager.gridImportUnitPrice}" }
+            formula = "max(0, solar - gridExport - inverterConsumption) * gridImportUnitPrice",
+            calculation = { "max(0, ${totalsViewModel.solar.roundedToString(it)} - ${totalsViewModel.feedIn.roundedToString(it)} - ${totalsViewModel.inverterConsumption.roundedToString(it)}) * ${configManager.gridImportUnitPrice}" }
         )
 
         total = FinanceAmount(

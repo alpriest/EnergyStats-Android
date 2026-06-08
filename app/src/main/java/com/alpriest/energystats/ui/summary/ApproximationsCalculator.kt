@@ -1,14 +1,14 @@
 package com.alpriest.energystats.ui.summary
 
-import com.alpriest.energystats.shared.network.Networking
-import com.alpriest.energystats.shared.models.network.OpenReportResponse
-import com.alpriest.energystats.shared.models.QueryDate
-import com.alpriest.energystats.shared.models.network.ReportType
-import com.alpriest.energystats.shared.models.ReportVariable
-import com.alpriest.energystats.shared.models.parse
 import com.alpriest.energystats.shared.config.ConfigManaging
-import com.alpriest.energystats.ui.flow.earnings.EnergyStatsFinancialModel
+import com.alpriest.energystats.shared.models.QueryDate
+import com.alpriest.energystats.shared.models.ReportVariable
 import com.alpriest.energystats.shared.models.TotalsViewModel
+import com.alpriest.energystats.shared.models.network.OpenReportResponse
+import com.alpriest.energystats.shared.models.network.ReportType
+import com.alpriest.energystats.shared.models.parse
+import com.alpriest.energystats.shared.network.Networking
+import com.alpriest.energystats.ui.flow.earnings.EnergyStatsFinancialModel
 import com.alpriest.energystats.ui.statsgraph.AbsoluteSelfSufficiencyCalculator
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import com.alpriest.energystats.ui.statsgraph.NetSelfSufficiencyCalculator
@@ -26,7 +26,15 @@ class ApproximationsCalculator(
         batteryDischarge: Double,
         solar: Double
     ): ApproximationsViewModel {
-        val totalsViewModel = TotalsViewModel(grid, feedIn, loads, solar, ct2 = 0.0) // ApproximationsCalculator is always called from places where we're looking at historical data, and ct2 isn't available)
+        val inverterConsumption = maxOf(solar + grid + batteryDischarge - feedIn - batteryCharge - loads, 0.0)
+        val totalsViewModel = TotalsViewModel(
+            grid,
+            feedIn,
+            loads,
+            solar,
+            ct2 = 0.0,  // ApproximationsCalculator is always called from places where we're looking at historical data, and ct2 isn't available)
+            inverterConsumption
+        )
 
         val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager)
 

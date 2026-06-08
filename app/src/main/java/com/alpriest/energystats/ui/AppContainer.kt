@@ -65,6 +65,7 @@ class AppContainer(private val context: Context) {
     var filePathChooser: ActivityResultLauncher<String>? = null
     var filePathChooserCallback: ((Uri) -> Unit)? = null
     val appSettingsStore: AppSettingsStore = AppSettingsStore(AppSettings.toAppSettings(config))
+    var historicStore: NetworkHistoricStore? = null
 
     val networking: Networking by lazy {
         val chucker = ChuckerInterceptor.Builder(context)
@@ -85,6 +86,7 @@ class AppContainer(private val context: Context) {
         val service = FoxAPIService(requestData, chucker)
         val throttler = NetworkThrottlerFacade(service)
         val historicStore = NetworkHistoricStore(throttler, File(context.filesDir, "network-historic-store"))
+        this.historicStore = historicStore
         val cache = NetworkCache(historicStore)
 
         NetworkService(
@@ -112,7 +114,11 @@ class AppContainer(private val context: Context) {
     }
 
     val userManager: UserManaging by lazy {
-        UserManager(context, configManager, credentialStore, solarForecastingProvider)
+        UserManager(context, configManager, credentialStore, {
+            solarForecastingProvider().clearCache()
+            historicStore?.clear()
+            credentialStore.logout()
+        })
     }
 
     val bannerAlertManager: BannerAlertManaging by lazy {
