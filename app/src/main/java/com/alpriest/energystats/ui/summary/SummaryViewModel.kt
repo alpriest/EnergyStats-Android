@@ -207,6 +207,8 @@ class SummaryTabViewModel(
             is SummaryDateRange.Automatic -> LocalDate.MIN
             is SummaryDateRange.Manual -> dateRange.from
         }
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
 
         for (year in (fromYear..toYear).reversed()) {
             if (hasFinished) {
@@ -222,7 +224,11 @@ class SummaryTabViewModel(
                         is SummaryDateRange.Manual -> dateRange.from
                     }
 
-                    if (year < toYear) {
+                    if (toYear != currentYear) {
+                        if (year < toYear) {
+                            hasFinished = true
+                        }
+                    } else {
                         hasFinished = true
                     }
                 }
@@ -284,7 +290,7 @@ class SummaryTabViewModel(
                 }
             }
 
-            if (monthlyTotal == 0.0 && (month < currentMonth || year < currentYear)) {
+            if (monthlyTotal == 0.0 && ((month < currentMonth && year == currentYear) || month < currentMonth || year < currentYear)) {
                 emptyMonth = month
                 break
             }

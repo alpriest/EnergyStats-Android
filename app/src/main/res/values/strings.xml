@@ -552,4 +552,5 @@
     <string name="years">years</string>
     <string name="present">present</string>
     <string name="manually_selected">%1$s (manually selected)</string>
+    <string name="unit_price_no_multi_tariff_available">Energy Stats cannot track multiple tariffs because the calculation is based on a total amount of energy used over a time period, e.g. day/month/year. Enter an average of your electricity rate usually obtained from your bill.</string>
 </resources>

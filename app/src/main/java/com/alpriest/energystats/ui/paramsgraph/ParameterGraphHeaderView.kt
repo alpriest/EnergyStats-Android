@@ -49,7 +49,6 @@ import java.time.LocalDate
 fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: Modifier = Modifier, navController: NavHostController, configManager: ConfigManaging) {
     var hours by remember { mutableStateOf(viewModel.displayModeStream.value.hours) }
     val candidateQueryDate = MutableStateFlow(viewModel.displayModeStream.collectAsState().value.date)
-    var hoursButtonEnabled by remember { mutableStateOf(true) }
     val currentDate = remember { mutableStateOf(LocalDate.now()) }
 
     LaunchedEffect(Unit) {
@@ -63,7 +62,6 @@ fun ParameterGraphHeaderView(viewModel: ParametersGraphTabViewModel, modifier: M
         candidateQueryDate
             .onEach {
                 viewModel.displayModeStream.value = ParametersDisplayMode(it, hours)
-                hoursButtonEnabled = it == LocalDate.now()
             }
             .collect {}
     }
