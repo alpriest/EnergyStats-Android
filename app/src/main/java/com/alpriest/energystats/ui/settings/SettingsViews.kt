@@ -181,8 +181,7 @@ fun SettingsDiscreteText(
         ) {
             MarkdownText(
                 it,
-                style = typography.bodySmall,
-                color = colorScheme.onSecondary.copy(alpha = 0.7f),
+                style = typography.bodySmall.copy(color = colorScheme.onSecondary.copy(alpha = 0.7f)),
                 modifier = textModifier.padding(bottom = 8.dp)
             )
         }
