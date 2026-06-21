@@ -25,8 +25,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.helpers.dayMonthFormat
 import com.alpriest.energystats.shared.helpers.dayMonthYearFormat
+import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.tabs.TopBarSettings
-import com.alpriest.energystats.ui.helpers.CalendarView
+import com.alpriest.energystats.ui.helpers.InlineCalendarView
 import com.alpriest.energystats.ui.helpers.MonthPicker
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.helpers.YearPicker
@@ -162,11 +163,11 @@ fun CustomDateRangePickerView(
 
                 if (viewBy == CustomDateRangeDisplayUnit.DAYS) {
                     SettingsColumn(header = startHeader) {
-                        CalendarView(start) { viewModel.setStart(it) }
+                        InlineCalendarView(start, "Start") { viewModel.setStart(it) }
                     }
 
                     SettingsColumn(header = endHeader) {
-                        CalendarView(end) { viewModel.setEnd(it) }
+                        InlineCalendarView(end, "End") { viewModel.setEnd(it) }
                     }
                 } else {
                     MonthYearPicker(startHeader, start) {
@@ -218,12 +219,12 @@ fun MonthYearPicker(header: String, date: LocalDate, onChange: (LocalDate) -> Un
 private fun CustomDateRangePickerViewPreview() {
     val settings = remember { mutableStateOf(TopBarSettings(topBarVisible = true, title = "Choose", actions = {}, backButtonAction = null)) }
 
-    EnergyStatsTheme {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         CustomDateRangePickerView(
             topBarSettings = settings,
             initialStart = LocalDate.now(),
             initialEnd = LocalDate.now(),
-            initialViewBy = CustomDateRangeDisplayUnit.MONTHS,
+            initialViewBy = CustomDateRangeDisplayUnit.DAYS,
             onDismiss = {},
             onConfirm = { _, _, _ -> },
             viewModel = previewCustomDateRangePickerViewModel

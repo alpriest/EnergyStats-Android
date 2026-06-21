@@ -286,10 +286,10 @@ class StatsTabViewModel(
 
             is StatsDisplayMode.Custom -> {
                 val start = displayMode.start
-                val startMonth = String.format("%02d", start.month)
+                val startMonth = String.format("%02d", start.month.value)
                 val startDay = String.format("%02d", start.dayOfMonth)
                 val end = displayMode.end
-                val endMonth = String.format("%02d", end.month)
+                val endMonth = String.format("%02d", end.month.value)
                 val endDay = String.format("%02d", end.dayOfMonth)
 
                 baseExportFileName = "energystats_${start.year}_${startMonth}_${startDay}._${end.year}_${endMonth}_${endDay}"
