@@ -163,11 +163,11 @@ fun CustomDateRangePickerView(
 
                 if (viewBy == CustomDateRangeDisplayUnit.DAYS) {
                     SettingsColumn(header = startHeader) {
-                        InlineCalendarView(start, "Start") { viewModel.setStart(it) }
+                        InlineCalendarView(start, stringResource(R.string.start)) { viewModel.setStart(it) }
                     }
 
                     SettingsColumn(header = endHeader) {
-                        InlineCalendarView(end, "End") { viewModel.setEnd(it) }
+                        InlineCalendarView(end, stringResource(R.string.end)) { viewModel.setEnd(it) }
                     }
                 } else {
                     MonthYearPicker(startHeader, start) {

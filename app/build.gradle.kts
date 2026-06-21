@@ -16,10 +16,10 @@ localProperties.load(FileInputStream(rootProject.file("local.properties")))
 
 android {
     namespace = "com.alpriest.energystats"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        val api = 36
+        val api = 37
         applicationId = "com.alpriest.energystats"
         minSdk = 26
         targetSdk = api

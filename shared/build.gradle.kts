@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.alpriest.energystats.shared"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {

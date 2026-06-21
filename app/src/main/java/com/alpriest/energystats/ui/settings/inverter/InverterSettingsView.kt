@@ -109,6 +109,7 @@ fun InverterSettingsView(configManager: ConfigManaging, navController: NavHostCo
 
                 SettingsCheckbox(
                     title = stringResource(R.string.show_estimated_inverter_consumption),
+                    infoText = "solar + grid + batteryDischarge - feedIn - batteryCharge - loads",
                     state = showInverterConsumptionState,
                     onUpdate = { configManager.showInverterConsumption = it }
                 )

@@ -7,10 +7,10 @@ plugins {
 android {
     namespace = "com.alpriest.energystats"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
     defaultConfig {
-        val api = 36
+        val api = 37
         applicationId = "com.alpriest.energystats"
         minSdk = 28
         targetSdk = api
