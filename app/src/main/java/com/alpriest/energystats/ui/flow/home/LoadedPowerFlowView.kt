@@ -103,9 +103,12 @@ fun LoadedPowerFlowView(
                 )
 
                 todayPercentageSolarForecastAchieved?.let {
-                    if (configManager.showTodayPercentageSolarForecastAchieved) {
+                    if (configManager.showTodayPercentageSolarForecastAchieved &&
+                        todayPercentageSolarForecastAchieved != Double.POSITIVE_INFINITY &&
+                        todayPercentageSolarForecastAchieved != Double.NEGATIVE_INFINITY) {
+                        val amount: String = "%.0f".format(todayPercentageSolarForecastAchieved)
                         Text(
-                            ", ${"%.0f".format(todayPercentageSolarForecastAchieved)}% of forecast"
+                            stringResource(R.string.of_forecast, amount)
                         )
                     }
                 }

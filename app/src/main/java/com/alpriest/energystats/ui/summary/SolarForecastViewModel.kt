@@ -175,7 +175,7 @@ class SolarForecastViewModel(
         val coverage = solarForecastTotalData.percentageTimePeriodsAvailable
 
         val description = String.format(
-            "%s of required Solcast data is available. %s of forecast generated.",
+            application.getString(R.string.s_of_required_solcast_data_is_available_s_of_forecast_generated),
             coverage.asPercent(),
             percentageSolarForecastAchieved.asPercent()
         )

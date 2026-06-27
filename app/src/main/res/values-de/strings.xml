@@ -549,4 +549,9 @@
     <string name="years">Jahre</string>
     <string name="present">Heute</string>
     <string name="manually_selected">%1$s (manuell ausgewählt)</string>
+    <string name="unit_price_no_multi_tariff_available">Energy Stats kann keine mehreren Tarife verwalten, da die Berechnung auf dem gesamten Energieverbrauch über einen Zeitraum (z. B. Tag, Monat oder Jahr) basiert. Bitte gib deinen durchschnittlichen Strompreis ein, den du normalerweise auf deiner Stromrechnung findest.</string>
+    <string name="s_of_required_solcast_data_is_available_s_of_forecast_generated">%s der erforderlichen Solcast-Daten sind verfügbar. %s der Prognose wurden erstellt.</string>
+    <string name="of_forecast">, %1$s %% der Prognose</string>
+    <string name="hide_password_accessibility_hint">Passwort ausblenden</string>
+    <string name="show_password_accessibility_hint">Passwort anzeigen</string>
 </resources>

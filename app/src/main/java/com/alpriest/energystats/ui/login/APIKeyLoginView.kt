@@ -93,7 +93,7 @@ class APIKeyLoginView(private val userManager: UserManaging) {
                         Icons.Filled.Visibility
                     else Icons.Filled.VisibilityOff
 
-                    val description = if (passwordVisible) "Hide password" else "Show password"
+                    val description = if (passwordVisible) stringResource(R.string.hide_password_accessibility_hint) else stringResource(R.string.show_password_accessibility_hint)
 
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(imageVector = image, description)

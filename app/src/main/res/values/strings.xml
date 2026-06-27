@@ -553,4 +553,8 @@
     <string name="present">present</string>
     <string name="manually_selected">%1$s (manually selected)</string>
     <string name="unit_price_no_multi_tariff_available">Energy Stats cannot track multiple tariffs because the calculation is based on a total amount of energy used over a time period, e.g. day/month/year. Enter an average of your electricity rate usually obtained from your bill.</string>
+    <string name="s_of_required_solcast_data_is_available_s_of_forecast_generated">%s of required Solcast data is available. %s of forecast generated.</string>
+    <string name="of_forecast">, %1$s%% of forecast</string>
+    <string name="hide_password_accessibility_hint">Hide password</string>
+    <string name="show_password_accessibility_hint">Show password</string>
 </resources>
