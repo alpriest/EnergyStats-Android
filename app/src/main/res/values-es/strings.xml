@@ -554,4 +554,6 @@
     <string name="of_forecast">, %1$s %% de la previsión</string>
     <string name="hide_password_accessibility_hint">Ocultar contraseña</string>
     <string name="show_password_accessibility_hint">Mostrar contraseña</string>
+    <string name="deduct_inverter_consumption_from_grid_avoided">Restar el consumo del inversor de la energía de la red evitada</string>
+    <string name="deduct_inverter_consumption_from_grid_avoided_description">Cuando esta opción está activada, el consumo de energía de tu inversor se restará de la energía de la red evitada. Esto se debe a que esa energía no se habría importado de la red sin el inversor, por lo que no cuenta como un ahorro directo. Sin embargo, es posible que el inversor esté funcionando con energía almacenada en tus baterías procedente de tus paneles solares, por lo que quizá no quieras restar ese consumo.</string>
 </resources>

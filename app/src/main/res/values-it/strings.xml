@@ -555,4 +555,6 @@
     <string name="of_forecast">, %1$s%% della previsione</string>
     <string name="hide_password_accessibility_hint">Nascondi password</string>
     <string name="show_password_accessibility_hint">Mostra password</string>
+    <string name="deduct_inverter_consumption_from_grid_avoided">Detrai il consumo dell\'inverter dal prelievo di rete evitato</string>
+    <string name="deduct_inverter_consumption_from_grid_avoided_description">Quando questa opzione è selezionata, il consumo energetico del tuo inverter verrà sottratto dal prelievo di rete evitato. Questo perché tale energia non sarebbe stata prelevata dalla rete senza l\'inverter e quindi non rappresenta un risparmio diretto. Tuttavia, il tuo inverter potrebbe funzionare utilizzando l\'energia immagazzinata nelle batterie dai tuoi pannelli solari e, in tal caso, potresti non voler sottrarre questo consumo.</string>
 </resources>

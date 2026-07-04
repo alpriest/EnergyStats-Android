@@ -101,6 +101,7 @@ interface StoredConfig {
     var inverterGeneration: InverterGeneration
     var showTodayPercentageSolarForecastAchieved: Boolean
     var installationPurchasePrice: Double
+    var deductInverterConsumptionFromGridAvoided: Boolean
 }
 
 interface CurrentStatusCalculatorConfig {

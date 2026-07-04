@@ -111,5 +111,6 @@ class FakeStoredConfigStore(
     override var showBatteryMaxCurrentCharge: Boolean = false,
     override var inverterGeneration: InverterGeneration = InverterGeneration.Unknown,
     override var showTodayPercentageSolarForecastAchieved: Boolean = true,
-    override var installationPurchasePrice: Double = 0.0
+    override var installationPurchasePrice: Double = 0.0,
+    override var deductInverterConsumptionFromGridAvoided: Boolean = true
 ) : StoredConfig

@@ -555,4 +555,6 @@
     <string name="of_forecast">, %1$s%% prognozy</string>
     <string name="hide_password_accessibility_hint">Ukryj hasło</string>
     <string name="show_password_accessibility_hint">Pokaż hasło</string>
+    <string name="deduct_inverter_consumption_from_grid_avoided">Odejmij zużycie energii falownika od unikniętego poboru z sieci</string>
+    <string name="deduct_inverter_consumption_from_grid_avoided_description">Po włączeniu tej opcji zużycie energii przez falownik zostanie odjęte od unikniętego poboru energii z sieci. Wynika to z faktu, że bez falownika energia ta nie zostałaby pobrana z sieci, więc nie stanowi bezpośredniej oszczędności. Falownik może jednak być zasilany energią zgromadzoną w akumulatorach z paneli słonecznych, dlatego w takim przypadku możesz nie chcieć odejmować tego zużycia.</string>
 </resources>

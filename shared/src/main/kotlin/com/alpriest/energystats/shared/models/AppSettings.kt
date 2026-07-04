@@ -66,7 +66,8 @@ data class AppSettings(
     val isReadOnly: Boolean,
     val statsTimeUsageGraphStyle: StatsTimeUsageGraphStyle,
     val showEnergySourceUsageGraphOnStats: Boolean,
-    val showBatteryMaxCurrentCharge: Boolean
+    val showBatteryMaxCurrentCharge: Boolean,
+    val deductInverterConsumptionFromGridAvoided: Boolean
 ) {
     fun fontSize(): TextUnit {
         return when (useLargeDisplay) {
@@ -140,7 +141,7 @@ fun AppSettings.Companion.demo(
     showOutputEnergyOnStats: Boolean = false,
     isReadOnly: Boolean = false,
     showBatteryMaxCurrentCharge: Boolean = false,
-    showTodayPercentageSolarForecastAchieved: Boolean = true
+    deductInverterConsumptionFromGridAvoided: Boolean = true,
 ): AppSettings {
     return AppSettings(
         useLargeDisplay = useLargeDisplay,
@@ -189,7 +190,8 @@ fun AppSettings.Companion.demo(
         isReadOnly = isReadOnly,
         statsTimeUsageGraphStyle = StatsTimeUsageGraphStyle.Line,
         showEnergySourceUsageGraphOnStats = false,
-        showBatteryMaxCurrentCharge = showBatteryMaxCurrentCharge
+        showBatteryMaxCurrentCharge = showBatteryMaxCurrentCharge,
+        deductInverterConsumptionFromGridAvoided = deductInverterConsumptionFromGridAvoided
     )
 }
 
@@ -241,6 +243,7 @@ fun AppSettings.Companion.toAppSettings(config: StoredConfig): AppSettings {
         isReadOnly = config.isReadOnly,
         statsTimeUsageGraphStyle = config.statsTimeUsageGraphStyle,
         showEnergySourceUsageGraphOnStats = config.showEnergySourceUsageGraphOnStats,
-        showBatteryMaxCurrentCharge = config.showBatteryMaxCurrentCharge
+        showBatteryMaxCurrentCharge = config.showBatteryMaxCurrentCharge,
+        deductInverterConsumptionFromGridAvoided = config.deductInverterConsumptionFromGridAvoided
     )
 }

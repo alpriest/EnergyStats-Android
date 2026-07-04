@@ -109,6 +109,7 @@ class FakeConfigManager : ConfigManaging {
     override var inverterGeneration: InverterGeneration = InverterGeneration.Unknown
     override var showTodayPercentageSolarForecastAchieved: Boolean = true
     override var installationPurchasePrice: Double = 0.0
+    override var deductInverterConsumptionFromGridAvoided: Boolean = true
 
     override var devices: List<Device> = listOf(
         Device(

@@ -695,6 +695,13 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             config.installationPurchasePrice = value
         }
 
+    override var deductInverterConsumptionFromGridAvoided: Boolean
+        get() = config.deductInverterConsumptionFromGridAvoided
+        set(value) {
+            config.deductInverterConsumptionFromGridAvoided = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
     init {
         val selectedSn = selectedDeviceSN
         val initialDevice = if (selectedSn.isNullOrBlank()) {

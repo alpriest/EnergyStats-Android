@@ -26,6 +26,9 @@ import com.alpriest.energystats.ui.flow.UiLoadState
 import com.alpriest.energystats.ui.statsgraph.ApproximationsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -104,6 +107,18 @@ class SummaryTabViewModel(
                 )
             }
         }
+
+        viewModelScope.launch {
+            configManager.appSettingsStream
+                .map { it.deductInverterConsumptionFromGridAvoided }
+                .distinctUntilChanged()
+                .drop(1)
+                .collect { it ->
+                    _viewDataStream.value = null
+                    load()
+                }
+        }
+
         loadStateStream.value = UiLoadState(LoadState.Inactive)
     }
 

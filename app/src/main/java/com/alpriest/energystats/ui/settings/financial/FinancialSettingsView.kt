@@ -53,6 +53,7 @@ fun FinancialsSettingsView(configManager: ConfigManaging) {
     val unitPrice = rememberSaveable { mutableStateOf(configManager.feedInUnitPrice.toCurrency()) }
     val gridImportUnitPrice = rememberSaveable { mutableStateOf(configManager.gridImportUnitPrice.toCurrency()) }
     val earningsModel = rememberSaveable { mutableStateOf(configManager.earningsModel) }
+    val deductInverterConsumptionFromGridAvoidedState = rememberSaveable { mutableStateOf(configManager.deductInverterConsumptionFromGridAvoided) }
     trackScreenView("Financial Model", "FinancialsSettingsView")
 
     SettingsColumn(footer = stringResource(R.string.energy_stats_earnings_calculation_description)) {
@@ -112,6 +113,12 @@ fun FinancialsSettingsView(configManager: ConfigManaging) {
         }
 
         MakeInstallationFields(configManager)
+
+        SettingsColumn(footer = stringResource(R.string.deduct_inverter_consumption_from_grid_avoided_description)) {
+            SettingsCheckbox(title = stringResource(R.string.deduct_inverter_consumption_from_grid_avoided), state = deductInverterConsumptionFromGridAvoidedState, onUpdate = {
+                configManager.deductInverterConsumptionFromGridAvoided = it
+            })
+        }
 
         Column(
             horizontalAlignment = Alignment.Start,

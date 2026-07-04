@@ -124,7 +124,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_BATTERY_MAX_CURRENT_CHARGE,
         INVERTER_GENERATION,
         SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED,
-        INSTALLATION_PURCHASE_PRICE
+        INSTALLATION_PURCHASE_PRICE,
+        DEDUCT_INVERTER_CONSUMPTION_FROM_GRID_AVOIDED
     }
 
     // Local in-memory only
@@ -917,6 +918,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putFloat(SharedPreferenceDisplayKey.INSTALLATION_PURCHASE_PRICE.name, value.toFloat())
+            }
+        }
+
+    override var deductInverterConsumptionFromGridAvoided: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.DEDUCT_INVERTER_CONSUMPTION_FROM_GRID_AVOIDED.name, true)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.DEDUCT_INVERTER_CONSUMPTION_FROM_GRID_AVOIDED.name, value)
             }
         }
 }

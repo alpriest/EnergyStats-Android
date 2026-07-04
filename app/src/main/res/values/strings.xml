@@ -557,4 +557,6 @@
     <string name="of_forecast">, %1$s%% of forecast</string>
     <string name="hide_password_accessibility_hint">Hide password</string>
     <string name="show_password_accessibility_hint">Show password</string>
+    <string name="deduct_inverter_consumption_from_grid_avoided">Deduct inverter consumption from grid avoided</string>
+    <string name="deduct_inverter_consumption_from_grid_avoided_description">When this option is checked, your inverter\'s energy use will be deducted from your grid avoided amount. This is because the energy wouldn\'t have been imported without the inverter, so it doesn\'t count as a direct saving. However, your inverter might be running on energy stored in your batteries from your solar panels and therefore you don\'t want to deduct it.</string>
 </resources>
