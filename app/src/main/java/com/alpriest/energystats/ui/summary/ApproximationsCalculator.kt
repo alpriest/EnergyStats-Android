@@ -33,7 +33,9 @@ class ApproximationsCalculator(
             loads,
             solar,
             ct2 = 0.0,  // ApproximationsCalculator is always called from places where we're looking at historical data, and ct2 isn't available)
-            inverterConsumption
+            inverterConsumption,
+            batteryCharge,
+            batteryDischarge
         )
 
         val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager)

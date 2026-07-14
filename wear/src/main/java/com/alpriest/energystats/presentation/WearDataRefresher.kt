@@ -98,14 +98,14 @@ class WearDataRefresher(
                             "ResidualEnergy",
                             "batTemperature",
                             "batTemperature_1",
-                            "batTemperature_2"
+                            "batTemperature_2",
                         )
                     )
 
                     val config = WearConfig(
                         store.shouldInvertCT2,
                         store.shouldCombineCT2WithPVPower,
-                        PowerFlowStringsSettings.Companion.defaults,
+                        PowerFlowStringsSettings.defaults,
                         store.shouldCombineCT2WithLoadsPower,
                         store.allowNegativeLoad,
                         store.showGridTotals
@@ -127,8 +127,15 @@ class WearDataRefresher(
                         TotalsViewModel(
                             reports = networking.fetchReport(
                                 deviceSN = device.deviceSN,
-                                variables = listOf(ReportVariable.FeedIn, ReportVariable.GridConsumption),
-                                queryDate = QueryDate.Companion.invoke(),
+                                variables = listOf(
+                                    ReportVariable.FeedIn,
+                                    ReportVariable.GridConsumption,
+                                    ReportVariable.PvEnergyToTal,
+                                    ReportVariable.ChargeEnergyToTal,
+                                    ReportVariable.DischargeEnergyToTal,
+                                    ReportVariable.Loads
+                                ),
+                                queryDate = QueryDate.invoke(),
                                 reportType = ReportType.month
                             ),
                             generationViewModel = null
@@ -142,8 +149,12 @@ class WearDataRefresher(
                         houseLoadAmount = values.homeConsumption
                         gridAmount = values.grid
                         batteryChargeAmount = batteryViewModel.chargePower
-                        totalExport = totals?.grid
-                        totalImport = totals?.loads
+                        totalExport = totals?.feedIn
+                        totalImport = totals?.grid
+                        totalSolar = totals?.solar
+                        totalHome = totals?.loads
+                        totalBatteryDischarge = totals?.batteryDischarge
+                        totalBatteryCharge = totals?.batteryCharge
                     }
                 }
 

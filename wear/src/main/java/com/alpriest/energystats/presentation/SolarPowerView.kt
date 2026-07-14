@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.ui.SunIconWithThresholds
 
@@ -11,7 +12,8 @@ import com.alpriest.energystats.shared.ui.SunIconWithThresholds
 fun SolarPowerView(
     iconScale: IconScale,
     solarAmount: Double?,
-    solarRangeDefinitions: SolarRangeDefinitions
+    solarRangeDefinitions: SolarRangeDefinitions,
+    total: Double?
 ) {
     FullPageStatusView(
         iconScale = iconScale,
@@ -19,15 +21,19 @@ fun SolarPowerView(
             SunIconWithThresholds(solarAmount ?: 8.8, iconHeight = iconScale.iconHeight(), solarRangeDefinitions, true)
         },
         line1 = { textStyle ->
-            RedactedKW(solarAmount, textStyle)
+            kWWithPlaceholder(solarAmount, textStyle)
         },
     ) { textStyle ->
-        Text(" ", style = textStyle)
+        if (iconScale == IconScale.LARGE && total != null) {
+            TextWithPlaceholder("today ${total.kWh(1)}", textStyle)
+        } else {
+            Text(" ", style = textStyle)
+        }
     }
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun SolarPowerViewPreviewRound() {
-    SolarPowerView(IconScale.LARGE, 1.0, SolarRangeDefinitions.defaults)
+    SolarPowerView(IconScale.LARGE, 1.0, SolarRangeDefinitions.defaults, 17.8)
 }

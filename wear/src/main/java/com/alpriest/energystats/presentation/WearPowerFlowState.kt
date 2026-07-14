@@ -14,5 +14,9 @@ data class WearPowerFlowState(
     val batteryChargePower: Double?,
     val solarRangeDefinitions: SolarRangeDefinitions,
     val totalExport: Double?,
-    val totalImport: Double?
+    val totalImport: Double?,
+    val totalSolar: Double?,
+    val totalBatteryCharge: Double?,
+    val totalBatteryDischarge: Double?,
+    val totalHome: Double?
 )

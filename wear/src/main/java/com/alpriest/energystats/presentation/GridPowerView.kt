@@ -37,25 +37,21 @@ fun GridPowerView(
             )
         },
         line1 = { textStyle ->
-            RedactedKW(amount, textStyle)
+            kWWithPlaceholder(amount, textStyle)
         },
         line2 = { textStyle ->
-            if (iconScale == IconScale.LARGE && totalImport != null && totalExport != null) {
+            if (totalImport != null && totalExport != null) {
                 Row {
+                    TextWithPlaceholder(totalImport.roundedToString(1), textStyle.copy(color = PowerFlowNegative))
                     Text(
-                        text = totalImport.roundedToString(2),
-                        color = PowerFlowNegative,
-                        style = textStyle
+                        text = "/",
+                        style = textStyle.copy(color = PowerFlowNeutral)
                     )
-                    Text(
-                        "/",
-                        style = textStyle
-                    )
-                    Text(
-                        totalExport.kWh(2),
-                        color = PowerFlowPositive,
-                        style = textStyle
-                    )
+                    if (iconScale == IconScale.LARGE) {
+                        TextWithPlaceholder(totalExport.kWh(1), textStyle.copy(color = PowerFlowPositive))
+                    } else {
+                        TextWithPlaceholder(totalExport.roundedToString(1), textStyle.copy(color = PowerFlowPositive))
+                    }
                 }
             } else {
                 Text(" ")

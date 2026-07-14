@@ -31,7 +31,11 @@ data class WearCredsSnapshot(
     val gridAmount: Double,
     val totalImport: Double?,
     val totalExport: Double?,
-    val lastRefreshTime: Instant
+    val lastRefreshTime: Instant,
+    val totalSolar: Double?,
+    val totalBatteryCharge: Double?,
+    val totalBatteryDischarge: Double?,
+    val totalHome: Double?
 )
 
 fun SharedPreferencesConfigStore.snapshot(): WearCredsSnapshot = WearCredsSnapshot(
@@ -51,7 +55,11 @@ fun SharedPreferencesConfigStore.snapshot(): WearCredsSnapshot = WearCredsSnapsh
     gridAmount = gridAmount,
     totalImport = totalImport,
     totalExport = totalExport,
-    lastRefreshTime = lastUpdatedTime
+    lastRefreshTime = lastUpdatedTime,
+    totalSolar = totalSolar,
+    totalBatteryCharge = totalBatteryCharge,
+    totalBatteryDischarge = totalBatteryDischarge,
+    totalHome = totalHome
 )
 
 class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferences) {
@@ -75,7 +83,11 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         ALLOW_NEGATIVE_LOAD,
         TOTAL_IMPORT,
         TOTAL_EXPORT,
-        PREFS_UPDATED_AT
+        PREFS_UPDATED_AT,
+        TOTAL_SOLAR,
+        TOTAL_BATTERY_CHARGE,
+        TOTAL_BATTERY_DISCHARGE,
+        TOTAL_HOME
     }
 
     var apiKey: String? by preference(sharedPreferences, SharedPreferenceKey.TOKEN.name, null as String?)
@@ -96,6 +108,10 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
 
     var totalImport: Double? by nullableDoublePreference(sharedPreferences, SharedPreferenceKey.TOTAL_IMPORT.name)
     var totalExport: Double? by nullableDoublePreference(sharedPreferences, SharedPreferenceKey.TOTAL_EXPORT.name)
+    var totalSolar: Double? by nullableDoublePreference(sharedPreferences, SharedPreferenceKey.TOTAL_SOLAR.name)
+    var totalHome: Double? by nullableDoublePreference(sharedPreferences, SharedPreferenceKey.TOTAL_HOME.name)
+    var totalBatteryCharge: Double? by nullableDoublePreference(sharedPreferences, SharedPreferenceKey.TOTAL_BATTERY_CHARGE.name)
+    var totalBatteryDischarge: Double? by nullableDoublePreference(sharedPreferences, SharedPreferenceKey.TOTAL_BATTERY_DISCHARGE.name)
 
     var solarRangeDefinitions: SolarRangeDefinitions
         get() {

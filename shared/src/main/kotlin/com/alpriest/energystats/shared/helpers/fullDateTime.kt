@@ -22,7 +22,7 @@ fun LocalDate.monthYearString(): String {
 }
 
 fun LocalDateTime.fullDateTime(): String {
-    val formatter = DateTimeFormatter.ofPattern("dd/MM/y, HH:mm:ss")
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/y, HH:mm")
     return this.format(formatter)
 }
 

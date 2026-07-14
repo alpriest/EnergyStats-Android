@@ -56,6 +56,10 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
             null,
             SolarRangeDefinitions.defaults,
             null,
+            null,
+            null,
+            null,
+            null,
             null
         )
     )

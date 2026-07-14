@@ -31,11 +31,11 @@ enum class IconScale {
     fun strokeWidth(): Float {
         return when (this) {
             LARGE -> {
-                6f
+                8f
             }
 
             SMALL -> {
-                3f
+                4f
             }
         }
     }
@@ -44,7 +44,7 @@ enum class IconScale {
     fun line1TextStyle(): TextStyle {
         return when (this) {
             SMALL -> MaterialTheme.typography.caption2.copy(fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            LARGE -> MaterialTheme.typography.body1.copy(fontSize = 24.sp)
+            LARGE -> MaterialTheme.typography.body1.copy(fontSize = 24.sp, fontWeight = FontWeight.Bold)
         }
     }
 
@@ -52,7 +52,7 @@ enum class IconScale {
     fun line2TextStyle(): TextStyle {
         return when (this) {
             SMALL -> MaterialTheme.typography.caption2.copy(fontSize = 14.sp, fontWeight = FontWeight.Bold)
-            LARGE -> MaterialTheme.typography.body1.copy(fontSize = 20.sp)
+            LARGE -> MaterialTheme.typography.body1.copy(fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

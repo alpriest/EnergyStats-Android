@@ -77,7 +77,8 @@ class MainActivity : ComponentActivity() {
                     1 -> SolarPowerView(
                         IconScale.LARGE,
                         solarAmount = state.solarAmount,
-                        solarRangeDefinitions = state.solarRangeDefinitions
+                        solarRangeDefinitions = state.solarRangeDefinitions,
+                        state.totalSolar
                     )
 
                     2 -> GridPowerView(
@@ -90,12 +91,15 @@ class MainActivity : ComponentActivity() {
                     3 -> BatteryPowerView(
                         IconScale.LARGE,
                         amount = state.batterySOC,
-                        chargeLevel = state.batteryChargePower
+                        chargeLevel = state.batteryChargePower,
+                        totalCharge = state.totalBatteryCharge,
+                        totalDischarge = state.totalBatteryDischarge
                     )
 
                     4 -> HomePowerView(
                         IconScale.LARGE,
-                        amount = state.houseLoadAmount
+                        amount = state.houseLoadAmount,
+                        state.totalHome
                     )
 
                     5 -> LastUpdatedView(state.lastUpdated)

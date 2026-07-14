@@ -44,21 +44,21 @@ fun AllItemsView(
             modifier = Modifier.align(solarAlign),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SolarPowerView(IconScale.SMALL, solarAmount, solarRangeDefinitions)
+            SolarPowerView(IconScale.SMALL, solarAmount, solarRangeDefinitions, null)
         }
 
         Column(
             modifier = Modifier.align(houseAlign),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HomePowerView(IconScale.SMALL, houseLoadAmount)
+            HomePowerView(IconScale.SMALL, houseLoadAmount, null)
         }
 
         Column(
             modifier = Modifier.align(batteryAlign),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BatteryPowerView(IconScale.SMALL, batteryChargeAmount, batteryChargeLevel)
+            BatteryPowerView(IconScale.SMALL, batteryChargeAmount, batteryChargeLevel, null, null)
         }
 
         Column(

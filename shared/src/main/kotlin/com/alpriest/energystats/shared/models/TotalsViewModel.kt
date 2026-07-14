@@ -11,6 +11,8 @@ class TotalsViewModel {
     val solar: Double
     val ct2: Double
     val inverterConsumption: Double
+    val batteryCharge: Double
+    val batteryDischarge: Double
 
     constructor(
         grid: Double,
@@ -18,7 +20,9 @@ class TotalsViewModel {
         loads: Double,
         solar: Double,
         ct2: Double,
-        inverterConsumption: Double
+        inverterConsumption: Double,
+        batteryCharge: Double,
+        batteryDischarge: Double
     ) {
         this.grid = grid
         this.feedIn = feedIn
@@ -26,6 +30,8 @@ class TotalsViewModel {
         this.solar = solar
         this.ct2 = ct2
         this.inverterConsumption = inverterConsumption
+        this.batteryCharge = batteryCharge
+        this.batteryDischarge = batteryDischarge
     }
 
     constructor(
@@ -37,8 +43,8 @@ class TotalsViewModel {
         loads = reports.todayValue(forKey = ReportVariable.Loads.networkTitle())
         solar = reports.todayValue(forKey = ReportVariable.PvEnergyToTal.networkTitle())
         ct2 = generationViewModel?.ct2Total ?: 0.0
-        val batteryDischarge = reports.todayValue(forKey = ReportVariable.DischargeEnergyToTal.networkTitle())
-        val batteryCharge = reports.todayValue(forKey = ReportVariable.ChargeEnergyToTal.networkTitle())
+        batteryDischarge = reports.todayValue(forKey = ReportVariable.DischargeEnergyToTal.networkTitle())
+        batteryCharge = reports.todayValue(forKey = ReportVariable.ChargeEnergyToTal.networkTitle())
         inverterConsumption = maxOf(solar + grid + batteryDischarge - feedIn - batteryCharge - loads, 0.0)
     }
 }
