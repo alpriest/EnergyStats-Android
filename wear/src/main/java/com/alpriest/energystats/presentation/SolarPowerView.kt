@@ -1,9 +1,11 @@
 package com.alpriest.energystats.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.models.SolarRangeDefinitions
 import com.alpriest.energystats.shared.ui.SunIconWithThresholds
@@ -25,7 +27,7 @@ fun SolarPowerView(
         },
     ) { textStyle ->
         if (iconScale == IconScale.LARGE && total != null) {
-            TextWithPlaceholder("today ${total.kWh(1)}", textStyle)
+            TextWithPlaceholder(stringResource(R.string.today, total.kWh(1)), textStyle)
         } else {
             Text(" ", style = textStyle)
         }

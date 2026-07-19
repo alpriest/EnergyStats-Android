@@ -2,4 +2,5 @@
 <resources>
     <string name="complication_label">Heimbatterie-Ladezustand</string>
     <string name="no_device_api_key_found">Kein Gerät- oder API-Schlüssel gefunden. Öffne Energy Stats auf deinem Smartphone, um zu synchronisieren.</string>
+    <string name="today">heute %1$s</string>
 </resources>

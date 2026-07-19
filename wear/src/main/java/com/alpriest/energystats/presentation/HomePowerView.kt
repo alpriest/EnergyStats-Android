@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.alpriest.energystats.R
 import com.alpriest.energystats.shared.helpers.kWh
 import com.alpriest.energystats.shared.ui.HouseView
 
@@ -33,7 +35,7 @@ fun HomePowerView(
         },
         line2 = { textStyle ->
             total?.let {
-                Text("today ${total.kWh(1)}", style = textStyle)
+                TextWithPlaceholder(stringResource(R.string.today, total.kWh(1)), textStyle)
             } ?: Text(" ", style = textStyle)
         }
     )

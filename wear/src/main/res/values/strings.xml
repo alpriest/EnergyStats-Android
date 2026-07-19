@@ -2,4 +2,5 @@
     <string name="app_name" translatable="false">Energy Stats</string>
     <string name="complication_label">Home Battery SOC</string>
     <string name="no_device_api_key_found">No device/API key found. Open Energy Stats on your phone to sync.</string>
+    <string name="today">today %1$s</string>
 </resources>

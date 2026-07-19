@@ -10,7 +10,7 @@ android {
         version = release(37)
     }
     defaultConfig {
-        val api = 37
+        val api = 36
         applicationId = "com.alpriest.energystats"
         minSdk = 28
         targetSdk = api

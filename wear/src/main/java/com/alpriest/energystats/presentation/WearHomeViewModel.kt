@@ -101,7 +101,10 @@ class WearHomeViewModel(application: Application) : AndroidViewModel(application
             solarRangeDefinitions = snapshot.solarRangeDefinitions,
             totalExport = snapshot.totalExport,
             totalImport = snapshot.totalImport,
-            lastUpdated = lastUpdatedTime
+            lastUpdated = lastUpdatedTime,
+            totalBatteryCharge = snapshot.totalBatteryCharge,
+            totalBatteryDischarge = snapshot.totalBatteryDischarge,
+            totalHome = snapshot.totalHome
         )
     }
 
