@@ -92,12 +92,12 @@ private fun Line2Text(iconScale: IconScale, chargeLevel: Double?, totalCharge: D
         IconScale.SMALL -> RedactedPercentage(chargeLevel, textStyle)
         IconScale.LARGE -> Row {
             if (totalCharge != null && totalDischarge != null) {
-                TextWithPlaceholder(totalCharge?.roundedToString(1), textStyle.copy(color = PowerFlowNegative))
+                TextWithPlaceholder(totalDischarge.roundedToString(1), textStyle.copy(color = PowerFlowNegative))
                 Text(
                     text = "/",
                     style = textStyle.copy(color = PowerFlowNeutral)
                 )
-                TextWithPlaceholder(totalDischarge?.kWh(1), textStyle.copy(color = PowerFlowPositive))
+                TextWithPlaceholder(totalCharge.kWh(1), textStyle.copy(color = PowerFlowPositive))
             }
         }
     }

@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                         IconScale.LARGE,
                         solarAmount = state.solarAmount,
                         solarRangeDefinitions = state.solarRangeDefinitions,
-                        state.totalSolar
+                        total = state.totalSolar
                     )
 
                     2 -> GridPowerView(
