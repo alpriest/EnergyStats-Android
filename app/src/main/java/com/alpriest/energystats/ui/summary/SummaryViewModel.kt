@@ -65,6 +65,19 @@ class SummaryTabViewModel(
     private val _viewDataStream: MutableStateFlow<SummaryViewData?> = MutableStateFlow(null)
     val viewDataStream: StateFlow<SummaryViewData?> = _viewDataStream
 
+    init {
+        viewModelScope.launch {
+            configManager.appSettingsStream
+                .map { it.deductInverterConsumptionFromGridAvoided }
+                .distinctUntilChanged()
+                .drop(1)
+                .collect { it ->
+                    _viewDataStream.value = null
+                    load()
+                }
+        }
+    }
+
     suspend fun load() {
         if (viewDataStream.value != null) {
             return
@@ -106,17 +119,6 @@ class SummaryTabViewModel(
                     currencySymbol = configManager.currencySymbol
                 )
             }
-        }
-
-        viewModelScope.launch {
-            configManager.appSettingsStream
-                .map { it.deductInverterConsumptionFromGridAvoided }
-                .distinctUntilChanged()
-                .drop(1)
-                .collect { it ->
-                    _viewDataStream.value = null
-                    load()
-                }
         }
 
         loadStateStream.value = UiLoadState(LoadState.Inactive)

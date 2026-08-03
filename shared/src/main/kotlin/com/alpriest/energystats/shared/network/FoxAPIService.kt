@@ -156,7 +156,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchRealData(deviceSN: String, variables: List<String>): OpenRealQueryResponse {
-        val body = Gson().toJson(OpenRealQueryRequest(listOf(deviceSN), variables))
+        val body = json.encodeToString(OpenRealQueryRequest(listOf(deviceSN), variables))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -172,7 +172,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchHistory(deviceSN: String, variables: List<String>, start: Long, end: Long): OpenHistoryResponse {
-        val body = Gson().toJson(OpenHistoryRequest(deviceSN, variables, start, end))
+        val body = json.encodeToString(OpenHistoryRequest(deviceSN, variables, start, end))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -209,7 +209,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_setBatterySoc(deviceSN: String, minSOCOnGrid: Int, minSOC: Int) {
-        val body = Gson().toJson(SetBatterySOCRequest(minSocOnGrid = minSOCOnGrid, minSoc = minSOC, sn = deviceSN))
+        val body = json.encodeToString(SetBatterySOCRequest(minSocOnGrid = minSOCOnGrid, minSoc = minSOC, sn = deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -366,7 +366,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchSchedulerFlag(deviceSN: String): GetSchedulerFlagResponse {
-        val body = Gson().toJson(GetSchedulerFlagRequest(deviceSN))
+        val body = json.encodeToString(GetSchedulerFlagRequest(deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder().url(URLs.getOpenSchedulerFlag()).post(body).build()
@@ -376,7 +376,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchCurrentSchedule(deviceSN: String): ScheduleResponse {
-        val body = Gson().toJson(GetSchedulerFlagRequest(deviceSN))
+        val body = json.encodeToString(GetSchedulerFlagRequest(deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder().url(URLs.getOpenCurrentSchedule()).post(body).build()
@@ -386,7 +386,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_setScheduleFlag(deviceSN: String, schedulerEnabled: Boolean) {
-        val body = Gson().toJson(SetSchedulerFlagRequest(deviceSN, schedulerEnabled.intValue))
+        val body = json.encodeToString(SetSchedulerFlagRequest(deviceSN, schedulerEnabled.intValue))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()

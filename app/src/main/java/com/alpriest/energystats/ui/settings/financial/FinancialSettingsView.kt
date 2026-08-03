@@ -78,7 +78,7 @@ fun FinancialsSettingsView(configManager: ConfigManaging) {
                 EarningsModel.CT2 -> stringResource(R.string.earnings_ct2_description)
             },
         ) {
-            MakeTextField(configManager, unitPrice, stringResource(R.string.unit_price), stringResource(R.string.unit_price_no_multi_tariff_available)) {
+            MakeTextField(configManager, unitPrice, stringResource(R.string.grid_export_unit_price), stringResource(R.string.unit_price_no_multi_tariff_available)) {
                 unitPrice.value = it
                 configManager.feedInUnitPrice = it.safeToDouble()
             }

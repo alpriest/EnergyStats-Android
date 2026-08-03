@@ -3,6 +3,7 @@ package com.alpriest.energystats.shared.models.network
 import com.alpriest.energystats.shared.network.OpenRealQueryResponseDeserializer
 import kotlinx.serialization.Serializable
 
+@Serializable
 data class OpenRealQueryRequest(
     val sns: List<String>,
     val variables: List<String>

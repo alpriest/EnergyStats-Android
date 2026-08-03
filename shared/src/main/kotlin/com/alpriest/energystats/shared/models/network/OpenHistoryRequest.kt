@@ -2,6 +2,7 @@ package com.alpriest.energystats.shared.models.network
 
 import kotlinx.serialization.Serializable
 
+@Serializable
 data class OpenHistoryRequest(
     val sn: String,
     val variables: List<String>,
