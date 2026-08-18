@@ -48,7 +48,6 @@ import com.alpriest.energystats.shared.models.network.SetPeakShavingSettingsRequ
 import com.alpriest.energystats.shared.models.network.SetSchedulerFlagRequest
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.Callback
@@ -143,7 +142,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchDeviceList(): List<DeviceSummaryResponse> {
-        val body = Gson().toJson(DeviceListRequest())
+        val body = json.encodeToString(DeviceListRequest())
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -410,18 +409,17 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_getBatteryHeatingSchedule(deviceSN: String): BatteryHeatingScheduleResponse {
-        val body = Gson().toJson(GetBatteryHeatingScheduleRequest(deviceSN))
+        val body = json.encodeToString(GetBatteryHeatingScheduleRequest(deviceSN))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder().url(URLs.getBatteryHeatingSchedule()).post(body).build()
 
-        val type = object : TypeToken<NetworkResponse<BatteryHeatingScheduleResponse>>() {}.type
-        val response: NetworkTuple<NetworkResponse<BatteryHeatingScheduleResponse>> = fetchGSON(request, type)
+        val response: NetworkTuple<NetworkResponse<BatteryHeatingScheduleResponse>> = fetchJSON(request)
         return response.item.result ?: throw MissingDataException()
     }
 
     override suspend fun openapi_setBatteryHeatingSchedule(schedule: BatteryHeatingScheduleRequest) {
-        val body = Gson().toJson(schedule)
+        val body = json.encodeToString(schedule)
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()

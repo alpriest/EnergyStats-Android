@@ -557,4 +557,6 @@
     <string name="show_password_accessibility_hint">Mostra password</string>
     <string name="deduct_inverter_consumption_from_grid_avoided">Detrai il consumo dell\'inverter dal prelievo di rete evitato</string>
     <string name="deduct_inverter_consumption_from_grid_avoided_description">Quando questa opzione è selezionata, il consumo energetico del tuo inverter verrà sottratto dal prelievo di rete evitato. Questo perché tale energia non sarebbe stata prelevata dalla rete senza l\'inverter e quindi non rappresenta un risparmio diretto. Tuttavia, il tuo inverter potrebbe funzionare utilizzando l\'energia immagazzinata nelle batterie dai tuoi pannelli solari e, in tal caso, potresti non voler sottrarre questo consumo.</string>
+    <string name="clear_network_cache_description">Energy Stats memorizza nella cache i dati storici per caricare le pagine più velocemente. Cancella questi dati se noti dati storici mancanti o errati.</string>
+    <string name="clear_network_cache">Cancella cache di rete</string>
 </resources>

@@ -556,4 +556,6 @@
     <string name="show_password_accessibility_hint">Passwort anzeigen</string>
     <string name="deduct_inverter_consumption_from_grid_avoided">Wechselrichterverbrauch vom vermiedenen Netzbezug abziehen</string>
     <string name="deduct_inverter_consumption_from_grid_avoided_description">Wenn diese Option aktiviert ist, wird der Energieverbrauch Ihres Wechselrichters vom vermiedenen Netzbezug abgezogen. Dies liegt daran, dass diese Energie ohne den Wechselrichter nicht aus dem Netz bezogen worden wäre und daher nicht als direkte Einsparung zählt. Möglicherweise wird Ihr Wechselrichter jedoch mit Energie betrieben, die von Ihren Solarmodulen in Ihren Batterien gespeichert wurde. In diesem Fall möchten Sie diesen Verbrauch möglicherweise nicht abziehen.</string>
+    <string name="clear_network_cache_description">Energy Stats speichert Verlaufsdaten zwischen, damit Seiten schneller geladen werden. Lösche diese Daten, wenn Verlaufsdaten fehlen oder fehlerhaft sind.</string>
+    <string name="clear_network_cache">Netzwerk-Cache leeren</string>
 </resources>

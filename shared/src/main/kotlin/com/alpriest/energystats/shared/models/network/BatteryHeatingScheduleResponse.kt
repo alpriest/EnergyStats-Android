@@ -1,19 +1,25 @@
 package com.alpriest.energystats.shared.models.network
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class GetBatteryHeatingScheduleRequest(
     val sn: String
 )
 
+@Serializable
 data class BatteryHeatingScheduleResponse(
     val dataList: List<BatteryHeatingParameter>
 )
 
+@Serializable
 data class BatteryHeatingParameter(
     val name: String,
     val value: String,
     val unit: String?
 )
 
+@Serializable
 data class BatteryHeatingScheduleRequest(
     val sn: String,
     val batteryWarmUpEnable: String,

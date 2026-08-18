@@ -25,5 +25,6 @@ class TabbedViewDependencies(
     val widgetDataSharer: WidgetDataSharing,
     val bannerAlertManager: BannerAlertManaging,
     val templateStore: TemplateStoring,
-    val apiKeyProvider: () -> String?
+    val apiKeyProvider: () -> String?,
+    val onClearNetworkCache: () -> Unit
 )

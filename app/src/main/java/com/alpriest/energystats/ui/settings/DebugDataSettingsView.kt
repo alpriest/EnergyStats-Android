@@ -34,20 +34,21 @@ fun NavGraphBuilder.debugGraph(
     topBarSettings: MutableState<TopBarSettings>,
     network: Networking,
     navController: NavHostController,
-    configManager: ConfigManaging
+    configManager: ConfigManaging,
+    onClearNetworkCache: () -> Unit
 ) {
     navigation(startDestination = "debug", route = "login") {
         composable("debug") {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.view_debug_data), {}, { navController.popBackStack() })
             ProtectedContent(configManager) {
-                DebugDataSettingsView(network, Modifier)
+                DebugDataSettingsView(network, onClearNetworkCache)
             }
         }
     }
 }
 
 @Composable
-fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
+fun DebugDataSettingsView(network: Networking, onClearNetworkCache: () -> Unit) {
     val scope = rememberCoroutineScope()
     val alertDialogMessage = remember { mutableStateOf(null as String?) }
     trackScreenView("Debug", "DebugDataSettingsView")
@@ -59,7 +60,7 @@ fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
         })
     }
 
-    SettingsPage(modifier) {
+    SettingsPage(Modifier) {
         SettingsColumnWithChild(padding = SettingsPaddingValues.withVertical()) {
             Text(stringResource(R.string.chucker_description))
 
@@ -91,6 +92,18 @@ fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
                 }
             }
         }
+
+        SettingsColumnWithChild(padding = SettingsPaddingValues.withVertical()) {
+            Text(stringResource(R.string.clear_network_cache_description))
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                ESButton(onClick = {
+                    onClearNetworkCache()
+                }) {
+                    Text(stringResource(R.string.clear_network_cache))
+                }
+            }
+        }
     }
 }
 
@@ -98,6 +111,6 @@ fun DebugDataSettingsView(network: Networking, modifier: Modifier) {
 @Composable
 fun DebugDataSettingsViewPreview() {
     EnergyStatsTheme {
-        DebugDataSettingsView(DemoNetworking(), Modifier)
+        DebugDataSettingsView(DemoNetworking(), {  })
     }
 }

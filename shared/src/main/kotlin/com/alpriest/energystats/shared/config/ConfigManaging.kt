@@ -35,6 +35,9 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     suspend fun fetchPowerStationDetail()
     var detectedActiveTemplate: String?
     override val appSettingsStream: StateFlow<AppSettings>
+    fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean
+    fun resetDisplaySettings()
+    fun loginAsDemo()
 
     val lastSettingsResetTime: LocalDateTime?
     var currencyCode: String
@@ -87,9 +90,6 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var showInverterScheduleQuickLink: Boolean
     var fetchSolcastOnAppLaunch: Boolean
     var ct2DisplayMode: CT2DisplayMode
-    fun getDeviceSupports(capability: DeviceCapability, deviceSN: String): Boolean
-    fun resetDisplaySettings()
-    fun loginAsDemo()
 
     var workModes: List<WorkMode>
     var showInverterConsumption: Boolean

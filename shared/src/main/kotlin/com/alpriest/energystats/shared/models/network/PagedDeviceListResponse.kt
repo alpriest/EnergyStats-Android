@@ -55,6 +55,7 @@ data class DeviceFunction(
     val scheduler: Boolean
 )
 
+@Serializable
 data class DeviceListRequest(
     val pageSize: Int = 20,
     val currentPage: Int = 1

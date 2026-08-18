@@ -36,8 +36,7 @@ class EditSummaryViewModel(
     private var originalValue: EditSummaryViewData? = null
 
     init {
-        val summaryDateRange = configManager.summaryDateRange
-        val viewData = when (summaryDateRange) {
+        val viewData = when (val summaryDateRange = configManager.summaryDateRange) {
             is SummaryDateRange.Automatic -> EditSummaryViewData(
                 automatic = true,
                 fromMonth = 1,
@@ -57,9 +56,13 @@ class EditSummaryViewModel(
         _viewDataStream = MutableStateFlow(viewData)
         viewDataStream = _viewDataStream
         originalValue = viewDataStream.value
+
         viewModelScope.launch {
             viewDataStream.collect {
-                _dirtyState.value = originalValue != it
+                val from = LocalDate.of(it.fromYear, it.fromMonth, 1)
+                val to = LocalDate.of(it.toYear, it.toMonth, 1)
+
+                _dirtyState.value = originalValue != it && from < to
             }
         }
     }

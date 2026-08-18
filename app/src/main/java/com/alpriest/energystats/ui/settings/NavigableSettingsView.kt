@@ -31,9 +31,9 @@ import com.alpriest.energystats.ui.settings.financial.FinancialsSettingsView
 import com.alpriest.energystats.ui.settings.inverter.InverterSettingsView
 import com.alpriest.energystats.ui.settings.inverter.PeakShavingSettingsView
 import com.alpriest.energystats.ui.settings.inverter.WorkModeSettingsView
-import com.alpriest.energystats.ui.settings.inverter.schedule.phase.EditPhaseView
 import com.alpriest.energystats.ui.settings.inverter.schedule.EditScheduleView
 import com.alpriest.energystats.ui.settings.inverter.schedule.ScheduleSummaryView
+import com.alpriest.energystats.ui.settings.inverter.schedule.phase.EditPhaseView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.EditTemplateView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.ScheduleTemplateListView
 import com.alpriest.energystats.ui.settings.inverter.schedule.templates.TemplateStoring
@@ -56,7 +56,8 @@ fun NavigableSettingsView(
     network: Networking,
     solarForecastingProvider: () -> SolcastCaching,
     templateStore: TemplateStoring,
-    bannerAlertManager: BannerAlertManaging
+    bannerAlertManager: BannerAlertManaging,
+    onClearNetworkCache: () -> Unit
 ) {
     val lastSettingsResetTimeViewKey by remember { mutableStateOf(configManager.lastSettingsResetTime) }
     val navController = rememberNavController()
@@ -210,7 +211,7 @@ fun NavigableSettingsView(
 
         inverterScheduleGraph(navController, topBarSettings, configManager, userManager, network, templateStore)
 
-        debugGraph(topBarSettings, network, navController, configManager)
+        debugGraph(topBarSettings, network, navController, configManager, onClearNetworkCache)
 
         composable(SettingsScreen.ReadOnlyModeSettings.name) {
             val mode = configManager.appSettingsStream.collectAsState().value.isReadOnly.asOnOff()

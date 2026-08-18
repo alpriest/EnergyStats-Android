@@ -128,7 +128,8 @@ fun TabbedViewPreview() {
         WidgetDataSharer.preview(),
         BannerAlertManager(),
         TemplateStore(FakeConfigManager()),
-        { "" }
+        { "" },
+        {}
     )
 
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {

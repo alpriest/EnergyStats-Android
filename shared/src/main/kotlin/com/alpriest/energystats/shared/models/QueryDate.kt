@@ -18,6 +18,11 @@ data class QueryDate(val year: Int, val month: Int?, val day: Int?) {
         fun from(date: LocalDate): QueryDate {
             return QueryDate(date.year, date.monthValue, date.dayOfMonth)
         }
+
+    }
+
+    fun toDebugString(): String {
+        return "$year $month $day"
     }
 }
 

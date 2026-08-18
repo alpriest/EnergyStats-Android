@@ -37,7 +37,8 @@ fun MainAppView(appContainer: AppContainer) {
             appContainer.widgetDataSharer,
             appContainer.bannerAlertManager,
             appContainer.templateStore,
-            { appContainer.credentialStore.getApiKey() }
+            { appContainer.credentialStore.getApiKey() },
+            { appContainer.historicStore?.clear() }
         )
     }
     val showingApiKeyEntry = remember { mutableStateOf(false) }
