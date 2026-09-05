@@ -77,6 +77,8 @@ fun DebugDataSettingsView(network: Networking, onClearNetworkCache: () -> Unit) 
         SettingsColumnWithChild(padding = SettingsPaddingValues.withVertical()) {
             Text(stringResource(R.string.fox_restricts_the_number_of_network_requests_you_can_make_within_a_24_hr_period_find_out_how_many_you_have_left))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                val context = LocalContext.current
+
                 ESButton(onClick = {
                     scope.launch {
                         try {

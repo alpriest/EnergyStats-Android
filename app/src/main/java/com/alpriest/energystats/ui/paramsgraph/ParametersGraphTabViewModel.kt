@@ -232,6 +232,7 @@ class ParametersGraphTabViewModel(
         }
     }
 
+
     private fun refresh() {
         val enabledGraphVariables = graphVariablesStream.value.filter { it.enabled }.map { it.type }
         val hours = displayModeStream.value.hours
@@ -239,6 +240,7 @@ class ParametersGraphTabViewModel(
         val oldest = displayModeStream.value.date.atTime(now.hour, now.minute).minusHours(hours.toLong())
         val groupedByType = rawData
             .filter { it.time > oldest }
+            .filter { hours == 24 || it.time < now }
             .groupBy { it.type }
         val entries = groupedByType
             .map { group ->
