@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.isDarkMode
@@ -25,6 +26,7 @@ import com.google.firebase.crashlytics.setCustomKeys
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.CartesianMeasuringContext
 import com.patrykandpatrick.vico.compose.cartesian.axis.Axis
+import com.patrykandpatrick.vico.compose.cartesian.axis.BaseAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
@@ -191,7 +193,8 @@ private fun ParameterGraphViewWithCustomMarker(
                         endAxis = VerticalAxis.rememberEnd(
                             label = graphLabel,
                             itemPlacer = VerticalAxis.ItemPlacer.count(count = { 5 }),
-                            valueFormatter = endAxisFormatter
+                            valueFormatter = endAxisFormatter,
+                            size = BaseAxis.Size.Fixed(40.dp)
                         ),
                         bottomAxis = HorizontalAxis.rememberBottom(
                             label = graphLabel,

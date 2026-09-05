@@ -16,6 +16,7 @@ data class OpenReportResponseData(
     val value: Double
 )
 
+@Serializable
 data class OpenReportRequest(
     val sn: String,
     val variables: List<String>,

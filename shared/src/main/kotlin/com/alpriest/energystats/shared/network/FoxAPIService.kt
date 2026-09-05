@@ -46,8 +46,6 @@ import com.alpriest.energystats.shared.models.network.SetCurrentScheduleRequest
 import com.alpriest.energystats.shared.models.network.SetDeviceSettingsItemRequest
 import com.alpriest.energystats.shared.models.network.SetPeakShavingSettingsRequest
 import com.alpriest.energystats.shared.models.network.SetSchedulerFlagRequest
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.Callback
@@ -58,7 +56,6 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
-import java.lang.reflect.Type
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.TimeUnit
@@ -187,7 +184,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_fetchReport(deviceSN: String, variables: List<ReportVariable>, queryDate: QueryDate, reportType: ReportType): List<OpenReportResponse> {
-        val body = Gson().toJson(OpenReportRequest(deviceSN, variables.map { it.networkTitle() }, reportType, queryDate.year, queryDate.month, queryDate.day))
+        val body = json.encodeToString(OpenReportRequest(deviceSN, variables.map { it.networkTitle() }, reportType, queryDate.year, queryDate.month, queryDate.day))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -397,7 +394,7 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
     }
 
     override suspend fun openapi_saveSchedule(deviceSN: String, schedule: ScheduleV3) {
-        val body = Gson().toJson(SetCurrentScheduleRequest(deviceSN, schedule.phases.map { it.toPhaseResponse() }))
+        val body = json.encodeToString(SetCurrentScheduleRequest(deviceSN, schedule.phases.map { it.toPhaseResponse() }))
             .toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -432,68 +429,6 @@ class FoxAPIService(private val requestData: RequestData, interceptor: Intercept
 
     private suspend fun executeWithoutResponse(request: Request) {
         fetchJSON<NetworkResponse<Unit>>(request)
-    }
-
-    @Deprecated("Use fetchJSON instead")
-    private suspend fun <T : NetworkResponseInterface> fetchGSON(
-        request: Request,
-        type: Type
-    ): NetworkTuple<T> {
-        val requestOrigin = Throwable("FoxAPIService request origin: ${request.method} ${request.url}")
-        return suspendCoroutine { continuation ->
-            okHttpClient.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    continuation.resumeWithException(
-                        FoxNetworkRequestException(
-                            method = request.method,
-                            url = request.url.toString(),
-                            origin = requestOrigin,
-                            cause = e,
-                        )
-                    )
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.code == 406) {
-                        continuation.resumeWithException(UnacceptableException())
-                        return
-                    }
-
-                    if (response.code == 401) {
-                        continuation.resumeWithException(BadCredentialsException())
-                        return
-                    }
-
-                    if (response.code !in 200..299) {
-                        continuation.resumeWithException(InvalidResponseError(request.url, response.code))
-                        return
-                    }
-
-                    try {
-                        val text = response.body.string()
-                        val builder = GsonBuilder()
-                            .registerTypeAdapter(ScheduleResponse::class.java, ScheduleResponse.Deserializer())
-                            .create()
-                        val body: T = builder.fromJson(text, type)
-                        val result: Result<T> = check(body)
-
-                        result.fold(
-                            onSuccess = { continuation.resume(NetworkTuple(it, text)) },
-                            onFailure = { continuation.resumeWithException(it) }
-                        )
-                    } catch (ex: Exception) {
-                        continuation.resumeWithException(
-                            FoxNetworkRequestException(
-                                method = request.method,
-                                url = request.url.toString(),
-                                origin = requestOrigin,
-                                cause = ex,
-                            )
-                        )
-                    }
-                }
-            })
-        }
     }
 
     private suspend inline fun <reified T : NetworkResponseInterface> fetchJSON(

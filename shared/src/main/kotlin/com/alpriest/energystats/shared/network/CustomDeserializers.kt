@@ -1,8 +1,6 @@
 package com.alpriest.energystats.shared.network
 
 import com.alpriest.energystats.shared.models.ParameterGroup
-import com.alpriest.energystats.shared.models.network.ApiVariable
-import com.alpriest.energystats.shared.models.network.ApiVariableArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
