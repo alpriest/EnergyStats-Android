@@ -288,12 +288,13 @@
     <string name="templates_not_yet_available">Zeitplanvorlagen sind über OpenAPI von FoxESS noch nicht verfügbar. Sie wurden angefordert und werden hinzugefügt, sobald sie verfügbar sind.</string>
     <string name="enable_scheduler">Zeitplaner aktivieren</string>
     <string name="edit_api_key">API-Schlüssel bearbeiten</string>
-    <string name="api_key_step_1">1. Logge dich ein unter https://www.foxesscloud.com/</string>
-    <string name="api_key_step_2">2, Klicke oben rechts auf das Personensymbol</string>
-    <string name="api_key_step_3">3. Klicke auf die Menüoption Benutzerprofil</string>
-    <string name="api_key_step_4">4. Klicke auf API-Schlüssel generieren</string>
-    <string name="api_key_step_5">5. Kopiere den API-Schlüssel (notiere ihn sicher)</string>
-    <string name="api_key_step_6">6. Füge den API-Schlüssel oben ein</string>
+    <string name="api_key_step_1">Besuchen Sie https://developer-eu.foxesscloud.com/</string>
+    <string name="api_key_step_2">Klicken Sie unten links auf den Anmeldelink</string>
+    <string name="api_key_step_3">Anmelden</string>
+    <string name="api_key_step_4">Klicken Sie auf die Schaltfläche „API-Schlüssel“</string>
+    <string name="api_key_step_5">Klicken Sie auf „API-Schlüssel generieren“</string>
+    <string name="api_key_step_6">Kopieren Sie den API-Schlüssel und bewahren Sie ihn sicher auf</string>
+    <string name="api_key_step_7">Fügen Sie den API-Schlüssel oben ein</string>
     <string name="what_is_api_key_1">Ein API-Schlüssel ist wie ein zusätzliches Passwort für dein Konto, das du an Apps außerhalb von Fox (wie Energy Stats!) weitergeben kannst, damit diese auf dein Konto zugreifen können.</string>
     <string name="what_is_api_key_2">Wenn du Apps den Zugriff auf dein Konto entziehen möchtest, kannst du deinen API-Schlüssel neu erzeugen. Damit werden sofort alle Zugriffsversuche mit dem alten API-Schlüssel blockiert.</string>
     <string name="what_is_api_key_3">Dein API-Schlüssel wird 36 Zeichen lang sein und etwa so aussehen: abcde123\\-4567\\-8901\\-2345\\-6789abcdef01.</string>
@@ -305,7 +306,6 @@
     <string name="combine_ct2_with_loads_power">CT2 mit Lastleistung kombinieren</string>
     <string name="if_you_have_multiple_inverters_and_your_pv_generation_values_are_incorrect_try_toggling_this">Wenn Sie mehrere Wechselrichter haben und Ihre PV-Erzeugungswerte nicht korrekt sind, versuchen Sie dies umzuschalten.</string>
     <string name="show_pv_power_by_strings">PV-Leistungen je String anzeigen</string>
-    <string name="api_key_step_7">7. Dein API-Schlüssel wird 36 Zeichen lang sein und etwa so aussehen: abcde123\\-4567\\-8901\\-2345\\-6789abcdef01.</string>
     <string name="show_battery_percentage_remaining">Restprozentsatz der Batterie anzeigen</string>
     <string name="invalid_api_token_needs_logout">Ihr API-Token ist ungültig. Bitte loggen Sie sich aus und folgen Sie den Anweisungen, um ein neues API-Token zu generieren.</string>
     <string name="wrong_credentials_try_again">Falsche Anmeldeinformationen, versuchen Sie es erneut.</string>

@@ -1,6 +1,7 @@
 package com.alpriest.energystats.ui.login
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,6 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.preview.FakeUserManager
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.demo
-import com.alpriest.energystats.shared.ui.Sunny
 import com.alpriest.energystats.ui.helpers.ClickableUrlText
 import com.alpriest.energystats.ui.theme.ESButton
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
@@ -168,7 +168,6 @@ class HowToObtainAPIKeyView {
                 fontWeight = FontWeight.Bold
             )
             BulletPoint(1, stringResource(R.string.api_key_step_1), appSettingsStream)
-            Text("** Do not use the V2 website yet.**")
             BulletPoint(2, stringResource(R.string.api_key_step_2), appSettingsStream)
             BulletPoint(3, stringResource(R.string.api_key_step_3), appSettingsStream)
             BulletPoint(4, stringResource(R.string.api_key_step_4), appSettingsStream)
@@ -215,7 +214,7 @@ class HowToObtainAPIKeyView {
             Box(
                 modifier = Modifier
                     .size(18.dp)
-                    .background(Sunny, shape = CircleShape),
+                    .border(BorderStroke(1.dp, Color.Black), shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
