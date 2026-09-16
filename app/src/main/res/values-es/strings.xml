@@ -558,4 +558,5 @@
     <string name="deduct_inverter_consumption_from_grid_avoided_description">Cuando esta opción está activada, el consumo de energía de tu inversor se restará de la energía de la red evitada. Esto se debe a que esa energía no se habría importado de la red sin el inversor, por lo que no cuenta como un ahorro directo. Sin embargo, es posible que el inversor esté funcionando con energía almacenada en tus baterías procedente de tus paneles solares, por lo que quizá no quieras restar ese consumo.</string>
     <string name="clear_network_cache_description">Energy Stats almacena datos históricos en caché para que las páginas carguen más rápido. Borra estos datos si ves datos históricos incompletos o incorrectos.</string>
     <string name="clear_network_cache">Borrar caché de red</string>
+    <string name="fox_rejected_your_login_request_check_the_date_time_on_your_device_is_set_to_automatic_and_try_again">Fox rechazó tu solicitud de inicio de sesión. Comprueba que la fecha y la hora de tu dispositivo estén configuradas como «Automáticas» e inténtalo de nuevo.</string>
 </resources>

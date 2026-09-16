@@ -6,6 +6,7 @@ import com.alpriest.energystats.R
 import com.alpriest.energystats.WatchSyncManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.network.BadCredentialsException
+import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.network.InvalidTokenException
 import com.alpriest.energystats.stores.CredentialStore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -98,6 +99,11 @@ class UserManager(
 
                 is SocketTimeoutException ->
                     _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.foxess_timeout)))
+
+                is FoxServerError ->
+                    if (e.errno == 40256) {
+                        _loggedInState.value = LoginStateHolder(LoggedOut(application.getString(R.string.fox_rejected_your_login_request_check_the_date_time_on_your_device_is_set_to_automatic_and_try_again)))
+                    }
 
                 else ->
                     _loggedInState.value = LoginStateHolder(LoggedOut("Could not login. ${e.localizedMessage}"))

@@ -559,4 +559,5 @@
     <string name="deduct_inverter_consumption_from_grid_avoided_description">Quando questa opzione è selezionata, il consumo energetico del tuo inverter verrà sottratto dal prelievo di rete evitato. Questo perché tale energia non sarebbe stata prelevata dalla rete senza l\'inverter e quindi non rappresenta un risparmio diretto. Tuttavia, il tuo inverter potrebbe funzionare utilizzando l\'energia immagazzinata nelle batterie dai tuoi pannelli solari e, in tal caso, potresti non voler sottrarre questo consumo.</string>
     <string name="clear_network_cache_description">Energy Stats memorizza nella cache i dati storici per caricare le pagine più velocemente. Cancella questi dati se noti dati storici mancanti o errati.</string>
     <string name="clear_network_cache">Cancella cache di rete</string>
+    <string name="fox_rejected_your_login_request_check_the_date_time_on_your_device_is_set_to_automatic_and_try_again">Fox ha rifiutato la tua richiesta di accesso. Controlla che la data e l’ora del dispositivo siano impostate su «Automatiche», quindi riprova.</string>
 </resources>
