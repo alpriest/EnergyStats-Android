@@ -40,6 +40,11 @@ android {
         compose = true
     }
     buildTypes {
+        debug {
+            isMinifyEnabled = true
+            isShrinkResources = false // Debug only
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
