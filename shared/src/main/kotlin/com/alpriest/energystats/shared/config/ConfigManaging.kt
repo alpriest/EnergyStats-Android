@@ -105,6 +105,7 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
     var scheduleProperties: Map<String, SchedulePropertyDefinition>
     var inverterGeneration: InverterGeneration
     var showTodayPercentageSolarForecastAchieved: Boolean
+    var useRollingSolarForecastTotalForToday: Boolean
     var installationPurchasePrice: Double
     var deductInverterConsumptionFromGridAvoided: Boolean
 }

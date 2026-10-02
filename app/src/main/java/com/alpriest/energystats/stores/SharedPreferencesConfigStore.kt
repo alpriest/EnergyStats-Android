@@ -124,6 +124,7 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         SHOW_BATTERY_MAX_CURRENT_CHARGE,
         INVERTER_GENERATION,
         SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED,
+        USE_ROLLING_SOLAR_FORECAST_TOTAL_FOR_TODAY,
         INSTALLATION_PURCHASE_PRICE,
         DEDUCT_INVERTER_CONSUMPTION_FROM_GRID_AVOIDED
     }
@@ -910,6 +911,14 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         set(value) {
             sharedPreferences.edit {
                 putBoolean(SharedPreferenceDisplayKey.SHOW_TODAY_PERCENTAGE_SOLAR_FORECAST_ACHIEVED.name, value)
+            }
+        }
+
+    override var useRollingSolarForecastTotalForToday: Boolean
+        get() = sharedPreferences.getBoolean(SharedPreferenceDisplayKey.USE_ROLLING_SOLAR_FORECAST_TOTAL_FOR_TODAY.name, true)
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(SharedPreferenceDisplayKey.USE_ROLLING_SOLAR_FORECAST_TOTAL_FOR_TODAY.name, value)
             }
         }
 

@@ -263,8 +263,8 @@ class PowerFlowTabViewModel(
         val siteTotals = settings.sites.map { site ->
             val data = service.fetchForecast(site, apiKey, false)
             val todayForecasts = data.forecasts
-                .filter { isSameDay(it.periodEnd, nowDate) }
-                .filter { it.periodEnd < nowDate }
+                .filter { !configManager.useRollingSolarForecastTotalForToday ||
+                        (configManager.useRollingSolarForecastTotalForToday && isSameDay(it.periodEnd, nowDate) && it.periodEnd < nowDate) }
 
             todayForecasts.total()
         }

@@ -689,6 +689,13 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
+    override var useRollingSolarForecastTotalForToday: Boolean
+        get() = config.useRollingSolarForecastTotalForToday
+        set(value) {
+            config.useRollingSolarForecastTotalForToday = value
+            appSettingsStore.update(AppSettings.toAppSettings(config))
+        }
+
     override var installationPurchasePrice: Double
         get() = config.installationPurchasePrice
         set(value) {

@@ -108,6 +108,7 @@ class FakeConfigManager : ConfigManaging {
     override var scheduleProperties: Map<String, SchedulePropertyDefinition> = emptyMap()
     override var inverterGeneration: InverterGeneration = InverterGeneration.Unknown
     override var showTodayPercentageSolarForecastAchieved: Boolean = true
+    override var useRollingSolarForecastTotalForToday: Boolean = true
     override var installationPurchasePrice: Double = 0.0
     override var deductInverterConsumptionFromGridAvoided: Boolean = true
 

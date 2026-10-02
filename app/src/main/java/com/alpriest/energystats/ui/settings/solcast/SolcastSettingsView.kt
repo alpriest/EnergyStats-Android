@@ -72,6 +72,7 @@ class SolcastSettingsView(
         }
         val fetchDescription2 = stringResource(R.string.fetch_solar_footer)
         val showTodayPercentageSolarForecastAchievedState = rememberSaveable { mutableStateOf(configManager.showTodayPercentageSolarForecastAchieved) }
+        val useRollingSolarForecastTotalForTodayState = rememberSaveable { mutableStateOf(configManager.useRollingSolarForecastTotalForToday) }
 
         MonitorAlertDialog(viewModel)
 
@@ -111,14 +112,24 @@ class SolcastSettingsView(
                         )
                     }
 
-                    SettingsColumn {
+                    SettingsColumn(
+                        footer = if (useRollingSolarForecastTotalForTodayState.value)
+                            "The percentage compares your solar generation so far with Solcast's forecast up to now." else
+                                "The percentage compares your total solar generation with Solcast's forecast for the entire day."
+                    ) {
                         SettingsCheckbox(
                             title = stringResource(R.string.show_percentage_of_solar_forecast_achieved),
                             state = showTodayPercentageSolarForecastAchievedState,
                             onUpdate = { configManager.showTodayPercentageSolarForecastAchieved = it }
                         )
-                    }
 
+                        SettingsCheckbox(
+                            title = "Use rolling time period",
+                            state = useRollingSolarForecastTotalForTodayState,
+                            onUpdate = { configManager.useRollingSolarForecastTotalForToday = it },
+                            enabled = showTodayPercentageSolarForecastAchievedState.value
+                        )
+                    }
 
                     viewData.sites.forEach {
                         SolcastSiteView(it)
@@ -216,7 +227,7 @@ private fun Row(title: String, value: String) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 600)
+@Preview(showBackground = true, widthDp = 400, heightDp = 900)
 @Composable
 fun SolcastSettingsViewPreview() {
     EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
