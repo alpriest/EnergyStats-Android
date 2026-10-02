@@ -114,8 +114,8 @@ class SolcastSettingsView(
 
                     SettingsColumn(
                         footer = if (useRollingSolarForecastTotalForTodayState.value)
-                            "The percentage compares your solar generation so far with Solcast's forecast up to now." else
-                                "The percentage compares your total solar generation with Solcast's forecast for the entire day."
+                            stringResource(R.string.the_percentage_compares_your_solar_generation_so_far_with_solcast_s_forecast_up_to_now) else
+                            stringResource(R.string.the_percentage_compares_your_total_solar_generation_with_solcast_s_forecast_for_the_entire_day)
                     ) {
                         SettingsCheckbox(
                             title = stringResource(R.string.show_percentage_of_solar_forecast_achieved),
@@ -124,7 +124,7 @@ class SolcastSettingsView(
                         )
 
                         SettingsCheckbox(
-                            title = "Use rolling time period",
+                            title = stringResource(R.string.use_rolling_time_period),
                             state = useRollingSolarForecastTotalForTodayState,
                             onUpdate = { configManager.useRollingSolarForecastTotalForToday = it },
                             enabled = showTodayPercentageSolarForecastAchievedState.value

@@ -560,4 +560,7 @@
     <string name="clear_network_cache_description">Energy Stats memorizza nella cache i dati storici per caricare le pagine più velocemente. Cancella questi dati se noti dati storici mancanti o errati.</string>
     <string name="clear_network_cache">Cancella cache di rete</string>
     <string name="fox_rejected_your_login_request_check_the_date_time_on_your_device_is_set_to_automatic_and_try_again">Fox ha rifiutato la tua richiesta di accesso. Controlla che la data e l’ora del dispositivo siano impostate su «Automatiche», quindi riprova.</string>
+    <string name="the_percentage_compares_your_solar_generation_so_far_with_solcast_s_forecast_up_to_now">La percentuale confronta la produzione solare effettuata finora con la previsione Solcast fino a questo momento.</string>
+    <string name="the_percentage_compares_your_total_solar_generation_with_solcast_s_forecast_for_the_entire_day">La percentuale confronta la produzione solare totale con la previsione Solcast per l’intera giornata.</string>
+    <string name="use_rolling_time_period">Usa il periodo mobile</string>
 </resources>

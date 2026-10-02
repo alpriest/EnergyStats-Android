@@ -562,4 +562,7 @@
     <string name="clear_network_cache_description">Energy Stats caches historic data so that pages load quicker. Clear this data if you see missing/bad historic data.</string>
     <string name="clear_network_cache">Clear network cache</string>
     <string name="fox_rejected_your_login_request_check_the_date_time_on_your_device_is_set_to_automatic_and_try_again">Fox rejected your login request. Check the date/time on your device is set to Automatic and try again.</string>
+    <string name="the_percentage_compares_your_solar_generation_so_far_with_solcast_s_forecast_up_to_now">The percentage compares your solar generation so far with Solcast\'s forecast up to now.</string>
+    <string name="the_percentage_compares_your_total_solar_generation_with_solcast_s_forecast_for_the_entire_day">The percentage compares your total solar generation with Solcast\'s forecast for the entire day.</string>
+    <string name="use_rolling_time_period">Use rolling time period</string>
 </resources>
