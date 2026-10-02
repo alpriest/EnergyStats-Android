@@ -20,6 +20,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Instant
 
 interface SolcastCaching {
     suspend fun fetchSites(apiKey: String): SolcastSiteResponseList
@@ -96,24 +97,24 @@ class SolcastCache(
         val previousForecasts = previous?.forecasts ?: listOf()
         val oldestCacheData = LocalDate.now().minusDays(7)
 
-        // Remove periods duplicated in the cached version and newly fetched data
-        var merged = previousForecasts.map { p ->
-            val indexOfLatestForecastPeriod = latest.indexOfFirst { it.periodEnd == p.periodEnd }
-            if (indexOfLatestForecastPeriod > -1) {
-                latest.removeAt(indexOfLatestForecastPeriod)
-            } else {
-                p
-            }
-        }.toMutableList()
+        // Merge by period, inserting cached data first so the newly fetched data
+        // replaces it whenever the same period is present. This also removes
+        // duplicates in either dataset and keeps the result deterministic.
+        val mergedByPeriod = LinkedHashMap<Instant, SolcastForecastResponse>()
+        previousForecasts.forEach { mergedByPeriod[it.periodEnd] = it }
+        latest.forEach { mergedByPeriod[it.periodEnd] = it }
 
-        merged.addAll(latest)
-        merged = merged.filter {
-            it.periodEnd.toLocalDate(zone)?.let { it >= oldestCacheData } ?: false
-        }.toMutableList()
+        val merged = mergedByPeriod.values
+            .filter {
+                it.periodEnd.toLocalDate(zone)?.let { it >= oldestCacheData } ?: false
+            }
+            .sortedBy { it.periodEnd }
 
         val result = SolcastForecastResponseList(merged)
-        val jsonText = Gson().toJson(result)
-        unsafe_saveForecast(site.resourceId, jsonText)
+        if (failure == null) {
+            val jsonText = Gson().toJson(result)
+            unsafe_saveForecast(site.resourceId, jsonText)
+        }
 
         return SolcastForecastList(failure, result.forecasts)
     }

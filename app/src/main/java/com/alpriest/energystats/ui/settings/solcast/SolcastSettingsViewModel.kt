@@ -63,6 +63,7 @@ class SolcastSettingsViewModel(
         try {
             val response = service.fetchSites(apiKey = viewDataStream.value.apiKey)
             configManager.solcastSettings = SolcastSettings(viewDataStream.value.apiKey, response.sites.map { SolcastSite(site = it) })
+            service.clearCache()
             _viewDataStream.value = viewDataStream.value.copy(sites = configManager.solcastSettings.sites)
             resetDirtyState()
             alertDialogMessage.value = MonitorAlertDialogData(null, "Your Solcast settings were successfully verified.")
@@ -72,6 +73,7 @@ class SolcastSettingsViewModel(
     }
 
     fun removeKey() {
+        solarForecastingProvider().clearCache()
         configManager.solcastSettings = SolcastSettings.defaults
         _viewDataStream.value = SolcastSettingsViewData(
             configManager.solcastSettings.apiKey ?: "",

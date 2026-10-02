@@ -48,12 +48,13 @@ class AppContainer(private val context: Context) {
     val templateStore: TemplateStoring by lazy {
         TemplateStore(configManager)
     }
-    val solarForecastingProvider: () -> SolcastCaching = {
-        if (config.isDemoUser) {
+    val solarForecastingProvider: () -> SolcastCaching by lazy {
+        val provider = if (config.isDemoUser) {
             DemoSolarForecasting()
         } else {
             SolcastCache(Solcast(configManager), context)
         }
+        { provider }
     }
     private var sharedPreferences: SharedPreferences =
         context.getSharedPreferences(
