@@ -126,7 +126,8 @@ class LoadedPowerFlowViewModel(
     private fun shouldLoadGeneration(): Boolean {
         return configManager.totalYieldModel == TotalYieldModel.EnergyStats ||
                 configManager.powerFlowStrings.enabled ||
-                configManager.ct2DisplayMode == CT2DisplayMode.AsPowerString
+                configManager.ct2DisplayMode == CT2DisplayMode.AsPowerString ||
+                configManager.showTodayPercentageSolarForecastAchieved
     }
 
     private suspend fun loadHistoryData(device: Device): OpenHistoryResponse {
@@ -171,7 +172,8 @@ class LoadedPowerFlowViewModel(
     }
 
     private fun loadTotals() {
-        if (configManager.showHomeTotal || configManager.showGridTotals || configManager.showFinancialSummary || configManager.totalYieldModel != TotalYieldModel.Off) {
+        if (configManager.showHomeTotal || configManager.showGridTotals || configManager.showFinancialSummary || configManager.totalYieldModel != TotalYieldModel.Off ||
+            configManager.showTodayPercentageSolarForecastAchieved) {
             viewModelScope.launch {
                 try {
                     val generation = loadGeneration()

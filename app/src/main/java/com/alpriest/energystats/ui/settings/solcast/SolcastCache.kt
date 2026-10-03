@@ -9,8 +9,8 @@ import com.alpriest.energystats.shared.models.network.SolcastForecastResponseLis
 import com.alpriest.energystats.shared.models.network.SolcastSiteResponseList
 import com.alpriest.energystats.shared.network.TryLaterException
 import com.alpriest.energystats.ui.summary.toLocalDate
-import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File

@@ -41,7 +41,7 @@ android {
     }
     buildTypes {
         debug {
-            isMinifyEnabled = true
+            isMinifyEnabled = false // Debug only
             isShrinkResources = false // Debug only
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
