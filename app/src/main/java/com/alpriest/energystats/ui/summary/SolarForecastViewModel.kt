@@ -147,7 +147,6 @@ class SolarForecastViewModel(
                 loadStateStream.value = LoadState.Inactive
             } catch (ex: Exception) {
                 loadStateStream.value = LoadState.Error(ex, ex.localizedMessage ?: application.getString(R.string.unknown_error))
-                solarForecastProvider().clearCache()
             }
         }
     }

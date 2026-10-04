@@ -16,9 +16,7 @@ import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.nio.charset.Charset
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Instant
 
@@ -136,10 +134,4 @@ class SolcastCache(
         val file = getFile(resourceId)
         file.writeText(data, Charset.defaultCharset())
     }
-}
-
-fun Date.toLocalDateTime(): LocalDateTime {
-    return this.toInstant()
-        .atZone(ZoneId.systemDefault())
-        .toLocalDateTime()
 }
