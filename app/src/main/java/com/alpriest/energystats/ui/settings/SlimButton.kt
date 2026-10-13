@@ -21,10 +21,11 @@ fun SlimButton(modifier: Modifier = Modifier.Companion, enabled: Boolean = true,
 }
 
 @Composable
-fun OutlinedSlimButton(modifier: Modifier = Modifier.Companion, onClick: () -> Unit, content: @Composable () -> Unit, colors: ButtonColors) {
+fun OutlinedSlimButton(modifier: Modifier = Modifier.Companion, enabled: Boolean, onClick: () -> Unit, content: @Composable () -> Unit, colors: ButtonColors) {
     OutlinedESButton(
         onClick = onClick,
         modifier = modifier,
+        enabled = enabled,
         colors = colors,
         contentPadding = PaddingValues(horizontal = 12.dp)
     ) {

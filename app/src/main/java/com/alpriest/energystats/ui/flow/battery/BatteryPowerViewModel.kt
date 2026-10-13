@@ -1,12 +1,15 @@
 package com.alpriest.energystats.ui.flow.battery
 
 import androidx.lifecycle.ViewModel
+import com.alpriest.energystats.helpers.AlertDialogMessageProviding
 import com.alpriest.energystats.preview.FakeConfigManager
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.BatteryTemperatures
 import com.alpriest.energystats.shared.services.BatteryCapacityCalculator
 import com.alpriest.energystats.shared.services.BatteryCapacityEstimate
+import com.alpriest.energystats.ui.dialog.MonitorAlertDialogData
+import kotlinx.coroutines.flow.MutableStateFlow
 
 val previewBatteryPowerViewModel = BatteryPowerViewModel(
     FakeConfigManager().apply {
@@ -24,7 +27,9 @@ class BatteryPowerViewModel(
     val chargePowerkWH: Double,
     private val batteryTemperatures: BatteryTemperatures,
     val maxCurrentCharge: Double
-) : ViewModel() {
+) : ViewModel(), AlertDialogMessageProviding {
+    override val alertDialogMessage = MutableStateFlow<MonitorAlertDialogData?>(null)
+
     val temperatures: List<Double>
         get() {
             val result: List<Double> = when (configManager.batteryTemperatureDisplayMode) {
@@ -53,7 +58,12 @@ class BatteryPowerViewModel(
     }
 
     fun batteryStateOfCharge(): Double {
-        return calculator.effectiveBatteryStateOfCharge(batteryStateOfCharge = actualStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly)
+        try {
+            return calculator.effectiveBatteryStateOfCharge(batteryStateOfCharge = actualStateOfCharge, includeUnusableCapacity = !configManager.showUsableBatteryOnly)
+        } catch (_: Exception) {
+            alertDialogMessage.value = MonitorAlertDialogData(ex = null, message = "Could not calculate your battery SOC, check your battery capacity in settings is correct.")
+            return 0.0
+        }
     }
 
     fun setBatteryAsPercentage(value: Boolean) {

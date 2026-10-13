@@ -113,6 +113,7 @@ fun ESButton(
 fun OutlinedESButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     colors: ButtonColors = ButtonDefaults.buttonColors().copy(
         containerColor = Color.Transparent,
@@ -123,6 +124,7 @@ fun OutlinedESButton(
     ESButton(
         onClick = onClick,
         modifier = modifier,
+        enabled = enabled,
         colors = colors,
         border = BorderStroke(
             width = 1.dp,

@@ -63,6 +63,7 @@ class EditSummaryView(
         ),
     ) {
         val viewData = viewModel.viewDataStream.collectAsStateWithLifecycle().value
+        val dirtyState = viewModel.dirtyState.collectAsStateWithLifecycle().value
 
         val textColor = if (viewData.automatic) {
             MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
@@ -83,7 +84,11 @@ class EditSummaryView(
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        SettingsCheckbox(title = stringResource(R.string.automatic), state = mutableStateOf(viewData.automatic), onUpdate = { viewModel.didChangeAutomatic(it) })
+                        SettingsCheckbox(
+                            title = stringResource(R.string.automatic),
+                            state = mutableStateOf(viewData.automatic),
+                            onUpdate = { viewModel.didChangeAutomatic(it) }
+                        )
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
@@ -92,8 +97,8 @@ class EditSummaryView(
                                 color = textColor
                             )
 
-                            MonthPicker(month = viewData.fromMonth, onPrimary = false) { viewModel.didChangeFromMonth(it) }
-                            YearPicker(year = viewData.fromYear, onPrimary = false) { viewModel.didChangeFromYear(it) }
+                            MonthPicker(month = viewData.fromMonth, onPrimary = false, enabled = !viewData.automatic) { viewModel.didChangeFromMonth(it) }
+                            YearPicker(year = viewData.fromYear, onPrimary = false, enabled = !viewData.automatic) { viewModel.didChangeFromYear(it) }
                         }
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -103,8 +108,8 @@ class EditSummaryView(
                                 color = textColor
                             )
 
-                            MonthPicker(month = viewData.toMonth, onPrimary = false) { viewModel.didChangeToMonth(it) }
-                            YearPicker(year = viewData.toYear, onPrimary = false) { viewModel.didChangeToYear(it) }
+                            MonthPicker(month = viewData.toMonth, onPrimary = false, enabled = !viewData.automatic) { viewModel.didChangeToMonth(it) }
+                            YearPicker(year = viewData.toYear, onPrimary = false, enabled = !viewData.automatic) { viewModel.didChangeToYear(it) }
                         }
                     }
                 }

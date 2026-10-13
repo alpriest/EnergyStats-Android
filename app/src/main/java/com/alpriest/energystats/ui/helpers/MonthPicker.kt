@@ -32,7 +32,14 @@ import java.util.Locale
 
 @Composable
 // Returns month in the range 1..12
-fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifier = Modifier, onPrimary: Boolean, onClick: (Int) -> Unit) {
+fun MonthPicker(
+    month: Int,
+    modifier: Modifier = Modifier,
+    textModifier: Modifier = Modifier,
+    onPrimary: Boolean,
+    enabled: Boolean = true,
+    onClick: (Int) -> Unit
+) {
     var showing by remember { mutableStateOf(false) }
 
     Box(
@@ -41,6 +48,7 @@ fun MonthPicker(month: Int, modifier: Modifier = Modifier, textModifier: Modifie
             .padding(end = 14.dp)
     ) {
         OutlinedSlimButton(
+            enabled = enabled,
             onClick = { showing = true },
             colors = ButtonDefaults.buttonColors().copy(
                 containerColor = Color.Transparent,

@@ -28,7 +28,13 @@ import com.alpriest.energystats.ui.theme.Typography
 import java.util.Calendar
 
 @Composable
-fun YearPicker(year: Int, modifier: Modifier = Modifier, onPrimary: Boolean, onClick: (Int) -> Unit) {
+fun YearPicker(
+    year: Int,
+    modifier: Modifier = Modifier,
+    onPrimary: Boolean,
+    enabled: Boolean = true,
+    onClick: (Int) -> Unit
+) {
     var showing by remember { mutableStateOf(false) }
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
@@ -38,6 +44,7 @@ fun YearPicker(year: Int, modifier: Modifier = Modifier, onPrimary: Boolean, onC
             .padding(end = 14.dp)
     ) {
         OutlinedSlimButton(
+            enabled = enabled,
             onClick = { showing = true },
             colors = ButtonDefaults.buttonColors().copy(
                 containerColor = Color.Transparent,

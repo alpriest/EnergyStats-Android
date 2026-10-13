@@ -62,7 +62,7 @@ class EditSummaryViewModel(
                 val from = LocalDate.of(it.fromYear, it.fromMonth, 1)
                 val to = LocalDate.of(it.toYear, it.toMonth, 1)
 
-                _dirtyState.value = originalValue != it && from < to
+                _dirtyState.value = originalValue != it && from <= to
             }
         }
     }
