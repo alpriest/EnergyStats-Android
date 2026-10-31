@@ -32,3 +32,25 @@ sealed class StatsDisplayMode {
             }
         }
 }
+/** Dates represented by a report or one selected graph bucket; end is exclusive. */
+fun StatsDisplayMode.pricePeriod(point: Int? = null): Pair<LocalDate, LocalDate> = when (this) {
+    is StatsDisplayMode.Day -> date to date.plusDays(1)
+    is StatsDisplayMode.Month -> {
+        val start = LocalDate.of(year, month, point ?: 1)
+        start to if (point == null) start.plusMonths(1) else start.plusDays(1)
+    }
+    is StatsDisplayMode.Year -> {
+        val start = LocalDate.of(year, point ?: 1, 1)
+        start to if (point == null) start.plusYears(1) else start.plusMonths(1)
+    }
+    is StatsDisplayMode.Custom -> {
+        if (point == null) start to end.plusDays(1)
+        else if (unit == CustomDateRangeDisplayUnit.DAYS) {
+            val day = start.plusDays(point.toLong())
+            day to day.plusDays(1)
+        } else {
+            val month = start.withDayOfMonth(1).plusMonths(point.toLong())
+            maxOf(start, month) to minOf(end.plusDays(1), month.plusMonths(1))
+        }
+    }
+}

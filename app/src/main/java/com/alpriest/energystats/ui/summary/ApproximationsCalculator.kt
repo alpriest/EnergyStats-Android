@@ -24,7 +24,8 @@ class ApproximationsCalculator(
         loads: Double,
         batteryCharge: Double,
         batteryDischarge: Double,
-        solar: Double
+        solar: Double,
+        period: Pair<java.time.LocalDate, java.time.LocalDate>
     ): ApproximationsViewModel {
         val inverterConsumption = maxOf(solar + grid + batteryDischarge - feedIn - batteryCharge - loads, 0.0)
         val totalsViewModel = TotalsViewModel(
@@ -38,7 +39,7 @@ class ApproximationsCalculator(
             batteryDischarge
         )
 
-        val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager)
+        val financialModel = EnergyStatsFinancialModel(totalsViewModel, configManager, period.first, period.second)
 
         val netResult = NetSelfSufficiencyCalculator().calculate(
             grid,

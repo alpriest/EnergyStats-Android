@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.config
 
+import com.alpriest.energystats.shared.models.EnergyPriceRate
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
 import com.alpriest.energystats.shared.models.CT2DisplayMode
@@ -41,8 +42,8 @@ interface ConfigManaging: ScheduleTemplateConfigManager, CurrentStatusCalculator
 
     val lastSettingsResetTime: LocalDateTime?
     var currencyCode: String
-    var gridImportUnitPrice: Double
-    var feedInUnitPrice: Double
+    var feedInPriceRates: List<EnergyPriceRate>
+    var gridImportPriceRates: List<EnergyPriceRate>
     var currencySymbol: String
     var parameterGroups: List<ParameterGroup>
     var solarRangeDefinitions: SolarRangeDefinitions

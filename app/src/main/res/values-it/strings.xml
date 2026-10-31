@@ -563,4 +563,12 @@
     <string name="the_percentage_compares_your_solar_generation_so_far_with_solcast_s_forecast_up_to_now">La percentuale confronta la produzione solare effettuata finora con la previsione Solcast fino a questo momento.</string>
     <string name="the_percentage_compares_your_total_solar_generation_with_solcast_s_forecast_for_the_entire_day">La percentuale confronta la produzione solare totale con la previsione Solcast per l’intera giornata.</string>
     <string name="use_rolling_time_period">Usa il periodo mobile</string>
+    <string name="energy_prices">Prezzi dell’energia</string>
+    <string name="export_prices">Prezzi di immissione</string>
+    <string name="import_prices">Prezzi di prelievo</string>
+    <string name="energy_prices_apportioned">I prezzi vengono ripartiti automaticamente per giorno di calendario quando un rapporto copre più periodi di prezzo.</string>
+    <string name="price_applies_from">Si applica dal %1$s</string>
+    <string name="price_before">Prima del %1$s</string>
+    <string name="default_price">Prezzo predefinito</string>
+    <string name="add_price_change">Aggiungi variazione di prezzo</string>
 </resources>

@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -44,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.alpriest.energystats.shared.ui.DimmedTextColor
 import com.alpriest.energystats.ui.dialog.AlertDialog
 import com.alpriest.energystats.ui.helpers.darkenColor
 import com.alpriest.energystats.ui.theme.ESButton
@@ -387,13 +389,21 @@ fun InlineSettingsNavButton(
     modifier: Modifier = Modifier,
     disclosureIcon: (() -> ImageVector)? = { Icons.Default.ChevronRight },
     disclosureView: (@Composable () -> Unit)? = null,
+    subtitle: String? = null,
     onClick: () -> Unit
 ) {
+    val padding = if (subtitle == null) {
+        PaddingValues(0.dp)
+    } else {
+        PaddingValues(vertical = 4.dp)
+    }
+
     TextButton(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
+        shape = RectangleShape,
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-        contentPadding = PaddingValues(all = 0.dp),
+        contentPadding = padding,
         border = null
     ) {
         Row(
@@ -401,11 +411,16 @@ fun InlineSettingsNavButton(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                title,
-                color = colorScheme.onSecondary,
-                style = typography.bodyLarge
-            )
+            Column {
+                Text(
+                    title,
+                    color = colorScheme.onSecondary,
+                    style = typography.bodyLarge
+                )
+                subtitle?.let {
+                    Text(it, color = DimmedTextColor)
+                }
+            }
 
             disclosureIcon?.let {
                 Icon(
@@ -417,6 +432,7 @@ fun InlineSettingsNavButton(
             }
 
             disclosureView?.let { it() }
+
         }
     }
 }

@@ -70,6 +70,7 @@ class WorkModeViewModel(
                 try {
                     if (items.isEmpty()) {
                         configManager.workModes = fetchWorkModes(deviceSN)
+                        items = configManager.workModes
                     }
 
                     val result = network.fetchDeviceSettingsItem(deviceSN, DeviceSettingsItem.WorkMode)

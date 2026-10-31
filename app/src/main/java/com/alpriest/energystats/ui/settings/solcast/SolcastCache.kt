@@ -9,10 +9,11 @@ import com.alpriest.energystats.shared.models.network.SolcastForecastResponseLis
 import com.alpriest.energystats.shared.models.network.SolcastSiteResponseList
 import com.alpriest.energystats.shared.network.TryLaterException
 import com.alpriest.energystats.ui.summary.toLocalDate
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.nio.charset.Charset
 import java.time.LocalDate
@@ -31,6 +32,7 @@ class SolcastCache(
     private val context: Context
 ) : SolcastCaching {
 
+    private val json = Json { ignoreUnknownKeys = true }
     private val sitesLock = Mutex()
     private val siteLocks = ConcurrentHashMap<String, Mutex>()
 
@@ -45,14 +47,12 @@ class SolcastCache(
     override suspend fun fetchForecast(site: SolcastSite, apiKey: String, ignoreCache: Boolean): SolcastForecastList {
         return lockFor(site.resourceId).withLock {
             getCachedData(site.resourceId)?.let { it ->
-                val type = object : TypeToken<SolcastForecastResponseList>() {}.type
-                var cachedResponseList: SolcastForecastResponseList
-                try {
-                    cachedResponseList = Gson().fromJson(it, type)
-                } catch (_: Exception) {
-                    // Invalid cached data, so let's tidy up and next time we'll fetch fresh
+                val cachedResponseList = try {
+                    json.decodeFromString<SolcastForecastResponseList>(it)
+                } catch (_: SerializationException) {
+                    // Old Gson caches and invalid data cannot be read with this format.
                     clearCache()
-                    cachedResponseList = SolcastForecastResponseList(forecasts = emptyList())
+                    return@withLock fetchAndStore(site, apiKey)
                 }
 
                 val eightHoursInMillis = 8 * 60 * 60 * 1000
@@ -110,7 +110,7 @@ class SolcastCache(
 
         val result = SolcastForecastResponseList(merged)
         if (failure == null) {
-            val jsonText = Gson().toJson(result)
+            val jsonText = json.encodeToString(result)
             unsafe_saveForecast(site.resourceId, jsonText)
         }
 

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.ui.login
 
+import com.alpriest.energystats.shared.models.EnergyPriceRate
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.AppSettingsStore
@@ -112,17 +113,17 @@ open class ConfigManager(var config: StoredConfigManaging, val networking: Netwo
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
-    override var gridImportUnitPrice: Double
-        get() = config.gridImportUnitPrice
+    override var feedInPriceRates: List<EnergyPriceRate>
+        get() = config.feedInPriceRates
         set(value) {
-            config.gridImportUnitPrice = value
+            config.feedInPriceRates = value
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 
-    override var feedInUnitPrice: Double
-        get() = config.feedInUnitPrice
+    override var gridImportPriceRates: List<EnergyPriceRate>
+        get() = config.gridImportPriceRates
         set(value) {
-            config.feedInUnitPrice = value
+            config.gridImportPriceRates = value
             appSettingsStore.update(AppSettings.toAppSettings(config))
         }
 

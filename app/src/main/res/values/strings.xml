@@ -565,4 +565,12 @@
     <string name="the_percentage_compares_your_solar_generation_so_far_with_solcast_s_forecast_up_to_now">The percentage compares your solar generation so far with Solcast\'s forecast up to now.</string>
     <string name="the_percentage_compares_your_total_solar_generation_with_solcast_s_forecast_for_the_entire_day">The percentage compares your total solar generation with Solcast\'s forecast for the entire day.</string>
     <string name="use_rolling_time_period">Use rolling time period</string>
+    <string name="energy_prices">Energy prices</string>
+    <string name="export_prices">Export prices</string>
+    <string name="import_prices">Import prices</string>
+    <string name="energy_prices_apportioned">Prices are automatically apportioned by calendar day when a report covers more than one price period.</string>
+    <string name="price_applies_from">Applies from %1$s</string>
+    <string name="price_before">Before %1$s</string>
+    <string name="default_price">Default price</string>
+    <string name="add_price_change">Add price change</string>
 </resources>

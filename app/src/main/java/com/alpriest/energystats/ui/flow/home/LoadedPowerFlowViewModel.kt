@@ -21,7 +21,6 @@ import com.alpriest.energystats.shared.models.network.currentData
 import com.alpriest.energystats.shared.models.preview
 import com.alpriest.energystats.shared.models.toUtcMillis
 import com.alpriest.energystats.shared.network.DemoNetworking
-import com.alpriest.energystats.shared.network.FoxNetworkRequestException
 import com.alpriest.energystats.shared.network.FoxServerError
 import com.alpriest.energystats.shared.network.Networking
 import com.alpriest.energystats.shared.services.CurrentValues
@@ -193,7 +192,7 @@ class LoadedPowerFlowViewModel(
                             }
                         }
                     }
-                } catch (ex: FoxNetworkRequestException) {
+                } catch (ex: Exception) {
                     bannerAlertManager.showToast("Failed to load totals: ${ex.message}")
                 }
             }

@@ -16,6 +16,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -34,9 +35,11 @@ import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.helpers.toCurrency
 import com.alpriest.energystats.shared.models.ColorThemeMode
 import com.alpriest.energystats.shared.models.EarningsModel
+import com.alpriest.energystats.shared.models.priceOn
 import com.alpriest.energystats.shared.ui.roundedToString
 import com.alpriest.energystats.ui.helpers.SegmentedControl
 import com.alpriest.energystats.ui.settings.InfoButton
+import com.alpriest.energystats.ui.settings.InlineSettingsNavButton
 import com.alpriest.energystats.ui.settings.SettingsCheckbox
 import com.alpriest.energystats.ui.settings.SettingsColumn
 import com.alpriest.energystats.ui.settings.SettingsPage
@@ -44,14 +47,14 @@ import com.alpriest.energystats.ui.settings.SettingsSegmentedControl
 import com.alpriest.energystats.ui.theme.EnergyStatsTheme
 import java.text.NumberFormat
 import java.text.ParseException
+import java.time.LocalDate
 import java.util.Locale
 
 @Composable
-fun FinancialsSettingsView(configManager: ConfigManaging) {
+fun FinancialsSettingsView(configManager: ConfigManaging, onPrices: (Boolean) -> Unit = {}) {
+    val appSettings = configManager.appSettingsStream.collectAsState().value
     val showFinancialSummaryState = rememberSaveable { mutableStateOf(configManager.showFinancialSummary) }
     val showFinancialSummaryOnFlowPageState = rememberSaveable { mutableStateOf(configManager.showFinancialSummaryOnFlowPage) }
-    val unitPrice = rememberSaveable { mutableStateOf(configManager.feedInUnitPrice.toCurrency()) }
-    val gridImportUnitPrice = rememberSaveable { mutableStateOf(configManager.gridImportUnitPrice.toCurrency()) }
     val earningsModel = rememberSaveable { mutableStateOf(configManager.earningsModel) }
     val deductInverterConsumptionFromGridAvoidedState = rememberSaveable { mutableStateOf(configManager.deductInverterConsumptionFromGridAvoided) }
     trackScreenView("Financial Model", "FinancialsSettingsView")
@@ -78,10 +81,10 @@ fun FinancialsSettingsView(configManager: ConfigManaging) {
                 EarningsModel.CT2 -> stringResource(R.string.earnings_ct2_description)
             },
         ) {
-            MakeTextField(configManager, unitPrice, stringResource(R.string.grid_export_unit_price), stringResource(R.string.unit_price_no_multi_tariff_available)) {
-                unitPrice.value = it
-                configManager.feedInUnitPrice = it.safeToDouble()
-            }
+            InlineSettingsNavButton(
+                stringResource(R.string.grid_export_unit_price),
+                subtitle = configManager.currencySymbol + appSettings.feedInPriceRates.priceOn(LocalDate.now()).toCurrency()
+            ) { onPrices(true) }
 
             SettingsSegmentedControl(
                 title = stringResource(R.string.i_am_paid_for),
@@ -105,11 +108,11 @@ fun FinancialsSettingsView(configManager: ConfigManaging) {
             )
         }
 
-        SettingsColumn(footer = stringResource(R.string.earnings_imported_description)) {
-            MakeTextField(configManager, gridImportUnitPrice, stringResource(R.string.grid_import_unit_price), null) {
-                gridImportUnitPrice.value = it
-                configManager.gridImportUnitPrice = it.safeToDouble()
-            }
+        SettingsColumn(footer = stringResource(R.string.energy_prices_apportioned)) {
+            InlineSettingsNavButton(
+                stringResource(R.string.grid_import_unit_price),
+                subtitle = configManager.currencySymbol + appSettings.gridImportPriceRates.priceOn(LocalDate.now()).toCurrency()
+            ) { onPrices(false) }
         }
 
         MakeInstallationFields(configManager)
@@ -300,10 +303,10 @@ fun CalculationDescription(title: String, description: String, formula: String) 
     }
 }
 
-@Preview(heightDp = 1024)
+@Preview(heightDp = 1024, widthDp = 450)
 @Composable
 fun FinancialsSettingsViewPreview() {
-    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Light) {
+    EnergyStatsTheme(colorThemeMode = ColorThemeMode.Dark) {
         SettingsPage(Modifier.padding(12.dp)) {
             FinancialsSettingsView(
                 configManager = FakeConfigManager()

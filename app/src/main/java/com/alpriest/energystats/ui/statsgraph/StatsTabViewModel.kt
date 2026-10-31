@@ -34,6 +34,9 @@ import com.alpriest.energystats.ui.summary.ApproximationsCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.time.LocalDateTime
@@ -100,6 +103,30 @@ class StatsTabViewModel(
                     updateGraphVariables(it)
                 }
             }
+        }
+
+        viewModelScope.launch {
+            appSettingsStream
+                .map {
+                    Triple(
+                        it.deductInverterConsumptionFromGridAvoided,
+                        it.feedInPriceRates,
+                        it.gridImportPriceRates
+                    )
+                }
+                .distinctUntilChanged()
+                .drop(1)
+                .collect {
+                    // Rebuild the displayed snapshot, including its calculation breakdowns,
+                    // using the loaded totals or the currently selected graph bucket.
+                    if (approximationsViewModelStream.value != null) {
+                        if (valuesAtTimeStream.value.values.any { it.isNotEmpty() }) {
+                            updateApproximationsFromSelectedValues(application)
+                        } else {
+                            calculateSelfSufficiencyEstimate()
+                        }
+                    }
+                }
         }
 
         viewModelScope.launch {
@@ -400,7 +427,8 @@ class StatsTabViewModel(
             loads = loads,
             batteryCharge = batteryCharge,
             batteryDischarge = batteryDischarge,
-            solar = solar
+            solar = solar,
+            period = displayModeStream.value.pricePeriod()
         )
     }
 
@@ -525,7 +553,8 @@ class StatsTabViewModel(
                     loads = loads.graphValue,
                     batteryCharge = batteryCharge.graphValue,
                     batteryDischarge = batteryDischarge.graphValue,
-                    solar = solar.graphValue
+                    solar = solar.graphValue,
+                    period = displayModeStream.value.pricePeriod(graphPoint)
                 )
 
                 approximations.netSelfSufficiencyEstimateValue?.let {
@@ -569,7 +598,8 @@ class StatsTabViewModel(
                 loads = loads.graphValue,
                 batteryCharge = batteryCharge.graphValue,
                 batteryDischarge = batteryDischarge.graphValue,
-                solar = solar.graphValue
+                solar = solar.graphValue,
+                period = displayModeStream.value.pricePeriod(selectedValue.x.toInt())
             )
 
             approximationsViewModelStream.value = approximations

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.shared.config
 
+import com.alpriest.energystats.shared.models.EnergyPriceRate
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
@@ -46,8 +47,8 @@ interface StoredConfig {
     var colorTheme: ColorThemeMode
     var showGraphValueDescriptions: Boolean
     var currencyCode: String
-    var gridImportUnitPrice: Double
-    var feedInUnitPrice: Double
+    var feedInPriceRates: List<EnergyPriceRate>
+    var gridImportPriceRates: List<EnergyPriceRate>
     var currencySymbol: String
     var solarRangeDefinitions: SolarRangeDefinitions
     var showLastUpdateTimestamp: Boolean

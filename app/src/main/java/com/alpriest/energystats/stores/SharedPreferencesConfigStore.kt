@@ -1,5 +1,6 @@
 package com.alpriest.energystats.stores
 
+import com.alpriest.energystats.shared.models.EnergyPriceRate
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.alpriest.energystats.shared.config.StoredConfig
@@ -82,6 +83,8 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
         CURRENCY_SYMBOL,
         CURRENCY_CODE,
         FEED_IN_UNIT_PRICE,
+        FEED_IN_PRICE_RATES,
+        GRID_IMPORT_PRICE_RATES,
         GRID_IMPORT_UNIT_PRICE,
         SHOULD_COMBINE_CT2_WITH_PVPOWER,
         SHOULD_COMBINE_CT2_WITH_LOADSPOWER,
@@ -193,21 +196,37 @@ class SharedPreferencesConfigStore(private val sharedPreferences: SharedPreferen
             }
         }
 
-    override var gridImportUnitPrice: Double
-        get() = (sharedPreferences.getString(SharedPreferenceDisplayKey.GRID_IMPORT_UNIT_PRICE.name, "0.15") ?: "0.15").toDouble()
+    override var feedInPriceRates: List<EnergyPriceRate>
+        get() {
+            val stored = sharedPreferences.getString(SharedPreferenceDisplayKey.FEED_IN_PRICE_RATES.name, null)
+            val rates = runCatching { Gson().fromJson<List<EnergyPriceRate>>(stored, object : TypeToken<List<EnergyPriceRate>>() {}.type) }.getOrNull()
+            if (!rates.isNullOrEmpty()) return rates
+            val migrated = listOf(EnergyPriceRate(feedInUnitPrice))
+            feedInPriceRates = migrated
+            return migrated
+        }
         set(value) {
-            sharedPreferences.edit {
-                putString(SharedPreferenceDisplayKey.GRID_IMPORT_UNIT_PRICE.name, value.toString())
-            }
+            sharedPreferences.edit { putString(SharedPreferenceDisplayKey.FEED_IN_PRICE_RATES.name, Gson().toJson(value)) }
         }
 
-    override var feedInUnitPrice: Double
-        get() = (sharedPreferences.getString(SharedPreferenceDisplayKey.FEED_IN_UNIT_PRICE.name, "0.05") ?: "0.05").toDouble()
-        set(value) {
-            sharedPreferences.edit {
-                putString(SharedPreferenceDisplayKey.FEED_IN_UNIT_PRICE.name, value.toString())
-            }
+    override var gridImportPriceRates: List<EnergyPriceRate>
+        get() {
+            val stored = sharedPreferences.getString(SharedPreferenceDisplayKey.GRID_IMPORT_PRICE_RATES.name, null)
+            val rates = runCatching { Gson().fromJson<List<EnergyPriceRate>>(stored, object : TypeToken<List<EnergyPriceRate>>() {}.type) }.getOrNull()
+            if (!rates.isNullOrEmpty()) return rates
+            val migrated = listOf(EnergyPriceRate(gridImportUnitPrice))
+            gridImportPriceRates = migrated
+            return migrated
         }
+        set(value) {
+            sharedPreferences.edit { putString(SharedPreferenceDisplayKey.GRID_IMPORT_PRICE_RATES.name, Gson().toJson(value)) }
+        }
+
+    private val gridImportUnitPrice: Double
+        get() = (sharedPreferences.getString(SharedPreferenceDisplayKey.GRID_IMPORT_UNIT_PRICE.name, "0.15") ?: "0.15").toDouble()
+
+    private val feedInUnitPrice: Double
+        get() = (sharedPreferences.getString(SharedPreferenceDisplayKey.FEED_IN_UNIT_PRICE.name, "0.05") ?: "0.05").toDouble()
 
     override var currencyCode: String
         get() = sharedPreferences.getString(SharedPreferenceDisplayKey.CURRENCY_CODE.name, "GBP") ?: "GBP"

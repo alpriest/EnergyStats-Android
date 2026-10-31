@@ -112,10 +112,18 @@ fun NavigableSettingsView(
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.dataloggers), {}, { navController.popBackStack() })
             DataLoggerViewContainer(network = network, configManager = configManager, navController = navController).Content(modifier = Modifier)
         }
+        listOf("ExportPrices", "ImportPrices").forEach { route ->
+            composable(route) {
+                topBarSettings.value = TopBarSettings(true, stringResource(R.string.energy_prices), {}, { navController.popBackStack() })
+                SettingsPage {
+                    com.alpriest.energystats.ui.settings.financial.EnergyPricesView(configManager, route == "ExportPrices")
+                }
+            }
+        }
         composable(SettingsScreen.FinancialModel.name) {
             topBarSettings.value = TopBarSettings(true, stringResource(R.string.financial_model), {}, { navController.popBackStack() })
             SettingsPage(Modifier) {
-                FinancialsSettingsView(configManager)
+                FinancialsSettingsView(configManager) { exporting -> navController.navigate(if (exporting) "ExportPrices" else "ImportPrices") }
             }
         }
         composable(SettingsScreen.SelfSufficiencyEstimates.name) {

@@ -1,5 +1,6 @@
 package com.alpriest.energystats.preview
 
+import com.alpriest.energystats.shared.models.EnergyPriceRate
 import com.alpriest.energystats.shared.config.StoredConfig
 import com.alpriest.energystats.shared.models.BatteryData
 import com.alpriest.energystats.shared.models.BatteryTemperatureDisplayMode
@@ -32,8 +33,8 @@ class FakeStoredConfigStore(
     override var showGraphValueDescriptions: Boolean = true,
     override var shouldCombineCT2WithPVPower: Boolean = false,
     override var currencyCode: String = "GBP",
-    override var feedInUnitPrice: Double = 0.05,
-    override var gridImportUnitPrice: Double = 0.15,
+    override var feedInPriceRates: List<EnergyPriceRate> = listOf(EnergyPriceRate(0.05)),
+    override var gridImportPriceRates: List<EnergyPriceRate> = listOf(EnergyPriceRate(0.15)),
     override var isDemoUser: Boolean = true,
     override var useLargeDisplay: Boolean = false,
     override var useColouredFlowLines: Boolean = true,

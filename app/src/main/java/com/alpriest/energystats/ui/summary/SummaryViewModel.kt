@@ -68,7 +68,13 @@ class SummaryTabViewModel(
     init {
         viewModelScope.launch {
             configManager.appSettingsStream
-                .map { it.deductInverterConsumptionFromGridAvoided }
+                .map {
+                    Triple(
+                        it.deductInverterConsumptionFromGridAvoided,
+                        it.feedInPriceRates,
+                        it.gridImportPriceRates
+                    )
+                }
                 .distinctUntilChanged()
                 .drop(1)
                 .collect { it ->
@@ -87,7 +93,7 @@ class SummaryTabViewModel(
         configManager.currentDevice.value?.let { device ->
             solarGenerationByMonth = mutableListOf()
             val (totals, oldestDataDate) = fetchAllYears(device)
-            makeApproximationsViewModel(totals)?.let { model ->
+            makeApproximationsViewModel(totals, oldestDataDate)?.let { model ->
                 val financialData: SummaryViewData.FinancialData? = model.financialModel?.let { financialModel ->
                     SummaryViewData.FinancialData(
                         exportIncome = financialModel.exportIncome.amount,
@@ -346,7 +352,8 @@ class SummaryTabViewModel(
     }
 
     private fun makeApproximationsViewModel(
-        totals: Map<ReportVariable, Double>
+        totals: Map<ReportVariable, Double>,
+        oldestDataDate: LocalDate
     ): ApproximationsViewModel? {
         val grid = totals[ReportVariable.GridConsumption]
         val feedIn = totals[ReportVariable.FeedIn]
@@ -365,7 +372,12 @@ class SummaryTabViewModel(
             loads = loads,
             batteryCharge = batteryCharge,
             batteryDischarge = batteryDischarge,
-            solar = solar
+            solar = solar,
+            period = (if (oldestDataDate == LocalDate.MIN) LocalDate.of(fromYear, 1, 1) else oldestDataDate) to
+                    when (val range = configManager.summaryDateRange) {
+                        is SummaryDateRange.Automatic -> LocalDate.now().plusDays(1)
+                        is SummaryDateRange.Manual -> range.to.withDayOfMonth(1).plusMonths(1)
+                    }
         )
     }
 }

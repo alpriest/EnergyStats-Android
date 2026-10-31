@@ -1,5 +1,6 @@
 package com.alpriest.energystats.preview
 
+import com.alpriest.energystats.shared.models.EnergyPriceRate
 import com.alpriest.energystats.shared.config.ConfigManaging
 import com.alpriest.energystats.shared.models.AppSettings
 import com.alpriest.energystats.shared.models.Battery
@@ -40,8 +41,8 @@ class FakeConfigManager : ConfigManaging {
     override var shouldCombineCT2WithPVPower: Boolean = true
     override var shouldCombineCT2WithLoadsPower: Boolean = false
     override var currencyCode: String = "GBP"
-    override var feedInUnitPrice: Double = 0.05
-    override var gridImportUnitPrice: Double = 0.15
+    override var feedInPriceRates: List<EnergyPriceRate> = listOf(EnergyPriceRate(0.05))
+    override var gridImportPriceRates: List<EnergyPriceRate> = listOf(EnergyPriceRate(0.15))
     override var currencySymbol: String = "£"
     override val variables: List<Variable> = listOf()
     override var showUsableBatteryOnly: Boolean = false

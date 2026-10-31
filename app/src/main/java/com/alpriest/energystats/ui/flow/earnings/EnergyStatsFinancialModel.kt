@@ -11,6 +11,7 @@ import com.alpriest.energystats.shared.ui.roundedToString
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import com.alpriest.energystats.shared.models.weightedPrice
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.math.ceil
@@ -43,7 +44,7 @@ data class InstallationPaybackEstimate(
     }
 }
 
-class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, private val configManager: ConfigManaging) : ViewModel() {
+class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, private val configManager: ConfigManaging, private val periodStart: LocalDate = LocalDate.now(), private val periodEnd: LocalDate = periodStart.plusDays(1)) : ViewModel() {
     lateinit var exportIncome: FinanceAmount
     lateinit var solarSaving: FinanceAmount
     lateinit var total: FinanceAmount
@@ -76,13 +77,15 @@ class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, pr
     }
 
     fun update() {
+        val exportPrice = configManager.feedInPriceRates.weightedPrice(periodStart, periodEnd)
+        val importPrice = configManager.gridImportPriceRates.weightedPrice(periodStart, periodEnd)
         exportIncome = FinanceAmount(
             shortTitleResId = R.string.exported_income_short_title,
-            amount = amountForIncomeCalculation * configManager.feedInUnitPrice
+            amount = amountForIncomeCalculation * exportPrice
         )
         exportBreakdown = CalculationBreakdown(
-            formula = "$nameForIncomeCalculation * feedInUnitPrice",
-            calculation = { "${amountForIncomeCalculation.roundedToString(it)} * ${configManager.feedInUnitPrice.roundedToString(it)}" }
+            formula = "$nameForIncomeCalculation * weightedExportPrice",
+            calculation = { "${amountForIncomeCalculation.roundedToString(it)} * ${exportPrice.roundedToString(it)}" }
         )
 
         val inverterConsumptionCalcFormulaDescriptionText: String
@@ -100,12 +103,12 @@ class EnergyStatsFinancialModel(private val totalsViewModel: TotalsViewModel, pr
 
         solarSaving = FinanceAmount(
             shortTitleResId = R.string.grid_import_avoided_short_title,
-            amount = java.lang.Double.max(0.0, totalsViewModel.solar - totalsViewModel.feedIn - inverterConsumptionCalcAmount) * configManager.gridImportUnitPrice
+            amount = java.lang.Double.max(0.0, totalsViewModel.solar - totalsViewModel.feedIn - inverterConsumptionCalcAmount) * importPrice
         )
 
         solarSavingBreakdown = CalculationBreakdown(
-            formula = "max(0, solar - gridExport$inverterConsumptionCalcFormulaDescriptionText) * gridImportUnitPrice",
-            calculation = { "max(0, ${totalsViewModel.solar.roundedToString(it)} - ${totalsViewModel.feedIn.roundedToString(it)}${inverterConsumptionCalcFormulaAmountText(it)}) * ${configManager.gridImportUnitPrice}" }
+            formula = "max(0, solar - gridExport$inverterConsumptionCalcFormulaDescriptionText) * weightedImportPrice",
+            calculation = { "max(0, ${totalsViewModel.solar.roundedToString(it)} - ${totalsViewModel.feedIn.roundedToString(it)}${inverterConsumptionCalcFormulaAmountText(it)}) * ${importPrice}" }
         )
 
         total = FinanceAmount(
